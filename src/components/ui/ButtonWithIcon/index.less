@@ -1,0 +1,36 @@
+.ant-btn.btn-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 30px;
+  padding: 0;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  background-color: var(--btn-color-primary);
+  
+  border: 0.25px solid var(--btn-color-border);
+  
+  &:hover {
+    background: var(--btn-color-primary) !important;
+    border-color: var(--border-color-primary) !important;
+  }
+
+  svg {
+    path {
+      fill: var(--icon-color-primary);
+    }
+  }
+
+  &.inactive::after {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--btn-color-inactive);
+    opacity: 0.5;
+  }
+}

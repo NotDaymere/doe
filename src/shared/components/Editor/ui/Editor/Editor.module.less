@@ -1,0 +1,38 @@
+.editor {
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.editor_editor {
+    border: none;
+    outline: none;
+    min-height: 36px;
+
+    .setFontSohneBuch(16px, 1.1, normal);
+    color: #000;
+
+    position: relative;
+}
+
+.editor_focused {
+    border: none;
+}
+
+.editor_placeholder {
+    &:first-child::before {
+        content: attr(data-placeholder);
+        display: block;
+        position: absolute;
+
+        // float: left;
+        // height: 0;
+        height: auto;
+        pointer-events: none;
+
+        .setFontSohneBuch(16px, 1.2, normal);
+        .setTextGradient(
+            linear-gradient(to right, #B5B5B5, rgba(#B5B5B5, 0.2))
+        )
+    }
+}

@@ -1,0 +1,13 @@
+build
+.cache
+dev-dist
+vite.config.d.ts
+vite.config.js
+/public/uploads/**
+/public/sitemap/**
+!/public/sitemap/.gitkeep
+!/public/uploads/.gitkeep
+
+node_modules
+.env.*
+!.env.example

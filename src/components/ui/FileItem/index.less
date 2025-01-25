@@ -1,0 +1,36 @@
+.file-item {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  gap: 20px;
+  align-items: center;
+  width: 200px;
+  margin-bottom: 10px;
+  padding: 0.5em 0.1em 0.5em 0.5em;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+
+  .file-item-remove-icon {
+    position: absolute;
+    top: -6px;
+    left: -7px;
+    color: #ff4d4f;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .file-item-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .file-item-info {
+    display: flex;
+    flex-direction: column;
+
+    .file-item-format {
+      color: #B1B1B1;
+      text-transform: uppercase;
+    }
+  }
+}

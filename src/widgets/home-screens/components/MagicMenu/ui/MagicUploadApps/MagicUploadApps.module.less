@@ -1,0 +1,167 @@
+.apps {
+    position: relative;
+}
+
+.apps_btn {
+    &._active {
+        [data-has-menu] {
+            opacity: 1;
+            &::before {
+                transform: translate(-50%, -50%);
+            }
+        }
+    }
+
+    &:hover,
+    &._active {
+        > span > svg {
+            fill: #f55687;
+        }
+    }
+}
+
+
+.apps_menu {
+    width: 260px;
+    border-radius: 12px;
+    border: 1px solid #DDDDDD;
+    box-shadow: 0 4px 30px rgba(#000, 10%);
+
+    background: #ffffff;
+    position: absolute;
+    bottom: 8px;
+    left: calc(100% - 8px);
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.apps_menu_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 9px 8px;
+    padding-left: 16px;
+}
+
+.input {
+    width: calc(100% - 107px);
+    position: relative;
+}
+
+.input_icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    fill: #1F1F1F;
+
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.input_input {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0 10px;
+    padding-left: 24px;
+    height: 22px;
+
+    .setFontSohneBuch(16px, 1, normal);
+    color: #1F1F1F;
+
+    &::placeholder {
+        color: rgba(#1F1F1F, 50%);
+    }
+}
+
+.apps_menu_apps {
+    width: 90px;
+    height: 31px;
+    border-radius: 8px;
+
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    background: #FFF;
+    border: 1px solid #EEEEEE;
+
+    .setFontSohneKraftig(14px, 1.2, normal);
+    color: #1F1F1F;
+
+    svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+
+        fill: #5B5B5B;
+    }
+}
+
+.apps_menu_content {
+    border-top: 1px solid #DDDDDD;
+    margin: 0;
+    max-height: 150px;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.apps_menu_item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 12px;
+    padding-right: 8px;
+
+    transition: background 200ms ease;
+
+    cursor: pointer;
+    
+    .setFontSohneBuch(14px, 1.1, normal);
+
+    > span > span {
+        .setFontSohneKraftig(14px, 1.1, normal);
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+
+    img {
+        margin-left: auto;
+        width: 30px;
+        height: 30px;
+        flex-shrink: 0;
+    }
+
+    &:hover {
+        background: #F5F5F5;
+    }
+}
+
+.enter {
+    opacity: 0;
+}
+.enterActive {
+    opacity: 1;
+    transition: opacity 250ms ease;
+}
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: opacity 250ms ease;
+}

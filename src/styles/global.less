@@ -1,0 +1,98 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color-main);
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+}
+
+.inline-wrapper {
+  display: flex;
+  align-items: center;
+  
+  p {
+    margin: 0;
+  }
+}
+
+.highlighted-span {
+  &.green {
+    color: #53B400;
+  }
+}
+
+.custom-tag {
+  display: inline-block;
+  padding: 4px;
+  border-radius: 4px;
+  line-height: 100%;
+
+  p {
+    margin: 0;
+  }
+
+  &.green {
+    color: #0FBE00;
+    background-color: #dcffd975;
+    border: 1px dashed #0FBE00;
+  }
+
+  &.red {
+    color: #FF5C5C;
+    border: 1px dashed #FF5C5C;
+    background-color: #ffcbcb75;
+  }
+
+  &.blue {
+    color: #5CBAFF;
+    border: 1px dashed #5CBAFF;
+    background-color: #cbefff75;
+  }
+
+  &.yellow {
+    color: #FFD35C;
+    border: 1px dashed #FFD35C;
+    background-color: #ffefcb75;
+  }
+}
+
+.integrations.ant-dropdown {
+  .ant-dropdown-menu {
+    padding: 0;
+
+    .ant-dropdown-menu-submenu-title {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+    }
+
+    .ant-dropdown-menu-item {
+      padding: 8px 12px;
+    }
+
+    .ant-dropdown-menu-title-content {
+      text-wrap: nowrap;
+    }
+  }
+}
+
+.integrations-submenu.ant-dropdown-menu-submenu {
+  .ant-dropdown-menu-item {
+    padding: 5px;
+
+    & > svg {
+      width: 24px;
+      height: 24px;
+      margin: 0 !important;
+    }
+  }
+}
+
+.ant-tooltip .ant-tooltip-arrow {
+  &::before {
+    background-color: var(--bg-color-main);
+  }
+}

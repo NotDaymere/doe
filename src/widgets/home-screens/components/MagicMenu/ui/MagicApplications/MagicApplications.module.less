@@ -1,0 +1,106 @@
+.apps {
+    position: relative;
+}
+
+.apps_btn {
+    &._active {
+        [data-has-menu] {
+            opacity: 1;
+            &::before {
+                transform: translate(-50%, -50%);
+            }
+        }
+    }
+
+    &:hover,
+    &._active {
+        color: #1f1f1f;
+        background: #f8f8f8;
+
+        > span > svg {
+            fill: #9747ff;
+        }
+    }
+}
+
+.apps_menu {
+    // width: 148px;
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid #f8f8f8;
+
+    background: #ffffff;
+    position: absolute;
+    bottom: 8px;
+    left: calc(100% - 8px);
+
+    // max-height: 104px;
+    // overflow: auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+
+    // &::-webkit-scrollbar {
+    //     display: none;
+    // }
+}
+
+.apps_menu_btn {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: border 200ms ease;
+
+    position: relative;
+
+    &::after {
+        content: attr(data-label);
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: rgba(#1F1F1F, 35%);
+        border: 1px solid rgba(#1F1F1F, 5%);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 4px 20px rgba(#000, 6%);
+
+        .setFontSohneBuch(14px);
+        color: #F8F8F8;
+
+        position: absolute;
+        bottom: 18px;
+        left: 16px;
+
+        opacity: 0;
+        visibility: hidden;
+
+        transition: 200ms ease;
+        transition-property: visible, opacity;
+    }
+
+    &:hover {
+        border-color: #DDDDDD;
+
+        &::after {
+            opacity: 1;
+            z-index: 50;
+            visibility: visible;
+        }
+    }
+}
+
+.enter {
+    opacity: 0;
+}
+.enterActive {
+    opacity: 1;
+    transition: opacity 250ms ease;
+}
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: opacity 250ms ease;
+}

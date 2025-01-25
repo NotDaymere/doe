@@ -1,0 +1,80 @@
+.gaia-bar {
+  &-wrapper {
+    position: relative;
+    background-color: var(--gaia-button-bg);
+    border: 0.10px solid var(--btn-color-border);
+    border-radius: 24px;
+    padding: 8px 24px;
+  }
+
+  &-value {
+    position: absolute;
+    top: 56px;
+    text-align: center;
+
+    .value-unit {
+      color: var(--text-color-primary);
+    }
+
+    .value-number {
+      font-weight: 600;
+    }
+
+    &.tree {
+      .value-number {
+        color: #A2845E;
+      }
+    }
+
+    &.drop {
+      .value-number {
+        color: #54BEF0;
+      }
+    }
+
+    &.wind {
+      .value-number {
+        color: #9D9D9D;
+      }
+    }
+
+    &.bolt {
+      .value-number {
+        color: #FFCC02;
+      }
+    }
+
+    &.leaf {
+      .value-number {
+        color: #27CD41;
+      }
+    }
+  }
+
+  &-item {
+    align-items: center;
+
+    svg {
+      height: 24px;
+    }
+  }
+
+  .close-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    height: fit-content;
+    padding: 10px;
+
+    svg {
+      height: 16px;
+      width: 16px;
+    }
+  }
+}
