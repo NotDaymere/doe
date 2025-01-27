@@ -1,0 +1,1 @@
+export { getCodeBlockConfigured } from "./editor-highlight";

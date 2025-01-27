@@ -9,12 +9,14 @@ export function useEditorContext(editor: Editor | null) {
         const isItalic = editor?.isActive("italic");
         const isStrike = editor?.isActive("strike");
         const isUnderline = editor?.isActive("underline");
+        const isCode = editor?.isActive("codeBlock");
 
         return {
             isBold,
             isItalic,
             isStrike,
             isUnderline,
+            isCode
         };
     }, [editor, _]);
 
@@ -32,6 +34,10 @@ export function useEditorContext(editor: Editor | null) {
     );
     const toggleStrike = React.useCallback(
         () => editor?.chain().focus().toggleStrike().run(),
+        [editor]
+    );
+    const toggleCode = React.useCallback(
+        () => editor?.chain().focus().toggleCodeBlock().run(),
         [editor]
     );
 
@@ -53,5 +59,6 @@ export function useEditorContext(editor: Editor | null) {
         toggleItalic,
         toggleStrike,
         toggleUnderline,
+        toggleCode,
     };
 }

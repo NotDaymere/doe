@@ -8,13 +8,160 @@
 }
 
 .panel_wrapper {
-    background: #F8F8F8;
-    border: 1px solid #DDDDDD;
+    max-width: 892px;
+    width: 100%;
+
+    position: relative;
+
+    &._over {
+        .panel_drag_text,
+        .panel_drag_btn {
+            opacity: 0.1;
+        }
+        .panel_drag::after,
+        .panel_drag::before {
+            opacity: 1;
+        }
+    }
+}
+
+.panel_prompt {
+    padding: 8px;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    transform: translateY(-4px);
+    width: 100%;
+    border-radius: 12px;
+    background: rgba(#fff, 0.8);
+    backdrop-filter: blur(80px);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    box-shadow: 2px 8px 16px rgba(#000, 5%);
+    z-index: 10;
+
+    .setFontSohneBuch(14px, 1, normal);
+    color: #1f1f1f;
+}
+
+.panel_files {
+    left: 0;
+    bottom: 100%;
+    transform: translateY(-15px);
+    width: 100%;
+}
+
+// Drag
+.panel_drag {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    background: linear-gradient(to bottom, #fff, #fff), rgba(#f3ffdf, 0.3);
+    border: 1px dotted #8bcf16;
+    z-index: 11;
+
+    padding: 0 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    &::after,
+    &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: #b7ff3c;
+        height: 17px;
+        filter: blur(16px);
+        opacity: 0;
+        transition: opacity 400ms ease;
+    }
+
+    &::before {
+        width: 102px;
+    }
+
+    &::after {
+        width: 270px;
+    }
+}
+.panel_drag_text {
+    .setFontSohneBuch(16px, 1.1, normal);
+    color: #355302;
+    transition: opacity 300ms ease;
+}
+.panel_drag_btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    background: #d9f4ac;
+    border: 1px solid #8bcf16;
+    position: relative;
+    transition: opacity 300ms ease;
+
+    svg {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+        fill: #8bcf16;
+
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+// Prompt
+.panel_prompt_icon {
+    width: 30px;
+    height: 30px;
+    padding: 8px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: #f8f8f8;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    fill: #b5b5b5;
+}
+
+.panel_prompt_input {
+    min-width: 62px;
+    padding: 7px;
+    border-radius: 8px;
+    border: 1px dashed #5cb9ff;
+    background: rgba(#5cb9ff, 0.1);
+
+    .setFontSohneBuch(13px, 1.2, normal);
+    color: #5cb9ff;
+
+    &::placeholder {
+        color: #5cb9ff;
+    }
+}
+
+.panel_main {
+    width: 100%;
+
+    background: #f8f8f8;
+    border: 1px solid #dddddd;
     border-radius: 16px;
     padding: 8px;
     padding-left: 10px;
-    max-width: 892px;
-    width: 100%;
 
     display: flex;
     align-items: flex-end;
@@ -30,13 +177,13 @@
     padding-right: 8px;
     max-height: 160px;
     overflow-y: auto;
-
 }
 
+.panel_callBtn,
 .panel_button {
     width: 36px;
     height: 36px;
-    border: 1px solid #DDDDDD;
+    border: 1px solid #dddddd;
     border-radius: 50%;
     flex-shrink: 0;
 
@@ -45,14 +192,20 @@
     align-items: center;
 
     svg {
-        width: 17px;
-        height: 17px;
-        fill: #B5B5B5;
+        flex-shrink: 0;
     }
 
     &:disabled {
         cursor: default;
-        background: rgba(#B5B5B5, 20%);
+        background: rgba(#b5b5b5, 20%);
+    }
+}
+
+.panel_button {
+    svg {
+        width: 17px;
+        height: 17px;
+        fill: #b5b5b5;
     }
 }
 
@@ -60,7 +213,7 @@
     height: 36px;
     padding: 10px 22px;
     border-radius: 12px;
-    background: #1F1F1F;
+    background: #1f1f1f;
 
     display: flex;
     align-items: center;
@@ -68,11 +221,30 @@
 
     .setFontSohneBuch(14px);
 
-    color: #F8F8F8;
+    color: #f8f8f8;
 
     svg {
         width: 13px;
         height: 13px;
-        stroke: #F8F8F8;
+        stroke: #f8f8f8;
+    }
+}
+
+.panel_callBtn {
+    transition: background 120ms ease;
+
+    svg {
+        width: 17px;
+        height: 17px;
+        fill: #5b5b5b;
+        transition: fill 120ms ease;
+    }
+
+    &:hover {
+        background: #5b5b5b;
+
+        svg {
+            fill: #5cb9ff;
+        }
     }
 }

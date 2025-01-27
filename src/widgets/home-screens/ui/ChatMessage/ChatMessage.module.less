@@ -1,0 +1,95 @@
+.input {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.input_editBtn{
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #F1E7FF;
+    border: 1px solid #9747FF;
+
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: background 125ms ease;
+
+    svg {
+        width: 12px;
+        height: 12px;
+        fill: #9747FF;
+    }
+
+    &:hover {
+        background: darken(#F1E7FF, 3%);
+    }
+}
+.input_message {
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px dashed #B5B5B5;
+
+    .setFontSohneBuch(16px, 1.4, normal);
+    color: #1f1f1f;
+}
+
+// Edit
+.edit {
+    border-radius: 16px;
+    border: 1px solid #DDDDDD;
+    background: #FBFBFB;
+    padding: 20px;
+}
+.edit_editor_editor {
+    padding-right: 10px;
+    .setFontSohneBuch(16px, 1.2, normal);
+    color: #1F1F1F;
+
+    max-height: 160px;
+    overflow-y: auto;
+}
+.edit_controls {
+    margin-top: 4px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+}
+.edit_controls_cancelBtn,
+.edit_controls_saveBtn {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(#000, 0.05);
+
+    position: relative;
+
+    svg {
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.edit_controls_cancelBtn {
+    border: 1px solid #DDDDDD;
+    svg {
+        fill: #5B5B5B;
+        width: 10px;
+        height: 10px;
+    }
+}
+.edit_controls_saveBtn {
+    background: #1F1F1F;
+    svg {
+        fill: #FFFFFF;
+    }
+}

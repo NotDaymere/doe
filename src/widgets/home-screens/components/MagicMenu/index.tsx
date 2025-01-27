@@ -6,6 +6,7 @@ import StarsIcon from "src/shared/icons/Stars.icon";
 import TalkIcon from "src/shared/icons/Talk.icon";
 import UploadIcon from "src/shared/icons/Upload.icon";
 import { MagicApplications, MagicMenuButton, MagicUploadApps } from "./ui";
+import { useClickOut } from "src/shared/hooks/useClickOut";
 import css from "./MagicMenu.module.less";
 
 interface Props {
@@ -19,6 +20,9 @@ export const MagicMenu: React.FC<Props> = ({
 }) => {
     const [activeMenu, setActiveMenu] = React.useState(false);
     const nodeRef = React.useRef<HTMLDivElement>(null);
+    const ref = useClickOut({
+        handler: () => setActiveMenu(false)
+    });
 
     const toggleMenu = () => setActiveMenu(!activeMenu);
 
@@ -32,10 +36,23 @@ export const MagicMenu: React.FC<Props> = ({
             input.remove();
         }
         input.click();
+    };
+
+    const setCloseHandler = (fn?: () => void) => {
+        return () => {
+            fn?.();
+            setActiveMenu(false);
+        }
     }
 
     return (
-        <div className={css.magic} style={{ zIndex: activeMenu ? 100 : "" }}>
+        <div 
+            className={css.magic} 
+            style={{ 
+                zIndex: activeMenu ? 100 : "" 
+            }} 
+            ref={ref}
+        >
             <button className={css.magic_btn} onClick={toggleMenu}>
                 <StarsIcon />
             </button>
@@ -52,13 +69,13 @@ export const MagicMenu: React.FC<Props> = ({
                     <MagicMenuButton 
                         icon={<UploadIcon />} 
                         text="Upload from desktop" 
-                        onClick={upload}
+                        onClick={setCloseHandler(upload)}
                     />
                     <MagicUploadApps />
                     <MagicMenuButton 
                         icon={<CallIcon />} 
                         text="Dispatch Doe" 
-                        onClick={onDispatchDoe}
+                        onClick={setCloseHandler(onDispatchDoe)}
                     />
                     <MagicMenuButton icon={<TalkIcon />} text="Talk mode" />
                     <MagicMenuButton icon={<BranchIcon />} text="Create new branch" />

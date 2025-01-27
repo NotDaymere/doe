@@ -1,20 +1,22 @@
 import { Editor } from "@tiptap/react";
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
 
 export interface AppState {
     editor: Editor | null;
+    theme: "light" | "dark";
+    gaiaActive: boolean;
+    setGaiaActive: (bool: boolean) => void;
     setActiveEditor: (editor: Editor | null) => void;
+    setTheme: (value: "light" | "dark") => void;
 }
 
 export const useAppStore = create<AppState>()(
-    devtools(
-        (set) => ({
-            editor: null,
-            setActiveEditor: (editor) => set(() => ({ editor })),
-        }),
-        {
-            name: "app-storage",
-        }
-    )
+    (set) => ({
+        editor: null,
+        gaiaActive: false,
+        theme: "light",
+        setGaiaActive: (gaiaActive) => set(() => ({ gaiaActive })),
+        setActiveEditor: (editor) => set(() => ({ editor })),
+        setTheme: (theme) => set(() => ({ theme })),
+    })
 );

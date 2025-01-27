@@ -1,0 +1,77 @@
+.file {
+    width: 235px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    position: relative;
+
+    border: 1px solid #fff;
+    background: rgba(#fff, 0.1);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 4px 20px rgba(#000, 0.06);
+
+    &:hover {
+        .file_deleteBtn {
+            opacity: 1;
+        }
+    }
+}
+.file_icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: inherit;
+    }
+}
+.file_content {
+    width: calc(100% - 50px);
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px
+
+}
+.file_name {
+    .setFontSohneKraftig(16px, 1.1, normal);
+    color: #1f1f1f;
+    white-space: nowrap;
+}
+
+.file_ext {
+    text-transform: uppercase;
+    .setFontSohneBuch(16px, 1, normal);
+    color: #B5B5B5;
+}
+
+.file_deleteBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #F55687;
+    transform: translate(50%, -50%);
+
+    opacity: 0;
+    transition: opacity 200ms ease;
+
+    svg {
+        width: 50%;
+        height: 50%;
+        fill: #FFF;
+
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

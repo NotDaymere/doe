@@ -1,0 +1,115 @@
+.select {
+    position: relative;
+
+    &._active {
+        z-index: 100;
+        .select_btn_icon {
+            transform: rotate(-180deg);
+        }
+    }
+}
+.select_hidden {
+    display: flex;
+    flex-direction: column;
+    height: 0px;
+    visibility: hidden;
+    opacity: 0;
+}
+.select_btn {
+    min-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0px 16px;
+    height: 50px;
+    // @include fontTasaNormal(16px, 1.1, normal, #120830);
+    // background: darken(colorLightBlue(), 1%);
+    white-space: nowrap;
+    border-radius: 9px;
+    text-align: left;
+}
+
+.select_value {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    svg,
+    img {
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+}
+.select_btn_icon {
+    // @include size(10px);
+    // transform: rotate(90deg);
+    width: 10px;
+    height: 10px;
+    stroke: #909090;
+}
+.select_dropdown {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, 10px);
+    min-width: 100%;
+    background: #FFF;
+    border-radius: 9px;
+    padding: 9px;
+
+    max-height: 270px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    
+    // box-shadow: 0 4px 16px colorBlack(5%);
+    
+
+    &::-webkit-scrollbar {
+        width: 8px;
+
+        &-thumb {
+            width: 8px;
+            border-radius: 8px;
+            background: colorBlack(50%);
+        }
+    }
+}
+.select_dropdown_item {
+    cursor: pointer;
+    // @include fontTasaNormal(16px, 1.1, normal, #120830);
+    white-space: nowrap;
+    width: fit-content;
+    border-radius: 6px;
+    min-width: 100%;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 8px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    img,
+    svg {
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+    &:hover {
+        background: #F5F9FC;
+    }
+
+    &._active {
+        opacity: 0.5;
+    }
+
+    &:not(._nullable)._active {
+        pointer-events: none
+    }
+}
