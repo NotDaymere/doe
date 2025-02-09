@@ -66,10 +66,9 @@ export const ChatMessage: React.FC<Props> = ({
         )
     }
 
-
     return (
         <div className={css.message}>
-            ChatMessage
+            {null}
         </div>
     );
 };

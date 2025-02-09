@@ -6,6 +6,7 @@ import css from "./Editor.module.less";
 
 type Props = {
     className?: string;
+    clearContent?: boolean;
 } & EditorProps;
 
 export const Editor: React.FC<Props> = ({
@@ -13,6 +14,7 @@ export const Editor: React.FC<Props> = ({
     classNameEditor,
     classNameFocus,
     classNamePlaceholder,
+    clearContent,
     ...editorProps
 }) => {
     const editor = useInitialEditor({
@@ -21,6 +23,11 @@ export const Editor: React.FC<Props> = ({
         classNameFocus: clsx(css.editor_focused, classNameFocus),
         classNamePlaceholder: clsx(css.editor_placeholder, classNamePlaceholder)
     });
+
+    // clear content after sending text
+    React.useEffect(()=>{
+        if(clearContent) editor?.commands.clearContent()
+    }, [clearContent])
 
     return (
         <div className={clsx(css.editor, className)}>

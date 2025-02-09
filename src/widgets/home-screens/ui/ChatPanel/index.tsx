@@ -14,8 +14,10 @@ import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
 
 export const ChatPanel: React.FC = () => {
-    const { text, files, setText, setFiles } = usePanel();
-    const { setEditor } = useChatStore();
+    const { text, files, setText, setFiles, reset } = usePanel();
+    const { setEditor, setMessages } = useChatStore();
+    const messages = useChatStore((state) => state.messages);
+    const [clearContent, setClearContent] = React.useState(false)
     const { 
         drag,
         dragTarget, 
@@ -32,6 +34,18 @@ export const ChatPanel: React.FC = () => {
     });
 
     const prompt = usePrompt();
+
+    const handleSend = () => {
+        setMessages([...messages, { id: messages.length+1, isUser: true, isCode: false, content: text, files: files }]);
+        reset();
+        console.log({text});
+        setClearContent(true);
+    }
+
+    const handleChangeEditor = (e:string) => {
+        setClearContent(false);
+        setText(e)
+    }
 
     
     
@@ -85,11 +99,12 @@ export const ChatPanel: React.FC = () => {
                     <Editor
                         readOnly={prompt.active}
                         value={text}
-                        onChange={setText}
+                        onChange={handleChangeEditor}
                         onFocus={setEditor}
                         onBlur={() => setEditor(null)}
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
+                        clearContent={clearContent}
                         placeholder="Ask Doe anything you’d like about the world..."
                     />
                     <button className={css.panel_button} disabled>
@@ -99,7 +114,7 @@ export const ChatPanel: React.FC = () => {
                         <MicrophoneIcon />
                     </button>
                     {!prompt.active ? (
-                        <button className={css.panel_submitBtn}>
+                        <button className={css.panel_submitBtn} onClick={handleSend}>
                             Send <ArrowUpIcon />
                         </button>
                     ) : (
