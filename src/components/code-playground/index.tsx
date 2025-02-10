@@ -7,7 +7,11 @@ import { calculateButtonPosition } from './helpers/calculateButtonPosition';
 import { QuestionButton } from './assets/QuestionButton';
 import { useEditorContext } from 'src/contexts/EditorProvider';
 import { CloseCircleOutlined } from "@ant-design/icons"
-import { Flex } from 'antd';
+import { Flex } from "antd";
+import Pen from "./assets/Pen";
+import DecreasePlayground from "./assets/DecreasePlayground";
+import CloudPlus from "./assets/CloudPlus";
+
 
 const CodePlayground = () => {
   const [selectedText, setSelectedText] = useState<string | null>(null);
@@ -127,6 +131,9 @@ const CodePlayground = () => {
     const area = calculateArea(5);
     console.log("Area:", area);`}
       />
+      <Pen />
+      <DecreasePlayground />
+      <CloudPlus />
       {selectedText && <QuestionButton
         buttonPosition={{
           top: buttonPosition?.top,
