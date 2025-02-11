@@ -3,8 +3,10 @@ import { Button } from "antd";
 import './CloudPlus.less';
 
 function CloudPlus() {
-    return <Button
-        // onClick={onClick}
-        className={"cloud-plus-button"}> <CloudPlusIcon className ={"cloud-plus-icon"}/></Button>
+    return (
+        <Button className={"cloud-plus-button"} >
+            <CloudPlusIcon className ={"cloud-plus-icon"}/>
+        </Button>
+    )
 }
 export default CloudPlus

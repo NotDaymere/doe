@@ -6,6 +6,7 @@ import "highlight.js/styles/github-dark.css";
 import jsPDF from "jspdf";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { ReactComponent as Logo } from "src/assets/icons/general-logo.svg";
+import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
 import { useApp } from "../app";
 import { SvgIcon } from "../icon";
 import { FileItem } from "../ui/FileItem";
@@ -70,6 +71,13 @@ export const ChatMessage: FC<ChatMessageProps> = ({
         setPlayground((prev) => ({
             ...prev,
             type: "code",
+            open: true,
+        }));
+    };
+    const openTablePlayground = () => {
+        setPlayground((prev) => ({
+            ...prev,
+            type: "table",
             open: true,
         }));
     };
@@ -152,7 +160,13 @@ export const ChatMessage: FC<ChatMessageProps> = ({
                             </MathJax>
                         </div>
                         {!isUser && (
-                            <Flex justify={"space-between"} className={"message-actions"}>
+                            <Flex vertical>
+                                <Flex justify={"space-between"} className={"message-actions"}>
+                                    <Button onClick={openTablePlayground} className={'table-playground-button'}>
+                                        <TableIcon /> Table Random Values
+                                    </Button>
+                                </Flex>
+                                <Flex justify={"space-between"} className={"message-actions"}>
                                 <Button
                                     icon={
                                         <SvgIcon
@@ -185,6 +199,7 @@ export const ChatMessage: FC<ChatMessageProps> = ({
                                         onClick={handleCopy}
                                     />
                                 </Flex>
+                            </Flex>
                             </Flex>
                         )}
                     </div>

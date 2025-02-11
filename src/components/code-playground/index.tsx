@@ -8,9 +8,6 @@ import { QuestionButton } from './assets/QuestionButton';
 import { useEditorContext } from 'src/contexts/EditorProvider';
 import { CloseCircleOutlined } from "@ant-design/icons"
 import { Flex } from "antd";
-import Pen from "./assets/Pen";
-import DecreasePlayground from "./assets/DecreasePlayground";
-import CloudPlus from "./assets/CloudPlus";
 
 
 const CodePlayground = () => {
@@ -29,6 +26,7 @@ const CodePlayground = () => {
   const { setPlayground } = useApp().app
 
   const handleSetContent = () => {
+
     if (selectedText) {
       const template = `I have a question about ${determineCodeType(selectedText)}<div class="inline-wrapper">:<div data-tag="true" class="custom-tag yellow">question</div></div>`;
       const contentHTML = template;
@@ -76,6 +74,7 @@ const CodePlayground = () => {
       if (!model) return;
 
       const selectedText = model.getValueInRange(selection);
+
       setSelectedText(selectedText);
     }
   };
@@ -93,7 +92,7 @@ const CodePlayground = () => {
   
     monaco.editor.defineTheme('myCustomTheme', customTheme);
     monaco.editor.setTheme('myCustomTheme');
-  
+
     editor.onMouseUp(() => {
       handleEditorMouseUp(editor);
     });
@@ -101,6 +100,7 @@ const CodePlayground = () => {
     editor.onKeyUp(() => {
       handleEditorMouseUp(editor);
     });
+
   };
 
   const language = 'javascript';
@@ -131,9 +131,6 @@ const CodePlayground = () => {
     const area = calculateArea(5);
     console.log("Area:", area);`}
       />
-      <Pen />
-      <DecreasePlayground />
-      <CloudPlus />
       {selectedText && <QuestionButton
         buttonPosition={{
           top: buttonPosition?.top,
