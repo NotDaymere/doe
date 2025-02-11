@@ -63,17 +63,19 @@ export const ChatPanel: React.FC = () => {
             setMessages([...updatedMessages, botMessage]);
         }, 3000);
     };
-    
-    
-    
 
     const handleChangeEditor = (e:string) => {
         setClearContent(false);
         setText(e)
     }
 
-    
-    
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.code === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+        }
+    };
+
     return (
         <div className={css.panel}
             onDragStart={handleDragStart}
@@ -128,6 +130,7 @@ export const ChatPanel: React.FC = () => {
                         readOnly={prompt.active}
                         value={text}
                         onChange={handleChangeEditor}
+                        handleKeyDown={handleKeyPress}
                         onFocus={setEditor}
                         onBlur={() => setEditor(null)}
                         className={css.panel_editor}
