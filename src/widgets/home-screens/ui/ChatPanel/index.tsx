@@ -12,6 +12,7 @@ import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
 import { FileList } from "src/shared/components/FileList";
 import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
+import { testTextAndCharts } from "src/components/chat-message/mockData";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
@@ -36,9 +37,8 @@ export const ChatPanel: React.FC = () => {
     const prompt = usePrompt();
 
     const handleSend = () => {
-        setMessages([...messages, { id: messages.length+1, isUser: true, isCode: false, content: text, files: files }]);
+        setMessages([...messages, { id: Date.now(), isUser: true, isCode: false, content: text, files: files },  { id: Date.now()+1, isUser: false, isCode: true, content: testTextAndCharts }]);
         reset();
-        console.log({text});
         setClearContent(true);
     }
 
@@ -77,15 +77,18 @@ export const ChatPanel: React.FC = () => {
                     </div>
                 )}
                 {files.length > 0 && (
-                    <FileList 
-                        className={css.panel_files}
-                        files={files}
-                        onChange={setFiles}
-                    />
+                    <div className={css.panel_files_mask}>
+                        <FileList 
+                            className={css.panel_files}
+                            files={files}
+                            onChange={setFiles}
+                        />
+                    </div>
                 )}
                 {drag && (
                     <div className={css.panel_drag}>
                         <p className={css.panel_drag_text}>Upload files, folders, text content, or code here.</p>
+                        <div className={css.panel_drag_background}/>
                         <button className={css.panel_drag_btn}>
                             <UploadIcon />
                         </button>

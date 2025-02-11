@@ -65,6 +65,13 @@ export const ChatMessage: React.FC<Props> = ({
             </div>
         )
     }
+    if(data.isCode) {
+        return (
+            <div className={css.message}>
+                    {data.content}
+            </div>
+        )
+    }
 
     return (
         <div className={css.message}>
