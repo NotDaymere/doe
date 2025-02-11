@@ -13,6 +13,7 @@ import { FileList } from "src/shared/components/FileList";
 import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
 import { testTextAndCharts } from "src/components/chat-message/mockData";
+import { IMessage } from "src/shared/types/Message";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
@@ -37,10 +38,34 @@ export const ChatPanel: React.FC = () => {
     const prompt = usePrompt();
 
     const handleSend = () => {
-        setMessages([...messages, { id: Date.now(), isUser: true, isCode: false, content: text, files: files },  { id: Date.now()+1, isUser: false, isCode: true, content: testTextAndCharts }]);
+        const userMessage: IMessage = {
+            id: Date.now(),
+            isUser: true,
+            isCode: false,
+            content: text,
+            files: files,
+        };
+    
+        const botMessage: IMessage = {
+            id: Date.now() + 1,
+            isUser: false,
+            isCode: true,
+            content: testTextAndCharts,
+        };
+    
+        const updatedMessages = [...messages, userMessage];
+        setMessages(updatedMessages);
+    
         reset();
         setClearContent(true);
-    }
+    
+        setTimeout(() => {
+            setMessages([...updatedMessages, botMessage]);
+        }, 3000);
+    };
+    
+    
+    
 
     const handleChangeEditor = (e:string) => {
         setClearContent(false);
