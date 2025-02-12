@@ -1,4 +1,6 @@
 .cloud-plus-button {
+  box-sizing: border-box;
+  //position: relative;
   bottom: 50px;
   right: 485px;
   padding: 0;
@@ -10,11 +12,18 @@
   text-align: center;
   align-items: center;
   background-color: rgba(31, 31, 31, 0.35);
-;
+  border: 0;
 }
 .cloud-plus-icon {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.cloud-plus-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  bottom: 50px;
+  right: 485px;
 }

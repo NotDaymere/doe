@@ -1,9 +1,8 @@
-import { Button, Table, TableProps } from "antd";
+import { Table, TableProps } from "antd";
 import { FC, useEffect, useRef, useState } from "react";
 import mockData from './mockData.json';
 import { useApp } from "../app";
 import './index.less';
-import { SvgIcon } from "../icon";
 import { useEditorContext } from "src/contexts/EditorProvider";
 import Pen from "./assets/Pen/Pen";
 import DecreasePlayground from "./assets/DecreasePlayground/DecreasePlayground";
@@ -21,6 +20,7 @@ const TablePlayground: FC = () => {
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
   const [selectedText, setSelectedText] = useState<string | null>(null);
+  const [isPen, setIsPen] = useState<boolean>(false);
   const [buttonPosition, setButtonPosition] = useState<{ top?: number; left?: number; bottom?: number; right?: number} | null>(null);
 
   const customTheme: monaco.editor.IStandaloneThemeData = {
@@ -121,24 +121,6 @@ const TablePlayground: FC = () => {
     setPlayground({ type: null, data: null, id: null, open: false })
   )
 
-  const downloadCSV = () => {
-    const csvRows = [];
-    const headers = mockData.columns.map(col => col.title).join(',');
-    csvRows.push(headers);
-
-    mockData.data.forEach(row => {
-      const values = mockData.columns.map(col => row[col.dataIndex as keyof typeof row]);
-      csvRows.push(values.join(','));
-    });
-    const csvString = csvRows.join('\n');
-    const blob = new Blob([csvString], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'table_data.csv';
-    a.click();
-    URL.revokeObjectURL(url);
-  };
   const handleEditorMount: OnMount = (editor, monaco) => {
     editorRef.current = editor;
     editor.focus();
@@ -146,10 +128,12 @@ const TablePlayground: FC = () => {
     monaco.editor.defineTheme('myCustomTheme', customTheme);
     monaco.editor.setTheme('myCustomTheme');
     editor.onMouseUp(() => {
+      setIsPen(false);
       handleEditorMouseUp(editor);
     });
 
     editor.onKeyUp(() => {
+      setIsPen(false);
       handleEditorMouseUp(editor);
     });
   };
@@ -167,16 +151,18 @@ const TablePlayground: FC = () => {
       if (!model) return;
 
       const selectedText = model.getValueInRange(selection);
-      console.log(selectedText);
       setSelectedText(selectedText);
     }
   };
+
 const handlePenClick = () => {
   if (selectedText) {
     setSelectedText(null)
     setButtonPosition(null)
+    setIsPen(false)
   } else {
     setSelectedText("Pen");
+    setIsPen(true)
     setButtonPosition({
       bottom: 137,
       right: 45,
@@ -195,7 +181,7 @@ const handlePenClick = () => {
       />
       <Editor
           onMount={handleEditorMount}
-          theme="light"
+          theme="customTheme"
           language="plaintext"
           height="100%"
           options={{
@@ -203,6 +189,7 @@ const handlePenClick = () => {
             insertSpaces: true,
             minimap: { enabled: false },
           }}
+          className={'example-text'}
           defaultValue={`
 This is what your table looks like when it's in Doe Playground! 
 Larger tables can be navigated, folded in to reveal text, etc.
@@ -216,11 +203,6 @@ The graph interaction with highlighting still applies here!
 
         <DecreasePlayground onClick={handleCollapsePlayground} />
         <CloudPlus />
-        <Button type={'text'}
-                onClick={downloadCSV}
-        >
-          <SvgIcon type={'download'} />
-        </Button>
         <Pen isActive = {selectedText} onClick={handlePenClick}/>
       </div>
 
@@ -231,6 +213,7 @@ The graph interaction with highlighting still applies here!
               bottom: buttonPosition?.bottom,
               right: buttonPosition?.right
             }}
+                      isPen={isPen}
       />
       }
     </div>
