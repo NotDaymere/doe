@@ -11,7 +11,7 @@
 
 .sourcePlayground {
     display: grid;
-    grid-template-rows: repeat(2, 50vh);
+    grid-template-rows: repeat(2, calc((100vh - 65px - 24px) / 2));
     gap: 10px;
 }
 
@@ -78,6 +78,7 @@
     gap: 12px;
     padding: 12px;
     overflow: hidden;
+    background-color: aqua;
 }
 
 .defaultText {
