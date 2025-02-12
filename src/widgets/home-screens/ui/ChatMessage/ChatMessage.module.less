@@ -117,13 +117,15 @@
     .bot_message {
       align-self: flex-start;
       justify-content: flex-start;
-      border-top-left-radius: 0;
     }
   
     .message_content {
       display: flex;
       flex-direction: column;
       white-space: pre-wrap;
+      background-color: #fff;
+      border-radius: 16px;
+      padding: 20px;
     }
   
     .edit_button {
@@ -141,43 +143,70 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      min-width: 40px;
-      height: 40px;
-      min-height: 40px;
+      width: 46px;
+      min-width: 46px;
+      height: 46px;
+      min-height: 46px;
       margin-right: 8px;
       background-color: #fff;
-      border: 1px solid #EFEFEF;
       border-radius: 8px;
-  
+      margin:auto;
       svg {
         width: 20px;
         height: 20px;
       }
     }
-  
-    .code_without_output {
-      code {
-        border-radius: 10px;
-      }
+    //for gradient borders
+    .bot_logo_background {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      min-width: 48px;
+      height: 48px;
+      min-height: 48px;
+      margin-right: 8px;
+      background-image: linear-gradient(to right bottom, 
+      rgba(141, 141, 141, 0.46), 
+      rgba(255, 255, 255, 1)
+      );
+      border-radius: 8px;
     }
+    .button_steps{
+      border-radius: 1000px;
+      padding: 8px 14px;
+      box-shadow: 0px 2px 15px 0px #0000000D;
+    }
+    .button_steps_label {
+      background: linear-gradient(90.09deg, #9747FF -24.88%, #1F1F1F 72.4%);
+      background-clip: text;
+      background-size: 100%;
+      -webkit-background-clip: text;
+      -moz-background-clip: text;
+      -webkit-text-fill-color: transparent; 
+      -moz-text-fill-color: transparent;
+      font-size: 16px;
+      font-weight: 400;
+  }
   
-  
-  
-    .code_with_output {
+    :global(.code-without-output) {
       display: flex;
       flex-direction: column;
-  
-      pre {
+    
+      :global(code) {
+        border-radius: 10px;
+      }
+    
+      :global(pre) {
         margin-bottom: 0;
-  
-        code {
+    
+        :global(code) {
           border-top-left-radius: 10px;
           border-top-right-radius: 10px;
         }
       }
-  
-      .output {
+    
+      :global(.output) {
         padding: 1em;
         color: white;
         background-color: #8D8D8D;
@@ -185,8 +214,28 @@
         border-bottom-left-radius: 10px;
       }
     }
+    :global(.code-with-output) {
+      display: flex;
+      flex-direction: column;
+      
+      :global(pre) {
+        margin-bottom: 0;
   
+        :global(code) {
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+        }
+      }
   
+      :global(.output) {
+        padding: 1em;
+        color: white;
+        background-color: #8D8D8D;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+      }
+    }
+
     .typewriter_cursor {
       display: none;
     }

@@ -3,6 +3,9 @@ import React from "react";
 // External libraries
 import { Editor as EditorTiptap } from "@tiptap/react";
 import { MathJax } from "better-react-mathjax";
+import hljs from "highlight.js";
+import jsPDF from "jspdf";
+import { Flex } from "antd";
 
 // Shared types & providers
 import { IMessage } from "src/shared/types/Message";
@@ -10,12 +13,14 @@ import { useChatStore } from "src/shared/providers";
 
 // Shared components
 import { Editor } from "src/shared/components/Editor";
+import { useApp } from "src/components/app";
 
 // Icons
 import CrossIcon from "src/shared/icons/Cross.icon";
 import PenIcon from "src/shared/icons/Pen.icon";
 import SendIcon from "src/shared/icons/Send.icon";
 import { ReactComponent as Logo } from "src/assets/icons/general-logo.svg";
+import { SvgIcon } from "src/components/icon";
 
 // Chat message utilities
 import { parseContent } from "src/components/chat-message/parseContent";
@@ -24,6 +29,7 @@ import ChartRenderer from "src/components/chat-message/parseChart";
 
 // Styles
 import css from "./ChatMessage.module.less";
+import "highlight.js/styles/github-dark.css";
 
 interface Props {
     data: IMessage
@@ -38,6 +44,15 @@ export const ChatMessage: React.FC<Props> = ({
     const { editor, setEditor } = useChatStore();
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
+    const { setPlayground } = useApp().app;
+    React.useEffect(() => {
+        if (messageRef.current) {
+            const codeBlocks = messageRef.current.querySelectorAll("code");
+            codeBlocks.forEach((block) => {
+                hljs.highlightElement(block as HTMLElement);
+            });
+        }
+    }, [content, messageRef]);
 
     const toggleEdit = () => {
         setEdit(!isEdit);
@@ -47,6 +62,41 @@ export const ChatMessage: React.FC<Props> = ({
         setContent(data.content);
         setEdit(false);
     }
+    const handleCopy = () => {
+        if (messageRef.current) {
+            const range = document.createRange();
+            range.selectNodeContents(messageRef.current);
+            const selection = window.getSelection();
+            selection?.removeAllRanges();
+            selection?.addRange(range);
+            document.execCommand("copy");
+            selection?.removeAllRanges();
+        }
+    };
+        const downloadPDF = () => {
+            if (messageRef.current) {
+                const doc = new jsPDF();
+    
+                const content = messageRef.current;
+    
+                doc.html(content, {
+                    callback: function (doc) {
+                        doc.save("response.pdf");
+                    },
+                    html2canvas: { scale: 0.3 },
+                    x: 10,
+                    y: 10,
+                });
+            }
+        };
+        const openSourcePlayground = () => {
+            setPlayground((prev) => ({
+                ...prev,
+                type: "source",
+                open: true,
+            }));
+        };
+
 
     if(data.isUser) {
         if(isEdit) {
@@ -90,8 +140,10 @@ export const ChatMessage: React.FC<Props> = ({
         return (
             <div className={`${css.chat_message} ${data.isUser ? css.user_message : css.bot_message}`}>
                 {!data.isUser && (
-                    <div className={css.bot_logo}>
-                        <Logo />
+                    <div className={css.bot_logo_background}>
+                        <div className={css.bot_logo}>
+                            <Logo />
+                        </div>
                     </div>
                 )}
             <div className={css.message_content}>
@@ -119,6 +171,28 @@ export const ChatMessage: React.FC<Props> = ({
                         })}
                     </MathJax>
                 </div>
+                {!data.isUser && (
+                            <Flex justify={"space-between"} className={"message-actions"}>
+                                <button onClick={openSourcePlayground} className={css.button_steps}>
+                                    <SvgIcon
+                                        style={{ width: "15px", height: "15px", marginRight: "2px" }}
+                                        type={"seeAllStepsVioletIcon"}
+                                    /> 
+                                    <span className={css.button_steps_label}>See all steps</span>
+                                </button>
+                                <Flex gap={10}>
+                                    <button onClick={handleCopy}>
+                                        <SvgIcon style={{ width: "100%", height: "100%" }} type={"listenIcon"} />
+                                    </button>
+                                    <button onClick={downloadPDF}>
+                                        <SvgIcon style={{ width: "100%", height: "100%" }} type={"downloadGreen"} />
+                                    </button>
+                                    <button onClick={handleCopy}>
+                                        <SvgIcon style={{ width: "100%", height: "100%" }} type={"copyAnswerGreenIcon"} />
+                                    </button>
+                                </Flex>
+                            </Flex>
+                        )}
             </div>
         </div>
         )
