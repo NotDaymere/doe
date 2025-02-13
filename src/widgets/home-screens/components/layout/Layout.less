@@ -1,0 +1,26 @@
+@import url('/src/styles/variables.less');
+
+
+.main-layout, .main-layout .content {
+  height: 100%;
+}
+
+.main-layout {
+  border-radius: 1rem;
+  border: 0.5px solid black;
+  overflow: hidden;
+
+  .ant-layout-sider {
+    padding: 40px 28px;
+    background: var(--bg-color-sidebar);
+  }
+
+  .content {
+    background: var(--bg-color-main);
+  }
+
+  .playground-sider {
+    background: var(--bg-color-sidebar);
+    padding: 0;
+  }
+}

@@ -1,18 +1,16 @@
 import { Layout as BaseLayout } from "antd"
-import { FC, Suspense } from "react"
-import { Outlet } from "react-router-dom"
+import { FC } from "react"
 import { Sider } from "."
-import { useApp } from "../app"
-import PlaygroundRenderer from "../playground-renderer"
 import "./Layout.less"
+import { useChatStore } from "src/shared/providers";
+import PlaygroundRenderer from "../../ui/PlaygroundRenderer";
 
 interface Props {
   children: React.ReactNode
 }
 
-const Layout: FC<Props> = ({ children }) => {
-    console.log(111111111);
-  const { playground } = useApp().app
+const Layout2: FC<Props> = ({ children }) => {
+  const { playground } = useChatStore()
 
   return (
     <BaseLayout className={"main-layout"} hasSider>
@@ -21,9 +19,6 @@ const Layout: FC<Props> = ({ children }) => {
       </BaseLayout.Sider>
 
       <BaseLayout.Content className={"content"}>
-        {/*<Suspense>*/}
-        {/*  <Outlet />*/}
-        {/*</Suspense>*/}
         {children}
       </BaseLayout.Content>
 
@@ -36,4 +31,4 @@ const Layout: FC<Props> = ({ children }) => {
   )
 }
 
-export { Layout }
+export { Layout2 }

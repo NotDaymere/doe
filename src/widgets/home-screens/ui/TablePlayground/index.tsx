@@ -1,7 +1,6 @@
 import { Flex, Table, TableProps } from "antd";
 import { FC, useEffect, useRef, useState } from "react";
 import mockData from './mockData.json';
-import { useApp } from "../app";
 import './index.less';
 import { useEditorContext } from "src/contexts/EditorProvider";
 import Pen from "./assets/Pen/Pen";
@@ -9,13 +8,14 @@ import DecreasePlayground from "./assets/DecreasePlayground/DecreasePlayground";
 import CloudPlus from "./assets/CloudPlus/CloudPlus";
 import TextFormat from "./assets/TextFormat/TextFormat";
 import * as monaco from "monaco-editor";
-import { calculateButtonPosition } from "../code-playground/helpers/calculateButtonPosition";
 import Editor, { OnMount } from "@monaco-editor/react";
-import TableRandomValues from "../../widgets/home-screens/ui/ChatMessage/assets/TableRandomValues/TableRandomValues";
-import PythonTaskManager from "../../widgets/home-screens/ui/ChatMessage/assets/PythonTaskManager/PythonTaskManager";
+import { useChatStore } from "../../../../shared/providers";
+import { calculateButtonPosition } from "../../../../components/code-playground/helpers/calculateButtonPosition";
+import TableRandomValues from "../ChatMessage/assets/TableRandomValues/TableRandomValues";
+import PythonTaskManager from "../ChatMessage/assets/PythonTaskManager/PythonTaskManager";
 
 const TablePlayground: FC = () => {
-  const { setPlayground } = useApp().app;
+  const { setPlayground } = useChatStore();
   const { editor } = useEditorContext()
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);

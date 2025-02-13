@@ -6,8 +6,6 @@ import "highlight.js/styles/github-dark.css";
 import jsPDF from "jspdf";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { ReactComponent as Logo } from "src/assets/icons/general-logo.svg";
-import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
-import { ReactComponent as CodeIcon } from "src/assets/icons/code.svg";
 import { useApp } from "../app";
 import { SvgIcon } from "../icon";
 import { FileItem } from "../ui/FileItem";
@@ -15,7 +13,6 @@ import "./index.less";
 import ChartRenderer from "./parseChart";
 import { parseContent } from "./parseContent";
 import { parseTextFormatting } from "./parseTextFormatting";
-import DownloadCSV from "../table-playground/assets/DownloadCSV/DownloadCSV";
 
 interface ChatMessageProps {
     id: number | null;
@@ -163,20 +160,6 @@ export const ChatMessage: FC<ChatMessageProps> = ({
                         </div>
                         {!isUser && (
                             <Flex vertical>
-                                <Flex justify={"flex-start"} className={"message-actions"}>
-                                    <Button onClick={openTablePlayground} className={'table-playground-button'}>
-                                        <TableIcon /> Table Random Values
-                                    </Button>
-
-                                    <DownloadCSV />
-                                </Flex>
-                                <Flex justify={"flex-start"} className={"message-actions"}>
-                                    <Button onClick={openCodePlayground} className={'table-playground-button'}>
-                                        <CodeIcon /> Python Task Manager
-                                    </Button>
-
-                                    <DownloadCSV />
-                                </Flex>
                                 <Flex justify={"space-between"} className={"message-actions"}>
                                 <Button
                                     icon={

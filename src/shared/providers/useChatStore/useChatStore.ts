@@ -2,16 +2,19 @@ import { Editor } from "@tiptap/react";
 import { IBranch } from "src/shared/types/Branch";
 import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
+import { IPlayground } from "../../types/Playground";
 
 interface ChatState {
     editor: Editor | null;
     isTyping: boolean;
     currentBranch: IBranch | null;
     messages: IMessage[];
+    playground: IPlayground;
     setCurrentBranch: (currentBranch: IBranch | null) => void;
     setMessages: (messages: IMessage[]) => void;
     setEditor: (editor: Editor | null) => void;
     setTyping: (isTyping: boolean) => void;
+    setPlayground: (playground: IPlayground) => void;
 }
 
 export const useChatStore = create<ChatState>()(
@@ -34,9 +37,17 @@ export const useChatStore = create<ChatState>()(
                 isUser: true
             }
         ],
+        playground: {
+            type: null,
+            open: false,
+            data: null,
+            text: "",
+            id: "code",
+        },
         setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
         setMessages: (messages) => set(() => ({ messages })),
         setEditor: (editor) => set(() => ({ editor })),
-        setTyping: (isTyping) => set(() => ({ isTyping }))
+        setTyping: (isTyping) => set(() => ({ isTyping })),
+        setPlayground: (playground) => set(() => ({ playground })),
     })
 );

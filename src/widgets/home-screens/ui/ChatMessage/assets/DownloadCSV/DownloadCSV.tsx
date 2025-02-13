@@ -1,6 +1,6 @@
 import { Button } from "antd";
-import { SvgIcon } from "../../../icon";
-import mockData from "../../mockData.json";
+import { SvgIcon } from "../../../../../../components/icon";
+import mockData from "../../../../../../components/table-playground/mockData.json";
 import './DownloadCSV.less';
 
 function DownloadCSV() {
