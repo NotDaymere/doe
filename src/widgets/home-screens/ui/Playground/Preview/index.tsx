@@ -8,9 +8,8 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js";
 
 const Preview: FC<IPreviewPlayground> = ({ type, data }) => {
-    if (type === "docs") return <DocsPreview url={data} />;
-
-    return null;
+    // if (type === "docs") return <DocsPreview url={data} />;
+    return <DocsPreview url={data} />;
 };
 
 export default Preview;
