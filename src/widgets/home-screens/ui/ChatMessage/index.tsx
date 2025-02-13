@@ -53,6 +53,59 @@ export const ChatMessage: React.FC<Props> = ({
             });
         }
     }, [content, messageRef]);
+    const [isPaused,setIsPaused] = React.useState(true);
+    const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
+    //speech
+    const synth = React.useRef(window.speechSynthesis);
+    React.useEffect(() => {
+        const synth = window.speechSynthesis;
+    
+        const initUtterance = () => {
+          const textToSpeak = messageRef.current?.textContent || "";
+          const u = new SpeechSynthesisUtterance(textToSpeak);
+    
+          const voices = synth.getVoices();
+          if (voices.length > 0) {
+            u.voice = voices.find((v) => v.lang.startsWith("en")) || voices[0];
+          }
+    
+          setUtterance(u);
+        };
+    
+        initUtterance();
+        //voice updating
+        const handleVoicesChanged = () => {
+          initUtterance();
+        };
+    
+        synth.addEventListener("voiceschanged", handleVoicesChanged);
+    
+        return () => {
+          synth.cancel();
+          synth.removeEventListener("voiceschanged", handleVoicesChanged);
+        };
+      }, []);
+    
+    const handlePlay = () => {
+    if (!utterance) {
+      console.error("Utterance is not ready.");
+      return;
+    }
+
+    if (synth.current.speaking) {
+      console.warn("Already speaking.");
+      return;
+    }
+    
+    synth.current.speak(utterance);
+    setIsPaused(false);
+    };
+
+  const handleStop = () => {
+    synth.current.cancel();
+
+    setIsPaused(true);
+  };
 
     const toggleEdit = () => {
         setEdit(!isEdit);
@@ -181,7 +234,7 @@ export const ChatMessage: React.FC<Props> = ({
                                     <span className={css.button_steps_label}>See all steps</span>
                                 </button>
                                 <Flex gap={10}>
-                                    <button onClick={handleCopy}>
+                                    <button onClick={isPaused ? handlePlay : handleStop}>
                                         <SvgIcon style={{ width: "100%", height: "100%" }} type={"listenIcon"} />
                                     </button>
                                     <button onClick={downloadPDF}>
