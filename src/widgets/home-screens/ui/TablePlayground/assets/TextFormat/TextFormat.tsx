@@ -1,6 +1,9 @@
 import { ReactComponent as General } from "src/assets/icons/general.svg";
-import { ReactComponent as Bius } from "src/assets/icons/bius.svg";
-import { ReactComponent as UpperLowerCase} from "src/assets/icons/upper-lower-case.svg";
+import { ReactComponent as Bold } from "src/assets/icons/bold.svg";
+import { ReactComponent as Indian } from "src/assets/icons/indian.svg";
+import { ReactComponent as UnderLine } from "src/assets/icons/underlining.svg";
+import { ReactComponent as StrikeThrough } from "src/assets/icons/strikethrough.svg";
+import { ReactComponent as UpperLowerCase } from "src/assets/icons/upper-lower-case.svg";
 import { ReactComponent as PencilUnderline } from "src/assets/icons/pencil-underline.svg";
 import { ReactComponent as Paint } from "src/assets/icons/paint.svg";
 import { ReactComponent as ActivePaintIcon } from "src/assets/icons/active-paint.svg";
@@ -14,9 +17,11 @@ import { ReactComponent as ActiveMenuIcon } from "src/assets/icons/active-menu.s
 import { ReactComponent as CardPlus } from "src/assets/icons/card-plus.svg";
 import './TextFormat.less'
 import { Button, Flex } from "antd";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ActivePaint from "./ActivePaint/ActivePaint";
 import ActiveMenu from "./ActiveMenu/ActiveMenu";
+import Underline from "@tiptap/extension-underline";
+
 type Props = {
     isPen?: boolean,
     buttonPosition: {
@@ -27,15 +32,26 @@ type Props = {
     }
 }
 
-function TextFormat({buttonPosition, isPen}: Props) {
+function TextFormat({ buttonPosition, isPen }: Props) {
     const [activePaint, setActivePaint] = useState(false);
-    const handlePenClick  = () => {
-        setActivePaint(!activePaint);
-    }
     const [activeMenu, setActiveMenu] = useState(false);
-    const handleMenuClick  = () => {
+    const [editableText, setEditableText] = useState("Edit this text");
+    const textRef = useRef<HTMLDivElement>(null);
+
+    const handlePenClick = () => {
+        setActivePaint(!activePaint);
+    };
+
+    const handleMenuClick = () => {
         setActiveMenu(!activeMenu);
-    }
+    };
+
+    const handleTextChange = () => {
+        if (textRef.current) {
+            setEditableText(textRef.current.innerText);
+        }
+    };
+
     return (
         <>
             <Flex
@@ -48,11 +64,14 @@ function TextFormat({buttonPosition, isPen}: Props) {
                 }}
             >
                 <Button className={'button'}><General /></Button>
-                <Button className={'button'}><Bius /></Button>
+                <Button className={'button'}><Bold /></Button>
+                <Button className={'button'}><Indian /></Button>
+                <Button className={'button'}><UnderLine /></Button>
+                <Button className={'button'}><StrikeThrough /></Button>
                 <Button className={'button'}><UpperLowerCase /></Button>
                 <Button className={'button'}><PencilUnderline /></Button>
                 <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-                    <Button className={`${activePaint ? 'button-active' : 'button'}`} onClick={handlePenClick}>
+                    <Button className={activePaint ? 'button-active' : 'button'} onClick={handlePenClick}>
                         {!activePaint ? <Paint /> : <ActivePaintIcon />}
                     </Button>
                     {activePaint && (<ActivePaint />)}
@@ -62,19 +81,30 @@ function TextFormat({buttonPosition, isPen}: Props) {
                 <Button className={'button'}><Degree /></Button>
                 <Button className={'button'}><Format /></Button>
                 <Button className={'button'}><LinkOther /></Button>
-                { isPen && (<>
-                        <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-                            <Button className={`${activeMenu ? ' button-active' : 'button'}`} onClick={handleMenuClick}>
-                                {!activeMenu ? <Menu /> : <ActiveMenuIcon />}
-                            </Button>
-                            {activeMenu && (<ActiveMenu />)}
-                        </div>
+                {isPen && (<>
+                    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+                        <Button className={activeMenu ? ' button-active' : 'button'} onClick={handleMenuClick}>
+                            {!activeMenu ? <Menu /> : <ActiveMenuIcon />}
+                        </Button>
+                        {activeMenu && (<ActiveMenu />)}
+                    </div>
                     <Button className={'button'}><CardPlus /></Button>
-                    </>
-            ) }
+                </>)}
             </Flex>
 
-    </>
-    )
+
+            <div
+                className="editable-text"
+                contentEditable={true}
+                suppressContentEditableWarning={true}
+                ref={textRef}
+                onInput={handleTextChange}
+                style={{ border: "1px solid #ccc", padding: "10px", minHeight: "40px", marginTop: "10px" }}
+            >
+                {editableText}
+            </div>
+        </>
+    );
 }
+
 export default TextFormat;
