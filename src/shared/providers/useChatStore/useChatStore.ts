@@ -10,6 +10,8 @@ interface ChatState {
     currentBranch: IBranch | null;
     messages: IMessage[];
     playground: IPlayground;
+    playgroundFullscreen: boolean;
+    setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
     setCurrentBranch: (currentBranch: IBranch | null) => void;
     setMessages: (messages: IMessage[]) => void;
     setEditor: (editor: Editor | null) => void;
@@ -44,6 +46,8 @@ export const useChatStore = create<ChatState>()(
             text: "",
             id: "code",
         },
+        playgroundFullscreen: false,
+        setPlaygroundFullscreen: (playgroundFullscreen) => set(() => ({ playgroundFullscreen })),
         setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
         setMessages: (messages) => set(() => ({ messages })),
         setEditor: (editor) => set(() => ({ editor })),

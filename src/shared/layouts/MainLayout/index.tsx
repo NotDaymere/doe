@@ -14,15 +14,14 @@ export const MainLayout: React.FC<Props> = ({
     children
 }) => {
     const gaiaRef = React.useRef<HTMLDivElement>(null);
-    const { playground } = useChatStore()
-
+    const { playground, playgroundFullscreen } = useChatStore()
     return (
         <React.Fragment>
             <BaseLayout className={"main-layout"} hasSider>
                 <BaseLayout.Sider width={"auto"} className={"sider-wrapper"}>
                     <Sider />
                 </BaseLayout.Sider>
-            {children}
+            {!playgroundFullscreen && children}
             {/* <CSSTransition
                 classNames={{
                     enter: css.gaiaEnter,
@@ -39,7 +38,7 @@ export const MainLayout: React.FC<Props> = ({
                 <Gaia className={css.gaia} ref={gaiaRef} />
             {/* </CSSTransition> */}
             {playground.open && (
-                <BaseLayout.Sider width={550} className={"playground-sider"}>
+                <BaseLayout.Sider width={playgroundFullscreen ? '100%' : 550} className={"playground-sider"}>
                     <PlaygroundRenderer type={playground.type} id={playground.id} />
                 </BaseLayout.Sider>
             )}

@@ -12,7 +12,6 @@ import Editor, { OnMount } from "@monaco-editor/react";
 import { useChatStore } from "../../../../shared/providers";
 import { calculateButtonPosition } from "../../../../components/code-playground/helpers/calculateButtonPosition";
 import TableRandomValues from "../ChatMessage/assets/TableRandomValues/TableRandomValues";
-import PythonTaskManager from "../ChatMessage/assets/PythonTaskManager/PythonTaskManager";
 
 const TablePlayground: FC = () => {
   const { setPlayground } = useChatStore();
@@ -174,9 +173,9 @@ const handlePenClick = () => {
   return (
     <div className={'table-playground'} style={{ position: 'relative', height: '100%' }}>
       <Flex className={'tabs-panel'}>
-        <TableRandomValues />
-        <TableRandomValues />
-        <PythonTaskManager />
+        <TableRandomValues isSelect={true}/>
+        <TableRandomValues isSelect={false}/>
+        <TableRandomValues isSelect={false}/>
       </Flex>
       <Table
         className={'table'}
@@ -208,7 +207,7 @@ The graph interaction with highlighting still applies here!
 
       <div className={'action-buttons'}>
 
-        <DecreasePlayground onClick={handleCollapsePlayground} />
+        <DecreasePlayground />
         <CloudPlus />
         <Pen isActive = {selectedText} onClick={handlePenClick}/>
       </div>
