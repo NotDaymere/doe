@@ -1,5 +1,33 @@
-.txtPreview {
-    width: 100%;
+.preview {
+    position: relative;
+    z-index: 1;
+    width: 400px;
     overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
     margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: calc((100vh - 65px - 24px - 10px));
+}
+
+.openButton {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: max-content;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    gap: 4px;
+    padding: 6px 3px;
+    background-color: #b1b1b1;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+    color: #f8f8f8;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 10;
+    word-break: keep-all;
 }

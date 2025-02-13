@@ -99,7 +99,7 @@ export const PLAYGROUND_SOURCES: IPlaygroundSourceData = {
             {
                 title: "Work_file.doc",
                 icon: <FileFilledIcon width={12} height={12} />,
-                content: "/file-samples/file-sample.doc",
+                content: "/file-samples/file-sample.docx",
             },
         ],
     },
