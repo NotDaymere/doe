@@ -4,8 +4,9 @@
   display: flex;
   gap: 5px;
   flex-direction: row;
-  border: 1px solid rgba(248, 248, 248, 1);
-  background: rgba(255, 255, 255, 1);
+  border: 1px solid #F8F8F8;
+  box-shadow: 0px 0px 12px 0px #0000000D;
+  background: #FFFFFF;
   border-radius: 5px;
   position: fixed;
 }
@@ -24,7 +25,6 @@
   background-color:rgba(255, 255, 255, 1);
   margin: 0;
   color: rgba(91, 91, 91, 1);
-;
 }
 
 .button {
@@ -52,4 +52,16 @@
   height: 100%;
   max-height: fit-content;
   min-height: 30px;
+}
+.editable-text {
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-height: 40px;
+  margin-top: 10px;
+  outline: none;
+}
+
+.editable-text:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px #007bff;
 }

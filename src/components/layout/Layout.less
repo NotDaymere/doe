@@ -24,3 +24,33 @@
     padding: 0;
   }
 }
+
+.main-layout-playground {
+  position: relative;
+  height: 100vh;
+  margin-right: 22px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #ffffff;
+
+  .ant-layout-sider {
+    background-color: #ffffff;
+  }
+
+  .content {
+    background-color: #ffffff;
+  }
+
+  .playground-sider {
+    min-width: unset !important;
+    max-width: 550px!important;
+    padding-bottom: 48px;
+    padding-top: 75px;
+    border-radius: 16px;
+  }
+  @media (max-width: 1300px) {
+    .playground-sider {
+      flex: unset !important;
+    }
+  }
+}

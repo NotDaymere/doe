@@ -1,41 +1,36 @@
-.table-playground {
+.table-playground-container {
   position: relative;
   height: 100%;
+  background-color: #F1F1F1;
+  border-radius: 16px;
 
   .table {
     .selected-column {
       &:is(th) {
         background: #007AFF !important;
       }
-  
       &:is(td) {
         background: #EFF5FD !important;
       }
     }
-  
     .selected-cell {
       background: #EFF5FD !important;
       outline: 1px solid #007AFF;
     }
   }
 
-  .action-buttons {
-    position: absolute;
+  .action-buttons-right-part{
     display: flex;
+    flex-direction: column;
     gap: 8px;
-    bottom: 24px;
-    right: 24px;
-
-    .ant-btn {
-      padding: 2px;
-      margin: 0;
-      height: 36px;
-      width: 36px;
-    }
   }
-}
-.example-text {
 
+  .ant-btn {
+    padding: 2px;
+    margin: 0;
+    height: 36px;
+    width: 36px;
+  }
 }
 .tabs-panel {
   border-radius: 12px;
@@ -43,5 +38,4 @@
   border: 1px solid rgba(221, 221, 221, 1);
   padding: 0;
   margin: 0;
-
 }

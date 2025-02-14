@@ -12,7 +12,17 @@
         display: none;
     }
 }
+.sidebar_playground {
+    // overflow: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    height: 100%;
 
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
 // Profile
 .sidebar_profile {
     margin-top: 16px;
@@ -146,6 +156,9 @@
 @media screen and (max-width: 1660px) {
     .sidebar {
         padding-top: 36px;
+        padding-bottom: 36px;
+    }
+    .sidebar_playground {
         padding-bottom: 36px;
     }
 }

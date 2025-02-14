@@ -17,7 +17,7 @@ export const MainLayout: React.FC<Props> = ({
     const { playground, playgroundFullscreen } = useChatStore()
     return (
         <React.Fragment>
-            <BaseLayout className={"main-layout"} hasSider>
+            <BaseLayout className={playground.open ? "main-layout-playground" : "main-layout"} hasSider>
                 <BaseLayout.Sider width={"auto"} className={"sider-wrapper"}>
                     <Sider />
                 </BaseLayout.Sider>

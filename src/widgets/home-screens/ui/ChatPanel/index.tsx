@@ -15,6 +15,7 @@ import UploadIcon from "src/shared/icons/Upload.icon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles } = usePanel();
+    const { playground} = useChatStore()
     const { setEditor } = useChatStore();
     const { 
         drag,
@@ -36,7 +37,7 @@ export const ChatPanel: React.FC = () => {
     
     
     return (
-        <div className={css.panel}
+        <div className={playground.open ? css.panel_playground : css.panel}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDragLeave={handleDragCancel}

@@ -1,58 +1,106 @@
 import { Flex, Table, TableProps } from "antd";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import mockData from './mockData.json';
 import './index.less';
-import { useEditorContext } from "src/contexts/EditorProvider";
-import Pen from "./assets/Pen/Pen";
-import DecreasePlayground from "./assets/DecreasePlayground/DecreasePlayground";
-import CloudPlus from "./assets/CloudPlus/CloudPlus";
-import TextFormat from "./assets/TextFormat/TextFormat";
-import * as monaco from "monaco-editor";
-import Editor, { OnMount } from "@monaco-editor/react";
+import { EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from "@tiptap/extension-underline";
+import { calculateTiptapButtonPosition } from "../../../../components/code-playground/helpers/calculateButtonPosition";
 import { useChatStore } from "../../../../shared/providers";
-import { calculateButtonPosition } from "../../../../components/code-playground/helpers/calculateButtonPosition";
-import TableRandomValues from "../ChatMessage/assets/TableRandomValues/TableRandomValues";
+import TipTapTextFormatMenu from "./assets/TextFormat/TipTapTextFormatMenu";
+import ResizePlaygroundButton from "../PlaygroundButtons/ResizePlaygroundButton/ResizePlaygroundButton";
+import CloudPlusButton from "../PlaygroundButtons/CloudPlusButton/CloudPlusButton";
+import PenFormatingButton from "../PlaygroundButtons/PenFormatingButton/PenFormatingButton";
+import { Color } from "@tiptap/extension-color";
+import { TextStyle } from "@tiptap/extension-text-style";
+import { Superscript } from "@tiptap/extension-superscript";
+import { Subscript } from "@tiptap/extension-subscript";
 
 const TablePlayground: FC = () => {
+  function adjustPosition(
+      rawPosition: { top: number; left: number },
+      containerWidth: number,
+      containerHeight: number,
+      margin = 10
+  ) {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    let { top, left } = rawPosition;
+
+    if (left + containerWidth + margin > viewportWidth) {
+      left = viewportWidth - containerWidth - margin;
+    }
+    if (left < margin) {
+      left = margin;
+    }
+    if (top + containerHeight + margin > viewportHeight) {
+      top = viewportHeight - containerHeight - margin;
+    }
+    if (top < margin) {
+      top = margin;
+    }
+    return { top, left };
+  }
+
   const { setPlayground } = useChatStore();
-  const { editor } = useEditorContext()
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
   const [selectedText, setSelectedText] = useState<string | null>(null);
   const [isPen, setIsPen] = useState<boolean>(false);
-  const [buttonPosition, setButtonPosition] = useState<{ top?: number; left?: number; bottom?: number; right?: number} | null>(null);
+  const [buttonPosition, setButtonPosition] = useState<{
+    top?: number;
+    left?: number;
+    bottom?: number;
+    right?: number;
+  } | null>(null);
 
-  const customTheme: monaco.editor.IStandaloneThemeData = {
-    base: 'vs',
-    inherit: true,
-    rules: [
-      { token: 'string', foreground: 'A5201E' },
-      { token: 'keyword', foreground: '0000FF' },
-      { token: 'identifier', foreground: '0171C1' },
-      { token: 'variable', foreground: '0171C1' },
-      { token: 'delimiter', foreground: '3D3F46' },
-      { token: 'function', foreground: '0000FF' },
-
+  const editor = useEditor({
+    extensions: [
+        StarterKit,
+        Underline,
+        TextStyle,
+        Superscript,
+        Subscript,
+        Color.configure({
+          types: ['textStyle'],
+        }),
     ],
-    colors: {
-      'editor.background': '#FAFAF9',
-      'editor.lineHighlightBackground': '#FAFAF9',
-      'editor.selectionBackground': '#c1d3ff',
-    }
-  };
+    content: `
+      <p>
+        This is what your table looks like when it's in Doe Playground! 
+        Larger tables can be navigated, folded in to reveal text, etc.
+        Typically, a Playground table will not include both text blocks and graphs 
+        as it does here, but it is still possible! 
+        The graph interaction with highlighting still applies here!
+      </p>
+    `,
+    onSelectionUpdate({ editor }) {
+      const { from, to } = editor.state.selection;
+      const text = editor.state.doc.textBetween(from, to, ' ');
+      setSelectedText(text);
+
+      const position = calculateTiptapButtonPosition(editor);
+      if (position) {
+        const adjustedPosition = adjustPosition(
+            { top: position.top, left: position.left },
+            280,
+            20,
+            10
+        );
+        setButtonPosition(adjustedPosition);
+      }
+    },
+  });
+
   useEffect(() => {
     handleSetDataToInput();
   }, [selectedRow, selectedColumn, selectedCell]);
 
   const handleSetDataToInput = () => {
-    if (!editor) {
-      return;
-    }
+    if (!editor) return;
 
     let template = '';
-
     if (selectedCell) {
       template = `<div>I have a question about <span class="highlighted-span green">Tab ${selectedCell}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
     } else if (selectedRow) {
@@ -60,9 +108,8 @@ const TablePlayground: FC = () => {
     } else if (selectedColumn) {
       template = `<div>I have a question about <span class="highlighted-span green">Column ${selectedColumn}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
     }
-
     if (template) {
-      editor.chain().clearContent().insertContent(template).run();
+      editor.commands.setContent(template);
     }
   };
 
@@ -71,14 +118,10 @@ const TablePlayground: FC = () => {
     dataIndex: 'rowHeader',
     width: '36px',
     render: (_: any, __: any, rowIndex: number) => `${rowIndex + 1}`,
-
     onCell: (_: any, rowIndex?: number) => ({
       onClick: (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation();
-        if (rowIndex === undefined) {
-          return;
-        }
-
+        if (rowIndex === undefined) return;
         setSelectedRow(rowIndex + 1);
         setSelectedCell(null);
         setSelectedColumn(null);
@@ -93,19 +136,17 @@ const TablePlayground: FC = () => {
       onCell: (_: any, rowIndex?: number) => ({
         onClick: (event: React.MouseEvent<HTMLElement>) => {
           event.stopPropagation();
-          if (rowIndex === undefined) {
-            return;
-          }
+          if (rowIndex === undefined) return;
           const cellAddress = `${col.title}${rowIndex + 1}`;
           setSelectedCell(cellAddress);
           setSelectedRow(null);
           setSelectedColumn(null);
         },
         className: selectedColumn === col.title
-          ? 'selected-column'
-          : selectedCell === `${col.title}${rowIndex! + 1}`
-            ? 'selected-cell'
-            : '',
+            ? 'selected-column'
+            : selectedCell === `${col.title}${rowIndex! + 1}`
+                ? 'selected-cell'
+                : '',
       }),
       onHeaderCell: () => ({
         onClick: () => {
@@ -118,113 +159,67 @@ const TablePlayground: FC = () => {
     }))
   ];
 
-  const handleCollapsePlayground = () => (
-    setPlayground({ type: null, data: null, id: null, open: false })
-  )
-
-  const handleEditorMount: OnMount = (editor, monaco) => {
-    editorRef.current = editor;
-    editor.focus();
-
-    monaco.editor.defineTheme('myCustomTheme', customTheme);
-    monaco.editor.setTheme('myCustomTheme');
-    editor.onMouseUp(() => {
-      setIsPen(false);
-      handleEditorMouseUp(editor);
-    });
-
-    editor.onKeyUp(() => {
-      setIsPen(false);
-      handleEditorMouseUp(editor);
-    });
+  const handleCollapsePlayground = () => {
+    setPlayground({ type: null, data: null, id: null, open: false });
   };
-  const handleEditorMouseUp = (editor: monaco.editor.IStandaloneCodeEditor) => {
-    updateSelectedText(editor);
-    const position = calculateButtonPosition(editor);
-    if (position) {
-      setButtonPosition(position);
-    }
-  };
-  const updateSelectedText = (editor: monaco.editor.IStandaloneCodeEditor) => {
-    const selection = editor.getSelection();
-    if (selection) {
-      const model = editor.getModel();
-      if (!model) return;
 
-      const selectedText = model.getValueInRange(selection);
-      setSelectedText(selectedText);
+  const handlePenClick = () => {
+    if (selectedText) {
+      setSelectedText(null);
+      setButtonPosition(null);
+      setIsPen(false);
+    } else {
+      setSelectedText("Pen");
+      setIsPen(true);
+      setButtonPosition({
+        bottom: 137,
+        right: 45,
+      });
     }
   };
 
-const handlePenClick = () => {
-  if (selectedText) {
-    setSelectedText(null)
-    setButtonPosition(null)
-    setIsPen(false)
-  } else {
-    setSelectedText("Pen");
-    setIsPen(true)
-    setButtonPosition({
-      bottom: 137,
-      right: 45,
-    });
-  }
-}
   return (
-    <div className={'table-playground'} style={{ position: 'relative', height: '100%' }}>
-      <Flex className={'tabs-panel'}>
-        <TableRandomValues isSelect={true}/>
-        <TableRandomValues isSelect={false}/>
-        <TableRandomValues isSelect={false}/>
-      </Flex>
-      <Table
-        className={'table'}
-        dataSource={mockData.data}
-        columns={columns}
-        pagination={false}
-        bordered
-        rowKey={(record, rowIndex) => rowIndex!.toString()}
-      />
-      <Editor
-          onMount={handleEditorMount}
-          theme="customTheme"
-          language="plaintext"
-          height="100%"
-          options={{
-            tabSize: 2,
-            insertSpaces: true,
-            minimap: { enabled: false },
-          }}
-          className={'example-text'}
-          defaultValue={`
-This is what your table looks like when it's in Doe Playground! 
-Larger tables can be navigated, folded in to reveal text, etc.
-Typically, a Playground table will not include both text blocks and graphs 
-as it does here, but it is still possible! 
-The graph interaction with highlighting still applies here!
-      `}
-      />
+      <div className={"table-playground"}>
+        <Flex className={"tabs-panel-playground"}>
+          Table Random Values
+        </Flex>
 
-      <div className={'action-buttons'}>
+        <section className="editor-section">
+          <Table
+              className={"table"}
+              dataSource={mockData.data}
+              columns={columns}
+              pagination={false}
+              bordered
+              rowKey={(record, rowIndex) => rowIndex!.toString()}
+          />
+          <div className="table-playground-editor tiptap-editor">
+            <EditorContent editor={editor} />
+          </div>
+        </section>
 
-        <DecreasePlayground />
-        <CloudPlus />
-        <Pen isActive = {selectedText} onClick={handlePenClick}/>
+        <div className={"action-buttons"}>
+          <CloudPlusButton />
+          <div className={"action-buttons-right-part"}>
+            <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+            <ResizePlaygroundButton onClick={handleCollapsePlayground} />
+          </div>
+        </div>
+
+        {selectedText && editor && (
+            <TipTapTextFormatMenu
+                buttonPosition={{
+                  top: buttonPosition?.top,
+                  left: buttonPosition?.left,
+                  bottom: buttonPosition?.bottom,
+                  right: buttonPosition?.right,
+                }}
+                isPen={isPen}
+                editor={editor}
+            />
+        )}
       </div>
-
-      {selectedText &&
-          <TextFormat buttonPosition={{
-              top: buttonPosition?.top,
-              left: buttonPosition?.left,
-              bottom: buttonPosition?.bottom,
-              right: buttonPosition?.right
-            }}
-                      isPen={isPen}
-      />
-      }
-    </div>
   );
 };
 
 export default TablePlayground;
-

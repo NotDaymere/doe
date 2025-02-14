@@ -7,9 +7,9 @@ import { ChatMessage } from "../ChatMessage";
 export const ChatContent: React.FC = () => {
     const { chatRef } = useChatController();
     const { currentBranch, messages } = useChatStore();
-
+    const { playground } = useChatStore();
     return (
-        <div className={css.content}>
+        <div className={playground.open ? css.content_playground : css.content}>
             <div className={css.content_inner}>
                 <div className={css.content_chat} ref={chatRef}>
                     {messages.map((item) => (

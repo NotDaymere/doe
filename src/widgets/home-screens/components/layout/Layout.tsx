@@ -13,7 +13,7 @@ const Layout2: FC<Props> = ({ children }) => {
   const { playground } = useChatStore()
 
   return (
-    <BaseLayout className={"main-layout"} hasSider>
+    <BaseLayout className={playground.open ? "main-layout-playground" : "main-layout" } hasSider>
       <BaseLayout.Sider width={"auto"} className={"sider-wrapper"}>
         <Sider />
       </BaseLayout.Sider>

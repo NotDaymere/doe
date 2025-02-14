@@ -1,22 +1,26 @@
 import { Button } from "antd";
 import React from "react";
-import { ReactComponent as CodeIcon } from "src/assets/icons/code.svg";
-import { useApp } from "../../../../../../components/app";
-import('./PythonTaskManager.less');
+import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
+import { useChatStore } from "src/shared/providers";
 
-function PythonTaskManager() {
-    const { setPlayground } = useApp().app;
-    const openCodePlayground = () => {
-        setPlayground((prev) => ({
-            ...prev,
-            type: "code",
-            open: true,
-        }));
+function PythonTaskManager({isSelect}: {isSelect?: boolean}) {
+    const { playground, setPlayground } = useChatStore();
+    const openTablePlayground = () => {
+        const newPlayground = playground;
+        newPlayground.type = "code";
+        newPlayground.open = true;
+        setPlayground(newPlayground);
     };
     return (
-        <Button onClick={openCodePlayground} className={'python-task-manager-button'}>
-            <CodeIcon /> Python Task Manager
+        <Button onClick={openTablePlayground}
+                className={
+                    isSelect === undefined ? 'table-playground-button' :
+                        (isSelect ? 'table-playground-button-selected' : 'table-playground-button-unselected')
+                }
+        >
+            <TableIcon /> Python Task Manager
         </Button>
+
     )
 }
 export default PythonTaskManager
