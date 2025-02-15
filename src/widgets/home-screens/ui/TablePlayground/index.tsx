@@ -89,6 +89,7 @@ const TablePlayground: FC = () => {
             10
         );
         setButtonPosition(adjustedPosition);
+        setIsPen(false);
       }
     },
   });
@@ -202,7 +203,7 @@ const TablePlayground: FC = () => {
           <CloudPlusButton />
           <div className={"action-buttons-right-part"}>
             <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-            <ResizePlaygroundButton onClick={handleCollapsePlayground} />
+            <ResizePlaygroundButton />
           </div>
         </div>
 

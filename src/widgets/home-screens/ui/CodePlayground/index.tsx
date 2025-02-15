@@ -5,10 +5,11 @@ import * as monaco from "monaco-editor";
 import Editor, { OnMount } from "@monaco-editor/react";
 import { calculateButtonPosition } from "../../../../components/code-playground/helpers/calculateButtonPosition";
 import { useChatStore } from "../../../../shared/providers";
-import MonacoEditorMenu from "./assets/MonacoEditorMenu";
+import MonacoEditorMenu from "./assets/MonacoEditorMenu/MonacoEditorMenu";
 import CloudPlusButton from "../PlaygroundButtons/CloudPlusButton/CloudPlusButton";
 import PenFormatingButton from "../PlaygroundButtons/PenFormatingButton/PenFormatingButton";
 import ResizePlaygroundButton from "../PlaygroundButtons/ResizePlaygroundButton/ResizePlaygroundButton";
+import QuestionCode from "./assets/QuestionCode/QuestionCode";
 
 const CodePlayground: FC = () => {
     function adjustPosition(rawPosition: { top: number; left: number }, containerWidth: number, containerHeight: number, margin = 10) {
@@ -169,11 +170,11 @@ print(result)`.trim()}
                 <CloudPlusButton />
                 <div className="action-buttons-right-part">
                     <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-                    <ResizePlaygroundButton onClick={handleCollapsePlayground} />
+                    <ResizePlaygroundButton />
                 </div>
             </div>
             {selectedText && editorInstance && (
-                <MonacoEditorMenu
+                isPen ? (<MonacoEditorMenu
                     buttonPosition={{
                         top: buttonPosition?.top,
                         left: buttonPosition?.left,
@@ -182,7 +183,17 @@ print(result)`.trim()}
                     }}
                     isPen={isPen}
                     editor={editorInstance}
-                />
+                />)
+                    : (<QuestionCode
+                            buttonPosition={{
+                                top: buttonPosition?.top,
+                                left: buttonPosition?.left,
+                                bottom: buttonPosition?.bottom,
+                                right: buttonPosition?.right,
+                            }}
+                            editor={editorInstance}
+                    />
+                    )
             )}
         </div>
     );

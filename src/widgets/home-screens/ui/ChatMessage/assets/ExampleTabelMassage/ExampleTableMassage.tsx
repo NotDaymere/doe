@@ -7,6 +7,7 @@ import './ExampleTableMassage.less';
 import GeneralLogo2 from "../../../../../../shared/icons/GeneralLogo2";
 import CodePlayground from "../../../../../../components/code-playground";
 import PythonTaskManager from "../PythonTaskManager/PythonTaskManager";
+
 function ExampleTableMassage() {
     return (
         <div className={"example-table-massage-container"}>

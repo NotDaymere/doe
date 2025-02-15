@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppStore, useChatStore } from "src/shared/providers";
+import { useChatStore } from "src/shared/providers";
 import { Gaia } from "src/widgets/Gaia";
 import css from "./MainLayout.module.less";
 import { Layout as BaseLayout } from "antd";

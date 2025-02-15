@@ -3,6 +3,7 @@ import { IBranch } from "src/shared/types/Branch";
 import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
 import { IPlayground } from "../../types/Playground";
+import { IQuestionCodeMessage } from "../../types/QuestionCodeMessage";
 
 interface ChatState {
     editor: Editor | null;
@@ -11,12 +12,14 @@ interface ChatState {
     messages: IMessage[];
     playground: IPlayground;
     playgroundFullscreen: boolean;
+    questionCodeMessage: IQuestionCodeMessage | null;
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
     setCurrentBranch: (currentBranch: IBranch | null) => void;
     setMessages: (messages: IMessage[]) => void;
     setEditor: (editor: Editor | null) => void;
     setTyping: (isTyping: boolean) => void;
     setPlayground: (playground: IPlayground) => void;
+    setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
 }
 
 export const useChatStore = create<ChatState>()(
@@ -47,11 +50,13 @@ export const useChatStore = create<ChatState>()(
             id: "code",
         },
         playgroundFullscreen: false,
-        setPlaygroundFullscreen: (playgroundFullscreen) => set(() => ({ playgroundFullscreen })),
+        questionCodeMessage: null,
         setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
         setMessages: (messages) => set(() => ({ messages })),
         setEditor: (editor) => set(() => ({ editor })),
         setTyping: (isTyping) => set(() => ({ isTyping })),
         setPlayground: (playground) => set(() => ({ playground })),
+        setPlaygroundFullscreen: (playgroundFullscreen) => set(() => ({ playgroundFullscreen })),
+        setQuestionCodeMessage: (questionCodeMessage) => set(() => ({ questionCodeMessage })),
     })
 );

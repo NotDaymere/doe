@@ -19,8 +19,8 @@ import './MonacoEditorMenu.less';
 import { Button, Flex } from "antd";
 import { useState } from "react";
 import * as monaco from "monaco-editor";
-import ActivePaint from "../../PlaygroundButtons/ActivePaint/ActivePaint";
-import ActiveMenu from "../../PlaygroundButtons/ActiveMenu/ActiveMenu";
+import ActivePaint from "../../../PlaygroundButtons/ActivePaint/ActivePaint";
+import ActiveMenu from "../../../PlaygroundButtons/ActiveMenu/ActiveMenu";
 
 type TextFormatProps = {
     isPen?: boolean;

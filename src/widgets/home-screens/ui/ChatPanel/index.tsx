@@ -12,10 +12,12 @@ import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
 import { FileList } from "src/shared/components/FileList";
 import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
+import QuestionCodeMessage from "./assets/QuestionCodeMessage/QuestionCodeMessage";
+import HammerIcon from "src/shared/icons/HammerIcon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles } = usePanel();
-    const { playground} = useChatStore()
+    const { playground, questionCodeMessage } = useChatStore()
     const { setEditor } = useChatStore();
     const { 
         drag,
@@ -42,6 +44,7 @@ export const ChatPanel: React.FC = () => {
             onDragOver={handleDragOver}
             onDragLeave={handleDragCancel}
         >
+            {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
             <div 
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
@@ -100,9 +103,15 @@ export const ChatPanel: React.FC = () => {
                         <MicrophoneIcon />
                     </button>
                     {!prompt.active ? (
-                        <button className={css.panel_submitBtn}>
-                            Send <ArrowUpIcon />
-                        </button>
+                         !questionCodeMessage ? (
+                            <button className={css.panel_submitBtn}>
+                                Send <ArrowUpIcon />
+                            </button>
+                        ) : (
+                             <button className={css.panel_hammerBtn}>
+                                 <HammerIcon />
+                             </button>
+                         )
                     ) : (
                         <button className={css.panel_callBtn}>
                             <CallVoiceIcon />

@@ -15,7 +15,6 @@ import { ReactComponent as LinkOther } from "src/assets/icons/link-other.svg";
 import { ReactComponent as Menu } from "src/assets/icons/menu.svg";
 import { ReactComponent as ActiveMenuIcon } from "src/assets/icons/active-menu.svg";
 import { ReactComponent as CardPlus } from "src/assets/icons/card-plus.svg";
-
 import './TipTapTextFormatMenu.less';
 import { Button, Flex } from "antd";
 import { useState } from "react";
@@ -152,7 +151,21 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor }: TextFormatProps
 
     const applyLink = () => {
         if (!editor) return;
+        const { from, to } = editor.state.selection;
+        if (from === to) return;
 
+        const selectedText = editor.state.doc.textBetween(from, to, "");
+        const url = prompt("Enter URL:", "https://");
+
+        if (url) {
+            editor.chain().focus()
+                .deleteRange({ from, to })
+                .insertContent(selectedText)
+                .setTextSelection({ from, to: from + selectedText.length })
+                .toggleLink({ href: url, target: '_blank' })
+                .run();
+
+        }
     };
 
     const handlePenClick = () => {
@@ -192,42 +205,34 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor }: TextFormatProps
                         }
                 }
             >
-                {/* Сброс стилей */}
                 <Button className={"button"} onClick={handleRemoveFormat}>
                     <General />
                 </Button>
 
-                {/* Жирный */}
                 <Button className={"button"} onClick={applyBold}>
                     <Bold />
                 </Button>
 
-                {/* Курсив */}
                 <Button className={"button"} onClick={applyItalic}>
                     <Indian />
                 </Button>
 
-                {/* Подчёркивание */}
                 <Button className={"button"} onClick={applyUnderline}>
                     <UnderLine />
                 </Button>
 
-                {/* Зачёркивание */}
                 <Button className={"button"} onClick={applyStrikeThrough}>
                     <StrikeThrough />
                 </Button>
 
-                {/* Переключение регистров */}
                 <Button className={"button"} onClick={toggleUpperLowerCase}>
                     <UpperLowerCase />
                 </Button>
 
-                {/* «карандашное» подчёркивание */}
                 <Button className={"button"} onClick={applyPencilUnderline}>
                     <PencilUnderline />
                 </Button>
 
-                {/* Палитра цветов */}
                 <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
                     <Button
                         className={activePaint ? "button-active" : "button"}
@@ -238,12 +243,10 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor }: TextFormatProps
                     {activePaint && <ActivePaint onColorSelect={applyColor} />}
                 </div>
 
-                {/* Кавычки "..." */}
                 <Button className={"button"} onClick={applyQuotes}>
                     <Quotes />
                 </Button>
 
-                {/* Кавычки “...” */}
                 <Button className={"button"} onClick={applyCloudQuotes}>
                     <CloudQuotes />
                 </Button>
