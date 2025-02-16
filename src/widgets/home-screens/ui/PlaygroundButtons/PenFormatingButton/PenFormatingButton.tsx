@@ -1,5 +1,4 @@
 import { ReactComponent as PenIcon } from "src/assets/icons/pen.svg"
-import { Button } from "antd";
 import './PenFormatingButton.less';
 interface IPen {
     onClick: () => void,
@@ -7,12 +6,12 @@ interface IPen {
 }
 function PenFormatingButton({ onClick , isActive }: IPen ) {
     return (
-    <Button
+    <button
         onClick={onClick}
         className={`pen-button ${isActive ? "pen-button-active" : ""}`}
     >
         <PenIcon className={"pen-icon"} />
-    </Button>
+    </button>
     )
 }
 export default PenFormatingButton

@@ -1,6 +1,5 @@
 import { ReactComponent as Stars } from "src/assets/icons/stars.svg";
 import { ReactComponent as Plus } from "src/assets/icons/Plus.svg";
-import { Button } from "antd";
 import "./CloudActionsSection.less";
 
 function CloudActionsSection() {
@@ -10,9 +9,9 @@ function CloudActionsSection() {
                 <p className={"text-columns-button-p"}>
                     Add a <span className={"text-columns-button-span"}>Prompt</span>
                 </p>
-                <Button className="button-plus">
+                <button className="button-plus">
                     <Plus className="plus-icon" />
-                </Button>
+                </button>
             </div>
             <div className="text-columns-button text-columns-border-top justify-flex-start">
                 <Stars />

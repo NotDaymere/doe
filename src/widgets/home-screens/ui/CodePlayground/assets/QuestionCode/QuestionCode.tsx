@@ -1,7 +1,7 @@
 import * as monaco from "monaco-editor";
 import { Flex } from "antd";
 import './QuestionCode.less';
-import { useChatStore } from "../../../../../../shared/providers";
+import { useChatStore } from "src/shared/providers";
 
 type TextFormatProps = {
     buttonPosition: {

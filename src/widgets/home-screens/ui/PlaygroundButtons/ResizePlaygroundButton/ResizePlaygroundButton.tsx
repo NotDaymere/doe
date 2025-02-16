@@ -1,5 +1,5 @@
 import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg"
-import { Button } from "antd";
+import { ReactComponent as DecreasePlaygroundActiveIcon } from "src/assets/icons/decrease-playground-active.svg"
 import './ResizePlaygroundButton.less';
 import { useChatStore } from "src/shared/providers";
 
@@ -9,11 +9,17 @@ export default function ResizePlaygroundButton () {
         setPlaygroundFullscreen(!playgroundFullscreen);
     }
     return  (
-        <Button
+        <button
             onClick={resizePlayground}
-            className={"decrease-playground-button"}
+            className={!playgroundFullscreen
+                ? "decrease-playground-button"
+                : "decrease-playground-active-button"
+        }
         >
-            <DecreasePlaygroundIcon className={"decrease-playground-icon"} />
-        </Button>
+            {!playgroundFullscreen
+                ? <DecreasePlaygroundIcon className={"decrease-playground-icon"} />
+                : <DecreasePlaygroundActiveIcon className={"decrease-playground-active-icon"} />
+            }
+        </button>
     )
 }
