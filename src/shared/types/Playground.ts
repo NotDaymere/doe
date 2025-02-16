@@ -19,7 +19,7 @@ export interface ISourceTypeNode {
 export interface ISourceTypeItem {
     icon: ReactElement;
     title: string;
-    content: string;
+    link: string;
 }
 
 export interface IPlaygroundSourceItemData {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StyledLineIcon from "src/shared/icons/StyledLine.icon";
 import SourcesIcon from "src/shared/icons/Sources.icon";
 import { SourceType } from "src/shared/types/Playground";
@@ -7,14 +7,13 @@ import InfoCardNode from "../InfoCardNode";
 import ListIcon from "src/shared/icons/List.icon";
 import SourceTypeNode from "../SourceTypeNode";
 import { PLAYGROUND_SOURCES, INFO_NODES, SOURCE_NODES } from "../MockData";
-import css from "./SourcePlayground.module.less";
 import GlowIcon from "src/shared/icons/Glow.icon";
 import { ScalableContainer } from "../ScalableContainer";
 import { useAppStore } from "src/shared/providers";
-import { Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import { GlobalWorkerOptions } from "pdfjs-dist";
 import Preview from "../Preview";
+import css from "./SourcePlayground.module.less";
 
 GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js";
 
@@ -22,6 +21,15 @@ const SourcePlayground = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [sourceType, setSourceType] = useState<SourceType>("web");
     const { previewPlayground, setPreviewPlayground } = useAppStore();
+
+    useEffect(() => {
+        return () => {
+            setPreviewPlayground({
+                type: null,
+                data: "",
+            });
+        };
+    }, []);
 
     const handleOpenSourcePreviewClick = (type: any, data: any) => {
         setPreviewPlayground({
@@ -40,7 +48,7 @@ const SourcePlayground = () => {
                         <button
                             className={css.item}
                             key={item.title}
-                            onClick={() => handleOpenSourcePreviewClick(type, item.content)}
+                            onClick={() => handleOpenSourcePreviewClick(type, item.link)}
                         >
                             {item.icon}
                             <span className={css.itemText}>{item.title}</span>
@@ -105,7 +113,7 @@ const SourcePlayground = () => {
                         </span>
                     </>
                 ) : (
-                    <Preview data={previewPlayground.data || ""} type={sourceType} />
+                    <Preview data={previewPlayground.data || ""} type={previewPlayground.type} />
                 )}
             </div>
         </div>

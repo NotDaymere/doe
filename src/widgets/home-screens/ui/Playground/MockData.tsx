@@ -51,17 +51,17 @@ export const PLAYGROUND_SOURCES: IPlaygroundSourceData = {
             {
                 title: "brilliant.org",
                 icon: <BrilliantOrgIcon width={12} height={12} />,
-                content: "https://brilliant.org",
+                link: "https://www.example.com",
             },
             {
                 title: "codecade...com",
                 icon: <CodecademyIcon width={12} height={12} />,
-                content: "https://codecademy.com",
+                link: "https://www.example.com",
             },
             {
                 title: "theinform...com",
                 icon: <CaseStudyIcon width={12} height={12} />,
-                content: "https://theinformation.com",
+                link: "https://www.example.com",
             },
         ],
     },
@@ -69,16 +69,20 @@ export const PLAYGROUND_SOURCES: IPlaygroundSourceData = {
         title: "Documents resources",
         type: "apps",
         items: [
-            { title: "Notion", icon: <NotionIcon width={12} height={12} />, content: "Notion app" },
+            {
+                title: "Notion",
+                icon: <NotionIcon width={12} height={12} />,
+                link: "https://www.example.com",
+            },
             {
                 title: "Obsidian",
                 icon: <ObsidianIcon width={12} height={12} />,
-                content: "Obsidian app",
+                link: "https://www.example.com",
             },
             {
                 title: "Calendar",
                 icon: <GoogleCalendarIcon width={12} height={12} />,
-                content: "Calendar app",
+                link: "https://www.example.com",
             },
         ],
     },
@@ -89,17 +93,17 @@ export const PLAYGROUND_SOURCES: IPlaygroundSourceData = {
             {
                 title: "Work_file.pdf",
                 icon: <FileFilledIcon width={12} height={12} />,
-                content: "/file-samples/file-sample.pdf",
+                link: "/file-samples/file-sample.pdf",
             },
             {
                 title: "Work_file.txt",
                 icon: <FileFilledIcon width={12} height={12} />,
-                content: "/file-samples/file-sample.txt",
+                link: "/file-samples/file-sample.txt",
             },
             {
                 title: "Work_file.doc",
                 icon: <FileFilledIcon width={12} height={12} />,
-                content: "/file-samples/file-sample.docx",
+                link: "/file-samples/file-sample.docx",
             },
         ],
     },
