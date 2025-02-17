@@ -1,14 +1,23 @@
-import { GlobalWorkerOptions } from "pdfjs-dist";
 import mammoth from "mammoth";
 import { SourceType } from "src/shared/types/Playground";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
+import { pdfjs } from "react-pdf";
 import { Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import PdfViewerWithPagination from "../PDFViewerWithPagination";
+import classNames from "classnames";
+import css from "./Preview.module.less";
 
-GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js";
+pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.mjs";
 
-const usePreview = (type: SourceType | null, url: string) => {
+interface IProps {
+    type: SourceType | null;
+    url: string;
+    isModalView?: boolean;
+}
+
+const Preview: FC<IProps> = ({ type, url, isModalView }) => {
     const fileType = url?.split(".").pop() || "";
     const [content, setContent] = useState<any>(null);
 
@@ -42,9 +51,12 @@ const usePreview = (type: SourceType | null, url: string) => {
         }
     };
 
-    if (type === "apps" || type === "web") return <iframe src={url} />;
+    if (type === "apps" || type === "web")
+        return <iframe className={classNames({ [css.iframeModal]: isModalView })} src={url} />;
+
+    if (isModalView && fileType === "pdf") return <PdfViewerWithPagination url={url} />;
 
     return renderPreviewContent(fileType);
 };
 
-export default usePreview;
+export default Preview;
