@@ -30,6 +30,7 @@ function CloudPlusButton() {
     return (
         <div className="cloud-plus-wrapper" ref={cloudPlusRef}>
             <button onClick={handleCloudPlusOnClick} className="cloud-plus-button">
+
                 <CloudPlusIcon className="cloud-plus-icon" />
             </button>
             {activeCloudPlus && <CloudActionsSection />}
