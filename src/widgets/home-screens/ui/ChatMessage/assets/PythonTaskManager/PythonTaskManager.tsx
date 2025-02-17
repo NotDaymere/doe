@@ -3,7 +3,7 @@ import React from "react";
 import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
 import { useChatStore } from "src/shared/providers";
 
-function PythonTaskManager({isSelect}: {isSelect?: boolean}) {
+function PythonTaskManager() {
     const { playground, setPlayground } = useChatStore();
     const openTablePlayground = () => {
         const newPlayground = playground;
@@ -12,14 +12,11 @@ function PythonTaskManager({isSelect}: {isSelect?: boolean}) {
         setPlayground(newPlayground);
     };
     return (
-        <Button onClick={openTablePlayground}
-                className={
-                    isSelect === undefined ? 'table-playground-button' :
-                        (isSelect ? 'table-playground-button-selected' : 'table-playground-button-unselected')
-                }
+        <button onClick={openTablePlayground}
+                className={`table-playground-button ${playground.type == 'code'&&'table-playground-button-active'}`}
         >
             <TableIcon /> Python Task Manager
-        </Button>
+        </button>
 
     )
 }
