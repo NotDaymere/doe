@@ -1,5 +1,5 @@
 import { Flex, Table, TableProps } from "antd";
-import { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import mockData from './mockData.json';
 import './index.less';
 import { EditorContent, useEditor } from "@tiptap/react";
@@ -18,6 +18,8 @@ import { Subscript } from "@tiptap/extension-subscript";
 import GeneralLogo from "../GeneralLogo/GeneralLogo";
 import { ChatLayout } from "../ChatLayout";
 import FullscreenGeneralLogo from "./assets/FullscreenGeneralLogo/FullscreenGeneralLogo";
+import HistoryButton from "./assets/HistoryButton/HistoryButton";
+import DoePlaygroundStars from "../../../../shared/icons/DoePlaygroundStars";
 
 const TablePlayground: FC = () => {
   function adjustPosition(
@@ -119,6 +121,12 @@ const TablePlayground: FC = () => {
     const tablePlayground = document.querySelector(".table-playground") as HTMLElement | null;
     if (tablePlayground) {
       tablePlayground.addEventListener("scroll", handleScroll);
+    }
+    const doePlaygroundOpen = document.querySelector(".doe-playground-open") as HTMLElement | null;
+    if (doePlaygroundOpen) {
+      setTimeout(() => {
+        doePlaygroundOpen.style.display = "none";
+      }, 3000)
     }
 
     return () => {
@@ -225,8 +233,12 @@ const TablePlayground: FC = () => {
            }}
       >
         <Flex className={"tabs-panel-playground"}>
-          Tabular Random Values
+          <p>
+            Tabular Random Values
+          </p>
+          <HistoryButton />
         </Flex>
+
 
         <section className="editor-section">
           <Table
@@ -265,6 +277,9 @@ const TablePlayground: FC = () => {
                 handleTipTapTextFormatMenuOnClick = {handleTipTapTextFormatMenuOnClick}
             />
         )}
+        <Flex className={'doe-playground-open'}>
+          <DoePlaygroundStars /> Doe Playground
+        </Flex>
       </div>
   );
 };
