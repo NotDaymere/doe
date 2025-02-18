@@ -1,34 +1,33 @@
+import classNames from "classnames";
+import { FC } from "react";
 import ArrowLeftIcon from "src/shared/icons/ArrowLeft.icon";
 import ArrowRightIcon from "src/shared/icons/ArrowRight.icon";
-import classNames from "classnames";
-import { FC, useEffect, useState } from "react";
 import css from "./Pagination.module.less";
 
 interface IProps {
     pageRefs: any;
     numPages: number;
+    currentPage: number;
+    onPageChange: (page: number) => void;
 }
 
-const Pagination: FC<IProps> = ({ pageRefs, numPages }) => {
-    const [currentPage, setCurrentPage] = useState<number>(0);
-
-    useEffect(() => {
-        pageRefs?.current[currentPage]?.scrollIntoView({ behavior: "smooth" });
-    }, [currentPage]);
-
+const Pagination: FC<IProps> = ({ pageRefs, numPages, currentPage, onPageChange }) => {
     const handleNextPage = (e: any) => {
         e.stopPropagation();
         if (currentPage < numPages - 1) {
-            setCurrentPage(currentPage + 1);
+            onPageChange(currentPage + 1);
+            pageRefs?.current[currentPage + 1]?.scrollIntoView({ behavior: "smooth" });
         }
     };
 
     const handlePrevPage = (e: any) => {
         e.stopPropagation();
         if (currentPage > 0) {
-            setCurrentPage(currentPage - 1);
+            onPageChange(currentPage - 1);
+            pageRefs?.current[currentPage - 1]?.scrollIntoView({ behavior: "smooth" });
         }
     };
+
     return (
         <div className={css.pagination}>
             <button onClick={handlePrevPage}>

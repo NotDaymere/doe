@@ -1,19 +1,29 @@
 import { FC } from "react";
-import { Document, Page } from "react-pdf";
+import { Document } from "react-pdf";
+import PageInView from "../PageInView";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "@react-pdf-viewer/page-navigation/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import css from "./PdfDocument.module.less";
 
-interface PDFPreviewProps {
+interface IProps {
     url: string;
     scale: number;
+    numPages: number;
     pageRefs: any;
+    onPageChange: (page: number) => void;
     onDocumentLoad: (number: number) => void;
 }
 
-const PdfDocument: FC<PDFPreviewProps> = ({ url, scale, pageRefs, onDocumentLoad }) => {
+const PdfDocument: FC<IProps> = ({
+    url,
+    scale,
+    numPages,
+    pageRefs,
+    onDocumentLoad,
+    onPageChange,
+}) => {
     const onDocumentLoadSuccess = (pdf: any) => {
         onDocumentLoad(pdf.numPages);
     };
@@ -22,12 +32,23 @@ const PdfDocument: FC<PDFPreviewProps> = ({ url, scale, pageRefs, onDocumentLoad
         <div className={css.viewer}>
             <div className={css.document}>
                 <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
-                    {Array.from(new Array(4), (_, index) => (
-                        <div key={`page_${index + 1}`} ref={(el) => (pageRefs.current[index] = el)}>
-                            <Page scale={scale} pageNumber={index + 1} />
-                            <span style={{ color: "transparent" }}>// </span>
-                        </div>
-                    ))}
+                    {Array.from(new Array(numPages)).map((_, index) => {
+                        const pageIndex = index;
+
+                        const refCallback = (el: any) => {
+                            pageRefs.current[pageIndex] = el;
+                        };
+
+                        return (
+                            <div key={`page_${pageIndex + 1}`} ref={refCallback}>
+                                <PageInView
+                                    scale={scale}
+                                    pageNumber={pageIndex + 1}
+                                    onPageChange={onPageChange}
+                                />
+                            </div>
+                        );
+                    })}
                 </Document>
             </div>
         </div>

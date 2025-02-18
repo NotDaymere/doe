@@ -21,6 +21,7 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
     const fileType = url?.split(".").pop() || "";
     const [content, setContent] = useState<any>(null);
     const [scale, setScale] = useState(0.7);
+    const [currentPage, setCurrentPage] = useState<number>(0);
     const [numPages, setNumPages] = useState<number>(0);
     const pageRefs = useRef<any>({});
 
@@ -49,8 +50,10 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
                     <PdfDocument
                         url={url}
                         scale={scale}
-                        pageRefs={pageRefs}
+                        numPages={numPages}
                         onDocumentLoad={setNumPages}
+                        onPageChange={setCurrentPage}
+                        pageRefs={pageRefs}
                     />
                 );
             case "txt":
@@ -71,7 +74,12 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
                     <Title title={title} />
                 </div>
                 <div className={css.pagination}>
-                    <Pagination pageRefs={pageRefs} numPages={numPages} />
+                    <Pagination
+                        pageRefs={pageRefs}
+                        numPages={numPages}
+                        currentPage={currentPage}
+                        onPageChange={setCurrentPage}
+                    />
                 </div>
                 <div className={css.zoom}>
                     <ZoomButton onZoomClick={() => setScale(scale + 0.1)} />
@@ -79,8 +87,10 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
                 <PdfDocument
                     url={url}
                     scale={scale}
-                    pageRefs={pageRefs}
+                    numPages={numPages}
                     onDocumentLoad={setNumPages}
+                    onPageChange={setCurrentPage}
+                    pageRefs={pageRefs}
                 />
             </div>
         );
