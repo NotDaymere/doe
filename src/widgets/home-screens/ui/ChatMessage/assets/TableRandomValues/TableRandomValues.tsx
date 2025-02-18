@@ -14,10 +14,10 @@ function TableRandomValues() {
     };
     return (
         <button onClick={openTablePlayground}
-                className={`table-playground-button ${playground.type == 'table'&&'table-playground-button-active'}`}
+                className={`table-playground-button ${playground.type == 'table' && 'table-playground-button-active'}`}
 
         >
-            <TableIcon /> Table Random Values
+            <TableIcon /> Tabular random values
         </button>
 
     )

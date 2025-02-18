@@ -21,22 +21,8 @@ export const MainLayout: React.FC<Props> = ({
                 <BaseLayout.Sider width={"auto"} className={"sider-wrapper"}>
                     <Sider />
                 </BaseLayout.Sider>
-            {!playgroundFullscreen && children}
-            {/* <CSSTransition
-                classNames={{
-                    enter: css.gaiaEnter,
-                    enterActive: css.gaiaEnterActive,
-                    exit: css.gaiaExit,
-                    exitActive: css.gaiaExitActive
-                }}
-                timeout={1500}
-                in={gaiaActive}
-                unmountOnExit
-                mountOnEnter
-                nodeRef={gaiaRef}
-            > */}
-                <Gaia className={css.gaia} ref={gaiaRef} />
-            {/* </CSSTransition> */}
+                {!playgroundFullscreen && children}
+            <Gaia className={css.gaia} ref={gaiaRef} />
             {playground.open && (
                 <BaseLayout.Sider width={playgroundFullscreen ? '100%' : 550} className={"playground-sider"}>
                     <PlaygroundRenderer type={playground.type} id={playground.id} />

@@ -17,7 +17,7 @@ import HammerIcon from "src/shared/icons/HammerIcon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles } = usePanel();
-    const { playground, questionCodeMessage } = useChatStore()
+    const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
     const { setEditor } = useChatStore();
     const { 
         drag,
@@ -39,7 +39,7 @@ export const ChatPanel: React.FC = () => {
     
     
     return (
-        <div className={playground.open ? css.panel_playground : css.panel}
+        <div className={playground.open ? (playgroundFullscreen ? css.panel_playground_fullscreen : css.panel_playground) : css.panel}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDragLeave={handleDragCancel}
@@ -94,7 +94,7 @@ export const ChatPanel: React.FC = () => {
                         onBlur={() => setEditor(null)}
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
-                        placeholder="Ask Doe anything you’d like about the world..."
+                        placeholder={playgroundFullscreen ? 'Ask Doe anything' : "Ask Doe anything you’d like about the world..."}
                     />
                     <button className={css.panel_button} disabled>
                         <ScreenShareIcon />

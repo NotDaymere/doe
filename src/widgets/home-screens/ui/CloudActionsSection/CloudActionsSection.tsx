@@ -1,10 +1,19 @@
 import { ReactComponent as Stars } from "src/assets/icons/stars.svg";
 import { ReactComponent as Plus } from "src/assets/icons/Plus.svg";
 import "./CloudActionsSection.less";
+import { useChatStore } from "src/shared/providers";
 
 function CloudActionsSection() {
+    const { playgroundFullscreen } = useChatStore();
+
     return (
-        <div className="text-columns-container">
+        <div
+            className="text-columns-container"
+            style={{
+                right: playgroundFullscreen ? 0 : 'default',
+                left: !playgroundFullscreen ? 0 : 'default',
+            }}
+        >
             <div className="text-columns-button justify-space-between">
                 <p className={"text-columns-button-p"}>
                     Add a <span className={"text-columns-button-span"}>Prompt</span>

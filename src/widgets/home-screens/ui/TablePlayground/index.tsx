@@ -2,11 +2,11 @@ import { Flex, Table, TableProps } from "antd";
 import { FC, useEffect, useState } from "react";
 import mockData from './mockData.json';
 import './index.less';
-import { EditorContent, isActive, useEditor } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
 import Underline from "@tiptap/extension-underline";
-import { calculateTiptapButtonPosition } from "../../../../components/code-playground/helpers/calculateButtonPosition";
-import { useChatStore } from "../../../../shared/providers";
+import { calculateTiptapButtonPosition } from "src/components/code-playground/helpers/calculateButtonPosition";
+import { useChatStore } from "src/shared/providers";
 import TipTapTextFormatMenu from "./assets/TextFormat/TipTapTextFormatMenu";
 import ResizePlaygroundButton from "../PlaygroundButtons/ResizePlaygroundButton/ResizePlaygroundButton";
 import CloudPlusButton from "../PlaygroundButtons/CloudPlusButton/CloudPlusButton";
@@ -15,7 +15,9 @@ import { Color } from "@tiptap/extension-color";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Superscript } from "@tiptap/extension-superscript";
 import { Subscript } from "@tiptap/extension-subscript";
-import GeneralLogo2 from "../../../../shared/icons/GeneralLogo2";
+import GeneralLogo from "../GeneralLogo/GeneralLogo";
+import { ChatLayout } from "../ChatLayout";
+import FullscreenGeneralLogo from "./assets/FullscreenGeneralLogo/FullscreenGeneralLogo";
 
 const TablePlayground: FC = () => {
   function adjustPosition(
@@ -43,8 +45,7 @@ const TablePlayground: FC = () => {
     return { top, left };
   }
 
-  const { setPlayground } = useChatStore();
-  const {playgroundFullscreen} = useChatStore();
+  const { setPlayground, playgroundFullscreen } = useChatStore();
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
@@ -203,7 +204,7 @@ const TablePlayground: FC = () => {
 
         <div className={"action-buttons"}>
           {!playgroundFullscreen && <CloudPlusButton />}
-          {playgroundFullscreen && <GeneralLogo2 className={'general-logo2-button'}/>}
+          {playgroundFullscreen && <FullscreenGeneralLogo />}
           <div className={"action-buttons-right-part"}>
             {playgroundFullscreen && <CloudPlusButton />}
             <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
