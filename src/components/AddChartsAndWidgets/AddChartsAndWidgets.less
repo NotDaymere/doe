@@ -1,0 +1,117 @@
+.modalAddChartWidget {
+  position: absolute;
+  z-index: 100;
+  left: 50%;
+  margin-left: -279.5px;
+  width: 559px;
+  height: 206px;
+  top: 50%;
+  margin-top: -103px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  border: solid 1px white;
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(60px);
+  .modalHead {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #5b5b5b;
+    font-weight: 700;
+    p {
+      font-size: 16px;
+    }
+    .closeBtn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      img {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+  .modalAddChartWidget_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .addWidget {
+      cursor: pointer;
+      width: 265px;
+      height: 151px;
+      border-radius: 12px;
+      border: solid 1px #f1f1f1;
+      background-image: linear-gradient(
+        rgba(255, 255, 255, 0.2),
+        rgba(255, 255, 255)
+      );
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 15px;
+      .dottedbg {
+        background: url("/dots.svg") no-repeat;
+        width: 222px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .linebg {
+        background: url("/Grid.svg") no-repeat;
+        width: 222px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .flex {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        height: 75px;
+      }
+      p {
+        font-size: 14px;
+        font-weight: bold;
+        color: #5b5b5b;
+      }
+      button {
+        width: 43px;
+        height: 43px;
+        background: #fff;
+        border: solid 1px #f1f1f1;
+        border-radius: 10.75px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        div {
+          width: 24px;
+          height: 24px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: #fff;
+          border-radius: 7px;
+          box-shadow: 0px 3.58px 7.17px rgba(0, 0, 0, 0.12);
+        }
+      }
+    }
+  }
+}

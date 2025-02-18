@@ -1,0 +1,203 @@
+.Comment_Box {
+  width: 390px;
+  height: 100%;
+  background: #f8f8f8;
+  box-shadow: inset 1px 0 0 0 #dddddd;
+
+  .header {
+    width: auto;
+    height: 63px;
+    background: #f8f8f8;
+    border-bottom: solid 1px #dddddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.04);
+    button {
+      background: none;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      .filter-icon {
+        transition: filter 0.3s ease-in-out;
+      }
+    }
+    .active-filter {
+      .filter-icon {
+        filter: brightness(0) saturate(100%);
+      }
+    }
+  }
+  .search {
+    width: 265px;
+    padding: 11px;
+    height: 13px;
+    background: #f8f8f8;
+    box-shadow: inset 0 0 0 1px #dddddd;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 5px;
+    input[type="text"] {
+      outline: none;
+      font-size: 14px;
+      width: 100%;
+      background: linear-gradient(
+        45deg,
+        rgba(181, 181, 181, 1),
+        rgba(181, 181, 181, 0.2)
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border: none;
+      &::placeholder {
+        background: linear-gradient(
+          45deg,
+          rgba(181, 181, 181, 1),
+          rgba(181, 181, 181, 0.2)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+  }
+  .body {
+    padding: 13px;
+    overflow-y: scroll;
+    height: calc(100% - 120px);
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #dddddd;
+      border-radius: 10px;
+    }
+
+    .comments_container {
+      width: auto;
+      .top {
+        background: rgba(255, 255, 255, 0.6);
+        border: solid 1px #fff;
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.04);
+        backdrop-filter: blur(60px);
+        border-radius: 12px;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: space-between;
+        gap: 10px;
+        width: auto;
+        .cp-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          .profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+          }
+          .left {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 9px;
+          }
+          div {
+            .profile-name-time {
+              display: flex;
+              flex-direction: column;
+              justify-content: start;
+              align-items: start;
+            }
+            h4 {
+              font-size: 14px;
+              color: #5b5b5b;
+              font-weight: 700;
+              padding: 0;
+              margin: 0;
+            }
+            .profile-name-time {
+              p {
+                font-size: 14px;
+                color: #5b5b5b;
+                font-weight: 200;
+                margin: 0;
+                padding: 0;
+              }
+            }
+          }
+          .right {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 9px;
+            button {
+              background: transparent;
+              border: none;
+              cursor: pointer;
+            }
+          }
+        }
+        .cp-body {
+          background: #ffffff;
+          padding: 12px;
+          border-radius: 8px;
+          width: auto;
+          p {
+            font-size: 14px;
+            color: #1f1f1f;
+          }
+        }
+        .cp-footer {
+          background: #f8f8f8;
+          border: solid 1px #f1f1f1;
+          height: 25px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 5px;
+          width: calc(100% - 10px);
+          input[type="text"] {
+            background: none;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+            color: #1f1f1f;
+            &::placeholder {
+              color: #5b5b5b;
+            }
+          }
+          button {
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            background: #dddddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: none;
+            &:hover {
+              background: #1f1f1f;
+            }
+          }
+        }
+      }
+    }
+  }
+}

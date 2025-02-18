@@ -1,0 +1,37 @@
+.menuBoxContainer {
+  background: #ffffff;
+  border: solid 1px #f8f8f8;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.05);
+  width: 130px;
+  height: 130px;
+  position: absolute;
+  z-index: 1000;
+  border-radius: 12px;
+  padding: 5px;
+
+  right: 30px;
+  top: 0px;
+  button {
+    background: none;
+    border-radius: 12px;
+    color: #b5b5b5;
+    font-size: 14px !important;
+    width: 100% !important;
+    height: 40px !important;
+    display: flex;
+    align-items: center;
+    justify-content: start !important;
+    padding-left: 10px;
+    border: none;
+    cursor: pointer;
+    gap: 5px;
+    &:hover {
+      background: #f8f8f8;
+      border: solid 1px #dddddd !important;
+      color: #1f1f1f;
+      img {
+        filter: brightness(0) saturate(100%);
+      }
+    }
+  }
+}

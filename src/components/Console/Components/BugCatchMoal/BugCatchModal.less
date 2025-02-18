@@ -1,0 +1,66 @@
+.bugbox {
+  width: 244.92px;
+  min-height: 100px;
+  padding: 19px;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  z-index: 10000;
+  left: 30px;
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    color: #414141;
+  }
+  .body {
+    padding-top: 13px;
+    padding-bottom: 13px;
+    flex-direction: column;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    gap: 10px;
+    font-style: 16px;
+    color: #414141;
+    .medium {
+      font-weight: 500;
+    }
+    .go-1 {
+      background: white;
+      border-radius: 4px;
+      color: #ff5f5f;
+      padding: 2px;
+    }
+  }
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 8px;
+    button {
+      width: 29px;
+      height: 29px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      gap: 5px;
+      background: #090f01;
+      cursor: pointer;
+      p {
+        display: none;
+        color: white;
+        font-size: 16px;
+      }
+      &:hover {
+        width: auto;
+        padding: 6px;
+        p {
+          display: block;
+        }
+      }
+    }
+  }
+}

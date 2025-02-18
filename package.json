@@ -53,7 +53,11 @@
     "react-transition-group": "^4.4.5",
     "swiper": "^11.2.1",
     "xml2js": "^0.6.2",
-    "zustand": "^5.0.3"
+    "zustand": "^5.0.3",
+    "recharts": "^2.15.1",
+    "roughjs": "^4.6.6",
+    "xterm": "^5.3.0",
+    "d3": "^7.9.0"
   },
   "devDependencies": {
     "@bn-digital/prettier-config": "^2.4.1",
