@@ -45,7 +45,7 @@ const TablePlayground: FC = () => {
     return { top, left };
   }
 
-  const { setPlayground, playgroundFullscreen } = useChatStore();
+  const { playground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds } = useChatStore();
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
@@ -57,7 +57,6 @@ const TablePlayground: FC = () => {
     bottom?: number;
     right?: number;
   } | null>(null);
-
   const editor = useEditor({
     extensions: [
         StarterKit,
@@ -69,15 +68,14 @@ const TablePlayground: FC = () => {
           types: ['textStyle'],
         }),
     ],
-    content: `
-      <p>
+    content: playground?.text ??
+        `<p>
         This is what your table looks like when it's in Doe Playground! 
         Larger tables can be navigated, folded in to reveal text, etc.
         Typically, a Playground table will not include both text blocks and graphs 
         as it does here, but it is still possible! 
         The graph interaction with highlighting still applies here!
-      </p>
-    `,
+      </p>`,
     onSelectionUpdate({ editor }) {
       const { from, to } = editor.state.selection;
       const text = editor.state.doc.textBetween(from, to, ' ');
@@ -165,6 +163,10 @@ const TablePlayground: FC = () => {
 
   const handleCollapsePlayground = () => {
     setPlayground({ type: null, data: null, id: null, open: false });
+    const newPlayground = playground;
+    newPlayground.text = editor?.getText() ?? '';
+    newPlayground.open = false;
+    updateSavedPlaygrounds(newPlayground);
   };
 
   const handlePenClick = () => {
@@ -183,9 +185,15 @@ const TablePlayground: FC = () => {
   };
 
   return (
-      <div className={"table-playground"}>
+      <div className={"table-playground"}
+           onMouseDown={(event) => {
+             if (event.button === 1) {
+               handleCollapsePlayground();
+             }
+           }}
+      >
         <Flex className={"tabs-panel-playground"}>
-          Table Random Values
+          Tabular Random Values
         </Flex>
 
         <section className="editor-section">

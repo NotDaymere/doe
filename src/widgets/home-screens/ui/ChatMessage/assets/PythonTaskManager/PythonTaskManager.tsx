@@ -4,16 +4,17 @@ import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
 import { useChatStore } from "src/shared/providers";
 
 function PythonTaskManager() {
-    const { playground, setPlayground } = useChatStore();
+    const { playground, setPlayground, savedPlaygrounds, setSavedPlaygrounds } = useChatStore();
     const openTablePlayground = () => {
         const newPlayground = playground;
         newPlayground.type = "code";
         newPlayground.open = true;
-        setPlayground(newPlayground);
+        setSavedPlaygrounds(newPlayground);
+        setPlayground(savedPlaygrounds.at(-1) ?? newPlayground);
     };
     return (
         <button onClick={openTablePlayground}
-                className={`table-playground-button ${playground.type == 'code'&&'table-playground-button-active'}`}
+                className={`table-playground-button ${playground.type == 'code' && 'table-playground-button-active'}`}
         >
             <TableIcon /> Python Task Manager
         </button>

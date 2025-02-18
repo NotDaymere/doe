@@ -5,12 +5,13 @@ import './TableRandomValues.less';
 import { useChatStore } from "src/shared/providers";
 
 function TableRandomValues() {
-    const { playground, setPlayground } = useChatStore();
+    const { playground, setPlayground, savedPlaygrounds, setSavedPlaygrounds } = useChatStore();
     const openTablePlayground = () => {
         const newPlayground = playground;
         newPlayground.type = "table";
         newPlayground.open = true;
-        setPlayground(newPlayground);
+        setSavedPlaygrounds(newPlayground);
+        setPlayground(savedPlaygrounds.at(-1) ?? newPlayground);
     };
     return (
         <button onClick={openTablePlayground}
