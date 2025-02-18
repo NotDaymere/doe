@@ -1,5 +1,5 @@
 import { Flex, Table, TableProps } from "antd";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import mockData from './mockData.json';
 import './index.less';
 import { EditorContent, useEditor } from "@tiptap/react";
@@ -68,8 +68,9 @@ const TablePlayground: FC = () => {
           types: ['textStyle'],
         }),
     ],
-    content: playground?.text ??
-        `<p>
+    content: playground?.text
+        ? playground.text
+        :`<p>
         This is what your table looks like when it's in Doe Playground! 
         Larger tables can be navigated, folded in to reveal text, etc.
         Typically, a Playground table will not include both text blocks and graphs 
@@ -98,6 +99,34 @@ const TablePlayground: FC = () => {
   useEffect(() => {
     handleSetDataToInput();
   }, [selectedRow, selectedColumn, selectedCell]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const tablePlayground = document.querySelector(".table-playground") as HTMLElement | null;
+      const actionButtons = document.querySelector(".action-buttons") as HTMLElement | null;
+
+      if (!tablePlayground || !actionButtons) return;
+
+      const scrollHeight = tablePlayground.scrollHeight;
+      const scrollTop = tablePlayground.scrollTop;
+      const clientHeight = tablePlayground.clientHeight;
+
+      const newBottom = 22 - scrollTop;
+
+      actionButtons.style.bottom = `${newBottom}px`;
+    };
+
+    const tablePlayground = document.querySelector(".table-playground") as HTMLElement | null;
+    if (tablePlayground) {
+      tablePlayground.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (tablePlayground) {
+        tablePlayground.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
 
   const handleSetDataToInput = () => {
     if (!editor) return;
@@ -175,7 +204,7 @@ const TablePlayground: FC = () => {
       setButtonPosition(null);
       setIsPen(false);
     } else {
-      setSelectedText("Pen");
+      setSelectedText(selectedText ?? "Pen");
       setIsPen(true);
       setButtonPosition({
         bottom: 137,
@@ -184,6 +213,9 @@ const TablePlayground: FC = () => {
     }
   };
 
+  const handleTipTapTextFormatMenuOnClick = () => {
+    setSelectedText(null);
+  };
   return (
       <div className={"table-playground"}
            onMouseDown={(event) => {
@@ -230,6 +262,7 @@ const TablePlayground: FC = () => {
                 }}
                 isPen={isPen}
                 editor={editor}
+                handleTipTapTextFormatMenuOnClick = {handleTipTapTextFormatMenuOnClick}
             />
         )}
       </div>

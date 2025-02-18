@@ -17,7 +17,7 @@ import { ReactComponent as ActiveMenuIcon } from "src/assets/icons/active-menu.s
 import { ReactComponent as CardPlus } from "src/assets/icons/card-plus.svg";
 import './TipTapTextFormatMenu.less';
 import { Button, Flex } from "antd";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ActivePaint from "../../../PlaygroundButtons/ActivePaint/ActivePaint";
 import ActiveMenu from "../../../PlaygroundButtons/ActiveMenu/ActiveMenu";
 import { Editor } from "@tiptap/react";
@@ -31,11 +31,26 @@ type TextFormatProps = {
         right?: number;
     };
     editor: Editor | null;
+    handleTipTapTextFormatMenuOnClick: () => void;
 };
 
-function TipTapTextFormatMenu({ buttonPosition, isPen, editor }: TextFormatProps) {
+function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextFormatMenuOnClick}: TextFormatProps) {
     const [activePaint, setActivePaint] = useState(false);
     const [activeMenu, setActiveMenu] = useState(false);
+    const menuRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                handleTipTapTextFormatMenuOnClick();
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const handleRemoveFormat = () => {
         if (!editor) return;
@@ -101,7 +116,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor }: TextFormatProps
     const insertDegreeSymbol = () => {
         if (!editor) return;
         const { from, to } = editor.state.selection;
-        if (from === to) return; // ничего не выделено
+        if (from === to) return;
 
         const selectedText = editor.state.doc.textBetween(from, to, "");
 
@@ -189,6 +204,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor }: TextFormatProps
     return (
         <>
             <Flex
+                ref={menuRef}
                 className={"text-format-container"}
                 style={
                     isPen

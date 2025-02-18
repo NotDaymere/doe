@@ -74,6 +74,7 @@
     gap: 8px;
     bottom: 22px;
     width: 100%;
+    //transition: bottom 0.2s ease-in-out;
     .action-buttons-right-part {
       display: flex;
       flex-direction: column;
@@ -129,4 +130,17 @@
   padding-bottom: 16px;
   font-size: 16px;
   font-weight: 500;
+}
+::selection {
+  background-color: rgba(151, 71, 255, 0.16) !important;
+  color: #000000 !important;
+}
+.tiptap-editor,
+.tiptap,
+.table-playground,
+.tiptap-editor * {
+  &::selection {
+    background-color: rgba(151, 71, 255, 0.16) !important;
+    color: #000000 !important;
+  }
 }
