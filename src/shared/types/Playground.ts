@@ -37,4 +37,5 @@ export interface IPlaygroundSourceData {
 export interface IPreviewPlayground {
     type: SourceType | null;
     data: string;
+    title?: string;
 }

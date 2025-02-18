@@ -29,6 +29,7 @@ export const useAppStore = create<AppState>()((set) => ({
     previewPlayground: {
         type: null,
         data: "",
+        title: "",
     },
     setGaiaActive: (gaiaActive) => set(() => ({ gaiaActive })),
     setActiveEditor: (editor) => set(() => ({ editor })),

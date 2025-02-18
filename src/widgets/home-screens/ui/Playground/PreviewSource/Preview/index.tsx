@@ -1,25 +1,28 @@
 import mammoth from "mammoth";
 import { SourceType } from "src/shared/types/Playground";
-import { useState, useEffect, FC } from "react";
-import { pdfjs } from "react-pdf";
-import { Viewer } from "@react-pdf-viewer/core";
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import PdfViewerWithPagination from "../PDFViewerWithPagination";
+import { useState, useEffect, FC, useRef } from "react";
+import PdfDocument from "../PdfDocument";
 import classNames from "classnames";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import Pagination from "../Pagination";
+import ZoomButton from "../ZoomButton";
+import Title from "../Title";
 import css from "./Preview.module.less";
-
-pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.mjs";
 
 interface IProps {
     type: SourceType | null;
     url: string;
+    title?: string;
     isModalView?: boolean;
 }
 
-const Preview: FC<IProps> = ({ type, url, isModalView }) => {
+const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
     const fileType = url?.split(".").pop() || "";
     const [content, setContent] = useState<any>(null);
+    const [scale, setScale] = useState(0.7);
+    const [numPages, setNumPages] = useState<number>(0);
+    const pageRefs = useRef<any>({});
 
     useEffect(() => {
         if (fileType === "txt") {
@@ -42,7 +45,14 @@ const Preview: FC<IProps> = ({ type, url, isModalView }) => {
     const renderPreviewContent = (fileType: string) => {
         switch (fileType) {
             case "pdf":
-                return <Viewer fileUrl={url || ""} />;
+                return (
+                    <PdfDocument
+                        url={url}
+                        scale={scale}
+                        pageRefs={pageRefs}
+                        onDocumentLoad={setNumPages}
+                    />
+                );
             case "txt":
             case "docx":
                 return <pre style={{ display: "contents", whiteSpace: "pre-wrap" }}>{content}</pre>;
@@ -54,7 +64,26 @@ const Preview: FC<IProps> = ({ type, url, isModalView }) => {
     if (type === "apps" || type === "web")
         return <iframe className={classNames({ [css.iframeModal]: isModalView })} src={url} />;
 
-    if (isModalView && fileType === "pdf") return <PdfViewerWithPagination url={url} />;
+    if (isModalView && fileType === "pdf")
+        return (
+            <div className={css.pdfViewerWithPagination}>
+                <div className={css.title}>
+                    <Title title={title} />
+                </div>
+                <div className={css.pagination}>
+                    <Pagination pageRefs={pageRefs} numPages={numPages} />
+                </div>
+                <div className={css.zoom}>
+                    <ZoomButton onZoomClick={() => setScale(scale + 0.1)} />
+                </div>
+                <PdfDocument
+                    url={url}
+                    scale={scale}
+                    pageRefs={pageRefs}
+                    onDocumentLoad={setNumPages}
+                />
+            </div>
+        );
 
     return renderPreviewContent(fileType);
 };

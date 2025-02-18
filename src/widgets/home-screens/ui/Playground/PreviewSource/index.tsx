@@ -7,7 +7,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import css from "./PreviewSource.module.less";
 
-const PreviewSource: FC<IPreviewPlayground> = ({ type, data }) => {
+const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -40,15 +40,14 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data }) => {
                 className={css.previewSource}
             >
                 <Preview type={type} url={data} isModalView={isModalOpen} />
+
                 {(type === "apps" || type === "web") && (
                     <div className={css.iframeOverlay} onDoubleClick={() => setIsModalOpen(true)} />
                 )}
                 {renderOpenInNewWindowButtonClick()}
             </div>
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <div className={css.previewSource}>
-                    <Preview type={type} url={data} isModalView={isModalOpen} />
-                </div>
+                <Preview type={type} url={data} isModalView={isModalOpen} title={title} />
             </Modal>
         </>
     );

@@ -10,7 +10,7 @@ import { PLAYGROUND_SOURCES, INFO_NODES, SOURCE_NODES } from "../MockData";
 import GlowIcon from "src/shared/icons/Glow.icon";
 import { ScalableContainer } from "../ScalableContainer";
 import { useAppStore } from "src/shared/providers";
-import Preview from "../PreviewSource";
+import PreviewSource from "../PreviewSource";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import css from "./SourcePlayground.module.less";
 
@@ -24,14 +24,16 @@ const SourcePlayground = () => {
             setPreviewPlayground({
                 type: null,
                 data: "",
+                title: "",
             });
         };
     }, []);
 
-    const handleOpenSourcePreviewClick = (type: any, data: any) => {
+    const handleOpenSourcePreviewClick = (type: any, data: any, title: string) => {
         setPreviewPlayground({
             type,
             data,
+            title,
         });
     };
 
@@ -45,7 +47,9 @@ const SourcePlayground = () => {
                         <button
                             className={css.item}
                             key={item.title}
-                            onClick={() => handleOpenSourcePreviewClick(type, item.link)}
+                            onClick={() =>
+                                handleOpenSourcePreviewClick(type, item.link, item.title)
+                            }
                         >
                             {item.icon}
                             <span className={css.itemText}>{item.title}</span>
@@ -110,7 +114,11 @@ const SourcePlayground = () => {
                         </span>
                     </>
                 ) : (
-                    <Preview data={previewPlayground.data || ""} type={previewPlayground.type} />
+                    <PreviewSource
+                        data={previewPlayground.data || ""}
+                        type={previewPlayground.type}
+                        title={previewPlayground.title}
+                    />
                 )}
             </div>
         </div>
