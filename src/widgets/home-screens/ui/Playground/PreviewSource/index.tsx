@@ -6,6 +6,7 @@ import Preview from "./Preview";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import css from "./PreviewSource.module.less";
+import ExpandDoubleIcon from "src/shared/icons/ExpandDouble.icon";
 
 const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
     const [isHovered, setIsHovered] = useState(false);
@@ -39,15 +40,17 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                 onMouseLeave={() => setIsHovered(false)}
                 className={css.previewSource}
             >
-                <Preview type={type} url={data} isModalView={isModalOpen} />
-
-                {(type === "apps" || type === "web") && (
-                    <div className={css.iframeOverlay} onDoubleClick={() => setIsModalOpen(true)} />
+                <Preview type={type} url={data} isModalView={false} />
+                {type !== "web" && (
+                    <button className={css.expandView} onClick={() => setIsModalOpen(true)}>
+                        <ExpandDoubleIcon width={20} height={20} />
+                    </button>
                 )}
+
                 {renderOpenInNewWindowButtonClick()}
             </div>
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <Preview type={type} url={data} isModalView={isModalOpen} title={title} />
+                <Preview type={type} url={data} isModalView={true} title={title} />
             </Modal>
         </>
     );

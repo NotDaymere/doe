@@ -1,10 +1,11 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Document } from "react-pdf";
 import PageInView from "../PageInView";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "@react-pdf-viewer/page-navigation/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import { PDFDocumentProxy } from "pdfjs-dist";
 import css from "./PdfDocument.module.less";
 
 interface IProps {
@@ -24,9 +25,20 @@ const PdfDocument: FC<IProps> = ({
     onDocumentLoad,
     onPageChange,
 }) => {
+    const [pdfInstance, setPdfInstance] = useState<PDFDocumentProxy | null>(null);
+
     const onDocumentLoadSuccess = (pdf: any) => {
         onDocumentLoad(pdf.numPages);
+        setPdfInstance(pdf);
     };
+
+    useEffect(() => {
+        return () => {
+            if (pdfInstance) {
+                pdfInstance.destroy();
+            }
+        };
+    }, [pdfInstance]);
 
     return (
         <div className={css.viewer}>

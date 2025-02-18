@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StyledLineIcon from "src/shared/icons/StyledLine.icon";
 import SourcesIcon from "src/shared/icons/Sources.icon";
 import { SourceType } from "src/shared/types/Playground";
@@ -47,7 +47,7 @@ const SourcePlayground = () => {
                         <button
                             className={css.item}
                             key={item.title}
-                            onClick={() =>
+                            onDoubleClick={() =>
                                 handleOpenSourcePreviewClick(type, item.link, item.title)
                             }
                         >
@@ -64,6 +64,24 @@ const SourcePlayground = () => {
         setIsVisible(true);
         setSourceType(type);
     };
+
+    const previewRef = useRef<HTMLDivElement>(null);
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (previewRef.current && !previewRef.current.contains(event.target as Node)) {
+            setPreviewPlayground({
+                type: null,
+                data: "",
+            });
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <div className={css.sourcePlayground}>
@@ -105,7 +123,7 @@ const SourcePlayground = () => {
                     </div>
                 </ScalableContainer>
             </div>
-            <div className={css.detailsSection}>
+            <div className={css.detailsSection} ref={previewRef}>
                 {!previewPlayground.data ? (
                     <>
                         <SourcesIcon />

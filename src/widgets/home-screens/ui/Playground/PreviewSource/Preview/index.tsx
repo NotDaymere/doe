@@ -43,6 +43,25 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
         }
     }, [url, fileType]);
 
+    useEffect(() => {
+        const element = document.querySelector("#pdf_viewer");
+        element && element?.addEventListener("wheel", onWheelEvent);
+
+        return () => {
+            window.removeEventListener("wheel", onWheelEvent);
+        };
+    }, [scale]);
+
+    const onWheelEvent = (event: any) => {
+        event.preventDefault();
+
+        if (event.deltaY > 0) {
+            setScale(scale + 0.01);
+        } else if (event.deltaY < 0) {
+            setScale(scale - 0.01);
+        }
+    };
+
     const renderPreviewContent = (fileType: string) => {
         switch (fileType) {
             case "pdf":
@@ -69,7 +88,7 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
 
     if (isModalView && fileType === "pdf")
         return (
-            <div className={css.pdfViewerWithPagination}>
+            <div className={css.pdfViewerWithPagination} id="pdf_viewer">
                 <div className={css.title}>
                     <Title title={title} />
                 </div>
