@@ -35,6 +35,7 @@ type TextFormatProps = {
 };
 
 function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextFormatMenuOnClick}: TextFormatProps) {
+    console.log(buttonPosition);
     const [activePaint, setActivePaint] = useState(false);
     const [activeMenu, setActiveMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -210,8 +211,8 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
                     isPen
                         ? {
                             position: "absolute",
-                            bottom: "110px",
-                            right: "14px",
+                            bottom: `${buttonPosition?.bottom}px`,
+                            right: `${buttonPosition?.right}px`,
                         }
                         : {
                             top: `${buttonPosition?.top}px`,

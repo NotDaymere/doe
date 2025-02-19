@@ -59,6 +59,7 @@ const TablePlayground: FC = () => {
     bottom?: number;
     right?: number;
   } | null>(null);
+  const [penNewBottom, setPenNewBottom] = useState<number>(0);
   const editor = useEditor({
     extensions: [
         StarterKit,
@@ -114,7 +115,7 @@ const TablePlayground: FC = () => {
       const clientHeight = tablePlayground.clientHeight;
 
       const newBottom = 22 - scrollTop;
-
+      setPenNewBottom(newBottom - 22);
       actionButtons.style.bottom = `${newBottom}px`;
     };
 
@@ -212,11 +213,12 @@ const TablePlayground: FC = () => {
       setButtonPosition(null);
       setIsPen(false);
     } else {
-      setSelectedText(selectedText ?? "Pen");
+      setSelectedText(selectedText ? selectedText : "Pen");
       setIsPen(true);
+      console.log(penNewBottom);
       setButtonPosition({
-        bottom: 137,
-        right: 45,
+        bottom: 111,
+        right: 14,
       });
     }
   };
@@ -267,9 +269,9 @@ const TablePlayground: FC = () => {
         {selectedText && editor && (
             <TipTapTextFormatMenu
                 buttonPosition={{
-                  top: buttonPosition?.top,
+                  top: (buttonPosition?.top && (buttonPosition?.top + penNewBottom)),
                   left: buttonPosition?.left,
-                  bottom: buttonPosition?.bottom,
+                  bottom: (buttonPosition?.bottom && (buttonPosition?.bottom + penNewBottom)),
                   right: buttonPosition?.right,
                 }}
                 isPen={isPen}
