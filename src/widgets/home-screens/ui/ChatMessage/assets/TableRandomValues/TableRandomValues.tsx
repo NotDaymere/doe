@@ -1,17 +1,23 @@
-
 import React from "react";
 import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
 import './TableRandomValues.less';
 import { useChatStore } from "src/shared/providers";
+import { IPlayground } from "src/shared/types/Playground";
 
 function TableRandomValues() {
-    const { playground, setPlayground, savedPlaygrounds, setSavedPlaygrounds } = useChatStore();
+    const { playground, setPlayground, setSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlaygroundLast } = useChatStore();
     const openTablePlayground = () => {
-        const newPlayground = playground;
-        newPlayground.type = "table";
-        newPlayground.open = true;
+        const oldPlayground = playground;
+        oldPlayground.open = false;
+        updateSavedPlaygrounds(oldPlayground);
+        const newPlayground: IPlayground = {
+            id: null,
+            type: "table",
+            data: null,
+            open: true
+        };
         setSavedPlaygrounds(newPlayground);
-        setPlayground(savedPlaygrounds.at(-1) ?? newPlayground);
+        setPlayground(getSavedPlaygroundLast() ?? newPlayground);
     };
     return (
         <button onClick={openTablePlayground}

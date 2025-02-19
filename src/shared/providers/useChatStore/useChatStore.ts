@@ -2,7 +2,7 @@ import { Editor } from "@tiptap/react";
 import { IBranch } from "src/shared/types/Branch";
 import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
-import { IPlayground } from "../../types/Playground";
+import { IPlayground } from "src/shared/types/Playground";
 import { IQuestionCodeMessage } from "../../types/QuestionCodeMessage";
 
 interface ChatState {
@@ -22,12 +22,15 @@ interface ChatState {
     setSavedPlaygrounds: (playground: IPlayground) => void;
     updateSavedPlaygrounds: (playground: IPlayground) => void;
     deleteSavedPlaygrounds: (id: string | null) => void;
+    getSavedPlayground: (id: string | null) => IPlayground | null;
+    getOpenSavedPlaygrounds: () => IPlayground[];
+    getSavedPlaygroundLast: () => IPlayground | null;
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
     setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
 }
 
 export const useChatStore = create<ChatState>()(
-    (set) => ({
+    (set, get) => ({
         isTyping: false,
         editor: null,
         currentBranch: null,
@@ -77,5 +80,17 @@ export const useChatStore = create<ChatState>()(
         deleteSavedPlaygrounds: (id) => set((state) => ({
             savedPlaygrounds: state.savedPlaygrounds.filter(p => p.id !== id),
         })),
+
+        getSavedPlayground: (id) => {
+            return get().savedPlaygrounds.find(p => p.id === id) || null;
+        },
+
+        getOpenSavedPlaygrounds: () => {
+            return get().savedPlaygrounds.filter(p => p.open);
+        },
+
+        getSavedPlaygroundLast: () => {
+            return get().savedPlaygrounds.at(-1) || null;
+        }
     })
 );

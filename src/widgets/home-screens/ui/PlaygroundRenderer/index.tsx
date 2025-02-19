@@ -8,7 +8,7 @@ const PlaygroundRenderer: FC<Partial<App.Playground>> = ({ id, type }) => {
     case "code":
        return <CodePlayground />
     case "table":
-      return <TablePlayground />
+      return <TablePlayground id={id}/>
     // case "source":
     //   return <SourcePlayground />
     default:

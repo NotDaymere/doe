@@ -167,3 +167,35 @@
   justify-content: center;
   gap: 4px;
 }
+
+.saved-playgrounds-container {
+  width: 98%;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid #DDDDDD;
+  padding: 4px;
+  margin: 4px;
+  gap: 4px;
+  background: #B5B5B533;
+
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  scrollbar-color: #999 transparent;
+}
+
+.saved-playgrounds-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.saved-playgrounds-container::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 2px;
+}
+
+.saved-playgrounds-container::-webkit-scrollbar-track {
+  background: transparent;
+}

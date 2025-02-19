@@ -4,7 +4,7 @@ import { Gaia } from "src/widgets/Gaia";
 import css from "./MainLayout.module.less";
 import { Layout as BaseLayout } from "antd";
 import { Sider } from "../../../components/layout";
-import PlaygroundRenderer from "../../../widgets/home-screens/ui/PlaygroundRenderer";
+import MultiPlaygroundRenderer from "../../../widgets/home-screens/ui/PlaygroundRenderer/MultiPlaygroundRenderer/MultiPlaygroundRenderer";
 
 interface Props {
     children: React.ReactNode;
@@ -14,18 +14,18 @@ export const MainLayout: React.FC<Props> = ({
     children
 }) => {
     const gaiaRef = React.useRef<HTMLDivElement>(null);
-    const { playground, playgroundFullscreen } = useChatStore()
+    const { playgroundFullscreen, getOpenSavedPlaygrounds } = useChatStore()
     return (
         <React.Fragment>
-            <BaseLayout className={playground.open ? "main-layout-playground" : "main-layout"} hasSider>
+            <BaseLayout className={getOpenSavedPlaygrounds().length > 0 ? "main-layout-playground" : "main-layout"} hasSider>
                 <BaseLayout.Sider width={"auto"} className={"sider-wrapper"}>
                     <Sider />
                 </BaseLayout.Sider>
                 {!playgroundFullscreen && children}
             <Gaia className={css.gaia} ref={gaiaRef} />
-            {playground.open && (
+            {getOpenSavedPlaygrounds().length > 0 && (
                 <BaseLayout.Sider width={playgroundFullscreen ? '100%' : 550} className={"playground-sider"}>
-                    <PlaygroundRenderer type={playground.type} id={playground.id} />
+                    <MultiPlaygroundRenderer />
                 </BaseLayout.Sider>
             )}
             </BaseLayout>
