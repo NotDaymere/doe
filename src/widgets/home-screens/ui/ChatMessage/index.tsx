@@ -18,7 +18,7 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
     const [isEdit, setEdit] = React.useState(false);
     const [content, setContent] = React.useState(data.content);
     const { setPlayground, playground } = useAppStore();
-    const { editor, setEditor } = useChatStore();
+    const { editor, setEditor, setMessagesCount, messagesCount } = useChatStore();
 
     const toggleEdit = () => {
         setEdit(!isEdit);
@@ -35,6 +35,10 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
             type: "source",
             open: !playground.open,
         });
+    };
+
+    const handleSendButtonClick = () => {
+        setMessagesCount(messagesCount + 1);
     };
 
     if (data.isUser) {
@@ -54,7 +58,10 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
                         <button className={css.edit_controls_cancelBtn} onClick={cancelEdit}>
                             <CrossIcon />
                         </button>
-                        <button className={css.edit_controls_saveBtn}>
+                        <button
+                            className={css.edit_controls_saveBtn}
+                            onClick={handleSendButtonClick}
+                        >
                             <SendIcon />
                         </button>
                     </div>

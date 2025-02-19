@@ -15,7 +15,7 @@ import UploadIcon from "src/shared/icons/Upload.icon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles } = usePanel();
-    const { setEditor } = useChatStore();
+    const { setEditor, setMessagesCount, messagesCount } = useChatStore();
     const {
         drag,
         dragTarget,
@@ -32,6 +32,10 @@ export const ChatPanel: React.FC = () => {
     });
 
     const prompt = usePrompt();
+
+    const handleSendButtonClick = () => {
+        setMessagesCount(messagesCount + 1);
+    };
 
     return (
         <div
@@ -96,7 +100,7 @@ export const ChatPanel: React.FC = () => {
                         <MicrophoneIcon />
                     </button>
                     {!prompt.active ? (
-                        <button className={css.panel_submitBtn}>
+                        <button className={css.panel_submitBtn} onClick={handleSendButtonClick}>
                             Send <ArrowUpIcon />
                         </button>
                     ) : (
