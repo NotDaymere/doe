@@ -16,17 +16,17 @@ function Console() {
           </div>
           <div className="right_buttons">
             <button onClick={() => setShowMenu((prev) => !prev)}>
-              <img src="/console/code.svg" />
+              <img src="/img/console/code.svg" />
             </button>
             <button>
-              <img src="/console/window.svg" />
+              <img src="/img/console/window.svg" />
             </button>
             <button>
-              <img src="/console/delete.svg" />
+              <img src="/img/console/delete.svg" />
             </button>
             <button onClick={() => setIsVisible(false)}>
               {" "}
-              <img src="/console/hide.svg" />
+              <img src="/img/console/hide.svg" />
             </button>
           </div>
           {showMenu && <CodingLanguageMenu />}

@@ -23,7 +23,7 @@ function AddChartsAndWidgets() {
       <div className="modalHead">
         <p>Charts and widgets</p>
         <button className="closeBtn" onClick={closeModal}>
-          <img src="/icons/close.svg" alt="Close" />
+          <img src="/img/icons/close.svg" alt="Close" />
         </button>
       </div>
       <div className="modalAddChartWidget_container">
@@ -35,17 +35,17 @@ function AddChartsAndWidgets() {
             <div className="flex">
               <button>
                 <div>
-                  <img src="/icons/mirro.svg" alt="Mirro" />
+                  <img src="/img/icons/mirro.svg" alt="Mirro" />
                 </div>
               </button>
               <button>
                 <div>
-                  <img src="/icons/norton.svg" alt="Norton" />
+                  <img src="/img/icons/norton.svg" alt="Norton" />
                 </div>
               </button>
               <button>
                 <div>
-                  <img src="/icons/google.svg" alt="Google" />
+                  <img src="/img/icons/google.svg" alt="Google" />
                 </div>
               </button>
             </div>
@@ -58,7 +58,7 @@ function AddChartsAndWidgets() {
         >
           <div className="linebg">
             <div className="flex">
-              <img src="/icons/chart_icon.svg" alt="Chart" />
+              <img src="/img/icons/chart_icon.svg" alt="Chart" />
             </div>
             <p>Add Chart</p>
           </div>

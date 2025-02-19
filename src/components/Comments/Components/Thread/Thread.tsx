@@ -3,7 +3,7 @@ function Thread({comment}:any) {
   return (
     <div className="thread">
       <div className="th-header">
-        <img src="/profile_pic.png" />
+        <img src="/img/profile_pic.png" />
         <div>
           <h4>{comment.user.name}</h4>
           <p>{comment.timestamp}</p>

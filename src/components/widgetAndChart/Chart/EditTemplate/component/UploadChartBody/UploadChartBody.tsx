@@ -35,7 +35,7 @@ function UploadChartBody() {
           </div>
         </div>
         <button onClick={handleButtonClick}>
-          <img src="/icons/file_upload.svg" alt="Upload Icon" /> Upload your
+          <img src="/img/icons/file_upload.svg" alt="Upload Icon" /> Upload your
           data
         </button>
         <input

@@ -4,7 +4,7 @@ function BugCatchModal() {
   return (
     <div className="bugbox">
       <div className="head">
-        Bug Catch <img src="/icons/bug_on.svg" />
+        Bug Catch <img src="/img/icons/bug_on.svg" />
       </div>
       <div className="body">
         <p>
@@ -25,11 +25,11 @@ function BugCatchModal() {
       <div className="footer">
         <button>
           <p>Discuss</p>
-          <img src="/icons/discuss.svg" />
+          <img src="/img/icons/discuss.svg" />
         </button>
         <button>
           <p>Swat</p>
-          <img src="/icons/swat.svg" />
+          <img src="/img/icons/swat.svg" />
         </button>
       </div>
     </div>

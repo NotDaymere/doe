@@ -9,28 +9,28 @@ function WidgetInChat() {
       <div className="newWidgetContainer">
         {/* <button onClick={() => {setPage(Page.PREVIEW_WIDGET,"microsoft")}}>test</button> */}
         <WidgetButton
-          icon="/icons/norton.svg"
+          icon="/img/icons/norton.svg"
           text="Microsoft"
           onClick={() => {
             setPage(Page.PREVIEW_WIDGET, "Microsoft");
           }}
         />
         <WidgetButton
-          icon="/icons/google.svg"
+          icon="/img/icons/google.svg"
           text="Google"
           onClick={() => {
             setPage(Page.PREVIEW_WIDGET, "Google");
           }}
         />
         <WidgetButton
-          icon="/icons/mirro.svg"
+          icon="/img/icons/mirro.svg"
           text="Miro"
           onClick={() => {
             setPage(Page.PREVIEW_WIDGET, "Miro");
           }}
         />
         <WidgetButton
-          icon="/icons/norton.svg"
+          icon="/img/icons/norton.svg"
           text="Microsoft"
           onClick={() => {
             setPage(Page.PREVIEW_WIDGET, "Microsoft");
@@ -38,28 +38,28 @@ function WidgetInChat() {
         />
 
         <WidgetButton
-          icon="/icons/norton.svg"
+          icon="/img/icons/norton.svg"
           text="Microsoft"
           onClick={() => {
             setPage(Page.PREVIEW_WIDGET, "Microsoft");
           }}
         />
         <WidgetButton
-          icon="/icons/google.svg"
+          icon="/img/icons/google.svg"
           text="Google"
           onClick={() => {
             setPage(Page.PREVIEW_WIDGET, "Google");
           }}
         />
         <WidgetButton
-          icon="/icons/mirro.svg"
+          icon="/img/icons/mirro.svg"
           text="Miro"
           onClick={() => {
             setPage(Page.PREVIEW_WIDGET, "Miro");
           }}
         />
         <WidgetButton
-          icon="/icons/norton.svg"
+          icon="/img/icons/norton.svg"
           text="Microsoft"
           onClick={() => {
             alert("hi");

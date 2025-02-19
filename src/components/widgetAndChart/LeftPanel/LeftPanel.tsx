@@ -33,15 +33,15 @@ function LeftPanel() {
               onClick={() => toggleSection("charts")}
             >
               <div>
-                <img src="/icons/chart.svg" alt="Charts" />
+                <img src="/img/icons/chart.svg" alt="Charts" />
                 <p>Charts</p>
               </div>
               <button>
                 <img
                   src={
                     openSections.charts
-                      ? "/icons/decollapsed.svg"
-                      : "/icons/collapsed.svg"
+                      ? "/img/icons/decollapsed.svg"
+                      : "/img/icons/collapsed.svg"
                   }
                   alt="Toggle"
                 />
@@ -81,7 +81,7 @@ function LeftPanel() {
           <div className="list_container">
             <div className="list_button_container">
               <div>
-                <img src="/icons/drawicon.svg" />
+                <img src="/img/icons/drawicon.svg" />
                 <p>Drawings</p>
               </div>
             </div>
@@ -97,15 +97,15 @@ function LeftPanel() {
               onClick={() => toggleSection("widgets")}
             >
               <div>
-                <img src="/icons/widgetIcon.svg" alt="Widgets" />
+                <img src="/img/icons/widgetIcon.svg" alt="Widgets" />
                 <p>Widgets</p>
               </div>
               <button>
                 <img
                   src={
                     openSections.widgets
-                      ? "/icons/decollapsed.svg"
-                      : "/icons/collapsed.svg"
+                      ? "/img/icons/decollapsed.svg"
+                      : "/img/icons/collapsed.svg"
                   }
                   alt="Toggle"
                 />

@@ -11,15 +11,15 @@ function NewChart() {
     
     <div className="newChartContainer">
       
-      <ChartButton icon="/colorChartIcons/line.svg" text="Line" onClick={()=>{console.log("Clicked for page");setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
-      <ChartButton icon="/colorChartIcons/bar.svg" text="Bar" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
+      <ChartButton icon="/img/colorChartIcons/line.svg" text="Line" onClick={()=>{console.log("Clicked for page");setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
+      <ChartButton icon="/img/colorChartIcons/bar.svg" text="Bar" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
      
-      <ChartButton icon="/colorChartIcons/area.svg" text="Area" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
-      <ChartButton icon="/colorChartIcons/pie.svg" text="Pie" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
-      <ChartButton icon="/colorChartIcons/buble.svg" text="Buble" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
-      <ChartButton icon="/colorChartIcons/scatter.svg" text="Scater" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
+      <ChartButton icon="/img/colorChartIcons/area.svg" text="Area" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
+      <ChartButton icon="/img/colorChartIcons/pie.svg" text="Pie" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
+      <ChartButton icon="/img/colorChartIcons/buble.svg" text="Buble" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
+      <ChartButton icon="/img/colorChartIcons/scatter.svg" text="Scater" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
      
-      <ChartButton icon="/colorChartIcons/donut.svg" text="Donut" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
+      <ChartButton icon="/img/colorChartIcons/donut.svg" text="Donut" onClick={()=>{setPage(Page.EDIT_TEMPLATE);setFullWindow(true)}}/>
     </div>
   );
 }

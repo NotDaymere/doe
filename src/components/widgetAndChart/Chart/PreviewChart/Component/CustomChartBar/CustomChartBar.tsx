@@ -67,7 +67,7 @@ const CustomChartBar = () => {
   const [activeEntry, setActiveEntry] = useState<ChartData | null>(null);
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={280}>
       <BarChart
         data={data}
         margin={{ top: 70, right: 30, left: 20, bottom: 5 }}

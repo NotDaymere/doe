@@ -13,11 +13,11 @@ function ChartPreviewBox() {
         <div className="previewtitle">
           <p>Codeforces Elo/percentile</p>
           <button>
-            <img src="/icons/setting.svg" />
+            <img src="/img/icons/setting.svg" />
           </button>
         </div>
         <button className="previewClose" onClick={()=>setPage(Page.NEW_CHART)}>
-          <img src="/icons/closePreview.svg" />
+          <img src="/img/icons/closePreview.svg" />
         </button>
       </div>
       <div className="previewBody">

@@ -10,14 +10,14 @@ function Drawing() {
   return (
     <div>
       <div className="createDrawingBox">
-        <img src="/drawingnewimg.svg" />
+        <img src="/img/drawingnewimg.svg" />
         <button onClick={()=>{
           setFullWindow(true);
           
           setPage(Page.NEW_DRAWING)
         }}>
           <p>Create new drawing</p>
-          <img src="/icons/addicon.svg" />
+          <img src="/img/icons/addicon.svg" />
         </button>
       </div>
       <div className="drawingTab">
@@ -25,14 +25,14 @@ function Drawing() {
         <button>Drafts</button>
       </div>
       <div className="createdDrawings">
-        <ChartButton icon="/drawingicon/line.svg" text="Drawing #1"  onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/drawingicon/bar.svg" text="Drawing #2" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/drawingicon/area.svg" text="Drawing #3" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/drawingicon/pie.svg" text="Drawing #4" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/> 
-        <ChartButton icon="/drawingicon/buble.svg" text="Drawing #1" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/drawingicon/scater.svg" text="Drawing #2" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/drawingicon/donut.svg" text="Drawing #3" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/drawingicon/bar.svg" text="Drawing #4" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
+        <ChartButton icon="/img/drawingicon/line.svg" text="Drawing #1"  onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
+        <ChartButton icon="/img/drawingicon/bar.svg" text="Drawing #2" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
+        <ChartButton icon="/img/drawingicon/area.svg" text="Drawing #3" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
+        <ChartButton icon="/img/drawingicon/pie.svg" text="Drawing #4" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/> 
+        <ChartButton icon="/img/drawingicon/buble.svg" text="Drawing #1" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
+        <ChartButton icon="/img/drawingicon/scater.svg" text="Drawing #2" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
+        <ChartButton icon="/img/drawingicon/donut.svg" text="Drawing #3" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
+        <ChartButton icon="/img/drawingicon/bar.svg" text="Drawing #4" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
       </div>
     </div>
   );

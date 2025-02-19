@@ -31,6 +31,10 @@ import { useEditorContext } from "src/contexts/EditorProvider";
 import { App } from "src/types";
 import DefaultLayout from "../../components/layout"
 import "./index.less";
+import ChartWidgetsWindow from "src/components/widgetAndChart/Window/ChartWidgetsWindow";
+import Console from "src/components/Console/Console";
+import Comments from "src/components/Comments/Comments";
+import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
 
 
 const Home: FC = () => {
@@ -168,11 +172,18 @@ const Home: FC = () => {
 
     return (
         <DefaultLayout>
+          
             <div className={"home-page"}>
+               
                 <div className={"page-section chat-section"}>
                     <div className={"chat-container"}>
+                     
+                    
                         <Flex vertical gap={75}>
+                        
+                        
                             <h2>Table Example</h2>
+                            <Console/>
                             {!playground.open && <CustomTable />}
                             <h2>YouTube Widget Example</h2>
                             <YouTubeWidget

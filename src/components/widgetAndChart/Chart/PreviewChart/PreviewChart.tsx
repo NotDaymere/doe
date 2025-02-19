@@ -7,20 +7,20 @@ function PreviewChart() {
       <div className="chartscreated">
         <div className="chartscreated_inner">
           <ChartButton
-            icon="/colorChartIcons/line.svg"
+            icon="/img/colorChartIcons/line.svg"
             text="Codeforces El.."
           />
-          <ChartButton icon="/colorChartIcons/bar.svg" text="Codeforces El.." />
+          <ChartButton icon="/img/colorChartIcons/bar.svg" text="Codeforces El.." />
           <ChartButton
-            icon="/colorChartIcons/area.svg"
-            text="Codeforces El.."
-          />
-          <ChartButton
-            icon="/colorChartIcons/area.svg"
+            icon="/img/colorChartIcons/area.svg"
             text="Codeforces El.."
           />
           <ChartButton
-            icon="/colorChartIcons/area.svg"
+            icon="/img/colorChartIcons/area.svg"
+            text="Codeforces El.."
+          />
+          <ChartButton
+            icon="/img/colorChartIcons/area.svg"
             text="Codeforces El.."
           />
         </div>

@@ -7,7 +7,7 @@ import React, {
   useImperativeHandle,
   useEffect,
 } from "react";
-import Draggable from "react-draggable";
+// import Draggable from "react-draggable";
 import LeftPanel from "../LeftPanel/LeftPanel";
 import RightPanel from "../RightPanel/RightPanel";
 import "./ChartWidgetsWindow.less";
@@ -93,12 +93,12 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
     >
       <div className="widgetAndChartOverlay">
         {!fullWindow && (
-          <Draggable nodeRef={nodeRef} handle=".drag-handle">
+          // <Draggable nodeRef={nodeRef} handle=".drag-handle">
             <div ref={nodeRef} className="widgetChartWindow">
               <div className="Head drag-handle">
                 <p>Charts and widgets {paramter}</p>
                 <button className="closeBtn" onClick={closeWindow}>
-                  <img src="/icons/close.svg" alt="Close" />
+                  <img src="/img/icons/close.svg" alt="Close" />
                 </button>
               </div>
               <div className="containerModal">
@@ -109,7 +109,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
                 )}
               </div>
             </div>
-          </Draggable>
+          // </Draggable>
         )}
         {fullWindow && <>{page === Page.NEW_DRAWING && <DrawingModal />}</>}
         {fullWindow && (

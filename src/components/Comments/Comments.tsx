@@ -22,7 +22,7 @@ function Comments() {
     >
       <div className="header">
         <div className="search">
-          <img src="/icons/search.svg" alt="Search" />
+          <img src="/img/icons/search.svg" alt="Search" />
 
           <input type="text" placeholder="Search" />
         </div>
@@ -30,32 +30,33 @@ function Comments() {
           onClick={() => setShowFilter(!showFilter)}
           className={showFilter ? "active-filter" : ""}
         >
-          <img src="/icons/filter.svg" className="filter-icon" alt="Filter" />
+          <img src="/img/icons/filter.svg" className="filter-icon" alt="Filter" />
         </button>
         <button
           onClick={() => {
             setIsVisible(false);
           }}
         >
-          <img src="/icons/close_2.svg" alt="Close" />
+          <img src="/img/icons/close_2.svg" alt="Close" />
         </button>
+        {showFilter && <Filter />}
       </div>
-      {showFilter && <Filter />}
+      
       <div className="body">
         <div className="comments_container">
           <div className="top">
             <div className="cp-header">
               <div className="left">
-                <img className="profile" src="/profile_pic.png" alt="Profile" />
+                <img className="profile" src="/img/profile_pic.png" alt="Profile" />
                 <div className="profile-name-time">
                   <h4>John Doe</h4>
                   <p>Today, 9:41 AM</p>
                 </div>
               </div>
               <div className="right">
-                <img src="/icons/check.svg" alt="Check" />
+                <img src="/img/icons/check.svg" alt="Check" />
                 <button onClick={() => setShowMenu(!showMenu)}>
-                  <img src="/icons/menu.svg" alt="Menu" />
+                  <img src="/img/icons/menu.svg" alt="Menu" />
                 </button>
                 {showMenu && <Menu />}
               </div>
@@ -66,7 +67,7 @@ function Comments() {
             <div className="cp-footer">
               <input type="text" placeholder="Reply.." />
               <button>
-                <img src="/icons/send.svg" alt="Send" />
+                <img src="/img/icons/send.svg" alt="Send" />
               </button>
             </div>
           </div>

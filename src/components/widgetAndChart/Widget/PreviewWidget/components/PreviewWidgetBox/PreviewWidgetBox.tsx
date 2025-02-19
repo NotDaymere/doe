@@ -59,28 +59,28 @@ function PreviewWidgetBox() {
           setPage(Page.WIDGET_IN_CHAT);
         }}
       >
-        <img src="/icons/closePreview.svg" alt="Close" />
+        <img src="/img/icons/closePreview.svg" alt="Close" />
       </button>
       <div className="previewHead">
         <div className="previewbuttons">
           <button>
-            <img src="/icons/widgetprv_collapse.svg" alt="Collapse" />
+            <img src="/img/icons/widgetprv_collapse.svg" alt="Collapse" />
           </button>
           <button>
-            <img src="/icons/widgetprv_fullscreen.svg" alt="Fullscreen" />
+            <img src="/img/icons/widgetprv_fullscreen.svg" alt="Fullscreen" />
           </button>
         </div>
         <div className="previewtitle">
           <p>{paramter}</p>
         </div>
         <div className="widgetIcon">
-          <img src="/icons/norton.svg" alt="Icon" />
+          <img src="/img/icons/norton.svg" alt="Icon" />
         </div>
       </div>
       <div className="previewBody">
         <img
           ref={imgRef}
-          src="/screenshot.png"
+          src="/img/screenshot.png"
           alt="Preview"
           onMouseDown={handleStart}
           onTouchStart={handleStart}

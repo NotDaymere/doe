@@ -11,30 +11,30 @@ function CreateDrawing() {
     <div className="canvas">
       <DrawCanvas strokeColor={strokeColor} />
       <div className="toolbox">
-        <DrawingToolButton icon="/drawingEditorIcons/icon.svg" />
+        <DrawingToolButton icon="/img/drawingEditorIcons/icon.svg" />
         <hr />
 
         <div className="style">
-          <DrawingToolButton icon="/drawingEditorIcons/bold.svg" />
-          <DrawingToolButton icon="/drawingEditorIcons/italic.svg" />
-          <DrawingToolButton icon="/drawingEditorIcons/underline.svg" />
-          <DrawingToolButton icon="/drawingEditorIcons/strike.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/bold.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/italic.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/underline.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/strike.svg" />
         </div>
         <hr />
 
         <div>
-          <DrawingToolButton icon="/drawingEditorIcons/edit.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/edit.svg" />
         </div>
         <hr />
 
         <div>
-          <DrawingToolButton icon="/drawingEditorIcons/edit2.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/edit2.svg" />
         </div>
         <hr />
 
         <div>
           <DrawingToolButton
-            icon="/drawingEditorIcons/paint.svg"
+            icon="/img/drawingEditorIcons/paint.svg"
             onClick={() => setShowPaintBox(!showPaintBox)}
           />
           {showPaintBox && (
@@ -60,32 +60,32 @@ function CreateDrawing() {
         <hr />
 
         <div>
-          <DrawingToolButton icon="/drawingEditorIcons/quote.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/quote.svg" />
         </div>
         <hr />
 
         <div>
-          <DrawingToolButton icon="/drawingEditorIcons/sup.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/sup.svg" />
         </div>
         <hr />
 
         <div>
-          <DrawingToolButton icon="/drawingEditorIcons/sub.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/sub.svg" />
         </div>
         <hr />
 
         <div>
-          <DrawingToolButton icon="/drawingEditorIcons/link.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/link.svg" />
         </div>
         <hr />
 
         <div>
-          <DrawingToolButton icon="/drawingEditorIcons/textinsert.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/textinsert.svg" />
         </div>
         <hr />
 
         <div>
-          <DrawingToolButton icon="/drawingEditorIcons/paragraph.svg" />
+          <DrawingToolButton icon="/img/drawingEditorIcons/paragraph.svg" />
         </div>
       </div>
     </div>

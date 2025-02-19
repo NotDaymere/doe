@@ -1,5 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, defs, linearGradient, stop } from "recharts";
 
 const maxValue = 2000; // Maximum scale for bars
@@ -20,37 +19,6 @@ const colors = {
 const CustomRoundedBar = (props) => {
   const { x, y, width, height, fill } = props;
   const radius = 20; // Adjust roundness
-=======
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-
-const maxValue = 2000;
-
-const data = [
-  { name: "BCM (projected)", value: 300, color: "#FFC75F" },
-  { name: "o1 preview", value: 300, color: "#8BC34A" },
-  { name: "o1", value: 300, color: "#64B5F6" },
-  { name: "o1-ioi", value: 300, color: "#FFA07A" },
-];
-
-interface CustomBarProps {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  fill: string;
-}
-
-const CustomBar = (props: any) => {
-  const { x, y, width, height, fill } = props;
-  const radius = 20;
->>>>>>> db107e2a880650fa4964ebdfc9b538db0385250b
 
   return (
     <rect
@@ -67,7 +35,7 @@ const CustomBar = (props: any) => {
 
 const CustomBarChartTwo = () => {
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={200}>
       <BarChart data={data} barSize={100} barGap={5} barCategoryGap="10%">
         <defs>
           {/* Improved Gray Gradient for the Background */}
@@ -87,30 +55,11 @@ const CustomBarChartTwo = () => {
         <YAxis domain={[0, maxValue]} tick={{ fontSize: 12 }} />
         <Tooltip />
 
-<<<<<<< HEAD
         {/* Foreground Bar (Rounded and Colored) */}
         <Bar dataKey="value" fill="url(#color-gradient)" barSize={50} stackId="stack" minPointSize={5} shape={<CustomRoundedBar />} />
 
         {/* Background Bar (Rounded Gray Fade from Top) */}
         <Bar dataKey="background" fill="url(#gray-gradient)" barSize={50} stackId="stack" shape={<CustomRoundedBar />} />
-=======
-        <Bar
-          dataKey={() => maxValue}
-          fill="#E0E0E0"
-          barSize={50}
-          shape={<CustomBar />}
-        />
-
-        {data.map((entry, index) => (
-          <Bar
-            key={index}
-            dataKey="value"
-            fill={entry.color}
-            barSize={50}
-            shape={<CustomBar />}
-          />
-        ))}
->>>>>>> db107e2a880650fa4964ebdfc9b538db0385250b
       </BarChart>
     </ResponsiveContainer>
   );
