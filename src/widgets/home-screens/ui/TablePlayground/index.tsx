@@ -165,13 +165,17 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   ];
 
   useEffect(() => {
-    const newPlayground = playgroundState;
-    if (newPlayground) {
-      newPlayground.text = editor?.getText() ?? "";
-      updateSavedPlaygrounds(newPlayground);
-      setPlaygroundState(newPlayground);
-    }
-  }, [editor]);
+    if (!editor || !playgroundState) return;
+
+    const newContent = editor.getHTML();
+    setPlaygroundState((prev) => {
+      if (!prev) return null;
+
+      const updatedPlayground = { ...prev, text: newContent };
+      updateSavedPlaygrounds(updatedPlayground);
+      return updatedPlayground;
+    });
+  }, [editor?.getHTML()]);
 
   const handleCollapsePlayground = () => {
     const newPlayground = getOpenSavedPlaygrounds().at(1) || { type: null, data: null, id: null, open: false };
