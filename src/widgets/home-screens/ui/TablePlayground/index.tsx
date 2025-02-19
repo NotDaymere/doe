@@ -208,7 +208,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   };
 
   return (
-      <div className={`table-playground ${savedPlaygrounds.length > 1 && 'nane-top-border'}`}
+      <div className={`table-playground`}
            onMouseDown={(event) => {
              if (event.button === 1) {
                handleCollapsePlayground();

@@ -22,18 +22,20 @@ export default function MultiplePlaygroundRenderer() {
         <Flex vertical className={'multiple-playground-renderer-container'}>
             {
                 savedPlaygrounds.length > 1 && (
-                    <Flex className={"saved-playgrounds-container"}>
-                        {
-                            savedPlaygrounds.map((savedPlayground, index) => {
-                                const id = savedPlayground.id;
-                                return (
-                                    <div key={id || index}>
-                                        <OpenFromSavedPlayground savedPlayground={savedPlayground} />
-                                    </div>
-                                );
-                            })
-                        }
-                    </Flex>
+                    <div className={'saved-playgrounds'}>
+                        <Flex className={"saved-playgrounds-container"}>
+                            {
+                                savedPlaygrounds.map((savedPlayground, index) => {
+                                    const id = savedPlayground.id;
+                                    return (
+                                        <div key={id || index}>
+                                            <OpenFromSavedPlayground savedPlayground={savedPlayground} />
+                                        </div>
+                                    );
+                                })
+                            }
+                        </Flex>
+                    </div>
                 )
             }
             {
