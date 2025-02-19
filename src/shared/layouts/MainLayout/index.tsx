@@ -4,7 +4,7 @@ import { Gaia } from "src/widgets/Gaia";
 import css from "./MainLayout.module.less";
 import { Layout as BaseLayout } from "antd";
 import { Sider } from "../../../components/layout";
-import MultiPlaygroundRenderer from "../../../widgets/home-screens/ui/PlaygroundRenderer/MultiPlaygroundRenderer/MultiPlaygroundRenderer";
+import MultiplePlaygroundRenderer from "../../../widgets/home-screens/ui/PlaygroundRenderer/MultiplePlaygroundRenderer/MultiplePlaygroundRenderer";
 
 interface Props {
     children: React.ReactNode;
@@ -25,7 +25,7 @@ export const MainLayout: React.FC<Props> = ({
             <Gaia className={css.gaia} ref={gaiaRef} />
             {getOpenSavedPlaygrounds().length > 0 && (
                 <BaseLayout.Sider width={playgroundFullscreen ? '100%' : 550} className={"playground-sider"}>
-                    <MultiPlaygroundRenderer />
+                    <MultiplePlaygroundRenderer />
                 </BaseLayout.Sider>
             )}
             </BaseLayout>

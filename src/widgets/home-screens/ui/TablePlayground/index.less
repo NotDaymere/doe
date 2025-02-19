@@ -62,28 +62,31 @@
       z-index: 100000;
     }
   }
-  .action-buttons {
-    padding-left: 16px;
-    padding-right: 16px;
-    position: absolute;
+}
+.action-buttons {
+  margin-top: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 8px;
+  position: sticky;
+  width: 100%;
+  z-index: 1000;
+  bottom: 24px;
+
+  .action-buttons-right-part {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
+    flex-direction: column;
     gap: 8px;
-    bottom: 22px;
-    width: 100%;
-    .action-buttons-right-part {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .ant-btn {
-      padding: 2px;
-      margin: 0;
-      height: 36px;
-      width: 36px;
-    }
+  }
+  .ant-btn {
+    padding: 2px;
+    margin: 0;
+    height: 36px;
+    width: 36px;
   }
 }
 .tiptap-editor {
@@ -145,57 +148,4 @@
     background-color: rgba(151, 71, 255, 0.16) !important;
     color: #000000;
   }
-}
-.doe-playground-open {
-  font-family: Sohne;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 21.22px;
-  color: #F8F8F8;
-  width: 156px;
-  height: 36px;
-  border-radius: 1000px;
-  position: absolute;
-  right: 200px;
-  top: 30px;
-  background: #1F1F1F59;
-  border: 1px solid #1F1F1F0D;
-  box-shadow: 0px 4px 20px 0px #0000000F;
-  backdrop-filter: blur(20px);
-  display: flex ;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
-.saved-playgrounds-container {
-  width: 98%;
-  height: 38px;
-  border-radius: 10px;
-  border: 1px solid #DDDDDD;
-  padding: 4px;
-  margin: 4px;
-  gap: 4px;
-  background: #B5B5B533;
-
-  display: flex;
-  align-items: center;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  scrollbar-width: thin;
-  scrollbar-color: #999 transparent;
-}
-
-.saved-playgrounds-container::-webkit-scrollbar {
-  height: 4px;
-}
-
-.saved-playgrounds-container::-webkit-scrollbar-thumb {
-  background: #999;
-  border-radius: 2px;
-}
-
-.saved-playgrounds-container::-webkit-scrollbar-track {
-  background: transparent;
 }

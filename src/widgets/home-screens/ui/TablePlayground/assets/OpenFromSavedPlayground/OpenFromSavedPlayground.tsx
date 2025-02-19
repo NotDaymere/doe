@@ -8,17 +8,21 @@ interface Props {
 }
 export default function OpenFromSavedPlayground({savedPlayground} : Props) {
     const {updateSavedPlaygrounds, getOpenSavedPlaygrounds} = useChatStore();
-    const changeSavedPlaygroundStatus = () => {
-        if (getOpenSavedPlaygrounds().length > 2) {
+    const openSavedPlaygroundStatus = () => {
+        if (getOpenSavedPlaygrounds().length >= 2) {
             return;
         }
-        savedPlayground.open = !savedPlayground.open;
+        savedPlayground.open = true;
+        updateSavedPlaygrounds(savedPlayground);
+    }
+    const closeSavedPlaygroundStatus = () => {
+        savedPlayground.open = false;
         updateSavedPlaygrounds(savedPlayground);
     }
     return (
         <button
             className={`open-from-saved-playground-button ${savedPlayground.open && 'open-from-saved-playground-button-active'}`}
-            onClick={changeSavedPlaygroundStatus}
+            onClick={!savedPlayground.open ? openSavedPlaygroundStatus : closeSavedPlaygroundStatus}
         >
             {savedPlayground.type == 'table' && <TableIcon />}
         </button>

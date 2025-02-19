@@ -64,17 +64,19 @@
     }
   }
   .action-buttons {
+    margin-top: auto;
     padding-left: 16px;
     padding-right: 16px;
-    position: absolute;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
     gap: 8px;
-    bottom: 22px;
+    position: sticky;
     width: 100%;
-    //transition: bottom 0.2s ease-in-out;
+    z-index: 1000;
+    bottom: 24px;
+
     .action-buttons-right-part {
       display: flex;
       flex-direction: column;
@@ -143,4 +145,7 @@
     background-color: rgba(151, 71, 255, 0.16) !important;
     color: #000000;
   }
+}
+.nane-top-border {
+  border-radius: 0 0 16px 16px;
 }

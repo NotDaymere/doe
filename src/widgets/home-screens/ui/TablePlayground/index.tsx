@@ -17,8 +17,6 @@ import { Superscript } from "@tiptap/extension-superscript";
 import { Subscript } from "@tiptap/extension-subscript";
 import FullscreenGeneralLogo from "./assets/FullscreenGeneralLogo/FullscreenGeneralLogo";
 import HistoryButton from "./assets/HistoryButton/HistoryButton";
-import DoePlaygroundStars from "../../../../shared/icons/DoePlaygroundStars";
-import OpenFromSavedPlayground from "./assets/OpenFromSavedPlayground/OpenFromSavedPlayground";
 import { App } from "../../../../types";
 
 const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
@@ -103,38 +101,6 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   useEffect(() => {
     handleSetDataToInput();
   }, [selectedRow, selectedColumn, selectedCell]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const tablePlayground = document.querySelector(".table-playground") as HTMLElement | null;
-      const actionButtons = document.querySelector(".action-buttons") as HTMLElement | null;
-
-      if (!tablePlayground || !actionButtons) return;
-
-      const scrollTop = tablePlayground.scrollTop;
-
-      const newBottom = 22 - scrollTop;
-      setPenNewBottom(newBottom - 22);
-      actionButtons.style.bottom = `${newBottom}px`;
-    };
-
-    const tablePlayground = document.querySelector(".table-playground") as HTMLElement | null;
-    if (tablePlayground) {
-      tablePlayground.addEventListener("scroll", handleScroll);
-    }
-    const doePlaygroundOpen = document.querySelector(".doe-playground-open") as HTMLElement | null;
-    if (doePlaygroundOpen) {
-      setTimeout(() => {
-        doePlaygroundOpen.style.display = "none";
-      }, 3000)
-    }
-
-    return () => {
-      if (tablePlayground) {
-        tablePlayground.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
 
   const handleSetDataToInput = () => {
     if (!editor) return;
@@ -236,77 +202,66 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   const handleTipTapTextFormatMenuOnClick = () => {
     setSelectedText(null);
   };
+
   return (
-      <div className={"table-playground"}
+      <div className={`table-playground ${savedPlaygrounds.length > 1 && 'nane-top-border'}`}
            onMouseDown={(event) => {
              if (event.button === 1) {
                handleCollapsePlayground();
              }
            }}
-           onMouseMove={() => {playgroundState && setPlayground(playgroundState)}}
+           onMouseMove={() => {
+             playgroundState && setPlayground(playgroundState)
+           }}
       >
-        {playground.id == id &&
-          savedPlaygrounds.length > 1 && (
-              <Flex className={"saved-playgrounds-container"}>
-                {
-                  savedPlaygrounds.map((savedPlayground, index) => {
-                    const id = savedPlayground.id;
-                    return (
-                        <div key={id || index}>
-                          <OpenFromSavedPlayground savedPlayground={savedPlayground} />
-                        </div>
-                    );
-                  })
-                }
-              </Flex>
-          )
-        }
-        <Flex className={"tabs-panel-playground"}>
-          <p>Tabular Random Values</p>
-          <HistoryButton />
-        </Flex>
 
+        <div>
+          <Flex className={"tabs-panel-playground"}>
+            <p>Tabular Random Values</p>
+            <HistoryButton />
+          </Flex>
 
-        <section className="editor-section">
-          <Table
-              className={"table"}
-              dataSource={mockData.data}
-              columns={columns}
-              pagination={false}
-              bordered
-              rowKey={(record, rowIndex) => rowIndex!.toString()}
-          />
-          <div className="table-playground-editor tiptap-editor">
-            <EditorContent editor={editor} />
-          </div>
-        </section>
-
-        { playground.id == id && <div className={"action-buttons"}>
-          {!playgroundFullscreen && <CloudPlusButton />}
-          {playgroundFullscreen && <FullscreenGeneralLogo />}
-          <div className={"action-buttons-right-part"}>
-            {playgroundFullscreen && <CloudPlusButton />}
-            <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-            <ResizePlaygroundButton />
-          </div>
-        </div>}
-
-        {selectedText && editor && (
-            <TipTapTextFormatMenu
-                buttonPosition={{
-                  top: (buttonPosition?.top && (buttonPosition.top + penNewBottom)),
-                  left: buttonPosition?.left,
-                  bottom: (buttonPosition?.bottom && (buttonPosition.bottom + penNewBottom)),
-                  right: buttonPosition?.right,
-                }}
-                isPen={isPen}
-                editor={editor}
-                handleTipTapTextFormatMenuOnClick = {handleTipTapTextFormatMenuOnClick}
+          <section className="editor-section">
+            <Table
+                className={"table"}
+                dataSource={mockData.data}
+                columns={columns}
+                pagination={false}
+                bordered
+                rowKey={(record, rowIndex) => rowIndex!.toString()}
             />
-        )}
-        <Flex className={'doe-playground-open'}>
-          <DoePlaygroundStars /> Doe Playground
-        </Flex>
+            <div className="table-playground-editor tiptap-editor">
+              <EditorContent editor={editor} />
+            </div>
+          </section>
+
+
+          {selectedText && editor && (
+              <TipTapTextFormatMenu
+                  buttonPosition={{
+                    top: (buttonPosition?.top && (buttonPosition.top + penNewBottom)),
+                    left: buttonPosition?.left,
+                    bottom: (buttonPosition?.bottom && (buttonPosition.bottom + penNewBottom)),
+                    right: buttonPosition?.right,
+                  }}
+                  isPen={isPen}
+                  editor={editor}
+                  handleTipTapTextFormatMenuOnClick={handleTipTapTextFormatMenuOnClick}
+              />
+          )}
+        </div>
+        {
+            playground.id == id &&
+            <div className={"action-buttons"}>
+              {!playgroundFullscreen && <CloudPlusButton />}
+              {playgroundFullscreen && <FullscreenGeneralLogo />}
+              <div className={"action-buttons-right-part"}>
+                {playgroundFullscreen && <CloudPlusButton />}
+                <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+                <ResizePlaygroundButton />
+              </div>
+            </div>
+        }
       </div>
   );
 };
