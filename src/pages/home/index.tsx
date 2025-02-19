@@ -183,7 +183,9 @@ const Home: FC = () => {
                         
                         
                             <h2>Table Example</h2>
-                            <Console/>
+                           <AddChartsAndWidgets/>
+                           <Comments/>
+                           <ChartWidgetsWindow/>
                             {!playground.open && <CustomTable />}
                             <h2>YouTube Widget Example</h2>
                             <YouTubeWidget
