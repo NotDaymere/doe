@@ -6,6 +6,7 @@ import { MathJax } from "better-react-mathjax";
 import hljs from "highlight.js";
 import jsPDF from "jspdf";
 import { Flex } from "antd";
+import { CSSTransition } from "react-transition-group";
 
 // Shared types & providers
 import { IMessage } from "src/shared/types/Message";
@@ -33,6 +34,7 @@ import "highlight.js/styles/github-dark.css";
 import PlayIcon from "src/shared/icons/Play.icon";
 import DownloadIcon from "src/shared/icons/Download.icon";
 import CopyIcon from "src/shared/icons/Copy.icon";
+import { useClickOut } from "src/shared/hooks/useClickOut";
 
 interface Props {
     data: IMessage;
@@ -40,6 +42,21 @@ interface Props {
 }
 
 export const ChatMessage: React.FC<Props> = ({ data }) => {
+    const [activeMenu, setActiveMenu] = React.useState(false);
+    const downloadMenuRef = React.useRef<HTMLDivElement>(null);
+    const downloadRef = useClickOut({
+        handler: () => setActiveMenu(false),
+    });
+
+    const toggleMenu = () => setActiveMenu(!activeMenu);
+
+    const setCloseHandler = (fn?: () => void) => {
+        return () => {
+            fn?.();
+            setActiveMenu(false);
+        };
+    };
+
     const [isEdit, setEdit] = React.useState(false);
     const [content, setContent] = React.useState(data.content);
     const { editor, setEditor } = useChatStore();
@@ -248,11 +265,32 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
 
                                     <PlayIcon />
                                 </button>
-                                <button onClick={downloadPDF} className={css.button_steps_green}>
-                                    <span className={css.tooltip}>Download chat text</span>
+                                <div className={css.download} ref={downloadRef}>
+                                    <button
+                                        onClick={toggleMenu}
+                                        className={`${css.button_steps_green} ${activeMenu ? css.active : ""}`}
+                                    >
+                                        <span className={css.tooltip}>Download chat text</span>
 
-                                    <DownloadIcon />
-                                </button>
+                                        <DownloadIcon />
+                                    </button>
+                                    <CSSTransition
+                                        classNames={css}
+                                        timeout={150}
+                                        in={activeMenu}
+                                        downloadMenuRef={downloadMenuRef}
+                                        mountOnEnter
+                                        unmountOnExit
+                                    >
+                                        <div className={css.download_menu} ref={downloadMenuRef}>
+                                            <ul>
+                                                <li onClick={setCloseHandler(downloadPDF)}>.png</li>
+                                                <li onClick={setCloseHandler(downloadPDF)}>.txt</li>
+                                                <li onClick={setCloseHandler(downloadPDF)}>.pdf</li>
+                                            </ul>
+                                        </div>
+                                    </CSSTransition>
+                                </div>
                                 <button onClick={handleCopy} className={css.button_steps_green}>
                                     <span className={css.tooltip}>Copy chat text</span>
 

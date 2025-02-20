@@ -398,3 +398,62 @@
 .typewriter_cursor {
     display: none;
 }
+
+.download {
+    position: relative;
+
+    .download_menu {
+        position: absolute;
+        transform: translateY(40px);
+        top: 0;
+        right: 0;
+
+        ul {
+            // width: 100%;
+            display: inline-flex;
+            padding: 4px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            border: 1px solid #fff;
+            background: white;
+            box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(8px);
+
+            li {
+                cursor: pointer;
+                padding: 8px;
+                color: #b5b5b5;
+                font-size: 16px;
+                border: 1px solid transparent;
+
+                &:hover {
+                    border-radius: 8px;
+                    border: 1px solid #f8f8f8;
+                    color: #1f1f1f;
+                }
+            }
+        }
+    }
+}
+
+.active {
+    width: 100%;
+
+    .tooltip {
+        margin-right: 4px;
+        max-width: 300px;
+    }
+}
+
+.enter {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.enterActive {
+    opacity: 1;
+    transform: translateY(-20px);
+    transition: 300ms ease;
+    transition-property: transform, opacity;
+}
