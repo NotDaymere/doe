@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch } from "react";
 
 // External libraries
 import { Editor as EditorTiptap } from "@tiptap/react";
@@ -39,9 +39,19 @@ import { useClickOut } from "src/shared/hooks/useClickOut";
 interface Props {
     data: IMessage;
     editor: EditorTiptap | null;
+    editMsgMode: {
+        isEditMsgMode: boolean;
+        msgId: number | null;
+    };
+    setEditMsgMode: Dispatch<
+        React.SetStateAction<{
+            isEditMsgMode: boolean;
+            msgId: number | null;
+        }>
+    >;
 }
 
-export const ChatMessage: React.FC<Props> = ({ data }) => {
+export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode }) => {
     const [activeMenu, setActiveMenu] = React.useState(false);
     const downloadMenuRef = React.useRef<HTMLDivElement>(null);
     const downloadRef = useClickOut({
@@ -57,7 +67,7 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
         };
     };
 
-    const [isEdit, setEdit] = React.useState(false);
+    // const [isEdit, setEdit] = React.useState(false);
     const [content, setContent] = React.useState(data.content);
     const { editor, setEditor } = useChatStore();
     const parsedContent = parseContent(content);
@@ -125,13 +135,15 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
         setIsPaused(true);
     };
 
-    const toggleEdit = () => {
-        setEdit(!isEdit);
+    const toggleEdit = (id: number) => {
+        setEditMsgMode({ isEditMsgMode: true, msgId: id });
+        // setEditMsgMode(!editMsgMode);
     };
 
-    const cancelEdit = () => {
+    const cancelEdit = (id: number) => {
         setContent(data.content);
-        setEdit(false);
+        setEditMsgMode({ isEditMsgMode: false, msgId: null });
+        // setEditMsgMode(false);
     };
     const handleCopy = () => {
         if (messageRef.current) {
@@ -169,7 +181,7 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
     };
 
     if (data.isUser) {
-        if (isEdit) {
+        if (editMsgMode.isEditMsgMode && editMsgMode.msgId === data.id) {
             return (
                 <div className={css.edit}>
                     <Editor
@@ -182,7 +194,10 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
                         placeholder="Edit message"
                     />
                     <div className={css.edit_controls}>
-                        <button className={css.edit_controls_cancelBtn} onClick={cancelEdit}>
+                        <button
+                            className={css.edit_controls_cancelBtn}
+                            onClick={() => cancelEdit(data.id)}
+                        >
                             <CrossIcon />
                         </button>
                         <button className={css.edit_controls_saveBtn}>
@@ -195,7 +210,7 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
 
         return (
             <div className={css.input}>
-                <button className={css.input_editBtn} onClick={toggleEdit}>
+                <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
                     <span className={css.svg_wrapper}>
                         <PenIcon />
                         <span className={css.tooltip}>Edit</span>

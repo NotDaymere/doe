@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch } from "react";
 
 // TipTap extensions
 import Bold from "@tiptap/extension-bold";
@@ -31,8 +31,20 @@ import { ChatMessage } from "../ChatMessage";
 // Styles
 import css from "./ChatContent.module.less";
 
+interface Props {
+    editMsgMode: {
+        isEditMsgMode: boolean;
+        msgId: number | null;
+    };
+    setEditMsgMode: Dispatch<
+        React.SetStateAction<{
+            isEditMsgMode: boolean;
+            msgId: number | null;
+        }>
+    >;
+}
 
-export const ChatContent: React.FC = () => {
+export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) => {
     const { chatRef } = useChatController();
     const { currentBranch, messages } = useChatStore();
     const editor = useEditor({
@@ -58,17 +70,18 @@ export const ChatContent: React.FC = () => {
             createHandleTab(),
         ],
     });
-    
 
     return (
         <div className={css.content}>
             <div className={css.content_inner}>
                 <div className={css.content_chat} ref={chatRef}>
                     {messages.map((item) => (
-                        <ChatMessage 
-                            data={item} 
-                            key={item.id} 
+                        <ChatMessage
+                            data={item}
+                            key={item.id}
                             editor={editor}
+                            editMsgMode={editMsgMode}
+                            setEditMsgMode={setEditMsgMode}
                         />
                     ))}
                 </div>
