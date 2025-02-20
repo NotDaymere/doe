@@ -1,5 +1,6 @@
 import { IPlayground } from "src/shared/types/Playground";
 import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
+import { ReactComponent as CodeIcon } from "src/assets/icons/code.svg";
 import './OpenFromSavedPlayground.less';
 import { useChatStore } from "src/shared/providers";
 
@@ -7,9 +8,10 @@ interface Props {
     savedPlayground: IPlayground;
 }
 export default function OpenFromSavedPlayground({savedPlayground} : Props) {
-    const {updateSavedPlaygrounds, getOpenSavedPlaygrounds} = useChatStore();
+    const {updateSavedPlaygrounds, getOpenSavedPlaygrounds,playgroundFullscreen} = useChatStore();
     const openSavedPlaygroundStatus = () => {
-        if (getOpenSavedPlaygrounds().length >= 2) {
+        const maxLength = playgroundFullscreen ? 3:2;
+        if (getOpenSavedPlaygrounds().length >= maxLength) {
             return;
         }
         savedPlayground.open = true;
@@ -25,6 +27,7 @@ export default function OpenFromSavedPlayground({savedPlayground} : Props) {
             onClick={!savedPlayground.open ? openSavedPlaygroundStatus : closeSavedPlaygroundStatus}
         >
             {savedPlayground.type == 'table' && <TableIcon />}
+            {savedPlayground.type == 'code' && <CodeIcon />}
         </button>
     )
 }

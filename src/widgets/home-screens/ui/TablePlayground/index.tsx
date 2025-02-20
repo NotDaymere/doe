@@ -45,7 +45,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     return { top, left };
   }
 
-  const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, savedPlaygrounds, updateSavedPlaygrounds, getOpenSavedPlaygrounds } = useChatStore();
+  const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds } = useChatStore();
   const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);

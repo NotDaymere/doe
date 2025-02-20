@@ -7,7 +7,7 @@ import './MultiplePlaygroundRenderer.less';
 import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 
 export default function MultiplePlaygroundRenderer() {
-    const {getOpenSavedPlaygrounds, savedPlaygrounds} = useChatStore();
+    const {getOpenSavedPlaygrounds, savedPlaygrounds, playgroundFullscreen} = useChatStore();
 
     useEffect(() => {
       const doePlaygroundOpen = document.querySelector(".doe-playground-open") as HTMLElement | null;
@@ -38,7 +38,9 @@ export default function MultiplePlaygroundRenderer() {
                     </div>
                 )
             }
-            {
+
+           <Flex className={`playground-render ${playgroundFullscreen?'flex-direction-row':'flex-direction-column'}`}>
+               {
                 getOpenSavedPlaygrounds().map((savedPlayground) => {
                     return (
                         <PlaygroundRenderer
@@ -49,6 +51,7 @@ export default function MultiplePlaygroundRenderer() {
                     )
                 })
             }
+           </Flex>
             <Flex className={'doe-playground-open'}>
                 <DoePlaygroundStars /> Doe Playground
             </Flex>

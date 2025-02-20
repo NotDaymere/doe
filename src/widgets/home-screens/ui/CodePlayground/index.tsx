@@ -1,5 +1,5 @@
 import { Flex } from "antd";
-import { FC, useRef, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import "./index.less";
 import * as monaco from "monaco-editor";
 import Editor, { OnMount } from "@monaco-editor/react";
@@ -10,8 +10,10 @@ import CloudPlusButton from "../PlaygroundButtons/CloudPlusButton/CloudPlusButto
 import PenFormatingButton from "../PlaygroundButtons/PenFormatingButton/PenFormatingButton";
 import ResizePlaygroundButton from "../PlaygroundButtons/ResizePlaygroundButton/ResizePlaygroundButton";
 import QuestionCode from "./assets/QuestionCode/QuestionCode";
+import FullscreenGeneralLogo from "../TablePlayground/assets/FullscreenGeneralLogo/FullscreenGeneralLogo";
+import { App } from "../../../../types";
 
-const CodePlayground: FC = () => {
+const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     function adjustPosition(rawPosition: { top: number; left: number }, containerWidth: number, containerHeight: number, margin = 10) {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
@@ -31,13 +33,13 @@ const CodePlayground: FC = () => {
         return { top, left };
     }
 
-    const { setPlayground } = useChatStore();
+    const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds } = useChatStore();
     const [editorInstance, setEditorInstance] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
     const [selectedText, setSelectedText] = useState<string | null>(null);
     const [isPen, setIsPen] = useState<boolean>(false);
     const [buttonPosition, setButtonPosition] = useState<{ top?: number; left?: number; bottom?: number; right?: number } | null>(null);
-
+    const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
     const customTheme: monaco.editor.IStandaloneThemeData = {
         base: "vs",
         inherit: true,
@@ -64,7 +66,15 @@ const CodePlayground: FC = () => {
         },
     };
 
-    const handleCollapsePlayground = () => setPlayground({ type: null, data: null, id: null, open: false });
+    const handleCollapsePlayground = () => {
+        const newPlayground = getOpenSavedPlaygrounds().at(1) || { type: null, data: null, id: null, open: false };
+        setPlayground(newPlayground);
+        const oldPlayground = playgroundState;
+        if (oldPlayground) {
+            oldPlayground.open = false;
+            updateSavedPlaygrounds(oldPlayground);
+        }
+    };
 
     const handleEditorMount: OnMount = (editor, monaco) => {
         editorRef.current = editor;
@@ -114,7 +124,16 @@ const CodePlayground: FC = () => {
     };
 
     return (
-        <div className="table-playground">
+        <div className="table-playground"
+             onMouseDown={(event) => {
+                 if (event.button === 1) {
+                     handleCollapsePlayground();
+                 }
+             }}
+             onMouseMove={() => {
+                 playgroundState && setPlayground(playgroundState)
+             }}
+        >
             <Flex className="tabs-panel-playground">Python Task Manager</Flex>
             <section className="editor-section">
                 <Editor
@@ -166,13 +185,18 @@ result = delete_element(my_list, element_to_delete)
 print(result)`.trim()}
                 />
             </section>
-            <div className="action-buttons">
-                <CloudPlusButton />
-                <div className="action-buttons-right-part">
-                    <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-                    <ResizePlaygroundButton />
+            {
+                playground.id == id &&
+                <div className={"action-buttons"}>
+                    {!playgroundFullscreen && <CloudPlusButton />}
+                    {playgroundFullscreen && <FullscreenGeneralLogo />}
+                    <div className={"action-buttons-right-part"}>
+                        {playgroundFullscreen && <CloudPlusButton />}
+                        <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+                        <ResizePlaygroundButton />
+                    </div>
                 </div>
-            </div>
+            }
             {selectedText && editorInstance && (
                 isPen ? (<MonacoEditorMenu
                     buttonPosition={{

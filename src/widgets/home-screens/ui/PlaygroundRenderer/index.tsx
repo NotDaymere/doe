@@ -6,7 +6,7 @@ import CodePlayground from "../CodePlayground";
 const PlaygroundRenderer: FC<Partial<App.Playground>> = ({ id, type }) => {
   switch (type) {
     case "code":
-       return <CodePlayground />
+       return <CodePlayground id={id}/>
     case "table":
       return <TablePlayground id={id}/>
     // case "source":
