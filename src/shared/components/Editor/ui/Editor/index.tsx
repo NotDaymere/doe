@@ -6,6 +6,8 @@ import css from "./Editor.module.less";
 
 type Props = {
     className?: string;
+    clearContent?: boolean;
+    handleKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
 } & EditorProps;
 
 export const Editor: React.FC<Props> = ({
@@ -13,6 +15,8 @@ export const Editor: React.FC<Props> = ({
     classNameEditor,
     classNameFocus,
     classNamePlaceholder,
+    clearContent,
+    handleKeyDown,
     ...editorProps
 }) => {
     const editor = useInitialEditor({
@@ -22,9 +26,14 @@ export const Editor: React.FC<Props> = ({
         classNamePlaceholder: clsx(css.editor_placeholder, classNamePlaceholder)
     });
 
+    // clear content after sending text
+    React.useEffect(()=>{
+        if(clearContent) editor?.commands.clearContent()
+    }, [clearContent])
+
     return (
         <div className={clsx(css.editor, className)}>
-            <EditorContent editor={editor} />
+            <EditorContent editor={editor} onKeyDown={handleKeyDown}/>
         </div>
     );
 };

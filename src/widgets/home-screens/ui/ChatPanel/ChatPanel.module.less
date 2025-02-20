@@ -2,7 +2,6 @@
     padding: 30px 0;
     padding-left: 10px;
     padding-right: 86px;
-
     display: flex;
     justify-content: center;
 }
@@ -10,7 +9,6 @@
 .panel_wrapper {
     max-width: 892px;
     width: 100%;
-
     position: relative;
 
     &._over {
@@ -49,23 +47,26 @@
 .panel_files {
     left: 0;
     bottom: 100%;
-    transform: translateY(-15px);
     width: 100%;
 }
+
+.panel_files_mask {
+    mask-image: linear-gradient(to right, transparent, black 15%, black 75%, transparent);
+    position: absolute;
+    top: -75px;
+    left: 0;
+    width: 100%;
+}
+
 
 // Drag
 .panel_drag {
     overflow: hidden;
     position: absolute;
-    left: 0;
-    top: 0;
+
     width: 100%;
     height: 100%;
     border-radius: 16px;
-    background: linear-gradient(to bottom, #fff, #fff), rgba(#f3ffdf, 0.3);
-    border: 1px dotted #8bcf16;
-    z-index: 11;
-
     padding: 0 16px;
 
     display: flex;
@@ -73,33 +74,107 @@
     justify-content: space-between;
     gap: 24px;
 
-    &::after,
     &::before {
         content: "";
         display: block;
         position: absolute;
-        left: 50%;
-        top: 50%;
         transform: translate(-50%, -50%);
-        background: #b7ff3c;
+        background: #8BCF16;
         height: 17px;
-        filter: blur(16px);
-        opacity: 0;
-        transition: opacity 400ms ease;
+        filter: blur(5px);
+        transition: opacity 300ms ease;
+        z-index: 1;
+        top: -1px;
+        left: -1px;
+        width: calc(100% + 2px);
+        height: calc(100% + 2px);
+        border: 1px solid transparent;
+        border-radius: 18px;
+
+        border-top-color: #8bcf16;
+        border-right-color: transparent;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+
+        animation: snake 4s linear infinite;
     }
 
-    &::before {
-        width: 102px;
-    }
 
     &::after {
-        width: 270px;
+        content: "";
+        width: calc(100% - 2px);
+        height: calc(100% - 2px);
+        background: #FFF;
+        z-index: 12;
+        position: absolute;
+        top: 1;
+        left: 1px;
+        border-radius: 16px;
+    }
+}
+
+@keyframes snake {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }
 .panel_drag_text {
     .setFontSohneBuch(16px, 1.1, normal);
     color: #355302;
     transition: opacity 300ms ease;
+    position: relative;
+    color: rgba(53, 83, 2, .2);
+    z-index: 15;
+}
+.panel_drag_background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 16px;
+    transition: opacity 300ms ease;
+    z-index: 14;
+
+    //green background for drag and drop
+    &::after{
+        content: "";
+        width: 30%;
+        height: 30%;
+        background: #8bcf16;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 16px;
+        transform: translate(100%, 100%);
+        margin: auto;
+        align-self: center;
+        filter: blur(16px);
+        opacity: 1;
+        transition: opacity 300ms ease;
+        z-index: 16;
+    }
+    
+    //dots on green background
+    &::before {
+        content: "";
+        width: 30%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: opacity 300ms ease;
+        z-index: 14;
+        transform: translate(100%, 0); 
+        background-image: radial-gradient(circle, #CDF38D 1px, transparent 1px);
+        mask-image: radial-gradient(black, transparent 70% );
+        background-size: 10px 10px;
+        background-position: 0 0;
+        background-repeat: repeat;
+    }
 }
 .panel_drag_btn {
     width: 36px;
@@ -110,6 +185,7 @@
     border: 1px solid #8bcf16;
     position: relative;
     transition: opacity 300ms ease;
+    z-index: 15;
 
     svg {
         width: 12px;
