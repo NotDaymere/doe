@@ -35,10 +35,19 @@
   p {
     color: #5b5b5b;
     padding-left: 12px;
-    font-weight: bold;
     font-size: 14px;
+    font-family: "Sohne";
+      font-weight: 600;
+      display: inline-block;
+  max-width: 13ch; /* Limits to 13 characters */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+    
   }
-  &::hover p {
-    color: #1f1f1f;
+  &:hover{
+    p {
+    color: #1F1F1F;
   }
+}
 }

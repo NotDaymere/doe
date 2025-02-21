@@ -9,6 +9,7 @@ import "./RightPanel.less";
 import PreviewWidget from "../Widget/PreviewWidget/PreviewWidget";
 import { useChartWidgets } from "../Window/ChartWidgetsWindow";
 import WidgetInChat from "../Widget/WidgetInChat/WidgetInChat";
+import Games from "../Games/Games";
 
 function RightPanel() {
 
@@ -17,6 +18,7 @@ function RightPanel() {
     <div className="rightpanel">
       {page === Page.NEW_CHART && <NewChart />}
       {page === Page.DRAWING && <Drawing />}
+      {page === Page.GAMES && <Games/>}
       {page === Page.NEW_WIDGET && <NewWidget />}
       {page === Page.WIDGET_IN_CHAT && <WidgetInChat />}
      

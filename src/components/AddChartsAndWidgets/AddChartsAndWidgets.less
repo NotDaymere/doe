@@ -27,6 +27,8 @@
     font-weight: 700;
     p {
       font-size: 16px;
+      font-family: "Sohne";
+      font-weight: 600;
     }
     .closeBtn {
       background: none;
@@ -50,15 +52,19 @@
       height: 151px;
       border-radius: 12px;
       border: solid 1px #f1f1f1;
-      background-image: linear-gradient(
-        rgba(255, 255, 255, 0.2),
-        rgba(255, 255, 255)
-      );
+      
+      background-image: #F8F8F8;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       gap: 15px;
+      &:hover{
+background-image: linear-gradient(
+        rgba(255, 255, 255, 0.2),
+        rgba(255, 255, 255)
+      );
+      }
       .dottedbg {
         background: url("/img/dots.svg") no-repeat;
         width: 222px;
@@ -88,8 +94,9 @@
       }
       p {
         font-size: 14px;
-        font-weight: bold;
         color: #5b5b5b;
+        font-family: "Sohne";
+      font-weight: 600;
       }
       button {
         width: 43px;

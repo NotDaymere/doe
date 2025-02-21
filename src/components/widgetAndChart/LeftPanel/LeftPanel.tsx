@@ -14,17 +14,18 @@ function LeftPanel() {
   const [openSections, setOpenSections] = useState<any>({
     charts: false,
     widgets: true,
+    drawing:false,
+    games:false
   });
 
-  const toggleSection = (section: any) => {
-    setOpenSections((prev:any) => ({ ...prev, [section]: !prev[section] }));
- 
-  };
+ const toggleSection = (section: string) => {
+  setOpenSections({ charts: false, widgets: false, drawing: false, games: false, [section]: true });
+};
 
   return (
     <div className="leftpanel">
       <ul>
-        <li className={openSections.charts ? "active" : ""}>
+        <li className={openSections.charts  ? "active" : ""}>
           <div className="list_container">
             <div
               className={`list_button_container ${
@@ -73,9 +74,10 @@ function LeftPanel() {
         </li>
 
         <li
-          className=""
+          className={openSections.drawing ? "active" : ""}
           onClick={() => {
             setPage(Page.DRAWING);
+            toggleSection("drawing")
           }}
         >
           <div className="list_container">
@@ -83,6 +85,23 @@ function LeftPanel() {
               <div>
                 <img src="/img/icons/drawicon.svg" />
                 <p>Drawings</p>
+              </div>
+            </div>
+          </div>
+        </li>
+
+         <li
+           className={openSections.games ? "active" : ""}
+          onClick={() => {
+            setPage(Page.GAMES);
+            toggleSection("games")
+          }}
+        >
+          <div className="list_container">
+            <div className="list_button_container">
+              <div>
+                <img src="/img/icons/game_icon.svg" />
+                <p>Games</p>
               </div>
             </div>
           </div>
@@ -103,7 +122,7 @@ function LeftPanel() {
               <button>
                 <img
                   src={
-                    openSections.widgets
+                    openSections.widgets 
                       ? "/img/icons/decollapsed.svg"
                       : "/img/icons/collapsed.svg"
                   }

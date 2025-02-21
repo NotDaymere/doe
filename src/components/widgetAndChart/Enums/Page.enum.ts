@@ -7,6 +7,7 @@ export enum Page {
   WIDGET_IN_CHAT = "widgetInChat",
   NEW_DRAWING = "newDrawing",
   PREVIEW_WIDGET = "previewWidget",
-  EDIT_TEMPLATE = "editTemplate"
+  EDIT_TEMPLATE = "editTemplate",
+  GAMES="games"
 
 }

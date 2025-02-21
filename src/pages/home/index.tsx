@@ -183,6 +183,9 @@ const Home: FC = () => {
                         
                         
                             <h2>Table Example</h2>
+
+
+                            {/* <Console/> */}
                            <AddChartsAndWidgets/>
                            <Comments/>
                            <ChartWidgetsWindow/>

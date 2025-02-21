@@ -44,6 +44,7 @@ function TerminalBody() {
   return (
     <>
       <div className="bugs">
+        
         {[1, 2].map((id) => (
           <div
             key={id}
@@ -57,6 +58,7 @@ function TerminalBody() {
                 onMouseEnter={() => setHoveredBug(id)}
                 onMouseLeave={() => setHoveredBug(null)}
               >
+                <div className="bug-modal-arrow"></div>
                 <BugCatchModal />
               </div>
             )}
