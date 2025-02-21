@@ -2,8 +2,10 @@ import { ReactComponent as CloudPlusIcon } from "src/assets/icons/cloud-plus.svg
 import "./CloudPlusButton.less";
 import { useState, useEffect, useRef } from "react";
 import CloudActionsSection from "../../CloudActionsSection/CloudActionsSection";
+import CloudActionsSectionCode from "../../CodePlayground/assets/CloudActionsSectionCode/CloudActionsSectionCode";
 
-function CloudPlusButton() {
+
+function CloudPlusButton({type}: {type: 'table' | 'code' }) {
     const [activeCloudPlus, setActiveCloudPlus] = useState(false);
     const cloudPlusRef = useRef<HTMLDivElement | null>(null);
 
@@ -33,7 +35,12 @@ function CloudPlusButton() {
 
                 <CloudPlusIcon className="cloud-plus-icon" />
             </button>
-            {activeCloudPlus && <CloudActionsSection />}
+            {activeCloudPlus &&
+                <>
+                    {type === 'table' && <CloudActionsSection />}
+                    {type === 'code' && <CloudActionsSectionCode />}
+                </>
+            }
         </div>
     );
 }

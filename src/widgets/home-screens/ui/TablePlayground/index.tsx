@@ -61,14 +61,14 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   const [penNewBottom, setPenNewBottom] = useState<number>(0);
   const editor = useEditor({
     extensions: [
-        StarterKit,
-        Underline,
-        TextStyle,
-        Superscript,
-        Subscript,
-        Color.configure({
-          types: ['textStyle'],
-        }),
+      StarterKit,
+      Underline,
+      TextStyle,
+      Superscript,
+      Subscript,
+      Color.configure({
+        types: ['textStyle'],
+      }),
     ],
     content: playgroundState?.text
         ? playgroundState.text
@@ -168,7 +168,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     if (!editor || !playgroundState) return;
 
     const newContent = editor.getHTML();
-    setPlaygroundState((prev) => {
+    setPlaygroundState((prev:any) => {
       if (!prev) return null;
 
       const updatedPlayground = { ...prev, text: newContent };
@@ -232,7 +232,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                 columns={columns}
                 pagination={false}
                 bordered
-                rowKey={(record, rowIndex) => rowIndex!.toString()}
+                rowKey={(record:any, rowIndex:any) => rowIndex!.toString()}
             />
             <div className="table-playground-editor tiptap-editor">
               <EditorContent editor={editor} />
@@ -257,10 +257,10 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         {
             playground.id == id &&
             <div className={"action-buttons"}>
-              {!playgroundFullscreen && <CloudPlusButton />}
+              {!playgroundFullscreen && <CloudPlusButton type="table" />}
               {playgroundFullscreen && <FullscreenGeneralLogo />}
               <div className={"action-buttons-right-part"}>
-                {playgroundFullscreen && <CloudPlusButton />}
+                {playgroundFullscreen && <CloudPlusButton type="table" />}
                 <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
                 <ResizePlaygroundButton />
               </div>

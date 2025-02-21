@@ -188,10 +188,10 @@ print(result)`.trim()}
             {
                 playground.id == id &&
                 <div className={"action-buttons"}>
-                    {!playgroundFullscreen && <CloudPlusButton />}
+                    {!playgroundFullscreen && <CloudPlusButton type="code" />}
                     {playgroundFullscreen && <FullscreenGeneralLogo />}
                     <div className={"action-buttons-right-part"}>
-                        {playgroundFullscreen && <CloudPlusButton />}
+                        {playgroundFullscreen && <CloudPlusButton type="code" />}
                         <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
                         <ResizePlaygroundButton />
                     </div>
@@ -199,15 +199,15 @@ print(result)`.trim()}
             }
             {selectedText && editorInstance && (
                 isPen ? (<MonacoEditorMenu
-                    buttonPosition={{
-                        top: buttonPosition?.top,
-                        left: buttonPosition?.left,
-                        bottom: buttonPosition?.bottom,
-                        right: buttonPosition?.right,
-                    }}
-                    isPen={isPen}
-                    editor={editorInstance}
-                />)
+                        buttonPosition={{
+                            top: buttonPosition?.top,
+                            left: buttonPosition?.left,
+                            bottom: buttonPosition?.bottom,
+                            right: buttonPosition?.right,
+                        }}
+                        isPen={isPen}
+                        editor={editorInstance}
+                    />)
                     : (<QuestionCode
                             buttonPosition={{
                                 top: buttonPosition?.top,
@@ -216,7 +216,7 @@ print(result)`.trim()}
                                 right: buttonPosition?.right,
                             }}
                             editor={editorInstance}
-                    />
+                        />
                     )
             )}
         </div>
