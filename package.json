@@ -5,7 +5,8 @@
     "scripts": {
         "env": "npx vault-env generate",
         "build": "npx vite build",
-        "start": "npx vite serve --host"
+        "start": "npx vite serve --host",
+        "install:force": "npm install --force"
     },
     "proxy": "http://127.0.0.1:1337",
     "dependencies": {
