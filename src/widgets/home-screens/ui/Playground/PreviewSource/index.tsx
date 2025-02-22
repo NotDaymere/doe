@@ -9,6 +9,8 @@ import css from "./PreviewSource.module.less";
 import ExpandDoubleIcon from "src/shared/icons/ExpandDouble.icon";
 
 const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
+    const fileType = data?.split(".").pop() || "";
+
     const [isHovered, setIsHovered] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,7 +37,6 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
     return (
         <>
             <div
-                onDoubleClick={() => setIsModalOpen(true)}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className={css.previewSource}
@@ -49,9 +50,15 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
 
                 {renderOpenInNewWindowButtonClick()}
             </div>
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <Preview type={type} url={data} isModalView={true} title={title} />
-            </Modal>
+            <div className={css.modal}>
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    showScroll={fileType === "txt"}
+                >
+                    <Preview type={type} url={data} isModalView={true} title={title} />
+                </Modal>
+            </div>
         </>
     );
 };

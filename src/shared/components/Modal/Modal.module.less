@@ -21,4 +21,60 @@
     max-width: 35vw;
     max-height: 70vh;
     overflow: hidden;
+    // scrollbar-width: thin;
+    // scrollbar-color: #fff #cacaca;
+}
+
+// .modalContent::-webkit-scrollbar {
+//     width: 4px;
+//     height: 23px;
+//     background-color: #fff;
+// }
+
+// .modalContent::-webkit-scrollbar-track {
+//     background: #cacaca;
+//     border-radius: 16px;
+//     width: 6px;
+// }
+
+// .modalContent::-webkit-scrollbar-thumb {
+//     background-color: #fff;
+//     border-radius: 16px;
+//     border: 10px solid #fff;
+// }
+
+// .modalContent::-webkit-scrollbar-corner {
+//     background-color: #cecece;
+// }
+/* Загальні стилі для скролбару */
+.showScroll {
+    // scrollbar-width: thin; /* Для браузерів Firefox */
+    // scrollbar-color: #cacaca #fff; /* Колір доріжки і ползунка */
+}
+
+/* Стилізація для Webkit браузерів (Chrome, Safari) */
+.showScroll::-webkit-scrollbar {
+    width: 4px; /* Ширина скролбару по вертикалі */
+    height: 23px; /* Висота скролбару по горизонталі */
+}
+
+.showScroll::-webkit-scrollbar-track {
+    background: #cacaca; /* Колір доріжки скролбару */
+    border-radius: 16px;
+}
+
+.showScroll::-webkit-scrollbar-thumb {
+    background-color: #fff; /* Колір ползунка */
+    border-radius: 16px;
+    // border: 2px solid #cacaca; /* Додає трохи простору навколо ползунка */
+}
+
+.showScroll::-webkit-scrollbar-corner {
+    background-color: #cacaca; /* Кутовий блок для одночасного скролу */
+}
+
+/* Забезпечує скрол по обидвом осям */
+.showScroll {
+    overflow-x: auto; /* Для горизонтального скролу */
+    overflow-y: auto; /* Для вертикального скролу */
 }

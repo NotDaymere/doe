@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { IMessage } from "src/shared/types/Message";
 import PenIcon from "src/shared/icons/Pen.icon";
 import { Editor } from "src/shared/components/Editor";
@@ -8,7 +8,7 @@ import CrossIcon from "src/shared/icons/Cross.icon";
 import SendIcon from "src/shared/icons/Send.icon";
 import MagicIcon from "src/shared/icons/Magic.icon";
 import css from "./ChatMessage.module.less";
-import { IPlayground } from "src/shared/types/Playground";
+import QuickSearch from "../QuickSearch";
 
 interface Props {
     data: IMessage;
@@ -18,7 +18,14 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
     const [isEdit, setEdit] = React.useState(false);
     const [content, setContent] = React.useState(data.content);
     const { setPlayground, playground } = useAppStore();
-    const { editor, setEditor, setMessagesCount, messagesCount } = useChatStore();
+    const {
+        editor,
+        setEditor,
+        setMessagesCount,
+        messagesCount,
+        showQuickSearch,
+        setShowQuickSearch,
+    } = useChatStore();
 
     const toggleEdit = () => {
         setEdit(!isEdit);
@@ -40,6 +47,21 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
     const handleSendButtonClick = () => {
         setMessagesCount(messagesCount + 1);
     };
+
+    useEffect(() => {
+        const handleKeyDown = (event: any) => {
+            if ((event.metaKey || event.ctrlKey) && event.key === "f") {
+                event.preventDefault();
+                setShowQuickSearch(true);
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
 
     if (data.isUser) {
         if (isEdit) {
@@ -100,6 +122,11 @@ export const ChatMessage: React.FC<Props> = ({ data }) => {
                         </button>
                     </div>
                 </>
+            )}
+            {showQuickSearch && (
+                <div className={css.quickSearch}>
+                    <QuickSearch onClose={setShowQuickSearch} />
+                </div>
             )}
         </div>
     );

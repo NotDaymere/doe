@@ -67,21 +67,21 @@ const SourcePlayground = () => {
 
     const previewRef = useRef<HTMLDivElement>(null);
 
-    const handleClickOutside = (event: MouseEvent) => {
-        if (previewRef.current && !previewRef.current.contains(event.target as Node)) {
-            setPreviewPlayground({
-                type: null,
-                data: "",
-            });
-        }
-    };
+    // const handleClickOutside = (event: MouseEvent) => {
+    //     if (previewRef.current && !previewRef.current.contains(event.target as Node)) {
+    //         setPreviewPlayground({
+    //             type: null,
+    //             data: "",
+    //         });
+    //     }
+    // };
 
-    useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+    // useEffect(() => {
+    //     document.addEventListener("mousedown", handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener("mousedown", handleClickOutside);
+    //     };
+    // }, []);
 
     return (
         <div className={css.sourcePlayground}>
@@ -89,7 +89,11 @@ const SourcePlayground = () => {
                 <ScalableContainer>
                     <div className={css.infoCardNodes}>
                         {INFO_NODES.map((node) => (
-                            <InfoCardNode key={node.title} {...node} />
+                            <InfoCardNode
+                                key={node.title}
+                                {...node}
+                                onOpenResource={handleShowResources}
+                            />
                         ))}
                     </div>
                     <div className={css.styledLineIcon}>
@@ -118,7 +122,11 @@ const SourcePlayground = () => {
                     <div className={css.infoCardNodes}>
                         <GlowIcon className={css.glowIcon} />
                         {INFO_NODES.map((node) => (
-                            <InfoCardNode key={node.title} {...node} />
+                            <InfoCardNode
+                                key={node.title}
+                                {...node}
+                                onOpenResource={handleShowResources}
+                            />
                         ))}
                     </div>
                 </ScalableContainer>

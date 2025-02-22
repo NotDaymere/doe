@@ -9,11 +9,13 @@ interface ChatState {
     currentBranch: IBranch | null;
     messages: IMessage[];
     messagesCount: number;
+    showQuickSearch: boolean;
     setCurrentBranch: (currentBranch: IBranch | null) => void;
     setMessages: (messages: IMessage[]) => void;
     setEditor: (editor: Editor | null) => void;
     setTyping: (isTyping: boolean) => void;
     setMessagesCount: (messagesCount: number) => void;
+    setShowQuickSearch: (showQuickSearch: boolean) => void;
 }
 
 export const useChatStore = create<ChatState>()((set) => ({
@@ -37,9 +39,11 @@ export const useChatStore = create<ChatState>()((set) => ({
         },
     ],
     messagesCount: 0,
+    showQuickSearch: false,
     setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
     setMessages: (messages) => set(() => ({ messages })),
     setEditor: (editor) => set(() => ({ editor })),
     setTyping: (isTyping) => set(() => ({ isTyping })),
     setMessagesCount: (messagesCount) => set(() => ({ messagesCount })),
+    setShowQuickSearch: (showQuickSearch) => set(() => ({ showQuickSearch })),
 }));

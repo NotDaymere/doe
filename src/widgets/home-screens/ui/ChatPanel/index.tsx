@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { Editor } from "src/shared/components/Editor";
+import { Editor as IEditor } from "@tiptap/react";
 import { InputDynamicWidth } from "src/shared/components/InputDynamicWidth";
 import ArrowUpIcon from "src/shared/icons/ArrowUp.icon";
 import CallVoiceIcon from "src/shared/icons/CallVoice.icon";
@@ -12,6 +13,8 @@ import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
 import { FileList } from "src/shared/components/FileList";
 import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
+import Hints from "../WelcomeScreen/Hints";
+import HintsTyping from "../WelcomeScreen/HintsTyping";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles } = usePanel();
@@ -30,11 +33,28 @@ export const ChatPanel: React.FC = () => {
             setFiles([...files, ...uploadFiles]);
         },
     });
+    const [showHints, setShowHints] = useState({ hints: messagesCount === 0, typingHints: false });
 
     const prompt = usePrompt();
 
+    // useEffect(() => {
+    //     if (showHints.typingHints && text.length > 0) {
+    //         setShowHints({ ...showHints, typingHints: false });
+    //     }
+    // }, [text]);
+
     const handleSendButtonClick = () => {
         setMessagesCount(messagesCount + 1);
+    };
+
+    const handleFocusEditor = (editor: IEditor | null) => {
+        setEditor(editor);
+        setShowHints({ hints: false, typingHints: true });
+    };
+
+    const handleBlurEditor = () => {
+        setEditor(null);
+        setShowHints({ hints: false, typingHints: false });
     };
 
     return (
@@ -87,8 +107,8 @@ export const ChatPanel: React.FC = () => {
                         readOnly={prompt.active}
                         value={text}
                         onChange={setText}
-                        onFocus={setEditor}
-                        onBlur={() => setEditor(null)}
+                        onFocus={handleFocusEditor}
+                        onBlur={handleBlurEditor}
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
                         placeholder="Ask Doe anything you’d like about the world..."
@@ -109,6 +129,16 @@ export const ChatPanel: React.FC = () => {
                         </button>
                     )}
                 </div>
+                {showHints.hints && messagesCount === 0 && (
+                    <div className={css.hint}>
+                        <Hints />
+                    </div>
+                )}
+                {showHints.typingHints && messagesCount === 0 && (
+                    <div className={css.typingHints}>
+                        <HintsTyping />
+                    </div>
+                )}
             </div>
         </div>
     );

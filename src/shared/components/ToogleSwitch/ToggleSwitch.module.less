@@ -1,0 +1,60 @@
+.toggleContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.toggleLabel {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0;
+    color: #1f1f1f;
+    padding-right: 8px;
+}
+
+.toggleSwitch {
+    position: relative;
+    width: 32px;
+    height: 14px;
+}
+
+.toggleTrack {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #eeeeee;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.toggleSwitch input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.toggleSwitch input[type="checkbox"]:checked + .toggleTrack {
+    background-color: #8bcf15;
+}
+
+.toggleTrack::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 1px;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 1px 3px rgba(#101828, 0.1);
+}
+
+.toggleSwitch input[type="checkbox"]:checked + .toggleTrack::before {
+    transform: translate(1.25rem, -50%);
+    left: -1px;
+}

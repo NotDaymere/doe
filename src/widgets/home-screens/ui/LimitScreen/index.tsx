@@ -1,14 +1,12 @@
-import DoeIcon from "src/shared/icons/Doe.Icon";
 import CopyIcon from "src/shared/icons/Copy.icon";
+import DoeIcon from "src/shared/icons/Doe.icon";
 import css from "./LimitScreen.module.less";
 
 const LimitScreen = () => {
     const invitationLink = "https://www.doe.xyz/invite/kdadaf129)";
-
     const handleShareLinkButtonClick = () => {
         navigator.clipboard.writeText(invitationLink);
     };
-
     return (
         <div className={css.limitScreen}>
             <div className={css.iconContainer}>
@@ -17,7 +15,6 @@ const LimitScreen = () => {
                 </div>
                 <div className={css.backgroundPattern} />
             </div>
-
             <span className={css.title}>You've reached your 50 message daily maximum</span>
             <span className={css.description}>
                 Send <span className={css.bold}>5 invitations</span> to receive

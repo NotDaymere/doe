@@ -7,12 +7,14 @@ import "@react-pdf-viewer/page-navigation/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import { PDFDocumentProxy } from "pdfjs-dist";
 import css from "./PdfDocument.module.less";
+import classNames from "classnames";
 
 interface IProps {
     url: string;
     scale: number;
     numPages: number;
     pageRefs: any;
+    isModalView?: boolean;
     onPageChange: (page: number) => void;
     onDocumentLoad: (number: number) => void;
 }
@@ -22,6 +24,7 @@ const PdfDocument: FC<IProps> = ({
     scale,
     numPages,
     pageRefs,
+    isModalView,
     onDocumentLoad,
     onPageChange,
 }) => {
@@ -41,7 +44,11 @@ const PdfDocument: FC<IProps> = ({
     }, [pdfInstance]);
 
     return (
-        <div className={css.viewer}>
+        <div
+            className={classNames(css.viewer, {
+                [css.viewerModal]: isModalView,
+            })}
+        >
             <div className={css.document}>
                 <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
                     {Array.from(new Array(numPages)).map((_, index) => {

@@ -1,0 +1,43 @@
+.welcomeScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.welcomeText {
+    width: 100%;
+    margin: 0 auto;
+    font-family: CMU Serif;
+    font-size: 24px;
+    line-height: 140%;
+    letter-spacing: 0;
+    max-width: 821px;
+    padding-left: 10px;
+    padding-right: 86px;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.animatedIcon path {
+    animation: colorChange 2s infinite;
+}
+
+@keyframes colorChange {
+    0% {
+        fill: #000;
+    }
+    50% {
+        // shape-rendering: crispEdges;
+        fill: url(#rgb_gradient);
+    }
+    100% {
+        fill: #000;
+    }
+}

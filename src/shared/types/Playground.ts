@@ -8,7 +8,7 @@ export interface IPlayground {
     text?: string;
 }
 
-export type SourceType = "web" | "apps" | "docs";
+export type SourceType = "web" | "apps" | "docs" | "go" | "memory";
 
 export interface ISourceTypeNode {
     icon: ReactElement;
@@ -32,6 +32,8 @@ export interface IPlaygroundSourceData {
     web: IPlaygroundSourceItemData;
     apps: IPlaygroundSourceItemData;
     docs: IPlaygroundSourceItemData;
+    go: IPlaygroundSourceItemData;
+    memory: IPlaygroundSourceItemData;
 }
 
 export interface IPreviewPlayground {

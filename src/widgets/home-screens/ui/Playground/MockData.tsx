@@ -5,23 +5,24 @@ import GoogleCalendarIcon from "src/shared/icons/GoogleCalendar.icon";
 import ObsidianIcon from "src/shared/icons/Obsidian.icon";
 import CaseStudyIcon from "src/shared/icons/CaseStudy.icon";
 import FileFilledIcon from "src/shared/icons/FileFilled.icon";
-import { IInfoCardNode } from "./InfoCardNode";
 import { ISourceTypeNode } from "src/shared/types/Playground";
 import AppsSourceIcon from "src/shared/icons/AppsSource.icon";
 import DocsIcon from "src/shared/icons/Docs.icon";
-import { IPlaygroundSourceData, SourceType } from "src/shared/types/Playground";
+import { IPlaygroundSourceData } from "src/shared/types/Playground";
 import MemoryIcon from "src/shared/icons/Memory.icon";
 import WebIcon from "src/shared/icons/Web.icon";
 import BrainIcon from "src/shared/icons/Brain.icon";
 
-export const INFO_NODES: IInfoCardNode[] = [
+export const INFO_NODES: ISourceTypeNode[] = [
     {
         icon: <BrainIcon fill="#cfcecf" width={16} height={16} />,
         title: "GO",
+        type: "go",
     },
     {
         icon: <MemoryIcon fill="#cfcecf" width={16} height={16} />,
         title: "Memory",
+        type: "memory",
     },
 ];
 
@@ -104,6 +105,48 @@ export const PLAYGROUND_SOURCES: IPlaygroundSourceData = {
                 title: "Work_file.doc",
                 icon: <FileFilledIcon width={12} height={12} />,
                 link: "/file-samples/file-sample.docx",
+            },
+        ],
+    },
+    go: {
+        title: "Go",
+        type: "go",
+        items: [
+            {
+                title: "brilliant.org",
+                icon: <BrilliantOrgIcon width={12} height={12} />,
+                link: "https://www.example.com",
+            },
+            {
+                title: "codecade...com",
+                icon: <CodecademyIcon width={12} height={12} />,
+                link: "https://www.example.com",
+            },
+            {
+                title: "theinform...com",
+                icon: <CaseStudyIcon width={12} height={12} />,
+                link: "https://www.example.com",
+            },
+        ],
+    },
+    memory: {
+        title: "Memory",
+        type: "memory",
+        items: [
+            {
+                title: "brilliant.org",
+                icon: <BrilliantOrgIcon width={12} height={12} />,
+                link: "https://www.example.com",
+            },
+            {
+                title: "codecade...com",
+                icon: <CodecademyIcon width={12} height={12} />,
+                link: "https://www.example.com",
+            },
+            {
+                title: "theinform...com",
+                icon: <CaseStudyIcon width={12} height={12} />,
+                link: "https://www.example.com",
             },
         ],
     },

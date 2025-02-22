@@ -1,0 +1,54 @@
+.hints {
+    display: grid;
+    align-items: center;
+    gap: 8px;
+    max-width: 750px;
+}
+
+.hint1 {
+    grid-area: 1 / 1;
+}
+
+.hint2 {
+    grid-area: 1 / 2;
+}
+
+.hint3 {
+    grid-area: 1 / 3;
+}
+
+.hint4 {
+    grid-area: 2 / 2;
+}
+
+.hint {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #b5b5b5;
+    letter-spacing: 0;
+    background-color: #f8f8f8;
+    border: 1px solid #cfcfcf;
+    border-radius: 12px;
+    padding: 10px;
+
+    path {
+        fill: #b5b5b5;
+    }
+
+    &:hover {
+        color: #5b5b5b;
+        background-color: #ffffff;
+        border-color: #fff;
+
+        path {
+            fill: #5b5b5b;
+        }
+    }
+    box-shadow: 0 0 20px rgba(#000, 0.02);
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+}

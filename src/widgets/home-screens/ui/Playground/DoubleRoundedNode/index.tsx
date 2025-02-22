@@ -1,14 +1,15 @@
 import { FC, ReactNode } from "react";
 import css from "./DoubleRoundedNode.module.less";
 
-interface IProps {
+interface IProps extends React.HTMLProps<HTMLButtonElement> {
     children: ReactNode;
+    onClick: () => void;
 }
 
-const DoubledRoundedNode: FC<IProps> = ({ children }) => (
-    <div className={css.doubleBorder}>
+const DoubledRoundeNode: FC<IProps> = ({ children, onClick }) => (
+    <button className={css.doubleBorder} onClick={onClick}>
         <div className={css.innerBorder}>{children}</div>
-    </div>
+    </button>
 );
 
-export default DoubledRoundedNode;
+export default DoubledRoundeNode;

@@ -1,12 +1,13 @@
 .previewSource {
     position: relative;
     z-index: 1;
-    width: 400px;
+    width: 100%;
     overflow: hidden;
     white-space: pre-wrap;
     word-wrap: break-word;
     display: inline-block;
     max-height: calc((100vh - 65px - 24px - 10px));
+    border-radius: 8px;
 }
 
 .openButton {
@@ -52,4 +53,13 @@
         fill: #fff;
         fill-opacity: 0.85;
     }
+}
+
+.modal {
+    max-width: 35vw;
+    max-height: 70vh;
+}
+
+.txtPreview {
+    overflow: auto;
 }
