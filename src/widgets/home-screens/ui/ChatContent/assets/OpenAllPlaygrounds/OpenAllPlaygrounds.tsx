@@ -1,8 +1,10 @@
 import './OpenAllPlaygrounds.less';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from "react";
 import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg";
 import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 import { useChatStore } from "src/shared/providers";
+import ThreeVerticalDots from "../../../../../../shared/icons/ThreeVerticalDots";
+import AllPlaygroundsMenu from "../AllPlaygroundsMenu/AllPlaygroundsMenu";
 
 type OpenAllPlaygroundsProps = {
     changeActiveAllPlaygrounds: () => void;
@@ -11,6 +13,10 @@ type OpenAllPlaygroundsProps = {
 export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenAllPlaygroundsProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const { savedPlaygrounds } = useChatStore();
+    const [activeOpenAllPlaygroundsMenu, setActiveOpenAllPlaygroundsMenu] = useState<boolean>(false);
+    const changeActiveOpenAllPlaygroundsMenu = () => {
+        setActiveOpenAllPlaygroundsMenu(!activeOpenAllPlaygroundsMenu)
+    }
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -40,14 +46,21 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
                         key={index}
                         className={"open-all-playgrounds-content-example"}
                     >
-                        {savedPlayground.type == 'table' && 'Tabular Random Values'}
-                        {savedPlayground.type == 'code' && 'Python Task Manager'}
-                       <button className={'open-all-playgrounds-content-example-button'}>
-                           <span className={'open-all-playgrounds-example-span'}/>
+                       <div className={'open-all-playgrounds-content-name'}>
+                           <DoePlaygroundStars/>
+                           {savedPlayground.type == 'table' && 'Tabular Random Values'}
+                           {savedPlayground.type == 'code' && 'Python Task Manager'}
+                       </div>
+                       <button className={'open-all-playgrounds-content-example-button'}
+                       onClick={changeActiveOpenAllPlaygroundsMenu}
+                       >
+                           {!activeOpenAllPlaygroundsMenu && <span className={'open-all-playgrounds-example-span'}/>}
+                           {activeOpenAllPlaygroundsMenu && <span><ThreeVerticalDots/></span>}
                        </button>
                     </div>
                 ))}
             </div>
+            <AllPlaygroundsMenu />
         </div>
     );
 }
