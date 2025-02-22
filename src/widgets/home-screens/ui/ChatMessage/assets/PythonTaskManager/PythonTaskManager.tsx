@@ -1,7 +1,8 @@
 import React from "react";
 import { ReactComponent as CodeIcon } from "src/assets/icons/code.svg";
 import { useChatStore } from "src/shared/providers";
-import { IPlayground } from "../../../../../../shared/types/Playground";
+import { IPlayground } from "src/shared/types/Playground";
+import './PythonTaskManager.less'
 
 function PythonTaskManager() {
     const { playground, setPlayground, setSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlaygroundLast } = useChatStore();

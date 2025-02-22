@@ -24,7 +24,9 @@ function ExampleTableMassage() {
                         <TableRandomValues />
                         <DownloadCSV />
                     </Flex>
+                    <Flex>
                     <PythonTaskManager/>
+                    </Flex>
                 </Flex>
             </div>
         </div>
