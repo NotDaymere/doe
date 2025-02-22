@@ -3,8 +3,8 @@ import { ReactComponent as Plus } from "src/assets/icons/Plus.svg";
 import { ReactComponent as Code } from "src/assets/icons/code.svg";
 import ArrowDownIcon from "src/shared/icons/ArrowDown.icon";
 import ArrowUpIcon from "src/shared/icons/ArrowUp.icon";
-import "../../../../../../../../../../CloudActionsSectionCode.less";
-import { useChatStore } from "../../../../../../shared/providers";
+import "./CloudActionsSectionCode.less";
+import { useChatStore } from "src/shared/providers";
 
 
 

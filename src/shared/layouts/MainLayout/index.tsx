@@ -3,8 +3,8 @@ import { useChatStore } from "src/shared/providers";
 import { Gaia } from "src/widgets/Gaia";
 import css from "./MainLayout.module.less";
 import { Layout as BaseLayout } from "antd";
-import { Sider } from "../../../components/layout";
-import MultiplePlaygroundRenderer from "../../../widgets/home-screens/ui/PlaygroundRenderer/MultiplePlaygroundRenderer/MultiplePlaygroundRenderer";
+import { Sider } from "src/components/layout";
+import MultiplePlaygroundRenderer from "src/widgets/home-screens/ui/PlaygroundRenderer/MultiplePlaygroundRenderer/MultiplePlaygroundRenderer";
 
 interface Props {
     children: React.ReactNode;
