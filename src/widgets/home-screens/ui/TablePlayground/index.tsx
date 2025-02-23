@@ -6,7 +6,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
 import Underline from "@tiptap/extension-underline";
 import { calculateTiptapButtonPosition } from "src/components/code-playground/helpers/calculateButtonPosition";
-import { useChatStore } from "src/shared/providers";
+import { useChatStore, usePlaygroundStore } from "src/shared/providers";
 import TipTapTextFormatMenu from "./assets/TextFormat/TipTapTextFormatMenu";
 import ResizePlaygroundButton from "../PlaygroundButtons/ResizePlaygroundButton/ResizePlaygroundButton";
 import CloudPlusButton from "../PlaygroundButtons/CloudPlusButton/CloudPlusButton";
@@ -17,7 +17,9 @@ import { Superscript } from "@tiptap/extension-superscript";
 import { Subscript } from "@tiptap/extension-subscript";
 import FullscreenGeneralLogo from "./assets/FullscreenGeneralLogo/FullscreenGeneralLogo";
 import HistoryButton from "./assets/HistoryButton/HistoryButton";
-import { App } from "../../../../types";
+import { App } from "src/types";
+import PlaygroundAction from "../PlaygroundAction/PlaygroundAction";
+import { CustomBlock } from "./assets/CustomBlock/CustomBlock";
 
 const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   function adjustPosition(
@@ -46,6 +48,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   }
 
   const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds } = useChatStore();
+  const { playgroundAction } = usePlaygroundStore();
   const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
@@ -58,7 +61,6 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     bottom?: number;
     right?: number;
   } | null>(null);
-  const [penNewBottom, setPenNewBottom] = useState<number>(0);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -69,6 +71,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
       Color.configure({
         types: ['textStyle'],
       }),
+      CustomBlock,
     ],
     content: playgroundState?.text
         ? playgroundState.text
@@ -196,7 +199,6 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     } else {
       setSelectedText(selectedText ? selectedText : "Pen");
       setIsPen(true);
-      console.log(penNewBottom);
       setButtonPosition({
         bottom: 111,
         right: 14,
@@ -244,9 +246,9 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
           {selectedText && editor && (
               <TipTapTextFormatMenu
                   buttonPosition={{
-                    top: (buttonPosition?.top && (buttonPosition.top + penNewBottom)),
+                    top: buttonPosition?.top,
                     left: buttonPosition?.left,
-                    bottom: (buttonPosition?.bottom && (buttonPosition.bottom + penNewBottom)),
+                    bottom: buttonPosition?.bottom,
                     right: buttonPosition?.right,
                   }}
                   isPen={isPen}
@@ -258,13 +260,19 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         {
             playground.id == id &&
             <div className={"action-buttons"}>
-              {!playgroundFullscreen && <CloudPlusButton type="table" />}
-              {playgroundFullscreen && <FullscreenGeneralLogo />}
-              <div className={"action-buttons-right-part"}>
-                {playgroundFullscreen && <CloudPlusButton type="table" />}
-                <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-                <ResizePlaygroundButton />
-              </div>
+              {
+                !playgroundAction
+                  ? <>
+                    {!playgroundFullscreen && <CloudPlusButton type="table" />}
+                    {playgroundFullscreen && <FullscreenGeneralLogo />}
+                    <div className={"action-buttons-right-part"}>
+                      {playgroundFullscreen && <CloudPlusButton type="table" />}
+                      <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+                      <ResizePlaygroundButton />
+                    </div>
+                  </>
+                  : <PlaygroundAction playgroundAction = {playgroundAction} editor={editor} />
+              }
             </div>
         }
       </div>

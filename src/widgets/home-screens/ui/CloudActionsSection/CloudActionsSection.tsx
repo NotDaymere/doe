@@ -1,10 +1,11 @@
 import { ReactComponent as Stars } from "src/assets/icons/stars.svg";
 import { ReactComponent as Plus } from "src/assets/icons/Plus.svg";
 import "./CloudActionsSection.less";
-import { useChatStore } from "src/shared/providers";
+import { useChatStore, usePlaygroundStore } from "src/shared/providers";
 
 function CloudActionsSection() {
     const { playgroundFullscreen } = useChatStore();
+    const { setPlaygroundAction } = usePlaygroundStore();
 
     return (
         <div
@@ -18,7 +19,9 @@ function CloudActionsSection() {
                 <p className={"text-columns-button-p"}>
                     Add a <span className={"text-columns-button-span"}>Prompt</span>
                 </p>
-                <button className="button-plus">
+                <button className="button-plus"
+                        onClick={() => setPlaygroundAction({type: 'prompt'})}
+                >
                     <Plus className="plus-icon" />
                 </button>
             </div>
