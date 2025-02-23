@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
 import CrossIcon from "src/shared/icons/Cross.icon";
 import QuickSearchIcon from "src/shared/icons/QuickSearch.icon";
 import SearchIcon from "src/shared/icons/Search.icon";
@@ -7,9 +7,40 @@ import css from "./QuickSearch.module.less";
 import ToggleSwitch from "src/shared/components/ToogleSwitch";
 import TimeSpan from "src/shared/components/TimeSpan";
 
+interface IP {
+    text: string;
+    query: string;
+}
+
+const HighlightedText: FC<IP> = ({ text, query }) => {
+    if (!query) {
+        return <span>{text}</span>;
+    }
+
+    const parts = [];
+    let remainingText = text;
+    let queryIndex = remainingText.toLowerCase().indexOf(query.toLowerCase());
+
+    while (queryIndex !== -1) {
+        parts.push(<span>{remainingText.slice(0, queryIndex)}</span>);
+        parts.push(<strong>{remainingText.slice(queryIndex, queryIndex + query.length)}</strong>);
+        remainingText = remainingText.slice(queryIndex + query.length);
+        queryIndex = remainingText.toLowerCase().indexOf(query.toLowerCase(), 0);
+    }
+
+    parts.push(<span>{remainingText}</span>);
+
+    return <>{parts}</>;
+};
+
 const SHOW_QUICK_SEARCH_LABEL_TIME = 5000;
 
-const SEARCH_RESULTS = [
+interface ISearchResult {
+    icon: ReactElement;
+    text: string;
+}
+
+const SEARCH_RESULTS: ISearchResult[] = [
     {
         icon: <StarsIcon width={9} height={12} />,
         text: "...Result: The Yoneda Lemma and the Yoneda Embedding provide...",
@@ -31,6 +62,8 @@ interface IProps {
 const QuickSearch: FC<IProps> = ({ onClose }) => {
     const [showLabel, setShowLabel] = useState(true);
     const [isCaseSensitive, setIsCaseSensitive] = useState(false);
+    const [results, setResults] = useState<ISearchResult[]>([]);
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -41,6 +74,19 @@ const QuickSearch: FC<IProps> = ({ onClose }) => {
             clearTimeout(timeout);
         };
     }, []);
+
+    useEffect(() => {
+        if (!search) {
+            setResults([]);
+        } else {
+            const results = SEARCH_RESULTS.filter((result) =>
+                isCaseSensitive
+                    ? result.text.includes(search)
+                    : result.text.toLowerCase().includes(search.toLowerCase())
+            );
+            setResults([...results]);
+        }
+    }, [search, isCaseSensitive]);
 
     const handleCaseSensitivityToggle = (event: any) => {
         setIsCaseSensitive(event.target.checked);
@@ -57,7 +103,13 @@ const QuickSearch: FC<IProps> = ({ onClose }) => {
                 </div>
             )}
             <div className={css.searchInput}>
-                <input type="text" className={css.input} />
+                <input
+                    type="text"
+                    className={css.input}
+                    placeholder="Yoneda Lem"
+                    value={search}
+                    onChange={(e: any) => setSearch(e.target.value)}
+                />
                 <SearchIcon width={14} height={14} className={css.startAdornment} />
                 <button className={css.endAdornment} onClick={() => onClose(false)}>
                     <CrossIcon width={8} height={8} />
@@ -72,14 +124,18 @@ const QuickSearch: FC<IProps> = ({ onClose }) => {
                         onChange={handleCaseSensitivityToggle}
                     />
                 </div>
-                <div className={css.results}>
-                    {SEARCH_RESULTS.map((result) => (
-                        <div className={css.result} key={result.text}>
-                            <div className={css.iconResult}>{result.icon}</div>
-                            <span>{result.text}</span>
-                        </div>
-                    ))}
-                </div>
+                {!!results.length ? (
+                    <div className={css.results}>
+                        {results?.map((result) => (
+                            <div className={css.result} key={result.text}>
+                                <div className={css.iconResult}>{result.icon}</div>
+                                <span>
+                                    <HighlightedText text={result.text} query={search} />
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                ) : null}
             </div>
         </div>
     );

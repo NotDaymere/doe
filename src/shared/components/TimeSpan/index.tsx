@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Calendar from "../Calendar";
 import CalendarIcon from "src/shared/icons/Calendar.icon";
-import css from "./TimeSpan.module.less";
 import DownIcon from "src/shared/icons/Down.icon";
 import classNames from "classnames";
+import css from "./TimeSpan.module.less";
 
 export interface ISession {
     id: string;
@@ -70,9 +70,8 @@ const TimeSpan = () => {
                     <div className={css.selectedDate}>
                         <CalendarIcon width={15} height={14} />
                         <span>{formatSelectedDate(selectedDate)}</span>
-                        <span>{selectedSession?.[0]?.time}</span>
+                        {selectedSession?.map((session) => <span>{session.time}</span>)}
                     </div>
-
                     <button
                         onClick={handleToggleCalendar}
                         className={classNames(css.toggleCalendar, {
