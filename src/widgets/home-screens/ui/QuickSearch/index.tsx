@@ -1,10 +1,11 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import CrossIcon from "src/shared/icons/Cross.icon";
 import QuickSearchIcon from "src/shared/icons/QuickSearch.icon";
 import SearchIcon from "src/shared/icons/Search.icon";
 import StarsIcon from "src/shared/icons/Stars.icon";
 import css from "./QuickSearch.module.less";
 import ToggleSwitch from "src/shared/components/ToogleSwitch";
+import TimeSpan from "src/shared/components/TimeSpan";
 
 const SHOW_QUICK_SEARCH_LABEL_TIME = 5000;
 
@@ -41,9 +42,8 @@ const QuickSearch: FC<IProps> = ({ onClose }) => {
         };
     }, []);
 
-    const handleCaseSensitivityToggle = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleCaseSensitivityToggle = (event: any) => {
         setIsCaseSensitive(event.target.checked);
-        console.log("event", event);
     };
 
     return (
@@ -65,7 +65,7 @@ const QuickSearch: FC<IProps> = ({ onClose }) => {
             </div>
             <div className={css.searchResults}>
                 <div className={css.actions}>
-                    <div>CALENDAR</div>
+                    <TimeSpan />
                     <ToggleSwitch
                         label="Case Sensitivity"
                         checked={isCaseSensitive}
@@ -74,7 +74,7 @@ const QuickSearch: FC<IProps> = ({ onClose }) => {
                 </div>
                 <div className={css.results}>
                     {SEARCH_RESULTS.map((result) => (
-                        <div className={css.result}>
+                        <div className={css.result} key={result.text}>
                             <div className={css.iconResult}>{result.icon}</div>
                             <span>{result.text}</span>
                         </div>
