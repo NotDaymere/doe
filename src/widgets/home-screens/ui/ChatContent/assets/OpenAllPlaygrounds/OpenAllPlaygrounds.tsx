@@ -13,9 +13,26 @@ type OpenAllPlaygroundsProps = {
 export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenAllPlaygroundsProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const { savedPlaygrounds } = useChatStore();
-    const [activeOpenAllPlaygroundsMenu, setActiveOpenAllPlaygroundsMenu] = useState<boolean>(false);
-    const changeActiveOpenAllPlaygroundsMenu = () => {
-        setActiveOpenAllPlaygroundsMenu(!activeOpenAllPlaygroundsMenu)
+    const [activeOpenAllPlaygroundsMenu, setActiveOpenAllPlaygroundsMenu] = useState<string | null>(null);
+    const [contentIdHover, setContentIdHover] = useState<string | null>(null);
+    const contentMouseUp = (id: string | null) => {
+        if (activeOpenAllPlaygroundsMenu) {
+            return;
+        }
+        setContentIdHover(id);
+    }
+    const contentMouseDown = () => {
+        if (activeOpenAllPlaygroundsMenu) {
+            return;
+        }
+        setContentIdHover(null);
+    }
+    const changeActiveOpenAllPlaygroundsMenu = (id: string | null = null) => {
+        if (activeOpenAllPlaygroundsMenu) {
+            setActiveOpenAllPlaygroundsMenu(null)
+            return;
+        }
+        setActiveOpenAllPlaygroundsMenu(id)
     }
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -43,24 +60,36 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
             <div className={'open-all-playgrounds-content'}>
                 {savedPlaygrounds.map((savedPlayground, index) => (
                     <div
-                        key={index}
-                        className={"open-all-playgrounds-content-example"}
+                        key={savedPlayground.id}
+                        className={
+                        `open-all-playgrounds-content-example ${contentIdHover == savedPlayground.id 
+                        && 'open-all-playgrounds-content-example-hover'}`}
+                        onMouseMove={() => contentMouseUp(savedPlayground.id)}
+                        onMouseOut={contentMouseDown}
                     >
                        <div className={'open-all-playgrounds-content-name'}>
                            <DoePlaygroundStars/>
-                           {savedPlayground.type == 'table' && 'Tabular Random Values'}
-                           {savedPlayground.type == 'code' && 'Python Task Manager'}
+                           { savedPlayground.name }
                        </div>
                        <button className={'open-all-playgrounds-content-example-button'}
-                       onClick={changeActiveOpenAllPlaygroundsMenu}
+                       onClick={() => changeActiveOpenAllPlaygroundsMenu(savedPlayground.id)}
                        >
-                           {!activeOpenAllPlaygroundsMenu && <span className={'open-all-playgrounds-example-span'}/>}
-                           {activeOpenAllPlaygroundsMenu && <span><ThreeVerticalDots/></span>}
+                           {!activeOpenAllPlaygroundsMenu
+                               && <span className={'open-all-playgrounds-example-span'}/>
+                           }
+                           {activeOpenAllPlaygroundsMenu
+                               && <span><ThreeVerticalDots/></span>
+                           }
                        </button>
                     </div>
                 ))}
             </div>
-            <AllPlaygroundsMenu />
+            {activeOpenAllPlaygroundsMenu
+                && <AllPlaygroundsMenu
+                    activeOpenAllPlaygroundsMenu = {activeOpenAllPlaygroundsMenu}
+                    changeActiveOpenAllPlaygroundsMenu = {changeActiveOpenAllPlaygroundsMenu}
+                />
+            }
         </div>
     );
 }

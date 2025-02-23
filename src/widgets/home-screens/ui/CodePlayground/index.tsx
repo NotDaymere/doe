@@ -67,7 +67,8 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     };
 
     const handleCollapsePlayground = () => {
-        const newPlayground = getOpenSavedPlaygrounds().at(1) || { type: null, data: null, id: null, open: false };
+        const newPlayground = getOpenSavedPlaygrounds().at(1)
+            || { type: null, name: "", data: null, id: null, open: false };
         setPlayground(newPlayground);
         const oldPlayground = playgroundState;
         if (oldPlayground) {
@@ -134,7 +135,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                  playgroundState && setPlayground(playgroundState)
              }}
         >
-            <Flex className="tabs-panel-playground">Python Task Manager</Flex>
+            <Flex className="tabs-panel-playground">{ playgroundState?.name }</Flex>
             <section className="editor-section">
                 <Editor
                     onMount={handleEditorMount}

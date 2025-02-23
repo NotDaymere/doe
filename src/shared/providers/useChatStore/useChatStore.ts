@@ -3,7 +3,7 @@ import { IBranch } from "src/shared/types/Branch";
 import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
 import { IPlayground } from "src/shared/types/Playground";
-import { IQuestionCodeMessage } from "../../types/QuestionCodeMessage";
+import { IQuestionCodeMessage } from "src/shared/types/QuestionCodeMessage";
 
 interface ChatState {
     editor: Editor | null;
@@ -51,6 +51,7 @@ export const useChatStore = create<ChatState>()(
         ],
         playground: {
             type: null,
+            name: "",
             open: false,
             data: null,
             text: "",

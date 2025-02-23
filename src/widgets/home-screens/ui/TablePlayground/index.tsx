@@ -178,7 +178,8 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   }, [editor?.getHTML()]);
 
   const handleCollapsePlayground = () => {
-    const newPlayground = getOpenSavedPlaygrounds().at(1) || { type: null, data: null, id: null, open: false };
+    const newPlayground = getOpenSavedPlaygrounds().at(1)
+        || { type: null, name: "", data: null, id: null, open: false };
     setPlayground(newPlayground);
     const oldPlayground = playgroundState;
     if (oldPlayground) {
@@ -221,7 +222,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
         <div>
           <Flex className={"tabs-panel-playground"}>
-            <p>Tabular Random Values</p>
+            <p>{ playgroundState?.name }</p>
             <HistoryButton />
           </Flex>
 

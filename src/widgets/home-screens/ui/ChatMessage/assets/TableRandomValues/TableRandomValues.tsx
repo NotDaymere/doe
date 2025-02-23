@@ -12,6 +12,7 @@ function TableRandomValues() {
         updateSavedPlaygrounds(oldPlayground);
         const newPlayground: IPlayground = {
             id: null,
+            name: "Tabular random values",
             type: "table",
             data: null,
             open: true

@@ -12,6 +12,7 @@ function PythonTaskManager() {
         updateSavedPlaygrounds(oldPlayground);
         const newPlayground: IPlayground = {
             id: null,
+            name: "Python Task Manager",
             type: "code",
             data: null,
             open: true
