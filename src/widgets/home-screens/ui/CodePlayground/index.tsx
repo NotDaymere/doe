@@ -4,7 +4,7 @@ import "./index.less";
 import * as monaco from "monaco-editor";
 import Editor, { OnMount } from "@monaco-editor/react";
 import { calculateButtonPosition } from "../../../../components/code-playground/helpers/calculateButtonPosition";
-import { useChatStore } from "../../../../shared/providers";
+import { useChatStore, usePlaygroundStore } from "../../../../shared/providers";
 import MonacoEditorMenu from "./assets/MonacoEditorMenu/MonacoEditorMenu";
 import CloudPlusButton from "../PlaygroundButtons/CloudPlusButton/CloudPlusButton";
 import PenFormatingButton from "../PlaygroundButtons/PenFormatingButton/PenFormatingButton";
@@ -12,6 +12,7 @@ import ResizePlaygroundButton from "../PlaygroundButtons/ResizePlaygroundButton/
 import QuestionCode from "./assets/QuestionCode/QuestionCode";
 import FullscreenGeneralLogo from "../TablePlayground/assets/FullscreenGeneralLogo/FullscreenGeneralLogo";
 import { App } from "../../../../types";
+import PlaygroundAction from "../PlaygroundAction/PlaygroundAction";
 
 const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     function adjustPosition(rawPosition: { top: number; left: number }, containerWidth: number, containerHeight: number, margin = 10) {
@@ -40,6 +41,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     const [isPen, setIsPen] = useState<boolean>(false);
     const [buttonPosition, setButtonPosition] = useState<{ top?: number; left?: number; bottom?: number; right?: number } | null>(null);
     const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
+    const { playgroundAction } = usePlaygroundStore();
     const customTheme: monaco.editor.IStandaloneThemeData = {
         base: "vs",
         inherit: true,
@@ -189,13 +191,19 @@ print(result)`.trim()}
             {
                 playground.id == id &&
                 <div className={"action-buttons"}>
-                    {!playgroundFullscreen && <CloudPlusButton type="code" />}
-                    {playgroundFullscreen && <FullscreenGeneralLogo />}
-                    <div className={"action-buttons-right-part"}>
-                        {playgroundFullscreen && <CloudPlusButton type="code" />}
-                        <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-                        <ResizePlaygroundButton />
-                    </div>
+                    {
+                        !playgroundAction
+                            ? <>
+                                {!playgroundFullscreen && <CloudPlusButton type="code" />}
+                                {playgroundFullscreen && <FullscreenGeneralLogo />}
+                                <div className={"action-buttons-right-part"}>
+                                    {playgroundFullscreen && <CloudPlusButton type="code" />}
+                                    <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+                                    <ResizePlaygroundButton />
+                                </div>
+                            </>
+                            : <PlaygroundAction playgroundAction = {playgroundAction} editor={editorInstance} />
+                    }
                 </div>
             }
             {selectedText && editorInstance && (

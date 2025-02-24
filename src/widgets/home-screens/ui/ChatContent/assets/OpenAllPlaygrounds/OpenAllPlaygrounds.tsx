@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg";
 import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 import { useChatStore } from "src/shared/providers";
-import ThreeVerticalDots from "../../../../../../shared/icons/ThreeVerticalDots";
+import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
 import AllPlaygroundsMenu from "../AllPlaygroundsMenu/AllPlaygroundsMenu";
 
 type OpenAllPlaygroundsProps = {
@@ -12,7 +12,7 @@ type OpenAllPlaygroundsProps = {
 
 export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenAllPlaygroundsProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const { savedPlaygrounds } = useChatStore();
+    const { savedPlaygrounds, getOpenSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlayground } = useChatStore();
     const [activeOpenAllPlaygroundsMenu, setActiveOpenAllPlaygroundsMenu] = useState<string | null>(null);
     const [contentIdHover, setContentIdHover] = useState<string | null>(null);
     const contentMouseUp = (id: string | null) => {
@@ -34,6 +34,18 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
         }
         setActiveOpenAllPlaygroundsMenu(id)
     }
+
+    const openSavedPlaygroundStatus = (id: string | null) => {
+        const savedPlayground = getSavedPlayground(id)
+        const maxLength = 2;
+        if (getOpenSavedPlaygrounds().length >= maxLength) {
+            return;
+        }
+        if (!savedPlayground) return;
+        savedPlayground.open = true;
+        updateSavedPlaygrounds(savedPlayground);
+    }
+
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -61,26 +73,31 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
                 {savedPlaygrounds.map((savedPlayground, index) => (
                     <div
                         key={savedPlayground.id}
-                        className={
-                        `open-all-playgrounds-content-example ${contentIdHover == savedPlayground.id 
-                        && 'open-all-playgrounds-content-example-hover'}`}
+                        className={`open-all-playgrounds-content-example ${
+                            contentIdHover == savedPlayground.id && 'open-all-playgrounds-content-example-hover'
+                        }`}
                         onMouseMove={() => contentMouseUp(savedPlayground.id)}
                         onMouseOut={contentMouseDown}
+                        onClick={() => openSavedPlaygroundStatus(savedPlayground.id)}
                     >
                        <div className={'open-all-playgrounds-content-name'}>
                            <DoePlaygroundStars/>
                            { savedPlayground.name }
                        </div>
-                       <button className={'open-all-playgrounds-content-example-button'}
-                       onClick={() => changeActiveOpenAllPlaygroundsMenu(savedPlayground.id)}
-                       >
-                           {!activeOpenAllPlaygroundsMenu
-                               && <span className={'open-all-playgrounds-example-span'}/>
-                           }
-                           {activeOpenAllPlaygroundsMenu
-                               && <span><ThreeVerticalDots/></span>
-                           }
-                       </button>
+                        <button
+                            className={'open-all-playgrounds-content-example-button'}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                changeActiveOpenAllPlaygroundsMenu(savedPlayground.id);
+                            }}
+                        >
+                            {!activeOpenAllPlaygroundsMenu && <span className={'open-all-playgrounds-example-span'} />}
+                            {activeOpenAllPlaygroundsMenu && (
+                                <span>
+                <ThreeVerticalDots />
+            </span>
+                            )}
+                        </button>
                     </div>
                 ))}
             </div>

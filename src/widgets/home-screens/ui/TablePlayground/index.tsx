@@ -1,12 +1,12 @@
 import { Flex, Table, TableProps } from "antd";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import mockData from './mockData.json';
 import './index.less';
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
 import Underline from "@tiptap/extension-underline";
 import { calculateTiptapButtonPosition } from "src/components/code-playground/helpers/calculateButtonPosition";
-import { useChatStore, usePlaygroundStore } from "src/shared/providers";
+import { useChatStore, usePlaygroundStore, useVersionHistoryStore } from "src/shared/providers";
 import TipTapTextFormatMenu from "./assets/TextFormat/TipTapTextFormatMenu";
 import ResizePlaygroundButton from "../PlaygroundButtons/ResizePlaygroundButton/ResizePlaygroundButton";
 import CloudPlusButton from "../PlaygroundButtons/CloudPlusButton/CloudPlusButton";
@@ -100,6 +100,24 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
       }
     },
   });
+  const divRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const { openHistory } = useVersionHistoryStore();
+
+  useEffect(() => {
+    if (divRef.current) {
+      setContainerWidth(divRef.current.getBoundingClientRect().width);
+    }
+
+    const handleResize = () => {
+      if (divRef.current) {
+        setContainerWidth(divRef.current.getBoundingClientRect().width);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     handleSetDataToInput();
@@ -220,6 +238,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
            onMouseMove={() => {
              playgroundState && setPlayground(playgroundState)
            }}
+           ref={divRef}
       >
 
         <div>
@@ -263,15 +282,15 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
               {
                 !playgroundAction
                   ? <>
-                    {!playgroundFullscreen && <CloudPlusButton type="table" />}
+                    {(!playgroundFullscreen && !openHistory) && <CloudPlusButton type="table" />}
                     {playgroundFullscreen && <FullscreenGeneralLogo />}
-                    <div className={"action-buttons-right-part"}>
-                      {playgroundFullscreen && <CloudPlusButton type="table" />}
-                      <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-                      <ResizePlaygroundButton />
-                    </div>
+                      { !openHistory && <div className={"action-buttons-right-part"}>
+                        {playgroundFullscreen && <CloudPlusButton type="table" />}
+                        <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+                        <ResizePlaygroundButton />
+                      </div> }
                   </>
-                  : <PlaygroundAction playgroundAction = {playgroundAction} editor={editor} />
+                  : <PlaygroundAction playgroundAction = {playgroundAction} editor={editor} containerWidth={containerWidth} />
               }
             </div>
         }
