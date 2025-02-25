@@ -290,7 +290,17 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                         <ResizePlaygroundButton />
                       </div> }
                   </>
-                  : <PlaygroundAction playgroundAction = {playgroundAction} editor={editor} containerWidth={containerWidth} />
+                  : <>
+                      <PlaygroundAction playgroundAction = {playgroundAction} editor={editor} containerWidth={containerWidth} />
+                      {playgroundFullscreen && <>
+                        <FullscreenGeneralLogo />
+                        {!openHistory && <div className={"action-buttons-right-part"}>
+                           <CloudPlusButton type="table" />
+                          <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+                          <ResizePlaygroundButton />
+                        </div>}
+                      </>}
+                    </>
               }
             </div>
         }

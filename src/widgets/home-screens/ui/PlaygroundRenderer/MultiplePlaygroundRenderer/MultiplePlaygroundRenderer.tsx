@@ -1,5 +1,5 @@
 import PlaygroundRenderer from "../index";
-import { useChatStore } from "src/shared/providers";
+import { useChatStore, useVersionHistoryStore } from "src/shared/providers";
 import { Flex } from "antd";
 import OpenFromSavedPlayground from "../../TablePlayground/assets/OpenFromSavedPlayground/OpenFromSavedPlayground";
 import React, { useEffect } from "react";
@@ -8,6 +8,7 @@ import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 
 export default function MultiplePlaygroundRenderer() {
     const {getOpenSavedPlaygrounds, savedPlaygrounds, playgroundFullscreen} = useChatStore();
+    const {openHistory} = useVersionHistoryStore();
 
     useEffect(() => {
       const doePlaygroundOpen = document.querySelector(".doe-playground-open") as HTMLElement | null;
@@ -19,7 +20,7 @@ export default function MultiplePlaygroundRenderer() {
     }, []);
 
     return (
-        <Flex vertical className={'multiple-playground-renderer-container'}>
+        <Flex vertical className={`multiple-playground-renderer-container ${openHistory && ' multiple-playground-renderer-container-left-radius'}`}>
             {
                 savedPlaygrounds.length > 1 && (
                     <div className={'saved-playgrounds'}>

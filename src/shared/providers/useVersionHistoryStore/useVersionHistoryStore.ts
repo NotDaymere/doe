@@ -3,6 +3,7 @@ import { create } from "zustand";
 interface VersionHistoryStore {
     openHistory: boolean,
     setOpenHistory: (openHistoryAction: boolean) => void
+
 }
 
 export const useVersionHistoryStore = create<VersionHistoryStore>()(

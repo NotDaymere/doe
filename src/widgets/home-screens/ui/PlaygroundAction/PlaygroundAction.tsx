@@ -4,7 +4,7 @@ import Prompt from "./Prompt/Prompt";
 import './PlaygroundAction.less';
 import { Editor } from "@tiptap/react";
 import * as monaco from "monaco-editor";
-import { useChatStore } from "src/shared/providers";
+import { useChatStore} from "src/shared/providers";
 
 interface IProps {
     playgroundAction: IPlaygroundAction,
@@ -27,7 +27,7 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: {type}, editor, contai
         if (chatRef.current) {
             setInputWidth(chatRef.current.getBoundingClientRect().width);
         }
-        setPosition({ x: (containerWidth / 2 + inputWidth - 100), y: -40 })
+        setPosition({ x: (containerWidth / 2 + inputWidth - 200), y: 10 })
     }, []);
     useEffect(() => {
         const handleMouseMove = (event: MouseEvent) => {
