@@ -8,13 +8,18 @@ import CallVoiceIcon from "src/shared/icons/CallVoice.icon";
 import MicrophoneIcon from "src/shared/icons/Microphone.icon";
 import ReplyIcon from "src/shared/icons/Reply.icon";
 import ScreenShareIcon from "src/shared/icons/ScreenShare.icon";
-import { useChatStore } from "src/shared/providers";
+import { useAppStore, useChatStore } from "src/shared/providers";
 import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
 import { FileList } from "src/shared/components/FileList";
-import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
 import Hints from "../WelcomeScreen/Hints";
 import HintsTyping from "../WelcomeScreen/HintsTyping";
+import ShareScreenInfo from "../ShareScreen/ShareScreenInfo";
+import css from "./ChatPanel.module.less";
+import CableIcon from "src/shared/icons/Cable.icon";
+import BluetoothIcon from "src/shared/icons/Bluetooth.icon";
+import ScreenIcon from "src/shared/icons/Screen.icon";
+import classNames from "classnames";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles } = usePanel();
@@ -33,6 +38,7 @@ export const ChatPanel: React.FC = () => {
             setFiles([...files, ...uploadFiles]);
         },
     });
+    const { shareScreen, setShareScreen } = useAppStore();
 
     const [showHints, setShowHints] = useState({ hints: messagesCount === 0, typingHints: false });
 
@@ -108,9 +114,44 @@ export const ChatPanel: React.FC = () => {
                         classNameEditor={css.panel_editor_editor}
                         placeholder="Ask Doe anything you’d like about the world..."
                     />
-                    <button className={css.panel_button} disabled>
-                        <ScreenShareIcon />
-                    </button>
+                    <div
+                        className={classNames(css.shareScreenExpanded, {
+                            [css.shareScreenShow]: shareScreen.showInitialScreen,
+                        })}
+                    >
+                        <div className={classNames(css.expandedIcon, css.cableIcon)}>
+                            <CableIcon width={21} height={5} />
+                        </div>
+                        <div className={css.expandedIcon}>
+                            <BluetoothIcon width={9} height={13} />
+                        </div>
+                        <div className={css.expandedIcon}>
+                            <ScreenIcon width={16} height={13} />
+                        </div>
+                        <div className={classNames(css.expandedIcon, css.screenShareIcon)}>
+                            <ScreenShareIcon width={16} height={16} />
+                        </div>
+                    </div>
+                    {!shareScreen.showInitialScreen && (
+                        <button
+                            className={css.screenShareButton}
+                            onClick={() =>
+                                setShareScreen({
+                                    ...shareScreen,
+                                    showInitialScreen: true,
+                                })
+                            }
+                        >
+                            <ScreenShareIcon width={16} height={16} />
+                        </button>
+                    )}
+                    <div
+                        className={classNames(css.shareScreen, {
+                            [css.shareScreenShow]: shareScreen.showInitialScreen,
+                        })}
+                    >
+                        <ShareScreenInfo />
+                    </div>
                     <button className={css.panel_button}>
                         <MicrophoneIcon />
                     </button>

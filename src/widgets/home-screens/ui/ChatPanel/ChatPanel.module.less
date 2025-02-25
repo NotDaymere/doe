@@ -165,7 +165,7 @@
     padding-left: 10px;
 
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 8px;
 }
 
@@ -258,4 +258,66 @@
 
 .typingHints {
     padding-top: 8px;
+}
+
+.shareScreenExpanded {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    padding: 5px;
+    border: 1px solid #f8f8f8;
+    border-radius: 1000px;
+    background-color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.expandedIcon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+}
+
+.cableIcon {
+    background-color: rgba(#ff8b12, 0.2);
+    border: 1px solid #ff8b12;
+}
+
+.screenShareIcon {
+    background-color: rgba(#ff8b12, 0.2);
+
+    path {
+        fill: #ff8b12;
+    }
+}
+
+.screenShareButton {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    background-color: rgba(#b5b5b5, 0.2);
+    border-radius: 50%;
+
+    path {
+        fill: #b5b5b5;
+    }
+}
+
+.shareScreen {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 72px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.shareScreenShow {
+    opacity: 1;
 }
