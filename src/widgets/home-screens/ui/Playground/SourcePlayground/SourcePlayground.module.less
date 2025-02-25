@@ -1,0 +1,144 @@
+.sourceSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 3px 20px rgba(#000, 0.04);
+    background-image: url("../assets/steps.png");
+}
+
+.sourcePlayground {
+    display: grid;
+    grid-template-rows: repeat(2, calc((100vh - 65px - 24px - 10px) / 2));
+    gap: 10px;
+    height: calc((100vh - 65px));
+}
+
+.generalSection {
+    .sourceSection;
+    justify-content: space-between;
+    position: relative;
+}
+
+.infoCardNodes {
+    display: flex;
+    flex-direction: row;
+    gap: 48px;
+    position: relative;
+}
+
+.glowIcon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    z-index: 1;
+}
+
+.styledLineIcon {
+    margin: -25px 0 -32px 0;
+}
+
+.sourceNodes {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 28%;
+}
+
+.nodes {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.popoverweb {
+    position: absolute;
+    top: 0;
+    left: -90px;
+}
+
+.popoverdocs {
+    position: absolute;
+    top: -40px;
+    right: -80px;
+}
+
+.popoverapps {
+    position: absolute;
+    top: 70px;
+    right: -80px;
+}
+
+.popovergo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+
+.popovermemory {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+
+.detailsSection {
+    .sourceSection;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px;
+    overflow: hidden;
+}
+
+.defaultText {
+    font-size: 14px;
+    color: #b5b5b5;
+}
+
+.lineIcon {
+    width: 171px;
+    height: 347px;
+}
+
+.popoverContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    width: 132px;
+    height: 80px;
+}
+
+.title {
+    font-size: 12px;
+    color: #cfcfcf;
+}
+
+.list {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.itemText {
+    color: #5b5b5b;
+}

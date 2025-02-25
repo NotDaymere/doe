@@ -11,3 +11,7 @@ vite.config.js
 node_modules
 .env.*
 !.env.example
+
+.DS_Store
+settings.json
+.vercel

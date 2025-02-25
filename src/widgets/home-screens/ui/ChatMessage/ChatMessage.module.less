@@ -1,3 +1,14 @@
+.buttons () {
+    display: flex;
+    gap: 4px;
+    border: 1px solid #ffffff;
+    padding: 12px;
+    border-radius: 24px;
+    box-shadow: 0 2px 15px rgba(#000, 0.05);
+    position: relative;
+    cursor: pointer;
+}
+
 .input {
     display: flex;
     align-items: flex-end;
@@ -5,12 +16,12 @@
     gap: 8px;
 }
 
-.input_editBtn{
+.input_editBtn {
     width: 30px;
     height: 30px;
     border-radius: 8px;
-    background: #F1E7FF;
-    border: 1px solid #9747FF;
+    background: #f1e7ff;
+    border: 1px solid #9747ff;
 
     position: relative;
     display: flex;
@@ -22,17 +33,17 @@
     svg {
         width: 12px;
         height: 12px;
-        fill: #9747FF;
+        fill: #9747ff;
     }
 
     &:hover {
-        background: darken(#F1E7FF, 3%);
+        background: darken(#f1e7ff, 3%);
     }
 }
 .input_message {
     padding: 8px 12px;
     border-radius: 12px;
-    border: 1px dashed #B5B5B5;
+    border: 1px dashed #b5b5b5;
 
     .setFontSohneBuch(16px, 1.4, normal);
     color: #1f1f1f;
@@ -41,14 +52,14 @@
 // Edit
 .edit {
     border-radius: 16px;
-    border: 1px solid #DDDDDD;
-    background: #FBFBFB;
+    border: 1px solid #dddddd;
+    background: #fbfbfb;
     padding: 20px;
 }
 .edit_editor_editor {
     padding-right: 10px;
     .setFontSohneBuch(16px, 1.2, normal);
-    color: #1F1F1F;
+    color: #1f1f1f;
 
     max-height: 160px;
     overflow-y: auto;
@@ -80,16 +91,70 @@
 }
 
 .edit_controls_cancelBtn {
-    border: 1px solid #DDDDDD;
+    border: 1px solid #dddddd;
     svg {
-        fill: #5B5B5B;
+        fill: #5b5b5b;
         width: 10px;
         height: 10px;
     }
 }
 .edit_controls_saveBtn {
-    background: #1F1F1F;
+    background: #1f1f1f;
     svg {
-        fill: #FFFFFF;
+        fill: #ffffff;
     }
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px;
+}
+
+.steps_button {
+    .buttons;
+    background-color: #ffffff;
+    background-image: linear-gradient(to right, #9747ff, #1f1f1f);
+    color: transparent;
+    background-clip: text;
+
+    &:hover {
+        background:
+            linear-gradient(#1f1f1f, #5b2b99) padding-box,
+            linear-gradient(to bottom, #f1e7ff, #9747ff) border-box;
+        border-radius: 24px;
+        border: 1px solid transparent;
+        color: #fff;
+
+        svg {
+            path {
+                fill: #fff;
+            }
+        }
+    }
+}
+
+.active_steps_button {
+    .buttons;
+    border-color: #9747ff;
+    background: #fff;
+    color: #9747ff;
+
+    svg {
+        path {
+            fill: #9747ff;
+        }
+    }
+}
+
+.block {
+    position: relative;
+}
+
+.quickSearch {
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
 }

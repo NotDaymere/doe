@@ -1,0 +1,132 @@
+.calendarContainer {
+    width: 217px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    padding: 12px;
+    z-index: 999;
+}
+
+.calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+}
+
+.calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 24px);
+    gap: 4px;
+    padding: 10px 0;
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+}
+
+.dayHeader {
+    height: 24px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #8d8d8d;
+}
+
+.day {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    font-size: 12px;
+    color: #5b5b5b;
+    cursor: pointer;
+}
+
+.otherMonth {
+    color: #dddddd;
+}
+
+.selected {
+    background-color: #f1e7ff;
+    color: #9747ff;
+    border: 1px solid #9747ff;
+    border-radius: 6px;
+}
+
+.calendarFooter {
+    margin-top: 10px;
+}
+
+.sessionsWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+}
+
+.sessions {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.session {
+    width: 63px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    color: #8d8d8d;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.sessionSelected {
+    color: #9747ff;
+    border: 1px solid #9747ff;
+    background-color: #f1e7ff;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.selectAllSessions {
+    font-size: 12px;
+    font-weight: bold;
+    color: #b5b5b5;
+}
+
+.sessionsInfo {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    letter-spacing: 0;
+}
+
+.aroundClockIcon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    margin-right: 4px;
+}
