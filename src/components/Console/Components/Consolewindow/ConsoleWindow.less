@@ -1,0 +1,118 @@
+.consoleTabContainer {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 8px;
+  .on {
+    border-bottom: solid 1px white;
+    p {
+      color: white;
+    }
+  }
+}
+
+.consoleTab {
+  padding-top: 13px;
+  padding-bottom: 13px;
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 5px;
+    cursor: pointer;
+    p {
+      font-size: 14px;
+      color: #8d8d8d;
+      font-family: "Sohne";
+      font-weight: 500;
+    }
+    div {
+      width: 19px;
+      height: 19px;
+      border-radius: 100%;
+      border: solid 1px rgba(181, 181, 181, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #8c8c8c;
+    }
+  }
+}
+
+.consoletop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 13px;
+  padding-right: 13px;
+  width: calc(100% -26px);
+}
+
+.consoleInnerWindow {
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
+   resize: none;
+  overflow: hidden;
+  min-width: 100%;
+  min-height: 150px;
+}
+
+.consoleBody {
+  min-height: 438px;
+  background: #3d3e3c;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  border-right: solid 1px #cacaca;
+}
+
+
+.resizer {
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  background: transparent;
+  z-index: 10;
+}
+
+.resizer:hover {
+  background: #777;
+}
+
+.top-left {
+  top: 120px;
+  left: 0px;
+  cursor: nwse-resize;
+  background: url('./img/icons/resizeIcons/resize-top-left.png');
+
+}
+
+
+.top-right {
+  top: 120px;
+  right: 0px;
+  
+  cursor: nesw-resize;
+
+    background: url('./img/icons/resizeIcons/resize-top-right.png');
+  
+}
+
+.bottom-left {
+  bottom: 6px;
+  left: 0px;
+  cursor: nesw-resize;
+  
+  background: url('./img/icons/resizeIcons/resize-bottom-left.png');
+}
+
+.bottom-right {
+  bottom: 6px;
+  right: 0px;
+  cursor: nwse-resize;
+   
+    background: url('./img/icons/resizeIcons/resize-bottom-right.png');
+  
+}

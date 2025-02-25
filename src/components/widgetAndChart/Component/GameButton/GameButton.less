@@ -1,0 +1,49 @@
+.gamebutton {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #f1f1f1;
+  width: 120px;
+  height: 98px;
+  border-radius: 12px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+ 
+
+  content: "";
+
+  &:hover::after {
+    width: 130px;
+    height: 106px;
+    border-radius: 12px;
+
+    box-shadow: inset 0 0 0 2px #f1f1f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    content: "";
+
+    position: relative;
+    top: -100px;
+    left: -5px;
+  }
+  .gamebutton_image {
+    width: 100%;
+    height: 84px;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+  }
+  p {
+    color: #5b5b5b;
+    padding-left: 12px;
+    font-size: 14px;
+    font-family: "Sohne";
+      font-weight: 600;
+    
+  }
+  &:hover{
+    p {
+    color: #1F1F1F;
+  }
+}
+}
