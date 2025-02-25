@@ -5,11 +5,12 @@ import "./CreateDrawing.less";
 
 function CreateDrawing() {
   const [showPaintBox, setShowPaintBox] = useState(false);
-  const [strokeColor, setStrokeColor] = useState("black");
+  const [strokeColor, setStrokeColor] = useState("orange");
 
   return (
     <div className="canvas">
-      <DrawCanvas strokeColor={strokeColor} />
+      <DrawCanvas label="Drawing #1" strokeColor={strokeColor} />
+      
       <div className="toolbox">
         <DrawingToolButton icon="/img/drawingEditorIcons/icon.svg" />
         <hr />

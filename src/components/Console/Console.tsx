@@ -9,7 +9,7 @@ function Console() {
 
   return (
     isVisible && (
-      <div className="consoleWindow" onClick={()=>showMenu? setShowMenu(false):null}>
+      <div className="consoleWindow">
         <div className="console_head">
           <div className="title">
             <p className="">Console</p>

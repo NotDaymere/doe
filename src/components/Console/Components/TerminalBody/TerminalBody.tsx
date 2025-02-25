@@ -15,7 +15,6 @@ function TerminalBody() {
         cursorBlink: true,
         rows: 20,
         fontSize: 14,
-
         theme: {
           background: "#3d3e3c",
           foreground: "#FFFFFF",
@@ -41,20 +40,24 @@ function TerminalBody() {
     };
   }, []);
 
+  // List of bugs with types
+  const bugs = [
+    { id: 1, type: "redColor" },
+    { id: 2, type: "blueColor" },
+  ];
+
   return (
     <>
-    
-      <div className="bugs">    
-        {[1, 2].map((id) => (
+      <div className="bugs">
+        {bugs.map(({ id, type }) => (
           <div
             key={id}
-            className={`indicator ${['bug','info'][id-1]}`}
+            className={`bug ${type}`}
             onMouseEnter={() => setHoveredBug(id)}
             onMouseLeave={() => setHoveredBug(null)}
           >
             {hoveredBug === id && (
-            
-            <div
+              <div
                 className="bug-modal"
                 onMouseEnter={() => setHoveredBug(id)}
                 onMouseLeave={() => setHoveredBug(null)}
@@ -63,14 +66,12 @@ function TerminalBody() {
                 <BugCatchModal />
               </div>
             )}
-        
           </div>
         ))}
       </div>
 
       <div className="terminal-container">
         <div className="terminal-header"></div>
-
         <div className="codewindow" ref={terminalRef}></div>
       </div>
     </>

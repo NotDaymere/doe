@@ -52,7 +52,10 @@
 .consoleInnerWindow {
   border-bottom-right-radius: 12px;
   border-bottom-left-radius: 12px;
-  width: 100%;
+   resize: none;
+  overflow: hidden;
+  min-width: 100%;
+  min-height: 150px;
 }
 
 .consoleBody {
@@ -63,4 +66,53 @@
   justify-content: space-between;
 
   border-right: solid 1px #cacaca;
+}
+
+
+.resizer {
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  background: transparent;
+  z-index: 10;
+}
+
+.resizer:hover {
+  background: #777;
+}
+
+.top-left {
+  top: 120px;
+  left: 0px;
+  cursor: nwse-resize;
+  background: url('./img/icons/resizeIcons/resize-top-left.png');
+
+}
+
+
+.top-right {
+  top: 120px;
+  right: 0px;
+  
+  cursor: nesw-resize;
+
+    background: url('./img/icons/resizeIcons/resize-top-right.png');
+  
+}
+
+.bottom-left {
+  bottom: 6px;
+  left: 0px;
+  cursor: nesw-resize;
+  
+  background: url('./img/icons/resizeIcons/resize-bottom-left.png');
+}
+
+.bottom-right {
+  bottom: 6px;
+  right: 0px;
+  cursor: nwse-resize;
+   
+    background: url('./img/icons/resizeIcons/resize-bottom-right.png');
+  
 }
