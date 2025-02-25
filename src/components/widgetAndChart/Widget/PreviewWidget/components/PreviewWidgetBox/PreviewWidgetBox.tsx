@@ -78,19 +78,7 @@ function PreviewWidgetBox() {
         </div>
       </div>
       <div className="previewBody">
-        <img
-          ref={imgRef}
-          src="/img/screenshot.png"
-          alt="Preview"
-          onMouseDown={handleStart}
-          onTouchStart={handleStart}
-          style={{
-            transform: `translate(${position.x}px, ${position.y}px)`,
-            cursor: dragging ? "grabbing" : "grab",
-            userSelect: "none",
-            position: "relative",
-          }}
-        />
+        <iframe src="https://miro.com/app/board/uXjVL_0dl7Q=/?share_link_id=661110526142"></iframe>
       </div>
     </div>
   );
