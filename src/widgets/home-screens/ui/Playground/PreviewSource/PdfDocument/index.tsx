@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Document } from "react-pdf";
+import { Document, Page } from "react-pdf";
 import PageInView from "../PageInView";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -60,11 +60,10 @@ const PdfDocument: FC<IProps> = ({
 
                         return (
                             <div key={`page_${pageIndex + 1}`} ref={refCallback}>
-                                <PageInView
-                                    scale={scale}
-                                    pageNumber={pageIndex + 1}
-                                    onPageChange={onPageChange}
-                                />
+                                <PageInView pageNumber={pageIndex + 1} onPageChange={onPageChange}>
+                                    <Page scale={scale} pageNumber={pageIndex + 1} />
+                                    <span style={{ color: "transparent" }}>// </span>
+                                </PageInView>
                             </div>
                         );
                     })}

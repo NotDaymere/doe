@@ -55,6 +55,7 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     showScroll={fileType === "txt"}
+                    classes={fileType === "docx" ? `${css.flex}` : ""}
                 >
                     <Preview type={type} url={data} isModalView={true} title={title} />
                 </Modal>

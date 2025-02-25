@@ -1,14 +1,13 @@
-import { FC, useEffect, useRef } from "react";
-import { Page } from "react-pdf";
+import { FC, ReactNode, useEffect, useRef } from "react";
 import { useInViewport } from "../../../lib/hooks/useInViewport";
 
 interface IProps {
-    scale: number;
     pageNumber: number;
     onPageChange: (page: number) => void;
+    children: ReactNode;
 }
 
-export const PageInView: FC<IProps> = ({ scale, pageNumber, onPageChange }) => {
+export const PageInView: FC<IProps> = ({ pageNumber, onPageChange, children }) => {
     const ref = useRef<HTMLDivElement>(null);
     const { isInViewport } = useInViewport(ref);
 
@@ -18,12 +17,7 @@ export const PageInView: FC<IProps> = ({ scale, pageNumber, onPageChange }) => {
         }
     }, [isInViewport]);
 
-    return (
-        <div ref={ref}>
-            <Page scale={scale} pageNumber={pageNumber} />
-            <span style={{ color: "transparent" }}>// </span>
-        </div>
-    );
+    return <div ref={ref}>{children}</div>;
 };
 
 export default PageInView;

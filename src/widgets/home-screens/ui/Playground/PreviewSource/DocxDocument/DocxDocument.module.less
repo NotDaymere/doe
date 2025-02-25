@@ -2,4 +2,46 @@
     background-color: #fff;
     border-radius: 16px;
     padding: 16px;
+    margin-right: 5px;
+}
+
+.page:not(:first-child) {
+    margin: 10px 0;
+}
+
+.document {
+    margin: 0 auto;
+    overflow: scroll;
+}
+
+.viewerModal {
+    width: 35vw;
+    height: 70vh;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-width: 100%;
+}
+
+.document::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+.document::-webkit-scrollbar-track {
+    background: #cacaca;
+    border-radius: 16px;
+}
+
+.document::-webkit-scrollbar-thumb {
+    background-color: #fff;
+    border-radius: 16px;
+}
+
+.document::-webkit-scrollbar-corner {
+    background-color: #cacaca;
+}
+
+.document {
+    overflow-x: scroll;
+    overflow-y: scroll;
 }

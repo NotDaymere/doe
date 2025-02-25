@@ -5,13 +5,10 @@
 
 .viewerModal {
     width: 35vw;
-    height: 70vh;
+    height: 80vh;
     overflow-x: auto;
     overflow-y: auto;
-    // max-height: 400px;
     max-width: 100%;
-    // scrollbar-width: thin;
-    // scrollbar-color: #fff #cacaca;
 }
 
 .document {
@@ -21,51 +18,24 @@
 }
 
 .viewerModal::-webkit-scrollbar {
-    width: 4px; /* Ширина скролбару по вертикалі */
-    height: 4px; /* Висота скролбару по горизонталі */
+    width: 4px;
+    height: 4px;
 }
 
 .viewerModal::-webkit-scrollbar-track {
-    background: #cacaca; /* Колір доріжки скролбару */
-    border-radius: 16px;
+    background: #cacaca;
 }
 
 .viewerModal::-webkit-scrollbar-thumb {
-    background-color: #fff; /* Колір ползунка */
+    background-color: #fff;
     border-radius: 16px;
-    // border: 2px solid #cacaca; /* Додає трохи простору навколо ползунка */
 }
 
 .viewerModal::-webkit-scrollbar-corner {
-    background-color: #cacaca; /* Кутовий блок для одночасного скролу */
+    background-color: #cacaca;
 }
 
-/* Забезпечує скрол по обидвом осям */
 .viewerModal {
-    overflow-x: auto; /* Для горизонтального скролу */
-    overflow-y: auto; /* Для вертикального скролу */
-    // max-height: 400px; /* Обмеження висоти, щоб викликати скрол */
-    // max-width: 100%; /* Обмеження ширини */
+    overflow-x: auto;
+    overflow-y: auto;
 }
-
-// .viewerModal::-webkit-scrollbar {
-//     width: 4px;
-//     height: 23px;
-//     background-color: #fff;
-// }
-
-// .viewerModal::-webkit-scrollbar-track {
-//     background: #cacaca;
-//     border-radius: 16px;
-//     width: 6px;
-// }
-
-// .viewerModal::-webkit-scrollbar-thumb {
-//     background-color: #fff;
-//     border-radius: 16px;
-//     border: 10px solid #fff;
-// }
-
-// .viewerModal::-webkit-scrollbar-corner {
-//     background-color: #cecece;
-// }

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import mammoth from "mammoth";
+import classNames from "classnames";
 import css from "./DocxDocument.module.less";
 
 interface DocxReaderProps {
-    url: string; // The URL of the DOCX file
-    itemsPerPage?: number; // Optional: How many characters per "page" (you can adjust this)
+    url: string;
+    itemsPerPage?: number;
 }
 
-const DocxReader: React.FC<DocxReaderProps> = ({ url, itemsPerPage = 1000 }) => {
-    const [docxContent, setDocxContent] = useState<string | null>(null);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [pages, setPages] = useState<string[]>([]);
-    // const pages: string[] = [];
+const ITEMS_PER_PAGES = 3000;
 
-    // Function to fetch and convert DOCX to HTML
+const DocxDocument: React.FC<DocxReaderProps> = ({ url, itemsPerPage = ITEMS_PER_PAGES }) => {
+    const [docxContent, setDocxContent] = useState<string | null>(null);
+    const [pages, setPages] = useState<string[]>([]);
+
     const fetchDocxContent = async (url: string) => {
         try {
             const response = await fetch(url);
@@ -26,37 +26,30 @@ const DocxReader: React.FC<DocxReaderProps> = ({ url, itemsPerPage = 1000 }) => 
     };
 
     useEffect(() => {
-        fetchDocxContent(url); // Load the DOCX file when the component mounts
+        fetchDocxContent(url);
     }, [url]);
 
-    // Pagination logic: split the content into smaller chunks
     useEffect(() => {
         if (docxContent) {
             const contentChunks = [];
             for (let i = 0; i < docxContent.length; i += itemsPerPage) {
                 contentChunks.push(docxContent.slice(i, i + itemsPerPage));
             }
-            setPages(contentChunks); // Store the content in "pages"
-            console.log("contentChunks", pages);
+            setPages(contentChunks);
         }
     }, [docxContent, itemsPerPage]);
 
-    // Handle navigation
-    // const nextPage = () => {
-    //     if (currentPage < pages.length - 1) setCurrentPage(currentPage + 1);
-    // };
-
-    // const prevPage = () => {
-    //     if (currentPage > 0) setCurrentPage(currentPage - 1);
-    // };
-
     return (
-        <>
-            {pages?.map((page) => (
-                <div className={css.page} dangerouslySetInnerHTML={{ __html: page }} />
+        <div className={css.document}>
+            {pages?.map((page, index) => (
+                <div
+                    key={`page_${index}`}
+                    className={classNames(css.page, css.modalView)}
+                    dangerouslySetInnerHTML={{ __html: page }}
+                />
             ))}
-        </>
+        </div>
     );
 };
 
-export default DocxReader;
+export default DocxDocument;
