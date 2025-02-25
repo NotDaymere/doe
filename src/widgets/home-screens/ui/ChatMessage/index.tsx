@@ -6,6 +6,8 @@ import { useChatStore } from "src/shared/providers";
 import CrossIcon from "src/shared/icons/Cross.icon";
 import SendIcon from "src/shared/icons/Send.icon";
 import css from "./ChatMessage.module.less";
+import { Flex } from "antd";
+import ExampleTableMassage from "./assets/ExampleTabelMassage/ExampleTableMassage";
 
 interface Props {
     data: IMessage
@@ -53,16 +55,20 @@ export const ChatMessage: React.FC<Props> = ({
         }
 
         return (
-            <div className={css.input}>
-                <button className={css.input_editBtn} onClick={toggleEdit}>
-                    <PenIcon />
-                </button>
-                <div className={css.input_message} 
-                    dangerouslySetInnerHTML={{
-                        __html: data.content
-                    }}
-                />
-            </div>
+            <Flex vertical>
+                <div className={css.input}>
+                    <button className={css.input_editBtn} onClick={toggleEdit}>
+                        <PenIcon />
+                    </button>
+                    <div className={css.input_message}
+                         dangerouslySetInnerHTML={{
+                             __html: data.content
+                         }}
+                    />
+                </div>
+                <ExampleTableMassage />
+            </Flex>
+
         )
     }
 

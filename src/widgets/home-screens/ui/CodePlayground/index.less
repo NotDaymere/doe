@@ -1,0 +1,150 @@
+.table-playground {
+  background-color: #F1F1F1;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+  }
+
+  .editor-section {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editor-wrapper {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .table {
+    position: relative;
+    cursor: pointer;
+    padding: 1px;
+    border-radius: 16px;
+    .selected-column {
+      &:is(th) {
+        background: #9747FF !important;
+      }
+      &:is(td) {
+        background: #F1E7FF !important;
+      }
+    }
+    .ant-table-row {
+      background: #F1F1F1 !important;
+    }
+    .ant-table-row td {
+      border: 1px solid #DDD;
+    }
+    .ant-table-row td:first-child {
+      background: #FFFF !important;
+    }
+    .selected-cell {
+      background: #F1E7FF !important;
+      outline: 1px solid #9747FF;
+      z-index: 100000;
+    }
+  }
+  .action-buttons {
+    margin-top: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 8px;
+    position: sticky;
+    width: 100%;
+    z-index: 1000;
+    bottom: 24px;
+
+    .action-buttons-right-part {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .ant-btn {
+      padding: 2px;
+      margin: 0;
+      height: 36px;
+      width: 36px;
+    }
+  }
+}
+.tiptap-editor {
+  outline: none;
+  border: none;
+  padding: 24px;
+  padding-top: 16px;
+  font-family: 'Söhne', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22.4px;
+  letter-spacing: 0;
+  background: inherit;
+  color: #1F1F1F;
+  caret-color: #9747FF;
+
+  &::selection {
+    background-color: #F1E7FF !important;
+    color: #1F1F1F !important;
+  }
+}
+.tiptap{
+  outline: none;
+  border: none;
+}
+
+.tabs-panel {
+  border-radius: 12px;
+  background: rgba(181, 181, 181, 0.2);
+  border: 1px solid rgba(221, 221, 221, 1);
+  padding: 0;
+  margin: 0;
+}
+
+.tabs-panel-playground {
+  border-radius: 16px 16px 0 0;
+  background: #F1F1F1;
+  margin: 0;
+  color: #1F1F1F;
+  padding-top: 30px;
+  padding-left: 24px;
+  padding-bottom: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  position: relative;
+  z-index: 99999;
+}
+::selection {
+  background-color: #F1E7FF !important;
+
+}
+.tiptap-editor,
+.tiptap,
+.table-playground,
+.tiptap-editor * {
+  &::selection {
+    background-color: #F1E7FF !important;
+
+  }
+}

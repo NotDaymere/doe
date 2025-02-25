@@ -1,8 +1,10 @@
 import React from "react";
-import { useAppStore } from "src/shared/providers";
-import { CSSTransition } from "react-transition-group";
+import { useChatStore } from "src/shared/providers";
 import { Gaia } from "src/widgets/Gaia";
 import css from "./MainLayout.module.less";
+import { Layout as BaseLayout } from "antd";
+import { Sider } from "src/components/layout";
+import MultiplePlaygroundRenderer from "src/widgets/home-screens/ui/PlaygroundRenderer/MultiplePlaygroundRenderer/MultiplePlaygroundRenderer";
 
 interface Props {
     children: React.ReactNode;
@@ -12,26 +14,21 @@ export const MainLayout: React.FC<Props> = ({
     children
 }) => {
     const gaiaRef = React.useRef<HTMLDivElement>(null);
-    const { gaiaActive } = useAppStore();
-
+    const { playgroundFullscreen, getOpenSavedPlaygrounds } = useChatStore()
     return (
         <React.Fragment>
-            {children}
-            {/* <CSSTransition
-                classNames={{
-                    enter: css.gaiaEnter,
-                    enterActive: css.gaiaEnterActive,
-                    exit: css.gaiaExit,
-                    exitActive: css.gaiaExitActive
-                }}
-                timeout={1500}
-                in={gaiaActive}
-                unmountOnExit
-                mountOnEnter
-                nodeRef={gaiaRef}
-            > */}
-                <Gaia className={css.gaia} ref={gaiaRef} />
-            {/* </CSSTransition> */}
+            <BaseLayout className={getOpenSavedPlaygrounds().length > 0 ? "main-layout-playground" : "main-layout"} hasSider>
+                <BaseLayout.Sider width={"auto"} className={"sider-wrapper"}>
+                    <Sider />
+                </BaseLayout.Sider>
+                {!playgroundFullscreen && children}
+            <Gaia className={css.gaia} ref={gaiaRef} />
+            {getOpenSavedPlaygrounds().length > 0 && (
+                <BaseLayout.Sider width={playgroundFullscreen ? '100%' : 550} className={"playground-sider"}>
+                    <MultiplePlaygroundRenderer />
+                </BaseLayout.Sider>
+            )}
+            </BaseLayout>
         </React.Fragment>
     );
 };

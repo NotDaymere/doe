@@ -11,6 +11,7 @@ interface Props {
 }
 
 const Layout: FC<Props> = ({ children }) => {
+    console.log(111111111);
   const { playground } = useApp().app
 
   return (
@@ -20,9 +21,9 @@ const Layout: FC<Props> = ({ children }) => {
       </BaseLayout.Sider>
 
       <BaseLayout.Content className={"content"}>
-        {/* <Suspense>
-          <Outlet />
-        </Suspense> */}
+        {/*<Suspense>*/}
+        {/*  <Outlet />*/}
+        {/*</Suspense>*/}
         {children}
       </BaseLayout.Content>
 

@@ -1,0 +1,137 @@
+.open-all-playgrounds-container {
+  position: absolute;
+  top: 125px;
+  width: 277px;
+  height: 165px;
+  padding: 10px;
+  border-radius: 16px;
+  background: #F0F0F0;
+  border: 1px solid #DDDDDD;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 8px;
+}
+.open-all-playgrounds-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Sohne;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18.56px;
+  color: #5B5B5B;
+}
+.open-all-playgrounds-header-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  svg {
+    fill: #5B5B5B;
+    width: 16px;
+    height: 16px;
+  }
+}
+.open-all-playgrounds-header-button {
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  left: 247px;
+  border-radius: 3px;
+  background: #F8F8F8;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    width: 12px;
+    height: 12px;
+    fill: #5B5B5B;
+  }
+}
+.open-all-playgrounds-content {
+   width: 257px;
+   height: 117px;
+  padding: 4px;
+   border-radius: 12px;
+   background: #FFFFFFCC;
+   box-shadow: 0px 8px 12px 0px #0000000A;
+   backdrop-filter: blur(100px);
+   overflow-y: auto;
+   scrollbar-width: thin;
+   scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+ }
+
+.open-all-playgrounds-content::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 50px;
+  position: absolute;
+  right: -6px;
+}
+
+.open-all-playgrounds-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50px;
+}
+
+.open-all-playgrounds-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.open-all-playgrounds-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.open-all-playgrounds-content::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.open-all-playgrounds-example-span {
+  width: 12px;
+  height: 2px;
+  background: #DBD8D8;
+}
+.open-all-playgrounds-content-example {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 11px;
+  width: 249px;
+  height: 35px;
+  border-radius: 8px;
+  font-family: Sohne;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18.56px;
+  color: #CFCFCF;
+  cursor: pointer;
+  span {
+    display: none;
+  }
+  svg {
+    fill: #B5B5B5;
+  }
+}
+.open-all-playgrounds-content-example-hover {
+  background: #F8F8F8;
+  color: #1F1F1F;
+  span {
+    display: block;
+  }
+  svg {
+    fill: #5B5B5B;
+  }
+}
+.open-all-playgrounds-content-example-button {
+  height: 12px;
+  width: 12px;
+}
+.open-all-playgrounds-content-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

@@ -7,7 +7,8 @@ import { calculateButtonPosition } from './helpers/calculateButtonPosition';
 import { QuestionButton } from './assets/QuestionButton';
 import { useEditorContext } from 'src/contexts/EditorProvider';
 import { CloseCircleOutlined } from "@ant-design/icons"
-import { Flex } from 'antd';
+import { Flex } from "antd";
+
 
 const CodePlayground = () => {
   const [selectedText, setSelectedText] = useState<string | null>(null);
@@ -25,6 +26,7 @@ const CodePlayground = () => {
   const { setPlayground } = useApp().app
 
   const handleSetContent = () => {
+
     if (selectedText) {
       const template = `I have a question about ${determineCodeType(selectedText)}<div class="inline-wrapper">:<div data-tag="true" class="custom-tag yellow">question</div></div>`;
       const contentHTML = template;
@@ -72,6 +74,7 @@ const CodePlayground = () => {
       if (!model) return;
 
       const selectedText = model.getValueInRange(selection);
+
       setSelectedText(selectedText);
     }
   };
@@ -89,7 +92,7 @@ const CodePlayground = () => {
   
     monaco.editor.defineTheme('myCustomTheme', customTheme);
     monaco.editor.setTheme('myCustomTheme');
-  
+
     editor.onMouseUp(() => {
       handleEditorMouseUp(editor);
     });
@@ -97,6 +100,7 @@ const CodePlayground = () => {
     editor.onKeyUp(() => {
       handleEditorMouseUp(editor);
     });
+
   };
 
   const language = 'javascript';

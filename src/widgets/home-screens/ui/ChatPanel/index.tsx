@@ -12,9 +12,12 @@ import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
 import { FileList } from "src/shared/components/FileList";
 import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
+import QuestionCodeMessage from "./assets/QuestionCodeMessage/QuestionCodeMessage";
+import HammerIcon from "src/shared/icons/HammerIcon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles } = usePanel();
+    const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
     const { setEditor } = useChatStore();
     const { 
         drag,
@@ -36,11 +39,12 @@ export const ChatPanel: React.FC = () => {
     
     
     return (
-        <div className={css.panel}
+        <div className={playground.open ? (playgroundFullscreen ? css.panel_playground_fullscreen : css.panel_playground) : css.panel}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDragLeave={handleDragCancel}
         >
+            {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
             <div 
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
@@ -90,7 +94,7 @@ export const ChatPanel: React.FC = () => {
                         onBlur={() => setEditor(null)}
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
-                        placeholder="Ask Doe anything you’d like about the world..."
+                        placeholder={playgroundFullscreen ? 'Ask Doe anything' : "Ask Doe anything you’d like about the world..."}
                     />
                     <button className={css.panel_button} disabled>
                         <ScreenShareIcon />
@@ -99,9 +103,15 @@ export const ChatPanel: React.FC = () => {
                         <MicrophoneIcon />
                     </button>
                     {!prompt.active ? (
-                        <button className={css.panel_submitBtn}>
-                            Send <ArrowUpIcon />
-                        </button>
+                         !questionCodeMessage ? (
+                            <button className={css.panel_submitBtn}>
+                                Send <ArrowUpIcon />
+                            </button>
+                        ) : (
+                             <button className={css.panel_hammerBtn}>
+                                 <HammerIcon />
+                             </button>
+                         )
                     ) : (
                         <button className={css.panel_callBtn}>
                             <CallVoiceIcon />
