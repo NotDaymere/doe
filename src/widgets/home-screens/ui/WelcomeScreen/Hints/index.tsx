@@ -2,9 +2,9 @@ import CodeIcon from "src/shared/icons/Code.icon";
 import QuestionMarkIcon from "src/shared/icons/QuestionMark.icon";
 import StarIcon from "src/shared/icons/Star.icon";
 import TableIcon from "src/shared/icons/Table.icon";
-import { ReactElement } from "react";
-import css from "./Hints.module.less";
+import { FC, ReactElement } from "react";
 import classNames from "classnames";
+import css from "./Hints.module.less";
 
 interface IHint {
     icon: ReactElement;
@@ -35,10 +35,18 @@ const HINTS: IHint[] = [
     },
 ];
 
-const Hints = () => (
+interface IProps {
+    onSelect: (text: string) => void;
+}
+
+const Hints: FC<IProps> = ({ onSelect }) => (
     <div className={css.hints}>
         {HINTS.map(({ icon, text, classname }) => (
-            <div key={text} className={classNames(css.hint, css[classname])}>
+            <div
+                key={text}
+                className={classNames(css.hint, css[classname])}
+                onClick={() => onSelect(text)}
+            >
                 {icon}
                 <span>{text}</span>
             </div>

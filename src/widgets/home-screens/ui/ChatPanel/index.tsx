@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import { Editor } from "src/shared/components/Editor";
 import { Editor as IEditor } from "@tiptap/react";
@@ -33,15 +33,10 @@ export const ChatPanel: React.FC = () => {
             setFiles([...files, ...uploadFiles]);
         },
     });
+
     const [showHints, setShowHints] = useState({ hints: messagesCount === 0, typingHints: false });
 
     const prompt = usePrompt();
-
-    // useEffect(() => {
-    //     if (showHints.typingHints && text.length > 0) {
-    //         setShowHints({ ...showHints, typingHints: false });
-    //     }
-    // }, [text]);
 
     const handleSendButtonClick = () => {
         setMessagesCount(messagesCount + 1);
@@ -131,12 +126,12 @@ export const ChatPanel: React.FC = () => {
                 </div>
                 {showHints.hints && messagesCount === 0 && (
                     <div className={css.hint}>
-                        <Hints />
+                        <Hints onSelect={setText} />
                     </div>
                 )}
                 {showHints.typingHints && messagesCount === 0 && (
                     <div className={css.typingHints}>
-                        <HintsTyping />
+                        <HintsTyping onSelect={setText} />
                     </div>
                 )}
             </div>

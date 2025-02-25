@@ -1,15 +1,20 @@
+import { FC } from "react";
 import HintIcon from "src/shared/icons/Hint.icon";
 import css from "./HintsTyping.module.less";
 
 const HINTS = ["Yoneda Lemma explained", "Yoneda Lemma ebmddeding", "Category theory Yoneda Lemma"];
 
-const HintsTyping = () => (
+interface IProps {
+    onSelect: (text: string) => void;
+}
+
+const HintsTyping: FC<IProps> = ({ onSelect }) => (
     <div className={css.hintsTyping}>
         {HINTS.map((hint) => (
-            <div key={hint} className={css.hint}>
+            <button key={hint} className={css.hint} onClick={() => onSelect(hint)}>
                 <HintIcon width={16} height={16} />
                 <span>{hint}</span>
-            </div>
+            </button>
         ))}
     </div>
 );
