@@ -56,12 +56,13 @@
 }
 .history-playground-body {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 8px 13px;
+  gap: 16px;
 }
-.history-current-version {
+.history-playground-version {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -75,7 +76,13 @@
   box-shadow: 0px 8px 20px 0px #0000000A;
   backdrop-filter: blur(60px)
 }
-.history-current-version-indicator-button {
+.history-playground-version-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.history-playground-version-indicator-button {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -84,13 +91,19 @@
   justify-content: center;
   align-items: center;
 }
-.history-current-version-indicator-dot {
+.history-playground-version-indicator-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: #8BCF16;
 }
-.history-current-version-button {
+.history-playground-version-text {
+  display: flex;
+  font-weight: 500;
+  font-size: 14px;
+  color: #1F1F1F;
+}
+.history-playground-version-button {
   width: 20px;
   height: 20px;
   border-radius: 4px;
@@ -99,8 +112,65 @@
   justify-content: center;
   align-items: center;
 }
-.history-current-minus {
+.history-playground-minus {
   width: 10px;
   height: 1px;
   background: #8D8D8D;
+}
+.history-playground-content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 10px;
+  padding-left: 35px;
+  width: 100%;
+  height: 65px;
+  margin-bottom: 6px;
+  .history-playground-content-dots-menu-button {
+    display: none;
+  }
+}
+.history-playground-active-content {
+  border-radius: 12px;
+  background: #FFFFFF99;
+  border: 1px solid #FFFFFF;
+  box-shadow: 0px 8px 20px 0px #0000000A;
+  backdrop-filter: blur(60px);
+  .history-playground-content-dots-menu-button {
+    display: flex;
+  }
+}
+.history-playground-content-value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+}
+.history-playground-content-value-time {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18.56px;
+  color: #1F1F1F;
+}
+.history-playground-content-value-user {
+  display: flex;
+  gap: 6px;
+}
+.history-playground-content-value-user-img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.history-playground-content-dots-menu-button {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  svg {
+    width: 15px;
+    fill: #8D8D8D;
+  }
 }
