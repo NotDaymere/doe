@@ -1,9 +1,9 @@
 import CopyIcon from "src/shared/icons/Copy.icon";
-import DoeIcon from "src/shared/icons/Doe.icon";
+import DoeIcon from "src/shared/icons/Doe.Icon";
 import css from "./LimitScreen.module.less";
 
 const LimitScreen = () => {
-    const invitationLink = "https://www.doe.xyz/invite/kdadaf129)";
+    const invitationLink = "https://www.doe.xyz/invite/kdadaf129";
     const handleShareLinkButtonClick = () => {
         navigator.clipboard.writeText(invitationLink);
     };
