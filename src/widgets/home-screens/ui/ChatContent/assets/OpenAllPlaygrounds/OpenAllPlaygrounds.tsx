@@ -62,9 +62,9 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeA
 
     return (
         <CSSTransition
-            timeout={500}
+            timeout={300}
             in={activeAllPlaygrounds}
-            nodeRef={containerRef}
+            classNames={'fade'}
             mountOnEnter
             unmountOnExit
         >

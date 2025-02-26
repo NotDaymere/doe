@@ -1,3 +1,23 @@
+.fade-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.fade-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
 .open-all-playgrounds-container {
   position: absolute;
   top: 135px;
@@ -61,35 +81,9 @@
    box-shadow: 0px 8px 12px 0px #0000000A;
    backdrop-filter: blur(100px);
    overflow-y: auto;
-   scrollbar-width: thin;
-   scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+   scrollbar-width: none;
  }
 
-.open-all-playgrounds-content::-webkit-scrollbar {
-  width: 4px;
-  border-radius: 50px;
-  position: absolute;
-  right: -6px;
-}
-
-.open-all-playgrounds-content::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 50px;
-}
-
-.open-all-playgrounds-content::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.open-all-playgrounds-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.open-all-playgrounds-content::-webkit-scrollbar-button {
-  display: none;
-  width: 0;
-  height: 0;
-}
 .open-all-playgrounds-example-span {
   width: 12px;
   height: 2px;
