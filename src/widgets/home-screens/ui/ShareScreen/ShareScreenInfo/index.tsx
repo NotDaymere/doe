@@ -1,24 +1,29 @@
-import CableIcon from "src/shared/icons/Cable.icon";
+import { FC } from "react";
+import { IScreenShareConfig } from "src/shared/types/ScreenShare";
 import css from "./ShareScreenInfo.module.less";
 
-const ShareScreenInfo = () => (
+const ShareScreenInfo: FC<IScreenShareConfig> = ({ title, description, label, icon, actions }) => (
     <div className={css.shareScreenWrapper}>
         <div className={css.shareScreen}>
             <div className={css.instruction}>
-                <span className={css.bold}>Share your mobile screen</span>
-                <span>
-                    To switch to sharing mode, connect your mobile device to your computer
-                    <span className={css.bold}>via a cable.</span>
-                </span>
-                <span>
-                    You can also connect your device <span className={css.bold}>via Bluetooth</span>{" "}
-                    if a cable connection is not available.
-                </span>
+                <span className={css.bold}>{title}</span>
+                <div
+                    className={css.description}
+                    dangerouslySetInnerHTML={{ __html: description }}
+                />
             </div>
-            <div className={css.bottom}>
-                <span>Share Mobile screen via a cable</span>
-                <CableIcon width={21} height={5} />
-            </div>
+            {label && (
+                <div className={css.bottom}>
+                    <span>{label}</span>
+                    {icon && icon}
+                </div>
+            )}
+            {actions && (
+                <div>
+                    <button>Cancel</button>
+                    <button>Try again</button>
+                </div>
+            )}
         </div>
     </div>
 );

@@ -279,18 +279,55 @@
     justify-content: center;
     align-items: center;
     border-radius: 100%;
+
+    path {
+        fill: #b5b5b5;
+    }
+
+    &:hover {
+        background-color: rgba(#ff8b12, 0.2);
+        border: 1px solid #ff8b12;
+
+        path {
+            fill: #ff8b12;
+        }
+    }
 }
 
-.cableIcon {
-    background-color: rgba(#ff8b12, 0.2);
-    border: 1px solid #ff8b12;
-}
-
-.screenShareIcon {
+.activeShareType {
     background-color: rgba(#ff8b12, 0.2);
 
     path {
         fill: #ff8b12;
+    }
+}
+
+.bluetoothIcon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+
+    path {
+        stroke: #b5b5b5;
+    }
+
+    &:hover {
+        background-color: rgba(#ff8b12, 0.2);
+        border: 1px solid #ff8b12;
+
+        path {
+            stroke: #ff8b12;
+        }
+    }
+}
+.activeBluetoothButton {
+    background-color: rgba(#ff8b12, 0.2);
+
+    path {
+        stroke: #ff8b12;
     }
 }
 
@@ -320,4 +357,12 @@
 
 .shareScreenShow {
     opacity: 1;
+}
+
+.screenShareIcon path {
+    fill: #ff8b12;
+}
+
+.screenShareBluetoothIcon path {
+    stroke: #ff8b12;
 }

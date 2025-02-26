@@ -6,8 +6,8 @@ const BluetoothIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
             <path
                 d="M1.04688 4.48438L8.07812 11.5156L4.5625 15.0312V0.96875L8.07812 4.48438L1.04688 11.5156"
                 stroke="#B5B5B5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                stroke-linecap="round"
+                stroke-linejoin="round"
             />
         </svg>
     );

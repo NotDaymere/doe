@@ -8,7 +8,7 @@ import CallVoiceIcon from "src/shared/icons/CallVoice.icon";
 import MicrophoneIcon from "src/shared/icons/Microphone.icon";
 import ReplyIcon from "src/shared/icons/Reply.icon";
 import ScreenShareIcon from "src/shared/icons/ScreenShare.icon";
-import { useAppStore, useChatStore } from "src/shared/providers";
+import { useChatStore } from "src/shared/providers";
 import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
 import { FileList } from "src/shared/components/FileList";
 import UploadIcon from "src/shared/icons/Upload.icon";
@@ -20,6 +20,40 @@ import CableIcon from "src/shared/icons/Cable.icon";
 import BluetoothIcon from "src/shared/icons/Bluetooth.icon";
 import ScreenIcon from "src/shared/icons/Screen.icon";
 import classNames from "classnames";
+import { IScreenSharePopup } from "src/shared/types/ScreenShare";
+
+type ShareType = keyof IScreenSharePopup;
+
+export const SCREEN_SHARE_CONFIG: IScreenSharePopup = {
+    shareScreen: {
+        title: "Share your computer screen",
+        description: `<span>Start broadcasting your desktop device screen. You can continue working with Doe with full functionality while the screen is being broadcast and Doe is interacting with the screen content.</span>`,
+        label: "Share computer screen",
+        icon: <ScreenIcon width={14} height={12} className={css.screenShareIcon} />,
+    },
+    shareViaBluetooth: {
+        title: "Share your mobile screen",
+        description: `<span>To switch to sharing mode, connect your mobile device to your computer <strong>via a cable</strong>.</span>
+            <span>You can also connect your device <strong>via Bluetooth</strong> if a cable connection is not available.<span/>`,
+        label: "Share Mobile screen via Bluetooth",
+        icon: <BluetoothIcon width={15} height={15} className={css.screenShareBluetoothIcon} />,
+    },
+    shareViaCabel: {
+        title: "Share your mobile screen",
+        description: `<span>To switch to sharing mode, connect your mobile device to your computer <strong>via a cable.</strong></span><span>You can also connect your device <strong>via Bluetooth</strong> if a cable connection is not available. <span/>`,
+        label: "Share Mobile screen via a cable",
+        icon: <CableIcon width={21} height={5} className={css.screenShareIcon} />,
+    },
+    connectionFailed: {
+        title: "Connection failed",
+        description: `<span>Check if the connection method you selected is correct and try again. Or change the connection method to another.<span/>`,
+        actions: true,
+    },
+    connectionSuccessful: {
+        title: "Connection successful!",
+        description: "You can now continue working in screen sharing mode with Doe.",
+    },
+};
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles } = usePanel();
@@ -38,9 +72,10 @@ export const ChatPanel: React.FC = () => {
             setFiles([...files, ...uploadFiles]);
         },
     });
-    const { shareScreen, setShareScreen } = useAppStore();
+    const [showScreenShareInfo, setShowScreenShareInfo] = useState(false);
 
     const [showHints, setShowHints] = useState({ hints: messagesCount === 0, typingHints: false });
+    const [shareType, setShareType] = useState<ShareType>("shareViaCabel");
 
     const prompt = usePrompt();
 
@@ -116,41 +151,51 @@ export const ChatPanel: React.FC = () => {
                     />
                     <div
                         className={classNames(css.shareScreenExpanded, {
-                            [css.shareScreenShow]: shareScreen.showInitialScreen,
+                            [css.shareScreenShow]: showScreenShareInfo,
                         })}
                     >
-                        <div className={classNames(css.expandedIcon, css.cableIcon)}>
+                        <button
+                            className={classNames(css.expandedIcon, {
+                                [css.activeShareType]: shareType === "shareViaCabel",
+                            })}
+                            onClick={() => setShareType("shareViaCabel")}
+                        >
                             <CableIcon width={21} height={5} />
-                        </div>
-                        <div className={css.expandedIcon}>
+                        </button>
+                        <button
+                            className={classNames(css.bluetoothIcon, {
+                                [css.activeBluetoothButton]: shareType === "shareViaBluetooth",
+                            })}
+                            onClick={() => setShareType("shareViaBluetooth")}
+                        >
                             <BluetoothIcon width={9} height={13} />
-                        </div>
-                        <div className={css.expandedIcon}>
+                        </button>
+                        <button
+                            className={classNames(css.expandedIcon, {
+                                [css.activeShareType]: shareType === "shareScreen",
+                            })}
+                            onClick={() => setShareType("shareScreen")}
+                        >
                             <ScreenIcon width={16} height={13} />
-                        </div>
-                        <div className={classNames(css.expandedIcon, css.screenShareIcon)}>
+                        </button>
+                        <div className={classNames(css.expandedIcon, css.activeShareType)}>
                             <ScreenShareIcon width={16} height={16} />
                         </div>
                     </div>
-                    {!shareScreen.showInitialScreen && (
+                    {!showScreenShareInfo && (
                         <button
                             className={css.screenShareButton}
-                            onClick={() =>
-                                setShareScreen({
-                                    ...shareScreen,
-                                    showInitialScreen: true,
-                                })
-                            }
+                            onClick={() => setShowScreenShareInfo(true)}
                         >
                             <ScreenShareIcon width={16} height={16} />
                         </button>
                     )}
                     <div
                         className={classNames(css.shareScreen, {
-                            [css.shareScreenShow]: shareScreen.showInitialScreen,
+                            [css.shareScreenShow]: showScreenShareInfo,
                         })}
                     >
-                        <ShareScreenInfo />
+                        <ShareScreenInfo {...SCREEN_SHARE_CONFIG[shareType]} />
                     </div>
                     <button className={css.panel_button}>
                         <MicrophoneIcon />
