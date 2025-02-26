@@ -4,9 +4,11 @@ import LinesIcon from "src/shared/icons/LinesIcon";
 import HistoryIcon from "src/shared/icons/HistoryIcon";
 import { useVersionHistoryStore } from "src/shared/providers";
 import ThreeVerticalDots from "../../../../../../shared/icons/ThreeVerticalDots";
+import { useState } from "react";
 
 export default function HistoryPlayground() {
-    const { setOpenHistory } = useVersionHistoryStore();
+    const { setOpenHistory, historyArray } = useVersionHistoryStore();
+    const [openContent, setOpenContent] = useState<boolean>(false);
     const handlerCloseHistoryPlayground  = () => {
         setOpenHistory(false);
     }
@@ -25,45 +27,57 @@ export default function HistoryPlayground() {
                 </span>
             </div>
             <div className={'history-playground-body'}>
+                <div className={'history-playground-content-line'} />
                 <div className={'history-playground-version'}>
                     <div className={'history-playground-version-left'}>
-                        <button className={'history-playground-version-indicator-button'} onClick={() => {}}>
+                        <button className={'history-playground-version-indicator-button'}
+                                onClick={() => {
+                                }}
+                        >
                             <div className={'history-playground-version-indicator-dot'} />
                         </button>
                         <div className={'history-playground-version-text'}>Current version</div>
                     </div>
-                    <button className={'history-playground-version-button'} onClick={() => {}}>
+                    <button className={'history-playground-version-button'}
+                            onClick={() => {
+                                setOpenContent(!openContent)
+                            }}
+                    >
                         <div className={'history-playground-minus'} />
                     </button>
                 </div>
-                <div className={'history-playground-content history-playground-active-content'}>
-                    <div className={'history-playground-content-value'}>
-                        <div className={'history-playground-content-value-time'}>
-                            Today, 9:41 AM
+                {openContent && historyArray.map((history, index) => {
+                    return (
+                        <div
+                            className={`history-playground-content`}
+                            key={history.id}
+                        >
+                            <div className={"history-playground-content-value"}>
+                                {history.name && <div className={"history-playground-content-value-time"}>
+                                    {history.name}
+                                    <div className={"history-playground-content-dot"} />
+                                </div>}
+                                <div className={!history.name ? "history-playground-content-value-time" : "history-playground-content-value-time-name"}>
+                                    {history.time}
+                                    {!history.name && <div className={"history-playground-content-dot"} />}
+                                </div>
+                                <div className={"history-playground-content-value-user"}>
+                                    <img className={"history-playground-content-value-user-img"}
+                                         src={history.photo} />
+                                    {history.user}
+                                </div>
+                            </div>
+                            <button
+                                className={"history-playground-content-dots-menu-button"}
+                                onClick={() => {
+                                }}
+                            >
+                                <ThreeVerticalDots />
+                            </button>
+
                         </div>
-                        <div className={'history-playground-content-value-user'}>
-                            <img className={'history-playground-content-value-user-img'} src="/temp/profile.jpg" />
-                            John Doe
-                        </div>
-                    </div>
-                    <button className={'history-playground-content-dots-menu-button'} onClick={() => {}}>
-                        <ThreeVerticalDots />
-                    </button>
-                </div>
-                <div className={'history-playground-content'}>
-                    <div className={'history-playground-content-value'}>
-                        <div className={'history-playground-content-value-time'}>
-                            Today, 9:41 AM
-                        </div>
-                        <div className={'history-playground-content-value-user'}>
-                            <img className={'history-playground-content-value-user-img'} src="/temp/profile.jpg" />
-                            John Doe
-                        </div>
-                    </div>
-                    <button className={'history-playground-content-dots-menu-button'} onClick={() => {}}>
-                        <ThreeVerticalDots />
-                    </button>
-                </div>
+                    )
+                })}
             </div>
         </div>
     );

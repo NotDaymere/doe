@@ -10,7 +10,7 @@ export default function HistoryButton(){
 
     return (
         <button onClick={handlerOpenHistoryPlayground}
-            className={'history-button'}>
+            className={`history-button ${openHistory && 'display-none'}`}>
             <HistoryIcon />
         </button>
     )
