@@ -23,11 +23,14 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: {type}, editor, contai
         setIsDragging(true);
     };
     useEffect(() => {
-        if (!playgroundFullscreen) return;
-        if (chatRef.current) {
-            setInputWidth(chatRef.current.getBoundingClientRect().width);
-        }
-        setPosition({ x: (containerWidth / 2 + inputWidth - 200), y: 10 })
+        if (!playgroundFullscreen || !chatRef.current) return;
+
+        const componentWidth = chatRef.current.getBoundingClientRect().width;
+
+        const centerX = (containerWidth - componentWidth) / 2;
+        const centerY = 0;
+
+        setPosition({ x: centerX, y: centerY });
     }, []);
     useEffect(() => {
         const handleMouseMove = (event: MouseEvent) => {

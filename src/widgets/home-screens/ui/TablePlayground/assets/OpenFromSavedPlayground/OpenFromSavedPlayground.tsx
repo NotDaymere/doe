@@ -6,8 +6,9 @@ import { useChatStore } from "src/shared/providers";
 
 interface Props {
     savedPlayground: IPlayground;
+    length: number;
 }
-export default function OpenFromSavedPlayground({savedPlayground} : Props) {
+export default function OpenFromSavedPlayground({savedPlayground, length} : Props) {
     const {updateSavedPlaygrounds, getOpenSavedPlaygrounds, playgroundFullscreen} = useChatStore();
     const openSavedPlaygroundStatus = () => {
         const maxLength = playgroundFullscreen ? 3:2;
@@ -28,6 +29,10 @@ export default function OpenFromSavedPlayground({savedPlayground} : Props) {
         >
             {savedPlayground.type == 'table' && <TableIcon />}
             {savedPlayground.type == 'code' && <CodeIcon />}
+            {length <= 3 && (<>
+                    <span className={'open-from-saved-playground-name'}>{savedPlayground.name}</span>
+                </>
+            )}
         </button>
     )
 }

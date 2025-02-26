@@ -6,9 +6,14 @@ import { useChatStore } from "src/shared/providers";
 interface IProps {
     activeOpenAllPlaygroundsMenu: string,
     changeActiveOpenAllPlaygroundsMenu: () => void,
+    changeActiveAllPlaygrounds: () => void,
 }
-export default function AllPlaygroundsMenu({ activeOpenAllPlaygroundsMenu, changeActiveOpenAllPlaygroundsMenu }: IProps) {
-    const { getSavedPlayground, updateSavedPlaygrounds, deleteSavedPlaygrounds } = useChatStore();
+export default function AllPlaygroundsMenu({
+                                               activeOpenAllPlaygroundsMenu,
+                                               changeActiveOpenAllPlaygroundsMenu,
+                                               changeActiveAllPlaygrounds
+}: IProps) {
+    const { getSavedPlayground, updateSavedPlaygrounds, deleteSavedPlaygrounds, getSavedPlaygroundLast } = useChatStore();
     const playgroundRename = () => {
         const playground = getSavedPlayground(activeOpenAllPlaygroundsMenu);
         if (playground == null) {
@@ -21,6 +26,13 @@ export default function AllPlaygroundsMenu({ activeOpenAllPlaygroundsMenu, chang
             changeActiveOpenAllPlaygroundsMenu();
         }
     }
+    const deletePlayground = () => {
+        deleteSavedPlaygrounds(activeOpenAllPlaygroundsMenu);
+        changeActiveOpenAllPlaygroundsMenu();
+        if (!getSavedPlaygroundLast()) {
+            changeActiveAllPlaygrounds()
+        }
+    }
     return (
         <div className="all-playgrounds-menu-container">
             <button className={'all-playgrounds-menu-button'}
@@ -29,11 +41,7 @@ export default function AllPlaygroundsMenu({ activeOpenAllPlaygroundsMenu, chang
                 <RenameIcon/> Rename
             </button>
             <button className={'all-playgrounds-menu-button'}
-                    onClick={() => {
-                        deleteSavedPlaygrounds(activeOpenAllPlaygroundsMenu);
-                        changeActiveOpenAllPlaygroundsMenu();
-                    }
-            }
+                    onClick={deletePlayground}
             >
                 <DeleteIcon/> Delete
             </button>

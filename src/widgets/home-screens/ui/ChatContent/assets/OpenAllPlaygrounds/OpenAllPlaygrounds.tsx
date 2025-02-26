@@ -1,5 +1,6 @@
 import './OpenAllPlaygrounds.less';
 import { useEffect, useRef, useState } from "react";
+import { CSSTransition } from "react-transition-group";
 import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg";
 import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 import { useChatStore } from "src/shared/providers";
@@ -8,9 +9,10 @@ import AllPlaygroundsMenu from "../AllPlaygroundsMenu/AllPlaygroundsMenu";
 
 type OpenAllPlaygroundsProps = {
     changeActiveAllPlaygrounds: () => void;
+    activeAllPlaygrounds: boolean;
 };
 
-export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenAllPlaygroundsProps) {
+export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeAllPlaygrounds }: OpenAllPlaygroundsProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const { savedPlaygrounds, getOpenSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlayground } = useChatStore();
     const [activeOpenAllPlaygroundsMenu, setActiveOpenAllPlaygroundsMenu] = useState<string | null>(null);
@@ -59,7 +61,14 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
     }, [changeActiveAllPlaygrounds]);
 
     return (
-        <div ref={containerRef} className={'open-all-playgrounds-container'}>
+        <CSSTransition
+            timeout={500}
+            in={activeAllPlaygrounds}
+            nodeRef={containerRef}
+            mountOnEnter
+            unmountOnExit
+        >
+            <div ref={containerRef} className={'open-all-playgrounds-container'}>
             <div className={'open-all-playgrounds-header'}>
                 <div className={'open-all-playgrounds-header-text'}>
                     <DoePlaygroundStars />All Playgrounds
@@ -91,12 +100,9 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
                                 changeActiveOpenAllPlaygroundsMenu(savedPlayground.id);
                             }}
                         >
-                            {!activeOpenAllPlaygroundsMenu && <span className={'open-all-playgrounds-example-span'} />}
-                            {activeOpenAllPlaygroundsMenu && (
-                                <span>
-                <ThreeVerticalDots />
-            </span>
-                            )}
+                            <span>
+                                <ThreeVerticalDots />
+                            </span>
                         </button>
                     </div>
                 ))}
@@ -105,8 +111,10 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
                 && <AllPlaygroundsMenu
                     activeOpenAllPlaygroundsMenu = {activeOpenAllPlaygroundsMenu}
                     changeActiveOpenAllPlaygroundsMenu = {changeActiveOpenAllPlaygroundsMenu}
+                    changeActiveAllPlaygrounds = {changeActiveAllPlaygrounds}
                 />
             }
         </div>
+        </CSSTransition>
     );
 }

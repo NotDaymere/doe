@@ -103,6 +103,11 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   const divRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const { openHistory } = useVersionHistoryStore();
+  const [showButtons, setShowButtons] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setShowButtons(true), 50);
+  }, []);
 
   useEffect(() => {
     if (divRef.current) {
@@ -278,7 +283,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         </div>
         {
             playground.id == id &&
-            <div className={"action-buttons"}>
+            <div className={`action-buttons ${showButtons && 'visible'}`}>
               {
                 !playgroundAction
                   ? <>

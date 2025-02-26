@@ -6,9 +6,7 @@ import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 
 export default function AllPlaygrounds() {
     const [activeAllPlaygrounds, setActiveAllPlaygrounds] = useState<boolean>(false);
-    const changeActiveAllPlaygrounds = () => {
-        setActiveAllPlaygrounds(!activeAllPlaygrounds)
-    }
+    const changeActiveAllPlaygrounds = () => setActiveAllPlaygrounds(!activeAllPlaygrounds)
     return (
         <div>
             <button className={'all-playgrounds-button'}
@@ -19,7 +17,7 @@ export default function AllPlaygrounds() {
                     {!activeAllPlaygrounds && <DoePlaygroundStars />}
                 </div>
             </button>
-            {activeAllPlaygrounds && <OpenAllPlaygrounds changeActiveAllPlaygrounds = {changeActiveAllPlaygrounds} />}
+            {activeAllPlaygrounds && <OpenAllPlaygrounds changeActiveAllPlaygrounds = {changeActiveAllPlaygrounds} activeAllPlaygrounds ={activeAllPlaygrounds} />}
         </div>
     )
 }

@@ -1,10 +1,10 @@
 import { Flex } from "antd";
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import "./index.less";
 import * as monaco from "monaco-editor";
 import Editor, { OnMount } from "@monaco-editor/react";
 import { calculateButtonPosition } from "../../../../components/code-playground/helpers/calculateButtonPosition";
-import { useChatStore, usePlaygroundStore } from "../../../../shared/providers";
+import { useChatStore, usePlaygroundStore, useVersionHistoryStore } from "../../../../shared/providers";
 import MonacoEditorMenu from "./assets/MonacoEditorMenu/MonacoEditorMenu";
 import CloudPlusButton from "../PlaygroundButtons/CloudPlusButton/CloudPlusButton";
 import PenFormatingButton from "../PlaygroundButtons/PenFormatingButton/PenFormatingButton";
@@ -13,6 +13,7 @@ import QuestionCode from "./assets/QuestionCode/QuestionCode";
 import FullscreenGeneralLogo from "../TablePlayground/assets/FullscreenGeneralLogo/FullscreenGeneralLogo";
 import { App } from "../../../../types";
 import PlaygroundAction from "../PlaygroundAction/PlaygroundAction";
+import HistoryButton from "../TablePlayground/assets/HistoryButton/HistoryButton";
 
 const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     function adjustPosition(rawPosition: { top: number; left: number }, containerWidth: number, containerHeight: number, margin = 10) {
@@ -42,6 +43,29 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     const [buttonPosition, setButtonPosition] = useState<{ top?: number; left?: number; bottom?: number; right?: number } | null>(null);
     const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
     const { playgroundAction } = usePlaygroundStore();
+    const { openHistory } = useVersionHistoryStore();
+    const divRef = useRef<HTMLDivElement>(null);
+    const [containerWidth, setContainerWidth] = useState(0);
+
+    useEffect(() => {
+        if (divRef.current) {
+            setContainerWidth(divRef.current.getBoundingClientRect().width);
+        }
+
+        const handleResize = () => {
+            if (divRef.current) {
+                setContainerWidth(divRef.current.getBoundingClientRect().width);
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+    const [showButtons, setShowButtons] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => setShowButtons(true), 50);
+    }, []);
     const customTheme: monaco.editor.IStandaloneThemeData = {
         base: "vs",
         inherit: true,
@@ -136,8 +160,12 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
              onMouseMove={() => {
                  playgroundState && setPlayground(playgroundState)
              }}
+             ref={divRef}
         >
-            <Flex className="tabs-panel-playground">{ playgroundState?.name }</Flex>
+            <Flex className={"tabs-panel-playground"}>
+                <p>{ playgroundState?.name }</p>
+                <HistoryButton />
+            </Flex>
             <section className="editor-section">
                 <Editor
                     onMount={handleEditorMount}
@@ -190,19 +218,29 @@ print(result)`.trim()}
             </section>
             {
                 playground.id == id &&
-                <div className={"action-buttons"}>
+                <div className={`action-buttons ${showButtons && 'visible'}`}>
                     {
                         !playgroundAction
                             ? <>
-                                {!playgroundFullscreen && <CloudPlusButton type="code" />}
+                                {(!playgroundFullscreen && !openHistory) && <CloudPlusButton type="code" />}
                                 {playgroundFullscreen && <FullscreenGeneralLogo />}
-                                <div className={"action-buttons-right-part"}>
+                                { !openHistory && <div className={"action-buttons-right-part"}>
                                     {playgroundFullscreen && <CloudPlusButton type="code" />}
                                     <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
                                     <ResizePlaygroundButton />
-                                </div>
+                                </div> }
                             </>
-                            : <PlaygroundAction playgroundAction = {playgroundAction} editor={editorInstance} />
+                            : <>
+                                <PlaygroundAction playgroundAction = {playgroundAction} editor={editorInstance} containerWidth={containerWidth} />
+                                {playgroundFullscreen && <>
+                                    <FullscreenGeneralLogo />
+                                    {!openHistory && <div className={"action-buttons-right-part"}>
+                                        <CloudPlusButton type="code" />
+                                        <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+                                        <ResizePlaygroundButton />
+                                    </div>}
+                                </>}
+                            </>
                     }
                 </div>
             }

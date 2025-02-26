@@ -5,20 +5,40 @@ import { IPlayground } from "src/shared/types/Playground";
 import './PythonTaskManager.less'
 
 function PythonTaskManager() {
-    const { playground, setPlayground, setSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlaygroundLast } = useChatStore();
+    const { playground, setPlayground, setSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlaygroundLastByType, getOpenSavedPlaygroundsByType } = useChatStore();
     const openCodePlayground = () => {
-        const oldPlayground = playground;
-        oldPlayground.open = false;
-        updateSavedPlaygrounds(oldPlayground);
-        const newPlayground: IPlayground = {
-            id: null,
-            name: "Python Task Manager",
-            type: "code",
-            data: null,
-            open: true
-        };
-        setSavedPlaygrounds(newPlayground);
-        setPlayground(getSavedPlaygroundLast() ?? newPlayground);
+        const oldPlayground = getSavedPlaygroundLastByType('code');
+        if (oldPlayground == null) {
+            const newPlayground: IPlayground = {
+                id: null,
+                name: "Python Task Manager",
+                type: "code",
+                data: null,
+                open: false,
+            };
+            newPlayground.open = true;
+            setSavedPlaygrounds(newPlayground);
+            setPlayground(newPlayground);
+            return;
+        }
+        if ((getOpenSavedPlaygroundsByType('code').length > 0) ) {
+            oldPlayground.open = false;
+            updateSavedPlaygrounds(oldPlayground);
+            const newPlayground: IPlayground = {
+                id: null,
+                name: "Python Task Manager",
+                type: "code",
+                data: null,
+                open: false,
+            };
+            newPlayground.open = true;
+            setSavedPlaygrounds(newPlayground);
+            setPlayground(newPlayground);
+            return;
+        } else {
+            oldPlayground.open = true;
+            updateSavedPlaygrounds(oldPlayground);
+        }
     };
     return (
         <button onClick={openCodePlayground}

@@ -24,7 +24,9 @@ interface ChatState {
     deleteSavedPlaygrounds: (id: string | null) => void;
     getSavedPlayground: (id: string | null) => IPlayground | null;
     getOpenSavedPlaygrounds: () => IPlayground[];
+    getOpenSavedPlaygroundsByType: (type: "code" | "table" | "source") => IPlayground[];
     getSavedPlaygroundLast: () => IPlayground | null;
+    getSavedPlaygroundLastByType: (type: "code" | "table" | "source") => IPlayground | null;
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
     setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
 }
@@ -90,8 +92,20 @@ export const useChatStore = create<ChatState>()(
             return get().savedPlaygrounds.filter(p => p.open);
         },
 
+        getOpenSavedPlaygroundsByType: (type: "code" | "table" | "source") => {
+            return get().savedPlaygrounds
+                .filter(p => p.open)
+                .filter(savedPlayground => savedPlayground.type === type);
+        },
+
         getSavedPlaygroundLast: () => {
             return get().savedPlaygrounds.at(-1) || null;
+        },
+
+        getSavedPlaygroundLastByType: (type) => {
+            return get().savedPlaygrounds
+                .filter(savedPlayground => savedPlayground.type === type)
+                .at(-1) || null;
         }
     })
 );

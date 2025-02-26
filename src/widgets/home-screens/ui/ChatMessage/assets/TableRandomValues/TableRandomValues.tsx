@@ -5,20 +5,40 @@ import { useChatStore } from "src/shared/providers";
 import { IPlayground } from "src/shared/types/Playground";
 
 function TableRandomValues() {
-    const { playground, setPlayground, setSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlaygroundLast } = useChatStore();
+    const { playground, setPlayground, setSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlaygroundLastByType, getOpenSavedPlaygroundsByType } = useChatStore();
     const openTablePlayground = () => {
-        const oldPlayground = playground;
-        oldPlayground.open = false;
-        updateSavedPlaygrounds(oldPlayground);
-        const newPlayground: IPlayground = {
-            id: null,
-            name: "Tabular random values",
-            type: "table",
-            data: null,
-            open: true
-        };
-        setSavedPlaygrounds(newPlayground);
-        setPlayground(getSavedPlaygroundLast() ?? newPlayground);
+        const oldPlayground = getSavedPlaygroundLastByType('table');
+        if (oldPlayground == null) {
+            const newPlayground: IPlayground = {
+                id: null,
+                name: "Tabular random values",
+                type: "table",
+                data: null,
+                open: false,
+            };
+            newPlayground.open = true;
+            setSavedPlaygrounds(newPlayground);
+            setPlayground(newPlayground);
+            return;
+        }
+        if ((getOpenSavedPlaygroundsByType('table').length > 0) ) {
+            oldPlayground.open = false;
+            updateSavedPlaygrounds(oldPlayground);
+            const newPlayground: IPlayground = {
+                id: null,
+                name: "Tabular random values",
+                type: "table",
+                data: null,
+                open: false,
+            };
+            newPlayground.open = true;
+            setSavedPlaygrounds(newPlayground);
+            setPlayground(newPlayground);
+            return;
+        } else {
+            oldPlayground.open = true;
+            updateSavedPlaygrounds(oldPlayground);
+        }
     };
     return (
         <button onClick={openTablePlayground}

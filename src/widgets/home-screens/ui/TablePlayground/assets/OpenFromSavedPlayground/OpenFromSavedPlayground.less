@@ -1,8 +1,29 @@
 .open-from-saved-playground-button {
-  width: 30px;
+  min-width: 30px;
+  width: max-content;
+  max-width: 125px;
   height: 30px;
   border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.open-from-saved-playground-name {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
 }
 .open-from-saved-playground-button-active {
   background: #FFFFFF;
+  max-width: max-content;
+  .open-from-saved-playground-name {
+    white-space: nowrap;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }

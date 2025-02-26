@@ -29,9 +29,18 @@ export default function MultiplePlaygroundRenderer() {
                                 savedPlaygrounds.map((savedPlayground, index) => {
                                     const id = savedPlayground.id;
                                     return (
-                                        <div key={id || index}>
-                                            <OpenFromSavedPlayground savedPlayground={savedPlayground} />
-                                        </div>
+                                        <>
+
+                                            <div key={id || index}>
+                                                <OpenFromSavedPlayground
+                                                    savedPlayground={savedPlayground}
+                                                    length={savedPlaygrounds.length}
+                                                />
+                                            </div>
+                                            {(savedPlaygrounds.length < 4 && (savedPlaygrounds.length-1) != index)
+                                                &&  <span className="separator" />
+                                            }
+                                        </>
                                     );
                                 })
                             }
@@ -40,15 +49,15 @@ export default function MultiplePlaygroundRenderer() {
                 )
             }
 
-           <Flex className={`playground-render ${playgroundFullscreen?'flex-direction-row':'flex-direction-column'}`}>
+           <Flex className={`playground-render ${playgroundFullscreen?'flex-direction-row':'flex-direction-column'} ${savedPlaygrounds.length > 1 && 'padding-top-20'}`}>
                {
                 getOpenSavedPlaygrounds().map((savedPlayground) => {
                     return (
-                        <PlaygroundRenderer
-                            type={savedPlayground.type}
-                            id={savedPlayground.id}
-                            key={savedPlayground.id}
-                        />
+                            <PlaygroundRenderer
+                                type={savedPlayground.type}
+                                id={savedPlayground.id}
+                                key={savedPlayground.id}
+                            />
                     )
                 })
             }

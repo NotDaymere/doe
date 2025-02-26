@@ -76,16 +76,27 @@
   z-index: 1000;
   bottom: 24px;
 
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .action-buttons-right-part {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
+
   .ant-btn {
     padding: 2px;
     margin: 0;
     height: 36px;
     width: 36px;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
   }
 }
 .tiptap-editor {
