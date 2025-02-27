@@ -139,24 +139,27 @@
   transform: translateY(10px);
   animation: fadeIn 0.3s ease-out forwards;
   color: #5B5B5B;
-  .history-playground-content-dots-menu-button {
+  .history-playground-content-menu-block {
     display: none;
   }
-  &:hover {
-    border-radius: 12px;
-    background: #FFFFFF99;
-    border: 1px solid #FFFFFF;
-    box-shadow: 0px 8px 20px 0px #0000000A;
-    backdrop-filter: blur(60px);
-    z-index: 1001;
-    color: #1F1F1F;
-    .history-playground-content-dots-menu-button {
-      display: flex;
-    }
-    .history-playground-content-dot {
-      background: #B5B5B5;
-    }
+}
+.history-playground-content-active {
+  border-radius: 12px;
+  background: #FFFFFF99;
+  border: 1px solid #FFFFFF;
+  box-shadow: 0px 8px 20px 0px #0000000A;
+  backdrop-filter: blur(60px);
+  z-index: 1001;
+  color: #1F1F1F;
+  .history-playground-content-menu-block {
+    display: flex;
   }
+  .history-playground-content-dot {
+    background: #B5B5B5;
+  }
+}
+.history-playground-content-menu-block {
+  position: relative;
 }
 .loop (@i) when (@i > 0) {
   .history-playground-content:nth-child(@{i}) {

@@ -5,9 +5,21 @@ import { IPlayground } from "src/shared/types/Playground";
 import './PythonTaskManager.less'
 
 function PythonTaskManager() {
-    const { playground, setPlayground, setSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlaygroundLastByType, getOpenSavedPlaygroundsByType } = useChatStore();
+    const { playground, setPlayground, setSavedPlaygrounds,
+        updateSavedPlaygrounds,
+        getSavedPlaygroundLastByType,
+        getOpenSavedPlaygroundsByType,
+        getOpenSavedPlaygrounds,
+    } = useChatStore();
     const openCodePlayground = () => {
-        const oldPlayground = getSavedPlaygroundLastByType('code');
+        let oldPlayground = getSavedPlaygroundLastByType('code');
+        if (getOpenSavedPlaygrounds().length >= 2) {
+            const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
+            if (lastPlayground && lastPlayground.type != 'code') {
+                lastPlayground.open = false;
+                updateSavedPlaygrounds(lastPlayground);
+            }
+        }
         if (oldPlayground == null) {
             const newPlayground: IPlayground = {
                 id: null,

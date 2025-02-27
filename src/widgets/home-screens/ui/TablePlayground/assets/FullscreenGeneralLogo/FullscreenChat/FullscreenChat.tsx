@@ -10,7 +10,7 @@ interface Props {
 
 export default function FullscreenChat({ onClick }: Props) {
     const chatRef = useRef<HTMLDivElement>(null);
-    const [position, setPosition] = useState({ x: 15, y: 50 });
+    const [position, setPosition] = useState({ x: 15, y: -314 });
     const [isDragging, setIsDragging] = useState(false);
 
     const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {

@@ -91,7 +91,7 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeA
                     >
                        <div className={'open-all-playgrounds-content-name'}>
                            <DoePlaygroundStars/>
-                           { savedPlayground.name }
+                           <p>{ savedPlayground.name }</p>
                        </div>
                         <button
                             className={'open-all-playgrounds-content-example-button'}

@@ -5,9 +5,21 @@ import { useChatStore } from "src/shared/providers";
 import { IPlayground } from "src/shared/types/Playground";
 
 function TableRandomValues() {
-    const { playground, setPlayground, setSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlaygroundLastByType, getOpenSavedPlaygroundsByType } = useChatStore();
+    const { playground,
+        setPlayground,
+        setSavedPlaygrounds,
+        updateSavedPlaygrounds, getOpenSavedPlaygrounds,
+        getSavedPlaygroundLastByType, getOpenSavedPlaygroundsByType } = useChatStore();
     const openTablePlayground = () => {
         const oldPlayground = getSavedPlaygroundLastByType('table');
+        if (getOpenSavedPlaygrounds().length >= 2) {
+            const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
+            console.log(lastPlayground);
+            if (lastPlayground && lastPlayground.type != 'table') {
+                lastPlayground.open = false;
+                updateSavedPlaygrounds(lastPlayground);
+            }
+        }
         if (oldPlayground == null) {
             const newPlayground: IPlayground = {
                 id: null,

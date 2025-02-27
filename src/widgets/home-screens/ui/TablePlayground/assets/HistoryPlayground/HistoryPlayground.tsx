@@ -3,12 +3,16 @@ import CloseIcon from "src/shared/icons/CloseIcon";
 import LinesIcon from "src/shared/icons/LinesIcon";
 import HistoryIcon from "src/shared/icons/HistoryIcon";
 import { useVersionHistoryStore } from "src/shared/providers";
-import ThreeVerticalDots from "../../../../../../shared/icons/ThreeVerticalDots";
+import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
 import { useState } from "react";
+import HistoryPlaygroundMenu from "./HistoryPlaygroundMenu/HistoryPlaygroundMenu";
 
 export default function HistoryPlayground() {
     const { setOpenHistory, historyArray } = useVersionHistoryStore();
     const [openContent, setOpenContent] = useState<boolean>(false);
+    const [hoveredId, setHoveredId] = useState<number | null>(null);
+    const [activeMenu, setActiveMenu] = useState<boolean>(false);
+
     const handlerCloseHistoryPlayground  = () => {
         setOpenHistory(false);
     }
@@ -49,8 +53,12 @@ export default function HistoryPlayground() {
                 {openContent && historyArray.map((history, index) => {
                     return (
                         <div
-                            className={`history-playground-content`}
+                            className={`history-playground-content ${hoveredId == history.id &&  'history-playground-content-active'}`}
                             key={history.id}
+                            onMouseEnter={() => {
+                                if (activeMenu) return
+                                setHoveredId(history.id);
+                            }}
                         >
                             <div className={"history-playground-content-value"}>
                                 {history.name && <div className={"history-playground-content-value-time"}>
@@ -67,18 +75,26 @@ export default function HistoryPlayground() {
                                     {history.user}
                                 </div>
                             </div>
-                            <button
-                                className={"history-playground-content-dots-menu-button"}
-                                onClick={() => {
-                                }}
-                            >
-                                <ThreeVerticalDots />
-                            </button>
+                            <div className={"history-playground-content-menu-block"}>
+                                <button
+                                    className={"history-playground-content-dots-menu-button"}
+                                    onClick={() => {
+                                        setActiveMenu(!activeMenu);
+                                    }}
+                                >
+                                    <ThreeVerticalDots />
+                                </button>
 
+                                {activeMenu && <HistoryPlaygroundMenu
+                                    history={history}
+                                    setActiveMenu={setActiveMenu}
+                                />}
+                            </div>
                         </div>
                     )
                 })}
             </div>
+
         </div>
     );
 }

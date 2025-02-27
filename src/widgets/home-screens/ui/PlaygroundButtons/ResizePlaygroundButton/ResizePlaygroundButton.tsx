@@ -4,9 +4,17 @@ import './ResizePlaygroundButton.less';
 import { useChatStore } from "src/shared/providers";
 
 export default function ResizePlaygroundButton () {
-    const {setPlaygroundFullscreen, playgroundFullscreen} = useChatStore();
+    const {setPlaygroundFullscreen, playgroundFullscreen, getOpenSavedPlaygrounds, updateSavedPlaygrounds} = useChatStore();
     const resizePlayground = () => {
         setPlaygroundFullscreen(!playgroundFullscreen);
+
+        if (getOpenSavedPlaygrounds().length > 2) {
+            const lastPlayground = getOpenSavedPlaygrounds().at(-1);
+            if (lastPlayground) {
+                lastPlayground.open = false;
+                updateSavedPlaygrounds(lastPlayground);
+            }
+        }
     }
     return  (
         <button

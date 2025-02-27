@@ -5,7 +5,9 @@ interface VersionHistoryStore {
     openHistory: boolean,
     setOpenHistory: (openHistoryAction: boolean) => void,
 
-    historyArray: IVersionHistory[]
+    historyArray: IVersionHistory[],
+
+    updateHistory: (history: IVersionHistory) => void,
 }
 
 export const useVersionHistoryStore = create<VersionHistoryStore>()(
@@ -50,5 +52,10 @@ export const useVersionHistoryStore = create<VersionHistoryStore>()(
                 photo: '/temp/profile.jpg',
             },
         ],
+
+
+        updateHistory: (history) => set((state) => ({
+            historyArray: state.historyArray.map(h => h.id === history.id ? history : h),
+        })),
     })
 );
