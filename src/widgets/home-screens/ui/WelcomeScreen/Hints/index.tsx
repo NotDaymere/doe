@@ -45,7 +45,9 @@ const Hints: FC<IProps> = ({ onSelect }) => (
             <div
                 key={text}
                 className={classNames(css.hint, css[classname])}
-                onClick={() => onSelect(text)}
+                onClick={() => {
+                    onSelect(text);
+                }}
             >
                 {icon}
                 <span>{text}</span>

@@ -32,7 +32,7 @@ const WelcomeScreen = () => {
         const typeEffect = async () => {
             await typeText("I'm ", setFirstPart, TYPING_SPEED, setDotVisible);
             setTimeout(() => {
-                setSecondPart(<DoeLogoIcon width={16} height={16} className={css.icon} />);
+                setSecondPart(<DoeLogoIcon width={26} height={26} className={css.icon} />);
             }, TYPING_SPEED);
             await typeText(" Doe, ", setThirdPart, TYPING_SPEED, setDotVisible);
             await typeText("powered by the new ", setFourthPart, TYPING_SPEED, setDotVisible);
@@ -59,19 +59,21 @@ const WelcomeScreen = () => {
     }, []);
 
     return (
-        <div className={css.welcomeScreen}>
-            <div className={css.welcomeText}>
-                <span>{firstPart}</span>
-                &nbsp;{secondPart}&nbsp;
-                <span className={css.italic}>{thirdPart}&nbsp;</span>
-                <span>{fourthPart}&nbsp;</span>
-                <span className={css.bold}>{fifthPart}&nbsp;</span>
-                <span>{sixthPart}</span>
-                <span className={css.bold}>&nbsp;{seventhPart}</span>
-                <span>&nbsp;{eighthPart}</span>
-                {dotVisible && <span className={css.dot}>●</span>}
+        <div className={css.welcomeScreenWrapper}>
+            <div className={css.welcomeScreen}>
+                <div className={css.welcomeText}>
+                    <span>{firstPart}</span>
+                    {secondPart}
+                    <span className={css.italic}>{thirdPart}&nbsp;</span>
+                    <span>{fourthPart}&nbsp;</span>
+                    <span className={css.bold}>{fifthPart}&nbsp;</span>
+                    <span>{sixthPart}</span>
+                    <span className={css.bold}>&nbsp;{seventhPart}</span>
+                    <span>&nbsp;{eighthPart}</span>
+                    {dotVisible && <span className={css.dot} />}
+                </div>
+                {ninthPart}
             </div>
-            {ninthPart}
         </div>
     );
 };

@@ -29,11 +29,25 @@ const PdfDocument: FC<IProps> = ({
     onPageChange,
 }) => {
     const [pdfInstance, setPdfInstance] = useState<PDFDocumentProxy | null>(null);
+    const [viewerWidth, setViewerWidth] = useState(400);
 
     const onDocumentLoadSuccess = (pdf: any) => {
         onDocumentLoad(pdf.numPages);
         setPdfInstance(pdf);
     };
+
+    const handleResize = () => {
+        const viewer = document.querySelector("#previewSource");
+        if (viewer) {
+            setViewerWidth(viewer?.getBoundingClientRect().width);
+        }
+    };
+    useEffect(() => {
+        window.addEventListener("resize", handleResize);
+        handleResize();
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     useEffect(() => {
         return () => {
@@ -61,7 +75,11 @@ const PdfDocument: FC<IProps> = ({
                         return (
                             <div key={`page_${pageIndex + 1}`} ref={refCallback}>
                                 <PageInView pageNumber={pageIndex + 1} onPageChange={onPageChange}>
-                                    <Page scale={scale} pageNumber={pageIndex + 1} />
+                                    {isModalView ? (
+                                        <Page scale={scale} pageNumber={pageIndex + 1} />
+                                    ) : (
+                                        <Page width={viewerWidth} pageNumber={pageIndex + 1} />
+                                    )}
                                     <span style={{ color: "transparent" }}>// </span>
                                 </PageInView>
                             </div>

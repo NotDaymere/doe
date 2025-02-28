@@ -1,14 +1,3 @@
-.buttons () {
-    display: flex;
-    gap: 4px;
-    border: 1px solid #ffffff;
-    padding: 12px;
-    border-radius: 24px;
-    box-shadow: 0 2px 15px rgba(#000, 0.05);
-    position: relative;
-    cursor: pointer;
-}
-
 .input {
     display: flex;
     align-items: flex-end;
@@ -103,58 +92,4 @@
     svg {
         fill: #ffffff;
     }
-}
-
-.actions {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 16px;
-}
-
-.steps_button {
-    .buttons;
-    background-color: #ffffff;
-    background-image: linear-gradient(to right, #9747ff, #1f1f1f);
-    color: transparent;
-    background-clip: text;
-
-    &:hover {
-        background:
-            linear-gradient(#1f1f1f, #5b2b99) padding-box,
-            linear-gradient(to bottom, #f1e7ff, #9747ff) border-box;
-        border-radius: 24px;
-        border: 1px solid transparent;
-        color: #fff;
-
-        svg {
-            path {
-                fill: #fff;
-            }
-        }
-    }
-}
-
-.active_steps_button {
-    .buttons;
-    border-color: #9747ff;
-    background: #fff;
-    color: #9747ff;
-
-    svg {
-        path {
-            fill: #9747ff;
-        }
-    }
-}
-
-.block {
-    position: relative;
-}
-
-.quickSearch {
-    position: absolute;
-    top: 200px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 999;
 }

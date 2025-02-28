@@ -18,6 +18,7 @@ const SourcePlayground = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [sourceType, setSourceType] = useState<SourceType>("web");
     const { previewPlayground, setPreviewPlayground } = useAppStore();
+    const [isOpenPopover, setIsOpenPopover] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -61,27 +62,10 @@ const SourcePlayground = () => {
     );
 
     const handleShowResources = (type: SourceType) => {
-        setIsVisible(true);
+        setIsVisible(!isVisible);
+        setIsOpenPopover(true);
         setSourceType(type);
     };
-
-    const previewRef = useRef<HTMLDivElement>(null);
-
-    // const handleClickOutside = (event: MouseEvent) => {
-    //     if (previewRef.current && !previewRef.current.contains(event.target as Node)) {
-    //         setPreviewPlayground({
-    //             type: null,
-    //             data: "",
-    //         });
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     document.addEventListener("mousedown", handleClickOutside);
-    //     return () => {
-    //         document.removeEventListener("mousedown", handleClickOutside);
-    //     };
-    // }, []);
 
     return (
         <div className={css.sourcePlayground}>
@@ -111,10 +95,10 @@ const SourcePlayground = () => {
                             ))}
                         </div>
                         <div className={css[`popover${sourceType}`]}>
-                            {isVisible && (
+                            {isVisible && isOpenPopover && (
                                 <Popover
                                     content={renderSourcePopoverContent(sourceType)}
-                                    onClickOutside={setIsVisible}
+                                    onClickOutside={setIsOpenPopover}
                                 />
                             )}
                         </div>
@@ -131,7 +115,7 @@ const SourcePlayground = () => {
                     </div>
                 </ScalableContainer>
             </div>
-            <div className={css.detailsSection} ref={previewRef}>
+            <div className={css.detailsSection}>
                 {!previewPlayground.data ? (
                     <>
                         <SourcesIcon />

@@ -9,7 +9,7 @@ import LimitScreen from "../LimitScreen";
 import css from "./ChatLayout.module.less";
 import WelcomeScreen from "../WelcomeScreen";
 
-const MAX_MESSAGES_LIMIT = 5;
+export const MAX_MESSAGES_LIMIT = 50;
 
 export const ChatLayout: React.FC = () => {
     const { playground } = useAppStore();

@@ -1,12 +1,12 @@
 import { FC, useState } from "react";
 import { IPreviewPlayground } from "src/shared/types/Playground";
 import ArrowRightUpIcon from "src/shared/icons/ArrowRightUp.icon";
+import ExpandDoubleIcon from "src/shared/icons/ExpandDouble.icon";
 import Modal from "src/shared/components/Modal";
 import Preview from "./Preview";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import css from "./PreviewSource.module.less";
-import ExpandDoubleIcon from "src/shared/icons/ExpandDouble.icon";
 
 const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
     const fileType = data?.split(".").pop() || "";
@@ -40,6 +40,7 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className={css.previewSource}
+                id="previewSource"
             >
                 <Preview type={type} url={data} isModalView={false} />
                 {type !== "web" && (

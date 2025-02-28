@@ -56,16 +56,16 @@ export function useInitialEditor(props: EditorProps) {
             }
         },
         onFocus({ editor }) {
-            if(props.onFocus) {
+            if (props.onFocus) {
                 props.onFocus(editor);
             }
         },
         onBlur({ editor }) {
-            if(props.onBlur) {
+            if (props.onBlur) {
                 props.onBlur(editor);
             }
-        }
-     });
+        },
+    });
 
     React.useEffect(() => {
         if (editor) {

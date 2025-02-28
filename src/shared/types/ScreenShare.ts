@@ -6,6 +6,7 @@ export interface IScreenShareConfig {
     label?: string;
     icon?: ReactElement;
     actions?: boolean;
+    videoUrl?: string;
 }
 
 export interface IScreenSharePopup {
