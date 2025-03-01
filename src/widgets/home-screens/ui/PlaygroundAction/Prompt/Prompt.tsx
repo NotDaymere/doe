@@ -1,14 +1,17 @@
-import './Prompt.less';
-import CloseIcon from "src/shared/icons/CloseIcon";
-import SendIcon from "src/shared/icons/SendIcon";
+import "./Prompt.less";
 import { usePlaygroundStore } from "src/shared/providers";
 import { Editor } from "@tiptap/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as monaco from "monaco-editor";
 
-export default function Prompt({ editor }: { editor: Editor | monaco.editor.IStandaloneCodeEditor | null }) {
+interface Props {
+    setSendButton: (sendButton: () => void) => void;
+    editor: Editor | monaco.editor.IStandaloneCodeEditor | null;
+}
+
+export default function Prompt({ editor, setSendButton }: Props) {
     const { setPlaygroundAction } = usePlaygroundStore();
-    const [promptValue, setPromptValue] = useState<string>('');
+    const [promptValue, setPromptValue] = useState<string>("");
 
     const addPrompt = () => {
         if (!editor) return;
@@ -29,7 +32,7 @@ export default function Prompt({ editor }: { editor: Editor | monaco.editor.ISta
             const model = editor.getModel();
             if (model) {
                 const lastLine = model.getLineCount();
-                const blockText =`\n ${promptValue} \n`;
+                const blockText = `\n ${promptValue} \n`;
 
                 editor.executeEdits("addPrompt", [
                     {
@@ -47,26 +50,21 @@ export default function Prompt({ editor }: { editor: Editor | monaco.editor.ISta
         setPlaygroundAction(null);
     };
 
+    useEffect(() => {
+        return () => setSendButton(() => {});
+    }, []);
+
+    useEffect(() => {
+        setSendButton(() => addPrompt);
+    }, [promptValue]);
+
     return (
         <>
-            <input className={'prompt-input'}
-                   value={promptValue}
-                   onChange={(e) => setPromptValue(e.target.value)}
+            <input
+                className="prompt-input"
+                value={promptValue}
+                onChange={(e) => setPromptValue(e.target.value)}
             />
-            <div className={'actions'}>
-                <button
-                    className={'prompt-button prompt-button-close'}
-                    onClick={() => setPlaygroundAction(null)}
-                >
-                    <CloseIcon />
-                </button>
-                <button
-                    className={'prompt-button prompt-button-send'}
-                    onClick={addPrompt}
-                >
-                    <SendIcon />
-                </button>
-            </div>
         </>
-    )
+    );
 }

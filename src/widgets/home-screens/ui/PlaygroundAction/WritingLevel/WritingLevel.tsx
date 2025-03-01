@@ -3,39 +3,34 @@ import Menu from "./Menu";
 import PenIcon from "src/shared/icons/Pen.icon";
 import CloseIcon from "src/shared/icons/CloseIcon";
 import SendIcon from "src/shared/icons/SendIcon";
+import { useState } from "react";
 
 function WritingLevel() {
-
+    const [writingLevelOption, setWritingLevelOption] = useState<string>("");
+    const [openMenu, setOpenMenu] = useState<boolean>(false)
     return (
         <>
-            {/*<div className={'writing-level-content'}>*/}
-            {/*    Change Writing Level to*/}
-            {/*    <div>*/}
-            {/*        primary school*/}
-            {/*        <button>*/}
-            {/*            <PenIcon className={'pen-icon-writing-level'} />*/}
-            {/*        </button>*/}
-            {/*    </div>*/}
-            {/*    in*/}
-            {/*    <div>*/}
-            {/*        This is what your table looks like when it's in Doe Playground!*/}
-            {/*    </div>*/}
-            {/*</div>*/}
-            {/*<div className={'actions'}>*/}
-            {/*    <button*/}
-            {/*        className={'prompt-button prompt-button-close'}*/}
-            {/*        onClick={() => {}}*/}
-            {/*    >*/}
-            {/*        <CloseIcon />*/}
-            {/*    </button>*/}
-            {/*    <button*/}
-            {/*        className={'prompt-button prompt-button-send'}*/}
-            {/*        onClick={()=> {}}*/}
-            {/*    >*/}
-            {/*        <SendIcon />*/}
-            {/*    </button>*/}
-            {/*</div>*/}
-            <Menu />
+            <div className={"writing-level-content"}>
+
+                <p className={"text-columns-button-p"}>
+                    Change<span className={"text-columns-button-span"}>Writing Level</span>to
+                </p>
+                <div className={"writing-level-option"}>
+                    <div className={"writing-level-option-text"}>
+                        {writingLevelOption}
+                    </div>
+                    <button className={"writing-level-option-button"}
+                            onClick={() => setOpenMenu(!openMenu)}
+                    >
+                        <PenIcon className={"pen-icon-writing-level"} />
+                    </button>
+                    {openMenu && <Menu setOpenMenu = {setOpenMenu} setWritingLevelOption = {setWritingLevelOption}/>}
+                </div>
+                <span className={"text-columns-button-span ml--5"}>in</span>
+                <div className={'text-columns-target'}>
+
+                </div>
+            </div>
         </>
     )
 }
