@@ -12,22 +12,16 @@ export default function Prompt({ editor }: { editor: Editor | monaco.editor.ISta
 
     const addPrompt = () => {
         if (!editor) return;
+
         if (editor instanceof Editor) {
             editor.chain().focus().insertContentAt(editor.state.doc.content.size, {
                 type: "paragraph",
                 content: [
-                    {
-                        type: "text",
-                        text: " ",
-                    },
+                    { type: "text", text: " " },
                     {
                         type: "text",
                         text: promptValue,
-                        marks: [
-                            {
-                                type: "customBlock",
-                            },
-                        ],
+                        marks: [{ type: "customBlock" }],
                     },
                 ],
             }).run();
@@ -35,22 +29,24 @@ export default function Prompt({ editor }: { editor: Editor | monaco.editor.ISta
             const model = editor.getModel();
             if (model) {
                 const lastLine = model.getLineCount();
-                const lastColumn = model.getLineMaxColumn(lastLine);
-                const blockText = `\n/* --- Prompt Block Start --- */\n +
-                /* ${promptValue} */\n +
-                /* --- Prompt Block End --- */\n`;
+                const blockText =`\n ${promptValue} \n`;
+
                 editor.executeEdits("addPrompt", [
                     {
-                        range: new monaco.Range(lastLine, lastColumn, lastLine, lastColumn),
+                        range: new monaco.Range(lastLine + 1, 1, lastLine + 1, 1),
                         text: blockText,
                         forceMoveMarkers: true,
                     },
                 ]);
-                editor.revealLine(lastLine + 2);
+
+                editor.pushUndoStop();
+                editor.revealLine(lastLine + 3);
             }
         }
-        setPlaygroundAction(null)
+
+        setPlaygroundAction(null);
     };
+
     return (
         <>
             <input className={'prompt-input'}

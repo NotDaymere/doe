@@ -96,11 +96,6 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         const newPlayground = getOpenSavedPlaygrounds().at(1)
             || { type: null, name: "", data: null, id: null, open: false };
         setPlayground(newPlayground);
-        const oldPlayground = playgroundState;
-        if (oldPlayground) {
-            oldPlayground.open = false;
-            updateSavedPlaygrounds(oldPlayground);
-        }
     };
 
     const handleEditorMount: OnMount = (editor, monaco) => {
@@ -150,6 +145,27 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         }
     };
 
+    useEffect(() => {
+        if (!editorInstance || !playgroundState) return;
+
+        const handleContentChange = () => {
+            const newContent = editorInstance.getValue();
+            console.log(newContent);
+            setPlaygroundState((prev: any) => {
+                if (!prev) return null;
+
+                const updatedPlayground = { ...prev, text: newContent };
+                updateSavedPlaygrounds(updatedPlayground);
+                return updatedPlayground;
+            });
+        };
+        const disposable = editorInstance.onDidChangeModelContent(handleContentChange);
+        return () => {
+            disposable.dispose();
+        };
+
+    }, [editorInstance, playgroundState]);
+
     return (
         <div className="table-playground"
              onMouseDown={(event) => {
@@ -185,7 +201,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                         detectIndentation: false,
                     }}
                     className="table-playground-editor"
-                    defaultValue={`def delete_element(my_list, element):
+                    defaultValue={playgroundState?.text || `def delete_element(my_list, element):
     """Removes the first occurrence of the element from the list."""
     try:
         my_list.remove(element)

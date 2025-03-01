@@ -5,6 +5,7 @@ import './PlaygroundAction.less';
 import { Editor } from "@tiptap/react";
 import * as monaco from "monaco-editor";
 import { useChatStore} from "src/shared/providers";
+import WritingLevel from "./WritingLevel/WritingLevel";
 
 interface IProps {
     playgroundAction: IPlaygroundAction,
@@ -15,7 +16,6 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: {type}, editor, contai
     const { playgroundFullscreen } = useChatStore();
     const chatRef = useRef<HTMLDivElement>(null);
     const [position, setPosition] = useState({ x: 700, y: -40 });
-    const [inputWidth, setInputWidth] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
         if (!playgroundFullscreen) return;
@@ -27,8 +27,8 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: {type}, editor, contai
 
         const componentWidth = chatRef.current.getBoundingClientRect().width;
 
-        const centerX = (containerWidth - componentWidth) / 2;
-        const centerY = 0;
+        const centerX = (containerWidth - componentWidth) /2;
+        const centerY = -40;
 
         setPosition({ x: centerX, y: centerY });
     }, []);
@@ -64,6 +64,7 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: {type}, editor, contai
         >
             <div className={'playground-action-content'}>
                 { type === 'prompt' && <Prompt editor={editor} /> }
+                { type === 'writing-level' && <WritingLevel /> }
             </div>
         </div>
     )

@@ -25,7 +25,9 @@ function CloudActionsSection() {
                     <Plus className="plus-icon" />
                 </button>
             </div>
-            <div className="text-columns-button text-columns-border-top justify-flex-start">
+            <div className="text-columns-button text-columns-border-top justify-flex-start"
+                 onClick={() => setPlaygroundAction({type: 'writing-level'})}
+            >
                 <Stars />
                 <p className={"text-columns-button-p"}>
                     Change <span className={"text-columns-button-span"}>Writing Level</span>

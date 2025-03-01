@@ -10,13 +10,13 @@ export default function GeneralLogo({onClick} : Props) {
     const [hovered, setHovered] = useState(false);
 
     return (
-        <div
+        <button
             className={hovered ? "general-logo-hovered-container" : 'general-logo-container'}
             onClick={onClick}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
         >
             {hovered ? <GeneralLogo2 /> : <GeneralLogoIcon />}
-        </div>
+        </button>
     );
 }

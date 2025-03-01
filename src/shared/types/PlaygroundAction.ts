@@ -1,3 +1,3 @@
 export interface IPlaygroundAction {
-    type: "prompt"
+    type: "prompt" | "writing-level"
 }
