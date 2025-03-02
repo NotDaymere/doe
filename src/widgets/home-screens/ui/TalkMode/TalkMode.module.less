@@ -1,0 +1,22 @@
+.talkMode {
+  position: fixed;
+  bottom: 130px;
+  left: 90px;
+  background: transparent;
+  padding: 16px;
+  width: fit-content;
+  border-radius: 4px;
+
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 1000;
+
+  &._active {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+

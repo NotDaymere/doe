@@ -30,6 +30,7 @@ import { ChatMessage } from "../ChatMessage";
 
 // Styles
 import css from "./ChatContent.module.less";
+import { TalkMode } from "../TalkMode";
 
 interface Props {
     editMsgMode: {
@@ -85,6 +86,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         />
                     ))}
                 </div>
+                <TalkMode targetRef={chatRef} />
             </div>
         </div>
     );
