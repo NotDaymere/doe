@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 
 interface CloseIconProps extends React.SVGProps<SVGSVGElement> {
-    fill?: string;      // Цвет заливки фона (по умолчанию "#F8F8F8")
-    stroke?: string;    // Цвет обводки (по умолчанию "#DDDDDD")
+    fill?: string;
+    stroke?: string;
     width?: string | number;
     height?: string | number;
     opacity?: number;
