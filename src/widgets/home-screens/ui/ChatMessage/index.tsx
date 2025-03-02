@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 
 // External libraries
 import { Editor as EditorTiptap } from "@tiptap/react";
@@ -35,6 +35,9 @@ import PlayIcon from "src/shared/icons/Play.icon";
 import DownloadIcon from "src/shared/icons/Download.icon";
 import CopyIcon from "src/shared/icons/Copy.icon";
 import { useClickOut } from "src/shared/hooks/useClickOut";
+import ReferenceButton from "../ChatReferences/ReferenceButton/ReferenceButton";
+
+import { useChatContext } from "../../lib/hooks/ChatContext";
 
 interface Props {
     data: IMessage;
@@ -73,6 +76,83 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
     const { setPlayground } = useApp().app;
+
+    const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
+    const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{ top: number; left: number } | null>(null);
+
+    const { setSelectedText, setIsShowReferencePanel } = useChatContext();
+
+    React.useEffect(() => {
+        const lastMouseEvent = { current: null as MouseEvent | null };
+
+        const handleMouseUp = (e: MouseEvent) => {
+            lastMouseEvent.current = e;
+            handleSelectionChange();
+        };
+
+        const handleSelectionChange = () => {
+            if (!messageRef.current) return;
+            const selection = window.getSelection();
+            const selectionText = selection ? selection.toString().trim() : "";
+
+            if (
+                selection &&
+                selectionText &&
+                messageRef.current.contains(selection.anchorNode)
+            ) {
+                const range = selection.getRangeAt(0);
+                const rects = range.getClientRects();
+                if (rects.length === 0) return;
+
+                const lastRect = rects[rects.length - 1];
+                const selectionTop = lastRect.bottom + window.scrollY;
+                const selectionLeft = lastRect.right + window.scrollX;
+                const maxDistance = 30;
+                const offsetY = -50;
+                const offsetX = -20;
+
+                if (lastMouseEvent.current) {
+                    const candidateTop = lastMouseEvent.current.pageY;
+                    const candidateLeft = lastMouseEvent.current.pageX;
+                    const topDiff = candidateTop - selectionTop;
+
+                    const clampedTop =
+                        Math.abs(topDiff) > maxDistance
+                            ? selectionTop + (topDiff > 0 ? maxDistance : -maxDistance)
+                            : candidateTop;
+
+                    setReferenceButtonPosition({ top: clampedTop + offsetY, left: candidateLeft + offsetX });
+                } else {
+                    setReferenceButtonPosition({ top: selectionTop, left: selectionLeft });
+                }
+                setReferenceButtonVisible(true);
+            } else {
+                handleClose();
+            }
+        };
+
+        document.addEventListener("mouseup", handleMouseUp);
+        document.addEventListener("selectionchange", handleSelectionChange);
+
+        return () => {
+            document.removeEventListener("mouseup", handleMouseUp);
+            document.removeEventListener("selectionchange", handleSelectionChange);
+        };
+    }, []);
+
+    const handleClose = () => {
+        setReferenceButtonVisible(false);
+    };
+
+    const handleReferenceClick = () => {
+        const selection = window.getSelection();
+        const text = selection ? selection.toString().trim() : "";
+        setSelectedText(text);
+        setIsShowReferencePanel(true);
+        if (selection) selection.removeAllRanges();
+    };
+
+
     React.useEffect(() => {
         if (messageRef.current) {
             const codeBlocks = messageRef.current.querySelectorAll("code");
@@ -199,9 +279,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             onClick={() => cancelEdit(data.id)}
                         >
                             <CrossIcon />
+                            {/*<span className={css.svg_wrapper}>*/}
+                            {/*    <span className={css.tooltip}>Close</span>*/}
+                            {/*</span>*/}
                         </button>
+
                         <button className={css.edit_controls_saveBtn}>
+                            {/*<span className={css.svg_wrapper}>*/}
                             <SendIcon />
+                            {/*<span className={css.tooltip}>Send</span>*/}
+                            {/*</span>*/}
                         </button>
                     </div>
                 </div>
@@ -261,6 +348,12 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 );
                             })}
                         </MathJax>
+                        <ReferenceButton
+                            isVisible={referenceButtonVisible}
+                            position={referenceButtonPosition}
+                            onClose={handleClose}
+                            onReferenceClick={handleReferenceClick}
+                        />
                     </div>
                     {!data.isUser && (
                         <Flex justify={"space-between"} className={"message-actions"}>
@@ -308,7 +401,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 </div>
                                 <button onClick={handleCopy} className={css.button_steps_green}>
                                     <span className={css.tooltip}>Copy chat text</span>
-
                                     <CopyIcon />
                                 </button>
                             </Flex>

@@ -15,6 +15,10 @@ import UploadIcon from "src/shared/icons/Upload.icon";
 import { testTextAndCharts } from "src/components/chat-message/mockData";
 import { IMessage } from "src/shared/types/Message";
 
+import { useChatContext } from "../../lib/hooks/ChatContext";
+import CloseIcon from "../../../../shared/icons/Close.icon";
+
+
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
     const { setEditor, setMessages } = useChatStore();
@@ -36,6 +40,8 @@ export const ChatPanel: React.FC = () => {
     });
 
     const prompt = usePrompt();
+
+    const { selectedText, isShowReferencePanel, setIsShowReferencePanel } = useChatContext();
 
     const handleSend = () => {
         const userMessage: IMessage = {
@@ -88,6 +94,16 @@ export const ChatPanel: React.FC = () => {
                 onDrop={handleDragDropTarget}
                 onDragLeave={handleDragLeaveTarget}
             >
+                {isShowReferencePanel && (
+                    <div className={css.panel_prompt}>
+                        <ReplyIcon className={css.panel_prompt_icon} />
+                            <div className={css.reference_panel}>
+                                    <button onClick={() => setIsShowReferencePanel(false)}><CloseIcon/></button>
+                                <div className={css.referencePanelContent}>{selectedText}</div>
+                            </div>
+                    </div>
+                )}
+
                 {prompt.active && (
                     <div className={css.panel_prompt}>
                         <ReplyIcon className={css.panel_prompt_icon} />
@@ -103,6 +119,7 @@ export const ChatPanel: React.FC = () => {
                         </p>
                     </div>
                 )}
+
                 {files.length > 0 && (
                     <div className={css.panel_files_mask}>
                         <FileList 

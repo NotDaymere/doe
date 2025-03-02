@@ -3,6 +3,7 @@ import { Sidebar } from "src/widgets/Sidebar";
 import { ChatContent } from "../ChatContent";
 import { ChatPanel } from "../ChatPanel";
 import css from "./ChatLayout.module.less";
+import { ChatProvider } from "../../lib/hooks/ChatContext";
 
 interface EditModeState {
     isEditMsgMode: boolean;
@@ -16,14 +17,16 @@ export const ChatLayout: React.FC = () => {
     });
 
     return (
-        <div className={css.layout}>
-            <div className={css.layout_sidebar}>
-                <Sidebar />
+        <ChatProvider>
+            <div className={css.layout}>
+                <div className={css.layout_sidebar}>
+                    <Sidebar />
+                </div>
+                <div className={css.layout_chat}>
+                    <ChatContent editMsgMode={editMsgMode} setEditMsgMode={setEditMsgMode} />
+                    {editMsgMode.isEditMsgMode ? null : <ChatPanel />}
+                </div>
             </div>
-            <div className={css.layout_chat}>
-                <ChatContent editMsgMode={editMsgMode} setEditMsgMode={setEditMsgMode} />
-                {editMsgMode.isEditMsgMode ? null : <ChatPanel />}
-            </div>
-        </div>
+        </ChatProvider>
     );
 };
