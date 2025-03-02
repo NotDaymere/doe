@@ -2,9 +2,21 @@ import React from "react";
 import css from "./TalkModeDynamicObj.module.less"
 import { TalkModeIcon } from "../../../../../shared/icons/TalkMode.icon";
 
-export const TalkModeDynamicObj: React.FC = () => {
+interface TalkModeDynamicObjProps {
+    onMouseEnter?: React.MouseEventHandler<HTMLElement>;
+    onMouseLeave?: React.MouseEventHandler<HTMLElement>;
+}
+
+export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
+                                                                          onMouseEnter,
+                                                                          onMouseLeave,
+                                                                      }) => {
     return (
-        <section className={css.talkModeIconContainer}>
+        <section
+            className={css.talkModeIconContainer}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
             <TalkModeIcon opacity={1} />
             <svg
                 className={css.wave1}

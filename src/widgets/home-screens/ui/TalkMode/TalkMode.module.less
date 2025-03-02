@@ -17,6 +17,24 @@
     opacity: 1;
   }
 }
+.dynamicObjWrapper{
+  max-width: fit-content;
+  margin: 0;
+  padding: 0;
+  width: 70px;
+}
 
+.hoverPanel {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:  max-height 0.5s linear , margin-bottom 0.2s linear, margin-top 0.2s linear, opacity 0.3s linear;
 
+}
 
+.hoverPanel._visible {
+  opacity: 1;
+  margin-top: -12px;
+  max-height: 200px;
+  margin-bottom: 12px;
+}
