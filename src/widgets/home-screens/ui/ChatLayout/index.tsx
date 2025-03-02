@@ -6,14 +6,33 @@ import { useAppStore, useChatStore } from "src/shared/providers";
 import PlaygroundRenderer from "../Playground";
 import classNames from "classnames";
 import LimitScreen from "../LimitScreen";
-import css from "./ChatLayout.module.less";
 import WelcomeScreen from "../WelcomeScreen";
+import { MODE } from "src/shared/types/Chat";
+import TranslationMode from "../Translator";
+import css from "./ChatLayout.module.less";
 
 export const MAX_MESSAGES_LIMIT = 50;
 
 export const ChatLayout: React.FC = () => {
     const { playground } = useAppStore();
-    const { messagesCount } = useChatStore();
+    const { messagesCount, mode } = useChatStore();
+
+    if (mode === MODE.TRANSLATION)
+        return (
+            <div
+                className={classNames(css.layout, {
+                    [css.layoutWithPlayground]: playground.open,
+                })}
+            >
+                <div className={css.layout_sidebar}>
+                    <Sidebar />
+                </div>
+                <div className={css.translation}>
+                    <TranslationMode />
+                </div>
+            </div>
+        );
+
     return (
         <>
             {messagesCount === 0 && (
@@ -23,7 +42,9 @@ export const ChatLayout: React.FC = () => {
                 </div>
             )}
             <div
-                className={classNames(css.layout, { [css.layoutWithPlayground]: playground.open })}
+                className={classNames(css.layout, {
+                    [css.layoutWithPlayground]: playground.open,
+                })}
             >
                 <div className={css.layout_sidebar}>
                     <Sidebar />

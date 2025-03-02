@@ -11,14 +11,20 @@ import LinkIcon from "src/shared/icons/Link.icon";
 import { useEditorContext } from "src/shared/components/Editor";
 import { useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "./ui";
+import TranslationIcon from "src/shared/icons/Translation.icon";
+import TapeIcon from "src/shared/icons/Tape.icon";
+import SharedWithYouIcon from "src/shared/icons/SharedWithYou.icon";
 import css from "./Sidebar.module.less";
+import { MODE } from "src/shared/types/Chat";
+import TranslationActiveIcon from "src/shared/icons/TranslationActive.icon";
+import SharedWithYouActiveIcon from "src/shared/icons/SharedWithYouActive.icon";
 
 export const Sidebar: React.FC = () => {
-    const { editor } = useChatStore();
+    const { editor, mode, setMode } = useChatStore();
     const editorState = useEditorContext(editor);
 
     const pointerDown = (event: React.PointerEvent) => {
-        event.preventDefault()
+        event.preventDefault();
     };
 
     return (
@@ -26,11 +32,7 @@ export const Sidebar: React.FC = () => {
             <SidebarGaia />
 
             <div className={css.sidebar_profile}>
-                <img 
-                    className={css.sidebar_profile_img} 
-                    src="/temp/profile.jpg" 
-                    alt="" 
-                />
+                <img className={css.sidebar_profile_img} src="/temp/profile.jpg" alt="" />
             </div>
             <div className={css.sidebar_theme}>
                 <div className={css.sidebar_theme_toggler}>
@@ -58,7 +60,7 @@ export const Sidebar: React.FC = () => {
                     </button>
                 </div>
                 <div className={css.sidebar_controls_group}>
-                    <button 
+                    <button
                         className={css.sidebar_controls_btn}
                         onPointerDown={pointerDown}
                         onClick={editorState.toggleBold}
@@ -66,7 +68,7 @@ export const Sidebar: React.FC = () => {
                     >
                         <BoldIcon />
                     </button>
-                    <button 
+                    <button
                         className={css.sidebar_controls_btn}
                         onPointerDown={pointerDown}
                         onClick={editorState.toggleUnderline}
@@ -74,7 +76,7 @@ export const Sidebar: React.FC = () => {
                     >
                         <UnderlineIcon />
                     </button>
-                    <button 
+                    <button
                         className={css.sidebar_controls_btn}
                         onPointerDown={pointerDown}
                         onClick={editorState.toggleItalic}
@@ -82,13 +84,10 @@ export const Sidebar: React.FC = () => {
                     >
                         <ItalicIcon />
                     </button>
-                    <button 
-                        className={css.sidebar_controls_btn}
-                        onPointerDown={pointerDown}
-                    >
+                    <button className={css.sidebar_controls_btn} onPointerDown={pointerDown}>
                         <FunctionIcon />
                     </button>
-                    <button 
+                    <button
                         className={css.sidebar_controls_btn}
                         onPointerDown={pointerDown}
                         onClick={editorState.toggleCode}
@@ -96,25 +95,42 @@ export const Sidebar: React.FC = () => {
                     >
                         <CodeIcon />
                     </button>
-                    <button 
-                        className={css.sidebar_controls_btn}
-                        onPointerDown={pointerDown}
-                    >
+                    <button className={css.sidebar_controls_btn} onPointerDown={pointerDown}>
                         <LinkIcon />
                     </button>
                 </div>
                 <div className={css.sidebar_controls_group}>
-                    <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/translations.svg" alt="" />
+                    <button
+                        className={css.sidebar_controls_btn}
+                        onClick={() => setMode(MODE.TRANSLATION)}
+                    >
+                        {mode === MODE.TRANSLATION ? (
+                            <TranslationActiveIcon />
+                        ) : (
+                            <TranslationIcon />
+                        )}
                     </button>
-                    <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/recording.svg" alt="" />
+                    <button
+                        className={css.sidebar_controls_btn}
+                        onClick={() => setMode(MODE.RECORDING)}
+                    >
+                        {mode === MODE.RECORDING ? (
+                            <TapeIcon className={css.activeTapeIcon} />
+                        ) : (
+                            <TapeIcon />
+                        )}
                     </button>
-
                 </div>
                 <div className={css.sidebar_controls_group}>
-                    <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/shared.svg" alt="" />
+                    <button
+                        className={css.sidebar_controls_btn}
+                        onClick={() => setMode(MODE.SHARED_WITH_YOU)}
+                    >
+                        {mode === MODE.SHARED_WITH_YOU ? (
+                            <SharedWithYouActiveIcon />
+                        ) : (
+                            <SharedWithYouIcon />
+                        )}
                     </button>
                 </div>
             </div>

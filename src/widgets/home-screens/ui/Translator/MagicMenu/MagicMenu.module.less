@@ -1,0 +1,53 @@
+.magicMenu {
+    position: relative;
+}
+
+.magicButton {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(#1f1f1f, 0.05);
+    background: linear-gradient(to bottom, #d7d7d7 0%, #fff 100%);
+}
+
+.menu {
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    transform: translate(-50%, -10px);
+    width: 224px;
+    padding: 6px;
+    border-radius: 16px;
+    background: rgba(#fff, 0.8);
+    border: 1px solid #dddddd;
+    backdrop-filter: blur(80px);
+    box-shadow: 0 0 12px rgba(#000, 5%);
+}
+
+.enter {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.enterActive {
+    opacity: 1;
+    transform: translateY(-20px);
+    transform: translateX(-50%);
+
+    transition: 300ms ease;
+    transition-property: transform, opacity;
+}
+
+.exit {
+    opacity: 1;
+    transform: translateY(-20px);
+}
+.exitActive {
+    opacity: 0;
+    transform: translateY(-50px);
+    transition: 300ms ease;
+    transition-property: transform, opacity;
+}
