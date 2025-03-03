@@ -29,7 +29,6 @@ const QuestionCode = ({ buttonPosition, editor }: TextFormatProps) =>  {
         const sel = getEditorSelection();
         if (!sel) return;
         const { selectedText } = sel;
-        console.log(selectedText);
         setQuestionCodeMessage({text: selectedText, active: true});
     }
     return (

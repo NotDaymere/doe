@@ -66,8 +66,8 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: { type }, editor, cont
         >
             <div className="playground-action-content">
                 {type === "prompt" && <Prompt editor={editor} setSendButton={setSendButton} />}
-                {type === "writing-level" && <WritingLevel />}
-                {type === "port-code" && <PortCode />}
+                {type === "writing-level" && <WritingLevel editor = {editor} />}
+                {type === "port-code" && <PortCode editor = {editor} />}
 
                 <div className="actions">
                     <button className="prompt-button prompt-button-close" onClick={() => setPlaygroundAction(null)}>
