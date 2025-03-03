@@ -76,10 +76,14 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
     // const [isEdit, setEdit] = React.useState(false);
     const [content, setContent] = React.useState(data.content);
+    const [updatedContent, setUpdatedContent] = useState(data.content);
     const { editor, setEditor } = useChatStore();
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
     const { setPlayground } = useApp().app;
+
+    const [versions, setVersions] = useState<string[]>([data.content]);
+    const [currentVersionIndex, setCurrentVersionIndex] = useState<number>(0);
 
     const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
     const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{ top: number; left: number } | null>(null);
@@ -224,6 +228,11 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         // setEditMsgMode(!editMsgMode);
     };
 
+    const handleSave = () => {
+        setUpdatedContent(content);
+        setEditMsgMode({ isEditMsgMode: false, msgId: null });
+    };
+
     const cancelEdit = (id: number) => {
         setContent(data.content);
         setEditMsgMode({ isEditMsgMode: false, msgId: null });
@@ -283,17 +292,20 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             className={css.edit_controls_cancelBtn}
                             onClick={() => cancelEdit(data.id)}
                         >
-                            <CrossIcon />
-                            {/*<span className={css.svg_wrapper}>*/}
-                            {/*    <span className={css.tooltip}>Close</span>*/}
-                            {/*</span>*/}
+                            <span className={css.svg_wrapper}>
+                                 <span className={css.tooltip}>Cancel</span>
+                                <CrossIcon />
+                            </span>
                         </button>
 
-                        <button className={css.edit_controls_saveBtn}>
-                            {/*<span className={css.svg_wrapper}>*/}
-                            <SendIcon />
-                            {/*<span className={css.tooltip}>Send</span>*/}
-                            {/*</span>*/}
+                        <button
+                            className={css.edit_controls_saveBtn}
+                            onClick={handleSave}
+                        >
+                            <span className={css.svg_wrapper}>
+                                <span className={css.tooltip}>Send edit</span>
+                                <SendIcon />
+                            </span>
                         </button>
                     </div>
                     <ReferenceButton
@@ -317,7 +329,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 <div
                     className={css.input_message}
                     dangerouslySetInnerHTML={{
-                        __html: data.content,
+                        __html: updatedContent,
                     }}
                 />
 

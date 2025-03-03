@@ -94,24 +94,58 @@
     justify-content: flex-end;
     gap: 6px;
 }
+
 .edit_controls_cancelBtn,
 .edit_controls_saveBtn {
-    width: 26px;
-    height: 26px;
-    flex-shrink: 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 15px rgba(#000, 0.05);
+  cursor: pointer;
+  height: 30px;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition:
+          background 125ms ease,
+          width 300ms ease;
 
+  .svg-wprapper {
     position: relative;
+    display: inline-block;
+  }
 
-    svg {
-        width: 12px;
-        height: 12px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-    }
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  &:hover {
+    width: auto;
+  }
+
+  .tooltip {
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 14px;
+    display: inline-block;
+    max-width: 0;
+    -webkit-transition:
+            max-width 0.3s,
+            margin-left 0.35s,
+            margin-right 0.3s;
+    transition:
+            max-width 0.3s,
+            margin-right 0.3s,
+            margin-left 0.35s;
+    vertical-align: top;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &:hover .tooltip {
+    max-width: 300px;
+    margin-right: 6px;
+  }
 }
 
 .edit_controls_cancelBtn {
@@ -127,6 +161,13 @@
     svg {
         fill: #ffffff;
     }
+  .tooltip {
+    color: #ffffff;
+  }
+
+  &:hover .tooltip {
+    color: #ffffff;
+  }
 }
 
 .user {
