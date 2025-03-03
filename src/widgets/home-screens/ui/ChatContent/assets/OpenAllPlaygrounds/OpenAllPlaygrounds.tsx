@@ -61,13 +61,6 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeA
     }, [changeActiveAllPlaygrounds]);
 
     return (
-        <CSSTransition
-            timeout={300}
-            in={activeAllPlaygrounds}
-            classNames={'fade'}
-            mountOnEnter
-            unmountOnExit
-        >
             <div ref={containerRef} className={'open-all-playgrounds-container'}>
             <div className={'open-all-playgrounds-header'}>
                 <div className={'open-all-playgrounds-header-text'}>
@@ -115,6 +108,5 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeA
                 />
             }
         </div>
-        </CSSTransition>
     );
 }

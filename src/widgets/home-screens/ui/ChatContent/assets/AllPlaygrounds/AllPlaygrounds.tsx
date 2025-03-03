@@ -8,7 +8,7 @@ export default function AllPlaygrounds() {
     const [activeAllPlaygrounds, setActiveAllPlaygrounds] = useState<boolean>(false);
     const changeActiveAllPlaygrounds = () => setActiveAllPlaygrounds(!activeAllPlaygrounds)
     return (
-        <div>
+        <div className={'position-fixed'}>
             <button className={'all-playgrounds-button'}
                     onClick={changeActiveAllPlaygrounds}
             >
