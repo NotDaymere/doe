@@ -11,9 +11,13 @@ interface Props {
 export default function OpenFromSavedPlayground({savedPlayground, length} : Props) {
     const {updateSavedPlaygrounds, getOpenSavedPlaygrounds, playgroundFullscreen} = useChatStore();
     const openSavedPlaygroundStatus = () => {
-        const maxLength = playgroundFullscreen ? 3:2;
+        const maxLength = playgroundFullscreen ? 3 : 2;
         if (getOpenSavedPlaygrounds().length >= maxLength) {
-            return;
+            const lastOpen = getOpenSavedPlaygrounds().at(-1)
+            if (lastOpen) {
+                lastOpen.open = false;
+                updateSavedPlaygrounds(lastOpen);
+            }
         }
         savedPlayground.open = true;
         updateSavedPlaygrounds(savedPlayground);
