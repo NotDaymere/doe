@@ -1,12 +1,22 @@
+import { useState,useEffect  } from "react";
 import ChartButton from "../Component/ChartButton/ChartButton";
 import { Page } from "../Enums/Page.enum";
 import { useChartWidgets } from "../Window/ChartWidgetsWindow";
-import "./Drawing.less";
-function Drawing() {
 
+import "./Drawing.less";
+const Drawing=()  => {
+   const [drawings, setDrawings] = useState([]);
+    
+ useEffect(() => {
+    // Retrieve saved drawings from localStorage
+    const savedDrawings = JSON.parse(localStorage.getItem("drawings") || "[]");
+    setDrawings(savedDrawings);
+  }, []);
 
 
   const {setFullWindow,setPage} = useChartWidgets();
+
+  
   return (
     <div>
       <div className="createDrawingBox">
@@ -25,14 +35,12 @@ function Drawing() {
         <button>Drafts</button>
       </div>
       <div className="createdDrawings">
-        <ChartButton icon="/img/drawingicon/line.svg" text="Drawing #1"  onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/img/drawingicon/bar.svg" text="Drawing #2" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/img/drawingicon/area.svg" text="Drawing #3" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/img/drawingicon/pie.svg" text="Drawing #4" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/> 
-        <ChartButton icon="/img/drawingicon/buble.svg" text="Drawing #1" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/img/drawingicon/scater.svg" text="Drawing #2" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/img/drawingicon/donut.svg" text="Drawing #3" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
-        <ChartButton icon="/img/drawingicon/bar.svg" text="Drawing #4" onClick={()=>{setPage(Page.NEW_DRAWING);setFullWindow(true)}}/>
+        
+        {drawings.map((drawing, index) => (
+          <>
+        <ChartButton icon={drawing.imageUrl} text={`Drawing # ${index +1}`}  onClick={()=>{setPage(Page.NEW_DRAWING,drawing.id);setFullWindow(true)}}/>
+          </>
+))}
       </div>
     </div>
   );

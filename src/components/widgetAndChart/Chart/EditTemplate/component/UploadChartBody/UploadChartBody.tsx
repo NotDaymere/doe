@@ -46,7 +46,9 @@ function UploadChartBody() {
                 />
             </div>
             <div className="right">
+                <div className="right-inner">
                 <CustomChartBar />
+                </div>
             </div>
         </div>
     );

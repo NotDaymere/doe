@@ -5,12 +5,12 @@ import "./ConsoleWindow.less";
 
 function ConsoleWindow() {
   const [activeTab, setActiveTab] = useState("terminal");
-  const [dimensions, setDimensions] = useState({ width: 700, height: 409 }); // Initial width & height
+  const [dimensions, setDimensions] = useState({ width: 1160, height: 300 }); 
   const consoleRef = useRef(null);
   const isResizing = useRef(false);
   const resizeDirection = useRef("");
 
-  const handleMouseDown = (e, direction) => {
+  const handleMouseDown = (e:any, direction:any) => {
     e.preventDefault();
     isResizing.current = true;
     resizeDirection.current = direction;

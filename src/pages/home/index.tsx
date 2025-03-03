@@ -189,9 +189,9 @@ const Home: FC = () => {
                            <AddChartsAndWidgets/>
                            <Comments/>
                            <ChartWidgetsWindow/>
-                            {!playground.open && <CustomTable />}
+                            {/* {!playground.open && <CustomTable />} */}
                             <h2>YouTube Widget Example</h2>
-                            <YouTubeWidget
+                            {/* <YouTubeWidget
                                 src={
                                 
                                     "https://www.youtube.com/embed/LXb3EKWsInQ?si=YqSqq2qm6X3tc-9F"
@@ -216,7 +216,7 @@ const Home: FC = () => {
                                 }
                             />
                             <h2>Drawing Example</h2>
-                            <Drawing />
+                            <Drawing /> */}
                         </Flex>
                         {messages.map((msg) =>
                             msg.id === editMessage.id ? (

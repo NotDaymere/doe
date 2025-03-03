@@ -2,6 +2,7 @@
   display: flex;
   justify-content: start;
   align-items: center;
+  
   gap: 8px;
   .on {
     border-bottom: solid 1px white;
@@ -14,6 +15,7 @@
 .consoleTab {
   padding-top: 13px;
   padding-bottom: 13px;
+ 
   button {
     display: flex;
     align-items: center;
@@ -47,6 +49,7 @@
   padding-left: 13px;
   padding-right: 13px;
   width: calc(100% -26px);
+   background: #1f1f1f;
 }
 
 .consoleInnerWindow {
@@ -59,7 +62,7 @@
 }
 
 .consoleBody {
-  min-height: 438px;
+  height: auto;
   background: #3d3e3c;
   display: flex;
   align-items: flex-start;
@@ -83,36 +86,37 @@
 
 .top-left {
   top: 120px;
-  left: 0px;
+  left: 6px;
   cursor: nwse-resize;
-  background: url('./img/icons/resizeIcons/resize-top-left.png');
-
+  &:hover{
+    background: url('./img/icons/resizeIcons/resize-top-left.png');
+  }
 }
 
 
 .top-right {
   top: 120px;
-  right: 0px;
-  
+  right: 6px;
   cursor: nesw-resize;
-
+  &:hover{
     background: url('./img/icons/resizeIcons/resize-top-right.png');
-  
+  }
 }
 
 .bottom-left {
   bottom: 6px;
-  left: 0px;
+  left: 6px;
   cursor: nesw-resize;
-  
-  background: url('./img/icons/resizeIcons/resize-bottom-left.png');
+  &:hover{
+    background: url('./img/icons/resizeIcons/resize-bottom-left.png');
+  }
 }
 
 .bottom-right {
   bottom: 6px;
-  right: 0px;
+  right: 6px;
   cursor: nwse-resize;
-   
+   &:hover{
     background: url('./img/icons/resizeIcons/resize-bottom-right.png');
-  
+  }
 }
