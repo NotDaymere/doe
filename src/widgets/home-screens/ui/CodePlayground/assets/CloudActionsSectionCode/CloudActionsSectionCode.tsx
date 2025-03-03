@@ -63,6 +63,9 @@ function CloudActionsSectionCode() {
             {arrowDownActionOnClick && (
                 <>
                     <div className="text-columns-button justify-flex-start text-columns-border-top hover-zero">
+                        <div className="text-columns-button text-columns-border-top justify-flex-start"
+                             onClick={() => setPlaygroundAction({type: 'port-code'})}
+                        >
                         <p className={`text-columns-button-p ${arrowDownActionOnClick && "text-columns-button-p-repaint"}`}>
                             <span className={"text-columns-button-span "}>Port Code</span>
                         </p>
@@ -98,6 +101,7 @@ function CloudActionsSectionCode() {
                             className={"text-columns-button-img "}
                             src={'https://s3-alpha-sig.figma.com/img/2e29/6a8e/2ede94e3f76d7177d871bae03342e3c5?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=U9YzCyISrsnqHQZFPmMLILmjQPX8FnDp75uaEq1RYLQNr5q68Bhrn7pDU-LtXFkBuCWcNGIf9PFpyU7XVZrHmFJVMXg7lER4dljIyOuEVOnn84-N7eyUNAJSnHcM--AdgfYr2RfebqpHyEvkYcJxx-ihp4AY9vj7-hg3mtqpIdNeveEz~KqP-vU0EeVEqGyT6v26G~0FQx5o0PxckHc3JNwFqRSvRkfhMQ5VBVeEdI5aMWUQnZbZ8dugaey7AzfguZxE9rauDdmrj55C4INxtNNcM5aO4Cs3YC~Sd~ZKxZsQPRc72Qhd1rJvHNlZf4iNgAnusUsINLTrEsX0kbTrtw__'}
                         />
+                        </div>
                     </div>
                 </>
             )}

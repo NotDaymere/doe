@@ -8,6 +8,7 @@ import { useChatStore, usePlaygroundStore } from "src/shared/providers";
 import WritingLevel from "./WritingLevel/WritingLevel";
 import CloseIcon from "../../../../shared/icons/CloseIcon";
 import SendIcon from "../../../../shared/icons/SendIcon";
+import PortCode from "./PortCode/PortCode";
 
 interface IProps {
     playgroundAction: IPlaygroundAction;
@@ -66,6 +67,7 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: { type }, editor, cont
             <div className="playground-action-content">
                 {type === "prompt" && <Prompt editor={editor} setSendButton={setSendButton} />}
                 {type === "writing-level" && <WritingLevel />}
+                {type === "port-code" && <PortCode />}
 
                 <div className="actions">
                     <button className="prompt-button prompt-button-close" onClick={() => setPlaygroundAction(null)}>

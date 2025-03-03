@@ -8,6 +8,7 @@ import { useState } from "react";
 function WritingLevel() {
     const [writingLevelOption, setWritingLevelOption] = useState<string>("");
     const [openMenu, setOpenMenu] = useState<boolean>(false)
+    const [promptValue, setPromptValue] = useState<string>("");
     return (
         <>
             <div className={"writing-level-content"}>
@@ -28,7 +29,6 @@ function WritingLevel() {
                 </div>
                 <span className={"text-columns-button-span ml--5"}>in</span>
                 <div className={'text-columns-target'}>
-
                 </div>
             </div>
         </>
