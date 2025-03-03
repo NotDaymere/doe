@@ -1,6 +1,6 @@
 import './OpenAllPlaygrounds.less';
 import { useEffect, useRef, useState } from "react";
-import { CSSTransition } from "react-transition-group";
+import ReactDOM from 'react-dom';
 import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg";
 import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 import { useChatStore } from "src/shared/providers";
@@ -60,7 +60,7 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeA
         };
     }, [changeActiveAllPlaygrounds]);
 
-    return (
+    return ReactDOM.createPortal(
             <div ref={containerRef} className={'open-all-playgrounds-container'}>
             <div className={'open-all-playgrounds-header'}>
                 <div className={'open-all-playgrounds-header-text'}>
@@ -107,6 +107,7 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeA
                     changeActiveAllPlaygrounds = {changeActiveAllPlaygrounds}
                 />
             }
-        </div>
+        </div>,
+        document.body
     );
 }
