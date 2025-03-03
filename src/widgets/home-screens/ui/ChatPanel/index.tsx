@@ -17,13 +17,16 @@ import { IMessage } from "src/shared/types/Message";
 
 import { useChatContext } from "../../lib/hooks/ChatContext";
 import CloseIcon from "../../../../shared/icons/Close.icon";
-
+import QuestionCodeMessage from "./assets/QuestionCodeMessage/QuestionCodeMessage";
+import HammerIcon from "src/shared/icons/HammerIcon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
     const { setEditor, setMessages } = useChatStore();
     const messages = useChatStore((state) => state.messages);
     const [clearContent, setClearContent] = React.useState(false)
+    const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
+
     const { 
         drag,
         dragTarget, 
@@ -51,20 +54,20 @@ export const ChatPanel: React.FC = () => {
             content: text,
             files: files,
         };
-    
+
         const botMessage: IMessage = {
             id: Date.now() + 1,
             isUser: false,
             isCode: true,
             content: testTextAndCharts,
         };
-    
+
         const updatedMessages = [...messages, userMessage];
         setMessages(updatedMessages);
-    
+
         reset();
         setClearContent(true);
-    
+
         setTimeout(() => {
             setMessages([...updatedMessages, botMessage]);
         }, 3000);
@@ -83,12 +86,13 @@ export const ChatPanel: React.FC = () => {
     };
 
     return (
-        <div className={css.panel}
+        <div className={playground.open ? (playgroundFullscreen ? css.panel_playground_fullscreen : css.panel_playground) : css.panel}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDragLeave={handleDragCancel}
         >
-            <div 
+            {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
+            <div
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
                 onDrop={handleDragDropTarget}
@@ -122,7 +126,7 @@ export const ChatPanel: React.FC = () => {
 
                 {files.length > 0 && (
                     <div className={css.panel_files_mask}>
-                        <FileList 
+                        <FileList
                             className={css.panel_files}
                             files={files}
                             onChange={setFiles}
@@ -153,7 +157,7 @@ export const ChatPanel: React.FC = () => {
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
                         clearContent={clearContent}
-                        placeholder="Ask Doe anything you’d like about the world..."
+                        placeholder={playgroundFullscreen ? 'Ask Doe anything' : "Ask Doe anything you’d like about the world..."}
                     />
                     <button className={css.panel_button} disabled>
                         <ScreenShareIcon />
@@ -162,9 +166,15 @@ export const ChatPanel: React.FC = () => {
                         <MicrophoneIcon />
                     </button>
                     {!prompt.active ? (
+                        !questionCodeMessage ? (
                         <button className={css.panel_submitBtn} onClick={handleSend}>
                             Send <ArrowUpIcon />
                         </button>
+                        ) : (
+                            <button className={css.panel_hammerBtn}>
+                                <HammerIcon />
+                            </button>
+                        )
                     ) : (
                         <button className={css.panel_callBtn}>
                             <CallVoiceIcon />

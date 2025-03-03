@@ -27,6 +27,7 @@ import {
 // Chat components
 import { useChatController } from "../..";
 import { ChatMessage } from "../ChatMessage";
+import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
 
 // Styles
 import css from "./ChatContent.module.less";
@@ -47,6 +48,7 @@ interface Props {
 
 export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) => {
     const { chatRef } = useChatController();
+    const { playground, playgroundFullscreen } = useChatStore();
     const { currentBranch, messages } = useChatStore();
     const editor = useEditor({
         extensions: [
@@ -73,8 +75,10 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     });
 
     return (
-        <div className={css.content}>
+        <div
+            className={playground.open ? (playgroundFullscreen ? css.content_playground_fullscreen : css.content_playground) : css.content}>
             <div className={css.content_inner}>
+                {!playgroundFullscreen && <AllPlaygrounds />}
                 <div className={css.content_chat} ref={chatRef}>
                     {messages.map((item) => (
                         <ChatMessage

@@ -15,6 +15,7 @@ import { useChatStore } from "src/shared/providers";
 // Shared components
 import { Editor } from "src/shared/components/Editor";
 import { useApp } from "src/components/app";
+import ExampleTableMassage from "./assets/ExampleTabelMassage/ExampleTableMassage";
 
 // Icons
 import CrossIcon from "src/shared/icons/Cross.icon";
@@ -38,6 +39,9 @@ import { useClickOut } from "src/shared/hooks/useClickOut";
 import ReferenceButton from "../ChatReferences/ReferenceButton/ReferenceButton";
 
 import { useChatContext } from "../../lib/hooks/ChatContext";
+import TableRandomValues from "./assets/TableRandomValues/TableRandomValues";
+import DownloadCSV from "./assets/DownloadCSV/DownloadCSV";
+import PythonTaskManager from "./assets/PythonTaskManager/PythonTaskManager";
 
 interface Props {
     data: IMessage;
@@ -273,6 +277,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         classNameEditor={css.edit_editor_editor}
                         placeholder="Edit message"
                     />
+
                     <div className={css.edit_controls}>
                         <button
                             className={css.edit_controls_cancelBtn}
@@ -291,6 +296,12 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             {/*</span>*/}
                         </button>
                     </div>
+                    <ReferenceButton
+                        isVisible={referenceButtonVisible}
+                        position={referenceButtonPosition}
+                        onClose={handleClose}
+                        onReferenceClick={handleReferenceClick}
+                    />
                 </div>
             );
         }
@@ -309,6 +320,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         __html: data.content,
                     }}
                 />
+
             </div>
         );
     }
@@ -317,6 +329,13 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             <div
                 className={`${css.chat_message} ${data.isUser ? css.user_message : css.bot_message}`}
             >
+                <ReferenceButton
+                    isVisible={referenceButtonVisible}
+                    position={referenceButtonPosition}
+                    onClose={handleClose}
+                    onReferenceClick={handleReferenceClick}
+                />
+
                 {!data.isUser && (
                     <div className={css.bot_logo_background}>
                         <div className={css.bot_logo}>
@@ -348,15 +367,21 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 );
                             })}
                         </MathJax>
-                        <ReferenceButton
-                            isVisible={referenceButtonVisible}
-                            position={referenceButtonPosition}
-                            onClose={handleClose}
-                            onReferenceClick={handleReferenceClick}
-                        />
+                        <text className={"message-text"}>Now Ill show the output in the table:</text>
+                        <Flex justify={"flex-start"} className={"message-actions"} vertical>
+                            <Flex>
+                                <TableRandomValues />
+                                <DownloadCSV />
+                            </Flex>
+                            <Flex>
+                                <PythonTaskManager />
+                            </Flex>
+                        </Flex>
                     </div>
+
                     {!data.isUser && (
                         <Flex justify={"space-between"} className={"message-actions"}>
+
                             <button onClick={openSourcePlayground} className={css.button_steps}>
                                 <SvgIcon
                                     style={{ width: "15px", height: "15px", marginRight: "2px" }}
