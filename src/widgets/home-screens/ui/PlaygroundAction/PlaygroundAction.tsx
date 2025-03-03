@@ -32,7 +32,7 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: { type }, editor, cont
     useEffect(() => {
         if (!playgroundFullscreen || !chatRef.current) return;
         const componentWidth = chatRef.current.getBoundingClientRect().width;
-        setPosition({ x: (containerWidth - componentWidth) / 2, y: -100 });
+        setPosition({ x: (containerWidth - componentWidth) / 100, y: -100 });
     }, [containerWidth, playgroundFullscreen]);
 
     useEffect(() => {

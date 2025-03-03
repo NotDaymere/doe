@@ -15,13 +15,12 @@ function CloudActionsSection() {
                 left: !playgroundFullscreen ? 0 : 'default',
             }}
         >
-            <div className="text-columns-button justify-space-between">
+            <div className="text-columns-button justify-space-between"
+                 onClick={() => setPlaygroundAction({type: 'prompt'})}>
                 <p className={"text-columns-button-p"}>
                     Add a <span className={"text-columns-button-span"}>Prompt</span>
                 </p>
-                <button className="button-plus"
-                        onClick={() => setPlaygroundAction({type: 'prompt'})}
-                >
+                <button className="button-plus">
                     <Plus className="plus-icon" />
                 </button>
             </div>
