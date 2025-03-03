@@ -16,13 +16,13 @@ export const TRANSLATION_FROM_IMAGE = `
   <span>Total: ______</span>
 `;
 
-export const TEXT_TO_TRANSLATE_PART = "";
-export const TRANSLATED_TEXT_TOP_PART = "";
-export const TRANSLATED_TEXT_BOTTOM_PART = "";
+// export const TEXT_TO_TRANSLATE_PART = "";
+// export const TRANSLATED_TEXT_TOP_PART = "";
+// export const TRANSLATED_TEXT_BOTTOM_PART = "";
 
-// export const TEXT_TO_TRANSLATE_PART = `<span>Hello this is the translation area of Doe. Do you like it? What do you think? What are some difficult things for me to say in your language do you think? Here, you are able to translate between any language seamlessly, and even upload examples of languages and add custom languages.</span><span>Generative Operators (GOs), like GO-1, the world’s first and only. have demonstrated impressive translation capabilities, often rivaling traditional Neural Machine Translation (NMT) systems such as Google Translate. However, their effectiveness varies based on several factors.</span>`;
-// export const TRANSLATED_TEXT_TOP_PART = `<span>こんにちは、Doeの翻訳エリアです。あなたはそれが好きですかどう思いますかあなたの言語で言うのが難しい ことは何だと思いますか?ここでは、任意の言語間でシームレスに翻訳したり、言語の例をアップロードしたり、カスタム言語を追加したりすることもできます。</span><span>世界初で唯一の GO-1 のようなジェネレーティブ オペレーター 。は、Google 翻訳などの従来のニューラル機械翻訳 (NMT) システムに匹敵する優れた翻訳機能を実証してきました。ただし、その有効性はいくつかの要因によって異なります。</span>`;
-// export const TRANSLATED_TEXT_BOTTOM_PART = `<span className={css.bottomText}>Kon'nichiwa, Doe no hon'yaku eriadesu. Anata wa sore ga sukidesu ka? Dōomoimasuka? Anata no gengo de iu no ga muzukashī koto wa nanida to omoimasu ka? Kokode wa, nin'i no gengo-kan de shīmuresu ni hon'yaku shi tari, gengo no rei o appurōdo shi tari, kasutamu gengo o tsuika shi tari suru koto mo dekimasu.</span><span className={css.bottomText}>Sekai-hatsu de yuiitsu no GO - 1 no yōna jenerētibu operētā (GO). Wa, gūguru hon'yaku nado no jūrai no nyūraru kikai hon'yaku (NMT) shisutemu ni hitteki suru sugureta hon'yaku kinō o jisshō shite kimashita. Tadashi, sono yūkōsei wa ikutsu ka no yōin ni yotte kotonarimasu.</span>`;
+export const TEXT_TO_TRANSLATE_PART = `<span>Hello this is the translation area of Doe. Do you like it? What do you think? What are some difficult things for me to say in your language do you think? Here, you are able to translate between any language seamlessly, and even upload examples of languages and add custom languages.</span><span>Generative Operators (GOs), like GO-1, the world’s first and only. have demonstrated impressive translation capabilities, often rivaling traditional Neural Machine Translation (NMT) systems such as Google Translate. However, their effectiveness varies based on several factors.</span>`;
+export const TRANSLATED_TEXT_TOP_PART = `<span>こんにちは、Doeの翻訳エリアです。あなたはそれが好きですかどう思いますかあなたの言語で言うのが難しい ことは何だと思いますか?ここでは、任意の言語間でシームレスに翻訳したり、言語の例をアップロードしたり、カスタム言語を追加したりすることもできます。</span><span>世界初で唯一の GO-1 のようなジェネレーティブ オペレーター 。は、Google 翻訳などの従来のニューラル機械翻訳 (NMT) システムに匹敵する優れた翻訳機能を実証してきました。ただし、その有効性はいくつかの要因によって異なります。</span>`;
+export const TRANSLATED_TEXT_BOTTOM_PART = `<span className={css.bottomText}>Kon'nichiwa, Doe no hon'yaku eriadesu. Anata wa sore ga sukidesu ka? Dōomoimasuka? Anata no gengo de iu no ga muzukashī koto wa nanida to omoimasu ka? Kokode wa, nin'i no gengo-kan de shīmuresu ni hon'yaku shi tari, gengo no rei o appurōdo shi tari, kasutamu gengo o tsuika shi tari suru koto mo dekimasu.</span><span className={css.bottomText}>Sekai-hatsu de yuiitsu no GO - 1 no yōna jenerētibu operētā (GO). Wa, gūguru hon'yaku nado no jūrai no nyūraru kikai hon'yaku (NMT) shisutemu ni hitteki suru sugureta hon'yaku kinō o jisshō shite kimashita. Tadashi, sono yūkōsei wa ikutsu ka no yōin ni yotte kotonarimasu.</span>`;
 
 // export const VOICE_TEXT_TO_TRANSLATE_PART = "";
 // export const VOICE_TRANSLATED_TEXT_TOP_PART = "";

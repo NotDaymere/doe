@@ -111,7 +111,7 @@ const Translation = () => {
                             <div className={css.uploadIcons}>{renderUploadIcons()}</div>
                         )}
                         <div className={css.textForTranslate}>
-                            {TEXT_TO_TRANSLATE_PART && (
+                            {TEXT_TO_TRANSLATE_PART && !isUploadFiles && (
                                 <div
                                     className={css.text}
                                     dangerouslySetInnerHTML={{ __html: TEXT_TO_TRANSLATE_PART }}
@@ -132,16 +132,18 @@ const Translation = () => {
                         </div>
                     )}
                     <div className={css.icons}>
-                        {TRANSLATED_TEXT_TOP_PART && TRANSLATED_TEXT_BOTTOM_PART && (
-                            <div className={css.volumeIcon}>
-                                <VolumeIcon width={17} height={13} />
-                            </div>
-                        )}
+                        {TRANSLATED_TEXT_TOP_PART &&
+                            TRANSLATED_TEXT_BOTTOM_PART &&
+                            !isUploadFiles && (
+                                <div className={css.volumeIcon}>
+                                    <VolumeIcon width={17} height={13} />
+                                </div>
+                            )}
                         <div className={css.translateIcon}>
                             <TranslatedTextIcon width={20} height={20} />
                         </div>
                     </div>
-                    {TRANSLATED_TEXT_TOP_PART && TRANSLATED_TEXT_BOTTOM_PART && (
+                    {TRANSLATED_TEXT_TOP_PART && TRANSLATED_TEXT_BOTTOM_PART && !isUploadFiles && (
                         <div className={css.translatedTextWrapper}>
                             <div
                                 className={css.text}
