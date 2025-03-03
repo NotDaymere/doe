@@ -10,10 +10,12 @@ import { TRANSLATION_MENU_OPTIONS, TranslationMenuOptionsType } from "src/shared
 import { useAppStore } from "src/shared/providers";
 import Chip from "src/shared/components/Chip";
 import css from "./Translator.module.less";
+import StarsIcon from "src/shared/icons/Stars.icon";
 
 const Translator = () => {
     const { activeTranslationOption, setActiveTranslationOption } = useAppStore();
     const [showChip, setShowChip] = useState(false);
+    const [showMagicMenu, setShowMagicMenu] = useState(false);
 
     useEffect(() => {
         if (activeTranslationOption === TRANSLATION_MENU_OPTIONS.TRANSLATION) return;
@@ -105,7 +107,14 @@ const Translator = () => {
             <div className={css.translator}>
                 {renderTranslatorMode(activeTranslationOption)}
                 <div className={css.magicMenu}>
-                    <MagicMenu items={MAGIC_MENU_ITEMS} />
+                    <button className={css.magicButton} onMouseEnter={() => setShowMagicMenu(true)}>
+                        <StarsIcon width={21} height={28} />
+                    </button>
+                    <MagicMenu
+                        items={MAGIC_MENU_ITEMS}
+                        isActive={showMagicMenu}
+                        setIsActive={setShowMagicMenu}
+                    />
                 </div>
             </div>
         </>

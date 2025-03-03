@@ -27,12 +27,12 @@ const VoiceMode = () => {
 
     return (
         <div className={css.translationWrapper}>
-            <div className={css.logo}>
-                <DoeIcon width={26} height={26} />
-            </div>
             <div className={css.translation}>
                 <DictionaryIcon width={48} height={48} className={css.dictionaryIcon} />
                 <div className={css.translationArea}>
+                    <div className={css.logo}>
+                        <DoeIcon width={26} height={26} />
+                    </div>
                     <div className={css.iconsForTranslated}>
                         <div className={css.translateIcon}>
                             <TextForTranslateIcon width={20} height={20} />

@@ -32,6 +32,25 @@
     padding: 20px;
     background-color: #fff;
     border-radius: 16px;
+    position: relative;
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fefefe;
+    border: 1px solid #cbcbcb;
+    border-radius: 12px;
+    position: absolute;
+    left: -60px;
+    top: 0;
+
+    path {
+        fill: #353930;
+    }
 }
 
 .textForTranslateWrapper {
@@ -67,6 +86,16 @@
     gap: 16px;
 }
 
+.uploadArea {
+    height: 44px;
+    border-color: #8bcf15;
+}
+
+.uploadIcons {
+    position: absolute;
+    right: 32px;
+}
+
 .text {
     display: flex;
     flex-direction: column;
@@ -78,6 +107,27 @@
     justify-content: flex-end;
     align-items: center;
     gap: 12px;
+}
+
+.filesList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.file {
+    display: flex;
+    align-items: center;
+    .setFontSohneBuch(16px);
+    color: #365302;
+
+    &:not(:last-child) {
+        gap: 6px;
+    }
+
+    &:last-child {
+        gap: 2px;
+    }
 }
 
 .volumeIcon {
@@ -115,4 +165,16 @@
     border-radius: 12px;
     box-shadow: 0 3px 12px rgba(#1f1f1f, 0.05);
     background: linear-gradient(to bottom, #d7d7d7 0%, #fff 100%);
+}
+
+.magicMenu {
+    position: relative;
+}
+
+.magicButton {
+    background-color: none;
+}
+
+.menu {
+    top: -150px;
 }
