@@ -77,13 +77,13 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     // const [isEdit, setEdit] = React.useState(false);
     const [content, setContent] = React.useState(data.content);
     const [updatedContent, setUpdatedContent] = useState(data.content);
+
+
     const { editor, setEditor } = useChatStore();
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
     const { setPlayground } = useApp().app;
 
-    const [versions, setVersions] = useState<string[]>([data.content]);
-    const [currentVersionIndex, setCurrentVersionIndex] = useState<number>(0);
 
     const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
     const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{ top: number; left: number } | null>(null);
@@ -336,6 +336,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             </div>
         );
     }
+
     if (data.isCode) {
         return (
             <div
@@ -440,6 +441,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                     <span className={css.tooltip}>Copy chat text</span>
                                     <CopyIcon />
                                 </button>
+
                             </Flex>
                         </Flex>
                     )}
