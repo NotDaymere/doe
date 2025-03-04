@@ -12,10 +12,11 @@ type OpenAllPlaygroundsProps = {
     activeAllPlaygrounds: boolean;
 };
 
-export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeAllPlaygrounds }: OpenAllPlaygroundsProps) {
+export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenAllPlaygroundsProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const { savedPlaygrounds, getOpenSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlayground } = useChatStore();
     const [activeOpenAllPlaygroundsMenu, setActiveOpenAllPlaygroundsMenu] = useState<string | null>(null);
+    const [activeAllPlaygrounds, setActiveAllPlaygrounds] = useState<boolean>(true);
     const [contentIdHover, setContentIdHover] = useState<string | null>(null);
     const contentMouseUp = (id: string | null) => {
         if (activeOpenAllPlaygroundsMenu) {
@@ -51,6 +52,7 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeA
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setActiveAllPlaygrounds(false);
                 changeActiveAllPlaygrounds();
             }
         }
@@ -61,13 +63,15 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeA
     }, [changeActiveAllPlaygrounds]);
 
     return ReactDOM.createPortal(
-            <div ref={containerRef} className={`open-all-playgrounds-container ${ getOpenSavedPlaygrounds().length < 1 && 'open-all-playgrounds-container-without-playground'}`}>
+            <div ref={containerRef} className={`open-all-playgrounds-container ${ getOpenSavedPlaygrounds().length < 1 && 'open-all-playgrounds-container-without-playground'} ${!activeAllPlaygrounds && 'close'}`}>
             <div className={'open-all-playgrounds-header'}>
                 <div className={'open-all-playgrounds-header-text'}>
                     <DoePlaygroundStars />All Playgrounds
                 </div>
                 <button className={'open-all-playgrounds-header-button'}
-                        onClick={changeActiveAllPlaygrounds}>
+                        onClick={()=>
+                            {changeActiveAllPlaygrounds()
+                            setActiveAllPlaygrounds(false)}}>
                     <DecreasePlaygroundIcon />
                 </button>
             </div>
