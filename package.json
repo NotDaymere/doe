@@ -16,10 +16,14 @@
     "@react-pdf/renderer": "^4.1.5",
     "@tiptap/extension-code": "^2.9.1",
     "@tiptap/extension-code-block-lowlight": "^2.11.3",
+    "@tiptap/extension-color": "^2.11.5",
     "@tiptap/extension-focus": "^2.11.3",
     "@tiptap/extension-history": "^2.9.1",
     "@tiptap/extension-link": "^2.9.1",
     "@tiptap/extension-placeholder": "^2.9.1",
+    "@tiptap/extension-subscript": "^2.11.5",
+    "@tiptap/extension-superscript": "^2.11.5",
+    "@tiptap/extension-text-style": "^2.11.5",
     "@tiptap/extension-underline": "^2.9.1",
     "@tiptap/pm": "^2.9.1",
     "@tiptap/react": "^2.9.1",
@@ -33,6 +37,7 @@
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
     "googleapis": "^144.0.0",
+    "graphql": "^16.10.0",
     "highlight.js": "^11.10.0",
     "jspdf": "^2.5.2",
     "monaco-editor": "^0.52.0",
@@ -68,6 +73,7 @@
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "@types/react-helmet": "^6.1.11",
-    "@types/react-transition-group": "^4.4.12"
+    "@types/react-transition-group": "^4.4.12",
+    "prettier": "^3.5.1"
   }
 }

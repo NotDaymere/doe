@@ -1,5 +1,6 @@
 build
 .cache
+.idea
 dev-dist
 vite.config.d.ts
 vite.config.js
@@ -11,3 +12,5 @@ vite.config.js
 node_modules
 .env.*
 !.env.example
+.idea
+package-lock.json

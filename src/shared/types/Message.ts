@@ -1,7 +1,7 @@
 export interface IMessage {
     id: number;
     content: string;
-    files: File[];
+    files?: File[];
     isUser: boolean;
     isCode: boolean;
 }

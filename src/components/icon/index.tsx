@@ -7,9 +7,11 @@ import { ReactComponent as BracesIcon } from "src/assets/icons/braces-icon.svg"
 import { ReactComponent as CallIcon } from "src/assets/icons/call.svg"
 import { ReactComponent as CollapseIcon } from "src/assets/icons/collapse.svg"
 import { ReactComponent as CopyAnswerIcon } from "src/assets/icons/copy-icon.svg"
+import { ReactComponent as CopyAnswerGreenIcon } from "src/assets/icons/copy-green-icon.svg"
 import { ReactComponent as DeepWebSearchIntegrationIcon } from "src/assets/icons/deep-web-search-integration-icon.svg"
 import { ReactComponent as GdocsIcon } from "src/assets/icons/docs.svg"
 import { ReactComponent as DownloadAnswerIcon } from "src/assets/icons/download-icon.svg"
+import { ReactComponent as DownloadGreenIcon } from "src/assets/icons/download-green-icon.svg"
 import { ReactComponent as DownloadIcon } from "src/assets/icons/download.svg"
 import { ReactComponent as DropIcon } from "src/assets/icons/drop.svg"
 import { ReactComponent as EarthIcon } from "src/assets/icons/earth-icon.svg"
@@ -24,6 +26,7 @@ import { ReactComponent as ItalicTextIcon } from "src/assets/icons/italic-text-i
 import { ReactComponent as LeafIcon } from "src/assets/icons/leaf.svg"
 import { ReactComponent as LineIcon } from "src/assets/icons/line.svg"
 import { ReactComponent as LinkIcon } from "src/assets/icons/link-icon.svg"
+import { ReactComponent as ListenIcon } from "src/assets/icons/listen-icon.svg"
 import { ReactComponent as MiroIcon } from "src/assets/icons/miro.svg"
 import { ReactComponent as MoonIcon } from "src/assets/icons/moon-icon.svg"
 import { ReactComponent as NotionIcon } from "src/assets/icons/notion-icon.svg"
@@ -32,6 +35,7 @@ import { ReactComponent as PencilIcon } from "src/assets/icons/pencil.svg"
 import { ReactComponent as PhoneIcon } from "src/assets/icons/phone-icon.svg"
 import { ReactComponent as PythonIcon } from "src/assets/icons/python-icon.svg"
 import { ReactComponent as SeeAllStepsIcon } from "src/assets/icons/see-all-steps-icon.svg"
+import { ReactComponent as SeeAllStepsIconViolet } from "src/assets/icons/see-all-steps-violet.svg"
 import { ReactComponent as SendMessageIcon } from "src/assets/icons/sendMessage.svg"
 import { ReactComponent as SparklesIcon } from "src/assets/icons/sparkles-icon.svg"
 import { ReactComponent as SpotifyIcon } from "src/assets/icons/spotify-icon.svg"
@@ -66,7 +70,9 @@ export const icons = {
   pdfIcon: PdfIcon,
   downloadAnswerIcon: DownloadAnswerIcon,
   copyAnswerIcon: CopyAnswerIcon,
+  copyAnswerGreenIcon: CopyAnswerGreenIcon,
   seeAllStepsIcon: SeeAllStepsIcon,
+  seeAllStepsVioletIcon: SeeAllStepsIconViolet,
   miro: MiroIcon,
   googleDocs: GdocsIcon,
   gMail: GmailIcon,
@@ -83,6 +89,7 @@ export const icons = {
   bolt: BoltIcon,
   stop: StopIcon,
   download: DownloadIcon,
+  downloadGreen: DownloadGreenIcon,
   expand: ExpandIcon,
   collapse: CollapseIcon,
   call: CallIcon,
@@ -91,6 +98,7 @@ export const icons = {
   xMark: XMark,
   sendMessage: SendMessageIcon,
   pythonIcon: PythonIcon,
+  listenIcon: ListenIcon,
 } as const
 
 export type IconsType = keyof typeof icons & string

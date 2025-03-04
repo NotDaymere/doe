@@ -16,13 +16,13 @@ import css from "./Sidebar.module.less";
 export const Sidebar: React.FC = () => {
     const { editor } = useChatStore();
     const editorState = useEditorContext(editor);
-
+    const { playground } = useChatStore();
     const pointerDown = (event: React.PointerEvent) => {
         event.preventDefault()
     };
 
     return (
-        <aside className={css.sidebar}>
+        <aside className={playground.open ? css.sidebar_playground : css.sidebar}>
             <SidebarGaia />
 
             <div className={css.sidebar_profile}>

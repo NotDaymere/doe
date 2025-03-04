@@ -8,6 +8,7 @@ import UploadIcon from "src/shared/icons/Upload.icon";
 import { MagicApplications, MagicMenuButton, MagicUploadApps } from "./ui";
 import { useClickOut } from "src/shared/hooks/useClickOut";
 import css from "./MagicMenu.module.less";
+import { useAppStore } from "../../../../shared/providers";
 
 interface Props {
     onUploadFiles?: (files: File[]) => void;
@@ -23,7 +24,7 @@ export const MagicMenu: React.FC<Props> = ({
     const ref = useClickOut({
         handler: () => setActiveMenu(false)
     });
-
+    const {setTalkModeActive } = useAppStore();
     const toggleMenu = () => setActiveMenu(!activeMenu);
 
     const upload = () => {
@@ -77,7 +78,11 @@ export const MagicMenu: React.FC<Props> = ({
                         text="Dispatch Doe" 
                         onClick={setCloseHandler(onDispatchDoe)}
                     />
-                    <MagicMenuButton icon={<TalkIcon />} text="Talk mode" />
+                    <MagicMenuButton
+                        icon={<TalkIcon />}
+                        text="Talk mode"
+                        onClick={setCloseHandler(() => setTalkModeActive(true))}
+                    />
                     <MagicMenuButton icon={<BranchIcon />} text="Create new branch" />
                 </div>
             </CSSTransition>

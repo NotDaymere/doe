@@ -7,7 +7,6 @@
 
 .main-layout {
   border-radius: 1rem;
-  border: 0.5px solid black;
   overflow: hidden;
 
   .ant-layout-sider {
@@ -19,8 +18,52 @@
     background: var(--bg-color-main);
   }
 
+}
+.playground-sider {
+  background: var(--bg-color-sidebar);
+  padding: 0;
+}
+.playground-sider {
+  transition: width 500ms ease, transform 500ms ease !important;
+  padding-bottom: 48px;
+  padding-top: 75px;
+  border-radius: 16px;
+  background: #fff;
+}
+.width-80{
+  width: 80% !important;
+}
+.width-100{
+  width: 100% !important;
+}
+.width-550px{
+  min-width: 550px !important;
+  width: 550px !important;
+}
+@media (max-width: 1300px) {
   .playground-sider {
-    background: var(--bg-color-sidebar);
-    padding: 0;
+    flex: unset !important;
   }
+}
+.main-layout-playground {
+  position: relative;
+  height: 100vh;
+  margin-right: 22px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: #ffffff;
+  padding: 2px;
+
+  .ant-layout-sider {
+    background-color: #ffffff;
+  }
+
+  .content {
+    background-color: #ffffff;
+  }
+
+
+}
+.display-none {
+  display: none;
 }

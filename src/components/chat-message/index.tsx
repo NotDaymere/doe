@@ -73,6 +73,13 @@ export const ChatMessage: FC<ChatMessageProps> = ({
             open: true,
         }));
     };
+    const openTablePlayground = () => {
+        setPlayground((prev) => ({
+            ...prev,
+            type: "table",
+            open: true,
+        }));
+    };
 
     const handleCopy = () => {
         if (messageRef.current) {
@@ -152,7 +159,8 @@ export const ChatMessage: FC<ChatMessageProps> = ({
                             </MathJax>
                         </div>
                         {!isUser && (
-                            <Flex justify={"space-between"} className={"message-actions"}>
+                            <Flex vertical>
+                                <Flex justify={"space-between"} className={"message-actions"}>
                                 <Button
                                     icon={
                                         <SvgIcon
@@ -185,6 +193,7 @@ export const ChatMessage: FC<ChatMessageProps> = ({
                                         onClick={handleCopy}
                                     />
                                 </Flex>
+                            </Flex>
                             </Flex>
                         )}
                     </div>
