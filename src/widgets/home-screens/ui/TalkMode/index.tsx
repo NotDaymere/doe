@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
 import css from "./TalkMode.module.less";
 import { useAppStore } from "../../../../shared/providers";
@@ -17,6 +17,18 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
     const [showMessage, setShowMessage] = useState(false);
     const [hoverPanelVisible, setHoverPanelVisible] = useState(false);
     const [isNeedToClose, setIsNeedToClose] = useState(false);
+
+    const [isCameraOn, setIsCameraOn] = useState<boolean | null>(null);
+    const [isMicrophoneOn, setIsMicrophoneOn] = useState<boolean | null>(null);
+
+    const [hasCameraPermission, setHasCameraPermission] = useState<boolean>(false);
+    const [hasMicrophonePermission, setHasMicrophonePermission] = useState<boolean>(false);
+
+    const [volume, setVolume] = useState<number>(0);
+
+    const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
+
+    const mediaStreamRef = useRef<MediaStream | null>(null);
 
     useEffect(() => {
         if (talkModeActive) {
@@ -54,11 +66,104 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
             const closeTimer = setTimeout(() => {
                 setTalkModeActive(false);
             }, 300);
-
             return () => clearTimeout(closeTimer);
         }
-        return;
+        return undefined;
     }, [isNeedToClose, setTalkModeActive]);
+
+    useEffect(() => {
+        if (navigator.permissions) {
+            navigator.permissions
+                .query({ name: "camera" as PermissionName })
+                .then((result) => {
+                    setHasCameraPermission(result.state === "granted");
+                    result.onchange = () => setHasCameraPermission(result.state === "granted");
+                })
+                .catch((error) => console.error("Camera permission query error:", error));
+
+            navigator.permissions
+                .query({ name: "microphone" as PermissionName })
+                .then((result) => {
+                    setHasMicrophonePermission(result.state === "granted");
+                    result.onchange = () => setHasMicrophonePermission(result.state === "granted");
+                })
+                .catch((error) => console.error("Microphone permission query error:", error));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (mediaStreamRef.current) {
+            mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+            mediaStreamRef.current = null;
+        }
+
+        if (isCameraOn !== true && isMicrophoneOn !== true) {
+            setAudioStream(null);
+            return;
+        }
+
+        navigator.mediaDevices
+            .getUserMedia({
+                video: isCameraOn === true,
+                audio: isMicrophoneOn === true,
+            })
+            .then((stream) => {
+                mediaStreamRef.current = stream;
+                console.log("Media stream started", stream);
+                // Если аудио включено, сохраняем аудиопоток отдельно
+                if (isMicrophoneOn === true) {
+                    setAudioStream(stream);
+                } else {
+                    setAudioStream(null);
+                }
+            })
+            .catch((error) => {
+                console.error("Error accessing media devices.", error);
+            });
+
+        return () => {
+            if (mediaStreamRef.current) {
+                mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+                mediaStreamRef.current = null;
+            }
+        };
+    }, [isCameraOn, isMicrophoneOn]);
+
+    useEffect(() => {
+        if (isMicrophoneOn === true && audioStream) {
+            const audioContext = new AudioContext();
+            const source = audioContext.createMediaStreamSource(audioStream);
+            const analyser = audioContext.createAnalyser();
+            analyser.fftSize = 256;
+            source.connect(analyser);
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+            let animationFrameId: number;
+
+            const updateVolume = () => {
+                analyser.getByteTimeDomainData(dataArray);
+                let sum = 0;
+                for (let i = 0; i < dataArray.length; i++) {
+                    const sample = dataArray[i] - 128;
+                    sum += sample * sample;
+                }
+                const rms = Math.sqrt(sum / dataArray.length);
+                const normalized = Math.min(rms / 128, 1);
+                setVolume(normalized);
+                animationFrameId = requestAnimationFrame(updateVolume);
+            };
+
+            updateVolume();
+
+            return () => {
+                cancelAnimationFrame(animationFrameId);
+                audioContext.close();
+            };
+        } else {
+            setVolume(0);
+        }
+        return undefined;
+    }, [isMicrophoneOn, audioStream]);
 
     if (!talkModeActive && !containerActive) {
         return null;
@@ -68,28 +173,41 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
         setShowMessage(false);
     };
 
+    const handleCameraToggle = () => {
+        setIsCameraOn((prev) => (prev === null ? true : !prev));
+    };
+
+    const handleMicrophoneToggle = () => {
+        setIsMicrophoneOn((prev) => (prev === null ? true : !prev));
+    };
+
     return (
         <div
             className={clsx(css.talkMode, { [css._active]: containerActive })}
             onMouseLeave={() => setHoverPanelVisible(false)}
         >
-            <TalkModeMessages
-                showMessage={showMessage}
-                closeBubbleHandler={closeBubbleHandler}
-            />
+            <TalkModeMessages showMessage={showMessage} closeBubbleHandler={closeBubbleHandler} />
             <div
                 className={clsx(css.hoverPanel, { [css._visible]: hoverPanelVisible })}
                 onMouseEnter={() => setHoverPanelVisible(true)}
                 onMouseLeave={() => setHoverPanelVisible(false)}
             >
-                <TalkModeActionsPanel onClose={() => setIsNeedToClose(true)} />
+                <TalkModeActionsPanel
+                    onClose={() => setIsNeedToClose(true)}
+                    isCameraOn={isCameraOn}
+                    isMicrophoneOn={isMicrophoneOn}
+                    onCameraToggle={handleCameraToggle}
+                    onMicrophoneToggle={handleMicrophoneToggle}
+                    noPermissionForCamera={!hasCameraPermission}
+                    noPermissionForMicrophone={!hasMicrophonePermission}
+                />
             </div>
             <div
                 className={css.dynamicObjWrapper}
                 onMouseEnter={() => setHoverPanelVisible(true)}
                 onMouseLeave={() => setHoverPanelVisible(false)}
             >
-                <TalkModeDynamicObj />
+                <TalkModeDynamicObj volume={volume} />
             </div>
         </div>
     );
