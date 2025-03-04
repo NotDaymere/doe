@@ -254,8 +254,6 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
             >
                 <TalkModeDynamicObj volume={volume} isThinkDoeMode={isUserResponseInProcess} />
             </div>
-            <span>{volume.toFixed(2)}</span>
-            <span>{isUserResponseInProcess ? "TRUE" : "FALSE"}</span>
         </div>
     );
 };
