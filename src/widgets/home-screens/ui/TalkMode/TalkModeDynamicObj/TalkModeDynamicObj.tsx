@@ -19,24 +19,24 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
     const defaultBoxShadow = `0 0 ${5 + volume * 140}px rgba(255, 139, 18, ${
         0.5 + volume * 0.6
     })`;
-    const answerModeBoxShadow = `0 0 ${5 + volume * 110}px rgba(255, 139, 18, ${
-        0.3 + volume * 0.7
-    })`;
+    const answerModeBoxShadow = `0 0 25px rgba(255, 139, 18, 1)`;
+
     const boxShadow = isThinkDoeMode ? answerModeBoxShadow : defaultBoxShadow;
-    const answerK = isThinkDoeMode ? 2 : 1;
-    const scale = 1 + volume * 0.3 * answerK;
 
-    const wave1Width = 58 + volume * 31;
-    const wave1Height = 50 + volume * 33;
-    const wave1Opacity = Math.min(0.3 + volume * 0.4, 1);
+    const scale = isThinkDoeMode ? 1 : 1 + volume * 0.5;
 
-    const wave2Width = 82 + volume * 29;
-    const wave2Height = 82 + volume * 28;
-    const wave2Opacity = Math.min(0.5 + volume * 0.3, 1);
+    const wave1Width = isThinkDoeMode ? 58 : 58 + volume * 31;
+    const wave1Height = isThinkDoeMode ? 50 : 50 + volume * 33;
+    const wave1Opacity = isThinkDoeMode ? 1 : Math.min(0.3 + volume * 0.4, 1);
 
-    const wave3Width = 58 + volume * 30;
-    const wave3Height = 58 + volume * 32;
-    const wave3Opacity = Math.min(0.3 + volume * 0.7, 1);
+    const wave2Width = isThinkDoeMode ? 82 : 82 + volume * 29;
+    const wave2Height = isThinkDoeMode ? 82 : 82 + volume * 28;
+    const wave2Opacity = isThinkDoeMode ? 1 : Math.min(0.5 + volume * 0.3, 1);
+
+    const wave3Width = isThinkDoeMode ? 58 : 58 + volume * 30;
+    const wave3Height = isThinkDoeMode ? 58 : 58 + volume * 32;
+    const wave3Opacity = isThinkDoeMode ? 1 : Math.min(0.3 + volume * 0.7, 1);
+
 
     return (
         <section
@@ -53,7 +53,7 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
             <SwitchTransition mode="out-in">
                 <CSSTransition
                     key={isThinkDoeMode ? "think" : "talk"}
-                    timeout={{ enter: 300, exit: 300 }}
+                    timeout={{ enter: 200, exit: 200 }}
                     classNames={{
                         enter: css.fadeEnter,
                         enterActive: css.fadeEnterActive,

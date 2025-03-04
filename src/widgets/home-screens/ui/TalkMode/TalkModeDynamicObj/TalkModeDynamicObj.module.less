@@ -10,6 +10,11 @@
   backdrop-filter: blur(1px);
   box-shadow: 0 4px 4px rgba(255, 139, 18, 0);
 
+  .answerMode{
+    backdrop-filter: blur(14px);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+
   .modeWrapper {
     transition: opacity 0.2s linear;
   }
@@ -138,12 +143,12 @@
 }
 .fadeEnterActive {
   opacity: 1;
-  transition: opacity 0.2s linear;
+  transition: opacity 0.2s linear, box-shadow 0.2s ease-in-out;
 }
 .fadeExit {
   opacity: 1;
 }
 .fadeExitActive {
   opacity: 0;
-  transition: opacity 0.2s linear;
+  transition: opacity 0.2s linear, box-shadow 0.2s ease-in-out;
 }
