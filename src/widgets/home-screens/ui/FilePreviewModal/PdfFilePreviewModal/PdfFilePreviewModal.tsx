@@ -1,14 +1,14 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import css from "./ModalOverplay.module.less";
-import ModalOverlay from "./ModalOverplay";
+import css from "../FilePreviewModalOverplay/FilePreviewModalOverplay.module.less";
+import ModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
 
 interface PdfModalProps {
     url: string;
     onClose: () => void;
 }
 
-const PdfModal: React.FC<PdfModalProps> = ({ url, onClose }) => {
+const PdfFilePreviewModal: React.FC<PdfModalProps> = ({ url, onClose }) => {
     console.log("PDF MODAL OPEN");
     return createPortal(
         <ModalOverlay onClose={onClose}>
@@ -18,4 +18,4 @@ const PdfModal: React.FC<PdfModalProps> = ({ url, onClose }) => {
     );
 };
 
-export default PdfModal;
+export default PdfFilePreviewModal;

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import css from "./ModalOverplay.module.less";
+import css from "./FilePreviewModalOverplay.module.less";
 import CrossIcon from "src/shared/icons/Cross.icon";
 
 interface ModalOverlayProps {
