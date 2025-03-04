@@ -21,6 +21,8 @@ import CloseIcon from "../../../../shared/icons/Close.icon";
 import QuestionCodeMessage from "./assets/QuestionCodeMessage/QuestionCodeMessage";
 import HammerIcon from "src/shared/icons/HammerIcon";
 import ChatResponseStopIcon from "../../../../shared/icons/ChatResponseStopIcon";
+import UploadFilesIcon from "../../../../shared/icons/UploadFiles.icon";
+import HandCursorIcon from "../../../../shared/icons/HandCursor.icon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
@@ -145,15 +147,22 @@ export const ChatPanel: React.FC = () => {
                 {drag && (
                     <div className={css.panel_drag}>
                         <p className={css.panel_drag_text}>Upload files, folders, text content, or code here.</p>
-                        <div className={css.panel_drag_background}/>
+                        <div className={css.panel_drag_background}>
+                            <div className={css.panel_drag_upload_files_wrapper}>
+                                <UploadFilesIcon width={14} height={20}/>
+                                <div className={css.panel_drag_hand_cursor_img}>
+                                    <HandCursorIcon />
+                                </div>
+                            </div>
+                        </div>
                         <button className={css.panel_drag_btn}>
                             <UploadIcon />
                         </button>
                     </div>
                 )}
                 <div className={css.panel_main}>
-                    <MagicMenu 
-                        onDispatchDoe={() => prompt.togglePrompt(true)} 
+                    <MagicMenu
+                        onDispatchDoe={() => prompt.togglePrompt(true)}
                         onUploadFiles={(values) => setFiles([...files, ...values])}
                     />
                     <Editor
