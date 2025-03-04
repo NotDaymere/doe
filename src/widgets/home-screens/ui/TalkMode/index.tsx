@@ -23,7 +23,7 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
     const [showMessage, setShowMessage] = useState(false);
     const [currentMessage, setCurrentMessage] = useState<string>("Hey, John. How can I help you?");
 
-    const [hoverPanelVisible, setHoverPanelVisible] = useState(false);
+    const [isNeedToShowActionsPanel, setIsNeedToShowActionsPanel] = useState(false);
     const [isNeedToClose, setIsNeedToClose] = useState(false);
 
     const [isCameraOn, setIsCameraOn] = useState<boolean | null>(null);
@@ -225,7 +225,7 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
             setIsUserResponseInProcess(false);
             const newMessage = "" +
                 "Your camera image contains a page of text with notes and graphs. " +
-                " I can suggest the following actions:\n" +
+                "I can suggest the following actions:\n" +
                 "1. Fixing the one thing there\n" +
                 "2. Fixing the second thing there\n" +
                 "3. Fixing the third thing there";
@@ -255,20 +255,41 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
     return (
         <div
             className={clsx(css.talkMode, { [css._active]: containerActive })}
-            onMouseLeave={() => setHoverPanelVisible(false)}
+            onMouseLeave={() => setIsNeedToShowActionsPanel(false)}
         >
             <TalkModeMessages
                 message={currentMessage}
                 showMessage={showMessage}
                 closeBubbleHandler={closeBubbleHandler}
             />
+            {!(isCameraOn === true) &&
+                <div
+                    className={clsx(css.hoverPanel, { [css._visible]: isNeedToShowActionsPanel })}
+                    onMouseEnter={() => setIsNeedToShowActionsPanel(true)}
+                    onMouseLeave={() => setIsNeedToShowActionsPanel(false)}
+                >
+                    <TalkModeActionsPanel
+                        onClose={() => setIsNeedToClose(true)}
+                        isCameraOn={isCameraOn}
+                        isMicrophoneOn={isMicrophoneOn}
+                        onCameraToggle={handleCameraToggle}
+                        onMicrophoneToggle={handleMicrophoneToggle}
+                        noPermissionForCamera={!hasCameraPermission}
+                        noPermissionForMicrophone={!hasMicrophonePermission}
+                    />
+                </div>
+            }
 
             <div
-                className={clsx(css.hoverPanel, { [css._visible]: hoverPanelVisible })}
-                onMouseEnter={() => setHoverPanelVisible(true)}
-                onMouseLeave={() => setHoverPanelVisible(false)}
+                className={css.dynamicObjWrapper}
+                onMouseEnter={() => setIsNeedToShowActionsPanel(true)}
+                onMouseLeave={() => setIsNeedToShowActionsPanel(false)}
             >
-                <TalkModeActionsPanel
+                <TalkModeDynamicObj
+                    volume={volume}
+                    isThinkDoeMode={isUserResponseInProcess}
+                />
+                <TalkModeVideoSection
                     onClose={() => setIsNeedToClose(true)}
                     isCameraOn={isCameraOn}
                     isMicrophoneOn={isMicrophoneOn}
@@ -276,19 +297,8 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
                     onMicrophoneToggle={handleMicrophoneToggle}
                     noPermissionForCamera={!hasCameraPermission}
                     noPermissionForMicrophone={!hasMicrophonePermission}
+                    isNeedToShowActionsPanel={isNeedToShowActionsPanel}
                 />
-            </div>
-
-            <div
-                className={css.dynamicObjWrapper}
-                onMouseEnter={() => setHoverPanelVisible(true)}
-                onMouseLeave={() => setHoverPanelVisible(false)}
-            >
-                <TalkModeDynamicObj
-                    volume={volume}
-                    isThinkDoeMode={isUserResponseInProcess}
-                />
-                <TalkModeVideoSection isCameraOn={isCameraOn === true} />
             </div>
         </div>
     );

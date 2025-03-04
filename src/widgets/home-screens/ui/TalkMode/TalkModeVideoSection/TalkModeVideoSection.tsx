@@ -1,12 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import css from "./TalkModeVideoSection.module.less";
+import { TalkModeActionsPanel } from "../TalkModeActionsPanel/TalkModeActionsPanel";
 
 interface TalkModeVideoSectionProps {
-    isCameraOn: boolean;
+    onClose: () => void;
+    isCameraOn: boolean | null;
+    isMicrophoneOn: boolean | null;
+    onCameraToggle: () => void;
+    onMicrophoneToggle: () => void;
+    isNeedToShowActionsPanel: boolean;
+    noPermissionForCamera?: boolean;
+    noPermissionForMicrophone?: boolean;
 }
 
-export const TalkModeVideoSection: React.FC<TalkModeVideoSectionProps> = ({ isCameraOn }) => {
+export const TalkModeVideoSection: React.FC<TalkModeVideoSectionProps> = ({
+                                                                              onClose,
+                                                                              isCameraOn,
+                                                                              isMicrophoneOn,
+                                                                              onCameraToggle,
+                                                                              onMicrophoneToggle,
+                                                                              isNeedToShowActionsPanel,
+                                                                              noPermissionForCamera = false,
+                                                                              noPermissionForMicrophone = false,
+                                                                          }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
     const [isVisible, setIsVisible] = useState(isCameraOn);
@@ -37,8 +54,21 @@ export const TalkModeVideoSection: React.FC<TalkModeVideoSectionProps> = ({ isCa
 
     return (
         isVisible && (
-            <div className={clsx(css.videoContainer, { [css.hidden]: !isCameraOn })} style={{ height: `${height}px` }}>
+            <div className={clsx(css.talkModeVideoContainer, { [css.hidden]: !isCameraOn })} style={{ height: `${height}px` }}>
                 <video ref={videoRef} autoPlay playsInline muted className={css.video} />
+                {isCameraOn === true &&
+                    <div className={clsx(css.hoverPanel, { [css._visible]: isNeedToShowActionsPanel })}>
+                        <TalkModeActionsPanel
+                            onClose={onClose}
+                            isCameraOn={isCameraOn}
+                            isMicrophoneOn={isMicrophoneOn}
+                            onCameraToggle={onCameraToggle}
+                            onMicrophoneToggle={onMicrophoneToggle}
+                            noPermissionForCamera={noPermissionForCamera}
+                            noPermissionForMicrophone={noPermissionForMicrophone}
+                        />
+                    </div>
+                }
             </div>
         )
     );
