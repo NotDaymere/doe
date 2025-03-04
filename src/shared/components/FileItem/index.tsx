@@ -2,9 +2,9 @@ import React, { useState, useMemo } from "react";
 import clsx from "clsx";
 import css from "./FileItem.module.less";
 import CrossIcon from "src/shared/icons/Cross.icon";
-import PdfFilePreviewModal from "../../../widgets/home-screens/ui/FilePreviewModal/PdfFilePreviewModal/PdfFilePreviewModal";
-import VideoFilePreviewModal from "../../../widgets/home-screens/ui/FilePreviewModal/VideoFilePreviewModal/VideoFilePreviewModal";
-import ImageFilePreviewModal from "../../../widgets/home-screens/ui/FilePreviewModal/ImageFilePreviewModal/ImageFilePreviewModal";
+import PdfModal from "../../../widgets/home-screens/ui/FilePreviewModal/PdfModal";
+import VideoModal from "../../../widgets/home-screens/ui/FilePreviewModal/VideoModal";
+import ImageModal from "../../../widgets/home-screens/ui/FilePreviewModal/ImageModal";
 
 
 interface FileItemProps {
@@ -14,12 +14,6 @@ interface FileItemProps {
     className?: string;
     onDelete?: () => void;
 }
-
-const shortenFileName = (name: string): string => {
-    const maxLength = 15;
-    if (name.length <= maxLength) return name;
-    return `${name.slice(0, 10)}...`;
-};
 
 export const FileItem: React.FC<FileItemProps> = ({ name, mimetype, url, className, onDelete }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,9 +53,6 @@ export const FileItem: React.FC<FileItemProps> = ({ name, mimetype, url, classNa
         }
     };
 
-    const shortFileName = shortenFileName(info.filename);
-    const displayFileName = `${shortFileName}.${info.ext}`;
-
     return (
         <>
             <div className={clsx(css.file, className)} onClick={handleClick}>
@@ -93,13 +84,13 @@ export const FileItem: React.FC<FileItemProps> = ({ name, mimetype, url, classNa
             </div>
 
             {isModalOpen && extLower === "pdf" && url && (
-                <PdfFilePreviewModal url={url} fileName={displayFileName} onClose={() => setIsModalOpen(false)} />
+                <PdfModal url={url} onClose={() => setIsModalOpen(false)} />
             )}
             {isModalOpen && ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) && url && (
-                <ImageFilePreviewModal url={url} fileName={displayFileName} onClose={() => setIsModalOpen(false)} />
+                <ImageModal url={url} onClose={() => setIsModalOpen(false)} />
             )}
             {isModalOpen && ["mp4", "webm", "ogg"].includes(extLower) && url && (
-                <VideoFilePreviewModal url={url} fileName={displayFileName} onClose={() => setIsModalOpen(false)} />
+                <VideoModal url={url} onClose={() => setIsModalOpen(false)} />
             )}
         </>
     );
