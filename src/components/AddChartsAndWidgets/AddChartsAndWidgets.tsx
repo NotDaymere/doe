@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState,useRef } from "react";
 import "./AddChartsAndWidgets.less";
 import { Page } from "../widgetAndChart/Enums/Page.enum";
 import { eventEmitter } from "../widgetAndChart/Utils/eventEmitter";
-
+import Draggable from "react-draggable";
 function AddChartsAndWidgets() {
   const [isVisible, setIsVisible] = useState(true);
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   const closeModal = () => {
     setIsVisible(false);
@@ -19,8 +20,9 @@ function AddChartsAndWidgets() {
   };
 
   return (
-    <div className="modalAddChartWidget">
-      <div className="modalHead">
+     <Draggable nodeRef={nodeRef} handle=".drag-handle">
+    <div ref={nodeRef} className="modalAddChartWidget">
+      <div className="modalHead drag-handle">
         <p>Charts and widgets</p>
         <button className="closeBtn" onClick={closeModal}>
           <img src="/img/icons/close.svg" alt="Close" />
@@ -65,6 +67,7 @@ function AddChartsAndWidgets() {
         </div>
       </div>
     </div>
+    </Draggable>
   );
 }
 

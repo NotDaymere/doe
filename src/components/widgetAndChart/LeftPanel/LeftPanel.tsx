@@ -37,7 +37,7 @@ function LeftPanel() {
                 <img src="/img/icons/chart.svg" alt="Charts" />
                 <p>Charts</p>
               </div>
-              <button>
+              <button onClick={(e) => {e.stopPropagation(); toggleSection("charts");}  }>
                 <img
                   src={
                     openSections.charts
@@ -119,7 +119,7 @@ function LeftPanel() {
                 <img src="/img/icons/widgetIcon.svg" alt="Widgets" />
                 <p>Widgets</p>
               </div>
-              <button>
+              <button  onClick={(e) => {e.stopPropagation(); toggleSection("widgets")} }>
                 <img
                   src={
                     openSections.widgets 

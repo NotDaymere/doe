@@ -1,12 +1,14 @@
 import { useState, useRef } from "react";
 import OutputBody from "../OutputBody/OutputBody";
 import TerminalBody from "../TerminalBody/TerminalBody";
+
 import "./ConsoleWindow.less";
 
 function ConsoleWindow() {
   const [activeTab, setActiveTab] = useState("terminal");
   const [dimensions, setDimensions] = useState({ width: 1160, height: 300 }); 
   const consoleRef = useRef(null);
+
   const isResizing = useRef(false);
   const resizeDirection = useRef("");
 

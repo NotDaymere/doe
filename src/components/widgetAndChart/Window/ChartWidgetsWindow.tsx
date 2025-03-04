@@ -7,15 +7,16 @@ import React, {
   useImperativeHandle,
   useEffect,
 } from "react";
-// import Draggable from "react-draggable";
+import Draggable from "react-draggable";
 import LeftPanel from "../LeftPanel/LeftPanel";
 import RightPanel from "../RightPanel/RightPanel";
 import "./ChartWidgetsWindow.less";
 import { Page } from "../Enums/Page.enum";
-import CreateDrawing from "../Drawing/Create/CreateDrawing";
-import DrawingModal from "../Drawing/DrawingModal/DrawingModal";
 import { eventEmitter } from "../Utils/eventEmitter";
 import EditTemplateModal from "../Chart/EditTemplate/EditTemplate";
+import Drawing from "../Drawing/Drawing";
+import DrawingModal from "../Drawing/DrawingModal/DrawingModal";
+
 
 interface ChartWidgetsContextType {
   prevPage: string;
@@ -52,6 +53,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
     setPrevPage(page);
     changePage(pageName);
     setParameter(parameterName || "");
+    // console.log("par"+parameterName);
   };
 
   const openWindow = () => setIsVisible(true);
@@ -93,7 +95,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
     >
       <div className="widgetAndChartOverlay">
         {!fullWindow && (
-          // <Draggable nodeRef={nodeRef} handle=".drag-handle">
+          <Draggable nodeRef={nodeRef} handle=".drag-handle">
             <div ref={nodeRef} className="widgetChartWindow">
               <div className="Head drag-handle">
                 <p>Charts and widgets {paramter}</p>
@@ -109,9 +111,9 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
                 )}
               </div>
             </div>
-          // </Draggable>
+           </Draggable>
         )}
-        {fullWindow && <>{page === Page.NEW_DRAWING && <DrawingModal />}</>}
+        {fullWindow && <>{page === Page.NEW_DRAWING && <DrawingModal id={paramter}/>}</>}
         {fullWindow && (
           <>{page === Page.EDIT_TEMPLATE && <EditTemplateModal />}</>
         )}

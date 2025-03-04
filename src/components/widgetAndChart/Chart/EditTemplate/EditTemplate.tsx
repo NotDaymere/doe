@@ -11,7 +11,7 @@ function EditTemplateModal() {
   const nodeRef = useRef(null);
   return (
     // <Draggable nodeRef={nodeRef} handle=".drag-handle">
-      <div className="modal" ref={nodeRef}>
+      <div className="modalChart" ref={nodeRef}>
         <div className="modalHead drag-handle">
           <p>Bar Chart #1</p>
           <div className="containerBtns">

@@ -186,9 +186,9 @@ const Home: FC = () => {
 
 
                             {/* <Console/> */}
-                           <AddChartsAndWidgets/>
+                           {/* <AddChartsAndWidgets/>
                            <Comments/>
-                           <ChartWidgetsWindow/>
+                           <ChartWidgetsWindow/> */}
                             {/* {!playground.open && <CustomTable />} */}
                             <h2>YouTube Widget Example</h2>
                             {/* <YouTubeWidget

@@ -38,7 +38,7 @@ const Drawing=()  => {
         
         {drawings.map((drawing, index) => (
           <>
-        <ChartButton icon={drawing.imageUrl} text={`Drawing # ${index +1}`}  onClick={()=>{setPage(Page.NEW_DRAWING,drawing.id);setFullWindow(true)}}/>
+        <ChartButton key={index} icon={drawing.imageUrl} text={`Drawing # ${index +1}`}  onClick={()=>{setPage(Page.NEW_DRAWING,drawing.id);setFullWindow(true)}}/>
           </>
 ))}
       </div>

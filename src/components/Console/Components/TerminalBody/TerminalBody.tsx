@@ -43,7 +43,6 @@ function TerminalBody() {
         const newBug = {
           id: currentLineIndex,
           type: currentLineIndex % 2 === 0 ? "red-bug" : "blue-bug",
-         
           x: 0,
           y: currentLineIndex,
         }
@@ -83,17 +82,17 @@ function TerminalBody() {
   const calculatePosition = (x: number, y: number) => {
     if (!terminalRef.current || !termInstance.current) return { top: 19.5, left: 0 }
 
-    
     const charHeight = 19.5 // Directly using the known row height
+
     return {
       top: y * charHeight+13.5,
       left: 20, // Align dots to the left margin
+      
     }
   }
 
   return (
     <>
-     
       <div className="bugs">
         {bugs.map(({ id, type, x, y }) => {
           const { top, left } = calculatePosition(x, y)
@@ -128,6 +127,24 @@ function TerminalBody() {
       <div className="terminal-container">
         <div className="codewindow" ref={terminalRef}></div>
       </div>
+
+      <div className="lines">
+         {bugs.map(({ id, type, x, y }) => {
+          const { top, left } = calculatePosition(x, y)
+          return (
+            <div
+              key={id}
+              style={{
+                position: "absolute",
+                top: `${top}px`,
+                height:`${19.5}px`,
+                zIndex: 10,
+            }}
+              className={`${type}`}
+            >
+              </div>
+               ) })}
+        </div>
     </>
   )
 }

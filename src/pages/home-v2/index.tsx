@@ -5,6 +5,10 @@ import {Helmet} from "react-helmet";
 import { MainLayout } from "src/shared/layouts/MainLayout";
 import { ChatLayout } from "src/widgets/home-screens";
 import css from "./index.module.less";
+import Console from "src/components/Console/Console";
+import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
+import Comments from "src/components/Comments/Comments";
+import ChartWidgetsWindow from "src/components/widgetAndChart/Window/ChartWidgetsWindow";
 
 const Home = () => {
     return (
@@ -12,6 +16,19 @@ const Home = () => {
             <Helmet>
                 <title>Doe</title>
             </Helmet>
+
+
+            
+            {/* <Console/> */}
+            
+            
+            
+             
+             <AddChartsAndWidgets/>
+                         
+                           <Comments/>
+                           <ChartWidgetsWindow/>
+
             <ChatLayout />
         </MainLayout>
     );
