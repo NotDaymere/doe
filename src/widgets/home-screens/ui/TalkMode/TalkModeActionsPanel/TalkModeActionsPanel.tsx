@@ -25,7 +25,7 @@ export const TalkModeActionsPanel: React.FC<TalkModeActionsPanelProps> = ({
                                                                               noPermissionForMicrophone = false,
                                                                           }) => {
     return (
-        <div className={css.actionsPanelContainer}>
+        <div className={`${isCameraOn ? css.actionsPanelCameraOnContainer : css.actionsPanelContainer}`}>
             <div
                 className={clsx(css.panelButton, {
                     ...(!noPermissionForMicrophone && {

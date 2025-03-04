@@ -1,8 +1,9 @@
-.videoContainer {
+.talkModeVideoContainer {
+  position: relative;
   width: 170px;
   height: 280px;
   background: black;
-  border-radius: 8px;
+  border-radius: 16px;
   overflow: hidden;
   display: flex;
   margin-top: 16px;
@@ -24,4 +25,19 @@
   opacity: 0;
   height: 0 !important;
   pointer-events: none;
+}
+
+.hoverPanel {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:  max-height 0.5s linear , margin-bottom 0.2s linear, margin-top 0.2s linear, opacity 0.3s linear;
+
+}
+
+.hoverPanel._visible {
+  opacity: 1;
+  margin-top: -12px;
+  max-height: 200px;
+  margin-bottom: 12px;
 }
