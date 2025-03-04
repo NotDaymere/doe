@@ -1,16 +1,27 @@
 .talkModeIconContainer {
   box-sizing: border-box;
   border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 59px;
   height: 59px;
-  background: transparent;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   backdrop-filter: blur(1px);
   box-shadow: 0 4px 4px rgba(255, 139, 18, 0);
+  .modeWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .modeWrapper.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+  }
   .wave1,
   .wave2,
   .wave3 {
@@ -23,95 +34,105 @@
   }
 
   .wave1 {
-    animation: wave1 24s infinite linear;
+    animation: wave1 18s infinite linear;
   }
-
   .wave2 {
-    animation: wave2 30s infinite linear;
+    animation: wave2 22s infinite linear;
   }
-
   .wave3 {
-    animation: wave3 28s infinite linear;
+    animation: wave3 20s infinite linear;
   }
+}
 
-  @keyframes wave1 {
-    0% {
-      transform: translate(-50%, -50%) rotate(0deg) scale(1);
-      opacity: 1;
-    }
-    20% {
-      transform: translate(-50%, -50%) rotate(72deg) scale(1.03) translateY(2px);
-      opacity: 0.95;
-    }
-    40% {
-      transform: translate(-50%, -50%) rotate(144deg) scale(1.1) translateY(-1px);
-      opacity: 0.9;
-    }
-    60% {
-      transform: translate(-50%, -50%) rotate(216deg) scale(0.96) translateY(2px);
-      opacity: 0.95;
-    }
-    80% {
-      transform: translate(-50%, -50%) rotate(288deg) scale(1) translateY(1px);
-      opacity: 1;
-    }
-    100% {
-      transform: translate(-50%, -50%) rotate(360deg) scale(1) translateY(0);
-      opacity: 1;
-    }
+@keyframes bend {
+  0% {
+    transform: scale(var(--scale)) skewX(calc(-1 * var(--skew)));
   }
-
-  @keyframes wave2 {
-    0% {
-      transform: translate(-50%, -50%) rotate(0deg) scale(1);
-      opacity: 1;
-    }
-    20% {
-      transform: translate(-50%, -50%) rotate(-72deg) scale(0.95) translateY(-2px);
-      opacity: 0.96;
-    }
-    40% {
-      transform: translate(-50%, -50%) rotate(-144deg) scale(0.9) translateY(-4px);
-      opacity: 0.92;
-    }
-    60% {
-      transform: translate(-50%, -50%) rotate(-216deg) scale(0.95) translateY(-2px);
-      opacity: 0.96;
-    }
-    80% {
-      transform: translate(-50%, -50%) rotate(-288deg) scale(1.1) translateY(0);
-      opacity: 1;
-    }
-    100% {
-      transform: translate(-50%, -50%) rotate(-360deg) scale(1) translateY(0);
-      opacity: 1;
-    }
+  50% {
+    transform: scale(var(--scale)) skewX(var(--skew));
   }
+  100% {
+    transform: scale(var(--scale)) skewX(calc(-1 * var(--skew)));
+  }
+}
 
-  @keyframes wave3 {
-    0% {
-      transform: translate(-50%, -50%) rotate(0deg) scale(1);
-      opacity: 1;
-    }
-    20% {
-      transform: translate(-50%, -50%) rotate(72deg) scale(0.98) translateY(1px);
-      opacity: 0.97;
-    }
-    40% {
-      transform: translate(-50%, -50%) rotate(144deg) scale(0.95) translateY(0);
-      opacity: 0.93;
-    }
-    60% {
-      transform: translate(-50%, -50%) rotate(216deg) scale(0.98) translateY(-1px);
-      opacity: 0.97;
-    }
-    80% {
-      transform: translate(-50%, -50%) rotate(288deg) scale(1) translateY(0);
-      opacity: 1;
-    }
-    100% {
-      transform: translate(-50%, -50%) rotate(360deg) scale(1) translateY(0);
-      opacity: 1;
-    }
+@keyframes wave1 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-50%, -50%) rotate(72deg) scale(1.03) translateY(2px);
+    opacity: 0.95;
+  }
+  40% {
+    transform: translate(-50%, -50%) rotate(144deg) scale(1.1) translateY(-1px);
+    opacity: 0.9;
+  }
+  60% {
+    transform: translate(-50%, -50%) rotate(216deg) scale(0.96) translateY(2px);
+    opacity: 0.95;
+  }
+  80% {
+    transform: translate(-50%, -50%) rotate(288deg) scale(1) translateY(1px);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes wave2 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-50%, -50%) rotate(-72deg) scale(0.95) translateY(-2px);
+    opacity: 0.96;
+  }
+  40% {
+    transform: translate(-50%, -50%) rotate(-144deg) scale(0.9) translateY(-4px);
+    opacity: 0.92;
+  }
+  60% {
+    transform: translate(-50%, -50%) rotate(-216deg) scale(0.95) translateY(-2px);
+    opacity: 0.96;
+  }
+  80% {
+    transform: translate(-50%, -50%) rotate(-288deg) scale(1.1) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(-360deg) scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes wave3 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-50%, -50%) rotate(72deg) scale(0.98) translateY(1px);
+    opacity: 0.97;
+  }
+  40% {
+    transform: translate(-50%, -50%) rotate(144deg) scale(0.95) translateY(0);
+    opacity: 0.93;
+  }
+  60% {
+    transform: translate(-50%, -50%) rotate(216deg) scale(0.98) translateY(-1px);
+    opacity: 0.97;
+  }
+  80% {
+    transform: translate(-50%, -50%) rotate(288deg) scale(1) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1) translateY(0);
+    opacity: 1;
   }
 }
