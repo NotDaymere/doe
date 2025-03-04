@@ -5,6 +5,7 @@ import { useAppStore } from "../../../../shared/providers";
 import { TalkModeDynamicObj } from "./TalkModeDynamicObj/TalkModeDynamicObj";
 import { TalkModeMessages } from "./TalkModeMessages/TalkModeMessages";
 import { TalkModeActionsPanel } from "./TalkModeActionsPanel/TalkModeActionsPanel";
+import { TalkModeVideoSection } from "./TalkModeVideoSection/TalkModeVideoSection";
 
 interface TalkModeProps {
     targetRef: React.RefObject<HTMLElement>;
@@ -287,6 +288,7 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
                     volume={volume}
                     isThinkDoeMode={isUserResponseInProcess}
                 />
+                <TalkModeVideoSection isCameraOn={isCameraOn === true} />
             </div>
         </div>
     );
