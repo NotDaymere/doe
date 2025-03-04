@@ -61,7 +61,6 @@ export const FileList: React.FC<Props> = ({
             containerRef.current.style.cursor = "grab";
         }
     }, []);
-
     return (
         <div
             className={clsx(css.files, "scrollbar", className)}
