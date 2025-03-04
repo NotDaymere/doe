@@ -12,13 +12,16 @@ interface TalkModeProps {
 
 const MIN_SPEECH_DURATION = 100;
 const SILENCE_DELAY = 1200;
-const SILENCE_THRESHOLD = 0.03;
+const SILENCE_THRESHOLD = 0.04;
 
 export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
     const { talkModeActive, setTalkModeActive } = useAppStore();
 
     const [containerActive, setContainerActive] = useState(false);
+
     const [showMessage, setShowMessage] = useState(false);
+    const [currentMessage, setCurrentMessage] = useState<string>("Hey, John. How can I help you?");
+
     const [hoverPanelVisible, setHoverPanelVisible] = useState(false);
     const [isNeedToClose, setIsNeedToClose] = useState(false);
 
@@ -86,7 +89,8 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
                 .query({ name: "camera" as PermissionName })
                 .then((result) => {
                     setHasCameraPermission(result.state === "granted");
-                    result.onchange = () => setHasCameraPermission(result.state === "granted");
+                    result.onchange = () =>
+                        setHasCameraPermission(result.state === "granted");
                 })
                 .catch((error) => console.error("Camera permission query error:", error));
 
@@ -94,7 +98,8 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
                 .query({ name: "microphone" as PermissionName })
                 .then((result) => {
                     setHasMicrophonePermission(result.state === "granted");
-                    result.onchange = () => setHasMicrophonePermission(result.state === "granted");
+                    result.onchange = () =>
+                        setHasMicrophonePermission(result.state === "granted");
                 })
                 .catch((error) => console.error("Microphone permission query error:", error));
         }
@@ -210,6 +215,26 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
         }
     }, [volume, isMicrophoneOn, audioStream, isUserResponseInProcess]);
 
+    useEffect(() => {
+        if (!isUserResponseInProcess) {
+            return;
+        }
+        setCurrentMessage("");
+        const timer = setTimeout(() => {
+            setIsUserResponseInProcess(false);
+            const newMessage = "" +
+                "Your camera image contains a page of text with notes and graphs. " +
+                " I can suggest the following actions:\n" +
+                "1. Fixing the one thing there\n" +
+                "2. Fixing the second thing there\n" +
+                "3. Fixing the third thing there";
+            setCurrentMessage(newMessage);
+            setShowMessage(true);
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }, [isUserResponseInProcess]);
+
     if (!talkModeActive && !containerActive) {
         return null;
     }
@@ -231,7 +256,12 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
             className={clsx(css.talkMode, { [css._active]: containerActive })}
             onMouseLeave={() => setHoverPanelVisible(false)}
         >
-            <TalkModeMessages showMessage={showMessage} closeBubbleHandler={closeBubbleHandler} />
+            <TalkModeMessages
+                message={currentMessage}
+                showMessage={showMessage}
+                closeBubbleHandler={closeBubbleHandler}
+            />
+
             <div
                 className={clsx(css.hoverPanel, { [css._visible]: hoverPanelVisible })}
                 onMouseEnter={() => setHoverPanelVisible(true)}
@@ -247,12 +277,16 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
                     noPermissionForMicrophone={!hasMicrophonePermission}
                 />
             </div>
+
             <div
                 className={css.dynamicObjWrapper}
                 onMouseEnter={() => setHoverPanelVisible(true)}
                 onMouseLeave={() => setHoverPanelVisible(false)}
             >
-                <TalkModeDynamicObj volume={volume} isThinkDoeMode={isUserResponseInProcess} />
+                <TalkModeDynamicObj
+                    volume={volume}
+                    isThinkDoeMode={isUserResponseInProcess}
+                />
             </div>
         </div>
     );
