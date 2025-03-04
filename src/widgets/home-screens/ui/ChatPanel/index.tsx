@@ -14,11 +14,13 @@ import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
 import { testTextAndCharts } from "src/components/chat-message/mockData";
 import { IMessage } from "src/shared/types/Message";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 import { useChatContext } from "../../lib/hooks/ChatContext";
 import CloseIcon from "../../../../shared/icons/Close.icon";
 import QuestionCodeMessage from "./assets/QuestionCodeMessage/QuestionCodeMessage";
 import HammerIcon from "src/shared/icons/HammerIcon";
+import ChatResponseStopIcon from "../../../../shared/icons/ChatResponseStopIcon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
@@ -26,6 +28,7 @@ export const ChatPanel: React.FC = () => {
     const messages = useChatStore((state) => state.messages);
     const [clearContent, setClearContent] = React.useState(false)
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const { 
         drag,
@@ -47,6 +50,9 @@ export const ChatPanel: React.FC = () => {
     const { selectedText, isShowReferencePanel, setIsShowReferencePanel } = useChatContext();
 
     const handleSend = () => {
+
+        setIsLoading(true);
+
         const userMessage: IMessage = {
             id: Date.now(),
             isUser: true,
@@ -70,6 +76,9 @@ export const ChatPanel: React.FC = () => {
 
         setTimeout(() => {
             setMessages([...updatedMessages, botMessage]);
+
+            setIsLoading(false);
+
         }, 3000);
     };
 
@@ -159,27 +168,67 @@ export const ChatPanel: React.FC = () => {
                         clearContent={clearContent}
                         placeholder={playgroundFullscreen ? 'Ask Doe anything' : "Ask Doe anything you’d like about the world..."}
                     />
-                    <button className={css.panel_button} disabled>
-                        <ScreenShareIcon />
-                    </button>
-                    <button className={css.panel_button}>
-                        <MicrophoneIcon />
-                    </button>
-                    {!prompt.active ? (
-                        !questionCodeMessage ? (
-                        <button className={css.panel_submitBtn} onClick={handleSend}>
-                            Send <ArrowUpIcon />
-                        </button>
-                        ) : (
-                            <button className={css.panel_hammerBtn}>
-                                <HammerIcon />
+
+                    <SwitchTransition>
+                    {isLoading ? (
+                        <CSSTransition
+                            in={isLoading}
+                            key="loading"
+                            timeout={{ enter: 300, exit: 300 }}
+                            classNames={{
+                                enter: css.fadeEnter,
+                                enterActive: css.fadeEnterActive,
+                                exit: css.fadeExit,
+                                exitActive: css.fadeExitActive
+                            }}
+                            mountOnEnter
+                            unmountOnExit
+                        >
+                            <button className={css.panel_loadingBtn}>
+                                <ChatResponseStopIcon fill="currentColor" />
                             </button>
-                        )
+                        </CSSTransition>
                     ) : (
-                        <button className={css.panel_callBtn}>
-                            <CallVoiceIcon />
-                        </button>
+                        <CSSTransition
+                            in={!isLoading}
+                            key="ready"
+                            timeout={{ enter: 300, exit: 300 }}
+                            classNames={{
+                                enter: css.fadeEnter,
+                                enterActive: css.fadeEnterActive,
+                                exit: css.fadeExit,
+                                exitActive: css.fadeExitActive
+                            }}
+                            mountOnEnter
+                            unmountOnExit
+                        >
+                            <>
+                            <button className={css.panel_button} disabled>
+                                <ScreenShareIcon />
+                            </button>
+                            <button className={css.panel_button}>
+                                <MicrophoneIcon />
+                            </button>
+
+                            {!prompt.active ? (
+                                !questionCodeMessage ? (
+                                    <button className={css.panel_submitBtn} onClick={handleSend}>
+                                        Send <ArrowUpIcon />
+                                    </button>
+                                        ) : (
+                                            <button className={css.panel_hammerBtn}>
+                                                <HammerIcon />
+                                            </button>)
+                                            ) : (
+                                                <button className={css.panel_callBtn}>
+                                                    <CallVoiceIcon />
+                                                </button>
+                                            )}
+                            </>
+                        </CSSTransition>
                     )}
+                </SwitchTransition>
+
                 </div>
             </div>
         </div>

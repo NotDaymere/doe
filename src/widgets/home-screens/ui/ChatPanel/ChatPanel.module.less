@@ -320,7 +320,6 @@
     padding: 10px 22px;
     border-radius: 12px;
     background: #1f1f1f;
-
     display: flex;
     align-items: center;
     gap: 2px;
@@ -376,3 +375,43 @@
         }
     }
 }
+
+.panel_loadingBtn {
+    display: flex;
+   justify-content: center;
+  align-items: center;
+  align-content: center;
+  border-radius: 50px;
+  border: 1px solid #dddddd;
+  height: 36px;
+  width: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  color: #5B5B5B;
+  transition:
+          background 0.3s ease,
+          color 0.3s ease,
+          border 0.3s ease;
+
+  &:hover {
+    color: #FFFFFF;
+    background-color: #5B5B5B;
+    border: none;
+  }
+}
+
+.fadeEnter {
+  opacity: 0;
+}
+.fadeEnterActive {
+  opacity: 1;
+  transition: opacity 0.2s linear;
+}
+.fadeExit {
+  opacity: 1;
+}
+.fadeExitActive {
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+
