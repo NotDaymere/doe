@@ -1,14 +1,14 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import css from "./ModalOverplay.module.less";
-import ModalOverlay from "./ModalOverplay";
+import css from "../FilePreviewModalOverplay/FilePreviewModalOverplay.module.less";
+import ModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
 
 interface VideoModalProps {
     url: string;
     onClose: () => void;
 }
 
-const VideoModal: React.FC<VideoModalProps> = ({ url, onClose }) => {
+const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose }) => {
     return createPortal(
         <ModalOverlay onClose={onClose}>
             <video controls className={css.modalVideo}>
@@ -20,4 +20,4 @@ const VideoModal: React.FC<VideoModalProps> = ({ url, onClose }) => {
     );
 };
 
-export default VideoModal;
+export default VideoFilePreviewModal;
