@@ -174,6 +174,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                  }
              }}
              onMouseMove={() => {
+                 if (playgroundAction) return
                  playgroundState && setPlayground(playgroundState)
              }}
              ref={divRef}

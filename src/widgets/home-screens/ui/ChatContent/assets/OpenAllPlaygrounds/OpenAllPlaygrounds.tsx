@@ -61,7 +61,7 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds, activeA
     }, [changeActiveAllPlaygrounds]);
 
     return ReactDOM.createPortal(
-            <div ref={containerRef} className={'open-all-playgrounds-container'}>
+            <div ref={containerRef} className={`open-all-playgrounds-container ${ getOpenSavedPlaygrounds().length < 1 && 'open-all-playgrounds-container-without-playground'}`}>
             <div className={'open-all-playgrounds-header'}>
                 <div className={'open-all-playgrounds-header-text'}>
                     <DoePlaygroundStars />All Playgrounds

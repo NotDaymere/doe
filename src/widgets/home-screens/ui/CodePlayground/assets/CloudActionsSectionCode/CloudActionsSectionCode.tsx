@@ -25,13 +25,12 @@ function CloudActionsSectionCode() {
                 left: !playgroundFullscreen ? 0 : 'default',
             }}
         >
-            <div className={`text-columns-button justify-space-between ${arrowDownActionOnClick && "hover-zero"}`}>
+            <div className={`text-columns-button justify-space-between ${arrowDownActionOnClick && "hover-zero"}`}
+                 onClick={() => setPlaygroundAction({type: 'prompt'})}>
                 <p className={`text-columns-button-p ${arrowDownActionOnClick && "text-columns-button-p-repaint"}`}>
                     Add a <span className={"text-columns-button-span"}>Prompt</span>
                 </p>
-                <button className="button-plus"
-                        onClick={() => setPlaygroundAction({type: 'prompt'})}
-                >
+                <button className="button-plus">
                     <Plus className="plus-icon" />
                 </button>
             </div>
@@ -62,7 +61,7 @@ function CloudActionsSectionCode() {
             </div>
             {arrowDownActionOnClick && (
                 <>
-                        <div className="text-columns-button text-columns-border-top justify-flex-start"
+                        <div className="text-columns-button text-columns-border-top justify-flex-start hover-zero"
                              onClick={() => setPlaygroundAction({type: 'port-code'})}
                         >
                         <p className={`text-columns-button-p ${arrowDownActionOnClick && "text-columns-button-p-repaint"}`}>

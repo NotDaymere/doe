@@ -1,6 +1,6 @@
 import { Flex, Table, TableProps } from "antd";
 import React, { FC, useEffect, useRef, useState } from "react";
-import mockData from './mockData.json';
+import table from './Table';
 import './index.less';
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
@@ -50,6 +50,19 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds } = useChatStore();
   const { playgroundAction } = usePlaygroundStore();
   const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
+    const [mockData, setMockData] = useState(() => {
+        const savedData = playgroundState?.data;
+        if (savedData instanceof Object) {
+            return (savedData);
+        } else {
+            const savedData = table();
+            if (playgroundState) {
+                playgroundState.data = savedData;
+                updateSavedPlaygrounds(playgroundState);
+            }
+            return (table());
+        }
+    });
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
@@ -104,6 +117,24 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   const [containerWidth, setContainerWidth] = useState(0);
   const { openHistory } = useVersionHistoryStore();
   const [showButtons, setShowButtons] = useState(false);
+
+    useEffect(() => {
+        if (id !== null && playgroundState?.data) {
+            playgroundState.data = mockData;
+            updateSavedPlaygrounds(playgroundState);
+        }
+    }, [mockData, id]);
+
+    useEffect(() => {
+        if (id !== null) {
+            const savedData = playgroundState?.data;
+            if (savedData instanceof Object) {
+                setMockData(savedData);
+            } else {
+                setMockData(table());
+            }
+        }
+    }, [id]);
 
   useEffect(() => {
     setTimeout(() => setShowButtons(true), 50);
@@ -189,7 +220,6 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
       })
     }))
   ];
-
   useEffect(() => {
     if (!editor || !playgroundState) return;
 
@@ -241,6 +271,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
              }
            }}
            onMouseMove={() => {
+               if (playgroundAction) return
              playgroundState && setPlayground(playgroundState)
            }}
            ref={divRef}
