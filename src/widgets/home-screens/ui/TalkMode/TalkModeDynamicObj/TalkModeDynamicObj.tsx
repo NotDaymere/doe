@@ -6,19 +6,19 @@ interface TalkModeDynamicObjProps {
     onMouseEnter?: React.MouseEventHandler<HTMLElement>;
     onMouseLeave?: React.MouseEventHandler<HTMLElement>;
     volume?: number;
-    isAnswerMode?: boolean;
+    isThinkDoeMode?: boolean;
 }
 
 export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
                                                                           onMouseEnter,
                                                                           onMouseLeave,
                                                                           volume = 0,
-                                                                          isAnswerMode = true,
+                                                                          isThinkDoeMode = false,
                                                                       }) => {
-    const defaultBoxShadow = `0 0 ${5 + volume * 100}px rgba(255, 139, 18, ${0.3 + volume * 0.7})`;
-    const answerModeBoxShadow = `0 0 ${20 + volume * 80}px rgba(255, 139, 18, ${0.4 + volume * 0.4})`;
-    const boxShadow = isAnswerMode ? answerModeBoxShadow : defaultBoxShadow;
-    let answerK = isAnswerMode ? 2 : 1;
+    const defaultBoxShadow = `0 0 ${5 + volume * 130}px rgba(255, 139, 18, ${0.3 + volume * 0.7})`;
+    const answerModeBoxShadow = `0 0 ${20 + volume * 100}px rgba(255, 139, 18, ${0.4 + volume * 0.4})`;
+    const boxShadow = isThinkDoeMode ? answerModeBoxShadow : defaultBoxShadow;
+    let answerK = isThinkDoeMode ? 2 : 1;
     const scale = 1 + volume * 0.3 * answerK;
 
     const wave1Width = 58 + volume * 31;
@@ -33,12 +33,9 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
     const wave3Height = 58 + volume * 32;
     const wave3Opacity = Math.min(0.3 + volume * 0.7, 1);
 
-
-    const skewAngle = volume * 10 * answerK;
-
     return (
         <section
-            className={`${css.talkModeIconContainer} ${isAnswerMode ? css.answerMode : ""}`}
+            className={`${css.talkModeIconContainer} ${isThinkDoeMode ? css.answerMode : ""}`}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             style={{
@@ -46,7 +43,7 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
                 boxShadow,
             }}
         >
-            {isAnswerMode ? (
+            {isThinkDoeMode ? (
                 <>
                     <svg
                         width="100"
@@ -56,6 +53,7 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
                         xmlns="http://www.w3.org/2000/svg"
                         style={{
                             transform: `scale(${scale * 1.3})`,
+                            pointerEvents: "none"
                         } as React.CSSProperties}
                     >
                         <g filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
@@ -131,7 +129,10 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
                          viewBox="0 0 70 69"
                          fill="none"
                          xmlns="http://www.w3.org/2000/svg"
-                         style={{ opacity: wave3Opacity }}
+                         style={{
+                             opacity: wave3Opacity,
+                             pointerEvents: "none"
+                         }}
                     >
                         <path
                             d="M62.6629 6.17588C56.3782 -0.28883 48.0812 -0.549817 39.8239 2.31691C31.5624 5.18507 23.3908 11.1723 17.4522 17.1109C11.5216 23.0415 4.70544 33.3278 1.92041 43.1485C0.528084 48.0582 0.150526 52.8262 1.36978 56.8674C2.58509 60.8956 5.39413 64.2277 10.436 66.2704C16.4406 68.7032 21.1467 68.0309 25.3639 66.7666C26.4208 66.4497 27.4466 66.0957 28.4572 65.7428C28.5518 65.7098 28.6463 65.6768 28.7407 65.6438C29.6527 65.325 30.5539 65.01 31.449 64.7302C33.4249 64.1126 35.3904 63.6598 37.4337 63.7068C39.452 63.7532 41.37 63.9233 43.1987 64.0854C43.4403 64.1068 43.6804 64.1281 43.9189 64.1489C45.9667 64.3279 47.9002 64.4741 49.7596 64.4025C53.4631 64.2599 56.8693 63.2537 60.2321 59.8909C67.2712 52.8518 70.1161 43.207 68.7664 34.0608C68.5326 32.4758 68.5201 30.4247 68.5085 28.1385L68.5081 28.0594C68.4966 25.786 68.4839 23.2705 68.2619 20.7022C67.8125 15.5023 66.508 10.1311 62.6629 6.17588Z"
@@ -147,6 +148,7 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
                         xmlns="http://www.w3.org/2000/svg"
                         style={{
                             transform: `scale(${scale})`,
+                            pointerEvents: "none",
                             opacity: wave2Opacity,
                         }}
                     >
@@ -209,7 +211,8 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                         style={{
-                            transform: `scale(${scale})`,
+                            transform: `scale(${scale + 1.5})`,
+                            pointerEvents: "none",
                             opacity: wave1Opacity,
                         }}
                     >
@@ -227,7 +230,9 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
                         viewBox="0 0 58 58"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        style={{ opacity: wave3Opacity }}
+                        style={{ opacity: wave3Opacity,
+                            pointerEvents: "none"
+                        }}
                     >
                         <path
                             d="M29.0333 1.16811C13.6804 1.16811 1.23452 13.614 1.23452 28.9669C1.23452 44.3197 13.6804 56.7656 29.0333 56.7656C32.2572 56.7656 34.7781 55.4309 37.1689 53.4446C38.3662 52.4498 39.5266 51.2951 40.7255 50.0655C40.9794 49.8051 41.2351 49.5412 41.4932 49.2749C42.4509 48.2867 43.4412 47.2648 44.4943 46.2591C45.8375 44.9763 47.1959 43.8392 48.4904 42.7555C48.6614 42.6123 48.8313 42.4701 49 42.3286C50.448 41.1132 51.7995 39.9517 52.9611 38.6971C55.2739 36.1991 56.832 33.3345 56.832 28.9669C56.832 19.8188 52.4135 11.7029 45.5931 6.63659C40.9677 3.20076 35.2382 1.16811 29.0333 1.16811Z"
@@ -243,7 +248,8 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                         style={{
-                            transform: `scale(${scale})`,
+                            transform: `scale(${scale + 1.2})`,
+                            pointerEvents: "none",
                             opacity: wave2Opacity,
                         }}
                     >

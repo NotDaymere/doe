@@ -10,6 +10,10 @@ interface TalkModeProps {
     targetRef: React.RefObject<HTMLElement>;
 }
 
+const MIN_SPEECH_DURATION = 100;
+const SILENCE_DELAY = 1200;
+const SILENCE_THRESHOLD = 0.03;
+
 export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
     const { talkModeActive, setTalkModeActive } = useAppStore();
 
@@ -26,9 +30,14 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
 
     const [volume, setVolume] = useState<number>(0);
 
+    const [isUserResponseInProcess, setIsUserResponseInProcess] = useState(false);
+
     const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
 
     const mediaStreamRef = useRef<MediaStream | null>(null);
+    const silenceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const speechStartTimeRef = useRef<number | null>(null);
 
     useEffect(() => {
         if (talkModeActive) {
@@ -109,8 +118,6 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
             })
             .then((stream) => {
                 mediaStreamRef.current = stream;
-                console.log("Media stream started", stream);
-                // Если аудио включено, сохраняем аудиопоток отдельно
                 if (isMicrophoneOn === true) {
                     setAudioStream(stream);
                 } else {
@@ -165,6 +172,44 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
         return undefined;
     }, [isMicrophoneOn, audioStream]);
 
+    useEffect(() => {
+        if (isMicrophoneOn && audioStream) {
+            if (volume >= SILENCE_THRESHOLD) {
+                if (isUserResponseInProcess) {
+                    setIsUserResponseInProcess(false);
+                }
+                if (!speechStartTimeRef.current) {
+                    speechStartTimeRef.current = Date.now();
+                }
+                if (silenceTimeoutRef.current) {
+                    clearTimeout(silenceTimeoutRef.current);
+                    silenceTimeoutRef.current = null;
+                }
+            } else {
+                if (speechStartTimeRef.current) {
+                    const speechDuration = Date.now() - speechStartTimeRef.current;
+                    if (speechDuration >= MIN_SPEECH_DURATION && !isUserResponseInProcess) {
+                        if (!silenceTimeoutRef.current) {
+                            silenceTimeoutRef.current = setTimeout(() => {
+                                setIsUserResponseInProcess(true);
+                                speechStartTimeRef.current = null;
+                            }, SILENCE_DELAY);
+                        }
+                    }
+                }
+            }
+        } else {
+            if (silenceTimeoutRef.current) {
+                clearTimeout(silenceTimeoutRef.current);
+                silenceTimeoutRef.current = null;
+            }
+            speechStartTimeRef.current = null;
+            if (isUserResponseInProcess) {
+                setIsUserResponseInProcess(false);
+            }
+        }
+    }, [volume, isMicrophoneOn, audioStream, isUserResponseInProcess]);
+
     if (!talkModeActive && !containerActive) {
         return null;
     }
@@ -207,8 +252,10 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
                 onMouseEnter={() => setHoverPanelVisible(true)}
                 onMouseLeave={() => setHoverPanelVisible(false)}
             >
-                <TalkModeDynamicObj volume={volume} />
+                <TalkModeDynamicObj volume={volume} isThinkDoeMode={isUserResponseInProcess} />
             </div>
+            <span>{volume.toFixed(2)}</span>
+            <span>{isUserResponseInProcess ? "TRUE" : "FALSE"}</span>
         </div>
     );
 };
