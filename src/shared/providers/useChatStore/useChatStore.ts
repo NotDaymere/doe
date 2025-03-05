@@ -29,6 +29,8 @@ interface ChatState {
     getSavedPlaygroundLastByType: (type: "code" | "table" | "source") => IPlayground | null;
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
     setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
+
+    savedBranches: IBranch[];
 }
 
 export const useChatStore = create<ChatState>()(
@@ -84,6 +86,7 @@ export const useChatStore = create<ChatState>()(
             id: null,
         },
         savedPlaygrounds: [],
+        savedBranches: [],
         playgroundFullscreen: false,
         questionCodeMessage: null,
         setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
