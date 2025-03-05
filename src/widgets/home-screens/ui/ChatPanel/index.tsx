@@ -136,7 +136,9 @@ export const ChatPanel: React.FC = () => {
                 )}
 
                 {files.length > 0 && (
-                    <div className={css.panel_files_mask}>
+                    <div
+                        className={css.panel_files_mask}
+                    >
                         <FileList
                             className={css.panel_files}
                             files={files}
