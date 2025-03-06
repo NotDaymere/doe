@@ -9,6 +9,7 @@ import { MagicApplications, MagicMenuButton, MagicUploadApps } from "./ui";
 import { useClickOut } from "src/shared/hooks/useClickOut";
 import css from "./MagicMenu.module.less";
 import { useAppStore } from "../../../../shared/providers";
+import { MagicCreateNewBranch } from "./ui/MagicCreateNewBranch/MagicCreateNewBranch";
 
 interface Props {
     onUploadFiles?: (files: File[]) => void;
@@ -83,7 +84,7 @@ export const MagicMenu: React.FC<Props> = ({
                         text="Talk mode"
                         onClick={setCloseHandler(() => setTalkModeActive(true))}
                     />
-                    <MagicMenuButton icon={<BranchIcon />} text="Create new branch" />
+                    <MagicCreateNewBranch/>
                 </div>
             </CSSTransition>
         </div>

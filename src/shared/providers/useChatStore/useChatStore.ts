@@ -8,13 +8,11 @@ import { IQuestionCodeMessage } from "src/shared/types/QuestionCodeMessage";
 interface ChatState {
     editor: Editor | null;
     isTyping: boolean;
-    currentBranch: IBranch | null;
     messages: IMessage[];
     playground: IPlayground;
     savedPlaygrounds: IPlayground[];
     playgroundFullscreen: boolean;
     questionCodeMessage: IQuestionCodeMessage | null;
-    setCurrentBranch: (currentBranch: IBranch | null) => void;
     setMessages: (messages: IMessage[]) => void;
     setEditor: (editor: Editor | null) => void;
     setTyping: (isTyping: boolean) => void;
@@ -30,6 +28,10 @@ interface ChatState {
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
     setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
 
+    isCreateBranchChatMode: boolean;
+    setIsCreateBranchChatMode: (isCreateBranchChatMode: boolean) => void;
+    currentBranch: IBranch | null;
+    setCurrentBranch: (currentBranch: IBranch | null) => void;
     savedBranches: IBranch[];
 }
 
@@ -37,7 +39,6 @@ export const useChatStore = create<ChatState>()(
     (set, get) => ({
         isTyping: false,
         editor: null,
-        currentBranch: null,
         messages: [
             {
                 id: 1,
@@ -86,10 +87,10 @@ export const useChatStore = create<ChatState>()(
             id: null,
         },
         savedPlaygrounds: [],
-        savedBranches: [],
+
         playgroundFullscreen: false,
         questionCodeMessage: null,
-        setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
+
         setMessages: (messages) => set(() => ({ messages })),
         setEditor: (editor) => set(() => ({ editor })),
         setTyping: (isTyping) => set(() => ({ isTyping })),
@@ -133,6 +134,12 @@ export const useChatStore = create<ChatState>()(
             return get().savedPlaygrounds
                 .filter(savedPlayground => savedPlayground.type === type)
                 .at(-1) || null;
-        }
+        },
+
+        isCreateBranchChatMode: false,
+        currentBranch: null,
+        savedBranches: [],
+        setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
+        setIsCreateBranchChatMode: (isCreateBranchChatMode) => set(() => ({ isCreateBranchChatMode })),
     })
 );

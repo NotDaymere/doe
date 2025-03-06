@@ -33,6 +33,7 @@ import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
 import css from "./ChatContent.module.less";
 import { TalkMode } from "../TalkMode";
 import AllBranches from "./assets/AllBranches/AllBranches";
+import { ChatMessageDate } from "./assets/ChatMessageData/ChatMessageDate";
 
 interface Props {
     editMsgMode: {
@@ -87,14 +88,17 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                 }
 
                 <div className={css.content_chat} ref={chatRef}>
-                    {messages.map((item) => (
-                        <ChatMessage
-                            data={item}
-                            key={item.id}
-                            editor={editor}
-                            editMsgMode={editMsgMode}
-                            setEditMsgMode={setEditMsgMode}
-                        />
+                    {messages.map((item, index) => (
+                        <>
+                            <ChatMessageDate id={index}/>
+                            <ChatMessage
+                                data={item}
+                                key={item.id}
+                                editor={editor}
+                                editMsgMode={editMsgMode}
+                                setEditMsgMode={setEditMsgMode}
+                            />
+                        </>
                     ))}
                 </div>
                 <TalkMode targetRef={chatRef} />
