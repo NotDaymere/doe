@@ -11,6 +11,7 @@ interface ChatState {
     messagesCount: number;
     showQuickSearch: boolean;
     mode: ModeType;
+    disableButtons: boolean;
     setCurrentBranch: (currentBranch: IBranch | null) => void;
     setMessages: (messages: IMessage[]) => void;
     setEditor: (editor: Editor | null) => void;
@@ -18,6 +19,7 @@ interface ChatState {
     setMessagesCount: (messagesCount: number) => void;
     setShowQuickSearch: (showQuickSearch: boolean) => void;
     setMode: (mode: ModeType) => void;
+    setDisableButtons: (disableButtons: boolean) => void;
 }
 
 export const useChatStore = create<ChatState>()((set) => ({
@@ -43,6 +45,7 @@ export const useChatStore = create<ChatState>()((set) => ({
     messagesCount: 0,
     showQuickSearch: false,
     mode: MODE.INITIAL,
+    disableButtons: false,
     setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
     setMessages: (messages) => set(() => ({ messages })),
     setEditor: (editor) => set(() => ({ editor })),
@@ -50,4 +53,5 @@ export const useChatStore = create<ChatState>()((set) => ({
     setMessagesCount: (messagesCount) => set(() => ({ messagesCount })),
     setShowQuickSearch: (showQuickSearch) => set(() => ({ showQuickSearch })),
     setMode: (mode) => set(() => ({ mode })),
+    setDisableButtons: (disableButtons) => set(() => ({ disableButtons })),
 }));

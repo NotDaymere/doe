@@ -13,16 +13,14 @@ import MemoryIcon from "src/shared/icons/Memory.icon";
 import WebIcon from "src/shared/icons/Web.icon";
 import BrainIcon from "src/shared/icons/Brain.icon";
 
-export const INFO_NODES: ISourceTypeNode[] = [
+export const INFO_NODES: Pick<ISourceTypeNode, "icon" | "title">[] = [
     {
         icon: <BrainIcon fill="#cfcecf" width={16} height={16} />,
         title: "GO",
-        type: "go",
     },
     {
         icon: <MemoryIcon fill="#cfcecf" width={16} height={16} />,
         title: "Memory",
-        type: "memory",
     },
 ];
 
@@ -51,102 +49,66 @@ export const PLAYGROUND_SOURCES: IPlaygroundSourceData = {
         items: [
             {
                 title: "brilliant.org",
-                icon: <BrilliantOrgIcon width={12} height={12} />,
+                isLink: true,
+                icon: <BrilliantOrgIcon width={12} height={13} />,
                 link: "https://www.example.com",
             },
             {
                 title: "codecade...com",
-                icon: <CodecademyIcon width={12} height={12} />,
+                isLink: true,
+                icon: <CodecademyIcon width={12} height={13} />,
                 link: "https://www.example.com",
             },
             {
                 title: "theinform...com",
-                icon: <CaseStudyIcon width={12} height={12} />,
+                isLink: true,
+                icon: <CaseStudyIcon width={12} height={13} />,
                 link: "https://www.example.com",
             },
         ],
     },
     apps: {
-        title: "Documents resources",
+        title: "App resources",
         type: "apps",
         items: [
             {
                 title: "Notion",
-                icon: <NotionIcon width={12} height={12} />,
+                isBoldText: true,
+                icon: <NotionIcon width={18} height={19} />,
                 link: "https://www.example.com",
             },
             {
                 title: "Obsidian",
-                icon: <ObsidianIcon width={12} height={12} />,
+                isBoldText: true,
+                icon: <ObsidianIcon width={18} height={19} />,
                 link: "https://www.example.com",
             },
             {
                 title: "Calendar",
-                icon: <GoogleCalendarIcon width={12} height={12} />,
+                isBoldText: true,
+                icon: <GoogleCalendarIcon width={18} height={19} />,
                 link: "https://www.example.com",
             },
         ],
     },
     docs: {
-        title: "App resources",
+        title: "Documents resources",
         type: "docs",
         items: [
             {
                 title: "Work_file.pdf",
-                icon: <FileFilledIcon width={12} height={12} />,
+                icon: <FileFilledIcon width={10} height={12} />,
                 link: "/file-samples/file-sample.pdf",
             },
             {
                 title: "Work_file.txt",
-                icon: <FileFilledIcon width={12} height={12} />,
+                icon: <FileFilledIcon width={10} height={12} />,
                 link: "/file-samples/file-sample.txt",
             },
             {
                 title: "Work_file.doc",
-                icon: <FileFilledIcon width={12} height={12} />,
+                icon: <FileFilledIcon width={10} height={12} />,
                 link: "/file-samples/file-sample.docx",
-            },
-        ],
-    },
-    go: {
-        title: "Go",
-        type: "go",
-        items: [
-            {
-                title: "brilliant.org",
-                icon: <BrilliantOrgIcon width={12} height={12} />,
-                link: "https://www.example.com",
-            },
-            {
-                title: "codecade...com",
-                icon: <CodecademyIcon width={12} height={12} />,
-                link: "https://www.example.com",
-            },
-            {
-                title: "theinform...com",
-                icon: <CaseStudyIcon width={12} height={12} />,
-                link: "https://www.example.com",
-            },
-        ],
-    },
-    memory: {
-        title: "Memory",
-        type: "memory",
-        items: [
-            {
-                title: "brilliant.org",
-                icon: <BrilliantOrgIcon width={12} height={12} />,
-                link: "https://www.example.com",
-            },
-            {
-                title: "codecade...com",
-                icon: <CodecademyIcon width={12} height={12} />,
-                link: "https://www.example.com",
-            },
-            {
-                title: "theinform...com",
-                icon: <CaseStudyIcon width={12} height={12} />,
-                link: "https://www.example.com",
             },
         ],
     },

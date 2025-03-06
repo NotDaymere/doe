@@ -2,8 +2,8 @@ import React, { SVGProps } from "react";
 
 const BrilliantOrgIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
     return (
-        <svg viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-            <g clipPath="url(#clip0_1790_31881)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 13" fill="none" {...props}>
+            <g clipPath="url(#clip0_1282_32526)">
                 <path
                     fillRule="evenodd"
                     clipRule="evenodd"
@@ -17,7 +17,7 @@ const BrilliantOrgIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
                 <path d="M8.03146 7.17502H6.22754V5.37109H8.03146V7.17502Z" fill="black" />
             </g>
             <defs>
-                <clipPath id="clip0_1790_31881">
+                <clipPath id="clip0_1282_32526">
                     <rect width="12" height="12" fill="white" transform="translate(0 0.5)" />
                 </clipPath>
             </defs>

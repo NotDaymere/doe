@@ -163,6 +163,7 @@
     border: 1px solid #dddddd;
     border-radius: 16px;
     padding-left: 10px;
+    padding-right: 7px;
 
     display: flex;
     align-items: center;
@@ -278,6 +279,12 @@
     justify-content: center;
     align-items: center;
     border-radius: 100%;
+    border: 1px solid transparent;
+
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        fill 0.3s ease;
 
     path {
         fill: #b5b5b5;
@@ -285,7 +292,7 @@
 
     &:hover {
         background-color: rgba(#ff8b12, 0.2);
-        border: 1px solid #ff8b12;
+        border-color: #ff8b12;
 
         path {
             fill: #ff8b12;
@@ -308,6 +315,12 @@
     justify-content: center;
     align-items: center;
     border-radius: 100%;
+    border: 1px solid transparent;
+
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        stroke 0.3s ease;
 
     path {
         stroke: #b5b5b5;
@@ -315,7 +328,7 @@
 
     &:hover {
         background-color: rgba(#ff8b12, 0.2);
-        border: 1px solid #ff8b12;
+        border-color: #ff8b12;
 
         path {
             stroke: #ff8b12;

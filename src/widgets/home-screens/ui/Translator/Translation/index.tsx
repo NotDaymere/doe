@@ -11,7 +11,7 @@ import AttachmentIcon from "src/shared/icons/Attachment.icon";
 import TextForTranslateIcon from "src/shared/icons/TextForTranslate.icon";
 import DictionaryIcon from "src/shared/icons/Dictionary.icon";
 import RotateButton from "../RotateButton";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DeviceIcon from "src/shared/icons/Device.icon";
 import AppsIcon from "src/shared/icons/Apps.icon";
 import PlaygroundIcon from "src/shared/icons/Playground.icon";
@@ -26,18 +26,70 @@ const Translation = () => {
     const [showMagicMenu, setShowMagicMenu] = useState(false);
     const { files, setFiles } = usePanel();
     const [isUploadFiles, setIsUploadFiles] = useState(false);
+    // const [fileProgress, setFileProgress] = useState(0);
+
+    const [fileProgress, setFileProgress] = useState<{ [fileName: string]: number }>({});
+    const [fileStatuses, setFileStatuses] = useState<{
+        [fileName: string]: "pending" | "success" | "error";
+    }>({});
+
+    // Функція для оновлення прогресу файлу
+    const updateFileProgress = (fileName: string, progress: number) => {
+        setFileProgress((prevProgress) => ({
+            ...prevProgress,
+            [fileName]: progress,
+        }));
+    };
+
+    const updateFileStatus = (fileName: string, status: "success" | "error") => {
+        setFileStatuses((prevStatuses) => ({
+            ...prevStatuses,
+            [fileName]: status,
+        }));
+    };
 
     const upload = () => {
         setIsUploadFiles(true);
         const input = document.createElement("input") as HTMLInputElement;
         input.type = "file";
         input.multiple = true;
+
         input.onchange = (ev: any) => {
-            const newFiles = Array.from(ev.target.files) as File[];
-            setFiles([...files, ...newFiles]);
+            const selectedFiles = Array.from(ev.target.files) as File[];
+
+            selectedFiles.forEach((file) => {
+                const formData = new FormData();
+                formData.append("file", file);
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.upload.onprogress = (event) => {
+                    if (event.lengthComputable) {
+                        const percentComplete = (event.loaded / event.total) * 100;
+                        console.log(`Progress for ${file.name}: ${percentComplete}%`);
+                        // setFileProgress(percentComplete);
+                        updateFileProgress(file.name, percentComplete);
+                    }
+                };
+
+                xhr.onload = () => {
+                    console.log(`File ${file.name} uploaded successfully!`);
+                    updateFileStatus(file.name, "success");
+                    setFiles([...files, file]);
+                };
+
+                xhr.onerror = () => {
+                    console.error(`Error uploading file ${file.name}.`);
+                    updateFileStatus(file.name, "error");
+                };
+
+                xhr.open("POST", "/upload");
+                xhr.send(formData);
+            });
 
             input.remove();
         };
+
         input.click();
     };
 
@@ -107,6 +159,17 @@ const Translation = () => {
                             [css.uploadArea]: isUploadFiles,
                         })}
                     >
+                        {/* {isUploadFiles && (
+                            <progress value={fileProgress} max="100" />
+
+                            // <div>
+                            //     <div className={css.progressBar} />
+                            //     <div
+                            //         className={css.fileProgress}
+                            //         style={{ width: `${fileProgress}%` }}
+                            //     />
+                            // </div>
+                        )} */}
                         {isUploadFiles && (
                             <div className={css.uploadIcons}>{renderUploadIcons()}</div>
                         )}
@@ -123,7 +186,7 @@ const Translation = () => {
                     {isUploadFiles && (
                         <div className={css.filesList}>
                             {files.map((file) => (
-                                <div className={css.file}>
+                                <div className={css.file} key={file.name}>
                                     <FileFilledIcon width={10} height={12} />
                                     {file.name}
                                     <CheckFilledIcon width={16} height={16} />
@@ -132,18 +195,16 @@ const Translation = () => {
                         </div>
                     )}
                     <div className={css.icons}>
-                        {TRANSLATED_TEXT_TOP_PART &&
-                            TRANSLATED_TEXT_BOTTOM_PART &&
-                            !isUploadFiles && (
-                                <div className={css.volumeIcon}>
-                                    <VolumeIcon width={17} height={13} />
-                                </div>
-                            )}
+                        {TRANSLATED_TEXT_TOP_PART && TRANSLATED_TEXT_BOTTOM_PART && (
+                            <div className={css.volumeIcon}>
+                                <VolumeIcon width={17} height={13} />
+                            </div>
+                        )}
                         <div className={css.translateIcon}>
                             <TranslatedTextIcon width={20} height={20} />
                         </div>
                     </div>
-                    {TRANSLATED_TEXT_TOP_PART && TRANSLATED_TEXT_BOTTOM_PART && !isUploadFiles && (
+                    {TRANSLATED_TEXT_TOP_PART && TRANSLATED_TEXT_BOTTOM_PART && (
                         <div className={css.translatedTextWrapper}>
                             <div
                                 className={css.text}

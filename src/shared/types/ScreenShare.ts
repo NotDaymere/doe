@@ -16,3 +16,5 @@ export interface IScreenSharePopup {
     connectionFailed: IScreenShareConfig;
     connectionSuccessful: IScreenShareConfig;
 }
+
+export type ShareType = keyof IScreenSharePopup;

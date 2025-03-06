@@ -19,10 +19,9 @@ import CableIcon from "src/shared/icons/Cable.icon";
 import BluetoothIcon from "src/shared/icons/Bluetooth.icon";
 import ScreenIcon from "src/shared/icons/Screen.icon";
 import classNames from "classnames";
-import { IScreenSharePopup } from "src/shared/types/ScreenShare";
+import { IScreenSharePopup, ShareType } from "src/shared/types/ScreenShare";
 import css from "./ChatPanel.module.less";
-
-type ShareType = keyof IScreenSharePopup;
+import ScreenShareMenu from "../ShareScreen/ScreenShareMenu";
 
 interface IShareScreen {
     expandedButtons: boolean;
@@ -67,7 +66,15 @@ export const SCREEN_SHARE_CONFIG: IScreenSharePopup = {
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles } = usePanel();
-    const { setEditor, setMessagesCount, messagesCount, messages, setMessages } = useChatStore();
+    const {
+        setEditor,
+        setMessagesCount,
+        messagesCount,
+        messages,
+        setMessages,
+        disableButtons,
+        setDisableButtons,
+    } = useChatStore();
     const {
         drag,
         dragTarget,
@@ -107,6 +114,7 @@ export const ChatPanel: React.FC = () => {
 
     const handleSendButtonClick = () => {
         setMessagesCount(messagesCount + 1);
+        setDisableButtons(false);
 
         if (!text) return;
 
@@ -136,6 +144,13 @@ export const ChatPanel: React.FC = () => {
         if (typingHintsRef.current && !typingHintsRef.current.contains(event.target as Node)) {
             setShowHints({ ...showHints, typingHints: false });
         }
+    };
+
+    const onShareScreenClickOutside = () => {
+        setShareScreenConfig({
+            shareType: null,
+            expandedButtons: false,
+        });
     };
 
     return (
@@ -195,82 +210,36 @@ export const ChatPanel: React.FC = () => {
                         placeholder="Ask Doe anything you’d like about the world..."
                         insertedContent={selectedHint}
                     />
-                    {shareScreenConfig.expandedButtons ? (
-                        <div
-                            className={css.shareScreenExpanded}
-                            onMouseLeave={() =>
-                                setShareScreenConfig({ shareType: null, expandedButtons: false })
-                            }
-                        >
-                            <button
-                                className={classNames(css.expandedIcon, {
-                                    [css.activeShareType]:
-                                        shareScreenConfig.shareType === "shareViaCabel",
-                                })}
-                                onMouseEnter={() =>
-                                    setShareScreenConfig({
-                                        ...shareScreenConfig,
-                                        shareType: "shareViaCabel",
-                                    })
-                                }
-                            >
-                                <CableIcon width={21} height={5} />
-                            </button>
-                            <button
-                                className={classNames(css.bluetoothIcon, {
-                                    [css.activeBluetoothButton]:
-                                        shareScreenConfig.shareType === "shareViaBluetooth",
-                                })}
-                                onMouseEnter={() =>
-                                    setShareScreenConfig({
-                                        ...shareScreenConfig,
-                                        shareType: "shareViaBluetooth",
-                                    })
-                                }
-                            >
-                                <BluetoothIcon width={9} height={13} />
-                            </button>
-                            <button
-                                className={classNames(css.expandedIcon, {
-                                    [css.activeShareType]:
-                                        shareScreenConfig.shareType === "shareScreen",
-                                })}
-                                onMouseEnter={() =>
-                                    setShareScreenConfig({
-                                        ...shareScreenConfig,
-                                        shareType: "shareScreen",
-                                    })
-                                }
-                            >
-                                <ScreenIcon width={16} height={13} />
-                            </button>
-                            <div className={classNames(css.expandedIcon, css.activeShareType)}>
-                                <ScreenShareIcon width={16} height={16} />
-                            </div>
-                        </div>
-                    ) : (
+                    <ScreenShareMenu
+                        isActive={shareScreenConfig.expandedButtons}
+                        type={shareScreenConfig.shareType}
+                        onConfig={(type) =>
+                            setShareScreenConfig({ ...shareScreenConfig, shareType: type })
+                        }
+                        onClickOutside={onShareScreenClickOutside}
+                    />
+                    {!shareScreenConfig.expandedButtons && (
                         <button
                             className={css.screenShareButton}
-                            onMouseEnter={() =>
-                                setShareScreenConfig({
-                                    ...shareScreenConfig,
-                                    expandedButtons: true,
-                                })
-                            }
+                            disabled={disableButtons}
+                            onMouseEnter={(event) => {
+                                if (!event.currentTarget.disabled) {
+                                    setShareScreenConfig({
+                                        ...shareScreenConfig,
+                                        expandedButtons: true,
+                                    });
+                                }
+                            }}
                         >
                             <ScreenShareIcon width={16} height={16} />
                         </button>
                     )}
                     {shareScreenConfig.shareType && (
-                        <div
-                            className={classNames(css.shareScreen, {
-                                [css.shareScreenShow]: shareScreenConfig.shareType,
-                            })}
-                        >
-                            <ShareScreenInfo
-                                {...SCREEN_SHARE_CONFIG[shareScreenConfig.shareType]}
-                            />
-                        </div>
+                        <ShareScreenInfo
+                            isActive={!!shareScreenConfig.shareType}
+                            onClickOutside={onShareScreenClickOutside}
+                            {...SCREEN_SHARE_CONFIG[shareScreenConfig.shareType]}
+                        />
                     )}
                     <button className={css.panel_button}>
                         <MicrophoneIcon />

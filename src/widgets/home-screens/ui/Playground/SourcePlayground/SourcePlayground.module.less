@@ -14,6 +14,29 @@
     gap: 10px;
     height: calc((100vh - 65px));
     background-color: #fff;
+    transition:
+        transform 0.3 ease,
+        opacity 0.3 ease;
+}
+
+.enter {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.enterActive {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.exit {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.exitActive {
+    transform: translateX(100%);
+    opacity: 0;
 }
 
 .generalSection {
@@ -58,35 +81,19 @@
 .popoverweb {
     position: absolute;
     top: 0;
-    left: -90px;
+    left: -100px;
 }
 
 .popoverdocs {
     position: absolute;
-    top: -40px;
-    right: -80px;
+    top: -50px;
+    right: -100px;
 }
 
 .popoverapps {
     position: absolute;
-    top: 70px;
-    right: -80px;
-}
-
-.popovergo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999;
-}
-
-.popovermemory {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999;
+    top: 100px;
+    right: -100px;
 }
 
 .detailsSection {
@@ -111,14 +118,16 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
-    width: 132px;
+    width: max-content;
     height: 80px;
+    width: 156px;
+    height: 105px;
 }
 
 .title {
-    font-size: 12px;
+    .setFontSohneBuch(12px);
     color: #cfcfcf;
 }
 
@@ -131,15 +140,30 @@
 .items {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .item {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 8px;
 }
 
 .itemText {
+    .setFontSohneBuch(14px);
     color: #5b5b5b;
+}
+
+.link {
+    .setFontSohneBuch(14px);
+    color: #5b5b5b;
+
+    &:hover {
+        color: #4285f4;
+    }
+}
+
+.bold {
+    .setFontSohneKraftig(14px);
 }

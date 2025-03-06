@@ -2,7 +2,7 @@ import React, { SVGProps } from "react";
 
 const ObsidianIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
     return (
-        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="none" {...props}>
             <path
                 d="M9 16.5938C13.1939 16.5938 16.5938 13.1939 16.5938 9C16.5938 4.80609 13.1939 1.40625 9 1.40625C4.80609 1.40625 1.40625 4.80609 1.40625 9C1.40625 13.1939 4.80609 16.5938 9 16.5938Z"
                 fill="#E7E2F6"

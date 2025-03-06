@@ -2,6 +2,7 @@ import { ReactElement, useEffect, useState } from "react";
 import DoeLogoIcon from "src/shared/icons/DoeLogo.icon";
 import WelcomeMagicIcon from "src/shared/icons/WelcomeMagic.icon";
 import css from "./WelcomeScreen.module.less";
+import { useChatStore } from "src/shared/providers";
 
 const TYPING_SPEED = 50;
 
@@ -27,9 +28,12 @@ const WelcomeScreen = () => {
     const [eighthPart, setEighthPart] = useState("");
     const [ninthPart, setNinthPart] = useState<ReactElement | null>(null);
     const [dotVisible, setDotVisible] = useState(false);
+    const { setDisableButtons } = useChatStore();
 
     useEffect(() => {
         const typeEffect = async () => {
+            setDisableButtons(true);
+
             await typeText("I'm ", setFirstPart, TYPING_SPEED, setDotVisible);
             setTimeout(() => {
                 setSecondPart(<DoeLogoIcon width={26} height={26} className={css.icon} />);
@@ -53,6 +57,7 @@ const WelcomeScreen = () => {
             setTimeout(() => {
                 setNinthPart(<WelcomeMagicIcon width={308} height={287} className={css.magic} />);
             }, TYPING_SPEED);
+            setDisableButtons(false);
         };
 
         typeEffect();

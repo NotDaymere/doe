@@ -57,7 +57,7 @@ export const MagicMenu: React.FC<IProps> = ({ items, isActive, setIsActive, clas
         >
             <CSSTransition
                 classNames={css}
-                timeout={300}
+                timeout={500}
                 in={showMagicMenu}
                 nodeRef={nodeRef}
                 mountOnEnter

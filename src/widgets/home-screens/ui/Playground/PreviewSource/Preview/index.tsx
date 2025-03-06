@@ -81,13 +81,7 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
     };
 
     if (type === "apps" || type === "web")
-        return (
-            <iframe
-                id="myIframe"
-                className={classNames({ [css.iframeModal]: isModalView })}
-                src={url}
-            />
-        );
+        return <iframe className={classNames({ [css.iframeModal]: isModalView })} src={url} />;
 
     if (isModalView && fileType === "pdf")
         return (

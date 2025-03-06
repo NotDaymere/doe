@@ -1,16 +1,17 @@
-.layout {
+.chatLayout {
     height: 100vh;
-    width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 16px;
     padding: 76px 76px 0 76px;
     background-color: #ffffff;
 }
 
-.layoutWithPlayground {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 16px;
+.layout {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: width 1s ease;
 }
 
 .layout_sidebar {
@@ -25,9 +26,17 @@
 .layout_chat {
     display: flex;
     flex-direction: column;
+    width: 100%;
     height: 100%;
     background-color: #f8f8f8;
     border-radius: 16px;
+    transition: width 1s ease;
+}
+
+.playground {
+    transition:
+        width 1s ease,
+        opacity 1s ease;
 }
 
 .limitScreen {

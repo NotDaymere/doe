@@ -3,13 +3,12 @@ import css from "./DoubleRoundedNode.module.less";
 
 interface IProps extends React.HTMLProps<HTMLButtonElement> {
     children: ReactNode;
-    onClick: () => void;
 }
 
-const DoubledRoundeNode: FC<IProps> = ({ children, onClick }) => (
-    <button className={css.doubleBorder} onClick={onClick}>
+const DoubledRoundeNode: FC<IProps> = ({ children }) => (
+    <div className={css.doubleBorder}>
         <div className={css.innerBorder}>{children}</div>
-    </button>
+    </div>
 );
 
 export default DoubledRoundeNode;

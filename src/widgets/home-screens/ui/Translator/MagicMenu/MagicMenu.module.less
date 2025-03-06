@@ -18,24 +18,19 @@
 
 .enter {
     opacity: 0;
-    transform: translateY(-10px);
 }
+
 .enterActive {
     opacity: 1;
-    transform: translateY(-20px);
-    transform: translateX(-50%);
-
-    transition: 300ms ease;
+    transition: 0.5s ease-in;
     transition-property: transform, opacity;
 }
 
 .exit {
     opacity: 1;
-    transform: translateY(-20px);
 }
 .exitActive {
     opacity: 0;
-    transform: translateY(-50px);
-    transition: 300ms ease;
-    transition-property: transform, opacity;
+    transition: 0.5s ease-in;
+    transition-property: opacity;
 }

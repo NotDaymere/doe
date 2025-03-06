@@ -1,43 +1,82 @@
-import { FC } from "react";
+import { CSSTransition } from "react-transition-group";
+import { FC, useEffect, useRef, useState } from "react";
 import { IScreenShareConfig } from "src/shared/types/ScreenShare";
 import css from "./ShareScreenInfo.module.less";
 
-const ShareScreenInfo: FC<IScreenShareConfig> = ({
+interface IProps extends IScreenShareConfig {
+    onClickOutside: () => void;
+    isActive: boolean;
+}
+
+const ShareScreenInfo: FC<IProps> = ({
     title,
     description,
     label,
     icon,
     actions,
     videoUrl,
-}) => (
-    <div className={css.shareScreenWrapper}>
-        {videoUrl && (
-            <div className={css.video}>
-                <video src={videoUrl} autoPlay loop />
-            </div>
-        )}
-        <div className={css.shareScreen}>
-            <div className={css.instruction}>
-                <span className={css.bold}>{title}</span>
-                <div
-                    className={css.description}
-                    dangerouslySetInnerHTML={{ __html: description }}
-                />
-            </div>
-            {label && (
-                <div className={css.bottom}>
-                    <span>{label}</span>
-                    {icon && icon}
+    onClickOutside,
+    isActive,
+}) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const [showScreenInfo, setShowScreenInfo] = useState(false);
+
+    useEffect(() => {
+        if (isActive) {
+            setShowScreenInfo(true);
+            return () => {
+                setShowScreenInfo(false);
+            };
+        } else {
+            setShowScreenInfo(false);
+        }
+    }, [isActive]);
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (ref.current && !ref.current.contains(event.target as Node)) {
+            onClickOutside();
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    return (
+        <CSSTransition in={showScreenInfo} timeout={500} classNames={css} unmountOnExit>
+            <div ref={ref} className={css.shareScreenWrapper}>
+                {videoUrl && (
+                    <div className={css.video}>
+                        <video src={videoUrl} autoPlay loop />
+                    </div>
+                )}
+                <div className={css.shareScreen}>
+                    <div className={css.instruction}>
+                        <span className={css.bold}>{title}</span>
+                        <div
+                            className={css.description}
+                            dangerouslySetInnerHTML={{ __html: description }}
+                        />
+                    </div>
+                    {label && (
+                        <div className={css.bottom}>
+                            <span>{label}</span>
+                            {icon && icon}
+                        </div>
+                    )}
+                    {actions && (
+                        <div>
+                            <button>Cancel</button>
+                            <button>Try again</button>
+                        </div>
+                    )}
                 </div>
-            )}
-            {actions && (
-                <div>
-                    <button>Cancel</button>
-                    <button>Try again</button>
-                </div>
-            )}
-        </div>
-    </div>
-);
+            </div>
+        </CSSTransition>
+    );
+};
 
 export default ShareScreenInfo;
