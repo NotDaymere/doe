@@ -2,9 +2,12 @@ import React, { useState, useMemo } from "react";
 import clsx from "clsx";
 import css from "./FileItem.module.less";
 import CrossIcon from "src/shared/icons/Cross.icon";
-import PdfModal from "../../../widgets/home-screens/ui/FilePreviewModal/PdfModal";
-import VideoModal from "../../../widgets/home-screens/ui/FilePreviewModal/VideoModal";
-import ImageModal from "../../../widgets/home-screens/ui/FilePreviewModal/ImageModal";
+import PdfFilePreviewModal
+    from "../../../widgets/home-screens/ui/FilePreviewModal/PdfFilePreviewModal/PdfFilePreviewModal";
+import ImageFilePreviewModal
+    from "../../../widgets/home-screens/ui/FilePreviewModal/ImageFilePreviewModal/ImageFilePreviewModal";
+import VideoFilePreviewModal
+    from "../../../widgets/home-screens/ui/FilePreviewModal/VideoFilePreviewModal/VideoFilePreviewModal";
 
 
 interface FileItemProps {
@@ -84,13 +87,13 @@ export const FileItem: React.FC<FileItemProps> = ({ name, mimetype, url, classNa
             </div>
 
             {isModalOpen && extLower === "pdf" && url && (
-                <PdfModal url={url} onClose={() => setIsModalOpen(false)} />
+                <PdfFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={info.filename}/>
             )}
             {isModalOpen && ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) && url && (
-                <ImageModal url={url} onClose={() => setIsModalOpen(false)} />
+                <ImageFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={info.filename}/>
             )}
             {isModalOpen && ["mp4", "webm", "ogg"].includes(extLower) && url && (
-                <VideoModal url={url} onClose={() => setIsModalOpen(false)} />
+                <VideoFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={info.filename}/>
             )}
         </>
     );

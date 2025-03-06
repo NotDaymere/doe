@@ -2,7 +2,7 @@ import React from "react";
 import {useRef, useState, useEffect} from "react";
 import { createPortal } from "react-dom";
 import css from "./VideoFilePreviewModal.module.less";
-import ModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
+import FilePreviewModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
 import ModalContentPanelEditIcon from "../../../../../shared/icons/ModalContentPanelEdit.icon";
 import ModalContentPanelVolumeIcon from "../../../../../shared/icons/ModalContentPanelVolume.icon";
 import ModalContentPanelVideoPlayIcon from "../../../../../shared/icons/ModalContentPanelVideoPlay.icon";
@@ -64,7 +64,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileNa
 
 
     return createPortal(
-        <ModalOverlay
+        <FilePreviewModalOverlay
             onClose={onClose}
             fileName={fileName}
             fileNameContainerClass={css.modalFileNameVideoContainer}
@@ -106,7 +106,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileNa
                     <ModalContentPanelEditIcon fill="currentColor"/>
                 </div>
             </div>
-        </ModalOverlay>,
+        </FilePreviewModalOverlay>,
         document.body
     );
 };

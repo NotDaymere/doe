@@ -2,7 +2,7 @@ import React from "react";
 import {useRef, useState, useEffect} from "react";
 import { createPortal } from "react-dom";
 import css from "./PdfFilePreviewModal.module.less";
-import ModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
+import FilePreviewModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
 import * as pdfjsLib from "pdfjs-dist";
 import "pdfjs-dist/web/pdf_viewer.css";
 import ArrowLeftIcon from "../../../../../shared/icons/ArrowLeft.icon";
@@ -144,7 +144,7 @@ const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
 
 const PdfFilePreviewModal: React.FC<PdfModalProps> = ({ url, onClose, fileName }) => {
     return createPortal(
-        <ModalOverlay
+        <FilePreviewModalOverlay
             onClose={onClose}
             modalContentClass={css.modalContentPdf}
             fileName={fileName}
@@ -164,7 +164,7 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({ url, onClose, fileName }
                     <ModalContentPanelAddTextIcon fill="currentColor"/>
                 </div>
             </div>
-        </ModalOverlay>,
+        </FilePreviewModalOverlay>,
         document.body,
     );
 };
