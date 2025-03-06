@@ -1,18 +1,34 @@
 import React, { ReactNode } from "react";
 import css from "./FilePreviewModalOverplay.module.less";
-import CrossIcon from "src/shared/icons/Cross.icon";
+import CloseViewFileIcon from "../../../../../shared/icons/CloseViewFile.icon";
 
 interface ModalOverlayProps {
     onClose: () => void;
     children: ReactNode;
+    fileName?: string;
+    fileNameContainerClass?: string;
+    modalContentClass?: string;
 }
 
-const ModalOverlay: React.FC<ModalOverlayProps> = ({ onClose, children }) => {
+const ModalOverlay: React.FC<ModalOverlayProps> = ({
+                                                       onClose,
+                                                       children,
+                                                       fileName,
+                                                       fileNameContainerClass,
+                                                       modalContentClass,
+}) => {
     return (
         <div className={css.modalOverlay} onClick={onClose}>
-            <div className={css.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className={`${css.modalContent} ${modalContentClass ? modalContentClass : ""}`}
+                 onClick={(e) => e.stopPropagation()}
+            >
+                {fileName && fileNameContainerClass && (
+                    <div className={fileNameContainerClass}>
+                        <span className={css.modalFileName}>{fileName}</span>
+                    </div>
+                )}
                 <button className={css.modalCloseBtn} onClick={onClose}>
-                    <CrossIcon />
+                    <CloseViewFileIcon />
                 </button>
                 {children}
             </div>
