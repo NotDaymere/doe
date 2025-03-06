@@ -23,10 +23,11 @@ import HammerIcon from "src/shared/icons/HammerIcon";
 import ChatResponseStopIcon from "../../../../shared/icons/ChatResponseStopIcon";
 import UploadFilesIcon from "../../../../shared/icons/UploadFiles.icon";
 import HandCursorIcon from "../../../../shared/icons/HandCursor.icon";
+import BranchIcon from "../../../../shared/icons/Branch.icon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
-    const { setEditor, setMessages } = useChatStore();
+    const { setEditor, setMessages, isCreateBranchChatMode } = useChatStore();
     const messages = useChatStore((state) => state.messages);
     const [clearContent, setClearContent] = React.useState(false)
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
@@ -50,6 +51,17 @@ export const ChatPanel: React.FC = () => {
     const prompt = usePrompt();
 
     const { selectedText, isShowReferencePanel, setIsShowReferencePanel } = useChatContext();
+
+    const placeholder = React.useMemo(() => {
+        if (isCreateBranchChatMode) {
+            return "Create new branch";
+        }
+        if (playgroundFullscreen) {
+            return "Ask Doe anything";
+        }
+        return "Ask Doe anything you’d like about the world...";
+    }, [isCreateBranchChatMode, playgroundFullscreen]);
+
 
     const handleSend = () => {
 
@@ -103,6 +115,7 @@ export const ChatPanel: React.FC = () => {
             onDragLeave={handleDragCancel}
         >
             {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
+            
             <div
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
@@ -146,6 +159,7 @@ export const ChatPanel: React.FC = () => {
                         />
                     </div>
                 )}
+
                 {drag && (
                     <div className={css.panel_drag}>
                         <p className={css.panel_drag_text}>Upload files, folders, text content, or code here.</p>
@@ -162,12 +176,19 @@ export const ChatPanel: React.FC = () => {
                         </button>
                     </div>
                 )}
+
                 <div className={css.panel_main}>
                     <MagicMenu
                         onDispatchDoe={() => prompt.togglePrompt(true)}
                         onUploadFiles={(values) => setFiles([...files, ...values])}
                     />
+                    {isCreateBranchChatMode &&
+                        <div className={css.panel_branchIcon}>
+                            <BranchIcon width={16} height={16} fill={"currentColor"}/>
+                        </div>
+                    }
                     <Editor
+                        key={placeholder}
                         readOnly={prompt.active}
                         value={text}
                         onChange={handleChangeEditor}
@@ -177,7 +198,7 @@ export const ChatPanel: React.FC = () => {
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
                         clearContent={clearContent}
-                        placeholder={playgroundFullscreen ? 'Ask Doe anything' : "Ask Doe anything you’d like about the world..."}
+                        placeholder={placeholder}
                     />
 
                     <SwitchTransition>
@@ -239,7 +260,6 @@ export const ChatPanel: React.FC = () => {
                         </CSSTransition>
                     )}
                 </SwitchTransition>
-
                 </div>
             </div>
         </div>

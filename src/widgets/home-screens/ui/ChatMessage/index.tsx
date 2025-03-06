@@ -42,6 +42,7 @@ import { useChatContext } from "../../lib/hooks/ChatContext";
 import TableRandomValues from "./assets/TableRandomValues/TableRandomValues";
 import DownloadCSV from "./assets/DownloadCSV/DownloadCSV";
 import PythonTaskManager from "./assets/PythonTaskManager/PythonTaskManager";
+import { ChatMessageDate } from "../ChatContent/assets/ChatMessageData/ChatMessageDate";
 
 interface Props {
     data: IMessage;
@@ -342,6 +343,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             <div
                 className={`${css.chat_message} ${data.isUser ? css.user_message : css.bot_message}`}
             >
+
                 <ReferenceButton
                     isVisible={referenceButtonVisible}
                     position={referenceButtonPosition}
@@ -356,7 +358,9 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         </div>
                     </div>
                 )}
+
                 <div className={css.message_content}>
+
                     <div ref={messageRef}>
                         <MathJax>
                             {parsedContent.map((part, index) => {

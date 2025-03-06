@@ -1,11 +1,15 @@
-import React, { SVGProps } from "react";
+import React, { FC, SVGProps } from 'react';
 
-const BranchIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
+interface BranchIconProps extends Omit<SVGProps<SVGSVGElement>, 'fill'> {
+    fill?: string;
+}
+
+const BranchIcon: FC<BranchIconProps> = ({ fill = 'none', ...props }) => {
     return (
         <svg
             {...props}
             viewBox="0 0 20 20"
-            fill="none"
+            fill={fill}
             xmlns="http://www.w3.org/2000/svg"
         >
             <path
