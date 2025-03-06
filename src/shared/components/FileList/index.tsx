@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import css from "./FileList.module.less";
 import clsx from "clsx";
 import { FileItem } from "../FileItem";
@@ -14,12 +14,15 @@ export const FileList: React.FC<Props> = ({
                                               onChange,
                                               className
                                           }) => {
-
-    const containerRef = React.useRef<HTMLDivElement>(null);
-    const [isDragging, setIsDragging] = React.useState(false);
-    const startX = React.useRef(0);
-    const scrollLeft = React.useRef(0);
     const [fileURLs, setFileURLs] = useState<Record<string, string>>({});
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const startX = useRef(0);
+    const scrollLeft = useRef(0);
+    const hasMoved = useRef(false);
+    const dragThreshold = 5;
+
+
 
     useEffect(() => {
         const urls: Record<string, string> = {};
@@ -32,10 +35,12 @@ export const FileList: React.FC<Props> = ({
             Object.values(urls).forEach(url => URL.revokeObjectURL(url));
         };
     }, [files]);
+
+
     const onMouseDown = (e: React.MouseEvent) => {
         if (!containerRef.current) return;
         setIsDragging(true);
-
+        hasMoved.current = false;
         startX.current = e.pageX - containerRef.current.offsetLeft;
         scrollLeft.current = containerRef.current.scrollLeft;
         containerRef.current.style.cursor = "grabbing";
@@ -46,6 +51,9 @@ export const FileList: React.FC<Props> = ({
         e.preventDefault();
         const x = e.pageX - containerRef.current.offsetLeft;
         const walk = x - startX.current;
+        if (Math.abs(walk) > dragThreshold) {
+            hasMoved.current = true;
+        }
         containerRef.current.scrollLeft = scrollLeft.current - walk;
     };
 
@@ -55,12 +63,13 @@ export const FileList: React.FC<Props> = ({
         containerRef.current.style.cursor = "grab";
     };
 
-
     React.useEffect(() => {
         if (containerRef.current) {
             containerRef.current.style.cursor = "grab";
         }
     }, []);
+
+
     return (
         <div
             className={clsx(css.files, "scrollbar", className)}
