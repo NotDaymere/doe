@@ -10,7 +10,7 @@ interface ModalOverlayProps {
     modalContentClass?: string;
 }
 
-const ModalOverlay: React.FC<ModalOverlayProps> = ({
+const FilePreviewModalOverlay: React.FC<ModalOverlayProps> = ({
                                                        onClose,
                                                        children,
                                                        fileName,
@@ -36,4 +36,4 @@ const ModalOverlay: React.FC<ModalOverlayProps> = ({
     );
 };
 
-export default ModalOverlay;
+export default FilePreviewModalOverlay;

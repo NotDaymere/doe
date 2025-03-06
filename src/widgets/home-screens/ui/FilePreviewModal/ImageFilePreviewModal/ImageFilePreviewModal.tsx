@@ -1,7 +1,7 @@
 import React from "react";
 import { createPortal } from "react-dom";
 import css from "./ImageFilePreviewModal.module.less";
-import ModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
+import FilePreviewModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
 import ModalContentPanelPencilIcon from "../../../../../shared/icons/ModalContentPanelPencil.icon";
 import ModalContentPanelAddTextIcon from "../../../../../shared/icons/ModalContentPanelAddText.icon";
 import ModalContentPanelCutIcon from "../../../../../shared/icons/ModalContentPanelCut.icon";
@@ -16,7 +16,7 @@ interface ImageModalProps {
 
 const ImageFilePreviewModal: React.FC<ImageModalProps> = ({ url, onClose, fileName }) => {
     return createPortal(
-        <ModalOverlay
+        <FilePreviewModalOverlay
             onClose={onClose}
             fileName={fileName}
             fileNameContainerClass={css.modalFileNameImgContainer}
@@ -45,7 +45,7 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({ url, onClose, fileNa
                     <ModalContentPanelAddTextIcon fill="currentColor"/>
                 </div>
             </div>
-        </ModalOverlay>,
+        </FilePreviewModalOverlay>,
         document.body
     );
 };
