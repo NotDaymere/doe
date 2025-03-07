@@ -12,13 +12,15 @@ interface ImageModalProps {
     url: string;
     onClose: () => void;
     fileName: string;
+    fileExt: string;
 }
 
-const ImageFilePreviewModal: React.FC<ImageModalProps> = ({ url, onClose, fileName }) => {
+const ImageFilePreviewModal: React.FC<ImageModalProps> = ({ url, onClose, fileName, fileExt }) => {
     return createPortal(
         <FilePreviewModalOverlay
             onClose={onClose}
             fileName={fileName}
+            fileExt={fileExt}
             fileNameContainerClass={css.modalFileNameImgContainer}
             modalContentClass={css.modalContentImg}
         >
