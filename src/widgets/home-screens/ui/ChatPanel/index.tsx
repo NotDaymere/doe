@@ -27,7 +27,7 @@ import BranchIcon from "../../../../shared/icons/Branch.icon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
-    const { setEditor, setMessages, isCreateBranchChatMode } = useChatStore();
+    const { setEditor, setMessages, isCreateBranchChatMode, isUploadFileChatMode } = useChatStore();
     const messages = useChatStore((state) => state.messages);
     const [clearContent, setClearContent] = React.useState(false)
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
@@ -108,6 +108,19 @@ export const ChatPanel: React.FC = () => {
         }
     };
 
+
+    const upload = () => {
+        const input = document.createElement("input") as HTMLInputElement;
+        input.type = "file";
+        input.multiple = true;
+        input.onchange = (ev: any) => {
+            const files = Array.from(ev.target.files) as File[];
+            input.remove();
+        };
+        input.click();
+    };
+
+
     return (
         <div className={playground.open ? (playgroundFullscreen ? css.panel_playground_fullscreen : css.panel_playground) : css.panel}
             onDragStart={handleDragStart}
@@ -177,6 +190,15 @@ export const ChatPanel: React.FC = () => {
                     </div>
                 )}
 
+                {isUploadFileChatMode && (
+                    <div className={css.panel_upload_file}>
+                        <p className={css.panel_drag_text}>Upload files, folders, text content, or code here.</p>
+                        <button className={css.panel_drag_btn}>
+                            <UploadIcon onClick={upload}/>
+                        </button>
+                    </div>
+                )}
+
                 <div className={css.panel_main}>
                     <MagicMenu
                         onDispatchDoe={() => prompt.togglePrompt(true)}
@@ -184,9 +206,10 @@ export const ChatPanel: React.FC = () => {
                     />
                     {isCreateBranchChatMode &&
                         <div className={css.panel_branchIcon}>
-                            <BranchIcon width={16} height={16} fill={"currentColor"}/>
+                            <BranchIcon width={16} height={16} fill={"currentColor"} />
                         </div>
                     }
+
                     <Editor
                         key={placeholder}
                         readOnly={prompt.active}
