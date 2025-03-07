@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
-import BranchIcon from "src/shared/icons/Branch.icon";
 import CallIcon from "src/shared/icons/Call.icon";
 import StarsIcon from "src/shared/icons/Stars.icon";
 import TalkIcon from "src/shared/icons/Talk.icon";
-import UploadIcon from "src/shared/icons/Upload.icon";
 import { MagicApplications, MagicMenuButton, MagicUploadApps } from "./ui";
 import { useClickOut } from "src/shared/hooks/useClickOut";
 import css from "./MagicMenu.module.less";
-import { useAppStore } from "../../../../shared/providers";
+import { useAppStore, useChatStore } from "../../../../shared/providers";
 import { MagicCreateNewBranch } from "./ui/MagicCreateNewBranch/MagicCreateNewBranch";
+import { MagicUploadFromDesktop } from "./ui/MagicUploadFromDesktop/MagicUploadFromDesktop";
+
 
 interface Props {
     onUploadFiles?: (files: File[]) => void;
@@ -25,20 +25,15 @@ export const MagicMenu: React.FC<Props> = ({
     const ref = useClickOut({
         handler: () => setActiveMenu(false)
     });
+    const isUploadFileChatMode = useChatStore((state) => state.isUploadFileChatMode);
     const {setTalkModeActive } = useAppStore();
     const toggleMenu = () => setActiveMenu(!activeMenu);
 
-    const upload = () => {
-        const input = document.createElement("input") as HTMLInputElement;
-        input.type = "file";
-        input.multiple = true;
-        input.onchange = (ev: any) => {
-            const files = Array.from(ev.target.files) as File[];
-            onUploadFiles?.(files);
-            input.remove();
+    useEffect(() => {
+        if(isUploadFileChatMode){
+            setActiveMenu(false);
         }
-        input.click();
-    };
+    }, [isUploadFileChatMode]);
 
     const setCloseHandler = (fn?: () => void) => {
         return () => {
@@ -55,9 +50,11 @@ export const MagicMenu: React.FC<Props> = ({
             }} 
             ref={ref}
         >
-            <button className={css.magic_btn} onClick={toggleMenu}>
-                <StarsIcon />
-            </button>
+            {!isUploadFileChatMode &&
+                <button className={css.magic_btn} onClick={toggleMenu}>
+                    <StarsIcon />
+                </button>
+            }
             <CSSTransition
                 classNames={css}
                 timeout={300}
@@ -68,11 +65,7 @@ export const MagicMenu: React.FC<Props> = ({
             >
                 <div className={css.menu} ref={nodeRef}>
                     <MagicApplications />
-                    <MagicMenuButton 
-                        icon={<UploadIcon />} 
-                        text="Upload from desktop" 
-                        onClick={setCloseHandler(upload)}
-                    />
+                    <MagicUploadFromDesktop/>
                     <MagicUploadApps />
                     <MagicMenuButton 
                         icon={<CallIcon />} 

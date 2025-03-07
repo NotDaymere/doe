@@ -33,6 +33,9 @@ interface ChatState {
     currentBranch: IBranch | null;
     setCurrentBranch: (currentBranch: IBranch | null) => void;
     savedBranches: IBranch[];
+
+    isUploadFileChatMode: boolean;
+    setIsUploadFileChatMode: (isCreateBranchChatMode: boolean) => void;
 }
 
 export const useChatStore = create<ChatState>()(
@@ -141,5 +144,8 @@ export const useChatStore = create<ChatState>()(
         savedBranches: [],
         setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
         setIsCreateBranchChatMode: (isCreateBranchChatMode) => set(() => ({ isCreateBranchChatMode })),
+
+        isUploadFileChatMode: false,
+        setIsUploadFileChatMode: (isUploadFileChatMode) => set(() => ({ isUploadFileChatMode })),
     })
 );
