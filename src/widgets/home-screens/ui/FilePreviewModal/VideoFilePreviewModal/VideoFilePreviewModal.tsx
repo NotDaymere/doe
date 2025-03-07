@@ -14,14 +14,16 @@ interface VideoModalProps {
     url: string;
     onClose: () => void;
     fileName: string;
+    fileExt: string;
 }
 
-const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileName }) => {
-
+const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileName, fileExt }) => {
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
+    const progressBarRef = useRef<HTMLDivElement>(null);
+    const [isDraggingProgress, setIsDraggingProgress] = useState(false);
 
     const togglePlayPause = () => {
         if (!videoRef.current) return;
@@ -41,13 +43,42 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileNa
         setProgress((currentTime / duration) * 100);
     };
 
-    const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!videoRef.current) return;
-        const bar = e.currentTarget;
-        const rect = bar.getBoundingClientRect();
-        const clickPos = (e.clientX - rect.left) / rect.width;
-        videoRef.current.currentTime = clickPos * videoRef.current.duration;
+
+    const updateVideoTime = (clientX: number) => {
+        if (!videoRef.current || !progressBarRef.current) return;
+        const rect = progressBarRef.current.getBoundingClientRect();
+        let pos = (clientX - rect.left) / rect.width;
+        if (pos < 0) pos = 0;
+        if (pos > 1) pos = 1;
+        videoRef.current.currentTime = pos * videoRef.current.duration;
+        setProgress(pos * 100);
     };
+
+    const handleProgressMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+        setIsDraggingProgress(true);
+        updateVideoTime(e.clientX);
+    };
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!isDraggingProgress) return;
+            updateVideoTime(e.clientX);
+        };
+
+        const handleMouseUp = () => {
+            if (isDraggingProgress) {
+                setIsDraggingProgress(false);
+            }
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
+
+        return () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUp);
+        };
+    }, [isDraggingProgress]);
 
     useEffect(() => {
         const video = videoRef.current;
@@ -62,11 +93,11 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileNa
         };
     }, []);
 
-
     return createPortal(
         <FilePreviewModalOverlay
             onClose={onClose}
             fileName={fileName}
+            fileExt={fileExt}
             fileNameContainerClass={css.modalFileNameVideoContainer}
             modalContentClass={css.modalContentVideo}
         >
@@ -80,8 +111,13 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileNa
                     {isPlaying ? <div></div> : <VideoPlayIcon />}
                 </button>
 
-                <div className={css.progressBarContainer} onClick={handleProgressClick}>
-                    <div className={css.progressBar} style={{ width: `${progress}%` }} />
+                <div  ref={progressBarRef}
+                      className={css.progressBarContainer}
+                      onMouseDown={handleProgressMouseDown}
+                >
+                    <div className={css.progressBar} style={{ width: `${progress}%` }}>
+                        <div className={css.progressBarHandle}></div>
+                    </div>
                 </div>
             </div>
 

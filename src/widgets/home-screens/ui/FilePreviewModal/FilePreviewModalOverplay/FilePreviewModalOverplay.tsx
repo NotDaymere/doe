@@ -6,6 +6,7 @@ interface ModalOverlayProps {
     onClose: () => void;
     children: ReactNode;
     fileName?: string;
+    fileExt?: string;
     fileNameContainerClass?: string;
     modalContentClass?: string;
 }
@@ -14,6 +15,7 @@ const FilePreviewModalOverlay: React.FC<ModalOverlayProps> = ({
                                                        onClose,
                                                        children,
                                                        fileName,
+                                                       fileExt,
                                                        fileNameContainerClass,
                                                        modalContentClass,
 }) => {
@@ -25,6 +27,9 @@ const FilePreviewModalOverlay: React.FC<ModalOverlayProps> = ({
                 {fileName && fileNameContainerClass && (
                     <div className={fileNameContainerClass}>
                         <span className={css.modalFileName}>{fileName}</span>
+                        {fileExt &&
+                            <span className={css.modalFileExt}>.{fileExt}</span>
+                        }
                     </div>
                 )}
                 <button className={css.modalCloseBtn} onClick={onClose}>

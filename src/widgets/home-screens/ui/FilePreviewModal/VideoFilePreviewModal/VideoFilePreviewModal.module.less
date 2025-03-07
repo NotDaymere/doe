@@ -7,13 +7,14 @@
   justify-content: center;
   border-radius: 20px;
   position: relative;
-  z-index: 1;
+  z-index: 1500;
   width: auto;
   height: auto;
 }
 
 .modalFileNameVideoContainer {
   position: absolute;
+  padding: 0 5px 0 5px;
   z-index: 9999;
   display: flex;
   justify-content: center;
@@ -27,7 +28,7 @@
   font-family: "Sohne";
   color: #F8F8F8;
   border-radius: 17px;
-  top: 6px;
+  top: 1%;
   box-shadow: 0px 4px 20px 0px #0000000F;
   backdrop-filter: blur(20px);
   opacity: 0;
@@ -101,11 +102,11 @@
   align-items: center;
   border-radius: 10px;
   padding: 5px;
-  bottom: 60px;
-  left: 40px;
+  bottom: 15%;
+  left: 5%;
   z-index: 10000;
-  opacity: 0;
   gap: 5px;
+  opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
   transition:
@@ -134,9 +135,9 @@
 .progressBarContainer {
   position: absolute;
   z-index: 10000;
-  bottom: 40px;
+  bottom: 10%;
   width: 90%;
-  height: 5px;
+  height: 7px;
   background-color: #FFFFFF33;
   cursor: pointer;
   border-radius: 5px;
@@ -145,6 +146,16 @@
   height: 100%;
   background-color: #FFFFFF;
   border-radius: 5px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  align-content: center;
+}
+.progressBarHandle {
+  height: 15px;
+  width: 15px;
+  border-radius: 50px;
+  background-color: #FFFFFF;
 }
 
 .playPauseButton {
@@ -158,3 +169,5 @@
   background: transparent;
   cursor: pointer;
 }
+
+
