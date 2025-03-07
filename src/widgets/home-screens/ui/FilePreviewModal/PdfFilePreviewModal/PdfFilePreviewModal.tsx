@@ -18,6 +18,7 @@ interface PdfModalProps {
     url: string;
     onClose: () => void;
     fileName: string;
+    fileExt?: string;
 }
 
 const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
@@ -110,7 +111,6 @@ const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
             scrollToPage(currentPage + 1);
         }
     };
-
     const prevPage = () => {
         if (pdf && currentPage > 1) {
             scrollToPage(currentPage - 1);
@@ -142,12 +142,13 @@ const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
     );
 };
 
-const PdfFilePreviewModal: React.FC<PdfModalProps> = ({ url, onClose, fileName }) => {
+const PdfFilePreviewModal: React.FC<PdfModalProps> = ({ url, onClose, fileName, fileExt }) => {
     return createPortal(
         <FilePreviewModalOverlay
             onClose={onClose}
             modalContentClass={css.modalContentPdf}
             fileName={fileName}
+            fileExt={fileExt}
             fileNameContainerClass={css.modalFileNamePdfContainer}
         >
             <PDFViewer url={url} />

@@ -56,6 +56,8 @@ export const FileItem: React.FC<FileItemProps> = ({ name, mimetype, url, classNa
         }
     };
 
+    const shortenFileName = info.filename.length > 10 ? `${info.filename.slice(0, 10)}...` : info.filename;
+
     return (
         <>
             <div className={clsx(css.file, className)} onClick={handleClick}>
@@ -87,13 +89,13 @@ export const FileItem: React.FC<FileItemProps> = ({ name, mimetype, url, classNa
             </div>
 
             {isModalOpen && extLower === "pdf" && url && (
-                <PdfFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={info.filename}/>
+                <PdfFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={shortenFileName} fileExt={info.ext}/>
             )}
             {isModalOpen && ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) && url && (
-                <ImageFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={info.filename}/>
+                <ImageFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={shortenFileName} fileExt={info.ext}/>
             )}
             {isModalOpen && ["mp4", "webm", "ogg"].includes(extLower) && url && (
-                <VideoFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={info.filename}/>
+                <VideoFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={shortenFileName} fileExt={info.ext}/>
             )}
         </>
     );
