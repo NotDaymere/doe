@@ -34,6 +34,7 @@ import css from "./ChatContent.module.less";
 import { TalkMode } from "../TalkMode";
 import AllBranches from "./assets/AllBranches/AllBranches";
 import { ChatMessageDate } from "./assets/ChatMessageData/ChatMessageDate";
+import ArrowDownChatScrollIcon from "../../../../shared/icons/ArrowDownChatScroll.icon";
 
 interface Props {
     editMsgMode: {
@@ -52,6 +53,8 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     const { chatRef } = useChatController();
     const { playground, playgroundFullscreen } = useChatStore();
     const { currentBranch, messages } = useChatStore();
+    const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
+
     const editor = useEditor({
         extensions: [
             Div,
@@ -76,10 +79,48 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         ],
     });
 
+    const scrollToBottom = () => {
+        if (chatRef.current) {
+            chatRef.current.scrollTo({
+                top: chatRef.current.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+    };
+
+    const handleScroll = () => {
+        if (chatRef.current) {
+            const { scrollTop, clientHeight, scrollHeight } = chatRef.current;
+            setShowScrollDownBtn(scrollTop + clientHeight < scrollHeight - 50);
+        }
+    };
+
+    React.useEffect(() => {
+        const currentChat = chatRef.current;
+        if (currentChat) {
+            currentChat.addEventListener("scroll", handleScroll);
+        }
+        return () => {
+            if (currentChat) {
+                currentChat.removeEventListener("scroll", handleScroll);
+            }
+        };
+    }, [chatRef]);
+
+    React.useEffect(() => {
+        const currentChat = chatRef.current;
+        if (currentChat) {
+            const { scrollTop, clientHeight, scrollHeight } = currentChat;
+            if (scrollTop + clientHeight >= scrollHeight - 50) {
+                scrollToBottom();
+            }
+        }
+    }, [messages]);
+
     return (
         <div
             className={playground.open ? (playgroundFullscreen ? css.content_playground_fullscreen : css.content_playground) : css.content}>
-            <div className={css.content_inner}>
+            <div className={css.content_inner} ref={chatRef}>
                 {!playgroundFullscreen &&
                     <div className={css.content_top_actions_container}>
                         <AllBranches />
@@ -87,7 +128,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     </div>
                 }
 
-                <div className={css.content_chat} ref={chatRef}>
+                <div className={css.content_chat} >
                     {messages.map((item, index) => (
                         <>
                             <ChatMessageDate id={index}/>
@@ -101,6 +142,15 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         </>
                     ))}
                 </div>
+
+                {showScrollDownBtn && (
+                    <button
+                        className={css.scroll_down_btn}
+                        onClick={scrollToBottom}
+                    >
+                        <ArrowDownChatScrollIcon/>
+                    </button>
+                )}
                 <TalkMode targetRef={chatRef} />
             </div>
         </div>
