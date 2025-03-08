@@ -11,6 +11,8 @@ import { useAppStore } from "src/shared/providers";
 import Chip from "src/shared/components/Chip";
 import css from "./Translator.module.less";
 import StarsIcon from "src/shared/icons/Stars.icon";
+import DictionaryIcon from "src/shared/icons/Dictionary.icon";
+import DoeIcon from "src/shared/icons/Doe.icon";
 
 const Translator = () => {
     const { activeTranslationOption, setActiveTranslationOption } = useAppStore();
@@ -105,7 +107,19 @@ const Translator = () => {
                 {...renderChipContent(activeTranslationOption)}
             />
             <div className={css.translator}>
-                {renderTranslatorMode(activeTranslationOption)}
+                <div className={css.translationWrapper}>
+                    <div className={css.translation}>
+                        <DictionaryIcon width={48} height={48} />
+                        <div className={css.translationAreaWrapper}>
+                            <div className={css.logo}>
+                                <DoeIcon width={26} height={26} />
+                            </div>
+                            <div className={css.translationArea}>
+                                {renderTranslatorMode(activeTranslationOption)}
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div className={css.magicMenu}>
                     <button className={css.magicButton} onMouseEnter={() => setShowMagicMenu(true)}>
                         <StarsIcon width={21} height={28} />

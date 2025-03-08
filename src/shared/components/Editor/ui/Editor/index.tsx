@@ -6,7 +6,6 @@ import css from "./Editor.module.less";
 
 type Props = {
     className?: string;
-    insertedContent?: string;
 } & EditorProps;
 
 export const Editor: React.FC<Props> = ({
@@ -14,7 +13,6 @@ export const Editor: React.FC<Props> = ({
     classNameEditor,
     classNameFocus,
     classNamePlaceholder,
-    insertedContent = "",
     ...editorProps
 }) => {
     const editor = useInitialEditor({
@@ -23,11 +21,6 @@ export const Editor: React.FC<Props> = ({
         classNameFocus: clsx(css.editor_focused, classNameFocus),
         classNamePlaceholder: clsx(css.editor_placeholder, classNamePlaceholder),
     });
-
-    useEffect(() => {
-        if (!insertedContent) return;
-        editor && editor?.commands?.insertContent(insertedContent);
-    }, [insertedContent]);
 
     return (
         <div className={clsx(css.editor, className)}>

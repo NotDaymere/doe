@@ -18,10 +18,27 @@ interface IProps {
     isModalView?: boolean;
 }
 
+const throttle = <T extends unknown[]>(callback: (...args: T) => void, delay: number) => {
+    let isWaiting = false;
+
+    return (...args: T) => {
+        if (isWaiting) {
+            return;
+        }
+
+        callback(...args);
+        isWaiting = true;
+
+        setTimeout(() => {
+            isWaiting = false;
+        }, delay);
+    };
+};
+
 const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
     const fileType = url?.split(".").pop() || "";
     const [content, setContent] = useState<any>(null);
-    const [scale, setScale] = useState(0.7);
+    const [scale, setScale] = useState(1);
     const [docxScale, setDocxScale] = useState(1);
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [numPages, setNumPages] = useState<number>(0);
@@ -43,19 +60,22 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
         element && element?.addEventListener("wheel", onWheelEvent);
 
         return () => {
-            window.removeEventListener("wheel", onWheelEvent);
+            element && element?.removeEventListener("wheel", onWheelEvent);
         };
     }, [scale]);
 
-    const onWheelEvent = (event: any) => {
+    const onWheelEvent = throttle((event: Event) => {
         event.preventDefault();
 
-        if (event.deltaY > 0) {
-            setScale(scale + 0.01);
-        } else if (event.deltaY < 0) {
-            setScale(scale - 0.01);
+        if (event instanceof WheelEvent) {
+            if (event.deltaY > 0) {
+                setScale(scale + 0.05);
+            } else if (event.deltaY < 0) {
+                if (scale - 0.05 <= 0) return;
+                setScale(scale - 0.05);
+            }
         }
-    };
+    }, 100);
 
     const renderPreviewContent = (fileType: string) => {
         switch (fileType) {
@@ -100,6 +120,7 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
                 <div className={css.zoom}>
                     <ZoomButton onZoomClick={() => setScale(scale + 0.1)} />
                 </div>
+
                 <PdfDocument
                     url={url}
                     scale={scale}

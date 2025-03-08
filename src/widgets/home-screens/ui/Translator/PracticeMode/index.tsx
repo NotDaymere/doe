@@ -6,7 +6,6 @@ import OctagonIcon from "src/shared/icons/Octagon.icon";
 import classNames from "classnames";
 import ArrowRightIcon from "src/shared/icons/ArrowRight.icon";
 import css from "./PracticeMode.module.less";
-import DoeIcon from "src/shared/icons/Doe.icon";
 
 interface IProps {
     onTranslationBack: () => void;
@@ -84,9 +83,6 @@ const PracticeMode: FC<IProps> = ({ onTranslationBack, qualityLevel = 6 }) => {
 
     return (
         <div className={css.practiceMode}>
-            <div className={css.logo}>
-                <DoeIcon width={26} height={26} />
-            </div>
             <>
                 {see && !isPracticeStopped && (
                     <div className={css.seeSection}>

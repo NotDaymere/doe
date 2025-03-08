@@ -18,10 +18,9 @@ import ShareScreenInfo from "../ShareScreen/ShareScreenInfo";
 import CableIcon from "src/shared/icons/Cable.icon";
 import BluetoothIcon from "src/shared/icons/Bluetooth.icon";
 import ScreenIcon from "src/shared/icons/Screen.icon";
-import classNames from "classnames";
 import { IScreenSharePopup, ShareType } from "src/shared/types/ScreenShare";
-import css from "./ChatPanel.module.less";
 import ScreenShareMenu from "../ShareScreen/ScreenShareMenu";
+import css from "./ChatPanel.module.less";
 
 interface IShareScreen {
     expandedButtons: boolean;
@@ -97,12 +96,6 @@ export const ChatPanel: React.FC = () => {
         shareType: null,
     });
 
-    const [selectedHint, setSelectedHint] = useState("");
-
-    useEffect(() => {
-        setText(selectedHint);
-    }, [selectedHint]);
-
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
@@ -112,16 +105,16 @@ export const ChatPanel: React.FC = () => {
 
     const prompt = usePrompt();
 
-    const handleSendButtonClick = () => {
+    const onSendMessage = (text: string) => {
+        if (!text || text === "<p></p>") return;
+
         setMessagesCount(messagesCount + 1);
         setDisableButtons(false);
-
-        if (!text) return;
 
         setMessages([
             ...messages,
             {
-                id: 3,
+                id: messages.length,
                 content: text,
                 files: [],
                 isCode: false,
@@ -200,7 +193,7 @@ export const ChatPanel: React.FC = () => {
                         onUploadFiles={(values) => setFiles([...files, ...values])}
                     />
                     <Editor
-                        readOnly={prompt.active}
+                        readOnly={prompt.active || disableButtons}
                         value={text}
                         onChange={setText}
                         onFocus={handleFocusEditor}
@@ -208,7 +201,6 @@ export const ChatPanel: React.FC = () => {
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
                         placeholder="Ask Doe anything you’d like about the world..."
-                        insertedContent={selectedHint}
                     />
                     <ScreenShareMenu
                         isActive={shareScreenConfig.expandedButtons}
@@ -245,7 +237,7 @@ export const ChatPanel: React.FC = () => {
                         <MicrophoneIcon />
                     </button>
                     {!prompt.active ? (
-                        <button className={css.panel_submitBtn} onClick={handleSendButtonClick}>
+                        <button className={css.panel_submitBtn} onClick={() => onSendMessage(text)}>
                             Send <ArrowUpIcon />
                         </button>
                     ) : (
@@ -256,12 +248,12 @@ export const ChatPanel: React.FC = () => {
                 </div>
                 {showHints.hints && messagesCount === 0 && (
                     <div className={css.hints}>
-                        <Hints onSelect={setSelectedHint} />
+                        <Hints onSelect={(hint: string) => onSendMessage(hint)} />
                     </div>
                 )}
                 {showHints.typingHints && messagesCount === 0 && (
                     <div className={css.typingHints} ref={typingHintsRef}>
-                        <HintsTyping onSelect={setSelectedHint} />
+                        <HintsTyping onSelect={(hint: string) => onSendMessage(hint)} />
                     </div>
                 )}
             </div>

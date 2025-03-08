@@ -63,7 +63,7 @@ const PdfDocument: FC<IProps> = ({
                 [css.viewerModal]: isModalView,
             })}
         >
-            <div className={css.document}>
+            <div className={css.document} style={{ transform: `scale(${scale})` }}>
                 <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
                     {Array.from(new Array(numPages)).map((_, index) => {
                         const pageIndex = index;
@@ -76,7 +76,7 @@ const PdfDocument: FC<IProps> = ({
                             <div key={`page_${pageIndex + 1}`} ref={refCallback}>
                                 <PageInView pageNumber={pageIndex + 1} onPageChange={onPageChange}>
                                     {isModalView ? (
-                                        <Page scale={scale} pageNumber={pageIndex + 1} />
+                                        <Page pageNumber={pageIndex + 1} scale={0.7} />
                                     ) : (
                                         <Page width={viewerWidth} pageNumber={pageIndex + 1} />
                                     )}

@@ -13,22 +13,28 @@ import css from "./ChatLayout.module.less";
 
 export const MAX_MESSAGES_LIMIT = 50;
 
+const DEFAULT_STYLES = {
+    width: "100%",
+    playgroundWidth: "0%",
+    opacity: 0,
+    paddingRight: "76px",
+};
+
 export const ChatLayout: React.FC = () => {
     const { playground } = useAppStore();
     const { messagesCount, mode } = useChatStore();
-    const [width, setWidth] = useState("100%");
-    const [playgroundWidth, setPlaygroundWidth] = useState("0%");
-    const [opacity, setOpacity] = useState(0);
+    const [styles, setStyles] = useState({ ...DEFAULT_STYLES });
 
     useEffect(() => {
         if (playground.open) {
-            setWidth("66%");
-            setPlaygroundWidth("34%");
-            setOpacity(1);
+            setStyles({
+                width: "66%",
+                playgroundWidth: "34%",
+                opacity: 1,
+                paddingRight: "20px",
+            });
         } else {
-            setWidth("100%");
-            setPlaygroundWidth("0%");
-            setOpacity(0);
+            setStyles({ ...DEFAULT_STYLES });
         }
     }, [playground.open]);
 
@@ -39,9 +45,7 @@ export const ChatLayout: React.FC = () => {
                     <div className={css.layout_sidebar}>
                         <Sidebar />
                     </div>
-                    <div className={css.translation}>
-                        <TranslationMode />
-                    </div>
+                    <TranslationMode />
                 </div>
             </div>
         );
@@ -54,12 +58,12 @@ export const ChatLayout: React.FC = () => {
                     <ChatPanel />
                 </div>
             )}
-            <div className={css.chatLayout}>
+            <div className={css.chatLayout} style={{ paddingRight: styles.paddingRight }}>
                 <div
                     className={classNames(css.layout, {
                         [css.layoutWithPlayground]: playground.open,
                     })}
-                    style={{ width }}
+                    style={{ width: styles.width }}
                 >
                     <div className={css.layout_sidebar}>
                         <Sidebar />
@@ -76,8 +80,11 @@ export const ChatLayout: React.FC = () => {
                     </div>
                 </div>
                 {playground.open && (
-                    <div className={css.playground} style={{ width: playgroundWidth, opacity }}>
-                        <PlaygroundRenderer type={playground.type} />{" "}
+                    <div
+                        className={css.playground}
+                        style={{ width: styles.playgroundWidth, opacity: styles.opacity }}
+                    >
+                        <PlaygroundRenderer type={playground.type} />
                     </div>
                 )}
             </div>
