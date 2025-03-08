@@ -179,14 +179,7 @@ function MonacoEditorMenu({ buttonPosition, isPen, editor }: TextFormatProps) {
         <>
             <Flex
                 className={'text-format-container'}
-                style={
-                    isPen
-                        ? {
-                            position: "absolute",
-                            bottom: "110px",
-                            right: "14px",
-                        }
-                        : {
+                style={{
                             top: `${buttonPosition?.top}px`,
                             left: buttonPosition?.left
                                 ? `${buttonPosition.left - 200}px`

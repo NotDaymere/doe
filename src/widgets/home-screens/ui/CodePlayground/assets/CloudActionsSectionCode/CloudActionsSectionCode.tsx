@@ -45,7 +45,8 @@ function CloudActionsSectionCode() {
                     <ArrowDownIconCode />
                 </button>
             </div>
-            <div className={`text-columns-button justify-space-between ${arrowDownActionOnClick && "button-highlighted"}`}>
+            <div className={`text-columns-button justify-space-between ${arrowDownActionOnClick && "button-highlighted"}`}
+                 onClick={handleArrowDownActionOnClick}>
                 <div className="text-columns-button justify-flex-start text-columns-border-top padding-zero hover-zero"
                 >
                     <Code />
@@ -53,8 +54,7 @@ function CloudActionsSectionCode() {
                         <span className={"text-columns-button-span"}>Code</span>
                     </p>
                 </div>
-                <button className={"arrow-down-icon-button"}
-                        onClick={handleArrowDownActionOnClick}>
+                <button className={"arrow-down-icon-button"}>
                     {!arrowDownActionOnClick && <ArrowDownIconCode />}
                     {arrowDownActionOnClick && <ArrowUpIconCode />}
                 </button>

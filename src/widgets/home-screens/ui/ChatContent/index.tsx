@@ -1,5 +1,4 @@
 import React, { Dispatch } from "react";
-import { useEditor } from "@tiptap/react";
 import Bold from "@tiptap/extension-bold";
 import Document from "@tiptap/extension-document";
 import History from "@tiptap/extension-history";
@@ -8,7 +7,7 @@ import Link from "@tiptap/extension-link";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import Underline from "@tiptap/extension-underline";
-
+import { useEditor } from "@tiptap/react";
 import { useChatStore } from "src/shared/providers";
 import {
     CustomCodeBlock,
@@ -18,8 +17,9 @@ import {
     Formula,
     createHandleTab,
 } from "src/components/tiptap-editor/extensions/index";
-
 import { useChatController } from "../..";
+import { ChatMessage } from "../ChatMessage";
+import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
 import { TalkMode } from "../TalkMode";
 import css from "./ChatContent.module.less";
 import { ScrollDownButton } from "./assets/ScrollDownButton/ScrollDownButton";
@@ -44,7 +44,9 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     const {
         playground,
         playgroundFullscreen,
+        getOpenSavedPlaygrounds,
         currentBranch,
+        messages,
         isCurrentBranchOpen,
         currentBranchDialog,
         setCurrentBranchDialog,
@@ -145,7 +147,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     return (
         <div
             className={
-                playground.open
+                getOpenSavedPlaygrounds().length > 0
                     ? playgroundFullscreen
                         ? css.content_playground_fullscreen
                         : css.content_playground
@@ -153,6 +155,18 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
             }
         >
             <div className={css.content_inner} ref={chatRef}>
+                {!playgroundFullscreen && <AllPlaygrounds />}
+                <div className={css.content_chat} ref={chatRef}>
+                    {messages.map((item) => (
+                        <ChatMessage
+                            data={item}
+                            key={item.id}
+                            editor={editor}
+                            editMsgMode={editMsgMode}
+                            setEditMsgMode={setEditMsgMode}
+                        />
+                    ))}
+                </div>
                 {!(isCurrentBranchOpen && currentBranch && currentBranch.messages) ? (
                     <ChatRegularView
                         playgroundFullscreen={playgroundFullscreen}
