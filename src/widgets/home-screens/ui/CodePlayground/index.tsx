@@ -133,15 +133,15 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         }
     };
 
-    const handlePenClick = () => {
-        if (selectedText) {
+    const handlePenClick = (position: any) => {
+        if (isPen) {
             setSelectedText(null);
             setButtonPosition(null);
             setIsPen(false);
         } else {
-            setSelectedText("Pen");
+            setSelectedText(selectedText ? selectedText : "Pen");
             setIsPen(true);
-            setButtonPosition({ bottom: 137, right: 45 });
+            setButtonPosition(position);
         }
     };
 
@@ -167,6 +167,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     }, [editorInstance, playgroundState]);
 
     return (
+        <>
         <div className="table-playground"
              onMouseDown={(event) => {
                  if (event.button === 1) {
@@ -239,18 +240,28 @@ print(result)`.trim()}
                     {
                         !playgroundAction
                             ? <>
-                                {(!playgroundFullscreen && !openHistory) && <CloudPlusButton type="code" />}
-                                {playgroundFullscreen && <FullscreenGeneralLogo />}
-                                { !openHistory && <div className={"action-buttons-right-part"}>
-                                    {playgroundFullscreen && <CloudPlusButton type="code" />}
-                                    <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-                                    <ResizePlaygroundButton />
-                                </div> }
+                                <div className={"action-buttons-left-part"}>
+                                    {(!playgroundFullscreen && !openHistory) && <CloudPlusButton type="code" />}
+                                    {playgroundFullscreen && <FullscreenGeneralLogo />}
+                                </div>
+                                {!openHistory &&
+                                    <div className={"action-buttons-right-part"}>
+                                        {playgroundFullscreen && <CloudPlusButton type="code" />}
+                                        <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+                                        <ResizePlaygroundButton />
+                                    </div>
+                                }
                             </>
                             : <>
-                                <PlaygroundAction playgroundAction = {playgroundAction} editor={editorInstance} containerWidth={containerWidth} />
+                                {playgroundFullscreen && (
+                                    <div className={"action-buttons-left-part"}>
+                                        <FullscreenGeneralLogo />
+                                    </div>
+                                )}
+                                <div className={"action-buttons-center-part"}>
+                                    <PlaygroundAction playgroundAction={playgroundAction} editor={editorInstance} containerWidth={containerWidth} />
+                                </div>
                                 {playgroundFullscreen && <>
-                                    <FullscreenGeneralLogo />
                                     {!openHistory && <div className={"action-buttons-right-part"}>
                                         <CloudPlusButton type="code" />
                                         <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
@@ -261,29 +272,30 @@ print(result)`.trim()}
                     }
                 </div>
             }
-            {selectedText && editorInstance && (
-                isPen ? (<MonacoEditorMenu
-                        buttonPosition={{
-                            top: buttonPosition?.top,
-                            left: buttonPosition?.left,
-                            bottom: buttonPosition?.bottom,
-                            right: buttonPosition?.right,
-                        }}
-                        isPen={isPen}
-                        editor={editorInstance}
-                    />)
-                    : (<QuestionCode
-                            buttonPosition={{
-                                top: buttonPosition?.top,
-                                left: buttonPosition?.left,
-                                bottom: buttonPosition?.bottom,
-                                right: buttonPosition?.right,
-                            }}
-                            editor={editorInstance}
-                        />
-                    )
-            )}
         </div>
+    {selectedText && editorInstance && (
+        isPen ? (<MonacoEditorMenu
+                buttonPosition={{
+                    top: buttonPosition?.top,
+                    left: buttonPosition?.left,
+                    bottom: buttonPosition?.bottom,
+                    right: buttonPosition?.right,
+                }}
+                isPen={isPen}
+                editor={editorInstance}
+            />)
+            : (<QuestionCode
+                    buttonPosition={{
+                        top: buttonPosition?.top,
+                        left: buttonPosition?.left,
+                        bottom: buttonPosition?.bottom,
+                        right: buttonPosition?.right,
+                    }}
+                    editor={editorInstance}
+                />
+            )
+    )}
+    </>
     );
 };
 

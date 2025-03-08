@@ -35,7 +35,6 @@ type TextFormatProps = {
 };
 
 function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextFormatMenuOnClick}: TextFormatProps) {
-    console.log(buttonPosition);
     const [activePaint, setActivePaint] = useState(false);
     const [activeMenu, setActiveMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -207,14 +206,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
             <Flex
                 ref={menuRef}
                 className={"text-format-container"}
-                style={
-                    isPen
-                        ? {
-                            position: "absolute",
-                            bottom: `${buttonPosition?.bottom}px`,
-                            right: `${buttonPosition?.right}px`,
-                        }
-                        : {
+                style={{
                             top: `${buttonPosition?.top}px`,
                             left: buttonPosition?.left ? `${buttonPosition.left - 200}px` : "auto",
                             bottom: `${buttonPosition?.bottom}px`,
@@ -257,7 +249,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
                     >
                         {!activePaint ? <Paint /> : <ActivePaintIcon />}
                     </Button>
-                    {activePaint && <ActivePaint onColorSelect={applyColor} />}
+                    {activePaint && <ActivePaint onColorSelect={applyColor} onClick={handlePenClick} />}
                 </div>
 
                 <Button className={"button"} onClick={applyQuotes}>

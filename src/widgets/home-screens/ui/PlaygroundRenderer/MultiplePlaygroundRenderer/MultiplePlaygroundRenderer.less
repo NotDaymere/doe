@@ -14,11 +14,13 @@
   height: fit-content;
   background: #F1F1F1;
   margin-bottom: -30px;
+  padding-left: 15px;
+  padding-right: 35px;
 }
 
 .saved-playgrounds-container {
   box-sizing: border-box;
-  width: 97%;
+  width: 100%;
   height: auto;
   min-height: fit-content;
   border-radius: 10px;
@@ -63,7 +65,16 @@
   justify-content: center;
   gap: 4px;
   z-index: 999999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
 }
+
+.doe-playground-open.show {
+  opacity: 1;
+  visibility: visible;
+}
+
 .playground-render {
   display: flex;
   width: 100%;

@@ -46,7 +46,7 @@ function WritingLevel({ editor }: Props) {
                     {openMenu && <Menu setOpenMenu={setOpenMenu} setWritingLevelOption={setWritingLevelOption} />}
                 </div>
                 <span className={"text-columns-button-span ml--5"}>in</span>
-                <div className={'text-columns-target'}>{promptValue}</div>
+                {promptValue && <div className={'text-columns-target'}>{promptValue}</div>}
             </div>
         </>
     );

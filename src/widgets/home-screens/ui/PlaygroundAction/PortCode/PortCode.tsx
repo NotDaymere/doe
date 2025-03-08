@@ -50,7 +50,7 @@ function PortCode({ editor }: Props) {
                     </div>
                 </div>
                 <span className={"text-columns-button-span"}>in</span>
-                <div className={'text-columns-target'}>{promptValue}</div>
+                {promptValue && <div className={'text-columns-target'}>{promptValue}</div>}
             </div>
         </>
     )

@@ -16,12 +16,12 @@ interface IProps {
     containerWidth?: number;
 }
 
-const PlaygroundAction: FC<IProps> = ({ playgroundAction: { type }, editor, containerWidth = 0 }) => {
+const PlaygroundAction: FC<IProps> = ({ playgroundAction: { type }, editor }) => {
     const { playgroundFullscreen } = useChatStore();
     const { setPlaygroundAction } = usePlaygroundStore();
     const [sendButton, setSendButton] = useState<(() => void) | null>(null);
     const chatRef = useRef<HTMLDivElement>(null);
-    const [position, setPosition] = useState({ x: 700, y: -40 });
+    const [position, setPosition] = useState<{x:number, y: number} | null>(null);
     const [isDragging, setIsDragging] = useState(false);
 
     const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -30,17 +30,12 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: { type }, editor, cont
     };
 
     useEffect(() => {
-        if (!playgroundFullscreen || !chatRef.current) return;
-        const componentWidth = chatRef.current.getBoundingClientRect().width;
-        setPosition({ x: (containerWidth - componentWidth) / 100, y: -100 });
-    }, [containerWidth, playgroundFullscreen]);
-
-    useEffect(() => {
         const handleMouseMove = (event: MouseEvent) => {
             if (!isDragging) return;
+            console.log(event.movementX, event.movementY);
             setPosition((prev) => ({
-                x: prev.x + event.movementX,
-                y: prev.y + event.movementY,
+                x: (prev?.x || 400) + event.movementX,
+                y: (prev?.y || -90) + event.movementY,
             }));
         };
 
@@ -59,9 +54,9 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: { type }, editor, cont
 
     return (
         <div
-            className={`playground-action-container ${playgroundFullscreen ? "playground-action-container-fullscreen" : ""}`}
+            className={`playground-action-container ${(playgroundFullscreen && position) && "playground-action-container-fullscreen"}`}
             ref={chatRef}
-            style={{ top: position.y, left: position.x }}
+            style={{ top: position?.y, left: position?.x }}
             onMouseDown={handleMouseDown}
         >
             <div className="playground-action-content">

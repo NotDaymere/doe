@@ -48,7 +48,7 @@ interface Props {
 
 export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) => {
     const { chatRef } = useChatController();
-    const { playground, playgroundFullscreen } = useChatStore();
+    const { playground, playgroundFullscreen, getOpenSavedPlaygrounds } = useChatStore();
     const { currentBranch, messages } = useChatStore();
     const editor = useEditor({
         extensions: [
@@ -76,7 +76,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
 
     return (
         <div
-            className={playground.open ? (playgroundFullscreen ? css.content_playground_fullscreen : css.content_playground) : css.content}>
+            className={getOpenSavedPlaygrounds().length > 0 ? (playgroundFullscreen ? css.content_playground_fullscreen : css.content_playground) : css.content}>
             <div className={css.content_inner}>
                 {!playgroundFullscreen && <AllPlaygrounds />}
                 <div className={css.content_chat} ref={chatRef}>

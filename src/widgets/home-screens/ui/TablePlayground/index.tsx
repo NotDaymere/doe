@@ -152,7 +152,12 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     };
 
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+        if(divRef.current)  {
+            divRef.current.classList.add("close")
+        }
+        window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   useEffect(() => {
@@ -244,26 +249,25 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     }
   };
 
-  const handlePenClick = () => {
-    if (selectedText) {
-      setSelectedText(null);
-      setButtonPosition(null);
-      setIsPen(false);
-    } else {
-      setSelectedText(selectedText ? selectedText : "Pen");
-      setIsPen(true);
-      setButtonPosition({
-        bottom: 111,
-        right: 14,
-      });
-    }
-  };
+    const handlePenClick = (position: any) => {
+        if (isPen) {
+            setSelectedText(null);
+            setButtonPosition(null);
+            setIsPen(false);
+        } else {
+            setSelectedText(selectedText ? selectedText : "Pen");
+            setIsPen(true);
+            setButtonPosition(position);
+        }
+    };
 
-  const handleTipTapTextFormatMenuOnClick = () => {
+
+    const handleTipTapTextFormatMenuOnClick = () => {
     setSelectedText(null);
   };
 
   return (
+      <>
       <div className={`table-playground`}
            onMouseDown={(event) => {
              if (event.button === 1) {
@@ -297,20 +301,6 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             </div>
           </section>
 
-
-          {selectedText && editor && (
-              <TipTapTextFormatMenu
-                  buttonPosition={{
-                    top: buttonPosition?.top,
-                    left: buttonPosition?.left,
-                    bottom: buttonPosition?.bottom,
-                    right: buttonPosition?.right,
-                  }}
-                  isPen={isPen}
-                  editor={editor}
-                  handleTipTapTextFormatMenuOnClick={handleTipTapTextFormatMenuOnClick}
-              />
-          )}
         </div>
         {
             playground.id == id &&
@@ -318,18 +308,28 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
               {
                 !playgroundAction
                   ? <>
-                    {(!playgroundFullscreen && !openHistory) && <CloudPlusButton type="table" />}
-                    {playgroundFullscreen && <FullscreenGeneralLogo />}
-                      { !openHistory && <div className={"action-buttons-right-part"}>
+                    <div className={"action-buttons-left-part"}>
+                        {(!playgroundFullscreen && !openHistory) && <CloudPlusButton type="table" />}
+                        {playgroundFullscreen && <FullscreenGeneralLogo />}
+                    </div>
+                      { !openHistory &&
+                      <div className={"action-buttons-right-part"}>
                         {playgroundFullscreen && <CloudPlusButton type="table" />}
                         <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
                         <ResizePlaygroundButton />
-                      </div> }
+                      </div>
+                      }
                   </>
                   : <>
-                      <PlaygroundAction playgroundAction = {playgroundAction} editor={editor} containerWidth={containerWidth} />
+                    {playgroundFullscreen && (
+                        <div className={"action-buttons-left-part"}>
+                            <FullscreenGeneralLogo />
+                        </div>
+                    )}
+                        <div className={"action-buttons-center-part"}>
+                            <PlaygroundAction playgroundAction = {playgroundAction} editor={editor} containerWidth={containerWidth} />
+                        </div>
                       {playgroundFullscreen && <>
-                        <FullscreenGeneralLogo />
                         {!openHistory && <div className={"action-buttons-right-part"}>
                            <CloudPlusButton type="table" />
                           <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
@@ -341,6 +341,20 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             </div>
         }
       </div>
+          {selectedText && editor && (
+              <TipTapTextFormatMenu
+                  buttonPosition={{
+                      top: buttonPosition?.top,
+                      left: buttonPosition?.left,
+                      bottom: buttonPosition?.bottom,
+                      right: buttonPosition?.right,
+                  }}
+                  isPen={isPen}
+                  editor={editor}
+                  handleTipTapTextFormatMenuOnClick={handleTipTapTextFormatMenuOnClick}
+              />
+          )}
+      </>
   );
 };
 
