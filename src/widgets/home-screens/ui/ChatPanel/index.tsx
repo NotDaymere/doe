@@ -26,8 +26,22 @@ import HandCursorIcon from "../../../../shared/icons/HandCursor.icon";
 import BranchIcon from "../../../../shared/icons/Branch.icon";
 
 export const ChatPanel: React.FC = () => {
-    const { text, files, setText, setFiles, reset } = usePanel();
-    const { setEditor, setMessages, isCreateBranchChatMode, isUploadFileChatMode } = useChatStore();
+    const {
+        text,
+        files,
+        setText,
+        setFiles,
+        reset
+    } = usePanel();
+
+    const {
+        setEditor,
+        setMessages,
+        isCreateBranchChatMode,
+        isUploadFileChatMode ,
+        addSavedBranch
+    } = useChatStore();
+
     const messages = useChatStore((state) => state.messages);
     const [clearContent, setClearContent] = React.useState(false)
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
@@ -84,6 +98,10 @@ export const ChatPanel: React.FC = () => {
 
         const updatedMessages = [...messages, userMessage];
         setMessages(updatedMessages);
+
+        if(isCreateBranchChatMode){
+            addSavedBranch(text, []);
+        }
 
         reset();
         setClearContent(true);

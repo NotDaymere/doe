@@ -1,7 +1,7 @@
 import { IMessage } from "./Message";
 
 export interface IBranch {
-    id: number;
+    id: number | null;
     name: string;
     messages: IMessage[];
 }
