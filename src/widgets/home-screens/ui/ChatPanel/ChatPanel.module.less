@@ -1,3 +1,11 @@
+.setFontSohneBuch(
+  @fontSize: 16px,
+  @leading: 1.25,
+  @letterSpacing: normal
+) {
+  font: 500 @fontSize/@leading var(--font-sohne);
+  letter-spacing: @letterSpacing;
+}
 .panel {
     padding: 30px 0;
     padding-left: 10px;
@@ -6,6 +14,7 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+  .setFontSohneBuch(16px, 1.4, normal);
 }
 .panel_playground {
     padding: 30px 0;

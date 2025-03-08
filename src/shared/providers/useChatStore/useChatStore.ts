@@ -33,6 +33,8 @@ interface ChatState {
     currentBranch: IBranch | null;
     setCurrentBranch: (currentBranch: IBranch | null) => void;
     savedBranches: IBranch[];
+    addSavedBranch: (name: string, messages: IMessage[]) => void;
+    deleteSavedBranch: (id: number) => void;
 
     isUploadFileChatMode: boolean;
     setIsUploadFileChatMode: (isCreateBranchChatMode: boolean) => void;
@@ -142,6 +144,21 @@ export const useChatStore = create<ChatState>()(
         isCreateBranchChatMode: false,
         currentBranch: null,
         savedBranches: [],
+        addSavedBranch: (name, messages) => set((state) => {
+            const newId = state.savedBranches.length > 0 ?
+                Math.max(...state.savedBranches.map(p => Number(p.id) || 0)) + 1
+                :
+                1;
+            const newBranch = {
+                id: newId,
+                name: name,
+                messages: messages
+            };
+            return { savedBranches: [...state.savedBranches, newBranch] };
+        }),
+        deleteSavedBranch: (id) => set((state) => ({
+            savedBranches: state.savedBranches.filter(branch => branch.id !== id),
+        })),
         setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
         setIsCreateBranchChatMode: (isCreateBranchChatMode) => set(() => ({ isCreateBranchChatMode })),
 
