@@ -52,9 +52,19 @@ interface Props {
 
 export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) => {
     const { chatRef } = useChatController();
-    const { playground, playgroundFullscreen } = useChatStore();
-    const { currentBranch, messages , isCurrentBranchOpen} = useChatStore();
+    const {
+        playground,
+        playgroundFullscreen,
+        currentBranch,
+        messages,
+        isCurrentBranchOpen,
+        currentBranchDialog,
+        setCurrentBranchDialog
+    } = useChatStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
+
+    // Массив рефов для каждого диалога
+    const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
     const editor = useEditor({
         extensions: [
@@ -90,6 +100,17 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         }
     }, [currentBranch?.dialogsMessages]);
 
+    // При наличии currentBranchDialog скроллим до конкретного элемента
+    React.useEffect(() => {
+        if (
+            isCurrentBranchOpen &&
+            currentBranchDialog !== null &&
+            dialogRefs.current[currentBranchDialog]
+        ) {
+            dialogRefs.current[currentBranchDialog]?.scrollIntoView({ behavior: "smooth" });
+            setCurrentBranchDialog(null);
+        }
+    }, [isCurrentBranchOpen, currentBranchDialog, setCurrentBranchDialog]);
 
     const scrollToBottom = () => {
         if (chatRef.current) {
@@ -131,29 +152,35 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
 
     return (
         <div
-            className={playground.open ? (playgroundFullscreen ? css.content_playground_fullscreen : css.content_playground) : css.content}>
+            className={
+                playground.open
+                    ? playgroundFullscreen
+                        ? css.content_playground_fullscreen
+                        : css.content_playground
+                    : css.content
+            }
+        >
             <div className={css.content_inner} ref={chatRef}>
                 {!(isCurrentBranchOpen && currentBranch && currentBranch.messages) ? (
                     <>
-                        {!playgroundFullscreen &&
+                        {!playgroundFullscreen && (
                             <div className={css.content_top_actions_container}>
                                 <AllBranches />
                                 <AllPlaygrounds />
                             </div>
-                        }
+                        )}
                         <div className={css.content_chat}>
                             {messages.map((item, index) => (
-                                <>
+                                <React.Fragment key={item.id}>
                                     <ChatMessageDate id={index} />
                                     <ChatBranchSection messageId={item.id} />
                                     <ChatMessage
                                         data={item}
-                                        key={item.id}
                                         editor={editor}
                                         editMsgMode={editMsgMode}
                                         setEditMsgMode={setEditMsgMode}
                                     />
-                                </>
+                                </React.Fragment>
                             ))}
                         </div>
                     </>
@@ -175,7 +202,10 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         <div className={css.content_chat_branch_dialogs}>
                             {currentBranch.dialogsMessages.map((dialog, index) => (
                                 <React.Fragment key={index}>
-                                    <div className={css.content_chat_branch}>
+                                    <div
+                                        ref={(el) => (dialogRefs.current[index] = el)}
+                                        className={css.content_chat_branch}
+                                    >
                                         <ChatBranchSection isOpenBrunch={true} />
                                         <div className={css.content_chat_branch_dialog}>
                                             <ChatMessage

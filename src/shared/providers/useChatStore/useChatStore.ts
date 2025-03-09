@@ -40,6 +40,8 @@ interface ChatState {
     deleteSavedBranch: (id: number) => void;
     addDialogToCurrentBranch: (dialog: IBranchDialog) => void;
     getBranchById: (id: string | number) => IBranch | null;
+    currentBranchDialog: number | null;
+    setCurrentBranchDialog: (dialogIndex: number | null) => void;
 
     isUploadFileChatMode: boolean;
     setIsUploadFileChatMode: (isCreateBranchChatMode: boolean) => void;
@@ -60,7 +62,7 @@ export const useChatStore = create<ChatState>()(
             }, {
                 id: 2,
                 content:
-                `<p>Here's a simple project idea: a Task Manager command-line application in Python. It will allow you to add, view, and delete tasks. In the structure, we'll be able to add and view all tasks, delete tasks by number, and mark tasks as completed.</p>
+                    `<p>Here's a simple project idea: a Task Manager command-line application in Python. It will allow you to add, view, and delete tasks. In the structure, we'll be able to add and view all tasks, delete tasks by number, and mark tasks as completed.</p>
                 <p><br class="ProseMirror-trailingBreak"></p>
                 <p>We will write this code completely in Python.</p>
                 <p><br class="ProseMirror-trailingBreak"></p>
@@ -69,12 +71,12 @@ export const useChatStore = create<ChatState>()(
                 <block-code>
                 <pre><code>
                 def delete_element(my_list, element):
-                """Removes the first occurrence of the element from the list."""
-                try:
-                    my_list.remove(element)
-                    return my_list
-                except ValueError:
-                     return f"Element {element} not found in the list."
+                    """Removes the first occurrence of the element from the list."""
+                    try:
+                        my_list.remove(element)
+                        return my_list
+                    except ValueError:
+                        return f"Element {element} not found in the list."
 
                 # Example usage
                 my_list = [1, 2, 3, 4, 5]
@@ -97,7 +99,6 @@ export const useChatStore = create<ChatState>()(
             id: null,
         },
         savedPlaygrounds: [],
-
         playgroundFullscreen: false,
         questionCodeMessage: null,
 
@@ -148,6 +149,7 @@ export const useChatStore = create<ChatState>()(
 
         isCreateBranchChatMode: false,
         currentBranch: null,
+        currentBranchDialog: null,
         isCurrentBranchOpen: false,
         savedBranches: [],
         addSavedBranch: (name: string, messages: IMessage[], dialogsMessages: IBranchDialog[], mainMessageId?: string | number) => {
@@ -156,7 +158,7 @@ export const useChatStore = create<ChatState>()(
                 element.innerHTML = html;
                 return element.textContent || element.innerText || "";
             };
-            const branchName =  stripHTML(name)
+            const branchName = stripHTML(name);
             const state = get();
             const newId = state.savedBranches.length > 0
                 ? Math.max(...state.savedBranches.map(p => Number(p.id) || 0)) + 1
@@ -177,7 +179,6 @@ export const useChatStore = create<ChatState>()(
         addDialogToCurrentBranch: (dialog: IBranchDialog) =>
             set((state) => {
                 if (!state.currentBranch) return state;
-
                 const updatedBranches = state.savedBranches.map(b =>
                     b.id === state.currentBranch!.id
                         ? { ...b, dialogsMessages: [...b.dialogsMessages, dialog] }
@@ -185,27 +186,34 @@ export const useChatStore = create<ChatState>()(
                 );
                 const updatedCurrentBranch =
                     updatedBranches.find(b => b.id === state.currentBranch!.id) || state.currentBranch;
-
                 return {
                     savedBranches: updatedBranches,
                     currentBranch: updatedCurrentBranch,
                 };
             }),
-        deleteSavedBranch: (id) => set((state) => ({
-            savedBranches: state.savedBranches.filter(branch => branch.id !== id),
-        })),
+        deleteSavedBranch: (id) =>
+            set((state) => {
+                const isCurrentBranchDeleted =
+                    state.currentBranch && String(state.currentBranch.id) === String(id);
+                return {
+                    savedBranches: state.savedBranches.filter(branch => branch.id !== id),
+                    currentBranch: isCurrentBranchDeleted ? null : state.currentBranch,
+                    currentBranchDialog: isCurrentBranchDeleted ? null : state.currentBranchDialog,
+                };
+            }),
         setCurrentBranch: (branch: IBranch | string | number | null) => {
             if (branch === null) {
-                set({ currentBranch: null });
+                set({ currentBranch: null, currentBranchDialog: null });
             } else if (typeof branch === "object") {
-                set({ currentBranch: branch });
+                set({ currentBranch: branch, currentBranchDialog: null });
             } else {
                 const foundBranch = get().savedBranches.find(
                     b => String(b.id) === String(branch)
                 );
-                set({ currentBranch: foundBranch || null });
+                set({ currentBranch: foundBranch || null, currentBranchDialog: null });
             }
         },
+        setCurrentBranchDialog: (dialogIndex: number | null) => set({ currentBranchDialog: dialogIndex }),
         setIsCreateBranchChatMode: (isCreateBranchChatMode) => set(() => ({ isCreateBranchChatMode })),
         setIsCurrentBranchOpen: (open: boolean) => set(() => ({ isCurrentBranchOpen: open })),
 
