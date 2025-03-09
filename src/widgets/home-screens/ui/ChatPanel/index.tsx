@@ -108,12 +108,12 @@ export const ChatPanel: React.FC = () => {
         }
 
         if (isCurrentBranchOpen && currentBranch){
-            addDialogToCurrentBranch(branchDialog)
 
             reset();
             setClearContent(true);
 
             setTimeout(() => {
+                addDialogToCurrentBranch(branchDialog)
                 setIsLoading(false);
 
             }, 3000);
