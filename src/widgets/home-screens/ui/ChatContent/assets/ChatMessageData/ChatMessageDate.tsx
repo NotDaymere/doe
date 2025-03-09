@@ -22,8 +22,10 @@ const ChatMessageDateComponent: React.FC<ChatMessageDateProps> = ({ id }) => {
     }, []);
 
     return (
-        <div className={css.dateSeparator}>
-            <span className={css.dateSeparator_text}>{cachedDateString}</span>
+        <div className={css.dateSeparatorContainer}>
+            <div className={css.dateSeparator}>
+                <span className={css.dateSeparator_text}>{cachedDateString}</span>
+            </div>
         </div>
     );
 };

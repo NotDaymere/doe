@@ -38,8 +38,10 @@ export const ChatPanel: React.FC = () => {
         setEditor,
         setMessages,
         isCreateBranchChatMode,
+        setIsCreateBranchChatMode,
         isUploadFileChatMode ,
-        addSavedBranch
+        addSavedBranch,
+        setCurrentBranch
     } = useChatStore();
 
     const messages = useChatStore((state) => state.messages);
@@ -96,11 +98,20 @@ export const ChatPanel: React.FC = () => {
             content: testTextAndCharts,
         };
 
+
         const updatedMessages = [...messages, userMessage];
         setMessages(updatedMessages);
 
+
+        const initBranchDialog = {
+            userRequest: userMessage,
+            botMessages: botMessage
+        }
+
         if(isCreateBranchChatMode){
-            addSavedBranch(text, []);
+            const newBranch = addSavedBranch(text, updatedMessages, [initBranchDialog], userMessage.id);
+            setCurrentBranch(newBranch);
+            setIsCreateBranchChatMode(false);
         }
 
         reset();
@@ -108,7 +119,6 @@ export const ChatPanel: React.FC = () => {
 
         setTimeout(() => {
             setMessages([...updatedMessages, botMessage]);
-
             setIsLoading(false);
 
         }, 3000);

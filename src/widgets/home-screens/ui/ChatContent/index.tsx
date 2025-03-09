@@ -35,6 +35,7 @@ import { TalkMode } from "../TalkMode";
 import AllBranches from "./assets/AllBranches/AllBranches";
 import { ChatMessageDate } from "./assets/ChatMessageData/ChatMessageDate";
 import ArrowDownChatScrollIcon from "../../../../shared/icons/ArrowDownChatScroll.icon";
+import ChatBranchSection from "./assets/ChatBranchSection/ChatBranchSection";
 
 interface Props {
     editMsgMode: {
@@ -52,7 +53,7 @@ interface Props {
 export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) => {
     const { chatRef } = useChatController();
     const { playground, playgroundFullscreen } = useChatStore();
-    const { currentBranch, messages } = useChatStore();
+    const { currentBranch, messages , isCurrentBranchOpen} = useChatStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
 
     const editor = useEditor({
@@ -121,27 +122,57 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         <div
             className={playground.open ? (playgroundFullscreen ? css.content_playground_fullscreen : css.content_playground) : css.content}>
             <div className={css.content_inner} ref={chatRef}>
-                {!playgroundFullscreen &&
-                    <div className={css.content_top_actions_container}>
-                        <AllBranches />
-                        <AllPlaygrounds />
-                    </div>
-                }
 
-                <div className={css.content_chat} >
-                    {messages.map((item, index) => (
-                        <>
-                            <ChatMessageDate id={index}/>
-                            <ChatMessage
-                                data={item}
-                                key={item.id}
-                                editor={editor}
-                                editMsgMode={editMsgMode}
-                                setEditMsgMode={setEditMsgMode}
-                            />
-                        </>
-                    ))}
-                </div>
+                {!(isCurrentBranchOpen && currentBranch && currentBranch.messages) ? (
+                    <>
+                        {!playgroundFullscreen &&
+                            <div className={css.content_top_actions_container}>
+                                <AllBranches />
+                                <AllPlaygrounds />
+                            </div>
+                        }
+                        <div className={css.content_chat} >
+                            {messages.map((item, index) => (
+                                <>
+                                    <ChatMessageDate id={index}/>
+                                    <ChatBranchSection messageId={item.id}/>
+                                    <ChatMessage
+                                        data={item}
+                                        key={item.id}
+                                        editor={editor}
+                                        editMsgMode={editMsgMode}
+                                        setEditMsgMode={setEditMsgMode}
+                                    />
+                                </>
+                            ))}
+                        </div>
+                    </>
+                    ) : (
+                        <div className={css.content_chat_branch_dialogs}>
+                            {currentBranch.dialogsMessages.map((dialog, index) => (
+                                <React.Fragment key={index}>
+                                    <div className={css.content_chat_branch}>
+                                        <ChatBranchSection messageId={dialog.userRequest.id}/>
+                                        <div className={css.content_chat_branch_dialog}>
+                                            <ChatMessage
+                                                data={dialog.userRequest}
+                                                editor={editor}
+                                                editMsgMode={editMsgMode}
+                                                setEditMsgMode={setEditMsgMode}
+                                            />
+                                            <ChatMessage
+                                                data={dialog.botMessages}
+                                                editor={editor}
+                                                editMsgMode={editMsgMode}
+                                                setEditMsgMode={setEditMsgMode}
+                                            />
+                                        </div>
+                                    </div>
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    )
+                }
 
                 {showScrollDownBtn && (
                     <button
