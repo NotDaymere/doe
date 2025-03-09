@@ -9,10 +9,11 @@ import css from "./MagicMenu.module.less";
 import { useAppStore, useChatStore } from "../../../../shared/providers";
 import { MagicCreateNewBranch } from "./ui/MagicCreateNewBranch/MagicCreateNewBranch";
 import { MagicUploadFromDesktop } from "./ui/MagicUploadFromDesktop/MagicUploadFromDesktop";
+import { FileWithId } from "../../lib/hooks/useDragFile";
 
 
 interface Props {
-    onUploadFiles?: (files: File[]) => void;
+    onUploadFiles?: (files: FileWithId[]) => void;
     onDispatchDoe?: () => void;
 }
 
