@@ -9,26 +9,25 @@ interface ChatMessageDateProps {
     isOpenBrunch?: boolean;
 }
 
-const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ messageId ,
-                                                             isOpenBrunch = false
-    }) => {
-    const { currentBranch, setIsCurrentBranchOpen } = useChatStore();
+const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ messageId, isOpenBrunch = false }) => {
+    const { currentBranch, savedBranches, setCurrentBranch, setIsCurrentBranchOpen } = useChatStore();
 
-    if (!currentBranch) return null;
+    const branchToDisplay = isOpenBrunch
+        ? currentBranch
+        : savedBranches.find(b => b.mainMessageId === messageId);
+
+    if (!branchToDisplay) return null;
 
     if (!isOpenBrunch) {
-        if (currentBranch.mainMessageId !== messageId) return null;
-
-        const foundMessage = currentBranch.messages.find(
-            (message) => message.id === messageId
-        );
-
+        if (branchToDisplay.mainMessageId !== messageId) return null;
+        const foundMessage = branchToDisplay.messages.find(message => message.id === messageId);
         if (!foundMessage) return null;
     }
 
-    const text = currentBranch.name;
+    const text = branchToDisplay.name;
 
     const handleContainerClick = () => {
+        setCurrentBranch(branchToDisplay);
         setIsCurrentBranchOpen(true);
     };
 
@@ -37,7 +36,7 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ messageId ,
     };
 
     return (
-        <div className={"chat-branch-section-container"}>
+        <div className="chat-branch-section-container">
             <div className="chat-branch-section" onClick={handleContainerClick}>
                 <BranchIcon width={16} height={16} fill="currentColor" />
                 <span className="chat-text">

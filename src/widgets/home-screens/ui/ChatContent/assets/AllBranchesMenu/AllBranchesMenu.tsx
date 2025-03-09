@@ -3,6 +3,8 @@ import "./AllBranchesMenu.less";
 import QuickViewIcon from "../../../../../../shared/icons/QuickView.icon";
 import DialogIcon from "../../../../../../shared/icons/Dialog.icon";
 import { useChatStore } from "../../../../../../shared/providers";
+import { useState } from "react";
+import BranchQuickView from "../BranchQuickView/BranchQuickView";
 
 interface AllBranchesMenuProps {
     branchId: number;
@@ -15,12 +17,17 @@ interface AllBranchesMenuProps {
 
 export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBranchesMenu }: AllBranchesMenuProps) {
     const deleteSavedBranch = useChatStore(state => state.deleteSavedBranch);
+    const [isActiveBranchQuickView, setIsActiveBranchQuickView] = useState<boolean>(false);
+    const { setIsCurrentBranchOpen, setCurrentBranch } = useChatStore();
 
     const handleQuickViewClick = () => {
-
+        setIsActiveBranchQuickView(true)
     };
 
     const handleOpenBranchClick = () => {
+        setCurrentBranch(branchId);
+        setIsCurrentBranchOpen(true);
+        setActiveOpenAllBranchesMenu(null);
 
     };
 
@@ -51,6 +58,12 @@ export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBr
                 <DeleteIcon fill={"currentColor"} />
                 <span className={"text-margin-bottom"}>Delete Branch</span>
             </button>
+            {isActiveBranchQuickView &&
+                <BranchQuickView
+                    branchId={branchId}
+                    changeIsActiveBranchQuickView={setIsActiveBranchQuickView}
+                />
+            }
         </div>
     );
 }
