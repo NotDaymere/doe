@@ -39,7 +39,7 @@ interface ChatState {
     addMessageNodeVersion: (current: IMessageNode | string, message: IMessage) => void;
     changeCurrentNodeVersion: (node: IMessageNode | string | IMessage | number, direction: "prev" | "next") => void;
     getMessageQueueFromNode: () => IMessage[];
-
+    getLastCurrentVersionMessageNode: () => IMessageNode;
     getCurrentMessageNodeVersionInfo: (
         node: IMessageNode | string | IMessage | number
     ) => { childrenCount: number; currentVersion: number } | null;
@@ -359,6 +359,7 @@ export const useChatStore = create<ChatState>()(
                     newIndex = Math.min(parent.children.length - 1, newIndex + 1);
                 }
                 parent.currentChildrenVersion = newIndex;
+
                 return {
                     messageNodeMap: { ...state.messageNodeMap },
                 };
@@ -368,15 +369,18 @@ export const useChatStore = create<ChatState>()(
             const state = get();
             const result: IMessage[] = [];
             let currentNode = state.messageNodeMap["root"];
+
             while (currentNode && currentNode.children && currentNode.children.length > 0) {
-                const index = currentNode.currentChildrenVersion ?? 0;
-                const nextNode = currentNode.children[index];
-                if (!nextNode) break;
-                if (nextNode.message) {
+                const versionIndex = currentNode.currentChildrenVersion ?? 0;
+                if (versionIndex < 0 || versionIndex >= currentNode.children.length) break;
+
+                const nextNode = currentNode.children[versionIndex];
+                if (nextNode && nextNode.message) {
                     result.push(nextNode.message);
                 }
                 currentNode = nextNode;
             }
+
             return result;
         },
 
@@ -408,6 +412,20 @@ export const useChatStore = create<ChatState>()(
             const parent = targetNode.parent;
             const childrenCount = parent.children ? parent.children.length : 0;
             const currentVersion = parent.currentChildrenVersion ?? 0;
+
             return { childrenCount, currentVersion };
         },
+        getLastCurrentVersionMessageNode: () => {
+            const state = get();
+            let currentNode = state.messageNodeMap["root"];
+            while (currentNode && currentNode.children && currentNode.children.length > 0) {
+                const index = currentNode.currentChildrenVersion ?? 0;
+                const nextNode = currentNode.children[index];
+                if (!nextNode) break;
+                currentNode = nextNode;
+            }
+
+            return currentNode;
+        },
+
 }));
