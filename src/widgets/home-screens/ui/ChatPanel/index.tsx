@@ -231,7 +231,6 @@ export const ChatPanel: React.FC = () => {
                     );
                 })()}
 
-
                 {drag && (
                     <div className={css.panel_drag}>
                         <p className={css.panel_drag_text}>Upload files, folders, text content, or code here.</p>
