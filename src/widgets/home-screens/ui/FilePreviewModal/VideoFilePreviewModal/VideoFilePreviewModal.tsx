@@ -15,6 +15,7 @@ interface VideoModalProps {
     onClose: () => void;
     fileName: string;
     fileExt: string;
+    isLoading?: boolean;
 }
 
 const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileName, fileExt }) => {

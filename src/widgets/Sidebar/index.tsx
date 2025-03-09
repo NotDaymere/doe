@@ -12,19 +12,20 @@ import { useEditorContext } from "src/shared/components/Editor";
 import { useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "./ui";
 import css from "./Sidebar.module.less";
+import {LinkInput} from "../../components/tiptap-editor/assets/LinkInput";
 
 export const Sidebar: React.FC = () => {
     const { editor } = useChatStore();
     const editorState = useEditorContext(editor);
     const { playground } = useChatStore();
     const pointerDown = (event: React.PointerEvent) => {
-        event.preventDefault()
+        event.preventDefault();
     };
+
 
     return (
         <aside className={playground.open ? css.sidebar_playground : css.sidebar}>
             <SidebarGaia />
-
             <div className={css.sidebar_profile}>
                 <img 
                     className={css.sidebar_profile_img} 
@@ -96,6 +97,8 @@ export const Sidebar: React.FC = () => {
                     >
                         <CodeIcon />
                     </button>
+
+
                     <button 
                         className={css.sidebar_controls_btn}
                         onPointerDown={pointerDown}

@@ -16,9 +16,15 @@ interface FileItemProps {
     url?: string;
     className?: string;
     onDelete?: () => void;
+
 }
 
-export const FileItem: React.FC<FileItemProps> = ({ name, mimetype, url, className, onDelete }) => {
+export const FileItem: React.FC<FileItemProps> = ({ name,
+                                                    mimetype,
+                                                    url,
+                                                    className,
+                                                    onDelete,
+                                                    }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const info = useMemo(() => {
@@ -46,7 +52,6 @@ export const FileItem: React.FC<FileItemProps> = ({ name, mimetype, url, classNa
     }, [extLower]);
 
     const handleClick = () => {
-        console.log("handleClick, extLower:", extLower, "url:", url);
         if (
             ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) ||
             ["mp4", "webm", "ogg"].includes(extLower) ||
@@ -60,42 +65,56 @@ export const FileItem: React.FC<FileItemProps> = ({ name, mimetype, url, classNa
 
     return (
         <>
-            <div className={clsx(css.file, className)} onClick={handleClick}>
-                <div className={css.file_icon}>
-                    <img src={iconURL} alt="" />
-                </div>
-                <div className={css.file_content}>
-                    <p className={css.file_name}>
+        <div className={clsx(css.file, className)} onClick={handleClick}>
+            <div className={css.file_icon}>
+                <img src={iconURL} alt="" />
+            </div>
+            <div className={css.file_content}>
+                <p className={css.file_name}>
                         <span>
                             {info.filename.length > 15
                                 ? `${info.filename.slice(0, 15)}...`
                                 : info.filename}
                         </span>
-                        .{info.ext}
-                    </p>
-                    <p className={css.file_ext}>{info.ext}</p>
-                </div>
-                {onDelete && (
-                    <button
-                        className={css.file_deleteBtn}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onDelete();
-                        }}
-                    >
-                        <CrossIcon />
-                    </button>
-                )}
+                    .{info.ext}
+                </p>
+                <p className={css.file_ext}>{info.ext}</p>
             </div>
-
-            {isModalOpen && extLower === "pdf" && url && (
-                <PdfFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={shortenFileName} fileExt={info.ext}/>
+            {onDelete && (
+                <button
+                    className={css.file_deleteBtn}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete();
+                    }}
+                >
+                    <CrossIcon />
+                </button>
             )}
-            {isModalOpen && ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) && url && (
-                <ImageFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={shortenFileName} fileExt={info.ext}/>
+        </div>
+
+    {
+        isModalOpen && extLower === "pdf" && url && (
+            <PdfFilePreviewModal
+                url={url}
+                onClose={() => setIsModalOpen(false)}
+                fileName={shortenFileName}
+                fileExt={info.ext} />
+        )}
+    {
+        isModalOpen && ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) && url && (
+                <ImageFilePreviewModal
+                    url={url}
+                    onClose={() => setIsModalOpen(false)}
+                    fileName={shortenFileName}
+                    fileExt={info.ext}/>
             )}
             {isModalOpen && ["mp4", "webm", "ogg"].includes(extLower) && url && (
-                <VideoFilePreviewModal url={url} onClose={() => setIsModalOpen(false)} fileName={shortenFileName} fileExt={info.ext}/>
+                <VideoFilePreviewModal
+                    url={url}
+                    onClose={() => setIsModalOpen(false)}
+                    fileName={shortenFileName}
+                    fileExt={info.ext}/>
             )}
         </>
     );

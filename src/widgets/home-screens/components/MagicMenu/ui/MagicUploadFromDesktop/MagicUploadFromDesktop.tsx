@@ -1,22 +1,34 @@
 import { useChatStore } from "../../../../../../shared/providers";
-import React from "react";
+import React, { useRef } from "react";
 import { MagicMenuButton } from "../MagicMenuButton";
 import UploadIcon from "../../../../../../shared/icons/Upload.icon";
 
-interface Props {}
+interface MagicUploadFromDesktopProps {
+    setActiveMenu: (active: boolean) => void;
+}
 
-export const MagicUploadFromDesktop: React.FC<Props> = (props) => {
+export const MagicUploadFromDesktop: React.FC<MagicUploadFromDesktopProps> = ({setActiveMenu}) => {
     const { setIsUploadFileChatMode, isUploadFileChatMode } = useChatStore();
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const activePanelUploadMode = () => {
+    const handleClick = () => {
+        fileInputRef.current?.click();
         setIsUploadFileChatMode(!isUploadFileChatMode)
+        setActiveMenu(false);
     };
 
     return (
+        <>
             <MagicMenuButton
-                icon={<UploadIcon/>}
+                icon={<UploadIcon />}
                 text="Upload from desktop"
-                onClick={activePanelUploadMode}
+                onClick={handleClick}
             />
+            <input
+                ref={fileInputRef}
+                type="file"
+                style={{ display: "none" }}
+            />
+        </>
     );
 };

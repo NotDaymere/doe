@@ -13,6 +13,7 @@ interface ImageModalProps {
     onClose: () => void;
     fileName: string;
     fileExt: string;
+    isLoading?: boolean;
 }
 
 const ImageFilePreviewModal: React.FC<ImageModalProps> = ({ url, onClose, fileName, fileExt }) => {
