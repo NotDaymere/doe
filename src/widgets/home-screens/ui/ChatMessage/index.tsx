@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { Dispatch, useState } from "react";
 
 // External libraries
 import { Editor as EditorTiptap } from "@tiptap/react";
@@ -15,7 +15,6 @@ import { useChatStore } from "src/shared/providers";
 // Shared components
 import { Editor } from "src/shared/components/Editor";
 import { useApp } from "src/components/app";
-import ExampleTableMassage from "./assets/ExampleTabelMassage/ExampleTableMassage";
 
 // Icons
 import CrossIcon from "src/shared/icons/Cross.icon";
@@ -42,7 +41,7 @@ import { useChatContext } from "../../lib/hooks/ChatContext";
 import TableRandomValues from "./assets/TableRandomValues/TableRandomValues";
 import DownloadCSV from "./assets/DownloadCSV/DownloadCSV";
 import PythonTaskManager from "./assets/PythonTaskManager/PythonTaskManager";
-import { ChatMessageDate } from "../ChatContent/assets/ChatMessageData/ChatMessageDate";
+import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
 
 interface Props {
     data: IMessage;
@@ -79,8 +78,11 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const [content, setContent] = React.useState(data.content);
     const [updatedContent, setUpdatedContent] = useState(data.content);
 
-
-    const { editor, setEditor } = useChatStore();
+    const {
+        editor,
+        setEditor ,
+        isCurrentBranchOpen,
+    } = useChatStore();
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
     const { setPlayground } = useApp().app;
@@ -320,19 +322,22 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         }
 
         return (
-            <div className={css.input}>
-                <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
-                    <span className={css.svg_wrapper}>
-                        <PenIcon />
-                        <span className={css.tooltip}>Edit</span>
-                    </span>
-                </button>
+            <div className={`${isCurrentBranchOpen ? css.input_open_branch : css.input} `}>
+                {!isCurrentBranchOpen &&
+                    <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
+                        <span className={css.svg_wrapper}>
+                            <PenIcon />
+                            <span className={css.tooltip}>Edit</span>
+                        </span>
+                    </button>
+                }
                 <div
-                    className={css.input_message}
+                    className={`${isCurrentBranchOpen ? css.input_message_branch : css.input_message} `}
                     dangerouslySetInnerHTML={{
                         __html: updatedContent,
                     }}
                 />
+
 
             </div>
         );
@@ -341,7 +346,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     if (data.isCode) {
         return (
             <div
-                className={`${css.chat_message} ${data.isUser ? css.user_message : css.bot_message}`}
+                className={`${isCurrentBranchOpen ? css.chat_message_branch : css.chat_message}  ${data.isUser ? css.user_message : css.bot_message}`}
             >
 
                 <ReferenceButton
@@ -352,9 +357,10 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 />
 
                 {!data.isUser && (
-                    <div className={css.bot_logo_background}>
-                        <div className={css.bot_logo}>
-                            <Logo />
+                    <div
+                        className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                        <div className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                            <MessageLogoIcon fillPath={"currentColor"}/>
                         </div>
                     </div>
                 )}

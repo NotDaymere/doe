@@ -4,6 +4,7 @@ import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
 import { IPlayground } from "src/shared/types/Playground";
 import { IQuestionCodeMessage } from "src/shared/types/QuestionCodeMessage";
+import { IBranchDialog } from "../../types/BranchDialog";
 
 interface ChatState {
     editor: Editor | null;
@@ -30,10 +31,12 @@ interface ChatState {
 
     isCreateBranchChatMode: boolean;
     setIsCreateBranchChatMode: (isCreateBranchChatMode: boolean) => void;
+    isCurrentBranchOpen: boolean;
+    setIsCurrentBranchOpen: (open: boolean) => void;
     currentBranch: IBranch | null;
     setCurrentBranch: (currentBranch: IBranch | null) => void;
     savedBranches: IBranch[];
-    addSavedBranch: (name: string, messages: IMessage[]) => void;
+    addSavedBranch: (name: string, messages: IMessage[], dialogsMessages: IBranchDialog[], mainMessageId?: string | number) => IBranch;
     deleteSavedBranch: (id: number) => void;
 
     isUploadFileChatMode: boolean;
@@ -143,25 +146,35 @@ export const useChatStore = create<ChatState>()(
 
         isCreateBranchChatMode: false,
         currentBranch: null,
+        isCurrentBranchOpen: false,
         savedBranches: [],
-        addSavedBranch: (name, messages) => set((state) => {
-            const newId = state.savedBranches.length > 0 ?
-                Math.max(...state.savedBranches.map(p => Number(p.id) || 0)) + 1
-                :
-                1;
+        addSavedBranch: (name: string, messages: IMessage[], dialogsMessages: IBranchDialog[], mainMessageId?: string | number) => {
+            const stripHTML = (html: string): string => {
+                const element = document.createElement('div');
+                element.innerHTML = html;
+                return element.textContent || element.innerText || "";
+            };
+            const branchName =  stripHTML(name)
+            const state = get();
+            const newId = state.savedBranches.length > 0
+                ? Math.max(...state.savedBranches.map(p => Number(p.id) || 0)) + 1
+                : 1;
             const newBranch = {
                 id: newId,
-                name: name,
-                messages: messages
+                name: branchName,
+                messages,
+                dialogsMessages,
+                mainMessageId
             };
-            return { savedBranches: [...state.savedBranches, newBranch] };
-        }),
+            set({ savedBranches: [...state.savedBranches, newBranch] });
+            return newBranch;
+        },
         deleteSavedBranch: (id) => set((state) => ({
             savedBranches: state.savedBranches.filter(branch => branch.id !== id),
         })),
         setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
         setIsCreateBranchChatMode: (isCreateBranchChatMode) => set(() => ({ isCreateBranchChatMode })),
-
+        setIsCurrentBranchOpen: (open: boolean) => set(() => ({ isCurrentBranchOpen: open })),
         isUploadFileChatMode: false,
         setIsUploadFileChatMode: (isUploadFileChatMode) => set(() => ({ isUploadFileChatMode })),
     })

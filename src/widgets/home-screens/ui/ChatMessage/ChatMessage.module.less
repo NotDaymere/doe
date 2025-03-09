@@ -3,7 +3,19 @@
     align-items: flex-end;
     justify-content: flex-end;
     gap: 8px;
+    margin-top: 8px;
+    position: relative;
 }
+.input_open_branch {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+  position: relative;
+}
+
 
 .input_editBtn {
     cursor: pointer;
@@ -70,7 +82,17 @@
     overflow-wrap: break-word;
     white-space: pre-wrap;
 }
-
+.input_message_branch {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px dashed #b5b5b5;
+  max-width: 100%;
+  .setFontSohneBuch(16px, 1.4, normal);
+  color: #1f1f1f;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
 // Edit
 .edit {
     border-radius: 16px;
@@ -183,6 +205,16 @@
     word-break: break-word;
     overflow-wrap: break-word;
 }
+.chat_message_branch {
+  .setFontSohneBuch(16px, 1.2, normal);
+  display: flex;
+  margin: 8px 0;
+  padding: 10px;
+  width: 100%;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
 
 .user_message {
     align-self: flex-end;
@@ -248,22 +280,58 @@
         height: 20px;
     }
 }
+
 //for gradient borders
+.bot_logo {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  min-width: 46px;
+  height: 46px;
+  min-height: 46px;
+  margin-right: 8px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin: auto;
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 .bot_logo_background {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    min-width: 48px;
-    height: 48px;
-    min-height: 48px;
-    margin-right: 8px;
-    background-image: linear-gradient(
-        to right bottom,
-        rgba(141, 141, 141, 0.46),
-        rgba(255, 255, 255, 1)
-    );
-    border-radius: 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+  min-height: 48px;
+  margin-right: 8px;
+  background-image: linear-gradient(
+          to right bottom,
+          rgba(141, 141, 141, 0.46),
+          rgba(255, 255, 255, 1)
+  );
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.bot_logo_background_open {
+  color: #FFFFFF !important;
+  background: linear-gradient(180deg, #5B5B5B 0%, #1F1F1F 100%) !important;
+  border: 1px solid !important;
+  border-image-source: linear-gradient(135deg, rgba(141, 141, 141, 0.46) 11.46%, #FFFFFF 91.67%) !important;
+  box-shadow: 0 3px 12px 0 rgba(31, 31, 31, 0.05) !important;
+  fill: #FFFFFF;
+  svg {
+    color: #FFFFFF !important;
+    fill: #FFFFFF;
+  }
 }
 .button_steps {
     border-radius: 1000px;
