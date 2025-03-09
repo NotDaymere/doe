@@ -5,21 +5,26 @@ import ThreeVerticalDots from "../../../../../../shared/icons/ThreeVerticalDots"
 import BranchIcon from "../../../../../../shared/icons/Branch.icon";
 
 interface ChatMessageDateProps {
-    messageId: number;
+    messageId?: number;
+    isOpenBrunch?: boolean;
 }
 
-const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ messageId }) => {
+const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ messageId ,
+                                                             isOpenBrunch = false
+    }) => {
     const { currentBranch, setIsCurrentBranchOpen } = useChatStore();
 
     if (!currentBranch) return null;
 
-    if (currentBranch.mainMessageId !== messageId) return null;
+    if (!isOpenBrunch) {
+        if (currentBranch.mainMessageId !== messageId) return null;
 
-    const foundMessage = currentBranch.messages.find(
-        (message) => message.id === messageId
-    );
+        const foundMessage = currentBranch.messages.find(
+            (message) => message.id === messageId
+        );
 
-    if (!foundMessage) return null;
+        if (!foundMessage) return null;
+    }
 
     const text = currentBranch.name;
 
