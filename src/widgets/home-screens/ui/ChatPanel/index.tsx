@@ -41,7 +41,10 @@ export const ChatPanel: React.FC = () => {
         setIsCreateBranchChatMode,
         isUploadFileChatMode ,
         addSavedBranch,
-        setCurrentBranch
+        setCurrentBranch,
+        isCurrentBranchOpen,
+        addDialogToCurrentBranch,
+        currentBranch
     } = useChatStore();
 
     const messages = useChatStore((state) => state.messages);
@@ -99,29 +102,40 @@ export const ChatPanel: React.FC = () => {
         };
 
 
-        const updatedMessages = [...messages, userMessage];
-        setMessages(updatedMessages);
-
-
-        const initBranchDialog = {
+        const branchDialog = {
             userRequest: userMessage,
             botMessages: botMessage
         }
 
-        if(isCreateBranchChatMode){
-            const newBranch = addSavedBranch(text, updatedMessages, [initBranchDialog], userMessage.id);
-            setCurrentBranch(newBranch);
-            setIsCreateBranchChatMode(false);
+        if (isCurrentBranchOpen && currentBranch){
+            addDialogToCurrentBranch(branchDialog)
+
+            reset();
+            setClearContent(true);
+
+            setTimeout(() => {
+                setIsLoading(false);
+
+            }, 3000);
+        }else {
+            const updatedMessages = [...messages, userMessage];
+            setMessages(updatedMessages);
+
+            if(isCreateBranchChatMode){
+                const newBranch = addSavedBranch(text, updatedMessages, [branchDialog], userMessage.id);
+                setCurrentBranch(newBranch);
+                setIsCreateBranchChatMode(false);
+            }
+
+            reset();
+            setClearContent(true);
+
+            setTimeout(() => {
+                setMessages([...updatedMessages, botMessage]);
+                setIsLoading(false);
+
+            }, 3000);
         }
-
-        reset();
-        setClearContent(true);
-
-        setTimeout(() => {
-            setMessages([...updatedMessages, botMessage]);
-            setIsLoading(false);
-
-        }, 3000);
     };
 
     const handleChangeEditor = (e:string) => {

@@ -38,6 +38,7 @@ interface ChatState {
     savedBranches: IBranch[];
     addSavedBranch: (name: string, messages: IMessage[], dialogsMessages: IBranchDialog[], mainMessageId?: string | number) => IBranch;
     deleteSavedBranch: (id: number) => void;
+    addDialogToCurrentBranch: (dialog: IBranchDialog) => void;
 
     isUploadFileChatMode: boolean;
     setIsUploadFileChatMode: (isCreateBranchChatMode: boolean) => void;
@@ -169,6 +170,23 @@ export const useChatStore = create<ChatState>()(
             set({ savedBranches: [...state.savedBranches, newBranch] });
             return newBranch;
         },
+        addDialogToCurrentBranch: (dialog: IBranchDialog) =>
+            set((state) => {
+                if (!state.currentBranch) return state;
+
+                const updatedBranches = state.savedBranches.map(b =>
+                    b.id === state.currentBranch!.id
+                        ? { ...b, dialogsMessages: [...b.dialogsMessages, dialog] }
+                        : b
+                );
+                const updatedCurrentBranch =
+                    updatedBranches.find(b => b.id === state.currentBranch!.id) || state.currentBranch;
+
+                return {
+                    savedBranches: updatedBranches,
+                    currentBranch: updatedCurrentBranch,
+                };
+            }),
         deleteSavedBranch: (id) => set((state) => ({
             savedBranches: state.savedBranches.filter(branch => branch.id !== id),
         })),

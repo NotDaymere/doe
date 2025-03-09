@@ -152,7 +152,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                             {currentBranch.dialogsMessages.map((dialog, index) => (
                                 <React.Fragment key={index}>
                                     <div className={css.content_chat_branch}>
-                                        <ChatBranchSection messageId={dialog.userRequest.id}/>
+                                        <ChatBranchSection isOpenBrunch={true}/>
                                         <div className={css.content_chat_branch_dialog}>
                                             <ChatMessage
                                                 data={dialog.userRequest}
@@ -169,9 +169,10 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                                         </div>
                                     </div>
                                 </React.Fragment>
+
                             ))}
                         </div>
-                    )
+                )
                 }
 
                 {showScrollDownBtn && (
@@ -179,7 +180,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         className={css.scroll_down_btn}
                         onClick={scrollToBottom}
                     >
-                        <ArrowDownChatScrollIcon/>
+                        <ArrowDownChatScrollIcon />
                     </button>
                 )}
                 <TalkMode targetRef={chatRef} />
