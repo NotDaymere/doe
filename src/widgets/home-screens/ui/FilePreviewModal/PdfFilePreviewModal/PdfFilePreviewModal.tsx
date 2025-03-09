@@ -19,6 +19,7 @@ interface PdfModalProps {
     onClose: () => void;
     fileName: string;
     fileExt?: string;
+    isLoading?: boolean;
 }
 
 const PDFViewer: React.FC<{ url: string }> = ({ url }) => {

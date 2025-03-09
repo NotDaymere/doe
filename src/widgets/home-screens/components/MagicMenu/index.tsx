@@ -50,11 +50,10 @@ export const MagicMenu: React.FC<Props> = ({
             }} 
             ref={ref}
         >
-            {!isUploadFileChatMode &&
                 <button className={css.magic_btn} onClick={toggleMenu}>
                     <StarsIcon />
                 </button>
-            }
+
             <CSSTransition
                 classNames={css}
                 timeout={300}
@@ -65,7 +64,7 @@ export const MagicMenu: React.FC<Props> = ({
             >
                 <div className={css.menu} ref={nodeRef}>
                     <MagicApplications />
-                    <MagicUploadFromDesktop/>
+                    <MagicUploadFromDesktop setActiveMenu={setActiveMenu}/>
                     <MagicUploadApps />
                     <MagicMenuButton 
                         icon={<CallIcon />} 

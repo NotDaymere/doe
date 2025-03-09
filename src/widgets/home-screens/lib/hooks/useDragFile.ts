@@ -28,6 +28,41 @@ export function useDragFile(props: Props = {}) {
             dragTarget: false,
         });
 
+    React.useEffect(() => {
+        const handleDragEnter = (event: DragEvent) => {
+            event.preventDefault();
+            setDrag(true);
+        };
+
+        const handleDragOver = (event: DragEvent) => {
+            event.preventDefault();
+            setDrag(true);
+        };
+
+        const handleDragLeave = (event: DragEvent) => {
+            if (!document.documentElement.contains(event.relatedTarget as Node)) {
+                setDrag(false);
+            }
+        };
+
+        const handleDrop = (event: DragEvent) => {
+            event.preventDefault();
+            setDrag(false);
+        };
+
+        document.addEventListener("dragenter", handleDragEnter);
+        document.addEventListener("dragover", handleDragOver);
+        document.addEventListener("dragleave", handleDragLeave);
+        document.addEventListener("drop", handleDrop);
+
+        return () => {
+            document.removeEventListener("dragenter", handleDragEnter);
+            document.removeEventListener("dragover", handleDragOver);
+            document.removeEventListener("dragleave", handleDragLeave);
+            document.removeEventListener("drop", handleDrop);
+        };
+    }, []);
+
     const handleDragOverTarget = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         setDragTarget(true);

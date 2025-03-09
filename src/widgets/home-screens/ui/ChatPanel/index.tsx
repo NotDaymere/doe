@@ -24,6 +24,7 @@ import ChatResponseStopIcon from "../../../../shared/icons/ChatResponseStopIcon"
 import UploadFilesIcon from "../../../../shared/icons/UploadFiles.icon";
 import HandCursorIcon from "../../../../shared/icons/HandCursor.icon";
 import BranchIcon from "../../../../shared/icons/Branch.icon";
+import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgress.icon";
 
 export const ChatPanel: React.FC = () => {
     const {
@@ -39,7 +40,6 @@ export const ChatPanel: React.FC = () => {
         setMessages,
         isCreateBranchChatMode,
         setIsCreateBranchChatMode,
-        isUploadFileChatMode ,
         addSavedBranch,
         setCurrentBranch,
         isCurrentBranchOpen,
@@ -51,10 +51,11 @@ export const ChatPanel: React.FC = () => {
     const [clearContent, setClearContent] = React.useState(false)
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
     const [isLoading, setIsLoading] = React.useState(false);
+    const [loadingFile, setLoadingFile] = React.useState<string | undefined>(undefined);
 
-    const { 
+    const {
         drag,
-        dragTarget, 
+        dragTarget,
         handleDragDropTarget,
         handleDragLeaveTarget,
         handleDragOverTarget,
@@ -151,18 +152,6 @@ export const ChatPanel: React.FC = () => {
     };
 
 
-    const upload = () => {
-        const input = document.createElement("input") as HTMLInputElement;
-        input.type = "file";
-        input.multiple = true;
-        input.onchange = (ev: any) => {
-            const files = Array.from(ev.target.files) as File[];
-            input.remove();
-        };
-        input.click();
-    };
-
-
     return (
         <div className={playground.open ? (playgroundFullscreen ? css.panel_playground_fullscreen : css.panel_playground) : css.panel}
             onDragStart={handleDragStart}
@@ -211,9 +200,37 @@ export const ChatPanel: React.FC = () => {
                             className={css.panel_files}
                             files={files}
                             onChange={setFiles}
+                            onLoadingStatusChange={setLoadingFile}
                         />
                     </div>
                 )}
+
+                {loadingFile && (() => {
+                    const [fileName, progressStr] = loadingFile.split("|||");
+                    const progress = Number(progressStr) || 0;
+                    return (
+                        <div className={css.panel_uploading_files} key={fileName}>
+                            <div className={css.uploading_file}>
+                                <div className={css.panel_uploading_files_icon}>
+                                    <UploadFilesProgressIcon />
+                                </div>
+                                <div className={css.panel_uploading_files_name_and_progressbar}>
+                                    <div className={css.panel_uploading_files_name_and_progress}>
+                                        <span>{fileName}</span>
+                                        <span>{progress}%</span>
+                                    </div>
+                                    <div className={css.progressBar}>
+                                        <div
+                                            className={css.progressFill}
+                                            style={{ width: `${progress}%` }}
+                                        ></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })()}
+
 
                 {drag && (
                     <div className={css.panel_drag}>
@@ -228,15 +245,6 @@ export const ChatPanel: React.FC = () => {
                         </div>
                         <button className={css.panel_drag_btn}>
                             <UploadIcon />
-                        </button>
-                    </div>
-                )}
-
-                {isUploadFileChatMode && (
-                    <div className={css.panel_upload_file}>
-                        <p className={css.panel_drag_text}>Upload files, folders, text content, or code here.</p>
-                        <button className={css.panel_drag_btn}>
-                            <UploadIcon onClick={upload}/>
                         </button>
                     </div>
                 )}
