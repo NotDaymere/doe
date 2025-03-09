@@ -5,16 +5,19 @@ import { create } from "zustand";
 import { IPlayground } from "src/shared/types/Playground";
 import { IQuestionCodeMessage } from "src/shared/types/QuestionCodeMessage";
 import { IBranchDialog } from "../../types/BranchDialog";
+import { IMessageNode } from "../../types/MessageNode";
 
 interface ChatState {
     editor: Editor | null;
     isTyping: boolean;
-    messages: IMessage[];
+
+    questionCodeMessage: IQuestionCodeMessage | null;
+    setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
+
     playground: IPlayground;
     savedPlaygrounds: IPlayground[];
     playgroundFullscreen: boolean;
-    questionCodeMessage: IQuestionCodeMessage | null;
-    setMessages: (messages: IMessage[]) => void;
+
     setEditor: (editor: Editor | null) => void;
     setTyping: (isTyping: boolean) => void;
     setPlayground: (playground: IPlayground) => void;
@@ -27,7 +30,19 @@ interface ChatState {
     getSavedPlaygroundLast: () => IPlayground | null;
     getSavedPlaygroundLastByType: (type: "code" | "table" | "source") => IPlayground | null;
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
-    setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
+
+    messages: IMessage[];
+    setMessages: (messages: IMessage[]) => void;
+
+    messageNodeMap: Record<string, IMessageNode>;
+    addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) => void;
+    addMessageNodeVersion: (current: IMessageNode | string, message: IMessage) => void;
+    changeCurrentNodeVersion: (node: IMessageNode | string | IMessage | number, direction: "prev" | "next") => void;
+    getMessageQueueFromNode: () => IMessage[];
+
+    getCurrentMessageNodeVersionInfo: (
+        node: IMessageNode | string | IMessage | number
+    ) => { childrenCount: number; currentVersion: number } | null;
 
     isCreateBranchChatMode: boolean;
     setIsCreateBranchChatMode: (isCreateBranchChatMode: boolean) => void;
@@ -36,7 +51,12 @@ interface ChatState {
     currentBranch: IBranch | null;
     setCurrentBranch: (currentBranch: IBranch | string | number | null) => void;
     savedBranches: IBranch[];
-    addSavedBranch: (name: string, messages: IMessage[], dialogsMessages: IBranchDialog[], mainMessageId?: string | number) => IBranch;
+    addSavedBranch: (
+        name: string,
+        messages: IMessage[],
+        dialogsMessages: IBranchDialog[],
+        mainMessageId?: string | number
+    ) => IBranch;
     deleteSavedBranch: (id: number) => void;
     addDialogToCurrentBranch: (dialog: IBranchDialog) => void;
     getBranchById: (id: string | number) => IBranch | null;
@@ -219,5 +239,175 @@ export const useChatStore = create<ChatState>()(
 
         isUploadFileChatMode: false,
         setIsUploadFileChatMode: (isUploadFileChatMode) => set(() => ({ isUploadFileChatMode })),
-    })
-);
+
+        messageNodeMap: {
+            root: {
+                id: "root",
+                isRootNode: true,
+                children: [],
+            },
+        },
+
+        addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) =>
+            set((state) => {
+                let actualParent: IMessageNode | undefined;
+                if (typeof parent === "string") {
+                    actualParent = state.messageNodeMap[parent];
+                } else if (parent) {
+                    actualParent = parent;
+                } else {
+                    actualParent = state.messageNodeMap["root"];
+                }
+                const newId = (Object.keys(state.messageNodeMap).length + 1).toString();
+                const newNode: IMessageNode = {
+                    id: newId,
+                    parent: actualParent,
+                    children: [],
+                    message: message,
+                    isRootNode: false,
+                };
+
+                if (actualParent) {
+                    const updatedChildren = actualParent.children ? [...actualParent.children, newNode] : [newNode];
+                    actualParent.children = updatedChildren;
+                    actualParent.currentChildrenVersion = updatedChildren.length - 1;
+                }
+
+                const updatedMap = {
+                    ...state.messageNodeMap,
+                    [newId]: newNode,
+                };
+
+                return {
+                    messageNodeMap: updatedMap,
+                    messages: [...state.messages, message],
+                };
+            }),
+
+        addMessageNodeVersion: (current: IMessageNode | string, message: IMessage) =>
+            set((state) => {
+                let currentNode: IMessageNode | undefined;
+                if (typeof current === "string") {
+                    currentNode = state.messageNodeMap[current];
+                } else {
+                    currentNode = current;
+                }
+                if (!currentNode) {
+                    currentNode = state.messageNodeMap["root"];
+                }
+                const parentOfCurrent = currentNode.parent || state.messageNodeMap["root"];
+                const newId = (Object.keys(state.messageNodeMap).length + 1).toString();
+                const newNode: IMessageNode = {
+                    id: newId,
+                    parent: parentOfCurrent,
+                    children: [],
+                    message: message,
+                    isRootNode: false,
+                };
+
+                if (parentOfCurrent) {
+                    const updatedChildren = parentOfCurrent.children ? [...parentOfCurrent.children, newNode] : [newNode];
+                    parentOfCurrent.children = updatedChildren;
+                    parentOfCurrent.currentChildrenVersion = updatedChildren.length - 1;
+                }
+
+                const updatedMap = {
+                    ...state.messageNodeMap,
+                    [newId]: newNode,
+                };
+
+                return {
+                    messageNodeMap: updatedMap,
+                    messages: [...state.messages, message],
+                };
+            }),
+
+        changeCurrentNodeVersion: (
+            node: IMessageNode | string | IMessage | number,
+            direction: "prev" | "next"
+        ) =>
+            set((state) => {
+                let targetNode: IMessageNode | undefined;
+
+                if (typeof node === "object") {
+                    if ("isRootNode" in node) {
+                        targetNode = node as IMessageNode;
+                    } else {
+                        const msg = node as IMessage;
+                        targetNode = Object.values(state.messageNodeMap).find(
+                            (n) => n.message && n.message.id === msg.id
+                        );
+                    }
+                } else {
+                    targetNode = state.messageNodeMap[node.toString()];
+                    if (!targetNode) {
+                        targetNode = Object.values(state.messageNodeMap).find(
+                            (n) => n.message && n.message.id === node
+                        );
+                    }
+                }
+
+                if (!targetNode) return state;
+                const parent = targetNode.parent;
+                if (!parent || !parent.children || parent.children.length === 0) return state;
+                const currentIndex = parent.children.findIndex((n) => n.id === targetNode!.id);
+                if (currentIndex === -1) return state;
+                let newIndex = parent.currentChildrenVersion ?? currentIndex;
+                if (direction === "prev") {
+                    newIndex = Math.max(0, newIndex - 1);
+                } else if (direction === "next") {
+                    newIndex = Math.min(parent.children.length - 1, newIndex + 1);
+                }
+                parent.currentChildrenVersion = newIndex;
+                return {
+                    messageNodeMap: { ...state.messageNodeMap },
+                };
+            }),
+
+        getMessageQueueFromNode: () => {
+            const state = get();
+            const result: IMessage[] = [];
+            let currentNode = state.messageNodeMap["root"];
+            while (currentNode && currentNode.children && currentNode.children.length > 0) {
+                const index = currentNode.currentChildrenVersion ?? 0;
+                const nextNode = currentNode.children[index];
+                if (!nextNode) break;
+                if (nextNode.message) {
+                    result.push(nextNode.message);
+                }
+                currentNode = nextNode;
+            }
+            return result;
+        },
+
+        getCurrentMessageNodeVersionInfo: (node: IMessageNode | string | IMessage | number) => {
+            const state = get();
+            let targetNode: IMessageNode | undefined;
+
+            if (typeof node === "object") {
+                if ("isRootNode" in node) {
+                    targetNode = node as IMessageNode;
+                } else {
+                    const msg = node as IMessage;
+                    targetNode = Object.values(state.messageNodeMap).find(
+                        (n) => n.message && n.message.id === msg.id
+                    );
+                }
+            } else {
+                targetNode = state.messageNodeMap[node.toString()];
+                if (!targetNode) {
+                    targetNode = Object.values(state.messageNodeMap).find(
+                        (n) => n.message && n.message.id === node
+                    );
+                }
+            }
+
+            if (!targetNode || !targetNode.parent) {
+                return null;
+            }
+            const parent = targetNode.parent;
+            const childrenCount = parent.children ? parent.children.length : 0;
+            const currentVersion = parent.currentChildrenVersion ?? 0;
+            return { childrenCount, currentVersion };
+        },
+}));
