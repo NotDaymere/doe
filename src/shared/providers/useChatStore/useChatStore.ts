@@ -34,11 +34,12 @@ interface ChatState {
     isCurrentBranchOpen: boolean;
     setIsCurrentBranchOpen: (open: boolean) => void;
     currentBranch: IBranch | null;
-    setCurrentBranch: (currentBranch: IBranch | null) => void;
+    setCurrentBranch: (currentBranch: IBranch | string | number | null) => void;
     savedBranches: IBranch[];
     addSavedBranch: (name: string, messages: IMessage[], dialogsMessages: IBranchDialog[], mainMessageId?: string | number) => IBranch;
     deleteSavedBranch: (id: number) => void;
     addDialogToCurrentBranch: (dialog: IBranchDialog) => void;
+    getBranchById: (id: string | number) => IBranch | null;
 
     isUploadFileChatMode: boolean;
     setIsUploadFileChatMode: (isCreateBranchChatMode: boolean) => void;
@@ -170,6 +171,9 @@ export const useChatStore = create<ChatState>()(
             set({ savedBranches: [...state.savedBranches, newBranch] });
             return newBranch;
         },
+        getBranchById: (id: string | number) => {
+            return get().savedBranches.find(branch => String(branch.id) === String(id)) || null;
+        },
         addDialogToCurrentBranch: (dialog: IBranchDialog) =>
             set((state) => {
                 if (!state.currentBranch) return state;
@@ -190,9 +194,21 @@ export const useChatStore = create<ChatState>()(
         deleteSavedBranch: (id) => set((state) => ({
             savedBranches: state.savedBranches.filter(branch => branch.id !== id),
         })),
-        setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
+        setCurrentBranch: (branch: IBranch | string | number | null) => {
+            if (branch === null) {
+                set({ currentBranch: null });
+            } else if (typeof branch === "object") {
+                set({ currentBranch: branch });
+            } else {
+                const foundBranch = get().savedBranches.find(
+                    b => String(b.id) === String(branch)
+                );
+                set({ currentBranch: foundBranch || null });
+            }
+        },
         setIsCreateBranchChatMode: (isCreateBranchChatMode) => set(() => ({ isCreateBranchChatMode })),
         setIsCurrentBranchOpen: (open: boolean) => set(() => ({ isCurrentBranchOpen: open })),
+
         isUploadFileChatMode: false,
         setIsUploadFileChatMode: (isUploadFileChatMode) => set(() => ({ isUploadFileChatMode })),
     })
