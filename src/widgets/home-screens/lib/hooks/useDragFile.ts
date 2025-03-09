@@ -1,7 +1,11 @@
 import React from "react";
 
+export interface FileWithId extends File {
+    id: string;
+}
+
 interface Props {
-    onUploadFiles?: (files: File[]) => void;
+    onUploadFiles?: (files: FileWithId[]) => void;
 }
 
 export function useDragFile(props: Props = {}) {
@@ -75,8 +79,12 @@ export function useDragFile(props: Props = {}) {
 
     const handleDragDropTarget = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-        const files = Array.from(event.dataTransfer.files);
-        props.onUploadFiles?.(files);
+        const filesWithId = Array.from(event.dataTransfer.files).map(file => {
+            return Object.assign(file, {
+                id: `${Date.now()}-${Math.random()}`
+            }) as FileWithId;
+        });
+        props.onUploadFiles?.(filesWithId);
         stopDrag();
     };
 
