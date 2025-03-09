@@ -60,13 +60,13 @@ export default function OpenBranchMenu({
     return (
         <div
             ref={containerRef}
-            className={`quick-view-branches-container ${animationState}`}
+            className={`open-menu-branches-container ${animationState}`}
             onClick={stopPropagationWrapper}
             onMouseEnter={stopPropagationWrapper}
             onMouseMove={stopPropagationWrapper}
             onMouseOut={stopPropagationWrapper}
         >
-            <button className="quick-view-branches-menu-button" onClick={handleCloseBranchClick}>
+            <button className="open-menu-branches-menu-button" onClick={handleCloseBranchClick}>
                 <CloseBranchIcon fill={"currentColor"} />
                 <span>Close Branch</span>
             </button>
@@ -74,7 +74,7 @@ export default function OpenBranchMenu({
                 <line y1="0.5" x2="118" y2="0.5" stroke="#F8F8F8" />
             </svg>
 
-            <button className="quick-view-branches-menu-button" onClick={handleDeleteBranchClick}>
+            <button className="open-menu-branches-menu-button" onClick={handleDeleteBranchClick}>
                 <DeleteIcon fill={"currentColor"} />
                 <span className={"text-margin-bottom"}>Delete Branch</span>
             </button>

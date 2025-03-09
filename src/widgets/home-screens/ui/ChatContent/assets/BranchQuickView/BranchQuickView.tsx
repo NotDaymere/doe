@@ -127,7 +127,7 @@ export default function BranchQuickView({
                 {branch.dialogsMessages.map((dialog: IBranchDialog, index: number) => (
                     <div
                         key={index}
-                        className={`quick-view-branches-content-example 
+                        className={`quick-view-branches-content-item 
                             ${
                             (contentIdHover === index) ||
                             (activeOpenAllBranchesMenu === index)

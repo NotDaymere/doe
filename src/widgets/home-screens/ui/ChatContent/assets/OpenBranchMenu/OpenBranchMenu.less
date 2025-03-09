@@ -6,7 +6,7 @@
   font: 500 @fontSize/@leading var(--font-sohne);
   letter-spacing: @letterSpacing;
 }
-.quick-view-branches-container {
+.open-menu-branches-container {
   position: absolute;
   top: calc(100% + 16px);
   right: 0;
@@ -26,22 +26,22 @@
   transition: opacity 300ms ease, transform 300ms ease;
 }
 
-.quick-view-branches-container.enter {
+.open-menu-branches-container.enter {
   opacity: 0;
   transform: translateY(10px);
 }
 
-.quick-view-branches-container.visible {
+.open-menu-branches-container.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-.quick-view-branches-container.exit {
+.open-menu-branches-container.exit {
   opacity: 0;
   transform: translateY(-10px);
 }
 
-.quick-view-branches-menu-button {
+.open-menu-branches-menu-button {
   width: 100%;
   height: 40px;
   padding-left: 6px;
@@ -66,7 +66,7 @@
     margin-bottom: -4px;
   }
 }
-.quick-view-branches-menu-button:hover {
+.open-menu-branches-menu-button:hover {
   background: #F8F8F8;
   border: 1px solid #DDDDDD;
   color: #1F1F1F;

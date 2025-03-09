@@ -89,14 +89,24 @@
 .quick-view-branches-content {
   width: 257px;
   height: 117px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(205, 205, 205);
+    border-radius: 3px;
+  }
   border-radius: 12px;
   background: transparent;
   overflow-y: auto;
-  scrollbar-width: none;
   transition: opacity 300ms ease, transform 300ms ease;
 }
 
-.quick-view-branches-content-example {
+.quick-view-branches-content-item {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -114,16 +124,16 @@
   transition: background 300ms ease, color 300ms ease;
 }
 
-.quick-view-branches-content-example:hover {
+.quick-view-branches-content-item:hover {
   background: #F0F0F0;
   color: rgba(31, 31, 31, 1);
 }
 
-.quick-view-branches-content-example:hover span {
+.quick-view-branches-content-item:hover span {
   display: block;
 }
 
-.quick-view-branches-content-example:hover svg {
+.quick-view-branches-content-item:hover svg {
   fill: rgba(31, 31, 31, 1);
 }
 

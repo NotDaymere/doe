@@ -85,7 +85,7 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
                 {savedBranches.map((savedBranch) => (
                     <div
                         key={savedBranch.id}
-                        className={`open-all-branches-content-example 
+                        className={`open-all-branches-content-item 
                             ${(
                             (contentIdHover === savedBranch.id) ||
                             (activeOpenAllBranchesMenu === savedBranch.id)
