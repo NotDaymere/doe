@@ -28,7 +28,6 @@ import {
 import { useChatController } from "../..";
 import { ChatMessage } from "../ChatMessage";
 import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
-
 // Styles
 import css from "./ChatContent.module.less";
 import { TalkMode } from "../TalkMode";
@@ -56,13 +55,12 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         playground,
         playgroundFullscreen,
         currentBranch,
-        messages,
         isCurrentBranchOpen,
         currentBranchDialog,
-        setCurrentBranchDialog
+        setCurrentBranchDialog,
     } = useChatStore();
-    const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
 
+    const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
     const editor = useEditor({
@@ -88,6 +86,12 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
             createHandleTab(),
         ],
     });
+
+    const messageNodeMap = useChatStore((state) => state.messageNodeMap);
+
+    const messageQueue = React.useMemo(() => {
+        return useChatStore.getState().getMessageQueueFromNode();
+    }, [messageNodeMap]);
 
     React.useEffect(() => {
         const currentChat = chatRef.current;
@@ -146,7 +150,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                 scrollToBottom();
             }
         }
-    }, [messages]);
+    }, [messageQueue]);
 
     return (
         <div
@@ -168,7 +172,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                             </div>
                         )}
                         <div className={css.content_chat}>
-                            {messages.map((item, index) => (
+                            {messageQueue.map((item, index) => (
                                 <React.Fragment key={item.id}>
                                     <ChatMessageDate id={index} />
                                     <ChatBranchSection messageId={item.id} />
@@ -227,10 +231,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                 )}
 
                 {showScrollDownBtn && (
-                    <button
-                        className={css.scroll_down_btn}
-                        onClick={scrollToBottom}
-                    >
+                    <button className={css.scroll_down_btn} onClick={scrollToBottom}>
                         <ArrowDownChatScrollIcon />
                     </button>
                 )}
