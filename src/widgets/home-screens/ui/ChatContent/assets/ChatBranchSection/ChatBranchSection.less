@@ -1,11 +1,3 @@
-.chat-branch-section-container{
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
 .chat-branch-section {
   background: linear-gradient(273.07deg, rgba(255, 205, 205, 0.12) -11.76%, #F8F8F8 18.11%, #FFF9E6 47.97%, #F8F8F8 77.84%, #E4F4FF 107.71%, #F8F8F8 137.58%);
   border: 2px dashed rgba(221, 221, 221, 1);
@@ -70,7 +62,8 @@
     padding: 4px;
   }
 
-  &:hover {
+  &:hover,
+  &.active {
     background: #FFFFFF;
     color: rgba(246, 132, 132, 1);
 
@@ -86,4 +79,12 @@
       opacity: 1;
     }
   }
+}
+
+.chat-branch-section-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }

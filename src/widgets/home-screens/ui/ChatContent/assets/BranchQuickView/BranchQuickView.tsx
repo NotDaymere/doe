@@ -1,8 +1,6 @@
 import './BranchQuickView.less';
 import { useEffect, useRef, useState } from "react";
-import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg";
 import { useChatStore } from "src/shared/providers";
-import BranchIcon from "../../../../../../shared/icons/Branch.icon";
 import { IBranchDialog } from "../../../../../../shared/types/BranchDialog";
 import BranchQuickViewIcon from "../../../../../../shared/icons/BranchQuickView.icon";
 import BackArrowIcon from "../../../../../../shared/icons/BackArrow.icon";
@@ -11,11 +9,16 @@ import DialogIcon from "../../../../../../shared/icons/Dialog.icon";
 type BranchQuickViewProps = {
     branchId: number;
     changeIsActiveBranchQuickView: (isActive: boolean) => void;
+    isOpenFromChat?: boolean;
 };
 
 type AnimationState = "enter" | "visible" | "exit";
 
-export default function BranchQuickView({ branchId, changeIsActiveBranchQuickView }: BranchQuickViewProps) {
+export default function BranchQuickView({
+                                            branchId,
+                                            changeIsActiveBranchQuickView,
+                                            isOpenFromChat = false
+                                        }: BranchQuickViewProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const branch = useChatStore(state => state.getBranchById(branchId));
 
@@ -27,11 +30,13 @@ export default function BranchQuickView({ branchId, changeIsActiveBranchQuickVie
         setAnimationState("visible");
     }, []);
 
-    const contentMouseUp = (id: number | null) => {
+    const contentMouseUp = (e: React.MouseEvent, id: number | null) => {
+        e.stopPropagation();
         setContentIdHover(id);
     };
 
-    const contentMouseDown = () => {
+    const contentMouseDown = (e: React.MouseEvent) => {
+        e.stopPropagation();
         setContentIdHover(null);
     };
 
@@ -60,9 +65,18 @@ export default function BranchQuickView({ branchId, changeIsActiveBranchQuickVie
         return element.textContent || element.innerText || "";
     };
 
+    const stopPropagationWrapper = (e: React.MouseEvent) => e.stopPropagation();
+
     if (!branch) {
         return (
-            <div className={`quick-view-branches-container ${animationState}`} ref={containerRef}>
+            <div
+                className={`quick-view-branches-container ${animationState} ${isOpenFromChat ? "quick-view-open-from-chat" : ""}`}
+                ref={containerRef}
+                onClick={stopPropagationWrapper}
+                onMouseEnter={stopPropagationWrapper}
+                onMouseMove={stopPropagationWrapper}
+                onMouseOut={stopPropagationWrapper}
+            >
                 <div className="quick-view-branches-header">
                     <div className="quick-view-branches-header-text">
                         <BranchQuickViewIcon />
@@ -70,24 +84,30 @@ export default function BranchQuickView({ branchId, changeIsActiveBranchQuickVie
                     </div>
                     <button
                         className="quick-view-branches-header-button"
-                        onClick={handleClose}
+                        onClick={(e) => { e.stopPropagation(); handleClose(); }}
                     >
                         <BackArrowIcon />
                     </button>
                 </div>
                 <svg width="100%" height="2" viewBox="0 0 293 1" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="4.37114e-08" y1="0.5" x2="293" y2="0.500026" stroke="#F8F8F8" />
+                    <line x1="0" y1="0.5" x2="293" y2="0.500026" stroke="#F8F8F8" />
                 </svg>
                 <div className="quick-view-branches-content">
-                    <div className="quick-view-branches-content">
-                    </div>
+                    <div className="quick-view-branches-content"></div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div ref={containerRef} className={`quick-view-branches-container ${animationState}`}>
+        <div
+            ref={containerRef}
+            className={`quick-view-branches-container ${animationState} ${isOpenFromChat ? "quick-view-open-from-chat" : ""}`}
+            onClick={stopPropagationWrapper}
+            onMouseEnter={stopPropagationWrapper}
+            onMouseMove={stopPropagationWrapper}
+            onMouseOut={stopPropagationWrapper}
+        >
             <div className="quick-view-branches-header">
                 <div className="quick-view-branches-header-text">
                     <BranchQuickViewIcon />
@@ -95,13 +115,13 @@ export default function BranchQuickView({ branchId, changeIsActiveBranchQuickVie
                 </div>
                 <button
                     className="quick-view-branches-header-button"
-                    onClick={handleClose}
+                    onClick={(e) => { e.stopPropagation(); handleClose(); }}
                 >
                     <BackArrowIcon />
                 </button>
             </div>
             <svg width="100%" height="2" viewBox="0 0 293 1" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="4.37114e-08" y1="0.5" x2="293" y2="0.500026" stroke="#F8F8F8" />
+                <line x1="0" y1="0.5" x2="293" y2="0.500026" stroke="#F8F8F8" />
             </svg>
             <div className="quick-view-branches-content">
                 {branch.dialogsMessages.map((dialog: IBranchDialog, index: number) => (
@@ -114,8 +134,9 @@ export default function BranchQuickView({ branchId, changeIsActiveBranchQuickVie
                                 ? 'quick-view-branches-content-example-hover'
                                 : ''
                         }`}
-                        onMouseMove={() => contentMouseUp(index)}
-                        onMouseOut={contentMouseDown}
+                        onMouseMove={(e) => contentMouseUp(e, index)}
+                        onMouseOut={(e) => contentMouseDown(e)}
+                        onClick={stopPropagationWrapper}  // предотвращаем всплытие клика от элементов списка
                     >
                         <div className="quick-view-branches-content-name">
                             <DialogIcon width={16} height={16} fill={"#5B5B5BFF"} />

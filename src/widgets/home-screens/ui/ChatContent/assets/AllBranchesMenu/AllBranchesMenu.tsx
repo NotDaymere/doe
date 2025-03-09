@@ -34,6 +34,7 @@ export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBr
     const handleDeleteBranchClick = () => {
         deleteSavedBranch(branchId);
         setActiveOpenAllBranchesMenu(null);
+        setCurrentBranch(null);
     };
 
     return (
