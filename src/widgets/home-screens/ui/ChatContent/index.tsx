@@ -63,7 +63,6 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     } = useChatStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
 
-    // Массив рефов для каждого диалога
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
     const editor = useEditor({
@@ -100,7 +99,6 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         }
     }, [currentBranch?.dialogsMessages]);
 
-    // При наличии currentBranchDialog скроллим до конкретного элемента
     React.useEffect(() => {
         if (
             isCurrentBranchOpen &&
