@@ -61,6 +61,7 @@ export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBr
             </button>
             {isActiveBranchQuickView &&
                 <BranchQuickView
+                    isOpenFromChat={false}
                     branchId={branchId}
                     changeIsActiveBranchQuickView={setIsActiveBranchQuickView}
                 />
