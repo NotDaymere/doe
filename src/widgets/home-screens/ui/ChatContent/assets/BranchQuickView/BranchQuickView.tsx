@@ -21,7 +21,11 @@ export default function BranchQuickView({
                                         }: BranchQuickViewProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const branch = useChatStore(state => state.getBranchById(branchId));
-
+    const {
+        setCurrentBranch,
+        setIsCurrentBranchOpen,
+        setCurrentBranchDialog
+    } = useChatStore();
     const [activeOpenAllBranchesMenu, setActiveOpenAllBranchesMenu] = useState<number | null>(null);
     const [contentIdHover, setContentIdHover] = useState<number | null>(null);
     const [animationState, setAnimationState] = useState<AnimationState>("enter");
@@ -99,6 +103,13 @@ export default function BranchQuickView({
         );
     }
 
+    const handleItemClick = (dialogIndex: number) => (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setCurrentBranch(branch);
+        setCurrentBranchDialog(dialogIndex);
+        setIsCurrentBranchOpen(true);
+    };
+
     return (
         <div
             ref={containerRef}
@@ -128,15 +139,13 @@ export default function BranchQuickView({
                     <div
                         key={index}
                         className={`quick-view-branches-content-item 
-                            ${
-                            (contentIdHover === index) ||
-                            (activeOpenAllBranchesMenu === index)
-                                ? 'quick-view-branches-content-example-hover'
-                                : ''
+                            ${(contentIdHover === index) || (activeOpenAllBranchesMenu === index)
+                            ? 'quick-view-branches-content-item-hover'
+                            : ''
                         }`}
                         onMouseMove={(e) => contentMouseUp(e, index)}
                         onMouseOut={(e) => contentMouseDown(e)}
-                        onClick={stopPropagationWrapper}  // предотвращаем всплытие клика от элементов списка
+                        onClick={handleItemClick(index)}
                     >
                         <div className="quick-view-branches-content-name">
                             <DialogIcon width={16} height={16} fill={"#5B5B5BFF"} />
