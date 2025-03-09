@@ -122,7 +122,6 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         <div
             className={playground.open ? (playgroundFullscreen ? css.content_playground_fullscreen : css.content_playground) : css.content}>
             <div className={css.content_inner} ref={chatRef}>
-
                 {!(isCurrentBranchOpen && currentBranch && currentBranch.messages) ? (
                     <>
                         {!playgroundFullscreen &&
@@ -131,11 +130,11 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                                 <AllPlaygrounds />
                             </div>
                         }
-                        <div className={css.content_chat} >
+                        <div className={css.content_chat}>
                             {messages.map((item, index) => (
                                 <>
-                                    <ChatMessageDate id={index}/>
-                                    <ChatBranchSection messageId={item.id}/>
+                                    <ChatMessageDate id={index} />
+                                    <ChatBranchSection messageId={item.id} />
                                     <ChatMessage
                                         data={item}
                                         key={item.id}
@@ -147,31 +146,31 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                             ))}
                         </div>
                     </>
-                    ) : (
-                        <div className={css.content_chat_branch_dialogs}>
-                            {currentBranch.dialogsMessages.map((dialog, index) => (
-                                <React.Fragment key={index}>
-                                    <div className={css.content_chat_branch}>
-                                        <ChatBranchSection isOpenBrunch={true}/>
-                                        <div className={css.content_chat_branch_dialog}>
-                                            <ChatMessage
-                                                data={dialog.userRequest}
-                                                editor={editor}
-                                                editMsgMode={editMsgMode}
-                                                setEditMsgMode={setEditMsgMode}
-                                            />
-                                            <ChatMessage
-                                                data={dialog.botMessages}
-                                                editor={editor}
-                                                editMsgMode={editMsgMode}
-                                                setEditMsgMode={setEditMsgMode}
-                                            />
-                                        </div>
+                ) : (
+                    <div className={css.content_chat_branch_dialogs}>
+                        {currentBranch.dialogsMessages.map((dialog, index) => (
+                            <React.Fragment key={index}>
+                                <div className={css.content_chat_branch}>
+                                    <ChatBranchSection isOpenBrunch={true} />
+                                    <div className={css.content_chat_branch_dialog}>
+                                        <ChatMessage
+                                            data={dialog.userRequest}
+                                            editor={editor}
+                                            editMsgMode={editMsgMode}
+                                            setEditMsgMode={setEditMsgMode}
+                                        />
+                                        <ChatMessage
+                                            data={dialog.botMessages}
+                                            editor={editor}
+                                            editMsgMode={editMsgMode}
+                                            setEditMsgMode={setEditMsgMode}
+                                        />
                                     </div>
-                                </React.Fragment>
+                                </div>
+                            </React.Fragment>
 
-                            ))}
-                        </div>
+                        ))}
+                    </div>
                 )
                 }
 
