@@ -266,26 +266,25 @@ type ChartComponentMap = {
 };
 
 const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
-    const charts = useMemo(() => parseXML(input), [input]);
+    const charts = useMemo(() => parseXML(input), [input])
     const chartComponentMap: ChartComponentMap = {
-        LineChart: GoogleChart,
-        PieChart: GoogleChart,
-        ScatterChart: GoogleChart,
-        BubbleChart: GoogleChart,
-        AreaChart: GoogleChart,
-        Histogram: GoogleChart,
-        CandlestickChart: GoogleChart,
-        Gantt: GoogleChart,
-        TreeMap: GoogleChart,
-        Sankey: GoogleChart,
-        SteppedAreaChart: GoogleChart,
-        BarChart: GoogleChart,
-        ColumnChart: GoogleChart,
+        "LineChart": GoogleChart,
+        "PieChart": GoogleChart,
+        "ScatterChart": GoogleChart,
+        "BubbleChart": GoogleChart,
+        "AreaChart": GoogleChart,
+        "Histogram": GoogleChart,
+        "CandlestickChart": GoogleChart,
+        "Gantt": GoogleChart,
+        "TreeMap": GoogleChart,
+        "Sankey": GoogleChart,
+        "SteppedAreaChart": GoogleChart,
+        "BarChart": GoogleChart,
+        "ColumnChart": GoogleChart,
     };
 
     return (
         <div
-            // Стили для общего контейнера
             style={{
                 display: "flex",
                 flexWrap: "wrap",
@@ -300,7 +299,6 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
 
                 if (ChartComponent) {
                     return (
-                        // Стили для контейнера каждого графика
                         <div
                             key={index}
                             style={{
@@ -320,8 +318,8 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
                             />
                         </div>
                     );
-                } else {
-                    // Если это не GoogleChart, то используем наши кастомные компоненты
+                } else
+                {
                     switch (chart.type) {
                         case "Violin":
                             return (
