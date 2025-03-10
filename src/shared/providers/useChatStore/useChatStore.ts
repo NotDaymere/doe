@@ -4,11 +4,10 @@ import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
 import { IPlayground } from "src/shared/types/Playground";
 import { IQuestionCodeMessage } from "src/shared/types/QuestionCodeMessage";
-import { useVersionHistoryStore } from "../index";
 import { IBranchDialog } from "../../types/BranchDialog";
 import { IMessageNode } from "../../types/MessageNode";
 import { testTextAndCharts } from "../../../components/chat-message/mockData";
-
+import { useVersionHistoryStore } from "../index";
 
 const initialMessages: IMessage[] = [
     {
@@ -94,6 +93,7 @@ interface ChatState {
     setPlayground: (playground: IPlayground) => void;
     setSavedPlaygrounds: (playground: IPlayground) => void;
     updateSavedPlaygrounds: (playground: IPlayground) => void;
+    saveHistory: (playground: IPlayground) => void;
     deleteSavedPlaygrounds: (id: string | null) => void;
     getSavedPlayground: (id: string | null) => IPlayground | null;
     getOpenSavedPlaygrounds: () => IPlayground[];
@@ -101,6 +101,7 @@ interface ChatState {
     getSavedPlaygroundLast: () => IPlayground | null;
     getSavedPlaygroundLastByType: (type: "code" | "table" | "source") => IPlayground | null;
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
+    setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
 
     messages: IMessage[];
     setMessages: (messages: IMessage[]) => void;
@@ -219,23 +220,23 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     setPlaygroundFullscreen: (playgroundFullscreen) => set(() => ({ playgroundFullscreen })),
     setQuestionCodeMessage: (questionCodeMessage) => set(() => ({ questionCodeMessage })),
 
-    setSavedPlaygrounds: (playground) => set((state) => {
-        const newId = state.savedPlaygrounds.length > 0 ?
-            String(Math.max(...state.savedPlaygrounds.map(p => Number(p.id) || 0)) + 1) : "1";
-        const newPlayground = { ...playground, id: newId };
+        setSavedPlaygrounds: (playground) => set((state) => {
+            const newId = state.savedPlaygrounds.length > 0 ?
+                String(Math.max(...state.savedPlaygrounds.map(p => Number(p.id) || 0)) + 1) : "1";
+            const newPlayground = { ...playground, id: newId };
 
-        useVersionHistoryStore.getState().updateHistory({
-            id: Date.now(),
-            name: null,
-            time: new Date().toLocaleString(),
-            user: "Current User",
-            photo: "/temp/profile.jpg",
-            playgroundId: newPlayground.id,
-            playground: newPlayground,
-        });
+            useVersionHistoryStore.getState().updateHistory({
+                id: Date.now(),
+                name: null,
+                time: new Date().toLocaleString(),
+                user: "Current User",
+                photo: "/temp/profile.jpg",
+                playgroundId: newPlayground.id,
+                playground: newPlayground,
+            });
 
-        return { savedPlaygrounds: [...state.savedPlaygrounds, newPlayground] };
-    }),
+            return { savedPlaygrounds: [...state.savedPlaygrounds, newPlayground] };
+        }),
 
     updateSavedPlaygrounds: (playground) => set((state) => ({
         savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
@@ -252,7 +253,21 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     getOpenSavedPlaygrounds: () => {
         return get().savedPlaygrounds.filter(p => p.open);
     },
+    saveHistory: (playground) => set((state) => {
+        useVersionHistoryStore.getState().updateHistory({
+            id: Date.now(),
+            name: null,
+            time: new Date().toLocaleString(),
+            user: "Current User",
+            photo: "/temp/profile.jpg",
+            playgroundId: playground.id,
+            playground: playground,
+        });
 
+        return {
+            savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
+        };
+    }),
     getOpenSavedPlaygroundsByType: (type) => {
         return get().savedPlaygrounds.filter(p => p.open && p.type === type);
     },
