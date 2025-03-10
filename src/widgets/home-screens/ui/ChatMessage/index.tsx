@@ -47,6 +47,8 @@ import MessageFrame from "./assets/MessageFrame/MessageFrame";
 import { mockTableData } from "./assets/MessageTable/mockTableData";
 import { mockMessageFrameData } from "./assets/MessageFrame/mockMessageFrameData";
 import ChartRenderer from "./assets/ChatRenderer/ChatRenderer";
+import MessageChart from "./assets/MessageChart/MessageChart";
+import { mockChartMessageData } from "./assets/MessageChart/mockChartMessageData";
 
 interface Props {
     data: IMessage;
@@ -432,6 +434,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 );
                             })}
                         </MathJax>
+
+                        <MessageChart data={mockChartMessageData}/>
                         <MessageFrame data={mockMessageFrameData}/>
                         <text className={"message-text"}>Now Ill show the output in the table:</text>
                         <MessageTable tableData={mockTableData}/>
@@ -444,6 +448,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 <PythonTaskManager />
                             </Flex>
                         </Flex>
+
                     </div>
 
                     {!data.isUser && (
