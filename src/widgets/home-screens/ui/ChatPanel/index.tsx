@@ -81,17 +81,15 @@ export const ChatPanel: React.FC = () => {
             content: text,
             files: files,
         };
+        const reply = await doMessageReply();
+        const branchDialog = {
+            userRequest: userMessage,
+            botMessages: reply,
+        };
+        reset();
+        setClearContent(true);
 
         if (isCurrentBranchOpen && currentBranch) {
-            reset();
-            setClearContent(true);
-
-            const reply = await doMessageReply();
-            const branchDialog = {
-                userRequest: userMessage,
-                botMessages: reply,
-            };
-
             addDialogToCurrentBranch(branchDialog);
         } else {
             const chatStore = useChatStore.getState();
@@ -99,15 +97,11 @@ export const ChatPanel: React.FC = () => {
             chatStore.addMessageNode(lastNodeForUserMessage, userMessage);
 
             if (isCreateBranchChatMode) {
-                const newBranch = addSavedBranch(text, [userMessage], [], userMessage.id);
+                const newBranch = addSavedBranch(text, [userMessage], [branchDialog], userMessage.id);
                 setCurrentBranch(newBranch);
                 setIsCreateBranchChatMode(false);
             }
 
-            reset();
-            setClearContent(true);
-
-            const reply = await doMessageReply();
             const lastNodeForReply = chatStore.getLastCurrentVersionMessageNode();
             chatStore.addMessageNode(lastNodeForReply, reply);
         }
@@ -117,10 +111,10 @@ export const ChatPanel: React.FC = () => {
         setText(e);
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const handleKeyPress = async (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.code === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            handleSend();
+            await handleSend();
         }
     };
 
