@@ -91,6 +91,20 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     }, [playgroundState]);
 
     useEffect(() => {
+        return () => {
+            if (playgroundState)
+                updateHistory({
+                    id: Date.now(),
+                    name: null,
+                    time: new Date().toLocaleString(),
+                    user: "Current User",
+                    photo: "/temp/profile.jpg",
+                    playgroundId: playground.id,
+                    playground: playground,
+                });
+        }
+    }, []);
+    useEffect(() => {
         setTimeout(() => setShowButtons(true), 50);
     }, []);
     const customTheme: monaco.editor.IStandaloneThemeData = {
