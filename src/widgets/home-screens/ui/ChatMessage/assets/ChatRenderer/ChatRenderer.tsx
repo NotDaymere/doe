@@ -266,21 +266,21 @@ type ChartComponentMap = {
 };
 
 const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
-    const charts = useMemo(() => parseXML(input), [input])
+    const charts = useMemo(() => parseXML(input), [input]);
     const chartComponentMap: ChartComponentMap = {
-        "LineChart": GoogleChart,
-        "PieChart": GoogleChart,
-        "ScatterChart": GoogleChart,
-        "BubbleChart": GoogleChart,
-        "AreaChart": GoogleChart,
-        "Histogram": GoogleChart,
-        "CandlestickChart": GoogleChart,
-        "Gantt": GoogleChart,
-        "TreeMap": GoogleChart,
-        "Sankey": GoogleChart,
-        "SteppedAreaChart": GoogleChart,
-        "BarChart": GoogleChart,
-        "ColumnChart": GoogleChart,
+        LineChart: GoogleChart,
+        PieChart: GoogleChart,
+        ScatterChart: GoogleChart,
+        BubbleChart: GoogleChart,
+        AreaChart: GoogleChart,
+        Histogram: GoogleChart,
+        CandlestickChart: GoogleChart,
+        Gantt: GoogleChart,
+        TreeMap: GoogleChart,
+        Sankey: GoogleChart,
+        SteppedAreaChart: GoogleChart,
+        BarChart: GoogleChart,
+        ColumnChart: GoogleChart,
     };
 
     return (
@@ -318,8 +318,7 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
                             />
                         </div>
                     );
-                } else
-                {
+                } else {
                     switch (chart.type) {
                         case "Violin":
                             return (

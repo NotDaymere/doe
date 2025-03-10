@@ -1,3 +1,4 @@
+export const mockChartMessageData = [
 export interface ChartMessageData {
     id: string;
     label: string;
