@@ -94,6 +94,9 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
     const { setSelectedText, setIsShowReferencePanel } = useChatContext();
 
+    const [isPaused, setIsPaused] = React.useState(true);
+    const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
+
     React.useEffect(() => {
         const lastMouseEvent = { current: null as MouseEvent | null };
 
@@ -173,8 +176,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             });
         }
     }, [content, messageRef]);
-    const [isPaused, setIsPaused] = React.useState(true);
-    const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
+
     //speech
     const synth = React.useRef(window.speechSynthesis);
     React.useEffect(() => {
@@ -232,9 +234,23 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         // setEditMsgMode(!editMsgMode);
     };
 
-    const handleSave = () => {
+    const handleEdit = async () => {
+        const newId = Date.now();
+
+        const newMessage: IMessage = {
+            ...data,
+            id: newId,
+            content: content,
+        };
+
+
+        useChatStore.getState().addMessageNodeVersion(data.id, newMessage);
+
         setUpdatedContent(content);
         setEditMsgMode({ isEditMsgMode: false, msgId: null });
+
+        const reply = await useChatStore.getState().doMessageReply();
+        useChatStore.getState().addMessageNodeVersion(newMessage.id, reply);
     };
 
     const cancelEdit = (id: number) => {
@@ -304,7 +320,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
                         <button
                             className={css.edit_controls_saveBtn}
-                            onClick={handleSave}
+                            onClick={handleEdit}
                         >
                             <span className={css.svg_wrapper}>
                                 <span className={css.tooltip}>Send edit</span>
