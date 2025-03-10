@@ -43,6 +43,7 @@ import DownloadCSV from "./assets/DownloadCSV/DownloadCSV";
 import PythonTaskManager from "./assets/PythonTaskManager/PythonTaskManager";
 import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
 import { MessageNodeVersionSelector } from "./assets/MessageNodeVersionSelector/MessageNodeVersionSelector";
+import MessageTable from "./assets/MessageTable/MessageTable";
 
 interface Props {
     data: IMessage;
@@ -429,6 +430,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             })}
                         </MathJax>
                         <text className={"message-text"}>Now Ill show the output in the table:</text>
+                        <MessageTable/>
                         <Flex justify={"flex-start"} className={"message-actions"} vertical>
                             <Flex>
                                 <TableRandomValues />
