@@ -1,11 +1,24 @@
 import { FC, useEffect, useState } from "react";
 import { Table, TableProps } from "antd";
-import { mockTableData } from "./mockData";
 import { useChatStore } from "../../../../../../shared/providers";
 import { IPlayground } from "../../../../../../shared/types/Playground";
-import "./MessageTable.less"
+import "./MessageTable.less";
 
-const MessageTable: FC = () => {
+interface TableColumn {
+    title: string;
+    dataIndex: string;
+}
+
+interface TableData {
+    columns: TableColumn[];
+    data: Record<string, any>[];
+}
+
+interface MessageTableProps {
+    tableData: TableData;
+}
+
+const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
     const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
     const [selectedRow, setSelectedRow] = useState<number | null>(null);
     const [selectedCell, setSelectedCell] = useState<string | null>(null);
@@ -25,9 +38,7 @@ const MessageTable: FC = () => {
 
     const handleSetDataToInput = () => {
         if (!editor) return;
-
         let template = "";
-
         if (selectedCell) {
             template = `<div>I have a question about <span class="highlighted-span green">Tab ${selectedCell}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
         } else if (selectedRow) {
@@ -35,13 +46,12 @@ const MessageTable: FC = () => {
         } else if (selectedColumn) {
             template = `<div>I have a question about <span class="highlighted-span green">Column ${selectedColumn}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
         }
-
         if (template) {
             editor.chain().clearContent().insertContent(template).run();
         }
     };
 
-    const rowHeaderColumn: TableProps<any>['columns'] = [
+    const rowHeaderColumn: TableProps<any>["columns"] = [
         {
             title: "",
             dataIndex: "rowHeader",
@@ -61,7 +71,7 @@ const MessageTable: FC = () => {
 
     const columns: TableProps<any>["columns"] = [
         ...rowHeaderColumn,
-        ...mockTableData.columns.map((col) => ({
+        ...tableData.columns.map((col) => ({
             ...col,
             onCell: (_: any, rowIndex?: number) => ({
                 onClick: (event: React.MouseEvent<HTMLElement>) => {
@@ -75,7 +85,7 @@ const MessageTable: FC = () => {
                 className:
                     selectedColumn === col.title
                         ? "selected-column"
-                        : selectedCell === `${col.title}${rowIndex! + 1}`
+                        : selectedCell === `${col.title}${(rowIndex || 0) + 1}`
                             ? "selected-cell"
                             : "",
             }),
@@ -91,11 +101,10 @@ const MessageTable: FC = () => {
     ];
 
     const openTablePlayground = () => {
-        const oldPlayground = getSavedPlaygroundLastByType('table');
+        const oldPlayground = getSavedPlaygroundLastByType("table");
         if (getOpenSavedPlaygrounds().length >= 2) {
             const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
-            console.log(lastPlayground);
-            if (lastPlayground && lastPlayground.type != 'table') {
+            if (lastPlayground && lastPlayground.type !== "table") {
                 lastPlayground.open = false;
                 updateSavedPlaygrounds(lastPlayground);
             }
@@ -113,7 +122,7 @@ const MessageTable: FC = () => {
             setPlayground(newPlayground);
             return;
         }
-        if ((getOpenSavedPlaygroundsByType('table').length > 0) ) {
+        if (getOpenSavedPlaygroundsByType("table").length > 0) {
             oldPlayground.open = false;
             updateSavedPlaygrounds(oldPlayground);
             const newPlayground: IPlayground = {
@@ -134,17 +143,13 @@ const MessageTable: FC = () => {
     };
 
     const downloadCSV = () => {
-        const csvRows = [];
-        const headers = mockTableData.columns.map((col) => col.title).join(",");
+        const csvRows: string[] = [];
+        const headers = tableData.columns.map((col) => col.title).join(",");
         csvRows.push(headers);
-
-        mockTableData.data.forEach((row) => {
-            const values = mockTableData.columns.map(
-                (col) => row[col.dataIndex as keyof typeof row]
-            );
+        tableData.data.forEach((row) => {
+            const values = tableData.columns.map((col) => row[col.dataIndex]);
             csvRows.push(values.join(","));
         });
-
         const csvString = csvRows.join("\n");
         const blob = new Blob([csvString], { type: "text/csv" });
         const url = URL.createObjectURL(blob);
@@ -169,11 +174,11 @@ const MessageTable: FC = () => {
                 </div>
             </div>
             <Table
-                dataSource={mockTableData.data}
+                dataSource={tableData.data}
                 columns={columns}
                 pagination={false}
                 bordered
-                rowKey={(record, rowIndex) => rowIndex!.toString()}
+                rowKey={(_, rowIndex) => rowIndex!.toString()}
             />
         </div>
     );
