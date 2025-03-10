@@ -4,6 +4,7 @@ import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
 import { IPlayground } from "src/shared/types/Playground";
 import { IQuestionCodeMessage } from "src/shared/types/QuestionCodeMessage";
+import { useVersionHistoryStore } from "../index";
 
 interface ChatState {
     editor: Editor | null;
@@ -21,6 +22,7 @@ interface ChatState {
     setPlayground: (playground: IPlayground) => void;
     setSavedPlaygrounds: (playground: IPlayground) => void;
     updateSavedPlaygrounds: (playground: IPlayground) => void;
+    saveHistory: (playground: IPlayground) => void;
     deleteSavedPlaygrounds: (id: string | null) => void;
     getSavedPlayground: (id: string | null) => IPlayground | null;
     getOpenSavedPlaygrounds: () => IPlayground[];
@@ -97,12 +99,40 @@ export const useChatStore = create<ChatState>()(
         setSavedPlaygrounds: (playground) => set((state) => {
             const newId = state.savedPlaygrounds.length > 0 ?
                 String(Math.max(...state.savedPlaygrounds.map(p => Number(p.id) || 0)) + 1) : "1";
-            return { savedPlaygrounds: [...state.savedPlaygrounds, { ...playground, id: newId }] };
+            const newPlayground = { ...playground, id: newId };
+
+            useVersionHistoryStore.getState().updateHistory({
+                id: Date.now(),
+                name: null,
+                time: new Date().toLocaleString(),
+                user: "Current User",
+                photo: "/temp/profile.jpg",
+                playgroundId: newPlayground.id,
+                playground: newPlayground,
+            });
+
+            return { savedPlaygrounds: [...state.savedPlaygrounds, newPlayground] };
         }),
 
         updateSavedPlaygrounds: (playground) => set((state) => ({
             savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
         })),
+
+        saveHistory: (playground) => set((state) => {
+            useVersionHistoryStore.getState().updateHistory({
+                id: Date.now(),
+                name: null,
+                time: new Date().toLocaleString(),
+                user: "Current User",
+                photo: "/temp/profile.jpg",
+                playgroundId: playground.id,
+                playground: playground,
+            });
+
+            return {
+                savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
+            };
+        }),
 
         deleteSavedPlaygrounds: (id) => set((state) => ({
             savedPlaygrounds: state.savedPlaygrounds.filter(p => p.id !== id),
@@ -116,10 +146,8 @@ export const useChatStore = create<ChatState>()(
             return get().savedPlaygrounds.filter(p => p.open);
         },
 
-        getOpenSavedPlaygroundsByType: (type: "code" | "table" | "source") => {
-            return get().savedPlaygrounds
-                .filter(p => p.open)
-                .filter(savedPlayground => savedPlayground.type === type);
+        getOpenSavedPlaygroundsByType: (type) => {
+            return get().savedPlaygrounds.filter(p => p.open && p.type === type);
         },
 
         getSavedPlaygroundLast: () => {
@@ -127,9 +155,7 @@ export const useChatStore = create<ChatState>()(
         },
 
         getSavedPlaygroundLastByType: (type) => {
-            return get().savedPlaygrounds
-                .filter(savedPlayground => savedPlayground.type === type)
-                .at(-1) || null;
+            return get().savedPlaygrounds.filter(p => p.type === type).at(-1) || null;
         }
     })
 );
