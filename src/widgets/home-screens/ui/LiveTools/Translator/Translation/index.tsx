@@ -3,7 +3,7 @@ import {
     TEXT_TO_TRANSLATE_PART,
     TRANSLATED_TEXT_BOTTOM_PART,
     TRANSLATED_TEXT_TOP_PART,
-} from "../MockData";
+} from "../../MockData";
 import TranslatedTextIcon from "src/shared/icons/TranslatedText.icon";
 import VolumeIcon from "src/shared/icons/Volume.icon";
 import PlanetIcon from "src/shared/icons/Planet.icon";
@@ -14,7 +14,7 @@ import { useMemo, useState } from "react";
 import DeviceIcon from "src/shared/icons/Device.icon";
 import AppsIcon from "src/shared/icons/Apps.icon";
 import PlaygroundIcon from "src/shared/icons/Playground.icon";
-import { MagicMenu } from "../MagicMenu";
+import { MagicMenu } from "../../MagicMenu";
 import { usePanel } from "src/widgets/home-screens/lib";
 import FileFilledIcon from "src/shared/icons/FileFilled.icon";
 import CheckFilledIcon from "src/shared/icons/CheckFilled.icon";
@@ -120,6 +120,7 @@ const Translation = () => {
                 <MagicMenu
                     items={MAGIC_MENU_ITEMS}
                     magicButtonIcon={<AttachmentIcon width={15} height={15} />}
+                    classes={css.menu}
                 />
             </div>
 

@@ -8,8 +8,9 @@ import classNames from "classnames";
 import LimitScreen from "../LimitScreen";
 import WelcomeScreen from "../WelcomeScreen";
 import { MODE } from "src/shared/types/Chat";
-import TranslationMode from "../Translator";
+import TranslationMode from "../LiveTools/Translator";
 import css from "./ChatLayout.module.less";
+import LiveTools from "../LiveTools";
 
 export const MAX_MESSAGES_LIMIT = 50;
 
@@ -38,14 +39,14 @@ export const ChatLayout: React.FC = () => {
         }
     }, [playground.open]);
 
-    if (mode === MODE.TRANSLATION)
+    if (mode !== MODE.INITIAL)
         return (
             <div className={css.chatLayout}>
                 <div className={css.layout}>
                     <div className={css.layout_sidebar}>
                         <Sidebar />
                     </div>
-                    <TranslationMode />
+                    <LiveTools />
                 </div>
             </div>
         );

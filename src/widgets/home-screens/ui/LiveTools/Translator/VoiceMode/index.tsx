@@ -2,7 +2,7 @@ import {
     VOICE_TEXT_TO_TRANSLATE_PART,
     VOICE_TRANSLATED_TEXT_TOP_PART,
     VOICE_TRANSLATED_TEXT_BOTTOM_PART,
-} from "../MockData";
+} from "../../MockData";
 import TranslatedTextIcon from "src/shared/icons/TranslatedText.icon";
 import VolumeIcon from "src/shared/icons/Volume.icon";
 import PlanetIcon from "src/shared/icons/Planet.icon";

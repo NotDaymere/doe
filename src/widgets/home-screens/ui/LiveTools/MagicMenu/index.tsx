@@ -59,14 +59,12 @@ export const MagicMenu: React.FC<IProps> = ({
                 mountOnEnter
                 unmountOnExit
             >
-                <div
-                    className={classNames(css.menu, classes)}
-                    ref={nodeRef}
-                    onMouseLeave={handleMouseLeave}
-                >
-                    {items.map((item: any) => (
-                        <MagicMenuItem key={item.text} item={item} />
-                    ))}
+                <div className={classNames(css.menuWrapper, classes)}>
+                    <div className={css.menu} ref={nodeRef} onMouseLeave={handleMouseLeave}>
+                        {items.map((item: any) => (
+                            <MagicMenuItem key={item.text} item={item} />
+                        ))}
+                    </div>
                 </div>
             </CSSTransition>
         </div>

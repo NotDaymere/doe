@@ -1,12 +1,24 @@
 .magicMenu {
     position: relative;
+
+    &:hover {
+        .menuWrapper {
+            display: block;
+        }
+    }
+}
+
+.menuWrapper {
+    margin-bottom: 20px;
+    height: 170px;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, -10px);
+    display: none;
 }
 
 .menu {
-    position: absolute;
-    left: 50%;
-    bottom: 100%;
-    transform: translate(-50%, -10px);
     width: max-content;
     padding: 6px;
     border-radius: 16px;

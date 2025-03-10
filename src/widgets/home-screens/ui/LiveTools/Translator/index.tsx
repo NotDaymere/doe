@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import CameraIcon from "src/shared/icons/Camera.icon";
 import StudyIcon from "src/shared/icons/Study.icon";
 import WaveIcon from "src/shared/icons/Wave.icon";
-import { MagicMenu } from "./MagicMenu";
 import Translation from "./Translation";
 import PracticeMode from "./PracticeMode";
 import VoiceMode from "./VoiceMode";
@@ -10,9 +9,9 @@ import { TRANSLATION_MENU_OPTIONS, TranslationMenuOptionsType } from "src/shared
 import { useAppStore } from "src/shared/providers";
 import Chip from "src/shared/components/Chip";
 import StarsIcon from "src/shared/icons/Stars.icon";
-import DictionaryIcon from "src/shared/icons/Dictionary.icon";
-import DoeIcon from "src/shared/icons/Doe.icon";
+import LiveToolsWrapper from "../LiveToolsWrapper";
 import css from "./Translator.module.less";
+import DictionaryIcon from "src/shared/icons/Dictionary.icon";
 
 const Translator = () => {
     const { activeTranslationOption, setActiveTranslationOption } = useAppStore();
@@ -105,28 +104,14 @@ const Translator = () => {
                 setIsActive={setShowChip}
                 {...renderChipContent(activeTranslationOption)}
             />
-            <div className={css.translator}>
-                <div className={css.translationWrapper}>
-                    <div className={css.translation}>
-                        <DictionaryIcon width={48} height={48} />
-                        <div className={css.translationAreaWrapper}>
-                            <div className={css.logo}>
-                                <DoeIcon width={26} height={26} />
-                            </div>
-                            <div className={css.translationArea}>
-                                {renderTranslatorMode(activeTranslationOption)}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={css.magicMenu}>
-                    <MagicMenu
-                        items={MAGIC_MENU_ITEMS}
-                        magicButtonIcon={<StarsIcon width={21} height={28} />}
-                        magicButtonClass={css.magicButton}
-                    />
-                </div>
-            </div>
+            <LiveToolsWrapper
+                bookmarkIcon={<DictionaryIcon width={48} height={48} />}
+                magicMenuItems={MAGIC_MENU_ITEMS}
+                magicButtonIcon={<StarsIcon width={21} height={28} />}
+                magicButtonClass={css.magicButton}
+            >
+                {renderTranslatorMode(activeTranslationOption)}
+            </LiveToolsWrapper>
         </>
     );
 };
