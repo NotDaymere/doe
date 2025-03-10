@@ -1,5 +1,5 @@
-import React,{useMemo } from "react";
-import { Chart as GoogleChart,GoogleChartWrapperChartType } from "react-google-charts";
+import React, { useMemo } from "react";
+import { Chart as GoogleChart, GoogleChartWrapperChartType } from "react-google-charts";
 import ParetoChart from "./ChartTypes/ParetoChart";
 import ViolinChart from "./ChartTypes/ViolinChart";
 import FunnelChart from "./ChartTypes/FunnelChart";
@@ -14,45 +14,80 @@ import VennChart from "./ChartTypes/VennChart";
 import StreamChart from "./ChartTypes/StreamChart";
 import {
     parseAreaChartData,
-    parseBarColumnAreaData, parseBoxplotData,
+    parseBarColumnAreaData,
+    parseBoxplotData,
     parseBubbleChartData,
     parseBulletChartData,
-    parseCandlestickData, parseCircularPackingData, parseDensityData,
+    parseCandlestickData,
+    parseCircularPackingData,
+    parseDensityData,
     parseFunnelChartData,
-    parseGanttChartData, parseHeatmapData,
+    parseGanttChartData,
+    parseHeatmapData,
     parseLayout,
-    parseLineChartData, parseParetoData,
+    parseLineChartData,
+    parseParetoData,
     parsePieChartData,
     parseRadarChartData,
     parseSankeyChartData,
     parseStepChartData,
     parseStyle,
     parseSunburstChartData,
-    parseTreeMapData, parseVennData,
-    parseViolinChartData, parseWaterfallData, parseWordCloudData,
+    parseTreeMapData,
+    parseVennData,
+    parseViolinChartData,
+    parseWaterfallData,
+    parseWordCloudData,
 } from "./Utils/ChartParsers";
 
 export interface ChartData {
     type: GoogleChartWrapperChartType | string;
-    data: any
-    layout: { hAxis?: { title: string }; vAxis?: { title: string } }
-    style: { [key: string]: any }
+    data: any;
+    layout: { hAxis?: { title: string }; vAxis?: { title: string } };
+    style: { [key: string]: any };
 }
 
-
-
-type ChartType = "bar" | "line" | "pie" | "donut" | "area" | "scatter" | "bubble" | "column" | "histogram" | "boxplot" | "waterfall" | "table" | "gantt" | "treemap" | "sankey" | "step" | "candlestick" | "violin" | "funnel" | "radar" | "sunburst" | "bullet" | "wordcloud" | "heatmap" | "density" | "venn" | "stream" | "circularpacking" | "pareto"
+type ChartType =
+    | "bar"
+    | "line"
+    | "pie"
+    | "donut"
+    | "area"
+    | "scatter"
+    | "bubble"
+    | "column"
+    | "histogram"
+    | "boxplot"
+    | "waterfall"
+    | "table"
+    | "gantt"
+    | "treemap"
+    | "sankey"
+    | "step"
+    | "candlestick"
+    | "violin"
+    | "funnel"
+    | "radar"
+    | "sunburst"
+    | "bullet"
+    | "wordcloud"
+    | "heatmap"
+    | "density"
+    | "venn"
+    | "stream"
+    | "circularpacking"
+    | "pareto";
 
 const getChartType = (type: ChartType, orientation: string, stacked: boolean) => {
     if (type === "bar") {
         if (orientation === "horizontal") {
-            return "BarChart"
+            return "BarChart";
         } else if (orientation === "vertical") {
-            return "ColumnChart"
+            return "ColumnChart";
         }
     }
-    return getBaseChartType(type)
-}
+    return getBaseChartType(type);
+};
 
 const colorPalette = [
     "#FF4848",
@@ -65,124 +100,124 @@ const colorPalette = [
     "#0064C7",
     "#FFFFFF",
     "#000000",
-]
+];
 
 const getBaseChartType = (type: ChartType) => {
     switch (type) {
         case "line":
-            return "LineChart"
+            return "LineChart";
         case "pie":
         case "donut":
-            return "PieChart"
+            return "PieChart";
         case "scatter":
-            return "ScatterChart"
+            return "ScatterChart";
         case "bubble":
-            return "BubbleChart"
+            return "BubbleChart";
         case "area":
-            return "AreaChart"
+            return "AreaChart";
         case "histogram":
-            return "Histogram"
+            return "Histogram";
         case "boxplot":
-            return "BoxPlot"
+            return "BoxPlot";
         case "candlestick":
-            return "CandlestickChart"
+            return "CandlestickChart";
         case "gantt":
-            return "Gantt"
+            return "Gantt";
         case "treemap":
-            return "TreeMap"
+            return "TreeMap";
         case "sankey":
-            return "Sankey"
+            return "Sankey";
         case "step":
-            return "SteppedAreaChart"
+            return "SteppedAreaChart";
         case "violin":
-            return "Violin"
+            return "Violin";
         case "funnel":
-            return "Funnel"
+            return "Funnel";
         case "radar":
-            return "Radar"
+            return "Radar";
         case "sunburst":
-            return "Sunburst"
+            return "Sunburst";
         case "bullet":
-            return "Bullet"
+            return "Bullet";
         case "wordcloud":
-            return "WordCloud"
+            return "WordCloud";
         case "waterfall":
-            return "Waterfall"
+            return "Waterfall";
         case "heatmap":
-            return "Heatmap"
+            return "Heatmap";
         case "density":
-            return "Density"
+            return "Density";
         case "venn":
-            return "Venn"
+            return "Venn";
         case "stream":
-            return "Stream"
+            return "Stream";
         case "circularpacking":
-            return "Circularpacking"
+            return "Circularpacking";
         case "pareto":
-            return "Pareto"
+            return "Pareto";
         case "table":
-            return "Table"
+            return "Table";
         default:
-            console.log(`Error ${type}`)
-            return "ColumnChart"
+            console.log(`Error ${type}`);
+            return "ColumnChart";
     }
-}
+};
 
 const parseXML = (xmlString: string): ChartData[] => {
-    const charts: ChartData[] = []
-    const parser = new DOMParser()
-    const xmlDoc = parser.parseFromString(xmlString, "application/xml")
+    const charts: ChartData[] = [];
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "application/xml");
 
-    const chartElements = xmlDoc.getElementsByTagName("chart")
+    const chartElements = xmlDoc.getElementsByTagName("chart");
     for (let i = 0; i < chartElements.length; i++) {
-        const chartElement = chartElements[i]
-        const chartType = chartElement.getAttribute("type") as ChartType
-        const orientation = chartElement.getAttribute("orientation") || "horizontal"
-        const stacked = chartElement.getAttribute("stacked") === "true"
-        console.log('orientation', orientation)
-        const mappedChartType = getChartType(chartType, orientation, stacked)
+        const chartElement = chartElements[i];
+        const chartType = chartElement.getAttribute("type") as ChartType;
+        const orientation = chartElement.getAttribute("orientation") || "horizontal";
+        const stacked = chartElement.getAttribute("stacked") === "true";
+        console.log("orientation", orientation);
+        const mappedChartType = getChartType(chartType, orientation, stacked);
 
-        const layout = parseLayout(chartElement)
-        const data = parseData(chartElement, mappedChartType, layout)
-        const style = parseStyle(chartElement, colorPalette)
+        const layout = parseLayout(chartElement);
+        const data = parseData(chartElement, mappedChartType, layout);
+        const style = parseStyle(chartElement, colorPalette);
 
         charts.push({
             type: mappedChartType,
             data,
             layout,
             style: { ...style, orientation },
-        })
+        });
     }
 
-    return charts
-}
+    return charts;
+};
 
 const parseData = (
     chartElement: Element,
     chartType: GoogleChartWrapperChartType | string,
     layout: { hAxis?: { title: string }; vAxis?: { title: string } }
 ) => {
-    const dataElement = chartElement.getElementsByTagName("data")[0]
-    if (!dataElement) return [[]]
+    const dataElement = chartElement.getElementsByTagName("data")[0];
+    if (!dataElement) return [[]];
 
     switch (chartType) {
         case "LineChart":
-            return parseLineChartData(dataElement)
+            return parseLineChartData(dataElement);
         case "BarChart":
         case "ColumnChart":
-            return parseBarColumnAreaData(dataElement, colorPalette)
+            return parseBarColumnAreaData(dataElement, colorPalette);
         case "AreaChart":
-            return parseAreaChartData(dataElement, layout)
+            return parseAreaChartData(dataElement, layout);
         case "ScatterChart":
-            return parseAreaChartData(dataElement, layout)
+            return parseAreaChartData(dataElement, layout);
         case "Histogram":
-            return parseBarColumnAreaData(dataElement, colorPalette)
+            return parseBarColumnAreaData(dataElement, colorPalette);
         case "PieChart":
-            return parsePieChartData(dataElement)
+            return parsePieChartData(dataElement);
         case "BubbleChart":
-            return parseBubbleChartData(dataElement, layout)
+            return parseBubbleChartData(dataElement, layout);
         case "CandlestickChart":
-            return parseCandlestickData(dataElement)
+            return parseCandlestickData(dataElement);
         case "Gantt":
             return parseGanttChartData(dataElement);
         case "TreeMap":
@@ -218,20 +253,12 @@ const parseData = (
         case "Pareto":
             return parseParetoData(dataElement);
         default:
-            return [[]]
+            return [[]];
     }
-}
-
-
-
-
-
-
-
-
+};
 
 interface ChartRendererProps {
-    input: string | any
+    input: string | any;
 }
 
 type ChartComponentMap = {
@@ -239,32 +266,51 @@ type ChartComponentMap = {
 };
 
 const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
-    const charts = useMemo(() => parseXML(input), [input])
+    const charts = useMemo(() => parseXML(input), [input]);
     const chartComponentMap: ChartComponentMap = {
-        "LineChart": GoogleChart,
-        "PieChart": GoogleChart,
-        "ScatterChart": GoogleChart,
-        "BubbleChart": GoogleChart,
-        "AreaChart": GoogleChart,
-        "Histogram": GoogleChart,
-        "CandlestickChart": GoogleChart,
-        "Gantt": GoogleChart,
-        "TreeMap": GoogleChart,
-        "Sankey": GoogleChart,
-        "SteppedAreaChart": GoogleChart,
-        "BarChart": GoogleChart,
-        "ColumnChart": GoogleChart,
+        LineChart: GoogleChart,
+        PieChart: GoogleChart,
+        ScatterChart: GoogleChart,
+        BubbleChart: GoogleChart,
+        AreaChart: GoogleChart,
+        Histogram: GoogleChart,
+        CandlestickChart: GoogleChart,
+        Gantt: GoogleChart,
+        TreeMap: GoogleChart,
+        Sankey: GoogleChart,
+        SteppedAreaChart: GoogleChart,
+        BarChart: GoogleChart,
+        ColumnChart: GoogleChart,
     };
 
-
     return (
-        <div>
+        <div
+            // Стили для общего контейнера
+            style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "20px",
+                justifyContent: "center",
+                padding: "20px",
+                backgroundColor: "#fafafa",
+            }}
+        >
             {charts.map((chart, index) => {
                 const ChartComponent = chartComponentMap[chart.type];
 
                 if (ChartComponent) {
                     return (
-                        <div key={index}>
+                        // Стили для контейнера каждого графика
+                        <div
+                            key={index}
+                            style={{
+                                border: "1px solid #ddd",
+                                borderRadius: "6px",
+                                backgroundColor: "#fff",
+                                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                padding: "10px",
+                            }}
+                        >
                             <ChartComponent
                                 chartType={chart.type}
                                 data={chart.data}
@@ -274,40 +320,196 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
                             />
                         </div>
                     );
-                } else
-                {
+                } else {
+                    // Если это не GoogleChart, то используем наши кастомные компоненты
                     switch (chart.type) {
                         case "Violin":
-                            return <ViolinChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <ViolinChart chart={chart} />
+                                </div>
+                            );
                         case "Funnel":
-                            return <FunnelChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <FunnelChart chart={chart} />
+                                </div>
+                            );
                         case "Radar":
-                            return <RadarChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <RadarChart chart={chart} />
+                                </div>
+                            );
                         case "Bullet":
-                            return <BulletChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <BulletChart chart={chart} />
+                                </div>
+                            );
                         case "WordCloud":
-                            return <WordCloudChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <WordCloudChart chart={chart} />
+                                </div>
+                            );
                         case "BoxPlot":
-                            return <BoxPlotChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <BoxPlotChart chart={chart} />
+                                </div>
+                            );
                         case "Waterfall":
-                            return <WaterfallChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <WaterfallChart chart={chart} />
+                                </div>
+                            );
                         case "Heatmap":
-                            return <HeatmapChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <HeatmapChart chart={chart} />
+                                </div>
+                            );
                         case "Density":
-                            return <DensityChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <DensityChart chart={chart} />
+                                </div>
+                            );
                         case "Venn":
-                            return <VennChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <VennChart chart={chart} />
+                                </div>
+                            );
                         case "Stream":
-                            return <StreamChart key={index} chart={chart} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <StreamChart chart={chart} />
+                                </div>
+                            );
                         case "Pareto":
-                            return <ParetoChart key={index} data={chart.data} />;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        border: "1px solid #ddd",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                        padding: "10px",
+                                    }}
+                                >
+                                    <ParetoChart data={chart.data} />
+                                </div>
+                            );
                         default:
                             return null;
                     }
                 }
             })}
         </div>
-    )
-}
+    );
+};
 
-export default ChartRenderer
+export default ChartRenderer;
