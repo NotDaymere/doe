@@ -26,7 +26,6 @@ import { SvgIcon } from "src/components/icon";
 // Chat message utilities
 import { parseContent } from "src/components/chat-message/parseContent";
 import { parseTextFormatting } from "src/components/chat-message/parseTextFormatting";
-import ChartRenderer from "src/components/chat-message/parseChart";
 
 // Styles
 import css from "./ChatMessage.module.less";
@@ -47,6 +46,7 @@ import MessageTable from "./assets/MessageTable/MessageTable";
 import MessageFrame from "./assets/MessageFrame/MessageFrame";
 import { mockTableData } from "./assets/MessageTable/mockTableData";
 import { mockMessageFrameData } from "./assets/MessageFrame/mockMessageFrameData";
+import ChartRenderer from "./assets/ChatRenderer/ChatRenderer";
 
 interface Props {
     data: IMessage;
