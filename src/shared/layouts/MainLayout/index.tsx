@@ -29,10 +29,10 @@ export const MainLayout: React.FC<Props> = ({
                 </div>
             {getOpenSavedPlaygrounds().length > 0 && (
                 <>
-                    <div  className={`playground-sider ${playgroundFullscreen ? (openHistory? 'width-80' : 'width-100') : "width-550px"}`}>
+                    <div className={`playground-sider ${playgroundFullscreen ? (openHistory? 'width-80' : 'width-100') : "width-550px"}`}>
                         <MultiplePlaygroundRenderer />
                     </div>
-                    <div style = {{ minWidth : "20%" }} className={openHistory ? 'playground-sider' : "display-none"}>
+                    <div style={{ minWidth : "20%" }} className={`padding-left-0 ${openHistory ? "playground-sider" : "display-none"}`}>
                         <HistoryPlayground />
                     </div>
                 </>

@@ -22,7 +22,6 @@ interface ChatState {
     setPlayground: (playground: IPlayground) => void;
     setSavedPlaygrounds: (playground: IPlayground) => void;
     updateSavedPlaygrounds: (playground: IPlayground) => void;
-    saveHistory: (playground: IPlayground) => void;
     deleteSavedPlaygrounds: (id: string | null) => void;
     getSavedPlayground: (id: string | null) => IPlayground | null;
     getOpenSavedPlaygrounds: () => IPlayground[];
@@ -117,18 +116,6 @@ export const useChatStore = create<ChatState>()(
         updateSavedPlaygrounds: (playground) => set((state) => ({
             savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
         })),
-
-        saveHistory: (playground) => (() => {
-            useVersionHistoryStore.getState().updateHistory({
-                id: Date.now(),
-                name: null,
-                time: new Date().toLocaleString(),
-                user: "Current User",
-                photo: "/temp/profile.jpg",
-                playgroundId: playground.id,
-                playground: playground,
-            });
-        }),
 
         deleteSavedPlaygrounds: (id) => set((state) => ({
             savedPlaygrounds: state.savedPlaygrounds.filter(p => p.id !== id),

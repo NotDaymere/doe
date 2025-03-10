@@ -47,7 +47,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     return { top, left };
   }
 
-  const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds, saveHistory } = useChatStore();
+  const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds } = useChatStore();
   const { playgroundAction } = usePlaygroundStore();
   const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
     const [mockData, setMockData] = useState(() => {
@@ -119,18 +119,35 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   const [showButtons, setShowButtons] = useState(false);
 
     useEffect(() => {
-        return () => {
-            if (playgroundState)
-               updateHistory({
-                    id: Date.now(),
-                    name: null,
-                    time: new Date().toLocaleString(),
-                    user: "Current User",
-                    photo: "/temp/profile.jpg",
-                    playgroundId: playground.id,
-                    playground: playground,
+        const handleSave = (event: KeyboardEvent) => {
+            if (event.ctrlKey && event.key.toLowerCase() === "s") {
+                event.preventDefault();
+
+                setPlaygroundState((prev) => {
+                    if (prev) {
+                        const updatedHistory = {
+                            id: Date.now(),
+                            name: null,
+                            time: new Date().toLocaleString(),
+                            user: "Current User",
+                            photo: "/temp/profile.jpg",
+                            playgroundId: prev.id,
+                            playground: prev,
+                        };
+
+                        updateHistory(updatedHistory);
+                        return { ...prev };
+                    }
+                    return prev;
                 });
-        }
+            }
+        };
+
+        window.addEventListener("keydown", handleSave);
+
+        return () => {
+            window.removeEventListener("keydown", handleSave);
+        };
     }, []);
 
     useEffect(() => {
@@ -139,6 +156,23 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             updateSavedPlaygrounds(playgroundState);
         }
     }, [mockData, id]);
+
+    useEffect(() => {
+        setPlaygroundState(getSavedPlayground(id))
+    }, [getSavedPlayground(id)]);
+
+    useEffect(() => {
+        if (!editor ) return;
+
+        editor.commands.setContent(playgroundState?.text || `<p>
+        This is what your table looks like when it's in Doe Playground! 
+        Larger tables can be navigated, folded in to reveal text, etc.
+        Typically, a Playground table will not include both text blocks and graphs 
+        as it does here, but it is still possible! 
+        The graph interaction with highlighting still applies here!
+      </p>`);
+
+    }, [playgroundState, editor]);
 
     useEffect(() => {
         if (id !== null) {
