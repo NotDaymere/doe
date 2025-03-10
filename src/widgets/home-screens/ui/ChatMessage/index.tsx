@@ -435,7 +435,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 );
                             })}
                         </MathJax>
-
                         <MessageChart data={mockChartMessageData}/>
                         <MessageFrame data={mockMessageFrameData}/>
                         <text className={"message-text"}>Now Ill show the output in the table:</text>
