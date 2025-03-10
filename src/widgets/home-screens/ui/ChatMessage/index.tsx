@@ -42,6 +42,7 @@ import TableRandomValues from "./assets/TableRandomValues/TableRandomValues";
 import DownloadCSV from "./assets/DownloadCSV/DownloadCSV";
 import PythonTaskManager from "./assets/PythonTaskManager/PythonTaskManager";
 import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
+import { MessageNodeVersionSelector } from "./assets/MessageNodeVersionSelector/MessageNodeVersionSelector";
 
 interface Props {
     data: IMessage;
@@ -82,6 +83,10 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         editor,
         setEditor ,
         isCurrentBranchOpen,
+        addMessageNodeVersion,
+        addMessageNode,
+        getLastCurrentVersionMessageNode,
+        doMessageReply
     } = useChatStore();
 
     const parsedContent = parseContent(content);
@@ -112,8 +117,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
             if (
                 selection &&
-                selectionText &&
-                messageRef.current.contains(selection.anchorNode)
+                selectionText
             ) {
                 const range = selection.getRangeAt(0);
                 const rects = range.getClientRects();
@@ -166,7 +170,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setIsShowReferencePanel(true);
         if (selection) selection.removeAllRanges();
     };
-
 
     React.useEffect(() => {
         if (messageRef.current) {
@@ -244,13 +247,15 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         };
 
 
-        useChatStore.getState().addMessageNodeVersion(data.id, newMessage);
+        addMessageNodeVersion(data.id, newMessage);
 
         setUpdatedContent(content);
         setEditMsgMode({ isEditMsgMode: false, msgId: null });
 
-        const reply = await useChatStore.getState().doMessageReply();
-        useChatStore.getState().addMessageNodeVersion(newMessage.id, reply);
+        const reply = await doMessageReply();
+        const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
+        addMessageNode(lastNodeForUserMessage, reply);
+
     };
 
     const cancelEdit = (id: number) => {
@@ -339,23 +344,33 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         }
 
         return (
-            <div className={`${isCurrentBranchOpen ? css.input_open_branch : css.input} `}>
+            <div className={css.input_container}>
+                <div className={`${isCurrentBranchOpen ? css.input_open_branch : css.input} `}>
+
+                    {!isCurrentBranchOpen &&
+                        <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
+                            <span className={css.svg_wrapper}>
+                                <PenIcon />
+                                <span className={css.tooltip}>Edit</span>
+                            </span>
+                        </button>
+                    }
+                    <div
+                        className={`${isCurrentBranchOpen ? css.input_message_branch : css.input_message} `}
+                        dangerouslySetInnerHTML={{
+                            __html: updatedContent,
+                        }}
+                    ></div>
+                    <ReferenceButton
+                        isVisible={referenceButtonVisible}
+                        position={referenceButtonPosition}
+                        onClose={handleClose}
+                        onReferenceClick={handleReferenceClick}
+                    />
+                </div>
                 {!isCurrentBranchOpen &&
-                    <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
-                        <span className={css.svg_wrapper}>
-                            <PenIcon />
-                            <span className={css.tooltip}>Edit</span>
-                        </span>
-                    </button>
+                    <MessageNodeVersionSelector message={data}/>
                 }
-                <div
-                    className={`${isCurrentBranchOpen ? css.input_message_branch : css.input_message} `}
-                    dangerouslySetInnerHTML={{
-                        __html: updatedContent,
-                    }}
-                />
-
-
             </div>
         );
     }
@@ -373,15 +388,17 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     onReferenceClick={handleReferenceClick}
                 />
 
-                {!data.isUser && (
-                    <div
-                        className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
-                        <div className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
-                            <MessageLogoIcon fillPath={"currentColor"}/>
+                <div className={css.sub_bot_message_info_container}>
+                    {!data.isUser && (
+                        <div
+                            className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                            <div className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                                <MessageLogoIcon fillPath={"currentColor"}/>
+                            </div>
                         </div>
-                    </div>
-                )}
-
+                    )}
+                    <MessageNodeVersionSelector message={data}/>
+                </div>
                 <div className={css.message_content}>
 
                     <div ref={messageRef}>

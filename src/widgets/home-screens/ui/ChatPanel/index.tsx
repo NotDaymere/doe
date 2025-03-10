@@ -37,6 +37,8 @@ export const ChatPanel: React.FC = () => {
         currentBranch,
         doMessageReply,
         isReplyLoading,
+        getLastCurrentVersionMessageNode,
+        addMessageNode
     } = useChatStore();
 
     const [clearContent, setClearContent] = React.useState(false);
@@ -81,20 +83,29 @@ export const ChatPanel: React.FC = () => {
             content: text,
             files: files,
         };
-        const reply = await doMessageReply();
-        const branchDialog = {
-            userRequest: userMessage,
-            botMessages: reply,
-        };
         reset();
         setClearContent(true);
-
         if (isCurrentBranchOpen && currentBranch) {
+            const reply = await doMessageReply();
+            const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
+            addMessageNode(lastNodeForUserMessage, userMessage);
+            const branchDialog = {
+                userRequest: userMessage,
+                botMessages: reply,
+            };
             addDialogToCurrentBranch(branchDialog);
         } else {
-            const chatStore = useChatStore.getState();
-            const lastNodeForUserMessage = chatStore.getLastCurrentVersionMessageNode();
-            chatStore.addMessageNode(lastNodeForUserMessage, userMessage);
+
+            const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
+            addMessageNode(lastNodeForUserMessage, userMessage);
+            reset();
+            setClearContent(true);
+
+            const reply = await doMessageReply();
+            const branchDialog = {
+                userRequest: userMessage,
+                botMessages: reply,
+            };
 
             if (isCreateBranchChatMode) {
                 const newBranch = addSavedBranch(text, [userMessage], [branchDialog], userMessage.id);
@@ -102,8 +113,8 @@ export const ChatPanel: React.FC = () => {
                 setIsCreateBranchChatMode(false);
             }
 
-            const lastNodeForReply = chatStore.getLastCurrentVersionMessageNode();
-            chatStore.addMessageNode(lastNodeForReply, reply);
+            const lastNodeForReply = getLastCurrentVersionMessageNode();
+            addMessageNode(lastNodeForReply, reply);
         }
     };
     const handleChangeEditor = (e: string) => {
