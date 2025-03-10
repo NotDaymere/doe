@@ -231,6 +231,7 @@
 
 .message_content {
     position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     background-color: #fff;
@@ -343,14 +344,14 @@
     position: relative;
     flex-shrink: 0;
     cursor: pointer;
-    min-width: 35px;
+    width: 35px;
     height: 35px;
     display: flex;
     justify-content: center;
     align-items: center;
+    align-content: center;
     border-radius: 18px;
     padding: 8.5px;
-    background-color: transparent;
     border: 1px solid #ddd;
     overflow: hidden;
     white-space: nowrap;
@@ -373,6 +374,10 @@
         svg path {
             fill: #5b5b5b;
         }
+    }
+
+    &:hover.button_container {
+      background: transparent;
     }
 
     .tooltip {
@@ -398,6 +403,80 @@
         margin-right: 4px;
         max-width: 300px;
     }
+
+    &:hover .button_container {
+      background: transparent;
+    }
+}
+
+.glowing_border {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  border: 5px transparent;
+  background-color: transparent;
+
+  svg path {
+    fill: #5B2B99;
+  }
+}
+
+.glowing_border::before {
+  content: "";
+  position: absolute;
+  top:  -4px;
+  left:  -4px;
+  right:  -4px;
+  bottom:  -4px;
+  border-radius: 50%;
+  background: conic-gradient(
+          from 0deg,
+          rgba(151, 71, 255, 0.72) 0deg,
+          rgba(181, 122, 255, 0.71) 90deg,
+          #9747FF00  180deg,
+          rgba(181, 122, 255, 0.63) 270deg,
+          rgba(151, 71, 255, 0.72) 360deg
+  );
+  z-index: -1;
+  animation: rotate 5s linear infinite, shimmer 5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3);
+  }
+}
+
+.button_container {
+  border-radius: 50%;
+  min-width: 33px;
+  height: 33px;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  z-index: 1;
+
+  &:hover {
+    background: transparent;
+  }
 }
 
 .button_steps_green {
