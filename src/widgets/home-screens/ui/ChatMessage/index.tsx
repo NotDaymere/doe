@@ -447,14 +447,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 <span className={css.button_steps_label}>See all steps</span>
                             </button>
                             <Flex gap={10}>
-                                <button
-                                    className={`${css.button_steps_grey} ${isPaused ? css.glowing_border : ""}`}
-                                    onClick={isPaused ? handlePlay : handleStop}
-                                >
-                                    <span className={css.tooltip}>Listen answer</span>
+                                    <button
+                                        className={`${css.button_steps_grey} ${!isPaused ? css.glowing_border : ""}`}
+                                        onClick={isPaused ? handlePlay : handleStop}
+                                    >
+                                        <span className={css.tooltip}>Listen answer</span>
+                                        <div className={css.button_container}>
+                                            <PlayIcon fill="currentColor" />
+                                        </div>
+                                    </button>
 
-                                    <PlayIcon />
-                                </button>
                                 <div className={css.download} ref={downloadRef}>
                                     <button
                                         onClick={toggleMenu}
