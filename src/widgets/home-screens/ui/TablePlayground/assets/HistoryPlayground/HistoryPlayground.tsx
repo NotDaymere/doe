@@ -4,7 +4,7 @@ import LinesIcon from "src/shared/icons/LinesIcon";
 import HistoryIcon from "src/shared/icons/HistoryIcon";
 import { useVersionHistoryStore } from "src/shared/providers";
 import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HistoryPlaygroundMenu from "./HistoryPlaygroundMenu/HistoryPlaygroundMenu";
 
 export default function HistoryPlayground() {
