@@ -222,6 +222,10 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             return;
         }
 
+        utterance.onend = () => {
+            setIsPaused(true);
+        };
+
         synth.current.speak(utterance);
         setIsPaused(false);
     };
@@ -448,7 +452,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             </button>
                             <Flex gap={10}>
                                     <button
-                                        className={`${css.button_steps_grey} ${!isPaused ? css.glowing_border : ""}`}
+                                        className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
                                         onClick={isPaused ? handlePlay : handleStop}
                                     >
                                         <span className={css.tooltip}>Listen answer</span>

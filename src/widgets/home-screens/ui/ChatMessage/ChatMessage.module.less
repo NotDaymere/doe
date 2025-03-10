@@ -427,17 +427,31 @@
 }
 
 .glowing_border {
-  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
   align-content: center;
+  border-radius: 18px;
+  padding: 8.5px;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  max-width: 35px;
   border: 5px transparent;
   background-color: transparent;
 
   svg path {
     fill: #5B2B99;
   }
+
+  .tooltip {
+    display: none;
+  }
+
 }
 
 .glowing_border::before {
@@ -458,6 +472,7 @@
   );
   z-index: -1;
   animation: rotate 3s linear infinite, shimmer 3s ease-in-out infinite;
+
 }
 
 @keyframes rotate {
@@ -492,7 +507,7 @@
   z-index: 1;
 
   &:hover {
-    background: transparent;
+    background: #ffffff;
   }
 }
 
