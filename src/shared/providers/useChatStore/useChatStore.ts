@@ -112,7 +112,7 @@ interface ChatState {
     getLastCurrentVersionMessageNode: () => IMessageNode;
     getCurrentMessageNodeVersionInfo: (
         node: IMessageNode | string | IMessage | number
-    ) => { childrenCount: number; currentVersion: number } | null;
+    ) => { totalVersions: number, currentVersion: number } | null;
 
     isCreateBranchChatMode: boolean;
     setIsCreateBranchChatMode: (isCreateBranchChatMode: boolean) => void;
@@ -435,7 +435,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         const parent = targetNode.parent;
         const childrenCount = parent.children ? parent.children.length : 0;
         const currentVersion = parent.currentChildrenVersion ?? 0;
-        return { childrenCount, currentVersion };
+        return { totalVersions: childrenCount, currentVersion: currentVersion };
     },
 
     getLastCurrentVersionMessageNode: () => {
