@@ -9,15 +9,14 @@ import VoiceMode from "./VoiceMode";
 import { TRANSLATION_MENU_OPTIONS, TranslationMenuOptionsType } from "src/shared/types/Translation";
 import { useAppStore } from "src/shared/providers";
 import Chip from "src/shared/components/Chip";
-import css from "./Translator.module.less";
 import StarsIcon from "src/shared/icons/Stars.icon";
 import DictionaryIcon from "src/shared/icons/Dictionary.icon";
 import DoeIcon from "src/shared/icons/Doe.icon";
+import css from "./Translator.module.less";
 
 const Translator = () => {
     const { activeTranslationOption, setActiveTranslationOption } = useAppStore();
     const [showChip, setShowChip] = useState(false);
-    const [showMagicMenu, setShowMagicMenu] = useState(false);
 
     useEffect(() => {
         if (activeTranslationOption === TRANSLATION_MENU_OPTIONS.TRANSLATION) return;
@@ -121,13 +120,10 @@ const Translator = () => {
                     </div>
                 </div>
                 <div className={css.magicMenu}>
-                    <button className={css.magicButton} onMouseEnter={() => setShowMagicMenu(true)}>
-                        <StarsIcon width={21} height={28} />
-                    </button>
                     <MagicMenu
                         items={MAGIC_MENU_ITEMS}
-                        isActive={showMagicMenu}
-                        setIsActive={setShowMagicMenu}
+                        magicButtonIcon={<StarsIcon width={21} height={28} />}
+                        magicButtonClass={css.magicButton}
                     />
                 </div>
             </div>

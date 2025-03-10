@@ -89,7 +89,7 @@ export const ChatPanel: React.FC = () => {
         },
     });
 
-    const typingHintsRef = useRef<HTMLDivElement>(null);
+    const panelWrapperRef = useRef<HTMLDivElement>(null);
     const [showHints, setShowHints] = useState({ hints: messagesCount === 0, typingHints: false });
     const [shareScreenConfig, setShareScreenConfig] = useState<IShareScreen>({
         expandedButtons: false,
@@ -134,7 +134,7 @@ export const ChatPanel: React.FC = () => {
     };
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (typingHintsRef.current && !typingHintsRef.current.contains(event.target as Node)) {
+        if (panelWrapperRef.current && !panelWrapperRef.current.contains(event.target as Node)) {
             setShowHints({ ...showHints, typingHints: false });
         }
     };
@@ -158,6 +158,7 @@ export const ChatPanel: React.FC = () => {
                 onDragOver={handleDragOverTarget}
                 onDrop={handleDragDropTarget}
                 onDragLeave={handleDragLeaveTarget}
+                ref={panelWrapperRef}
             >
                 {prompt.active && (
                     <div className={css.panel_prompt}>
@@ -246,14 +247,18 @@ export const ChatPanel: React.FC = () => {
                         </button>
                     )}
                 </div>
-                {showHints.hints && messagesCount === 0 && (
-                    <div className={css.hints}>
-                        <Hints onSelect={(hint: string) => onSendMessage(hint)} />
-                    </div>
-                )}
-                {showHints.typingHints && messagesCount === 0 && (
-                    <div className={css.typingHints} ref={typingHintsRef}>
-                        <HintsTyping onSelect={(hint: string) => onSendMessage(hint)} />
+                {messagesCount === 0 && (
+                    <div className={css.hintsWrapper}>
+                        {showHints.typingHints && messagesCount === 0 && (
+                            <div className={css.typingHints}>
+                                <HintsTyping onSelect={(hint: string) => onSendMessage(hint)} />
+                            </div>
+                        )}
+                        {showHints.hints && (
+                            <div className={css.hints}>
+                                <Hints onSelect={(hint: string) => onSendMessage(hint)} />
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

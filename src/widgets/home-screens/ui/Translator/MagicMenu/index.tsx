@@ -1,50 +1,41 @@
 import classNames from "classnames";
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { useClickOut } from "src/shared/hooks/useClickOut";
 import MagicMenuItem from "./MagicMenuItem";
 import { useAppStore } from "src/shared/providers";
 import css from "./MagicMenu.module.less";
 
 interface IProps {
     items: any;
-    isActive: boolean;
-    setIsActive: (value: boolean) => void;
+    magicButtonIcon: ReactElement;
+    magicButtonClass?: string;
     classes?: string;
 }
 
-export const MagicMenu: React.FC<IProps> = ({ items, isActive, setIsActive, classes }) => {
+export const MagicMenu: React.FC<IProps> = ({
+    items,
+    magicButtonIcon,
+    magicButtonClass,
+    classes,
+}) => {
     const nodeRef = React.useRef<HTMLDivElement>(null);
+    let closeTimeout = useRef<any>(null);
     const [showMagicMenu, setShowMagicMenu] = useState(false);
     const { activeTranslationOption } = useAppStore();
 
     useEffect(() => {
         setShowMagicMenu(false);
-        setIsActive(false);
     }, [activeTranslationOption]);
 
-    useEffect(() => {
-        if (isActive) {
-            setShowMagicMenu(true);
-        }
+    const handleMouseEnter = () => {
+        setShowMagicMenu(true);
+        clearTimeout(closeTimeout.current);
+    };
 
-        return () => {
+    const handleMouseLeave = () => {
+        closeTimeout.current = setTimeout(() => {
             setShowMagicMenu(false);
-        };
-    }, [isActive]);
-
-    const ref = useClickOut({
-        handler: () => {
-            setShowMagicMenu(false);
-            setIsActive(false);
-        },
-    });
-
-    const setCloseHandler = (fn?: () => void) => {
-        return () => {
-            fn?.();
-            setShowMagicMenu(false);
-        };
+        }, 200);
     };
 
     return (
@@ -53,8 +44,13 @@ export const MagicMenu: React.FC<IProps> = ({ items, isActive, setIsActive, clas
             style={{
                 zIndex: showMagicMenu ? 100 : "",
             }}
-            ref={ref}
         >
+            <button
+                className={magicButtonClass ? magicButtonClass : ""}
+                onMouseEnter={handleMouseEnter}
+            >
+                {magicButtonIcon}
+            </button>
             <CSSTransition
                 classNames={css}
                 timeout={500}
@@ -63,7 +59,11 @@ export const MagicMenu: React.FC<IProps> = ({ items, isActive, setIsActive, clas
                 mountOnEnter
                 unmountOnExit
             >
-                <div className={classNames(css.menu, classes)} ref={nodeRef}>
+                <div
+                    className={classNames(css.menu, classes)}
+                    ref={nodeRef}
+                    onMouseLeave={handleMouseLeave}
+                >
                     {items.map((item: any) => (
                         <MagicMenuItem key={item.text} item={item} />
                     ))}

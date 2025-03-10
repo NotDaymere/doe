@@ -69,10 +69,10 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
 
         if (event instanceof WheelEvent) {
             if (event.deltaY > 0) {
-                setScale(scale + 0.05);
-            } else if (event.deltaY < 0) {
                 if (scale - 0.05 <= 0) return;
                 setScale(scale - 0.05);
+            } else if (event.deltaY < 0) {
+                setScale(scale + 0.05);
             }
         }
     }, 100);

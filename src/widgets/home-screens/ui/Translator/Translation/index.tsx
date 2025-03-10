@@ -21,7 +21,6 @@ import CheckFilledIcon from "src/shared/icons/CheckFilled.icon";
 import css from "./Translation.module.less";
 
 const Translation = () => {
-    const [showMagicMenu, setShowMagicMenu] = useState(false);
     const { files, setFiles } = usePanel();
     const [isUploadFiles, setIsUploadFiles] = useState(false);
     // const [fileProgress, setFileProgress] = useState(0);
@@ -118,14 +117,9 @@ const Translation = () => {
     const renderUploadIcons = () => (
         <div className={css.icons}>
             <div className={css.magicMenu}>
-                <button onMouseEnter={() => setShowMagicMenu(true)}>
-                    <AttachmentIcon width={15} height={15} />
-                </button>
                 <MagicMenu
                     items={MAGIC_MENU_ITEMS}
-                    isActive={showMagicMenu}
-                    setIsActive={setShowMagicMenu}
-                    classes={css.menu}
+                    magicButtonIcon={<AttachmentIcon width={15} height={15} />}
                 />
             </div>
 
