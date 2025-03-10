@@ -4,10 +4,37 @@ import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
 import { IPlayground } from "src/shared/types/Playground";
 import { IQuestionCodeMessage } from "src/shared/types/QuestionCodeMessage";
+import { useVersionHistoryStore } from "../index";
 import { IBranchDialog } from "../../types/BranchDialog";
 import { IMessageNode } from "../../types/MessageNode";
 import { testTextAndCharts } from "../../../components/chat-message/mockData";
 
+interface ChatState {
+    editor: Editor | null;
+    isTyping: boolean;
+    currentBranch: IBranch | null;
+    messages: IMessage[];
+    playground: IPlayground;
+    savedPlaygrounds: IPlayground[];
+    playgroundFullscreen: boolean;
+    questionCodeMessage: IQuestionCodeMessage | null;
+    setCurrentBranch: (currentBranch: IBranch | null) => void;
+    setMessages: (messages: IMessage[]) => void;
+    setEditor: (editor: Editor | null) => void;
+    setTyping: (isTyping: boolean) => void;
+    setPlayground: (playground: IPlayground) => void;
+    setSavedPlaygrounds: (playground: IPlayground) => void;
+    updateSavedPlaygrounds: (playground: IPlayground) => void;
+    saveHistory: (playground: IPlayground) => void;
+    deleteSavedPlaygrounds: (id: string | null) => void;
+    getSavedPlayground: (id: string | null) => IPlayground | null;
+    getOpenSavedPlaygrounds: () => IPlayground[];
+    getOpenSavedPlaygroundsByType: (type: "code" | "table" | "source") => IPlayground[];
+    getSavedPlaygroundLast: () => IPlayground | null;
+    getSavedPlaygroundLastByType: (type: "code" | "table" | "source") => IPlayground | null;
+    setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
+    setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
+}
 
 const initialMessages: IMessage[] = [
     {
@@ -181,12 +208,40 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         setSavedPlaygrounds: (playground) => set((state) => {
             const newId = state.savedPlaygrounds.length > 0 ?
                 String(Math.max(...state.savedPlaygrounds.map(p => Number(p.id) || 0)) + 1) : "1";
-            return { savedPlaygrounds: [...state.savedPlaygrounds, { ...playground, id: newId }] };
+            const newPlayground = { ...playground, id: newId };
+
+            useVersionHistoryStore.getState().updateHistory({
+                id: Date.now(),
+                name: null,
+                time: new Date().toLocaleString(),
+                user: "Current User",
+                photo: "/temp/profile.jpg",
+                playgroundId: newPlayground.id,
+                playground: newPlayground,
+            });
+
+            return { savedPlaygrounds: [...state.savedPlaygrounds, newPlayground] };
         }),
 
         updateSavedPlaygrounds: (playground) => set((state) => ({
             savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
         })),
+
+        saveHistory: (playground) => set((state) => {
+            useVersionHistoryStore.getState().updateHistory({
+                id: Date.now(),
+                name: null,
+                time: new Date().toLocaleString(),
+                user: "Current User",
+                photo: "/temp/profile.jpg",
+                playgroundId: playground.id,
+                playground: playground,
+            });
+
+            return {
+                savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
+            };
+        }),
 
         deleteSavedPlaygrounds: (id) => set((state) => ({
             savedPlaygrounds: state.savedPlaygrounds.filter(p => p.id !== id),

@@ -35,7 +35,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         return { top, left };
     }
 
-    const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds } = useChatStore();
+    const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds, saveHistory } = useChatStore();
     const [editorInstance, setEditorInstance] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
     const [selectedText, setSelectedText] = useState<string | null>(null);
@@ -62,7 +62,12 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
     const [showButtons, setShowButtons] = useState(false);
-
+    useEffect(() => {
+        return () => {
+            if (playgroundState)
+                saveHistory(playgroundState)
+        }
+    }, []);
     useEffect(() => {
         setTimeout(() => setShowButtons(true), 50);
     }, []);
@@ -182,7 +187,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         >
             <Flex className={"tabs-panel-playground"}>
                 <p>{ playgroundState?.name }</p>
-                <HistoryButton />
+                <HistoryButton id={id} />
             </Flex>
             <section className="editor-section">
                 <Editor

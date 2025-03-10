@@ -198,7 +198,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
   const columns: TableProps<any>['columns'] = [
     ...rowHeaderColumn,
-    ...mockData.columns.map((col) => ({
+    ...mockData.columns.map((col: any) => ({
       ...col,
       onCell: (_: any, rowIndex?: number) => ({
         onClick: (event: React.MouseEvent<HTMLElement>) => {
@@ -284,7 +284,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         <div>
           <Flex className={"tabs-panel-playground"}>
             <p>{ playgroundState?.name }</p>
-            <HistoryButton />
+            <HistoryButton id={id} />
           </Flex>
 
           <section className="editor-section">
