@@ -95,7 +95,7 @@ const QuickSearch: FC<IProps> = ({ onClose }) => {
     return (
         <div className={css.quickSearch}>
             {showLabel && (
-                <div className={css.label} id="quickSearchLabel">
+                <div className={css.label}>
                     <div className={css.iconWrapper}>
                         <QuickSearchIcon width={18} height={9} />
                     </div>

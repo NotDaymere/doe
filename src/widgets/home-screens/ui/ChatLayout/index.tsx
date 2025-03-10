@@ -11,6 +11,7 @@ import { MODE } from "src/shared/types/Chat";
 import TranslationMode from "../LiveTools/Translator";
 import css from "./ChatLayout.module.less";
 import LiveTools from "../LiveTools";
+import Sharing from "../LiveTools/Sharing";
 
 export const MAX_MESSAGES_LIMIT = 50;
 
@@ -39,7 +40,7 @@ export const ChatLayout: React.FC = () => {
         }
     }, [playground.open]);
 
-    if (mode !== MODE.INITIAL)
+    if (mode === MODE.TRANSLATION || mode === MODE.RECORDING)
         return (
             <div className={css.chatLayout}>
                 <div className={css.layout}>

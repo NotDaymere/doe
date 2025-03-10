@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import LightThemeIcon from "src/shared/icons/LightTheme.icon";
 import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
@@ -14,13 +14,14 @@ import { SidebarGaia } from "./ui";
 import TranslationIcon from "src/shared/icons/Translation.icon";
 import TapeIcon from "src/shared/icons/Tape.icon";
 import SharedWithYouIcon from "src/shared/icons/SharedWithYou.icon";
-import css from "./Sidebar.module.less";
 import { MODE } from "src/shared/types/Chat";
 import TranslationActiveIcon from "src/shared/icons/TranslationActive.icon";
 import SharedWithYouActiveIcon from "src/shared/icons/SharedWithYouActive.icon";
+import Sharing from "../home-screens/ui/LiveTools/Sharing";
+import css from "./Sidebar.module.less";
 
 export const Sidebar: React.FC = () => {
-    const { editor, mode, setMode } = useChatStore();
+    const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
     const editorState = useEditorContext(editor);
 
     const pointerDown = (event: React.PointerEvent) => {
@@ -124,19 +125,18 @@ export const Sidebar: React.FC = () => {
                 <div className={css.sidebar_controls_group}>
                     <button
                         className={css.sidebar_controls_btn}
-                        onClick={() => setMode(MODE.SHARED_WITH_YOU)}
+                        onClick={() => setIsSharingActive(true)}
                     >
-                        {mode === MODE.SHARED_WITH_YOU ? (
-                            <SharedWithYouActiveIcon />
-                        ) : (
-                            <SharedWithYouIcon />
-                        )}
+                        {isSharingActive ? <SharedWithYouActiveIcon /> : <SharedWithYouIcon />}
                     </button>
                 </div>
             </div>
             <button className={css.sidebar_removeMsg}>
                 <TrashIcon />
             </button>
+            {isSharingActive && (
+                <Sharing isActive={isSharingActive} setIsActive={setIsSharingActive} />
+            )}
         </aside>
     );
 };

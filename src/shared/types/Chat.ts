@@ -1,7 +1,6 @@
 export const MODE = {
     TRANSLATION: "translation",
     RECORDING: "recording",
-    SHARED_WITH_YOU: "sharedWithYou",
     INITIAL: null,
 } as const;
 

@@ -12,6 +12,7 @@ interface ChatState {
     showQuickSearch: boolean;
     mode: ModeType;
     disableButtons: boolean;
+    isSharingActive: boolean;
     setCurrentBranch: (currentBranch: IBranch | null) => void;
     setMessages: (messages: IMessage[]) => void;
     setEditor: (editor: Editor | null) => void;
@@ -20,6 +21,7 @@ interface ChatState {
     setShowQuickSearch: (showQuickSearch: boolean) => void;
     setMode: (mode: ModeType) => void;
     setDisableButtons: (disableButtons: boolean) => void;
+    setIsSharingActive: (isSharingActive: boolean) => void;
 }
 
 export const useChatStore = create<ChatState>()((set) => ({
@@ -31,6 +33,7 @@ export const useChatStore = create<ChatState>()((set) => ({
     showQuickSearch: false,
     mode: MODE.INITIAL,
     disableButtons: false,
+    isSharingActive: false,
     setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
     setMessages: (messages) => set(() => ({ messages })),
     setEditor: (editor) => set(() => ({ editor })),
@@ -39,4 +42,5 @@ export const useChatStore = create<ChatState>()((set) => ({
     setShowQuickSearch: (showQuickSearch) => set(() => ({ showQuickSearch })),
     setMode: (mode) => set(() => ({ mode })),
     setDisableButtons: (disableButtons) => set(() => ({ disableButtons })),
+    setIsSharingActive: (isSharingActive) => set(() => ({ isSharingActive })),
 }));
