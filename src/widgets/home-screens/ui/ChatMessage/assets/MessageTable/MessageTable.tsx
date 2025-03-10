@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Table, TableProps } from "antd";
+import { mockTableData } from "./mockData";
 import { useChatStore } from "../../../../../../shared/providers";
 import { IPlayground } from "../../../../../../shared/types/Playground";
 import "./MessageTable.less";
@@ -9,6 +10,7 @@ interface TableColumn {
     dataIndex: string;
 }
 
+const MessageTable: FC = () => {
 interface TableData {
     columns: TableColumn[];
     data: Record<string, any>[];
@@ -38,7 +40,9 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
 
     const handleSetDataToInput = () => {
         if (!editor) return;
+
         let template = "";
+
         if (selectedCell) {
             template = `<div>I have a question about <span class="highlighted-span green">Tab ${selectedCell}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
         } else if (selectedRow) {
@@ -46,12 +50,13 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
         } else if (selectedColumn) {
             template = `<div>I have a question about <span class="highlighted-span green">Column ${selectedColumn}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
         }
+
         if (template) {
             editor.chain().clearContent().insertContent(template).run();
         }
     };
 
-    const rowHeaderColumn: TableProps<any>["columns"] = [
+    const rowHeaderColumn: TableProps<any>['columns'] = [
         {
             title: "",
             dataIndex: "rowHeader",
@@ -71,6 +76,7 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
 
     const columns: TableProps<any>["columns"] = [
         ...rowHeaderColumn,
+        ...mockTableData.columns.map((col) => ({
         ...tableData.columns.map((col) => ({
             ...col,
             onCell: (_: any, rowIndex?: number) => ({
@@ -101,9 +107,10 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
     ];
 
     const openTablePlayground = () => {
-        const oldPlayground = getSavedPlaygroundLastByType("table");
+        const oldPlayground = getSavedPlaygroundLastByType('table');
         if (getOpenSavedPlaygrounds().length >= 2) {
             const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
+            console.log(lastPlayground);
             if (lastPlayground && lastPlayground.type !== "table") {
                 lastPlayground.open = false;
                 updateSavedPlaygrounds(lastPlayground);
@@ -122,7 +129,7 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
             setPlayground(newPlayground);
             return;
         }
-        if (getOpenSavedPlaygroundsByType("table").length > 0) {
+        if ((getOpenSavedPlaygroundsByType('table').length > 0) ) {
             oldPlayground.open = false;
             updateSavedPlaygrounds(oldPlayground);
             const newPlayground: IPlayground = {
@@ -144,12 +151,18 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
 
     const downloadCSV = () => {
         const csvRows: string[] = [];
-        const headers = tableData.columns.map((col) => col.title).join(",");
+        const headers = mockTableData.columns.map((col) => col.title).join(",");
         csvRows.push(headers);
         tableData.data.forEach((row) => {
             const values = tableData.columns.map((col) => row[col.dataIndex]);
+
+        mockTableData.data.forEach((row) => {
+            const values = mockTableData.columns.map(
+                (col) => row[col.dataIndex as keyof typeof row]
+            );
             csvRows.push(values.join(","));
         });
+
         const csvString = csvRows.join("\n");
         const blob = new Blob([csvString], { type: "text/csv" });
         const url = URL.createObjectURL(blob);
@@ -174,11 +187,11 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
                 </div>
             </div>
             <Table
-                dataSource={tableData.data}
+                dataSource={mockTableData.data}
                 columns={columns}
                 pagination={false}
                 bordered
-                rowKey={(_, rowIndex) => rowIndex!.toString()}
+                rowKey={(record, rowIndex) => rowIndex!.toString()}
             />
         </div>
     );
