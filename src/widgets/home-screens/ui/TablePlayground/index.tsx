@@ -47,7 +47,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     return { top, left };
   }
 
-  const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds } = useChatStore();
+  const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds, saveHistory } = useChatStore();
   const { playgroundAction } = usePlaygroundStore();
   const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
     const [mockData, setMockData] = useState(() => {
@@ -115,8 +115,23 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   });
   const divRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const { openHistory } = useVersionHistoryStore();
+  const { openHistory,  updateHistory } = useVersionHistoryStore();
   const [showButtons, setShowButtons] = useState(false);
+
+    useEffect(() => {
+        return () => {
+            if (playgroundState)
+               updateHistory({
+                    id: Date.now(),
+                    name: null,
+                    time: new Date().toLocaleString(),
+                    user: "Current User",
+                    photo: "/temp/profile.jpg",
+                    playgroundId: playground.id,
+                    playground: playground,
+                });
+        }
+    }, []);
 
     useEffect(() => {
         if (id !== null && playgroundState?.data) {
