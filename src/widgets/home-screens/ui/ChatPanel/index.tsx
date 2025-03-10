@@ -12,7 +12,6 @@ import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
 import { FileList } from "src/shared/components/FileList";
 import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
-import { testTextAndCharts } from "src/components/chat-message/mockData";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useChatContext } from "../../lib/hooks/ChatContext";
 import CloseIcon from "../../../../shared/icons/Close.icon";
@@ -35,12 +34,13 @@ export const ChatPanel: React.FC = () => {
         setCurrentBranch,
         isCurrentBranchOpen,
         addDialogToCurrentBranch,
-        currentBranch
+        currentBranch,
+        doMessageReply,
+        isReplyLoading,
     } = useChatStore();
 
     const [clearContent, setClearContent] = React.useState(false);
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore();
-    const [isLoading, setIsLoading] = React.useState(false);
     const [loadingFile, setLoadingFile] = React.useState<string | undefined>(undefined);
 
     const {
@@ -71,8 +71,8 @@ export const ChatPanel: React.FC = () => {
         return "Ask Doe anything you’d like about the world...";
     }, [isCreateBranchChatMode, playgroundFullscreen]);
 
-    const handleSend = () => {
-        setIsLoading(true);
+
+    const handleSend = async () => {
 
         const userMessage: IMessage = {
             id: Date.now(),
@@ -82,32 +82,24 @@ export const ChatPanel: React.FC = () => {
             files: files,
         };
 
-        const botMessage: IMessage = {
-            id: Date.now() + 1,
-            isUser: false,
-            isCode: true,
-            content: testTextAndCharts,
-        };
-
-        const branchDialog = {
-            userRequest: userMessage,
-            botMessages: botMessage
-        };
-
         if (isCurrentBranchOpen && currentBranch) {
             reset();
             setClearContent(true);
-            setTimeout(() => {
-                addDialogToCurrentBranch(branchDialog);
-                setIsLoading(false);
-            }, 3000);
+
+            const reply = await doMessageReply();
+            const branchDialog = {
+                userRequest: userMessage,
+                botMessages: reply,
+            };
+
+            addDialogToCurrentBranch(branchDialog);
         } else {
             const chatStore = useChatStore.getState();
-            const lastNode = chatStore.getLastCurrentVersionMessageNode();
-            chatStore.addMessageNode(lastNode, userMessage);
+            const lastNodeForUserMessage = chatStore.getLastCurrentVersionMessageNode();
+            chatStore.addMessageNode(lastNodeForUserMessage, userMessage);
 
             if (isCreateBranchChatMode) {
-                const newBranch = addSavedBranch(text, [userMessage], [branchDialog], userMessage.id);
+                const newBranch = addSavedBranch(text, [userMessage], [], userMessage.id);
                 setCurrentBranch(newBranch);
                 setIsCreateBranchChatMode(false);
             }
@@ -115,14 +107,11 @@ export const ChatPanel: React.FC = () => {
             reset();
             setClearContent(true);
 
-            setTimeout(() => {
-                const lastNode = chatStore.getLastCurrentVersionMessageNode();
-                chatStore.addMessageNode(lastNode, botMessage);
-                setIsLoading(false);
-            }, 3000);
+            const reply = await doMessageReply();
+            const lastNodeForReply = chatStore.getLastCurrentVersionMessageNode();
+            chatStore.addMessageNode(lastNodeForReply, reply);
         }
     };
-
     const handleChangeEditor = (e: string) => {
         setClearContent(false);
         setText(e);
@@ -207,6 +196,7 @@ export const ChatPanel: React.FC = () => {
                         </div>
                     );
                 })()}
+
                 {drag && (
                     <div className={css.panel_drag}>
                         <p className={css.panel_drag_text}>Upload files, folders, text content, or code here.</p>
@@ -247,9 +237,9 @@ export const ChatPanel: React.FC = () => {
                         placeholder={placeholder}
                     />
                     <SwitchTransition>
-                        {isLoading ? (
+                        {isReplyLoading ? (
                             <CSSTransition
-                                in={isLoading}
+                                in={isReplyLoading}
                                 key="loading"
                                 timeout={{ enter: 300, exit: 300 }}
                                 classNames={{
@@ -267,7 +257,7 @@ export const ChatPanel: React.FC = () => {
                             </CSSTransition>
                         ) : (
                             <CSSTransition
-                                in={!isLoading}
+                                in={!isReplyLoading}
                                 key="ready"
                                 timeout={{ enter: 300, exit: 300 }}
                                 classNames={{
