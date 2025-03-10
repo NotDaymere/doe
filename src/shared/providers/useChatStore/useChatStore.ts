@@ -227,7 +227,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
         })),
 
-        saveHistory: (playground) => set((state) => {
+        saveHistory: (playground) => (() => {
             useVersionHistoryStore.getState().updateHistory({
                 id: Date.now(),
                 name: null,
@@ -237,10 +237,6 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 playgroundId: playground.id,
                 playground: playground,
             });
-
-            return {
-                savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
-            };
         }),
 
         deleteSavedPlaygrounds: (id) => set((state) => ({

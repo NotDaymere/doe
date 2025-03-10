@@ -43,7 +43,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     const [buttonPosition, setButtonPosition] = useState<{ top?: number; left?: number; bottom?: number; right?: number } | null>(null);
     const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
     const { playgroundAction } = usePlaygroundStore();
-    const { openHistory } = useVersionHistoryStore();
+    const { openHistory, updateHistory } = useVersionHistoryStore();
     const divRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState(0);
 
@@ -66,6 +66,20 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         return () => {
             if (playgroundState)
                 saveHistory(playgroundState)
+        }
+    }, []);
+    useEffect(() => {
+        return () => {
+            if (playgroundState)
+                updateHistory({
+                    id: Date.now(),
+                    name: null,
+                    time: new Date().toLocaleString(),
+                    user: "Current User",
+                    photo: "/temp/profile.jpg",
+                    playgroundId: playground.id,
+                    playground: playground,
+                });
         }
     }, []);
     useEffect(() => {

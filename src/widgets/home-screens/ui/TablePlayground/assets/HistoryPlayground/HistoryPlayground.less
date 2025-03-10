@@ -67,6 +67,7 @@
   position: relative;
   overflow-y: auto;
   scrollbar-width: none;
+  max-height: 100%;
 }
 .history-playground-version {
   display: flex;
@@ -126,7 +127,7 @@
 .history-playground-content {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   padding: 10px;
   padding-left: 35px;
@@ -134,7 +135,9 @@
   min-height: 65px;
   height: fit-content;
   margin-bottom: 6px;
+  flex-wrap: wrap;
   transition: width 500ms;
+  gap: 10px;
   opacity: 0;
   transform: translateY(10px);
   animation: fadeIn 0.3s ease-out forwards;
