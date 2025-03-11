@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import LightThemeIcon from "src/shared/icons/LightTheme.icon";
-import MoonIcon from "src/shared/icons/Moon.icon";
+import React from "react";
 import TrashIcon from "src/shared/icons/Trash.icon";
 import BoldIcon from "src/shared/icons/Bold.icon";
 import UnderlineIcon from "src/shared/icons/Underline.icon";
@@ -19,6 +17,7 @@ import { TagsIcon } from "src/shared/icons/TagsIcon";
 import { TranslationsIcon } from "src/shared/icons/TranslationsIcon";
 import { RecordingIcon } from "src/shared/icons/RecordingIcon";
 import { SharedIcon } from "src/shared/icons/SharedIcon";
+import ThemeToggleSwitch from "src/shared/components/ThemeToggler/ThemeToggler";
 
 export const Sidebar: React.FC = () => {
     const { editor } = useChatStore();
@@ -27,7 +26,6 @@ export const Sidebar: React.FC = () => {
     const pointerDown = (event: React.PointerEvent) => {
         event.preventDefault();
     };
-    const [theme, setTheme] = useState<"light" | "dark">("light");
     return (
         <aside className={playground.open ? css.sidebar_playground : css.sidebar}>
             <SidebarGaia />
@@ -35,30 +33,7 @@ export const Sidebar: React.FC = () => {
             <div className={css.sidebar_profile}>
                 <img className={css.sidebar_profile_img} src="/temp/profile.jpg" alt="" />
             </div>
-            <div className={css.sidebar_theme}>
-                <div className={css.sidebar_theme_toggler}>
-                    <button
-                        className={css.sidebar_theme_btn}
-                        disabled={theme === "light"}
-                        onClick={() => {
-                            document.body.classList.replace("dark", "light");
-                            setTheme("light");
-                        }}
-                    >
-                        <LightThemeIcon />
-                    </button>
-                    <button
-                        className={css.sidebar_theme_btn}
-                        disabled={theme === "dark"}
-                        onClick={() => {
-                            document.body.classList.replace("light", "dark");
-                            setTheme("dark");
-                        }}
-                    >
-                        <MoonIcon />
-                    </button>
-                </div>
-            </div>
+            <ThemeToggleSwitch className={css.sidebar_theme} />
             <div className={css.sidebar_controls}>
                 <div className={css.sidebar_controls_group}>
                     <button className={css.sidebar_controls_btn}>
