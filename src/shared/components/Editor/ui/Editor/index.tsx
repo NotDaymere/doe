@@ -1,8 +1,12 @@
-import React from "react";
+import React, { forwardRef, useImperativeHandle } from "react";
 import clsx from "clsx";
 import { EditorContent } from "@tiptap/react";
 import { EditorProps, useInitialEditor } from "../..";
 import css from "./Editor.module.less";
+
+interface EditorRef {
+    focus: () => void;
+}
 
 type Props = {
     className?: string;
@@ -10,15 +14,15 @@ type Props = {
     handleKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
 } & EditorProps;
 
-export const Editor: React.FC<Props> = ({
-    className,
-    classNameEditor,
-    classNameFocus,
-    classNamePlaceholder,
-    clearContent,
-    handleKeyDown,
-    ...editorProps
-}) => {
+export const Editor = forwardRef<EditorRef, Props>(({
+                                                        className,
+                                                        classNameEditor,
+                                                        classNameFocus,
+                                                        classNamePlaceholder,
+                                                        clearContent,
+                                                        handleKeyDown,
+                                                        ...editorProps
+                                                    }, ref) => {
     const editor = useInitialEditor({
         ...editorProps,
         classNameEditor: clsx(css.editor_editor, classNameEditor),
@@ -26,14 +30,19 @@ export const Editor: React.FC<Props> = ({
         classNamePlaceholder: clsx(css.editor_placeholder, classNamePlaceholder)
     });
 
-    // clear content after sending text
-    React.useEffect(()=>{
-        if(clearContent) editor?.commands.clearContent()
-    }, [clearContent])
+    React.useEffect(() => {
+        if (clearContent) editor?.commands.clearContent();
+    }, [clearContent, editor]);
+
+    useImperativeHandle(ref, () => ({
+        focus: () => {
+            editor?.chain().focus().run();
+        }
+    }), [editor]);
 
     return (
         <div className={clsx(css.editor, className)}>
-            <EditorContent editor={editor} onKeyDown={handleKeyDown}/>
+            <EditorContent editor={editor} onKeyDown={handleKeyDown} />
         </div>
     );
-};
+});

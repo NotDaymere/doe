@@ -75,6 +75,9 @@ const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMes
     return messageNodeMap;
 };
 
+let currentReplyTimeoutId: number | null = null;
+let currentReplyReject: ((reason?: any) => void) | null = null;
+
 interface ChatState {
     editor: Editor | null;
     isTyping: boolean;
@@ -102,8 +105,11 @@ interface ChatState {
     messages: IMessage[];
     setMessages: (messages: IMessage[]) => void;
     doMessageReply: () => Promise<IMessage>;
+    cancelReply: () => void;
     isReplyLoading: boolean;
     setIsReplyLoading: (loading: boolean) => void;
+    replyTimeoutId: number | null;
+    replyPromiseReject?: (reason?: any) => void;
 
     messageNodeMap: Record<string, IMessageNode>;
     addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) => void;
@@ -155,22 +161,52 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     playgroundFullscreen: false,
     questionCodeMessage: null,
 
+    replyTimeoutId: null,
+
     setMessages: (messages) => set(() => ({ messages })),
     isReplyLoading: false,
     setIsReplyLoading: (loading: boolean) => set(() => ({ isReplyLoading: loading })),
+
     doMessageReply: () => {
         set({ isReplyLoading: true });
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                set({ isReplyLoading: false });
+        return new Promise<IMessage>((resolve, reject) => {
+            currentReplyReject = reject;
+            currentReplyTimeoutId = window.setTimeout(() => {
+                set({
+                    isReplyLoading: false,
+                    replyTimeoutId: null,
+                    replyPromiseReject: undefined,
+                });
+                currentReplyTimeoutId = null;
+                currentReplyReject = null;
                 resolve({
                     id: Date.now() + 1,
                     isUser: false,
                     isCode: true,
                     content: testTextAndCharts,
+                    files: [],
                 });
             }, 3000);
+            set({ replyTimeoutId: currentReplyTimeoutId, replyPromiseReject: currentReplyReject });
         });
+    },
+
+
+    cancelReply: () => {
+        if (currentReplyTimeoutId !== null) {
+            clearTimeout(currentReplyTimeoutId);
+            if (currentReplyReject) {
+                currentReplyReject(new Error("Cancelled"));
+            }
+            set({
+                isReplyLoading: false,
+                replyTimeoutId: null,
+                replyPromiseReject: undefined,
+            });
+
+            currentReplyTimeoutId = null;
+            currentReplyReject = null;
+        }
     },
 
     setEditor: (editor) => set(() => ({ editor })),

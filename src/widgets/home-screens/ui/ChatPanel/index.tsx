@@ -36,6 +36,7 @@ export const ChatPanel: React.FC = () => {
         addDialogToCurrentBranch,
         currentBranch,
         doMessageReply,
+        cancelReply,
         isReplyLoading,
         getLastCurrentVersionMessageNode,
         addMessageNode
@@ -72,6 +73,14 @@ export const ChatPanel: React.FC = () => {
         }
         return "Ask Doe anything you’d like about the world...";
     }, [isCreateBranchChatMode, playgroundFullscreen]);
+
+    const editorRef = React.useRef(null);
+
+    React.useEffect(() => {
+        if (isCreateBranchChatMode && editorRef.current) {
+            (editorRef.current as any).focus();
+        }
+    }, [isCreateBranchChatMode]);
 
 
     const handleSend = async () => {
@@ -127,6 +136,10 @@ export const ChatPanel: React.FC = () => {
             e.preventDefault();
             await handleSend();
         }
+    };
+
+    const handleStopReply = () => {
+        cancelReply();
     };
 
     return (
@@ -229,6 +242,7 @@ export const ChatPanel: React.FC = () => {
                         </div>
                     )}
                     <Editor
+                        ref={editorRef}
                         key={placeholder}
                         readOnly={prompt.active}
                         value={text}
@@ -251,14 +265,20 @@ export const ChatPanel: React.FC = () => {
                                     enter: css.fadeEnter,
                                     enterActive: css.fadeEnterActive,
                                     exit: css.fadeExit,
-                                    exitActive: css.fadeExitActive
+                                    exitActive: css.fadeExitActive,
                                 }}
                                 mountOnEnter
                                 unmountOnExit
                             >
+
                                 <button className={css.panel_loadingBtn}>
-                                    <ChatResponseStopIcon fill="currentColor" />
+                                    <div className={css.chat_response_stop_icon}>
+                                        <ChatResponseStopIcon
+                                            fill="currentColor"
+                                            onClick={handleStopReply} />
+                                    </div>
                                 </button>
+
                             </CSSTransition>
                         ) : (
                             <CSSTransition
