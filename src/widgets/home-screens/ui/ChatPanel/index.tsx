@@ -9,7 +9,7 @@ import ReplyIcon from "src/shared/icons/Reply.icon";
 import ScreenShareIcon from "src/shared/icons/ScreenShare.icon";
 import { useChatStore } from "src/shared/providers";
 import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
-import { FileList } from "src/shared/components/FileList";
+import { FileListForUpload } from "src/shared/components/FileList/FileListForUpload";
 import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
@@ -23,6 +23,7 @@ import HandCursorIcon from "../../../../shared/icons/HandCursor.icon";
 import BranchIcon from "../../../../shared/icons/Branch.icon";
 import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgress.icon";
 import { IMessage } from "src/shared/types/Message";
+import { HyperlinkInput } from "./assets/HyperlinkInput/HyperlinkInput";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
@@ -36,6 +37,7 @@ export const ChatPanel: React.FC = () => {
         addDialogToCurrentBranch,
         currentBranch,
         doMessageReply,
+        cancelReply,
         isReplyLoading,
         getLastCurrentVersionMessageNode,
         addMessageNode
@@ -44,6 +46,48 @@ export const ChatPanel: React.FC = () => {
     const [clearContent, setClearContent] = React.useState(false);
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore();
     const [loadingFile, setLoadingFile] = React.useState<string | undefined>(undefined);
+
+    const { isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
+    const [hyperlinkPosition, setHyperlinkPosition] = React.useState<{ top: number; left: number } | null>(null);
+
+
+    React.useEffect(() => {
+        const handleSelectionChange = () => {
+            const selection = window.getSelection();
+            const text = selection ? selection.toString().trim() : "";
+
+            if (selection && text && selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const rects = range.getClientRects();
+                if (rects.length === 0) {
+                    setHyperlinkPosition(null);
+                    return;
+                }
+
+                const lastRect = rects[rects.length - 1];
+                const selectionTop = lastRect.top + window.scrollY;
+                const selectionLeft = lastRect.left + window.scrollX;
+
+                const offsetY = -40;
+                const offsetX = 0;
+
+                setHyperlinkPosition({
+                    top: selectionTop + offsetY,
+                    left: selectionLeft + offsetX,
+                });
+            } else {
+                setHyperlinkPosition(null);
+            }
+        };
+
+        document.addEventListener("mouseup", handleSelectionChange);
+        document.addEventListener("selectionchange", handleSelectionChange);
+
+        return () => {
+            document.removeEventListener("mouseup", handleSelectionChange);
+            document.removeEventListener("selectionchange", handleSelectionChange);
+        };
+    }, []);
 
     const {
         drag,
@@ -61,7 +105,11 @@ export const ChatPanel: React.FC = () => {
     });
 
     const prompt = usePrompt();
-    const { selectedText, isShowReferencePanel, setIsShowReferencePanel } = useChatContext();
+    const {
+        selectedText,
+        isShowReferencePanel,
+        setIsShowReferencePanel
+    } = useChatContext();
 
     const placeholder = React.useMemo(() => {
         if (isCreateBranchChatMode) {
@@ -72,6 +120,14 @@ export const ChatPanel: React.FC = () => {
         }
         return "Ask Doe anything you’d like about the world...";
     }, [isCreateBranchChatMode, playgroundFullscreen]);
+
+    const editorRef = React.useRef(null);
+
+    React.useEffect(() => {
+        if (isCreateBranchChatMode && editorRef.current) {
+            (editorRef.current as any).focus();
+        }
+    }, [isCreateBranchChatMode]);
 
 
     const handleSend = async () => {
@@ -129,6 +185,10 @@ export const ChatPanel: React.FC = () => {
         }
     };
 
+    const handleStopReply = () => {
+        cancelReply();
+    };
+
     return (
         <div className={playground.open ? (playgroundFullscreen ? css.panel_playground_fullscreen : css.panel_playground) : css.panel}
              onDragStart={handleDragStart}
@@ -136,6 +196,9 @@ export const ChatPanel: React.FC = () => {
              onDragLeave={handleDragCancel}
         >
             {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
+            {isHyperlinkInputOpen &&
+                <HyperlinkInput inputPosition={ hyperlinkPosition } />
+            }
             <div
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
@@ -168,7 +231,7 @@ export const ChatPanel: React.FC = () => {
                 )}
                 {files.length > 0 && (
                     <div className={css.panel_files_mask}>
-                        <FileList
+                        <FileListForUpload
                             className={css.panel_files}
                             files={files}
                             onChange={setFiles}
@@ -229,6 +292,7 @@ export const ChatPanel: React.FC = () => {
                         </div>
                     )}
                     <Editor
+                        ref={editorRef}
                         key={placeholder}
                         readOnly={prompt.active}
                         value={text}
@@ -251,14 +315,20 @@ export const ChatPanel: React.FC = () => {
                                     enter: css.fadeEnter,
                                     enterActive: css.fadeEnterActive,
                                     exit: css.fadeExit,
-                                    exitActive: css.fadeExitActive
+                                    exitActive: css.fadeExitActive,
                                 }}
                                 mountOnEnter
                                 unmountOnExit
                             >
+
                                 <button className={css.panel_loadingBtn}>
-                                    <ChatResponseStopIcon fill="currentColor" />
+                                    <div className={css.chat_response_stop_icon}>
+                                        <ChatResponseStopIcon
+                                            fill="currentColor"
+                                            onClick={handleStopReply} />
+                                    </div>
                                 </button>
+
                             </CSSTransition>
                         ) : (
                             <CSSTransition

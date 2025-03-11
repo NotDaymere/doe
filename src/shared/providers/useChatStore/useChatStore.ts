@@ -4,11 +4,10 @@ import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
 import { IPlayground } from "src/shared/types/Playground";
 import { IQuestionCodeMessage } from "src/shared/types/QuestionCodeMessage";
-import { useVersionHistoryStore } from "../index";
 import { IBranchDialog } from "../../types/BranchDialog";
 import { IMessageNode } from "../../types/MessageNode";
 import { testTextAndCharts } from "../../../components/chat-message/mockData";
-
+import { useVersionHistoryStore } from "../index";
 
 const initialMessages: IMessage[] = [
     {
@@ -75,6 +74,9 @@ const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMes
     return messageNodeMap;
 };
 
+let currentReplyTimeoutId: number | null = null;
+let currentReplyReject: ((reason?: any) => void) | null = null;
+
 interface ChatState {
     editor: Editor | null;
     isTyping: boolean;
@@ -91,6 +93,7 @@ interface ChatState {
     setPlayground: (playground: IPlayground) => void;
     setSavedPlaygrounds: (playground: IPlayground) => void;
     updateSavedPlaygrounds: (playground: IPlayground) => void;
+    saveHistory: (playground: IPlayground) => void;
     deleteSavedPlaygrounds: (id: string | null) => void;
     getSavedPlayground: (id: string | null) => IPlayground | null;
     getOpenSavedPlaygrounds: () => IPlayground[];
@@ -98,12 +101,16 @@ interface ChatState {
     getSavedPlaygroundLast: () => IPlayground | null;
     getSavedPlaygroundLastByType: (type: "code" | "table" | "source") => IPlayground | null;
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
+    setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
 
     messages: IMessage[];
     setMessages: (messages: IMessage[]) => void;
     doMessageReply: () => Promise<IMessage>;
+    cancelReply: () => void;
     isReplyLoading: boolean;
     setIsReplyLoading: (loading: boolean) => void;
+    replyTimeoutId: number | null;
+    replyPromiseReject?: (reason?: any) => void;
 
     messageNodeMap: Record<string, IMessageNode>;
     addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) => void;
@@ -136,6 +143,10 @@ interface ChatState {
 
     isUploadFileChatMode: boolean;
     setIsUploadFileChatMode: (isCreateBranchChatMode: boolean) => void;
+
+    isHyperlinkInputOpen: boolean;
+    setIsHyperlinkInputOpen: (isHyperlinkInput: boolean) => void;
+
 }
 
 export const useChatStore = create<ChatState>()((set, get) => ({
@@ -155,22 +166,52 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     playgroundFullscreen: false,
     questionCodeMessage: null,
 
+    replyTimeoutId: null,
+
     setMessages: (messages) => set(() => ({ messages })),
     isReplyLoading: false,
     setIsReplyLoading: (loading: boolean) => set(() => ({ isReplyLoading: loading })),
+
     doMessageReply: () => {
         set({ isReplyLoading: true });
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                set({ isReplyLoading: false });
+        return new Promise<IMessage>((resolve, reject) => {
+            currentReplyReject = reject;
+            currentReplyTimeoutId = window.setTimeout(() => {
+                set({
+                    isReplyLoading: false,
+                    replyTimeoutId: null,
+                    replyPromiseReject: undefined,
+                });
+                currentReplyTimeoutId = null;
+                currentReplyReject = null;
                 resolve({
                     id: Date.now() + 1,
                     isUser: false,
                     isCode: true,
                     content: testTextAndCharts,
+                    files: [],
                 });
             }, 3000);
+            set({ replyTimeoutId: currentReplyTimeoutId, replyPromiseReject: currentReplyReject });
         });
+    },
+
+
+    cancelReply: () => {
+        if (currentReplyTimeoutId !== null) {
+            clearTimeout(currentReplyTimeoutId);
+            if (currentReplyReject) {
+                currentReplyReject(new Error("Cancelled"));
+            }
+            set({
+                isReplyLoading: false,
+                replyTimeoutId: null,
+                replyPromiseReject: undefined,
+            });
+
+            currentReplyTimeoutId = null;
+            currentReplyReject = null;
+        }
     },
 
     setEditor: (editor) => set(() => ({ editor })),
@@ -179,23 +220,23 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     setPlaygroundFullscreen: (playgroundFullscreen) => set(() => ({ playgroundFullscreen })),
     setQuestionCodeMessage: (questionCodeMessage) => set(() => ({ questionCodeMessage })),
 
-    setSavedPlaygrounds: (playground) => set((state) => {
-        const newId = state.savedPlaygrounds.length > 0 ?
-            String(Math.max(...state.savedPlaygrounds.map(p => Number(p.id) || 0)) + 1) : "1";
-        const newPlayground = { ...playground, id: newId };
+        setSavedPlaygrounds: (playground) => set((state) => {
+            const newId = state.savedPlaygrounds.length > 0 ?
+                String(Math.max(...state.savedPlaygrounds.map(p => Number(p.id) || 0)) + 1) : "1";
+            const newPlayground = { ...playground, id: newId };
 
-        useVersionHistoryStore.getState().updateHistory({
-            id: Date.now(),
-            name: null,
-            time: new Date().toLocaleString(),
-            user: "Current User",
-            photo: "/temp/profile.jpg",
-            playgroundId: newPlayground.id,
-            playground: newPlayground,
-        });
+            useVersionHistoryStore.getState().updateHistory({
+                id: Date.now(),
+                name: null,
+                time: new Date().toLocaleString(),
+                user: "Current User",
+                photo: "/temp/profile.jpg",
+                playgroundId: newPlayground.id,
+                playground: newPlayground,
+            });
 
-        return { savedPlaygrounds: [...state.savedPlaygrounds, newPlayground] };
-    }),
+            return { savedPlaygrounds: [...state.savedPlaygrounds, newPlayground] };
+        }),
 
     updateSavedPlaygrounds: (playground) => set((state) => ({
         savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
@@ -212,7 +253,21 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     getOpenSavedPlaygrounds: () => {
         return get().savedPlaygrounds.filter(p => p.open);
     },
+    saveHistory: (playground) => set((state) => {
+        useVersionHistoryStore.getState().updateHistory({
+            id: Date.now(),
+            name: null,
+            time: new Date().toLocaleString(),
+            user: "Current User",
+            photo: "/temp/profile.jpg",
+            playgroundId: playground.id,
+            playground: playground,
+        });
 
+        return {
+            savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
+        };
+    }),
     getOpenSavedPlaygroundsByType: (type) => {
         return get().savedPlaygrounds.filter(p => p.open && p.type === type);
     },
@@ -290,6 +345,9 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
     isUploadFileChatMode: false,
     setIsUploadFileChatMode: (isUploadFileChatMode) => set(() => ({ isUploadFileChatMode })),
+
+    isHyperlinkInputOpen: false,
+    setIsHyperlinkInputOpen: (isHyperlinkInputOpen) => set(() => ({isHyperlinkInputOpen})),
 
     messageNodeMap: initialMessageNodeMap(initialMessages),
 

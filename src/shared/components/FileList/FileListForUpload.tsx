@@ -16,7 +16,7 @@ interface Props {
 
 type ScrollPosition = "start" | "middle" | "end";
 
-export const FileList: React.FC<Props> = ({
+export const FileListForUpload: React.FC<Props> = ({
                                               files,
                                               onChange,
                                               className,

@@ -5,13 +5,16 @@ import BranchIcon from "../../../../../../shared/icons/Branch.icon";
 import css from "./MagicCreateNewBranch.module.less";
 import { useChatStore } from "../../../../../../shared/providers";
 
-interface Props {}
+interface MagicCreateNewBranchProps {
+    setActiveMenu: (active: boolean) => void;
+}
 
-export const MagicCreateNewBranch: React.FC<Props> = (props) => {
+export const MagicCreateNewBranch: React.FC<MagicCreateNewBranchProps> = ({setActiveMenu}) => {
     const { setIsCreateBranchChatMode, isCreateBranchChatMode } = useChatStore();
 
     const createBranch = () => {
         setIsCreateBranchChatMode(!isCreateBranchChatMode)
+        setActiveMenu(false);
     };
 
     return (

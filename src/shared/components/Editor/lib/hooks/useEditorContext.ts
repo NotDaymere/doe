@@ -41,6 +41,8 @@ export function useEditorContext(editor: Editor | null) {
         [editor]
     );
 
+
+
     React.useEffect(() => {
         if (editor) {
             const handleUpdate = () => update((prev) => prev + 1);

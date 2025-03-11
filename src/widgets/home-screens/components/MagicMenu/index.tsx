@@ -29,6 +29,7 @@ export const MagicMenu: React.FC<Props> = ({
     const isUploadFileChatMode = useChatStore((state) => state.isUploadFileChatMode);
     const {setTalkModeActive } = useAppStore();
     const toggleMenu = () => setActiveMenu(!activeMenu);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if(isUploadFileChatMode){
@@ -44,42 +45,67 @@ export const MagicMenu: React.FC<Props> = ({
     }
 
     return (
-        <div 
-            className={css.magic} 
-            style={{ 
-                zIndex: activeMenu ? 100 : "" 
-            }} 
-            ref={ref}
-        >
+        <>
+            <div
+                className={css.magic}
+                style={{
+                    zIndex: activeMenu ? 100 : ""
+                }}
+                ref={ref}
+            >
                 <button className={css.magic_btn} onClick={toggleMenu}>
                     <StarsIcon />
                 </button>
 
-            <CSSTransition
-                classNames={css}
-                timeout={300}
-                in={activeMenu}
-                nodeRef={nodeRef}
-                mountOnEnter
-                unmountOnExit
-            >
-                <div className={css.menu} ref={nodeRef}>
-                    <MagicApplications />
-                    <MagicUploadFromDesktop setActiveMenu={setActiveMenu}/>
-                    <MagicUploadApps />
-                    <MagicMenuButton 
-                        icon={<CallIcon />} 
-                        text="Dispatch Doe" 
-                        onClick={setCloseHandler(onDispatchDoe)}
-                    />
-                    <MagicMenuButton
-                        icon={<TalkIcon />}
-                        text="Talk mode"
-                        onClick={setCloseHandler(() => setTalkModeActive(true))}
-                    />
-                    <MagicCreateNewBranch/>
-                </div>
-            </CSSTransition>
-        </div>
+                <CSSTransition
+                    classNames={css}
+                    timeout={300}
+                    in={activeMenu}
+                    nodeRef={nodeRef}
+                    mountOnEnter
+                    unmountOnExit
+                >
+                    <div className={css.menu} ref={nodeRef}>
+                        <MagicApplications />
+                        <MagicUploadFromDesktop setActiveMenu={setActiveMenu}
+                                                onUploadFiles={onUploadFiles}
+                                                fileInputRef={fileInputRef} />
+                        <MagicUploadApps />
+                        <MagicMenuButton
+                            icon={<CallIcon />}
+                            text="Dispatch Doe"
+                            onClick={setCloseHandler(onDispatchDoe)}
+                        />
+                        <MagicMenuButton
+                            icon={<TalkIcon />}
+                            text="Talk mode"
+                            onClick={setCloseHandler(() => setTalkModeActive(true))}
+                        />
+                        <MagicCreateNewBranch setActiveMenu={setActiveMenu} />
+                    </div>
+                </CSSTransition>
+            </div>
+            <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                style={{ display: "none" }}
+                onChange={(event) => {
+                    const files = event.target.files;
+                    if (!files) return;
+
+                    const filesArray = Array.from(files).map((file) =>
+                        Object.assign(file, {
+                            id: `${Date.now()}-${Math.random()}`,
+                        }) as FileWithId
+                    );
+                    if (onUploadFiles) {
+                        onUploadFiles(filesArray);
+                    }
+                    event.target.value = "";
+                }}
+            />
+        </>
+
     );
 };

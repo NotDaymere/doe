@@ -15,9 +15,44 @@
   justify-content: flex-end;
   gap: 8px;
   width: 100%;
-  margin-top: 8px;
   position: relative;
 }
+
+.user_message_container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.user_message_and_edit_button {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.message_files {
+  position: absolute;
+  top: -80px;
+  left: 0;
+  width: 100%;
+  z-index: 5;
+}
+
+.panel_files {
+  display: flex;
+  width: 100%;
+  flex-direction: row-reverse;
+}
+
+.file_container {
+  max-width: 820px;
+}
+
+
 .input_open_branch {
   width: 100%;
   display: flex;
@@ -88,7 +123,7 @@
     padding: 8px 12px;
     border-radius: 12px;
     border: 1px dashed #b5b5b5;
-    max-width: 80%;
+    max-width: 100%;
     .setFontSohneBuch(16px, 1.4, normal);
     color: #1f1f1f;
     word-wrap: break-word;
@@ -357,11 +392,33 @@
     box-shadow: 0px 2px 15px 0px #0000000d;
 }
 
+
+//flex-shrink: 0;
+//cursor: pointer;
+//min-width: 36px;
+//height: 36px;
+//display: flex;
+//justify-content: center;
+//align-items: center;
+//border-radius: 12px;
+//padding: 7px;
+//background-color: transparent;
+//border: 1px solid #8bcf16;
+//transition: 0.3s all ease;
+//overflow: hidden;
+//white-space: nowrap;
+//transition:
+//background 125ms ease,
+//              width 300ms ease,
+//                       border-radius 0.1s ease-in-out;
+
+
+
 .button_steps_grey {
     position: relative;
     flex-shrink: 0;
     cursor: pointer;
-    width: 35px;
+    min-width: 35px;
     height: 35px;
     display: flex;
     justify-content: center;
@@ -374,7 +431,7 @@
     white-space: nowrap;
     transition:
         background 125ms ease,
-        width 300ms ease,
+        width 500ms ease,
         border-radius 0.1s ease-in-out;
 
     svg path {
@@ -405,11 +462,11 @@
         max-width: 0;
         -webkit-transition:
             color 0.3,
-            max-width 0.3s,
+            max-width 0.5s,
             margin-right 0.35s;
         transition:
             color 0.3s,
-            max-width 0.3s,
+            max-width 0.5s,
             margin-right 0.35s;
         vertical-align: top;
         white-space: nowrap;
@@ -450,6 +507,28 @@
 
   .tooltip {
     display: none;
+  }
+
+  .button_container {
+    width: 35px;
+  }
+
+  .button_container {
+    border-radius: 50%;
+    height: 32px;
+    min-width: 32px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    z-index: 1;
+
+    &:hover {
+      background: #ffffff;
+    }
   }
 
 }
@@ -493,23 +572,7 @@
   }
 }
 
-.button_container {
-  border-radius: 50%;
-  min-width: 33px;
-  height: 33px;
-  background-color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  z-index: 1;
 
-  &:hover {
-    background: #ffffff;
-  }
-}
 
 .button_steps_green {
     flex-shrink: 0;
@@ -523,12 +586,11 @@
     padding: 7px;
     background-color: transparent;
     border: 1px solid #8bcf16;
-    transition: 0.3s all ease;
     overflow: hidden;
     white-space: nowrap;
     transition:
         background 125ms ease,
-        width 300ms ease,
+        width 500ms ease,
         border-radius 0.1s ease-in-out;
 
     .svg_wrapper {
@@ -554,11 +616,11 @@
         max-width: 0;
         -webkit-transition:
             color 0.3,
-            max-width 0.3s,
+            max-width 0.5s,
             margin-right 0.35s;
         transition:
             color 0.3s,
-            max-width 0.3s,
+            max-width 0.5s,
             margin-right 0.35s;
         vertical-align: top;
         white-space: nowrap;
@@ -692,3 +754,5 @@
     transition: 300ms ease;
     transition-property: transform, opacity;
 }
+
+
