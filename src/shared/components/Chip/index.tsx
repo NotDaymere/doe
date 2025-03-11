@@ -3,7 +3,7 @@ import { CSSTransition } from "react-transition-group";
 import css from "./Chip.module.less";
 
 interface IProps {
-    icon: ReactElement | null;
+    icon?: ReactElement | null;
     label: string;
     isActive: boolean;
     setIsActive: (value: boolean) => void;

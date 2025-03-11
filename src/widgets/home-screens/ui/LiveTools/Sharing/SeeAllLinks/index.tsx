@@ -12,60 +12,60 @@ import { useClickOut } from "src/shared/hooks/useClickOut";
 import css from "./SeeAllLinks.module.less";
 
 interface ISearchResult {
+    id: string;
     icon: ReactElement;
     text: string;
     password?: string;
     published: string;
-    showPassword?: boolean;
 }
 
 const SEARCH_RESULTS: ISearchResult[] = [
     {
+        id: "search_0",
         icon: <LinkWPIcon width={15} height={15} />,
         text: "Bijection Language Instructions",
         password: `R7d{}F"@Pdp{ChZX/[Mh)Qh\\`,
         published: "11.10.24",
-        showPassword: true,
     },
     {
+        id: "search_1",
         icon: <LinkIndexedIcon width={13} height={13} />,
         text: "Proving the Yoneda Lemma",
         published: "12.11.24",
     },
     {
+        id: "search_2",
         icon: <LinkWPIcon width={15} height={15} />,
         text: "Pronunciación en español importante",
         password: `R7d{}F"@Pdp{ChZX/[Mh)Qh\\`,
         published: "09.07.24",
-        showPassword: false,
     },
     {
+        id: "search_3",
         icon: <LinkWPIcon width={15} height={15} />,
         text: "Essay Review and Commented Feedback",
         password: `R7d{}F"@Pdp{ChZX/[Mh)Qh\\`,
-
         published: "10.10.24",
-        showPassword: false,
     },
     {
+        id: "search_4",
         icon: <LinkWPIcon width={15} height={15} />,
         text: "AES Decryption Approaches",
         password: `R7d{}F"@Pdp{ChZX/[Mh)Qh\\`,
-
         published: "01.29.24",
-        showPassword: false,
     },
     {
+        id: "search_5",
         icon: <LinkWOPIcon width={10} height={12} />,
         text: "Liszt and Singers Relationships",
         published: "04.25.24",
     },
     {
+        id: "search_6",
         icon: <LinkWPIcon width={15} height={15} />,
         text: "Script for New Horror Movie",
         password: `R7d{}F"@Pdp{ChZX/[Mh)Qh\\`,
         published: "06.16.24",
-        showPassword: false,
     },
 ];
 
@@ -79,13 +79,26 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
     const [isCaseSensitive, setIsCaseSensitive] = useState(false);
     const [search, setSearch] = useState("");
     const [showSeeAllLink, setShowSeeAllLink] = useState(false);
+    const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
+    const [hoveredPasswordId, setHoveredPasswordId] = useState<string | null>(null);
 
-    // const ref = useClickOut({
-    //     handler: () => {
-    //         setShowSeeAllLink(false);
-    //         setIsActive(false);
-    //     },
-    // });
+    const handlePasswordClick = (id: string) => {
+        setShowPasswords((prevState) => ({
+            ...prevState,
+            [id]: !prevState[id],
+        }));
+    };
+
+    const handleDeleteClick = (id: string) => {
+        setResults(results.filter((item) => item.id !== id));
+    };
+
+    const ref = useClickOut({
+        handler: () => {
+            setShowSeeAllLink(false);
+            setIsActive(false);
+        },
+    });
 
     useEffect(() => {
         if (isActive) {
@@ -103,7 +116,13 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
 
     return (
         <CSSTransition in={showSeeAllLink} timeout={500} classNames={css} unmountOnExit>
-            <div className={css.seeAllLinks}>
+            <div
+                className={css.seeAllLinks}
+                ref={ref}
+                onMouseDown={(e: any) => {
+                    e.stopPropagation();
+                }}
+            >
                 <div className={css.searchInput}>
                     <input
                         type="text"
@@ -128,31 +147,42 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
                         <div className={css.bold}>Password</div>
                         <div className={css.bold}>Published</div>
                         <div className={css.bold}></div>
-
                         {results.map((result, index) => (
                             <>
                                 <div key={index} className={css.linkResult}>
                                     <div className={css.resultIcon}>{result.icon}</div>
                                     <span className={css.link}>{result.text}</span>
                                 </div>
-                                <div className={css.password}>
-                                    {result.password ? (
-                                        result.showPassword ? (
+                                <div
+                                    className={css.password}
+                                    onClick={() => handlePasswordClick(result.id)}
+                                    onMouseEnter={() => setHoveredPasswordId(result.id)}
+                                    onMouseLeave={() => setHoveredPasswordId(null)}
+                                >
+                                    {result.password &&
+                                        (showPasswords[result.id] ? (
                                             result.password
                                         ) : (
-                                            <div className={css.hidePassword}>
-                                                {Array.from({ length: 12 }).map(() => (
-                                                    <div className={css.dot} />
-                                                ))}
+                                            <div className={css.passwordWrapper}>
+                                                <div className={css.hidePassword}>
+                                                    {Array.from({ length: 12 }).map(() => (
+                                                        <div className={css.dot} />
+                                                    ))}
+                                                </div>
+                                                {hoveredPasswordId === result.id && (
+                                                    <div className={css.passwordHint}>
+                                                        click to reveal
+                                                    </div>
+                                                )}
                                             </div>
-                                        )
-                                    ) : (
-                                        ""
-                                    )}
+                                        ))}
                                 </div>
                                 <div className={css.published}>{result.published}</div>
                                 <div className={css.actions}>
-                                    <button className={css.removeButton}>
+                                    <button
+                                        className={css.removeButton}
+                                        onClick={() => handleDeleteClick(result.id)}
+                                    >
                                         <StopIcon width={15} height={15} />
                                     </button>
                                     <button className={css.moveButton}>

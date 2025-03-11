@@ -5,7 +5,6 @@
     flex-direction: column;
     align-items: end;
     gap: 8px;
-    z-index: 999;
 }
 
 .iconWrapper {
@@ -64,7 +63,7 @@
 
 .results {
     display: grid;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: auto 245px auto auto;
     grid-template-rows: repeat(7, max-content);
     align-items: center;
     gap: 16px;
@@ -76,10 +75,6 @@
 }
 
 .result {
-    // display: flex;
-    // gap: 5px;
-    // align-items: center;
-    // padding: 4px;
     font-size: 14px;
     color: #1f1f1f;
     white-space: nowrap;
@@ -112,6 +107,35 @@
     display: flex;
     align-items: center;
     gap: 4px;
+}
+
+.passwordWrapper {
+    position: relative;
+}
+
+.passwordHint {
+    position: absolute;
+    bottom: 30px;
+    right: 24px;
+    white-space: nowrap;
+    .setFontSohneBuch(12px);
+    color: #ffffff;
+    padding: 6px;
+    background-color: #bdbdbd;
+    border: 1px solid #b9b9b9;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(#000, 0.06);
+
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 10px 5px 0 5px;
+        border-style: solid;
+        border-color: #b9b9b9 transparent transparent transparent;
+    }
 }
 
 .dot {

@@ -10,8 +10,8 @@ import { useAppStore } from "src/shared/providers";
 import Chip from "src/shared/components/Chip";
 import StarsIcon from "src/shared/icons/Stars.icon";
 import LiveToolsWrapper from "../LiveToolsWrapper";
-import css from "./Translator.module.less";
 import DictionaryIcon from "src/shared/icons/Dictionary.icon";
+import css from "./Translator.module.less";
 
 const Translator = () => {
     const { activeTranslationOption, setActiveTranslationOption } = useAppStore();
@@ -99,11 +99,13 @@ const Translator = () => {
 
     return (
         <>
-            <Chip
-                isActive={showChip}
-                setIsActive={setShowChip}
-                {...renderChipContent(activeTranslationOption)}
-            />
+            <div className={css.chip}>
+                <Chip
+                    isActive={showChip}
+                    setIsActive={setShowChip}
+                    {...renderChipContent(activeTranslationOption)}
+                />
+            </div>
             <LiveToolsWrapper
                 bookmarkIcon={<DictionaryIcon width={48} height={48} />}
                 magicMenuItems={MAGIC_MENU_ITEMS}
