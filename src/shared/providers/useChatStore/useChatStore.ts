@@ -142,6 +142,10 @@ interface ChatState {
 
     isUploadFileChatMode: boolean;
     setIsUploadFileChatMode: (isCreateBranchChatMode: boolean) => void;
+
+    isHyperlinkInputOpen: boolean;
+    setIsHyperlinkInputOpen: (isHyperlinkInput: boolean) => void;
+
 }
 
 export const useChatStore = create<ChatState>()((set, get) => ({
@@ -326,6 +330,9 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
     isUploadFileChatMode: false,
     setIsUploadFileChatMode: (isUploadFileChatMode) => set(() => ({ isUploadFileChatMode })),
+
+    isHyperlinkInputOpen: false,
+    setIsHyperlinkInputOpen: (isHyperlinkInputOpen) => set(() => ({isHyperlinkInputOpen})),
 
     messageNodeMap: initialMessageNodeMap(initialMessages),
 
