@@ -7,7 +7,7 @@
     flex-direction: column;
 
     height: 100%;
-
+    background-color: var(--bg-color-sidebar);
     &::-webkit-scrollbar {
         display: none;
     }
@@ -27,7 +27,7 @@
 .sidebar_profile {
     margin-top: 16px;
     padding-top: 20px;
-    border-top: 1px solid rgba(#b5b5b5, 0.2);
+    border-top: 1px solid var(--divider);
 }
 .sidebar_profile_img {
     width: 40px;
@@ -80,7 +80,7 @@
 .sidebar_controls {
     margin-top: 20px;
     padding-top: 12px;
-    border-top: 1px solid rgba(#b5b5b5, 0.2);
+    border-top: 1px solid var(--divider);
 
     overflow-y: auto;
     height: 0;
@@ -101,26 +101,27 @@
 
     + .sidebar_controls_group {
         padding-top: 12px;
-        border-top: 1px solid rgba(#b5b5b5, 0.2);
+        border-top: 1px solid var(--divider);
     }
 }
 
 .sidebar_controls_btn {
     width: 40px;
     height: 40px;
-
+    border-radius: 12px;
+    background-color: var(--bg-sidebar-action-button-default);
     display: flex;
     justify-content: center;
-.css.sidebar_controls_chats {
-    width: 280px;
-    height: 1024px;
-    border-right-width: 1px;
-    color: #FFFFFF;
-}
+    align-items: center;
+    .css.sidebar_controls_chats {
+        width: 280px;
+        height: 1024px;
+        border-right-width: 1px;
+        color: #ffffff;
+    }
     img {
         width: 20px;
         height: 20px;
-
         object-fit: contain;
         object-position: center;
     }
@@ -128,12 +129,18 @@
     svg {
         width: 20px;
         height: 20px;
-        fill: #b5b5b5;
+        fill: var(--icon-sidebar-action-button-default);
     }
-
-    &[data-active="true"] {
+    &:hover {
+        background-color: var(--bg-sidebar-action-button-hover);
         svg {
-            fill: #000;
+            fill: var(--icon-sidebar-action-button-hover);
+        }
+    }
+    &[data-active="true"] {
+        background-color: var(--bg-sidebar-action-button-active);
+        svg {
+            fill: var(--icon-sidebar-action-button-active);
         }
     }
 }
@@ -147,14 +154,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
+    background-color: var(--bg-clear-button);
     border-radius: 12px;
-    border: 1px solid #dddddd;
-
+    border: 1px solid var(--border-clear-button);
     svg {
         width: 20px;
         height: 20px;
-        fill: #b5b5b5;
+        fill: var(--icon-clear-button);
+    }
+    &:hover {
+        background-color: var(--bg-clear-button-hover);
+        border-color: var(--border-clear-button-hover);
+        svg {
+            fill: var(--icon-clear-button-hover);
+        }
     }
 }
 
@@ -164,6 +177,6 @@
         padding-bottom: 36px;
     }
     .sidebar_playground {
-       // padding-bottom: 36px;
+        // padding-bottom: 36px;
     }
 }

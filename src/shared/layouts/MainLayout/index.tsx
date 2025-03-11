@@ -11,32 +11,42 @@ interface Props {
     children: React.ReactNode;
 }
 
-export const MainLayout: React.FC<Props> = ({
-    children
-}) => {
+export const MainLayout: React.FC<Props> = ({ children }) => {
     const gaiaRef = React.useRef<HTMLDivElement>(null);
-    const { playgroundFullscreen, getOpenSavedPlaygrounds } = useChatStore()
-    const {openHistory} = useVersionHistoryStore();
+    const { playgroundFullscreen, getOpenSavedPlaygrounds } = useChatStore();
+    const { openHistory } = useVersionHistoryStore();
     return (
         <React.Fragment>
-            <Gaia className={'gaia'} ref={gaiaRef} />
-            <BaseLayout className={getOpenSavedPlaygrounds().length > 0 ? "main-layout-playground" : "main-layout" } hasSider>
-            {/*    <BaseLayout.Sider width={"auto"} className={"sider-wrapper"}>*/}
-                    <Sider />
+            <Gaia className={"gaia"} ref={gaiaRef} />
+            <BaseLayout
+                className={
+                    getOpenSavedPlaygrounds().length > 0 ? "main-layout-playground" : "main-layout"
+                }
+                hasSider
+            >
+                {/*    <BaseLayout.Sider width={"auto"} className={"sider-wrapper"}>*/}
+                <Sider />
                 {/*</BaseLayout.Sider>*/}
-                <div className={`children-main-layout ${((!playgroundFullscreen) || getOpenSavedPlaygrounds().length == 0) && 'children-main-layout-active'}`}>
+                <div
+                    className={`children-main-layout ${(!playgroundFullscreen || getOpenSavedPlaygrounds().length == 0) && "children-main-layout-active"}`}
+                >
                     {children}
                 </div>
-            {getOpenSavedPlaygrounds().length > 0 && (
-                <>
-                    <div className={`playground-sider ${playgroundFullscreen ? (openHistory? 'width-80' : 'width-100') : "width-550px"}`}>
-                        <MultiplePlaygroundRenderer />
-                    </div>
-                    <div style={{ minWidth : "20%" }} className={`padding-left-0 ${openHistory ? "playground-sider" : "display-none"}`}>
-                        <HistoryPlayground />
-                    </div>
-                </>
-            )}
+                {getOpenSavedPlaygrounds().length > 0 && (
+                    <>
+                        <div
+                            className={`playground-sider ${playgroundFullscreen ? (openHistory ? "width-80" : "width-100") : "width-550px"}`}
+                        >
+                            <MultiplePlaygroundRenderer />
+                        </div>
+                        <div
+                            style={{ minWidth: "20%" }}
+                            className={openHistory ? "playground-sider" : "display-none"}
+                        >
+                            <HistoryPlayground />
+                        </div>
+                    </>
+                )}
             </BaseLayout>
         </React.Fragment>
     );

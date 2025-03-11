@@ -1,39 +1,83 @@
 // Default colors (initially set to light)
 :root {
-  --bg-color-sidebar: #FAFAF9;
-  --bg-color-main: #FFFFFF;
-  --bg-color-input: #F6F6F6;
-  --bg-message-editor: #EFEFEF;
-  --bg-close-message-editor: #D1D1D1;
-  --btn-color-primary: #FFF;
-  --btn-color-inactive: #F0F0F0;
-  --btn-color-border: #D0D0D0;
-  --icon-color-primary: #000;
-  --icon-color-secondary: #7c7c7c;
-  --border-color-primary: #acacac56;
-  --gaia-button-bg: #F0F0F0;
-  --text-color-primary: #000;
-  --table-border-color: #CCCCCC;
+    --bg-color-sidebar: var(--color-white-100);
+    --icon-color-gaia-sidebar: var(--color-neutral-200);
+    --divider: var(--color-neutral-400-20);
+    --bg-sidebar-action-button-default: transparent;
+    --icon-sidebar-action-button-default: var(--color-neutral-400);
+    --bg-sidebar-action-button-hover: var(--color-neutral-100);
+    --icon-sidebar-action-button-hover: var(--color-neutral-600);
+    --bg-sidebar-action-button-active: var(--color-neutral-100);
+    --icon-sidebar-action-button-active: var(--color-neutral-950);
 
-  --font-sohne: "Sohne";
-  --font-inter: "Inter";
-  --font-sf-mono: "SF Mono";
+    --bg-clear-button: transparent;
+    --border-clear-button: var(--color-neutral-150);
+    --icon-clear-button: var(--color-neutral-150);
+    --bg-clear-button-hover: var(--color-red-500-20);
+    --border-clear-button-hover: var(--color-red-500);
+    --icon-clear-button-hover: var(--color-red-500);
+
+    --bg-gaia-widget-small: var(--color-neutral-950-20);
+    --border-gaia-widget-small: var(--color-neutral-950-05);
+    --bg-gaia-widget-full: var(--color-neutral-950-35);
+    --border-gaia-widget-full: var(--color-neutral-950-05);
+    --bg-gaia-icons: var(--color-white-80);
+    --divider-gaia-widget: var(--color-black-05);
+
+    --bg-color-main: #ffffff;
+    --bg-color-input: #f6f6f6;
+    --bg-message-editor: #efefef;
+    --bg-close-message-editor: #d1d1d1;
+    --btn-color-primary: #fff;
+    --btn-color-inactive: #f0f0f0;
+    --btn-color-border: #d0d0d0;
+    --icon-color-primary: #000;
+    --icon-color-secondary: #7c7c7c;
+    --border-color-primary: #acacac56;
+    --gaia-button-bg: #f0f0f0;
+    --text-color-primary: #000;
+    --table-border-color: #cccccc;
+    --font-sohne: "Sohne";
+    --font-inter: "Inter";
+    --font-sf-mono: "SF Mono";
 }
 
 // Dark mode
 body.dark {
-  --bg-color-sidebar: #242424;
-  --bg-color-main: #1F1F1F;
-  --bg-color-input: #2F2F2F;
-  --btn-color-primary: #242424;
-  --bg-close-message-editor: #3a3a3a;
-  --bg-message-editor: #2F2F2F;
-  --btn-color-inactive: #2F2F2F;
-  --btn-color-border: #3F3F3F;
-  --icon-color-primary: #FFF;
-  --icon-color-secondary: #7c7c7c;
-  --border-color-primary: #979797;
-  --gaia-button-bg: #2F2F2F;
-  --text-color-primary: #FFF;
-  --table-border-color: #3F3F3F;
+    --bg-color-sidebar: var(--color-neutral-900);
+    --icon-color-gaia-sidebar: var(--color-white-36);
+    --divider: var(--color-white-07);
+    --bg-sidebar-action-button-default: transparent;
+    --icon-sidebar-action-button-default: var(--color-white-36);
+    --bg-sidebar-action-button-hover: var(--color-white-05);
+    --icon-sidebar-action-button-hover: var(--color-white-85);
+    --bg-sidebar-action-button-active: var(--color-white-16);
+    --icon-sidebar-action-button-active: var(--color-white-100);
+    --bg-clear-button: transparent;
+    --border-clear-button: var(--color-white-16);
+    --icon-clear-button: var(--color-white-36);
+    --bg-clear-button-hover: var(--color-red-500-20);
+    --border-clear-button-hover: var(--color-red-500);
+    --icon-clear-button-hover: var(--color-red-500);
+
+    --bg-gaia-widget-small: var(--color-white-16);
+    --border-gaia-widget-small: var(--color-neutral-950-05);
+    --bg-gaia-widget-full: var(--color-white-16);
+    --border-gaia-widget-full: var(--color-white-05);
+    --bg-gaia-icons: var(--color-white-16);
+    --divider-gaia-widget: var(--color-white-05);
+
+    --bg-color-main: #1f1f1f;
+    --bg-color-input: #2f2f2f;
+    --btn-color-primary: #242424;
+    --bg-close-message-editor: #3a3a3a;
+    --bg-message-editor: #2f2f2f;
+    --btn-color-inactive: #2f2f2f;
+    --btn-color-border: #3f3f3f;
+    --icon-color-primary: #fff;
+    --icon-color-secondary: #7c7c7c;
+    --border-color-primary: #979797;
+    --gaia-button-bg: #2f2f2f;
+    --text-color-primary: #fff;
+    --table-border-color: #3f3f3f;
 }
