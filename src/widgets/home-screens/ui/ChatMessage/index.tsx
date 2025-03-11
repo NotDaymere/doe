@@ -15,6 +15,7 @@ import { useChatStore } from "src/shared/providers";
 // Shared components
 import { Editor } from "src/shared/components/Editor";
 import { useApp } from "src/components/app";
+import {FileListForDisplay} from "../../../../shared/components/FileList/FileListForDisplay";
 
 // Icons
 import CrossIcon from "src/shared/icons/Cross.icon";
@@ -49,6 +50,7 @@ import { mockMessageFrameData } from "./assets/MessageFrame/mockMessageFrameData
 import ChartRenderer from "./assets/ChatRenderer/ChatRenderer";
 import MessageChart from "./assets/MessageChart/MessageChart";
 import { mockChartMessageData } from "./assets/MessageChart/mockChartMessageData";
+import { usePanel } from "../../lib";
 
 interface Props {
     data: IMessage;
@@ -104,7 +106,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{ top: number; left: number } | null>(null);
 
     const { setSelectedText, setIsShowReferencePanel } = useChatContext();
-
+    const {setFiles} = usePanel();
     const [isPaused, setIsPaused] = React.useState(true);
     const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
 
@@ -321,7 +323,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         classNameEditor={css.edit_editor_editor}
                         placeholder="Edit message"
                     />
-
                     <div className={css.edit_controls}>
                         <button
                             className={css.edit_controls_cancelBtn}
@@ -356,21 +357,43 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         return (
             <div className={css.input_container}>
                 <div className={`${isCurrentBranchOpen ? css.input_open_branch : css.input} `}>
-
-                    {!isCurrentBranchOpen &&
-                        <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
+                    <div className={css.user_message_container}>
+                        <div className={css.user_message_and_edit_button}>
+                            {!isCurrentBranchOpen &&
+                                <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
                             <span className={css.svg_wrapper}>
                                 <PenIcon />
                                 <span className={css.tooltip}>Edit</span>
                             </span>
-                        </button>
-                    }
-                    <div
-                        className={`${isCurrentBranchOpen ? css.input_message_branch : css.input_message} `}
-                        dangerouslySetInnerHTML={{
-                            __html: updatedContent,
-                        }}
-                    ></div>
+                                </button>
+                            }
+
+                            <div
+                                className={`${isCurrentBranchOpen ? css.input_message_branch : css.input_message} `}
+                                dangerouslySetInnerHTML={{
+                                    __html: updatedContent,
+                                }}
+                            ></div>
+                        </div>
+
+
+                        <div
+                            className={css.file_container}
+                            style={{
+                                height: data.files && data.files.length > 0 ? "auto" : "0px",
+                                overflow: "hidden",
+                                transition: "height 0.3s ease",
+                            }}
+                        >
+                            {data.files && data.files.length > 0 && (
+                                <FileListForDisplay
+                                    className={css.panel_files}
+                                    files={data.files}
+                                    onChange={setFiles}
+                                />
+                            )}
+                        </div>
+                    </div>
                     <ReferenceButton
                         isVisible={referenceButtonVisible}
                         position={referenceButtonPosition}
@@ -379,7 +402,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     />
                 </div>
                 {!isCurrentBranchOpen &&
-                    <MessageNodeVersionSelector message={data}/>
+                    <MessageNodeVersionSelector message={data} />
                 }
             </div>
         );

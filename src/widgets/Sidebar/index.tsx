@@ -12,12 +12,12 @@ import { useEditorContext } from "src/shared/components/Editor";
 import { useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "./ui";
 import css from "./Sidebar.module.less";
-import {LinkInput} from "../../components/tiptap-editor/assets/LinkInput";
 
 export const Sidebar: React.FC = () => {
     const { editor } = useChatStore();
     const editorState = useEditorContext(editor);
     const { playground } = useChatStore();
+    const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
     const pointerDown = (event: React.PointerEvent) => {
         event.preventDefault();
     };
@@ -102,6 +102,7 @@ export const Sidebar: React.FC = () => {
                     <button 
                         className={css.sidebar_controls_btn}
                         onPointerDown={pointerDown}
+                        onClick={() => setIsHyperlinkInputOpen(!isHyperlinkInputOpen)}
                     >
                         <LinkIcon />
                     </button>

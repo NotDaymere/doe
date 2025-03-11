@@ -9,7 +9,7 @@ import ReplyIcon from "src/shared/icons/Reply.icon";
 import ScreenShareIcon from "src/shared/icons/ScreenShare.icon";
 import { useChatStore } from "src/shared/providers";
 import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
-import { FileList } from "src/shared/components/FileList";
+import { FileListForUpload } from "src/shared/components/FileList/FileListForUpload";
 import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
@@ -23,6 +23,7 @@ import HandCursorIcon from "../../../../shared/icons/HandCursor.icon";
 import BranchIcon from "../../../../shared/icons/Branch.icon";
 import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgress.icon";
 import { IMessage } from "src/shared/types/Message";
+import { HyperlinkInput } from "./assets/HyperlinkInput/HyperlinkInput";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
@@ -46,6 +47,48 @@ export const ChatPanel: React.FC = () => {
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore();
     const [loadingFile, setLoadingFile] = React.useState<string | undefined>(undefined);
 
+    const { isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
+    const [hyperlinkPosition, setHyperlinkPosition] = React.useState<{ top: number; left: number } | null>(null);
+
+
+    React.useEffect(() => {
+        const handleSelectionChange = () => {
+            const selection = window.getSelection();
+            const text = selection ? selection.toString().trim() : "";
+
+            if (selection && text && selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const rects = range.getClientRects();
+                if (rects.length === 0) {
+                    setHyperlinkPosition(null);
+                    return;
+                }
+
+                const lastRect = rects[rects.length - 1];
+                const selectionTop = lastRect.top + window.scrollY;
+                const selectionLeft = lastRect.left + window.scrollX;
+
+                const offsetY = -40;
+                const offsetX = 0;
+
+                setHyperlinkPosition({
+                    top: selectionTop + offsetY,
+                    left: selectionLeft + offsetX,
+                });
+            } else {
+                setHyperlinkPosition(null);
+            }
+        };
+
+        document.addEventListener("mouseup", handleSelectionChange);
+        document.addEventListener("selectionchange", handleSelectionChange);
+
+        return () => {
+            document.removeEventListener("mouseup", handleSelectionChange);
+            document.removeEventListener("selectionchange", handleSelectionChange);
+        };
+    }, []);
+
     const {
         drag,
         dragTarget,
@@ -62,7 +105,11 @@ export const ChatPanel: React.FC = () => {
     });
 
     const prompt = usePrompt();
-    const { selectedText, isShowReferencePanel, setIsShowReferencePanel } = useChatContext();
+    const {
+        selectedText,
+        isShowReferencePanel,
+        setIsShowReferencePanel
+    } = useChatContext();
 
     const placeholder = React.useMemo(() => {
         if (isCreateBranchChatMode) {
@@ -149,6 +196,9 @@ export const ChatPanel: React.FC = () => {
              onDragLeave={handleDragCancel}
         >
             {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
+            {isHyperlinkInputOpen &&
+                <HyperlinkInput inputPosition={ hyperlinkPosition } />
+            }
             <div
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
@@ -181,7 +231,7 @@ export const ChatPanel: React.FC = () => {
                 )}
                 {files.length > 0 && (
                     <div className={css.panel_files_mask}>
-                        <FileList
+                        <FileListForUpload
                             className={css.panel_files}
                             files={files}
                             onChange={setFiles}
