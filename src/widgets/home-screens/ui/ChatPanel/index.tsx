@@ -23,6 +23,7 @@ import HandCursorIcon from "../../../../shared/icons/HandCursor.icon";
 import BranchIcon from "../../../../shared/icons/Branch.icon";
 import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgress.icon";
 import { IMessage } from "src/shared/types/Message";
+import { Close } from "src/shared/icons/Close";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
@@ -38,7 +39,7 @@ export const ChatPanel: React.FC = () => {
         doMessageReply,
         isReplyLoading,
         getLastCurrentVersionMessageNode,
-        addMessageNode
+        addMessageNode,
     } = useChatStore();
 
     const [clearContent, setClearContent] = React.useState(false);
@@ -53,7 +54,7 @@ export const ChatPanel: React.FC = () => {
         handleDragOverTarget,
         handleDragStart,
         handleDragOver,
-        handleDragCancel
+        handleDragCancel,
     } = useDragFile({
         onUploadFiles(uploadFiles) {
             setFiles([...files, ...uploadFiles]);
@@ -73,9 +74,7 @@ export const ChatPanel: React.FC = () => {
         return "Ask Doe anything you’d like about the world...";
     }, [isCreateBranchChatMode, playgroundFullscreen]);
 
-
     const handleSend = async () => {
-
         const userMessage: IMessage = {
             id: Date.now(),
             isUser: true,
@@ -95,7 +94,6 @@ export const ChatPanel: React.FC = () => {
             };
             addDialogToCurrentBranch(branchDialog);
         } else {
-
             const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
             addMessageNode(lastNodeForUserMessage, userMessage);
             reset();
@@ -108,7 +106,12 @@ export const ChatPanel: React.FC = () => {
             };
 
             if (isCreateBranchChatMode) {
-                const newBranch = addSavedBranch(text, [userMessage], [branchDialog], userMessage.id);
+                const newBranch = addSavedBranch(
+                    text,
+                    [userMessage],
+                    [branchDialog],
+                    userMessage.id
+                );
                 setCurrentBranch(newBranch);
                 setIsCreateBranchChatMode(false);
             }
@@ -130,12 +133,21 @@ export const ChatPanel: React.FC = () => {
     };
 
     return (
-        <div className={playground.open ? (playgroundFullscreen ? css.panel_playground_fullscreen : css.panel_playground) : css.panel}
-             onDragStart={handleDragStart}
-             onDragOver={handleDragOver}
-             onDragLeave={handleDragCancel}
+        <div
+            className={
+                playground.open
+                    ? playgroundFullscreen
+                        ? css.panel_playground_fullscreen
+                        : css.panel_playground
+                    : css.panel
+            }
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragCancel}
         >
-            {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
+            {questionCodeMessage && (
+                <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />
+            )}
             <div
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
@@ -146,7 +158,12 @@ export const ChatPanel: React.FC = () => {
                     <div className={css.panel_prompt}>
                         <ReplyIcon className={css.panel_prompt_icon} />
                         <div className={css.reference_panel}>
-                            <button onClick={() => setIsShowReferencePanel(false)}><CloseIcon /></button>
+                            <button
+                                className={css.reference_panel_close_btn}
+                                onClick={() => setIsShowReferencePanel(false)}
+                            >
+                                <Close />
+                            </button>
                             <div className={css.referencePanelContent}>{selectedText}</div>
                         </div>
                     </div>
@@ -176,35 +193,40 @@ export const ChatPanel: React.FC = () => {
                         />
                     </div>
                 )}
-                {loadingFile && (() => {
-                    const [fileName, progressStr] = loadingFile.split("|||");
-                    const progress = Number(progressStr) || 0;
-                    return (
-                        <div className={css.panel_uploading_files} key={fileName}>
-                            <div className={css.uploading_file}>
-                                <div className={css.panel_uploading_files_icon}>
-                                    <UploadFilesProgressIcon />
-                                </div>
-                                <div className={css.panel_uploading_files_name_and_progressbar}>
-                                    <div className={css.panel_uploading_files_name_and_progress}>
-                                        <span>{fileName}</span>
-                                        <span>{progress}%</span>
+                {loadingFile &&
+                    (() => {
+                        const [fileName, progressStr] = loadingFile.split("|||");
+                        const progress = Number(progressStr) || 0;
+                        return (
+                            <div className={css.panel_uploading_files} key={fileName}>
+                                <div className={css.uploading_file}>
+                                    <div className={css.panel_uploading_files_icon}>
+                                        <UploadFilesProgressIcon />
                                     </div>
-                                    <div className={css.progressBar}>
+                                    <div className={css.panel_uploading_files_name_and_progressbar}>
                                         <div
-                                            className={css.progressFill}
-                                            style={{ width: `${progress}%` }}
-                                        ></div>
+                                            className={css.panel_uploading_files_name_and_progress}
+                                        >
+                                            <span>{fileName}</span>
+                                            <span>{progress}%</span>
+                                        </div>
+                                        <div className={css.progressBar}>
+                                            <div
+                                                className={css.progressFill}
+                                                style={{ width: `${progress}%` }}
+                                            ></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })()}
+                        );
+                    })()}
 
                 {drag && (
                     <div className={css.panel_drag}>
-                        <p className={css.panel_drag_text}>Upload files, folders, text content, or code here.</p>
+                        <p className={css.panel_drag_text}>
+                            Upload files, folders, text content, or code here.
+                        </p>
                         <div className={css.panel_drag_background}>
                             <div className={css.panel_drag_upload_files_wrapper}>
                                 <UploadFilesIcon width={14} height={20} />
@@ -251,7 +273,7 @@ export const ChatPanel: React.FC = () => {
                                     enter: css.fadeEnter,
                                     enterActive: css.fadeEnterActive,
                                     exit: css.fadeExit,
-                                    exitActive: css.fadeExitActive
+                                    exitActive: css.fadeExitActive,
                                 }}
                                 mountOnEnter
                                 unmountOnExit
@@ -269,7 +291,7 @@ export const ChatPanel: React.FC = () => {
                                     enter: css.fadeEnter,
                                     enterActive: css.fadeEnterActive,
                                     exit: css.fadeExit,
-                                    exitActive: css.fadeExitActive
+                                    exitActive: css.fadeExitActive,
                                 }}
                                 mountOnEnter
                                 unmountOnExit
@@ -283,7 +305,10 @@ export const ChatPanel: React.FC = () => {
                                     </button>
                                     {!prompt.active ? (
                                         !questionCodeMessage ? (
-                                            <button className={css.panel_submitBtn} onClick={handleSend}>
+                                            <button
+                                                className={css.panel_submitBtn}
+                                                onClick={handleSend}
+                                            >
                                                 Send <ArrowUpIcon />
                                             </button>
                                         ) : (

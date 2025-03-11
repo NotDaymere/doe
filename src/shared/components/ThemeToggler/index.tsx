@@ -3,36 +3,36 @@ import MoonIcon from "src/shared/icons/Moon.icon";
 import clsx from "clsx";
 import LightThemeIcon from "src/shared/icons/LightTheme.icon";
 import classes from "./ThemeToggler.module.less";
+import { useTheme } from "src/shared/hooks/useTheme";
 
 const ThemeToggleSwitch = ({ className }: { className?: string }) => {
-    const [isDark, setIsDark] = useState(false);
+    const { toggleTheme, theme } = useTheme();
     const [isHover, setIsHover] = useState(false);
     const [isTransition, setIsTransition] = useState(false);
-    const toggleTheme = () => {
-        document.body.classList.replace(isDark ? "dark" : "light", isDark ? "light" : "dark");
+    const handleTheme = () => {
+        toggleTheme();
         setIsTransition(true);
-        setIsDark(!isDark);
         setTimeout(() => setIsTransition(false), 500);
     };
     return (
         <div
             className={clsx(
                 classes.themeToggle,
-                isDark ? classes.dark : classes.light,
+                theme === "dark" ? classes.dark : classes.light,
                 isHover || isTransition ? classes.effect : "",
                 className
             )}
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
-            onClick={toggleTheme}
+            onClick={handleTheme}
         >
             <div
                 className={clsx(
                     classes.icon,
                     classes.sunIcon,
-                    isDark ? classes.dark : classes.light,
+                    theme === "dark" ? classes.dark : classes.light,
                     isHover || isTransition ? classes.effect : "",
-                    !isDark ? classes.active : ""
+                    theme === "light" ? classes.active : ""
                 )}
             >
                 <LightThemeIcon />
@@ -41,9 +41,9 @@ const ThemeToggleSwitch = ({ className }: { className?: string }) => {
                 className={clsx(
                     classes.icon,
                     classes.moonIcon,
-                    isDark ? classes.dark : classes.light,
+                    theme === "dark" ? classes.dark : classes.light,
                     isHover || isTransition ? classes.effect : "",
-                    isDark ? classes.active : ""
+                    theme === "dark" ? classes.active : ""
                 )}
             >
                 <MoonIcon />
@@ -51,21 +51,21 @@ const ThemeToggleSwitch = ({ className }: { className?: string }) => {
             <div
                 className={clsx(
                     classes.glowBlock,
-                    isDark ? classes.dark : classes.light,
+                    theme === "dark" ? classes.dark : classes.light,
                     isHover || isTransition ? classes.effect : ""
                 )}
             />
             <div
                 className={clsx(
                     classes.slider,
-                    isDark ? classes.dark : classes.light,
+                    theme === "dark" ? classes.dark : classes.light,
                     isHover || isTransition ? classes.effect : ""
                 )}
             />
             <div
                 className={clsx(
                     classes.border,
-                    isDark ? classes.dark : classes.light,
+                    theme === "dark" ? classes.dark : classes.light,
                     isHover || isTransition ? classes.effect : ""
                 )}
             />

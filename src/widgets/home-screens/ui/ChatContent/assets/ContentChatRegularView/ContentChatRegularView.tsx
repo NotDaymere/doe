@@ -4,8 +4,7 @@ import AllBranches from "../AllBranches/AllBranches";
 import { ChatMessageDate } from "../ChatMessageData/ChatMessageDate";
 import ChatBranchSection from "../ChatBranchSection/ChatBranchSection";
 import { ChatMessage } from "../../../ChatMessage";
-import css from "./ContentChatRegularView.module.less"
-
+import css from "./ContentChatRegularView.module.less";
 
 interface ChatRegularViewProps {
     playgroundFullscreen: boolean;
@@ -24,12 +23,12 @@ interface ChatRegularViewProps {
 }
 
 export const ChatRegularView: React.FC<ChatRegularViewProps> = ({
-                                                                    playgroundFullscreen,
-                                                                    messageQueue,
-                                                                    editor,
-                                                                    editMsgMode,
-                                                                    setEditMsgMode,
-                                                                }) => (
+    playgroundFullscreen,
+    messageQueue,
+    editor,
+    editMsgMode,
+    setEditMsgMode,
+}) => (
     <>
         {!playgroundFullscreen && (
             <div className={css.content_top_actions_container}>

@@ -18,7 +18,7 @@ import { TagsIcon } from "src/shared/icons/TagsIcon";
 import { TranslationsIcon } from "src/shared/icons/TranslationsIcon";
 import { RecordingIcon } from "src/shared/icons/RecordingIcon";
 import { SharedIcon } from "src/shared/icons/SharedIcon";
-import ThemeToggleSwitch from "src/shared/components/ThemeToggler/ThemeToggler";
+import ThemeToggleSwitch from "src/shared/components/ThemeToggler";
 
 export const Sidebar: React.FC = () => {
     const { editor } = useChatStore();

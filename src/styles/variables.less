@@ -1,7 +1,6 @@
-// Default colors (initially set to light)
+// SIDEBAR
 :root {
     --bg-color-sidebar: var(--color-white-100);
-    --icon-color-gaia-sidebar: var(--color-neutral-200);
     --divider: var(--color-neutral-400-20);
     --bg-sidebar-action-button-default: transparent;
     --icon-sidebar-action-button-default: var(--color-neutral-400);
@@ -9,21 +8,79 @@
     --icon-sidebar-action-button-hover: var(--color-neutral-600);
     --bg-sidebar-action-button-active: var(--color-neutral-100);
     --icon-sidebar-action-button-active: var(--color-neutral-950);
-
+}
+body.dark {
+    --bg-color-sidebar: var(--color-neutral-900);
+    --divider: var(--color-white-07);
+    --bg-sidebar-action-button-default: transparent;
+    --icon-sidebar-action-button-default: var(--color-white-36);
+    --bg-sidebar-action-button-hover: var(--color-white-05);
+    --icon-sidebar-action-button-hover: var(--color-white-85);
+    --bg-sidebar-action-button-active: var(--color-white-16);
+    --icon-sidebar-action-button-active: var(--color-white-100);
+}
+// CLEAR CHAT
+:root {
     --bg-clear-button: transparent;
     --border-clear-button: var(--color-neutral-150);
     --icon-clear-button: var(--color-neutral-150);
     --bg-clear-button-hover: var(--color-red-500-20);
     --border-clear-button-hover: var(--color-red-500);
     --icon-clear-button-hover: var(--color-red-500);
-
+}
+body.dark {
+    --bg-clear-button: transparent;
+    --border-clear-button: var(--color-white-16);
+    --icon-clear-button: var(--color-white-36);
+    --bg-clear-button-hover: var(--color-red-500-20);
+    --border-clear-button-hover: var(--color-red-500);
+    --icon-clear-button-hover: var(--color-red-500);
+}
+// GAIA WIDGET
+:root {
+    --icon-color-gaia-sidebar: var(--color-neutral-200);
     --bg-gaia-widget-small: var(--color-neutral-950-20);
     --border-gaia-widget-small: var(--color-neutral-950-05);
     --bg-gaia-widget-full: var(--color-neutral-950-35);
     --border-gaia-widget-full: var(--color-neutral-950-05);
     --bg-gaia-icons: var(--color-white-80);
     --divider-gaia-widget: var(--color-black-05);
-
+}
+body.dark {
+    --icon-color-gaia-sidebar: var(--color-white-36);
+    --bg-gaia-widget-small: var(--color-white-16);
+    --border-gaia-widget-small: var(--color-neutral-950-05);
+    --bg-gaia-widget-full: var(--color-white-16);
+    --border-gaia-widget-full: var(--color-white-05);
+    --bg-gaia-icons: var(--color-white-16);
+    --divider-gaia-widget: var(--color-white-05);
+}
+// REFERENCES POPUP
+:root {
+    --bg-references: var(--color-white-80);
+    --border-references: var(--color-neutral-100);
+    --text-references: var(--color-neutral-950);
+    --bg-icon-references: var(--color-neutral-100);
+    --fill-icon-references: var(--color-neutral-400);
+    --bg-close-btn-references: var(--color-neutral-100);
+    --border-close-btn-references: var(--color-neutral-150);
+    --fill-icon-close-btn-references: var(--color-neutral-150);
+    --bg-references-btn: var(--color-white-100);
+    --bg-references-btn-hover: var(--color-white-100);
+}
+body.dark {
+    --bg-references: var(--color-white-16);
+    --border-references: var(--color-white-16);
+    --text-references: var(--color-white-100);
+    --bg-icon-references: var(--color-white-36);
+    --fill-icon-references: var(--color-white-85);
+    --bg-close-btn-references: var(--color-white-05);
+    --border-close-btn-references: var(--color-white-11);
+    --fill-icon-close-btn-references: var(--color-neutral-400);
+    --bg-references-btn: var(--color-white-100);
+    --bg-references-btn-hover: var(--color-white-85);
+}
+:root {
     --bg-color-main: #ffffff;
     --bg-color-input: #f6f6f6;
     --bg-message-editor: #efefef;
@@ -44,29 +101,6 @@
 
 // Dark mode
 body.dark {
-    --bg-color-sidebar: var(--color-neutral-900);
-    --icon-color-gaia-sidebar: var(--color-white-36);
-    --divider: var(--color-white-07);
-    --bg-sidebar-action-button-default: transparent;
-    --icon-sidebar-action-button-default: var(--color-white-36);
-    --bg-sidebar-action-button-hover: var(--color-white-05);
-    --icon-sidebar-action-button-hover: var(--color-white-85);
-    --bg-sidebar-action-button-active: var(--color-white-16);
-    --icon-sidebar-action-button-active: var(--color-white-100);
-    --bg-clear-button: transparent;
-    --border-clear-button: var(--color-white-16);
-    --icon-clear-button: var(--color-white-36);
-    --bg-clear-button-hover: var(--color-red-500-20);
-    --border-clear-button-hover: var(--color-red-500);
-    --icon-clear-button-hover: var(--color-red-500);
-
-    --bg-gaia-widget-small: var(--color-white-16);
-    --border-gaia-widget-small: var(--color-neutral-950-05);
-    --bg-gaia-widget-full: var(--color-white-16);
-    --border-gaia-widget-full: var(--color-white-05);
-    --bg-gaia-icons: var(--color-white-16);
-    --divider-gaia-widget: var(--color-white-05);
-
     --bg-color-main: #1f1f1f;
     --bg-color-input: #2f2f2f;
     --btn-color-primary: #242424;
