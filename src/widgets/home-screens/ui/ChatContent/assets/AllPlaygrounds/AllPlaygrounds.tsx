@@ -23,8 +23,7 @@ export default function AllPlaygrounds() {
                     onClick={changeActiveAllPlaygrounds}
             >
                 <div className={'all-playgrounds-icon-container'}>
-                    {activeAllPlaygrounds && <AllPlaygroundsIcon />}
-                    {!activeAllPlaygrounds && <DoePlaygroundStars />}
+                     <DoePlaygroundStars />
                 </div>
             </button>
             {activeAllPlaygrounds && <OpenAllPlaygrounds changeActiveAllPlaygrounds = {changeActiveAllPlaygrounds} activeAllPlaygrounds ={activeAllPlaygrounds} />}
