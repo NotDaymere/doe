@@ -162,7 +162,9 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     }, [getSavedPlayground(id)]);
 
     useEffect(() => {
-        if (!editor ) return;
+        if (!editor) return;
+
+        const selection = editor.state.selection;
 
         editor.commands.setContent(playgroundState?.text || `<p>
         This is what your table looks like when it's in Doe Playground! 
@@ -170,9 +172,11 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         Typically, a Playground table will not include both text blocks and graphs 
         as it does here, but it is still possible! 
         The graph interaction with highlighting still applies here!
-      </p>`);
+      </p>`, false);
 
+        editor.commands.setTextSelection(selection);
     }, [playgroundState, editor]);
+
 
     useEffect(() => {
         if (id !== null) {
