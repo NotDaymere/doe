@@ -1,3 +1,11 @@
+.setFontSohneBuch(
+  @fontSize: 16px,
+  @leading: 1.25,
+  @letterSpacing: normal
+) {
+  font: 500 @fontSize/@leading var(--font-sohne);
+  letter-spacing: @letterSpacing;
+}
 .panel {
     padding: 30px 0;
     padding-left: 10px;
@@ -6,6 +14,7 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+  .setFontSohneBuch(16px, 1.4, normal);
 }
 .panel_playground {
     padding: 30px 0;
@@ -36,9 +45,13 @@
             opacity: 0.1;
         }
         .panel_drag::after,
-        .panel_drag::before {
+        .panel_drag::before,
+        .panel_drag_upload_files_wrapper,
+        .panel_drag_background{
             opacity: 1;
         }
+
+
     }
 }
 
@@ -78,16 +91,17 @@
     left: 0;
     bottom: 100%;
     width: 100%;
+    padding-bottom: 5px;
+    z-index: 5;
 }
 
 .panel_files_mask {
-    mask-image: linear-gradient(to right, transparent, black 15%, black 75%, transparent);
     position: absolute;
-    top: -75px;
+    top: -80px;
     left: 0;
     width: 100%;
+    z-index: 5;
 }
-
 
 // Drag
 .panel_drag {
@@ -97,7 +111,7 @@
     width: 100%;
     height: 100%;
     border-radius: 16px;
-    padding: 0 16px;
+    padding: 0 8px;
 
     display: flex;
     align-items: center;
@@ -137,7 +151,7 @@
         background: #FFF;
         z-index: 12;
         position: absolute;
-        top: 1;
+        top: 1px;
         left: 1px;
         border-radius: 16px;
     }
@@ -153,11 +167,12 @@
 }
 .panel_drag_text {
     .setFontSohneBuch(16px, 1.1, normal);
-    color: #355302;
+    opacity: 1;
     transition: opacity 300ms ease;
     position: relative;
-    color: rgba(53, 83, 2, .2);
-    z-index: 15;
+    color: #355302;
+    z-index: 20;
+    padding-left: 10px;
 }
 .panel_drag_background {
     width: 100%;
@@ -166,6 +181,7 @@
     top: 0;
     left: 0;
     border-radius: 16px;
+    opacity: 0;
     transition: opacity 300ms ease;
     z-index: 14;
 
@@ -179,7 +195,7 @@
         top: 0;
         left: 0;
         border-radius: 16px;
-        transform: translate(100%, 100%);
+        transform: translate(115%, 100%);
         margin: auto;
         align-self: center;
         filter: blur(16px);
@@ -273,7 +289,16 @@
     align-items: flex-end;
     gap: 8px;
 }
-
+.panel_branchIcon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #B5B5B5;
+  width: fit-content;
+  margin-left: -6px;
+  height: 36px;
+  box-sizing: border-box;
+}
 .panel_editor {
     flex-grow: 1;
 }
@@ -320,7 +345,6 @@
     padding: 10px 22px;
     border-radius: 12px;
     background: #1f1f1f;
-
     display: flex;
     align-items: center;
     gap: 2px;
@@ -376,3 +400,167 @@
         }
     }
 }
+
+.panel_loadingBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  border-radius: 50px;
+  border: 1px solid #dddddd;
+  height: 36px;
+  width: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  color: #5B5B5B;
+  transition:
+          background 0.3s ease,
+          color 0.3s ease,
+          border 0.3s ease;
+
+  &:hover {
+    color: #FFFFFF;
+    background-color: #5B5B5B;
+    border: none;
+  }
+}
+
+.fadeEnter {
+  opacity: 0;
+}
+.fadeEnterActive {
+  opacity: 1;
+  transition: opacity 0.2s linear;
+}
+.fadeExit {
+  opacity: 1;
+}
+.fadeExitActive {
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+
+.panel_drag_hand_cursor_img {
+  position: absolute;
+  right: -9px;
+  top: 31%;
+  z-index: 20;
+}
+
+.panel_drag_upload_files_wrapper {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  min-width: 36px;
+  border-radius: 35%;
+  background: white;
+  left: 50%;
+  top: 50%;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 300ms ease;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+.panel_uploading_files {
+  overflow: hidden;
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  padding: 0 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background-color: #f3fae9;
+  z-index: 100;
+  border: 1px dashed #8BCF16;
+  .setFontSohneBuch(16px, 1.1, normal);
+  color: #355302;
+}
+
+.panel_uploading_files_icon {
+  width: 36px;
+  height: 36px;
+  background-color: #FFFFFF;
+  box-shadow: 0 3px 12px 0 #1F1F1F0D;
+  border-radius: 15px;
+  min-height: 36px;
+  min-width: 36px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 300ms ease;
+  padding-left: 5px;
+}
+
+.progressBar {
+  position: absolute;
+  bottom: 30%;
+  width: 90%;
+  height: 2px;
+  background-color: rgba(139, 207, 22, 0.34);
+  overflow: hidden;
+  border-radius: 2px;
+  margin-top: 2px;
+  z-index: 1000;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: #8BCF16;
+  animation: fillBar 5s linear forwards;
+  z-index: 1005;
+}
+
+@keyframes fillBar {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.uploading_file {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.panel_uploading_files_name_and_progressbar {
+  display: flex;
+  flex-direction: column;
+  padding-left: 15px;
+}
+
+.panel_uploading_files_name_and_progress {
+  position: absolute;
+  width: 90%;
+  bottom: 45%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.uploaded_file_name {
+  font-size: 12px;
+  position: absolute;
+  left: 80%;
+}
+
+
+
+
+

@@ -10,6 +10,7 @@ import { useEditorContext } from "src/shared/components/Editor";
 import { useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "./ui";
 import css from "./Sidebar.module.less";
+import { LinkInput } from "../../components/tiptap-editor/assets/LinkInput";
 import { CorporaIcon } from "src/shared/icons/CorporaIcon";
 import { ChatsIcon } from "src/shared/icons/ChatsIcon";
 import { StarIcon } from "src/shared/icons/StarIcon";
@@ -26,10 +27,10 @@ export const Sidebar: React.FC = () => {
     const pointerDown = (event: React.PointerEvent) => {
         event.preventDefault();
     };
+
     return (
         <aside className={playground.open ? css.sidebar_playground : css.sidebar}>
             <SidebarGaia />
-
             <div className={css.sidebar_profile}>
                 <img className={css.sidebar_profile_img} src="/temp/profile.jpg" alt="" />
             </div>

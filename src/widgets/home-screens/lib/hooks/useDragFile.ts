@@ -1,7 +1,11 @@
 import React from "react";
 
+export interface FileWithId extends File {
+    id: string;
+}
+
 interface Props {
-    onUploadFiles?: (files: File[]) => void;
+    onUploadFiles?: (files: FileWithId[]) => void;
 }
 
 export function useDragFile(props: Props = {}) {
@@ -28,6 +32,41 @@ export function useDragFile(props: Props = {}) {
             dragTarget: false,
         });
 
+    React.useEffect(() => {
+        const handleDragEnter = (event: DragEvent) => {
+            event.preventDefault();
+            setDrag(true);
+        };
+
+        const handleDragOver = (event: DragEvent) => {
+            event.preventDefault();
+            setDrag(true);
+        };
+
+        const handleDragLeave = (event: DragEvent) => {
+            if (!document.documentElement.contains(event.relatedTarget as Node)) {
+                setDrag(false);
+            }
+        };
+
+        const handleDrop = (event: DragEvent) => {
+            event.preventDefault();
+            setDrag(false);
+        };
+
+        document.addEventListener("dragenter", handleDragEnter);
+        document.addEventListener("dragover", handleDragOver);
+        document.addEventListener("dragleave", handleDragLeave);
+        document.addEventListener("drop", handleDrop);
+
+        return () => {
+            document.removeEventListener("dragenter", handleDragEnter);
+            document.removeEventListener("dragover", handleDragOver);
+            document.removeEventListener("dragleave", handleDragLeave);
+            document.removeEventListener("drop", handleDrop);
+        };
+    }, []);
+
     const handleDragOverTarget = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         setDragTarget(true);
@@ -40,8 +79,12 @@ export function useDragFile(props: Props = {}) {
 
     const handleDragDropTarget = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-        const files = Array.from(event.dataTransfer.files);
-        props.onUploadFiles?.(files);
+        const filesWithId = Array.from(event.dataTransfer.files).map(file => {
+            return Object.assign(file, {
+                id: `${Date.now()}-${Math.random()}`
+            }) as FileWithId;
+        });
+        props.onUploadFiles?.(filesWithId);
         stopDrag();
     };
 

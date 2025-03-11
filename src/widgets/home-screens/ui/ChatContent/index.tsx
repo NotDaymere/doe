@@ -1,6 +1,5 @@
 import React, { Dispatch } from "react";
-
-// TipTap extensions
+import { useEditor } from "@tiptap/react";
 import Bold from "@tiptap/extension-bold";
 import Document from "@tiptap/extension-document";
 import History from "@tiptap/extension-history";
@@ -9,12 +8,8 @@ import Link from "@tiptap/extension-link";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import Underline from "@tiptap/extension-underline";
-import { useEditor } from "@tiptap/react";
 
-// Shared providers
 import { useChatStore } from "src/shared/providers";
-
-// Custom TipTap extensions
 import {
     CustomCodeBlock,
     CustomInlineCode,
@@ -24,14 +19,12 @@ import {
     createHandleTab,
 } from "src/components/tiptap-editor/extensions/index";
 
-// Chat components
 import { useChatController } from "../..";
-import { ChatMessage } from "../ChatMessage";
-import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
-
-// Styles
-import css from "./ChatContent.module.less";
 import { TalkMode } from "../TalkMode";
+import css from "./ChatContent.module.less";
+import { ScrollDownButton } from "./assets/ScrollDownButton/ScrollDownButton";
+import { ChatRegularView } from "./assets/ContentChatRegularView/ContentChatRegularView";
+import { ChatBranchView } from "./assets/ChatBranchView/ChatBranchView";
 
 interface Props {
     editMsgMode: {
@@ -48,8 +41,19 @@ interface Props {
 
 export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) => {
     const { chatRef } = useChatController();
-    const { playground, playgroundFullscreen, getOpenSavedPlaygrounds } = useChatStore();
-    const { currentBranch, messages } = useChatStore();
+    const {
+        playground,
+        playgroundFullscreen,
+        currentBranch,
+        isCurrentBranchOpen,
+        currentBranchDialog,
+        setCurrentBranchDialog,
+        getOpenSavedPlaygrounds,
+    } = useChatStore();
+
+    const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
+    const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+
     const editor = useEditor({
         extensions: [
             Div,
@@ -74,6 +78,71 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         ],
     });
 
+    const messageNodeMap = useChatStore((state) => state.messageNodeMap);
+
+    const messageQueue = React.useMemo(() => {
+        return useChatStore.getState().getMessageQueueFromNode();
+    }, [messageNodeMap]);
+
+    React.useEffect(() => {
+        const currentChat = chatRef.current;
+        if (currentBranch?.dialogsMessages && currentChat) {
+            currentChat.scrollTo({
+                left: currentChat.scrollWidth,
+                behavior: "smooth",
+            });
+        }
+    }, [currentBranch?.dialogsMessages]);
+
+    React.useEffect(() => {
+        if (
+            isCurrentBranchOpen &&
+            currentBranchDialog !== null &&
+            dialogRefs.current[currentBranchDialog]
+        ) {
+            dialogRefs.current[currentBranchDialog]?.scrollIntoView({ behavior: "smooth" });
+            setCurrentBranchDialog(null);
+        }
+    }, [isCurrentBranchOpen, currentBranchDialog, setCurrentBranchDialog]);
+
+    const scrollToBottom = () => {
+        if (chatRef.current) {
+            chatRef.current.scrollTo({
+                top: chatRef.current.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+    };
+
+    const handleScroll = () => {
+        if (chatRef.current) {
+            const { scrollTop, clientHeight, scrollHeight } = chatRef.current;
+            setShowScrollDownBtn(scrollTop + clientHeight < scrollHeight - 50);
+        }
+    };
+
+    React.useEffect(() => {
+        const currentChat = chatRef.current;
+        if (currentChat) {
+            currentChat.addEventListener("scroll", handleScroll);
+        }
+        return () => {
+            if (currentChat) {
+                currentChat.removeEventListener("scroll", handleScroll);
+            }
+        };
+    }, [chatRef]);
+
+    React.useEffect(() => {
+        const currentChat = chatRef.current;
+        if (currentChat) {
+            const { scrollTop, clientHeight, scrollHeight } = currentChat;
+            if (scrollTop + clientHeight >= scrollHeight - 50) {
+                scrollToBottom();
+            }
+        }
+    }, [messageQueue]);
+
     return (
         <div
             className={
@@ -84,19 +153,26 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     : css.content
             }
         >
-            <div className={css.content_inner}>
-                {!playgroundFullscreen && <AllPlaygrounds />}
-                <div className={css.content_chat} ref={chatRef}>
-                    {messages.map((item) => (
-                        <ChatMessage
-                            data={item}
-                            key={item.id}
-                            editor={editor}
-                            editMsgMode={editMsgMode}
-                            setEditMsgMode={setEditMsgMode}
-                        />
-                    ))}
-                </div>
+            <div className={css.content_inner} ref={chatRef}>
+                {!(isCurrentBranchOpen && currentBranch && currentBranch.messages) ? (
+                    <ChatRegularView
+                        playgroundFullscreen={playgroundFullscreen}
+                        messageQueue={messageQueue}
+                        editor={editor}
+                        editMsgMode={editMsgMode}
+                        setEditMsgMode={setEditMsgMode}
+                    />
+                ) : (
+                    <ChatBranchView
+                        currentBranch={currentBranch}
+                        editor={editor}
+                        editMsgMode={editMsgMode}
+                        setEditMsgMode={setEditMsgMode}
+                        dialogRefs={dialogRefs}
+                    />
+                )}
+
+                {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
                 <TalkMode targetRef={chatRef} />
             </div>
         </div>
