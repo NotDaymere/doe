@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { Dispatch, useState } from "react";
 
 // External libraries
 import { Editor as EditorTiptap } from "@tiptap/react";
@@ -15,7 +15,6 @@ import { useChatStore } from "src/shared/providers";
 // Shared components
 import { Editor } from "src/shared/components/Editor";
 import { useApp } from "src/components/app";
-import ExampleTableMassage from "./assets/ExampleTabelMassage/ExampleTableMassage";
 
 // Icons
 import CrossIcon from "src/shared/icons/Cross.icon";
@@ -42,6 +41,8 @@ import { useChatContext } from "../../lib/hooks/ChatContext";
 import TableRandomValues from "./assets/TableRandomValues/TableRandomValues";
 import DownloadCSV from "./assets/DownloadCSV/DownloadCSV";
 import PythonTaskManager from "./assets/PythonTaskManager/PythonTaskManager";
+import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
+import { MessageNodeVersionSelector } from "./assets/MessageNodeVersionSelector/MessageNodeVersionSelector";
 
 interface Props {
     data: IMessage;
@@ -77,18 +78,29 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     // const [isEdit, setEdit] = React.useState(false);
     const [content, setContent] = React.useState(data.content);
     const [updatedContent, setUpdatedContent] = useState(data.content);
-    const { editor, setEditor } = useChatStore();
+
+    const {
+        editor,
+        setEditor ,
+        isCurrentBranchOpen,
+        addMessageNodeVersion,
+        addMessageNode,
+        getLastCurrentVersionMessageNode,
+        doMessageReply
+    } = useChatStore();
+
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
     const { setPlayground } = useApp().app;
 
-    const [versions, setVersions] = useState<string[]>([data.content]);
-    const [currentVersionIndex, setCurrentVersionIndex] = useState<number>(0);
 
     const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
     const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{ top: number; left: number } | null>(null);
 
     const { setSelectedText, setIsShowReferencePanel } = useChatContext();
+
+    const [isPaused, setIsPaused] = React.useState(true);
+    const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
 
     React.useEffect(() => {
         const lastMouseEvent = { current: null as MouseEvent | null };
@@ -105,8 +117,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
             if (
                 selection &&
-                selectionText &&
-                messageRef.current.contains(selection.anchorNode)
+                selectionText
             ) {
                 const range = selection.getRangeAt(0);
                 const rects = range.getClientRects();
@@ -160,7 +171,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         if (selection) selection.removeAllRanges();
     };
 
-
     React.useEffect(() => {
         if (messageRef.current) {
             const codeBlocks = messageRef.current.querySelectorAll("code");
@@ -169,8 +179,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             });
         }
     }, [content, messageRef]);
-    const [isPaused, setIsPaused] = React.useState(true);
-    const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
+
     //speech
     const synth = React.useRef(window.speechSynthesis);
     React.useEffect(() => {
@@ -213,6 +222,10 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             return;
         }
 
+        utterance.onend = () => {
+            setIsPaused(true);
+        };
+
         synth.current.speak(utterance);
         setIsPaused(false);
     };
@@ -228,9 +241,25 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         // setEditMsgMode(!editMsgMode);
     };
 
-    const handleSave = () => {
+    const handleEdit = async () => {
+        const newId = Date.now();
+
+        const newMessage: IMessage = {
+            ...data,
+            id: newId,
+            content: content,
+        };
+
+
+        addMessageNodeVersion(data.id, newMessage);
+
         setUpdatedContent(content);
         setEditMsgMode({ isEditMsgMode: false, msgId: null });
+
+        const reply = await doMessageReply();
+        const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
+        addMessageNode(lastNodeForUserMessage, reply);
+
     };
 
     const cancelEdit = (id: number) => {
@@ -300,7 +329,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
                         <button
                             className={css.edit_controls_saveBtn}
-                            onClick={handleSave}
+                            onClick={handleEdit}
                         >
                             <span className={css.svg_wrapper}>
                                 <span className={css.tooltip}>Send edit</span>
@@ -319,28 +348,43 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         }
 
         return (
-            <div className={css.input}>
-                <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
-                    <span className={css.svg_wrapper}>
-                        <PenIcon />
-                        <span className={css.tooltip}>Edit</span>
-                    </span>
-                </button>
-                <div
-                    className={css.input_message}
-                    dangerouslySetInnerHTML={{
-                        __html: updatedContent,
-                    }}
-                />
+            <div className={css.input_container}>
+                <div className={`${isCurrentBranchOpen ? css.input_open_branch : css.input} `}>
 
+                    {!isCurrentBranchOpen &&
+                        <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
+                            <span className={css.svg_wrapper}>
+                                <PenIcon />
+                                <span className={css.tooltip}>Edit</span>
+                            </span>
+                        </button>
+                    }
+                    <div
+                        className={`${isCurrentBranchOpen ? css.input_message_branch : css.input_message} `}
+                        dangerouslySetInnerHTML={{
+                            __html: updatedContent,
+                        }}
+                    ></div>
+                    <ReferenceButton
+                        isVisible={referenceButtonVisible}
+                        position={referenceButtonPosition}
+                        onClose={handleClose}
+                        onReferenceClick={handleReferenceClick}
+                    />
+                </div>
+                {!isCurrentBranchOpen &&
+                    <MessageNodeVersionSelector message={data}/>
+                }
             </div>
         );
     }
+
     if (data.isCode) {
         return (
             <div
-                className={`${css.chat_message} ${data.isUser ? css.user_message : css.bot_message}`}
+                className={`${isCurrentBranchOpen ? css.chat_message_branch : css.chat_message}  ${data.isUser ? css.user_message : css.bot_message}`}
             >
+
                 <ReferenceButton
                     isVisible={referenceButtonVisible}
                     position={referenceButtonPosition}
@@ -348,14 +392,19 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     onReferenceClick={handleReferenceClick}
                 />
 
-                {!data.isUser && (
-                    <div className={css.bot_logo_background}>
-                        <div className={css.bot_logo}>
-                            <Logo />
+                <div className={css.sub_bot_message_info_container}>
+                    {!data.isUser && (
+                        <div
+                            className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                            <div className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                                <MessageLogoIcon fillPath={"currentColor"}/>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                    <MessageNodeVersionSelector message={data}/>
+                </div>
                 <div className={css.message_content}>
+
                     <div ref={messageRef}>
                         <MathJax>
                             {parsedContent.map((part, index) => {
@@ -402,14 +451,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 <span className={css.button_steps_label}>See all steps</span>
                             </button>
                             <Flex gap={10}>
-                                <button
-                                    className={`${css.button_steps_grey} ${isPaused ? css.glowing_border : ""}`}
-                                    onClick={isPaused ? handlePlay : handleStop}
-                                >
-                                    <span className={css.tooltip}>Listen answer</span>
+                                    <button
+                                        className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
+                                        onClick={isPaused ? handlePlay : handleStop}
+                                    >
+                                        <span className={css.tooltip}>Listen answer</span>
+                                        <div className={css.button_container}>
+                                            <PlayIcon fill="currentColor" />
+                                        </div>
+                                    </button>
 
-                                    <PlayIcon />
-                                </button>
                                 <div className={css.download} ref={downloadRef}>
                                     <button
                                         onClick={toggleMenu}
@@ -440,6 +491,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                     <span className={css.tooltip}>Copy chat text</span>
                                     <CopyIcon />
                                 </button>
+
                             </Flex>
                         </Flex>
                     )}

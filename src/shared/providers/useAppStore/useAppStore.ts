@@ -6,6 +6,8 @@ export interface AppState {
     theme: "light" | "dark";
     gaiaActive: boolean;
     talkModeActive: boolean;
+    linkInputActive: boolean;
+    setLinkInputActive: (bool: boolean) => void;
     setGaiaActive: (bool: boolean) => void;
     setActiveEditor: (editor: Editor | null) => void;
     setTalkModeActive: (bool: boolean) => void;
@@ -18,9 +20,11 @@ export const useAppStore = create<AppState>()(
         gaiaActive: false,
         talkModeActive: false,
         theme: "light",
+        linkInputActive: false,
         setGaiaActive: (gaiaActive) => set(() => ({ gaiaActive })),
         setTalkModeActive: (talkModeActive) => set(() => ({talkModeActive})),
         setActiveEditor: (editor) => set(() => ({ editor })),
         setTheme: (theme) => set(() => ({ theme })),
+        setLinkInputActive: (bool: boolean) => set(() => ({ linkInputActive: bool })),
     })
 );
