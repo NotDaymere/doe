@@ -1,11 +1,11 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: scale(0.95); /* Начальный размер */
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
-    transform: scale(1); /* Конечный размер */
+    transform: scale(1);
   }
 }
 
@@ -22,8 +22,8 @@
 
 .open-all-playgrounds-container {
   position: absolute;
-  top: 180px;
-  left: 96px;
+  top: 225px;
+  left: 95px;
   width: 277px;
   height: 165px;
   padding: 10px;
@@ -37,6 +37,7 @@
   gap: 8px;
   animation: fadeIn 0.45s ease-out forwards;
   transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1000;
 }
 
 .open-all-playgrounds-container.close {
@@ -44,8 +45,8 @@
 }
 
 .open-all-playgrounds-container-without-playground {
-  top:110px;
-  left: 75px;
+  top: 175px;
+  left: 95px;
 }
 
 .open-all-playgrounds-header {
