@@ -11,13 +11,24 @@ export default function MultiplePlaygroundRenderer() {
     const {openHistory} = useVersionHistoryStore();
 
     useEffect(() => {
-      const doePlaygroundOpen = document.querySelector(".doe-playground-open") as HTMLElement | null;
-      if (doePlaygroundOpen) {
-        setTimeout(() => {
-          doePlaygroundOpen.style.display = "none";
-        }, 3000)
-      }
+        const doePlaygroundOpen = document.querySelector(".doe-playground-open") as HTMLElement | null;
+
+        if (doePlaygroundOpen) {
+            // Спочатку ховаємо
+            doePlaygroundOpen.classList.remove("show");
+
+            // Через 300 мс показуємо
+            setTimeout(() => {
+                doePlaygroundOpen.classList.add("show");
+
+                // Через 2 секунди після появи ховаємо
+                setTimeout(() => {
+                    doePlaygroundOpen.classList.remove("show");
+                }, 2000);
+            }, 300);
+        }
     }, []);
+
 
     return (
         <Flex vertical className={`multiple-playground-renderer-container ${openHistory && ' multiple-playground-renderer-container-left-radius'}`}>
@@ -62,7 +73,7 @@ export default function MultiplePlaygroundRenderer() {
                 })
             }
            </Flex>
-            <Flex className={'doe-playground-open'}>
+            <Flex className={'doe-playground-open doe-playground-open.show'}>
                 <DoePlaygroundStars /> Doe Playground
             </Flex>
         </Flex>

@@ -1,6 +1,6 @@
 import { Flex, Table, TableProps } from "antd";
 import React, { FC, useEffect, useRef, useState } from "react";
-import mockData from './mockData.json';
+import table from './Table';
 import './index.less';
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from '@tiptap/starter-kit';
@@ -50,6 +50,19 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   const { playground, getSavedPlayground, setPlayground, playgroundFullscreen, updateSavedPlaygrounds, getOpenSavedPlaygrounds } = useChatStore();
   const { playgroundAction } = usePlaygroundStore();
   const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
+    const [mockData, setMockData] = useState(() => {
+        const savedData = playgroundState?.data;
+        if (savedData instanceof Object) {
+            return (savedData);
+        } else {
+            const savedData = table();
+            if (playgroundState) {
+                playgroundState.data = savedData;
+                updateSavedPlaygrounds(playgroundState);
+            }
+            return (table());
+        }
+    });
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
   const [selectedCell, setSelectedCell] = useState<string | null>(null);
@@ -102,8 +115,79 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   });
   const divRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const { openHistory } = useVersionHistoryStore();
+  const { openHistory,  updateHistory } = useVersionHistoryStore();
   const [showButtons, setShowButtons] = useState(false);
+
+    useEffect(() => {
+        const handleSave = (event: KeyboardEvent) => {
+            if (event.ctrlKey && event.key.toLowerCase() === "s") {
+                event.preventDefault();
+
+                setPlaygroundState((prev) => {
+                    if (prev) {
+                        const updatedHistory = {
+                            id: Date.now(),
+                            name: null,
+                            time: new Date().toLocaleString(),
+                            user: "Current User",
+                            photo: "/temp/profile.jpg",
+                            playgroundId: prev.id,
+                            playground: prev,
+                        };
+
+                        updateHistory(updatedHistory);
+                        return { ...prev };
+                    }
+                    return prev;
+                });
+            }
+        };
+
+        window.addEventListener("keydown", handleSave);
+
+        return () => {
+            window.removeEventListener("keydown", handleSave);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (id !== null && playgroundState?.data) {
+            playgroundState.data = mockData;
+            updateSavedPlaygrounds(playgroundState);
+        }
+    }, [mockData, id]);
+
+    useEffect(() => {
+        setPlaygroundState(getSavedPlayground(id))
+    }, [getSavedPlayground(id)]);
+
+    useEffect(() => {
+        if (!editor) return;
+
+        const selection = editor.state.selection;
+
+        editor.commands.setContent(playgroundState?.text || `<p>
+        This is what your table looks like when it's in Doe Playground! 
+        Larger tables can be navigated, folded in to reveal text, etc.
+        Typically, a Playground table will not include both text blocks and graphs 
+        as it does here, but it is still possible! 
+        The graph interaction with highlighting still applies here!
+      </p>`, false);
+
+        editor.commands.setTextSelection(selection);
+    }, [playgroundState, editor]);
+
+
+    useEffect(() => {
+        if (id !== null) {
+            const savedData = playgroundState?.data;
+            if (savedData instanceof Object) {
+                setMockData(savedData);
+            } else {
+                setMockData(table());
+            }
+        }
+    }, [id]);
 
   useEffect(() => {
     setTimeout(() => setShowButtons(true), 50);
@@ -121,7 +205,12 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     };
 
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+        if(divRef.current)  {
+            divRef.current.classList.add("close")
+        }
+        window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   useEffect(() => {
@@ -162,7 +251,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
   const columns: TableProps<any>['columns'] = [
     ...rowHeaderColumn,
-    ...mockData.columns.map((col) => ({
+    ...mockData.columns.map((col: any) => ({
       ...col,
       onCell: (_: any, rowIndex?: number) => ({
         onClick: (event: React.MouseEvent<HTMLElement>) => {
@@ -189,7 +278,6 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
       })
     }))
   ];
-
   useEffect(() => {
     if (!editor || !playgroundState) return;
 
@@ -214,26 +302,25 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     }
   };
 
-  const handlePenClick = () => {
-    if (selectedText) {
-      setSelectedText(null);
-      setButtonPosition(null);
-      setIsPen(false);
-    } else {
-      setSelectedText(selectedText ? selectedText : "Pen");
-      setIsPen(true);
-      setButtonPosition({
-        bottom: 111,
-        right: 14,
-      });
-    }
-  };
+    const handlePenClick = (position: any) => {
+        if (isPen) {
+            setSelectedText(null);
+            setButtonPosition(null);
+            setIsPen(false);
+        } else {
+            setSelectedText(selectedText ? selectedText : "Pen");
+            setIsPen(true);
+            setButtonPosition(position);
+        }
+    };
 
-  const handleTipTapTextFormatMenuOnClick = () => {
+
+    const handleTipTapTextFormatMenuOnClick = () => {
     setSelectedText(null);
   };
 
   return (
+      <>
       <div className={`table-playground`}
            onMouseDown={(event) => {
              if (event.button === 1) {
@@ -241,6 +328,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
              }
            }}
            onMouseMove={() => {
+               if (playgroundAction) return
              playgroundState && setPlayground(playgroundState)
            }}
            ref={divRef}
@@ -249,7 +337,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         <div>
           <Flex className={"tabs-panel-playground"}>
             <p>{ playgroundState?.name }</p>
-            <HistoryButton />
+            <HistoryButton id={id} />
           </Flex>
 
           <section className="editor-section">
@@ -266,20 +354,6 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             </div>
           </section>
 
-
-          {selectedText && editor && (
-              <TipTapTextFormatMenu
-                  buttonPosition={{
-                    top: buttonPosition?.top,
-                    left: buttonPosition?.left,
-                    bottom: buttonPosition?.bottom,
-                    right: buttonPosition?.right,
-                  }}
-                  isPen={isPen}
-                  editor={editor}
-                  handleTipTapTextFormatMenuOnClick={handleTipTapTextFormatMenuOnClick}
-              />
-          )}
         </div>
         {
             playground.id == id &&
@@ -287,18 +361,28 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
               {
                 !playgroundAction
                   ? <>
-                    {(!playgroundFullscreen && !openHistory) && <CloudPlusButton type="table" />}
-                    {playgroundFullscreen && <FullscreenGeneralLogo />}
-                      { !openHistory && <div className={"action-buttons-right-part"}>
+                    <div className={"action-buttons-left-part"}>
+                        {(!playgroundFullscreen && !openHistory) && <CloudPlusButton type="table" />}
+                        {playgroundFullscreen && <FullscreenGeneralLogo />}
+                    </div>
+                      { !openHistory &&
+                      <div className={"action-buttons-right-part"}>
                         {playgroundFullscreen && <CloudPlusButton type="table" />}
                         <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
                         <ResizePlaygroundButton />
-                      </div> }
+                      </div>
+                      }
                   </>
                   : <>
-                      <PlaygroundAction playgroundAction = {playgroundAction} editor={editor} containerWidth={containerWidth} />
+                    {playgroundFullscreen && (
+                        <div className={"action-buttons-left-part"}>
+                            <FullscreenGeneralLogo />
+                        </div>
+                    )}
+                        <div className={"action-buttons-center-part"}>
+                            <PlaygroundAction playgroundAction = {playgroundAction} editor={editor} containerWidth={containerWidth} />
+                        </div>
                       {playgroundFullscreen && <>
-                        <FullscreenGeneralLogo />
                         {!openHistory && <div className={"action-buttons-right-part"}>
                            <CloudPlusButton type="table" />
                           <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
@@ -310,6 +394,20 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             </div>
         }
       </div>
+          {selectedText && editor && (
+              <TipTapTextFormatMenu
+                  buttonPosition={{
+                      top: buttonPosition?.top,
+                      left: buttonPosition?.left,
+                      bottom: buttonPosition?.bottom,
+                      right: buttonPosition?.right,
+                  }}
+                  isPen={isPen}
+                  editor={editor}
+                  handleTipTapTextFormatMenuOnClick={handleTipTapTextFormatMenuOnClick}
+              />
+          )}
+      </>
   );
 };
 

@@ -1,27 +1,29 @@
-.fade-enter {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-.fade-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 300ms ease, transform 300ms ease;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.fade-exit {
-  opacity: 1;
-  transform: translateY(0);
-}
-.fade-exit-active {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 300ms ease, transform 300ms ease;
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
 }
 
 .open-all-playgrounds-container {
   position: absolute;
-  top: 180px;
-  left: 96px;
+  top: 225px;
+  left: 95px;
   width: 277px;
   height: 165px;
   padding: 10px;
@@ -33,8 +35,18 @@
   justify-content: flex-start;
   align-items: stretch;
   gap: 8px;
-  transition: width 500ms;
   animation: fadeIn 0.45s ease-out forwards;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1000;
+}
+
+.open-all-playgrounds-container.close {
+  animation: fadeOut 0.45s ease-out forwards;
+}
+
+.open-all-playgrounds-container-without-playground {
+  top: 175px;
+  left: 95px;
 }
 
 .open-all-playgrounds-header {

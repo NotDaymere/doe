@@ -43,7 +43,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     const [buttonPosition, setButtonPosition] = useState<{ top?: number; left?: number; bottom?: number; right?: number } | null>(null);
     const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
     const { playgroundAction } = usePlaygroundStore();
-    const { openHistory } = useVersionHistoryStore();
+    const { openHistory, updateHistory } = useVersionHistoryStore();
     const divRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState(0);
 
@@ -62,6 +62,33 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
     const [showButtons, setShowButtons] = useState(false);
+
+    useEffect(() => {
+        const handleSave = (event: KeyboardEvent) => {
+            if (event.ctrlKey && event.key.toLowerCase() === "s") {
+                event.preventDefault();
+
+                if (playgroundState) {
+                    updateHistory({
+                        id: Date.now(),
+                        name: null,
+                        time: new Date().toLocaleString(),
+                        user: "Current User",
+                        photo: "/temp/profile.jpg",
+                        playgroundId: playgroundState.id,
+                        playground: playgroundState,
+                    });
+
+                    console.log("History updated:", playgroundState);
+                }
+            }
+        };
+
+        window.addEventListener("keydown", handleSave);
+        return () => {
+            window.removeEventListener("keydown", handleSave);
+        };
+    }, [playgroundState]);
 
     useEffect(() => {
         setTimeout(() => setShowButtons(true), 50);
@@ -133,15 +160,15 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         }
     };
 
-    const handlePenClick = () => {
-        if (selectedText) {
+    const handlePenClick = (position: any) => {
+        if (isPen) {
             setSelectedText(null);
             setButtonPosition(null);
             setIsPen(false);
         } else {
-            setSelectedText("Pen");
+            setSelectedText(selectedText ? selectedText : "Pen");
             setIsPen(true);
-            setButtonPosition({ bottom: 137, right: 45 });
+            setButtonPosition(position);
         }
     };
 
@@ -166,42 +193,69 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
     }, [editorInstance, playgroundState]);
 
+    useEffect(() => {
+        if (!editorInstance || !playgroundState?.text) return;
+
+        const model = editorInstance.getModel();
+        if (!model) return;
+
+        const position = editorInstance.getPosition();
+
+        if (model.getValue() !== playgroundState.text) {
+            editorInstance.pushUndoStop();
+            model.setValue(playgroundState.text);
+            editorInstance.pushUndoStop();
+        }
+
+        if (position) {
+            editorInstance.setPosition(position);
+            editorInstance.revealPosition(position);
+        }
+    }, [playgroundState, editorInstance]);
+
+
+    useEffect(() => {
+        setPlaygroundState(getSavedPlayground(id))
+    }, [getSavedPlayground(id)]);
+
     return (
-        <div className="table-playground"
-             onMouseDown={(event) => {
-                 if (event.button === 1) {
-                     handleCollapsePlayground();
-                 }
-             }}
-             onMouseMove={() => {
-                 playgroundState && setPlayground(playgroundState)
-             }}
-             ref={divRef}
-        >
-            <Flex className={"tabs-panel-playground"}>
-                <p>{ playgroundState?.name }</p>
-                <HistoryButton />
-            </Flex>
-            <section className="editor-section">
-                <Editor
-                    onMount={handleEditorMount}
-                    theme="myCustomTheme"
-                    language="python"
-                    height="100%"
-                    options={{
-                        tabSize: 2,
-                        insertSpaces: true,
-                        minimap: { enabled: false },
-                        lineNumbers: "on",
-                        wordWrap: "on",
-                        scrollBeyondLastLine: false,
-                        automaticLayout: true,
-                        overviewRulerLanes: 0,
-                        autoIndent: "none",
-                        detectIndentation: false,
-                    }}
-                    className="table-playground-editor"
-                    defaultValue={playgroundState?.text || `def delete_element(my_list, element):
+        <>
+            <div className="table-playground"
+                 onMouseDown={(event) => {
+                     if (event.button === 1) {
+                         handleCollapsePlayground();
+                     }
+                 }}
+                 onMouseMove={() => {
+                     if (playgroundAction) return
+                     playgroundState && setPlayground(playgroundState)
+                 }}
+                 ref={divRef}
+            >
+                <Flex className={"tabs-panel-playground"}>
+                    <p>{ playgroundState?.name }</p>
+                    <HistoryButton id={id} />
+                </Flex>
+                <section className="editor-section">
+                    <Editor
+                        onMount={handleEditorMount}
+                        theme="myCustomTheme"
+                        language="python"
+                        height="100%"
+                        options={{
+                            tabSize: 2,
+                            insertSpaces: true,
+                            minimap: { enabled: false },
+                            lineNumbers: "on",
+                            wordWrap: "on",
+                            scrollBeyondLastLine: false,
+                            automaticLayout: true,
+                            overviewRulerLanes: 0,
+                            autoIndent: "none",
+                            detectIndentation: false,
+                        }}
+                        className="table-playground-editor"
+                        defaultValue={playgroundState?.text || `def delete_element(my_list, element):
     """Removes the first occurrence of the element from the list."""
     try:
         my_list.remove(element)
@@ -230,36 +284,47 @@ element_to_delete = 3
 
 result = delete_element(my_list, element_to_delete)
 print(result)`.trim()}
-                />
-            </section>
-            {
-                playground.id == id &&
-                <div className={`action-buttons ${showButtons && 'visible'}`}>
-                    {
-                        !playgroundAction
-                            ? <>
-                                {(!playgroundFullscreen && !openHistory) && <CloudPlusButton type="code" />}
-                                {playgroundFullscreen && <FullscreenGeneralLogo />}
-                                { !openHistory && <div className={"action-buttons-right-part"}>
-                                    {playgroundFullscreen && <CloudPlusButton type="code" />}
-                                    <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-                                    <ResizePlaygroundButton />
-                                </div> }
-                            </>
-                            : <>
-                                <PlaygroundAction playgroundAction = {playgroundAction} editor={editorInstance} containerWidth={containerWidth} />
-                                {playgroundFullscreen && <>
-                                    <FullscreenGeneralLogo />
-                                    {!openHistory && <div className={"action-buttons-right-part"}>
-                                        <CloudPlusButton type="code" />
-                                        <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-                                        <ResizePlaygroundButton />
-                                    </div>}
-                                </>}
-                            </>
-                    }
-                </div>
-            }
+                    />
+                </section>
+                {
+                    playground.id == id &&
+                    <div className={`action-buttons ${showButtons && 'visible'}`}>
+                        {
+                            !playgroundAction
+                                ? <>
+                                    <div className={"action-buttons-left-part"}>
+                                        {(!playgroundFullscreen && !openHistory) && <CloudPlusButton type="code" />}
+                                        {playgroundFullscreen && <FullscreenGeneralLogo />}
+                                    </div>
+                                    {!openHistory &&
+                                        <div className={"action-buttons-right-part"}>
+                                            {playgroundFullscreen && <CloudPlusButton type="code" />}
+                                            <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+                                            <ResizePlaygroundButton />
+                                        </div>
+                                    }
+                                </>
+                                : <>
+                                    {playgroundFullscreen && (
+                                        <div className={"action-buttons-left-part"}>
+                                            <FullscreenGeneralLogo />
+                                        </div>
+                                    )}
+                                    <div className={"action-buttons-center-part"}>
+                                        <PlaygroundAction playgroundAction={playgroundAction} editor={editorInstance} containerWidth={containerWidth} />
+                                    </div>
+                                    {playgroundFullscreen && <>
+                                        {!openHistory && <div className={"action-buttons-right-part"}>
+                                            <CloudPlusButton type="code" />
+                                            <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+                                            <ResizePlaygroundButton />
+                                        </div>}
+                                    </>}
+                                </>
+                        }
+                    </div>
+                }
+            </div>
             {selectedText && editorInstance && (
                 isPen ? (<MonacoEditorMenu
                         buttonPosition={{
@@ -282,7 +347,7 @@ print(result)`.trim()}
                         />
                     )
             )}
-        </div>
+        </>
     );
 };
 

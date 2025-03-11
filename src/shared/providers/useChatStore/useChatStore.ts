@@ -4,6 +4,7 @@ import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
 import { IPlayground } from "src/shared/types/Playground";
 import { IQuestionCodeMessage } from "src/shared/types/QuestionCodeMessage";
+import { useVersionHistoryStore } from "../index";
 import { IBranchDialog } from "../../types/BranchDialog";
 import { IMessageNode } from "../../types/MessageNode";
 import { testTextAndCharts } from "../../../components/chat-message/mockData";
@@ -178,43 +179,51 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     setPlaygroundFullscreen: (playgroundFullscreen) => set(() => ({ playgroundFullscreen })),
     setQuestionCodeMessage: (questionCodeMessage) => set(() => ({ questionCodeMessage })),
 
-        setSavedPlaygrounds: (playground) => set((state) => {
-            const newId = state.savedPlaygrounds.length > 0 ?
-                String(Math.max(...state.savedPlaygrounds.map(p => Number(p.id) || 0)) + 1) : "1";
-            return { savedPlaygrounds: [...state.savedPlaygrounds, { ...playground, id: newId }] };
-        }),
+    setSavedPlaygrounds: (playground) => set((state) => {
+        const newId = state.savedPlaygrounds.length > 0 ?
+            String(Math.max(...state.savedPlaygrounds.map(p => Number(p.id) || 0)) + 1) : "1";
+        const newPlayground = { ...playground, id: newId };
 
-        updateSavedPlaygrounds: (playground) => set((state) => ({
-            savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
-        })),
+        useVersionHistoryStore.getState().updateHistory({
+            id: Date.now(),
+            name: null,
+            time: new Date().toLocaleString(),
+            user: "Current User",
+            photo: "/temp/profile.jpg",
+            playgroundId: newPlayground.id,
+            playground: newPlayground,
+        });
 
-        deleteSavedPlaygrounds: (id) => set((state) => ({
-            savedPlaygrounds: state.savedPlaygrounds.filter(p => p.id !== id),
-        })),
+        return { savedPlaygrounds: [...state.savedPlaygrounds, newPlayground] };
+    }),
 
-        getSavedPlayground: (id) => {
-            return get().savedPlaygrounds.find(p => p.id === id) || null;
-        },
+    updateSavedPlaygrounds: (playground) => set((state) => ({
+        savedPlaygrounds: state.savedPlaygrounds.map(p => p.id === playground.id ? playground : p),
+    })),
 
-        getOpenSavedPlaygrounds: () => {
-            return get().savedPlaygrounds.filter(p => p.open);
-        },
+    deleteSavedPlaygrounds: (id) => set((state) => ({
+        savedPlaygrounds: state.savedPlaygrounds.filter(p => p.id !== id),
+    })),
 
-        getOpenSavedPlaygroundsByType: (type: "code" | "table" | "source") => {
-            return get().savedPlaygrounds
-                .filter(p => p.open)
-                .filter(savedPlayground => savedPlayground.type === type);
-        },
+    getSavedPlayground: (id) => {
+        return get().savedPlaygrounds.find(p => p.id === id) || null;
+    },
 
-        getSavedPlaygroundLast: () => {
-            return get().savedPlaygrounds.at(-1) || null;
-        },
+    getOpenSavedPlaygrounds: () => {
+        return get().savedPlaygrounds.filter(p => p.open);
+    },
 
-        getSavedPlaygroundLastByType: (type) => {
-            return get().savedPlaygrounds
-                .filter(savedPlayground => savedPlayground.type === type)
-                .at(-1) || null;
-        },
+    getOpenSavedPlaygroundsByType: (type) => {
+        return get().savedPlaygrounds.filter(p => p.open && p.type === type);
+    },
+
+    getSavedPlaygroundLast: () => {
+        return get().savedPlaygrounds.at(-1) || null;
+    },
+
+    getSavedPlaygroundLastByType: (type) => {
+        return get().savedPlaygrounds.filter(p => p.type === type).at(-1) || null;
+    },
 
     isCreateBranchChatMode: false,
     currentBranch: null,

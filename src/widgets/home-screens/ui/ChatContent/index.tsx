@@ -48,6 +48,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         isCurrentBranchOpen,
         currentBranchDialog,
         setCurrentBranchDialog,
+        getOpenSavedPlaygrounds
     } = useChatStore();
 
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
@@ -145,7 +146,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     return (
         <div
             className={
-                playground.open
+                getOpenSavedPlaygrounds().length > 0
                     ? playgroundFullscreen
                         ? css.content_playground_fullscreen
                         : css.content_playground

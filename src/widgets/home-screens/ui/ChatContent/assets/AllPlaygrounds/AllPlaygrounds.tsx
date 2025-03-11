@@ -6,15 +6,24 @@ import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 
 export default function AllPlaygrounds() {
     const [activeAllPlaygrounds, setActiveAllPlaygrounds] = useState<boolean>(false);
-    const changeActiveAllPlaygrounds = () => setActiveAllPlaygrounds(!activeAllPlaygrounds)
+    const changeActiveAllPlaygrounds = () => {
+        if (!activeAllPlaygrounds) {
+            setActiveAllPlaygrounds(true);
+            return;
+        }
+        setTimeout(
+            () => setActiveAllPlaygrounds(!activeAllPlaygrounds),
+            450
+        )
+    }
+
     return (
         <div className={'position-fixed'}>
             <button className={'all-playgrounds-button'}
                     onClick={changeActiveAllPlaygrounds}
             >
                 <div className={'all-playgrounds-icon-container'}>
-                    {activeAllPlaygrounds && <AllPlaygroundsIcon />}
-                    {!activeAllPlaygrounds && <DoePlaygroundStars />}
+                     <DoePlaygroundStars />
                 </div>
             </button>
             {activeAllPlaygrounds && <OpenAllPlaygrounds changeActiveAllPlaygrounds = {changeActiveAllPlaygrounds} activeAllPlaygrounds ={activeAllPlaygrounds} />}

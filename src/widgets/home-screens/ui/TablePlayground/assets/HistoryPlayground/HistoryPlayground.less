@@ -2,10 +2,11 @@
 @delay-step: 0.1s;
 
 .history-playground-container {
+  overflow: visible;
   width: 100%;
   height: 100%;
   padding: 2px 2px 2px 0;
-  overflow: hidden;
+  //overflow: hidden;
   border-radius: 0 16px 16px 0;
   background: #F8F8F8;
   border-left: 1px solid #DDDDDD;
@@ -61,14 +62,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 8px 13px;
   gap: 16px;
   position: relative;
-  overflow-y: auto;
   scrollbar-width: none;
+  overflow-y: auto;
+  height: 100%;
 }
 .history-playground-version {
+  position: sticky;
+  top: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -76,12 +80,13 @@
   padding: 8px 13px;
   width: 100%;
   height: 45px;
+  min-height: 45px;
   border-radius: 12px;
   background: #FFFFFF99;
   border: 1px solid #FFFFFF;
   box-shadow: 0px 8px 20px 0px #0000000A;
   backdrop-filter: blur(60px);
-  z-index: 1001;
+  z-index: 1002;
 }
 .history-playground-version-left {
   display: flex;

@@ -25,13 +25,12 @@ function CloudActionsSectionCode() {
                 left: !playgroundFullscreen ? 0 : 'default',
             }}
         >
-            <div className={`text-columns-button justify-space-between ${arrowDownActionOnClick && "hover-zero"}`}>
+            <div className={`text-columns-button justify-space-between ${arrowDownActionOnClick && "hover-zero"}`}
+                 onClick={() => setPlaygroundAction({type: 'prompt'})}>
                 <p className={`text-columns-button-p ${arrowDownActionOnClick && "text-columns-button-p-repaint"}`}>
                     Add a <span className={"text-columns-button-span"}>Prompt</span>
                 </p>
-                <button className="button-plus"
-                        onClick={() => setPlaygroundAction({type: 'prompt'})}
-                >
+                <button className="button-plus">
                     <Plus className="plus-icon" />
                 </button>
             </div>
@@ -46,7 +45,8 @@ function CloudActionsSectionCode() {
                     <ArrowDownIconCode />
                 </button>
             </div>
-            <div className={`text-columns-button justify-space-between ${arrowDownActionOnClick && "button-highlighted"}`}>
+            <div className={`text-columns-button justify-space-between ${arrowDownActionOnClick && "button-highlighted"}`}
+                 onClick={handleArrowDownActionOnClick}>
                 <div className="text-columns-button justify-flex-start text-columns-border-top padding-zero hover-zero"
                 >
                     <Code />
@@ -54,15 +54,14 @@ function CloudActionsSectionCode() {
                         <span className={"text-columns-button-span"}>Code</span>
                     </p>
                 </div>
-                <button className={"arrow-down-icon-button"}
-                        onClick={handleArrowDownActionOnClick}>
+                <button className={"arrow-down-icon-button"}>
                     {!arrowDownActionOnClick && <ArrowDownIconCode />}
                     {arrowDownActionOnClick && <ArrowUpIconCode />}
                 </button>
             </div>
             {arrowDownActionOnClick && (
                 <>
-                        <div className="text-columns-button text-columns-border-top justify-flex-start"
+                        <div className="text-columns-button text-columns-border-top justify-flex-start hover-zero"
                              onClick={() => setPlaygroundAction({type: 'port-code'})}
                         >
                         <p className={`text-columns-button-p ${arrowDownActionOnClick && "text-columns-button-p-repaint"}`}>

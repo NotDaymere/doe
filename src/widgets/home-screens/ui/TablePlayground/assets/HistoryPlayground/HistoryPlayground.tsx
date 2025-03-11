@@ -4,17 +4,18 @@ import LinesIcon from "src/shared/icons/LinesIcon";
 import HistoryIcon from "src/shared/icons/HistoryIcon";
 import { useVersionHistoryStore } from "src/shared/providers";
 import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HistoryPlaygroundMenu from "./HistoryPlaygroundMenu/HistoryPlaygroundMenu";
 
 export default function HistoryPlayground() {
-    const { setOpenHistory, historyArray } = useVersionHistoryStore();
+    const { openHistory, setOpenHistory, getHistoryByPlaygroundId } = useVersionHistoryStore();
     const [openContent, setOpenContent] = useState<boolean>(false);
     const [hoveredId, setHoveredId] = useState<number | null>(null);
     const [activeMenu, setActiveMenu] = useState<boolean>(false);
 
+    const historyArray = getHistoryByPlaygroundId(openHistory);
     const handlerCloseHistoryPlayground  = () => {
-        setOpenHistory(false);
+        setOpenHistory(null);
     }
     return (
         <div className={'history-playground-container'}>
