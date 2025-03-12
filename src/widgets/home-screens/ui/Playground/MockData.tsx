@@ -51,7 +51,8 @@ export const PLAYGROUND_SOURCES: IPlaygroundSourceData = {
                 title: "brilliant.org",
                 isLink: true,
                 icon: <BrilliantOrgIcon width={12} height={13} />,
-                link: "https://www.example.com",
+                link: "https://localsolar.io/",
+                // link: "https://www.example.com",
             },
             {
                 title: "codecade...com",

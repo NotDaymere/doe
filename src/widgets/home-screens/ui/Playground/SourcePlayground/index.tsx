@@ -155,7 +155,11 @@ const SourcePlayground: FC<IProps> = ({ isActive }) => {
                         </div>
                     </ScalableContainer>
                 </div>
-                <div className={css.detailsSection}>
+                <div
+                    className={classNames(css.detailsSection, {
+                        [css.detailsSectionWithData]: previewPlayground.data,
+                    })}
+                >
                     {!previewPlayground.data ? (
                         <>
                             <SourcesIcon />

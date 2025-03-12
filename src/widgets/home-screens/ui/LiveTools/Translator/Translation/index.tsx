@@ -122,7 +122,6 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
                     />
                 </div>
             )}
-
             <PlanetIcon width={15} height={15} />
         </div>
     );
@@ -168,7 +167,7 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
                         })}
                     >
                         <div className={css.textWrapper}>
-                            {isVoiceMode ? (
+                            {isVoiceMode && !isUploadFiles ? (
                                 <div className={css.record}>
                                     <RecordIcon width={18} height={16} />
                                 </div>
