@@ -14,20 +14,22 @@
 
     &:hover,
     &._active {
+        background: var(--bg-magic-menu-item-hover);
+        border: 1px solid var(--border-magic-menu-item-hover);
+        color: var(--text-magic-menu-item-hover);
+        border-radius: 12px;
         > span > svg {
             fill: #f55687;
         }
     }
 }
 
-
 .apps_menu {
     width: 260px;
     border-radius: 12px;
-    border: 1px solid #DDDDDD;
+    border: 1px solid var(--borrder-upload-app-menu);
     box-shadow: 0 4px 30px rgba(#000, 10%);
-
-    background: #ffffff;
+    background: var(--bg-upload-app-menu);
     position: absolute;
     bottom: 8px;
     left: calc(100% - 8px);
@@ -55,7 +57,7 @@
     width: 14px;
     height: 14px;
     flex-shrink: 0;
-    fill: #1F1F1F;
+    fill: var(--icon-search-upload-app-menu);
 
     position: absolute;
     left: 0;
@@ -72,10 +74,10 @@
     height: 22px;
 
     .setFontSohneBuch(16px, 1, normal);
-    color: #1F1F1F;
+    color: var(--text-search-upload-app-menu);
 
     &::placeholder {
-        color: rgba(#1F1F1F, 50%);
+        color: var(--placeholder-search-upload-app-menu);
     }
 }
 
@@ -90,23 +92,23 @@
     justify-content: center;
     gap: 4px;
 
-    background: #FFF;
-    border: 1px solid #EEEEEE;
+    background: var(--bg-select-upload-app-menu);
+    border: 1px solid var(--border-select-upload-app-menu);
 
     .setFontSohneKraftig(14px, 1.2, normal);
-    color: #1F1F1F;
+    color: var(--text-select-upload-app-menu);
 
     svg {
         width: 14px;
         height: 14px;
         flex-shrink: 0;
 
-        fill: #5B5B5B;
+        fill: var(--icon-select-upload-app-menu);
     }
 }
 
 .apps_menu_content {
-    border-top: 1px solid #DDDDDD;
+    border-top: 1px solid var(--border-upload-app-menu);
     margin: 0;
     max-height: 150px;
     overflow: auto;
@@ -122,13 +124,10 @@
     gap: 8px;
     padding-left: 12px;
     padding-right: 8px;
-
     transition: background 200ms ease;
-
     cursor: pointer;
-    
+    color: var(--text-upload-app-menu-item);
     .setFontSohneBuch(14px, 1.1, normal);
-
     > span > span {
         .setFontSohneKraftig(14px, 1.1, normal);
     }
@@ -147,7 +146,7 @@
     }
 
     &:hover {
-        background: #F5F5F5;
+        background: var(--bg-upload-app-menu-item-hover);
     }
 }
 
