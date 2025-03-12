@@ -3,6 +3,9 @@ import {
     TEXT_TO_TRANSLATE_PART,
     TRANSLATED_TEXT_BOTTOM_PART,
     TRANSLATED_TEXT_TOP_PART,
+    VOICE_TEXT_TO_TRANSLATE_PART,
+    VOICE_TRANSLATED_TEXT_BOTTOM_PART,
+    VOICE_TRANSLATED_TEXT_TOP_PART,
 } from "../../MockData";
 import TranslatedTextIcon from "src/shared/icons/TranslatedText.icon";
 import VolumeIcon from "src/shared/icons/Volume.icon";
@@ -10,7 +13,7 @@ import PlanetIcon from "src/shared/icons/Planet.icon";
 import AttachmentIcon from "src/shared/icons/Attachment.icon";
 import TextForTranslateIcon from "src/shared/icons/TextForTranslate.icon";
 import RotateButton from "../RotateButton";
-import { useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import DeviceIcon from "src/shared/icons/Device.icon";
 import AppsIcon from "src/shared/icons/Apps.icon";
 import PlaygroundIcon from "src/shared/icons/Playground.icon";
@@ -18,74 +21,58 @@ import { MagicMenu } from "../../MagicMenu";
 import { usePanel } from "src/widgets/home-screens/lib";
 import FileFilledIcon from "src/shared/icons/FileFilled.icon";
 import CheckFilledIcon from "src/shared/icons/CheckFilled.icon";
+import { TRANSLATION_MENU_OPTIONS, TranslationMenuOptionsType } from "src/shared/types/Translation";
+import RecordIcon from "src/shared/icons/Record.icon";
+import FileUploader from "../../LiveToolsWrapper/FileUploader";
 import css from "./Translation.module.less";
 
-const Translation = () => {
+interface IProps {
+    mode: TranslationMenuOptionsType;
+    isRotated: boolean;
+    onRotate: (value: boolean) => void;
+}
+
+const DURATION = 5000;
+
+const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
+    const isVoiceMode = mode === TRANSLATION_MENU_OPTIONS.VOICE_MODE;
     const { files, setFiles } = usePanel();
     const [isUploadFiles, setIsUploadFiles] = useState(false);
-    // const [fileProgress, setFileProgress] = useState(0);
+    const [progress, setProgress] = useState(0);
 
-    const [fileProgress, setFileProgress] = useState<{ [fileName: string]: number }>({});
-    const [fileStatuses, setFileStatuses] = useState<{
-        [fileName: string]: "pending" | "success" | "error";
-    }>({});
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
 
-    const updateFileProgress = (fileName: string, progress: number) => {
-        setFileProgress((prevProgress) => ({
-            ...prevProgress,
-            [fileName]: progress,
-        }));
-    };
+        const startAnimation = () => {
+            let currentProgress = 0;
+            const step = 100 / (DURATION / 10);
 
-    const updateFileStatus = (fileName: string, status: "success" | "error") => {
-        setFileStatuses((prevStatuses) => ({
-            ...prevStatuses,
-            [fileName]: status,
-        }));
-    };
+            interval = setInterval(() => {
+                currentProgress += step;
+                if (currentProgress >= 100) {
+                    clearInterval(interval);
+                    setProgress(100);
+                } else {
+                    setProgress(Math.floor(currentProgress));
+                }
+            }, 10);
+        };
 
-    const upload = () => {
-        setIsUploadFiles(true);
+        startAnimation();
+
+        return () => clearInterval(interval);
+    }, [DURATION]);
+
+    const uploadFiles = () => {
         const input = document.createElement("input") as HTMLInputElement;
         input.type = "file";
         input.multiple = true;
-
         input.onchange = (ev: any) => {
-            const selectedFiles = Array.from(ev.target.files) as File[];
-
-            selectedFiles.forEach((file) => {
-                const formData = new FormData();
-                formData.append("file", file);
-
-                const xhr = new XMLHttpRequest();
-
-                xhr.upload.onprogress = (event) => {
-                    if (event.lengthComputable) {
-                        const percentComplete = (event.loaded / event.total) * 100;
-                        console.log(`Progress for ${file.name}: ${percentComplete}%`);
-                        // setFileProgress(percentComplete);
-                        updateFileProgress(file.name, percentComplete);
-                    }
-                };
-
-                xhr.onload = () => {
-                    console.log(`File ${file.name} uploaded successfully!`);
-                    updateFileStatus(file.name, "success");
-                    setFiles([...files, file]);
-                };
-
-                xhr.onerror = () => {
-                    console.error(`Error uploading file ${file.name}.`);
-                    updateFileStatus(file.name, "error");
-                };
-
-                xhr.open("POST", "/upload");
-                xhr.send(formData);
-            });
-
+            const newFiles = Array.from(ev.target.files) as File[];
+            setFiles([...files, ...newFiles]);
+            setIsUploadFiles(true);
             input.remove();
         };
-
         input.click();
     };
 
@@ -94,7 +81,7 @@ const Translation = () => {
             {
                 icon: <DeviceIcon width={18} height={11} />,
                 text: "Device Files",
-                onClick: upload,
+                onClick: uploadFiles,
             },
             {
                 icon: <AppsIcon width={9} height={15} />,
@@ -114,94 +101,172 @@ const Translation = () => {
         []
     );
 
+    const splitText = (text: string) => {
+        const lastDotIndex = text.lastIndexOf(".");
+        if (lastDotIndex === -1) {
+            return { beforeLastDot: text, afterLastDot: "" };
+        }
+        const beforeLastDot = text.substring(0, lastDotIndex + 1);
+        const afterLastDot = text.substring(lastDotIndex + 1);
+        return { beforeLastDot, afterLastDot };
+    };
+
     const renderUploadIcons = () => (
-        <div className={css.icons}>
-            <div className={css.magicMenu}>
-                <MagicMenu
-                    items={MAGIC_MENU_ITEMS}
-                    magicButtonIcon={<AttachmentIcon width={15} height={15} />}
-                    classes={css.menu}
-                />
-            </div>
+        <div className={classNames(css.icons, { [css.alignEnd]: isVoiceMode })}>
+            {!isUploadFiles && (
+                <div className={css.magicMenu}>
+                    <MagicMenu
+                        items={MAGIC_MENU_ITEMS}
+                        magicButtonIcon={<AttachmentIcon width={15} height={15} />}
+                        classes={css.menu}
+                    />
+                </div>
+            )}
 
             <PlanetIcon width={15} height={15} />
         </div>
     );
 
+    const textToTranslate = TEXT_TO_TRANSLATE_PART || VOICE_TEXT_TO_TRANSLATE_PART;
+    const translatedTopText = TRANSLATED_TEXT_TOP_PART || VOICE_TRANSLATED_TEXT_TOP_PART;
+    const translatedBottomText = TRANSLATED_TEXT_BOTTOM_PART || VOICE_TRANSLATED_TEXT_BOTTOM_PART;
+
     return (
         <>
-            <div className={css.iconsForTranslated}>
-                <div className={css.translateIcon}>
-                    <TextForTranslateIcon width={20} height={20} />
+            <div className={css.translationBlock}>
+                <div
+                    className={
+                        isRotated ? css.translateIconRotatedWrapper : css.translateIconWrapper
+                    }
+                >
+                    <div className={css.translateIcon}>
+                        <TextForTranslateIcon width={20} height={20} />
+                    </div>
+                    {!isRotated && (
+                        <RotateButton onClick={() => onRotate(!isRotated)} isRotaded={isRotated} />
+                    )}
                 </div>
-                <RotateButton
-                    onClick={function (): void {
-                        throw new Error("Function not implemented.");
-                    }}
-                />
-            </div>
-            <div
-                className={classNames(css.textForTranslateWrapper, {
-                    [css.uploadArea]: isUploadFiles,
-                })}
-            >
-                {/* {isUploadFiles && (
-                            <progress value={fileProgress} max="100" />
-
-                            // <div>
-                            //     <div className={css.progressBar} />
-                            //     <div
-                            //         className={css.fileProgress}
-                            //         style={{ width: `${fileProgress}%` }}
-                            //     />
-                            // </div>
-                        )} */}
-                {isUploadFiles && <div className={css.uploadIcons}>{renderUploadIcons()}</div>}
-                <div className={css.textForTranslate}>
-                    {TEXT_TO_TRANSLATE_PART && !isUploadFiles && (
-                        <div
-                            className={css.text}
-                            dangerouslySetInnerHTML={{ __html: TEXT_TO_TRANSLATE_PART }}
+                <div
+                    className={classNames(css.textForTranslateWrapper, {
+                        [css.uploadArea]: isUploadFiles,
+                    })}
+                >
+                    {isUploadFiles && (
+                        <FileUploader
+                            fileName={files[files.length - 1]?.name}
+                            progress={progress}
+                            isActive={isUploadFiles}
+                            setIsActive={setIsUploadFiles}
                         />
                     )}
-                    {!isUploadFiles && renderUploadIcons()}
-                </div>
-            </div>
-            {isUploadFiles && (
-                <div className={css.filesList}>
-                    {files.map((file) => (
-                        <div className={css.file} key={file.name}>
-                            <FileFilledIcon width={10} height={12} />
-                            {file.name}
-                            <CheckFilledIcon width={16} height={16} />
+                    {isUploadFiles && (
+                        <div className={css.uploadFilesIcons}>{renderUploadIcons()}</div>
+                    )}
+                    <div
+                        className={classNames(css.textForTranslate, {
+                            [css.textForTranslateRow]: isVoiceMode,
+                        })}
+                    >
+                        <div className={css.textWrapper}>
+                            {isVoiceMode ? (
+                                <div className={css.record}>
+                                    <RecordIcon width={18} height={16} />
+                                </div>
+                            ) : null}
+                            {textToTranslate && !isUploadFiles && (
+                                <>
+                                    {isVoiceMode ? (
+                                        <div className={css.inline}>
+                                            <span>
+                                                {
+                                                    splitText(VOICE_TEXT_TO_TRANSLATE_PART)
+                                                        .beforeLastDot
+                                                }
+                                            </span>
+                                            <span className={css.lastSentence}>
+                                                {
+                                                    splitText(VOICE_TEXT_TO_TRANSLATE_PART)
+                                                        .afterLastDot
+                                                }
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <div
+                                            className={css.text}
+                                            dangerouslySetInnerHTML={{
+                                                __html: TEXT_TO_TRANSLATE_PART,
+                                            }}
+                                        />
+                                    )}
+                                </>
+                            )}
                         </div>
-                    ))}
+                        {!isUploadFiles && renderUploadIcons()}
+                    </div>
                 </div>
-            )}
-            <div className={css.icons}>
-                {TRANSLATED_TEXT_TOP_PART && TRANSLATED_TEXT_BOTTOM_PART && (
-                    <div className={css.volumeIcon}>
-                        <VolumeIcon width={17} height={13} />
+                {isUploadFiles && (
+                    <div className={css.filesList}>
+                        {files?.map((file) => (
+                            <div className={css.file} key={file.name}>
+                                <FileFilledIcon width={10} height={12} />
+                                {file.name}
+                                <CheckFilledIcon width={16} height={16} />
+                            </div>
+                        ))}
                     </div>
                 )}
-                <div className={css.translateIcon}>
-                    <TranslatedTextIcon width={20} height={20} />
-                </div>
             </div>
-            {TRANSLATED_TEXT_TOP_PART && TRANSLATED_TEXT_BOTTOM_PART && (
-                <div className={css.translatedTextWrapper}>
-                    <div
-                        className={css.text}
-                        dangerouslySetInnerHTML={{ __html: TRANSLATED_TEXT_TOP_PART }}
-                    />
-                    <div
-                        className={classNames(css.text, css.bottomText)}
-                        dangerouslySetInnerHTML={{
-                            __html: TRANSLATED_TEXT_BOTTOM_PART,
-                        }}
-                    />
+            <div className={css.translationBlock}>
+                <div className={css.buttonsWrapper}>
+                    <div className={css.icons}>
+                        {translatedTopText && translatedBottomText && (
+                            <div className={css.volumeIcon}>
+                                <VolumeIcon width={17} height={13} />
+                            </div>
+                        )}
+                        <div className={css.translateIcon}>
+                            <TranslatedTextIcon width={20} height={20} />
+                        </div>
+                    </div>
+                    {isRotated && (
+                        <div className={css.rotateButton}>
+                            <RotateButton
+                                onClick={() => onRotate(!isRotated)}
+                                isRotaded={isRotated}
+                            />
+                        </div>
+                    )}
                 </div>
-            )}
+                {translatedTopText && translatedBottomText && (
+                    <div className={css.translatedTextWrapper}>
+                        <div
+                            className={css.text}
+                            dangerouslySetInnerHTML={{
+                                __html: isVoiceMode
+                                    ? VOICE_TRANSLATED_TEXT_TOP_PART
+                                    : TRANSLATED_TEXT_TOP_PART,
+                            }}
+                        />
+                        {isVoiceMode ? (
+                            <div className={css.inline}>
+                                <span className={css.bottomText}>
+                                    {splitText(VOICE_TRANSLATED_TEXT_BOTTOM_PART).beforeLastDot}
+                                </span>
+                                <span className={css.lastSentenceTranslated}>
+                                    {splitText(VOICE_TRANSLATED_TEXT_BOTTOM_PART).afterLastDot}
+                                </span>
+                            </div>
+                        ) : (
+                            <div
+                                className={classNames(css.text, css.bottomText)}
+                                dangerouslySetInnerHTML={{
+                                    __html: TRANSLATED_TEXT_BOTTOM_PART,
+                                }}
+                            />
+                        )}
+                    </div>
+                )}
+            </div>
         </>
     );
 };

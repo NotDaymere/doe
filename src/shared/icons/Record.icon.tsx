@@ -1,6 +1,6 @@
 import React, { SVGProps } from "react";
 
-const RecordItem: React.FC<SVGProps<SVGSVGElement>> = (props) => {
+const RecordIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 16" fill="none" {...props}>
             <path
@@ -31,4 +31,4 @@ const RecordItem: React.FC<SVGProps<SVGSVGElement>> = (props) => {
     );
 };
 
-export default RecordItem;
+export default RecordIcon;

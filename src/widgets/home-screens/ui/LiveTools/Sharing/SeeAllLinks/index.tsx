@@ -11,12 +11,19 @@ import MoveIcon from "src/shared/icons/Move.icon";
 import { useClickOut } from "src/shared/hooks/useClickOut";
 import css from "./SeeAllLinks.module.less";
 
+enum LinkType {
+    LINK_WITH_PW = "LINK_WITH_PW",
+    LINK_WITHOUT_INDEXING_OR_PW = "LINK_WITHOUT_INDEXING_OR_PW",
+    LINK_WITHOUT_PW = "LINK_WITHOUT_PW",
+}
+
 interface ISearchResult {
     id: string;
     icon: ReactElement;
     text: string;
     password?: string;
     published: string;
+    linkType: LinkType;
 }
 
 const SEARCH_RESULTS: ISearchResult[] = [
@@ -26,12 +33,14 @@ const SEARCH_RESULTS: ISearchResult[] = [
         text: "Bijection Language Instructions",
         password: `R7d{}F"@Pdp{ChZX/[Mh)Qh\\`,
         published: "11.10.24",
+        linkType: LinkType.LINK_WITH_PW,
     },
     {
         id: "search_1",
         icon: <LinkIndexedIcon width={13} height={13} />,
         text: "Proving the Yoneda Lemma",
         published: "12.11.24",
+        linkType: LinkType.LINK_WITHOUT_PW,
     },
     {
         id: "search_2",
@@ -39,6 +48,7 @@ const SEARCH_RESULTS: ISearchResult[] = [
         text: "Pronunciación en español importante",
         password: `R7d{}F"@Pdp{ChZX/[Mh)Qh\\`,
         published: "09.07.24",
+        linkType: LinkType.LINK_WITH_PW,
     },
     {
         id: "search_3",
@@ -46,6 +56,7 @@ const SEARCH_RESULTS: ISearchResult[] = [
         text: "Essay Review and Commented Feedback",
         password: `R7d{}F"@Pdp{ChZX/[Mh)Qh\\`,
         published: "10.10.24",
+        linkType: LinkType.LINK_WITH_PW,
     },
     {
         id: "search_4",
@@ -53,12 +64,14 @@ const SEARCH_RESULTS: ISearchResult[] = [
         text: "AES Decryption Approaches",
         password: `R7d{}F"@Pdp{ChZX/[Mh)Qh\\`,
         published: "01.29.24",
+        linkType: LinkType.LINK_WITH_PW,
     },
     {
         id: "search_5",
         icon: <LinkWOPIcon width={10} height={12} />,
         text: "Liszt and Singers Relationships",
         published: "04.25.24",
+        linkType: LinkType.LINK_WITHOUT_INDEXING_OR_PW,
     },
     {
         id: "search_6",
@@ -66,6 +79,7 @@ const SEARCH_RESULTS: ISearchResult[] = [
         text: "Script for New Horror Movie",
         password: `R7d{}F"@Pdp{ChZX/[Mh)Qh\\`,
         published: "06.16.24",
+        linkType: LinkType.LINK_WITH_PW,
     },
 ];
 
@@ -91,6 +105,40 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
 
     const handleDeleteClick = (id: string) => {
         setResults(results.filter((item) => item.id !== id));
+    };
+
+    const handleLinkTypeButtonClick = (id: string) => {
+        setResults((prevResults) =>
+            prevResults.map((result) => {
+                if (result.id === id) {
+                    let nextType: LinkType;
+
+                    if (result.linkType === LinkType.LINK_WITH_PW) {
+                        nextType = LinkType.LINK_WITHOUT_INDEXING_OR_PW;
+                    } else if (result.linkType === LinkType.LINK_WITHOUT_INDEXING_OR_PW) {
+                        nextType = LinkType.LINK_WITHOUT_PW;
+                    } else {
+                        nextType = LinkType.LINK_WITH_PW;
+                    }
+
+                    return { ...result, linkType: nextType };
+                }
+                return result;
+            })
+        );
+    };
+
+    const renderButton = (linkType: LinkType) => {
+        switch (linkType) {
+            case LinkType.LINK_WITH_PW:
+                return <LinkWPIcon width={15} height={15} />;
+            case LinkType.LINK_WITHOUT_INDEXING_OR_PW:
+                return <LinkIndexedIcon width={13} height={13} />;
+            case LinkType.LINK_WITHOUT_PW:
+                return <LinkWOPIcon width={10} height={12} />;
+            default:
+                return null;
+        }
     };
 
     const ref = useClickOut({
@@ -150,7 +198,12 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
                         {results.map((result, index) => (
                             <>
                                 <div key={index} className={css.linkResult}>
-                                    <div className={css.resultIcon}>{result.icon}</div>
+                                    <button
+                                        className={css.resultIcon}
+                                        onClick={() => handleLinkTypeButtonClick(result.id)}
+                                    >
+                                        {renderButton(result.linkType)}
+                                    </button>
                                     <span className={css.link}>{result.text}</span>
                                 </div>
                                 <div

@@ -94,7 +94,7 @@ const PracticeMode: FC<IProps> = ({ onTranslationBack, qualityLevel = 6 }) => {
                                 <EyeIcon width={22} height={14} />
                             </button>
                         </div>
-                        <RotateButton onClick={() => console.log("rotated")} />
+                        {/* <RotateButton onClick={() => onRotate(!isRotated)} /> */}
                     </div>
                 )}
                 {!isPracticeStopped && (

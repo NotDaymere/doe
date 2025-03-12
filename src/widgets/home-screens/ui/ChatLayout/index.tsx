@@ -8,10 +8,8 @@ import classNames from "classnames";
 import LimitScreen from "../LimitScreen";
 import WelcomeScreen from "../WelcomeScreen";
 import { MODE } from "src/shared/types/Chat";
-import TranslationMode from "../LiveTools/Translator";
-import css from "./ChatLayout.module.less";
 import LiveTools from "../LiveTools";
-import Sharing from "../LiveTools/Sharing";
+import css from "./ChatLayout.module.less";
 
 export const MAX_MESSAGES_LIMIT = 50;
 

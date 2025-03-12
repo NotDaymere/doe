@@ -1,4 +1,5 @@
 .textForTranslateWrapper {
+    height: 100%;
     border: 1px dashed #ffd632;
     border-radius: 12px;
     background-color: #ffffff;
@@ -10,9 +11,25 @@
     gap: 16px;
 }
 
-.iconsForTranslated {
+.rotateButton {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.translationBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.translateIconWrapper {
     display: flex;
     justify-content: space-between;
+}
+
+.translateIconRotatedWrapper {
+    padding-top: 12px;
 }
 
 .translateIcon {
@@ -26,8 +43,20 @@
 }
 
 .textForTranslate {
+    height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.textForTranslateRow {
+    flex-direction: row;
+}
+
+.textWrapper {
+    display: flex;
+    align-items: center;
     gap: 16px;
 }
 
@@ -42,10 +71,22 @@
     right: 32px;
 }
 
+.uploadFilesIcons {
+    position: absolute;
+    right: 32px;
+    top: 2px;
+}
+
 .text {
     display: flex;
     flex-direction: column;
     gap: 30px;
+}
+
+.buttonsWrapper {
+    display: flex;
+    justify-content: flex-end;
+    gap: 24px;
 }
 
 .icons {
@@ -53,24 +94,7 @@
     justify-content: flex-end;
     align-items: center;
     gap: 12px;
-}
-
-.progress {
-    height: 1px;
-    border-bottom: 1px solid transparent;
-    border-radius: 12px;
-}
-
-.progressBar {
-    .progress;
-    width: 100%;
-    border-bottom-color: #e7f5d1;
-}
-
-.fileProgress {
-    // .progress;
-    // height: 1px;
-    // border-bottom-color: #8bcf16;
+    padding-top: 12px;
 }
 
 .filesList {
@@ -142,4 +166,34 @@
 .menu {
     top: -130px;
     bottom: unset;
+}
+
+.record {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border: 1px solid transparent;
+    border-radius: 1000px;
+    background:
+        linear-gradient(to bottom, #fff, #fff) padding-box,
+        linear-gradient(to bottom, #9747ff, rgba(#9747ff, 0)) border-box;
+}
+
+.lastSentence {
+    color: #898989;
+}
+
+.lastSentenceTranslated {
+    color: #d2bcff;
+}
+
+.inline {
+    display: inline;
+}
+
+.alignEnd {
+    align-items: flex-end;
 }

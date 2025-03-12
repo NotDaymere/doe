@@ -1,0 +1,51 @@
+.fileLoading {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+    padding-right: 40px;
+}
+
+.fileLoadingName {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    .setFontSohneBuch(16px);
+    color: #365302;
+}
+
+.fileInfo {
+    display: flex;
+    justify-content: space-between;
+}
+
+.progressBar {
+    height: 1px;
+    border-bottom: 1px solid #e7f5d1;
+    border-radius: 12px;
+}
+
+.progress {
+    height: 1px;
+    border-bottom: 1px solid #8bcf16;
+    transition: width 1s linear;
+    border-radius: 12px;
+}
+
+.enter {
+    opacity: 0;
+}
+.enterActive {
+    opacity: 1;
+    transition: opacity 500ms;
+}
+
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: opacity 500ms;
+}

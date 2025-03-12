@@ -43,7 +43,7 @@ const Sharing: FC<IProps> = ({ isActive, setIsActive }) => {
             <CSSTransition in={showSharing} timeout={500} classNames={css} unmountOnExit>
                 <div className={css.sharing} ref={ref}>
                     {isLinkCreated ? (
-                        <LinkCreated createdWithPassword={true} />
+                        <LinkCreated createdWithPassword={createWith.password} />
                     ) : (
                         <SharingLink
                             onCreateLink={() => setIsLinkCreated(true)}

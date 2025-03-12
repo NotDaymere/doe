@@ -4,7 +4,6 @@ import StudyIcon from "src/shared/icons/Study.icon";
 import WaveIcon from "src/shared/icons/Wave.icon";
 import Translation from "./Translation";
 import PracticeMode from "./PracticeMode";
-import VoiceMode from "./VoiceMode";
 import { TRANSLATION_MENU_OPTIONS, TranslationMenuOptionsType } from "src/shared/types/Translation";
 import { useAppStore } from "src/shared/providers";
 import Chip from "src/shared/components/Chip";
@@ -16,6 +15,7 @@ import css from "./Translator.module.less";
 const Translator = () => {
     const { activeTranslationOption, setActiveTranslationOption } = useAppStore();
     const [showChip, setShowChip] = useState(false);
+    const [isRotated, setIsRotated] = useState(false);
 
     useEffect(() => {
         if (activeTranslationOption === TRANSLATION_MENU_OPTIONS.TRANSLATION) return;
@@ -80,8 +80,9 @@ const Translator = () => {
     const renderTranslatorMode = (mode: TranslationMenuOptionsType) => {
         switch (mode) {
             case TRANSLATION_MENU_OPTIONS.TRANSLATION:
+            case TRANSLATION_MENU_OPTIONS.VOICE_MODE:
             default:
-                return <Translation />;
+                return <Translation mode={mode} isRotated={isRotated} onRotate={setIsRotated} />;
             case TRANSLATION_MENU_OPTIONS.CONNECT_TO_CAMERA:
                 return <span>CONNECT_TO_CAMERA</span>;
             case TRANSLATION_MENU_OPTIONS.PRACTICE_ENGLISH:
@@ -92,8 +93,6 @@ const Translator = () => {
                         }
                     />
                 );
-            case TRANSLATION_MENU_OPTIONS.VOICE_MODE:
-                return <VoiceMode />;
         }
     };
 
@@ -111,6 +110,7 @@ const Translator = () => {
                 magicMenuItems={MAGIC_MENU_ITEMS}
                 magicButtonIcon={<StarsIcon width={21} height={28} />}
                 magicButtonClass={css.magicButton}
+                isRotated={isRotated}
             >
                 {renderTranslatorMode(activeTranslationOption)}
             </LiveToolsWrapper>
