@@ -41,8 +41,9 @@ import { useChatContext } from "../../lib/hooks/ChatContext";
 import TableRandomValues from "./assets/TableRandomValues/TableRandomValues";
 import DownloadCSV from "./assets/DownloadCSV/DownloadCSV";
 import PythonTaskManager from "./assets/PythonTaskManager/PythonTaskManager";
-import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
+
 import { MessageNodeVersionSelector } from "./assets/MessageNodeVersionSelector/MessageNodeVersionSelector";
+import GeneralLogo from "../GeneralLogo/GeneralLogo";
 import MessageTable from "./assets/MessageTable/MessageTable";
 import MessageFrame from "./assets/MessageFrame/MessageFrame";
 import { mockTableData } from "./assets/MessageTable/mockTableData";
@@ -53,7 +54,6 @@ import { mockColumnsChartMessageData } from "./assets/MessageCharts/MessageColum
 import { usePanel } from "../../lib";
 import MessageLineChart from "./assets/MessageCharts/MessageLineChart/MessageLineChart";
 import { mockLineChartMessageData } from "./assets/MessageCharts/MessageLineChart/mockLineChartMessageData";
-import GeneralLogo from "../GeneralLogo/GeneralLogo";
 
 interface Props {
     data: IMessage;
@@ -460,10 +460,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 );
                             })}
                         </MathJax>
-                        <MessageColumnsChart data={mockColumnsChartMessageData}/>
                         <MessageLineChart data={mockLineChartMessageData}/>
                         <MessageChart data={mockChartMessageData}/>
-
                         <MessageColumnsChart data={mockColumnsChartMessageData} />
                         <text className={"message-text"}>
                             Here's a simple project idea: a manager platform in Notion,
@@ -487,7 +485,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 <PythonTaskManager />
                             </Flex>
                         </Flex>
-
                     </div>
 
                     {!data.isUser && (
@@ -501,8 +498,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 <span className={css.button_steps_label}>See all steps</span>
                             </button>
                             <Flex gap={10}>
-                                <button
-                                    className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
+                                    <button
+                                        className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
                                         onClick={isPaused ? handlePlay : handleStop}
                                     >
                                         <span className={css.tooltip}>Listen answer</span>
@@ -517,6 +514,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                         className={`${css.button_steps_green} ${activeMenu ? css.active : ""}`}
                                     >
                                         <span className={css.tooltip}>Download chat text</span>
+
                                         <DownloadIcon />
                                     </button>
                                     <CSSTransition
