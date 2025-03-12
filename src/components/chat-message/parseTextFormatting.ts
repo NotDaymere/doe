@@ -60,7 +60,7 @@ export function parseTextFormatting(input: string): string {
 
     switch (tag) {
       case "inline-code":
-        return input.replace(pattern, "<code>$1</code>")
+        return input.replace(pattern, `<code class="code-inline-output" style="color: rgba(255, 95, 95, 1); background: #ededed">$1</code`)
       case "block-code":
         return input.replace(pattern, `<div class="code-without-output"><pre><code>$1</code></pre></div>`)
       case "code-with-output":
