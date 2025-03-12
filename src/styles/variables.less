@@ -19,7 +19,7 @@ body.dark {
     --bg-sidebar-action-button-active: var(--color-white-16);
     --icon-sidebar-action-button-active: var(--color-white-100);
 }
-// CLEAR CHAT
+// CLEAR CHAT BUTTON
 :root {
     --bg-clear-button: transparent;
     --border-clear-button: var(--color-neutral-150);
@@ -195,10 +195,10 @@ body.dark {
     --border-references: var(--color-neutral-100);
     --text-references: var(--color-neutral-950);
     --bg-icon-references: var(--color-neutral-100);
-    --fill-icon-references: var(--color-neutral-400);
+    --icon-references: var(--color-neutral-400);
     --bg-close-btn-references: var(--color-neutral-100);
     --border-close-btn-references: var(--color-neutral-150);
-    --fill-icon-close-btn-references: var(--color-neutral-150);
+    --icon-close-btn-references: var(--color-neutral-150);
     --bg-references-btn: var(--color-white-100);
     --bg-references-btn-hover: var(--color-white-100);
 }
@@ -207,10 +207,10 @@ body.dark {
     --border-references: var(--color-white-16);
     --text-references: var(--color-white-100);
     --bg-icon-references: var(--color-white-36);
-    --fill-icon-references: var(--color-white-85);
+    --icon-references: var(--color-white-85);
     --bg-close-btn-references: var(--color-white-05);
     --border-close-btn-references: var(--color-white-11);
-    --fill-icon-close-btn-references: var(--color-neutral-400);
+    --icon-close-btn-references: var(--color-neutral-400);
     --bg-references-btn: var(--color-white-100);
     --bg-references-btn-hover: var(--color-white-85);
 }
@@ -232,7 +232,98 @@ body.dark {
     --font-inter: "Inter";
     --font-sf-mono: "SF Mono";
 }
+/* CHAT CONTAINER */
+:root {
+    --bg-chat-container: var(--color-neutral-100);
+}
+body.dark {
+    --bg-chat-container: var(--color-neutral-950);
+}
+/* TALK MODE BUBBLE MESSAGE */
+:root {
+    --bg-talk-mode-bubble-message: var(--color-white-70);
+    --border-talk-mode-bubble-message: var(--color-white-100);
+    --text-talk-mode-bubble-message: linear-gradient(
+        to right,
+        var(--color-black-60),
+        var(--color-black-10)
+    );
+    --bg-talk-mode-close-button: var(--color-neutral-150-20);
+    --border-talk-mode-close-button: var(--color-neutral-150);
+    --icon-talk-mode-close-button: var(--color-neutral-150);
+}
+body.dark {
+    --bg-talk-mode-bubble-message: var(--color-white-11);
+    --border-talk-mode-bubble-message: var(--color-white-16);
+    --text-talk-mode-bubble-message: linear-gradient(
+        to right,
+        var(--color-white-60),
+        var(--color-white-100)
+    );
+    --bg-talk-mode-close-button: var(--color-white-05);
+    --border-talk-mode-close-button: var(--color-white-11);
+    --icon-talk-mode-close-button: var(--color-neutral-400);
+}
+/* TALK MODE ACTIONS PANEL */
+:root {
+    --bg-talk-mode-actions-panel: var(--color-white-80);
+    --border-talk-mode-actions-panel: var(--color-neutral-100);
+    --icon-talk-mode-actions-panel: var(--color-neutral-400);
+    --bg-active-talk-mode-actions-panel: var(--color-neutral-200);
+}
+body.dark {
+    --bg-talk-mode-actions-panel: var(--color-neutral-950);
+    --border-talk-mode-actions-panel: var(--color-white-05);
+    --icon-talk-mode-actions-panel: var(--color-white-36);
+    --bg-active-talk-mode-actions-panel: var(--color-white-11);
+}
 
+/* ALL BRANCHES BUTTON */
+:root {
+    --bg-all-branches-button: var(--color-neutral-120);
+    --border-all-branches-button: var(--color-neutral-300);
+    --bg-inner-all-branches-button: var(--color-white-100);
+    --icon-all-branches-button: url("#branches-gradient-light");
+    --icon-all-branches-button-hover: url("#branches-gradient-light-hover");
+}
+body.dark {
+    --bg-all-branches-button: var(--color-neutral-900);
+    --border-all-branches-button: var(--color-white-09);
+    --bg-inner-all-branches-button: var(--color-white-16);
+    --icon-all-branches-button: url("#branches-gradient-dark");
+    --icon-all-branches-button-hover: var(--color-white-100);
+}
+// ALL BRANCHES
+:root {
+    --bg-all-branches: var(--color-neutral-110);
+    --border-all-branches: var(--color-neutral-150);
+    --text-all-branches-header: var(--color-neutral-600);
+    --icon-all-branches-header: var(--color-neutral-600);
+    --bg-all-branches-header-button: var(--color-neutral-100);
+    --icon-all-branches-header-button: var(--color-neutral-600);
+    --bg-all-branches-list: var(--color-white-80);
+    --border-all-branches-list: var(--color-white-100);
+    --icon-all-branches-item: var(--color-neutral-400);
+    --text-all-branches-item: var(--color-neutral-200);
+    --bg-all-branches-item-hover: var(--color-neutral-100);
+    --icon-all-branches-item-hover: var(--color-neutral-600);
+    --text-all-branches-item-hover: var(--color-neutral-950);
+}
+body.dark {
+    --bg-all-branches: var(--color-neutral-900);
+    --border-all-branches: var(--color-white-11);
+    --text-all-branches-header: var(--color-neutral-350);
+    --icon-all-branches-header: var(--color-white-36);
+    --bg-all-branches-header-button: var(--color-white-16);
+    --icon-all-branches-header-button: var(--color-neutral-400);
+    --bg-all-branches-list: var(--color-white-05);
+    --border-all-branches-list: var(--color-white-05);
+    --icon-all-branches-item: var(--color-white-36);
+    --text-all-branches-item: var(--color-neutral-500);
+    --bg-all-branches-item-hover: var(--color-white-16);
+    --icon-all-branches-item-hover: var(--color-white-85);
+    --text-all-branches-item-hover: var(--color-white-100);
+}
 // Dark mode
 body.dark {
     --bg-color-main: #1f1f1f;

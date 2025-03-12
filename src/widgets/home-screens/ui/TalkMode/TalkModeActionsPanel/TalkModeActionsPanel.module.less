@@ -1,87 +1,94 @@
 .actionsPanelCameraOnContainer {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 1px;
-  padding: 2px;
-  height: 42px;
-  width: 118px;
-  min-width: fit-content;
-  background: #e4e4e4;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px 0 #0000000a;
-  border: 1px solid #F8F8F8;
-  color: #B5B5B5;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1px;
+    padding: 2px;
+    height: 42px;
+    width: 118px;
+    min-width: fit-content;
+    background: var(--bg-talk-mode-actions-panel);
+    border-radius: 10px;
+    box-shadow: 0 8px 20px 0 #0000000a;
+    border: 1px solid var(--border-talk-mode-actions-panel);
+    color: #b5b5b5;
 }
 
 .actionsPanelContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 1px;
-  padding: 2px;
-  height: 42px;
-  width: 118px;
-  min-width: fit-content;
-  background: #ffffffb2;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px 0 #0000000a;
-  border: 1px solid #F8F8F8;
-  color: #B5B5B5;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1px;
+    padding: 2px;
+    height: 42px;
+    width: 118px;
+    min-width: fit-content;
+    background: var(--bg-talk-mode-actions-panel);
+    border-radius: 10px;
+    box-shadow: 0 8px 20px 0 #0000000a;
+    border: 1px solid var(--border-talk-mode-actions-panel);
+    color: #b5b5b5;
 }
-
+.divider {
+    width: 1px;
+    height: 30px;
+    background-color: var(--border-talk-mode-actions-panel);
+}
 .panelButton {
-  width: 30px !important;
-  height: 30px !important;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  box-sizing: border-box;
-  transition: background-color 0.2s linear;
+    width: 30px !important;
+    height: 30px !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: background-color 0.2s linear;
+    svg {
+        fill: var(--icon-talk-mode-actions-panel);
+    }
 }
 
 .panelButton:hover {
-  background-color: #EEEEEE;
+    background-color: var(--bg-active-talk-mode-actions-panel);
 }
 
 .panelButtonClose {
-  color: #B5B5B5;
-  transition: color 0.2s linear;
+    color: #b5b5b5;
+    transition: color 0.2s linear;
 }
 
 .panelButtonClose:hover {
-  color: #FF4C4C;
+    color: #ff4c4c;
 }
 
 .microphoneActive {
-  color: #2C84FF;
+    color: #2c84ff;
 }
 
 .microphoneDisabled {
-  color: #FF3939;
+    color: #ff3939;
 }
 
 .microphoneDefault {
-  color: #B5B5B5;
+    color: #b5b5b5;
 }
 
 .cameraActive {
-  color: #3ABAFF;
+    color: #3abaff;
 }
 
 .cameraDisabled {
-  color: #FF604B;
+    color: #ff604b;
 }
 
 .cameraDefault {
-  color: #B5B5B5;
+    color: #b5b5b5;
 }
