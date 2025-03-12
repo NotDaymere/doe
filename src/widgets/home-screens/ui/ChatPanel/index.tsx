@@ -24,6 +24,7 @@ import BranchIcon from "../../../../shared/icons/Branch.icon";
 import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgress.icon";
 import { IMessage } from "src/shared/types/Message";
 import { HyperlinkInput } from "./assets/HyperlinkInput/HyperlinkInput";
+import SendTableDataIcon from "../../../../shared/icons/SendTableData.icon";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
@@ -50,6 +51,9 @@ export const ChatPanel: React.FC = () => {
 
     const { isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
     const [hyperlinkPosition, setHyperlinkPosition] = React.useState<{ top: number; left: number } | null>(null);
+
+    const { isTablePromptVisible, setIsTablePromptVisible } = useChatStore();
+    const { selectedArea } = useChatStore();
 
 
     React.useEffect(() => {
@@ -216,6 +220,19 @@ export const ChatPanel: React.FC = () => {
                         </div>
                     </div>
                 )}
+
+                {isTablePromptVisible && (
+                    <div className={css.panel_prompt}>
+                        <ReplyIcon className={css.panel_prompt_icon} />
+                        <div className={css.table_prompt_panel}>
+                            <button onClick={() => setIsTablePromptVisible(false)}><CloseIcon /></button>
+                            <div className={css.referencePanelContent}>
+                                {selectedArea.type} {selectedArea.value}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {prompt.active && (
                     <div className={css.panel_prompt}>
                         <ReplyIcon className={css.panel_prompt_icon} />
@@ -353,21 +370,29 @@ export const ChatPanel: React.FC = () => {
                                     <button className={css.panel_button}>
                                         <MicrophoneIcon />
                                     </button>
-                                    {!prompt.active ? (
-                                        !questionCodeMessage ? (
-                                            <button className={css.panel_submitBtn} onClick={handleSend}>
-                                                Send <ArrowUpIcon />
-                                            </button>
+
+                                    { isTablePromptVisible ? (
+                                        <button className={css.panel_send_table_data_btn}>
+                                            <SendTableDataIcon fill = "currentColor"/>
+                                        </button>
+                                    ) : (
+                                        !prompt.active ? (
+                                            !questionCodeMessage ? (
+                                                <button className={css.panel_submitBtn} onClick={handleSend}>
+                                                    Send <ArrowUpIcon />
+                                                </button>
+                                            ) : (
+                                                <button className={css.panel_hammerBtn}>
+                                                    <HammerIcon />
+                                                </button>
+                                            )
                                         ) : (
-                                            <button className={css.panel_hammerBtn}>
-                                                <HammerIcon />
+                                            <button className={css.panel_callBtn}>
+                                                <CallVoiceIcon />
                                             </button>
                                         )
-                                    ) : (
-                                        <button className={css.panel_callBtn}>
-                                            <CallVoiceIcon />
-                                        </button>
                                     )}
+
                                 </>
                             </CSSTransition>
                         )}

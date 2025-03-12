@@ -102,7 +102,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const messageRef = React.useRef<HTMLDivElement>(null);
     const { setPlayground } = useApp().app;
 
-
     const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
     const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{ top: number; left: number } | null>(null);
 
@@ -503,7 +502,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                         className={`${css.button_steps_green} ${activeMenu ? css.active : ""}`}
                                     >
                                         <span className={css.tooltip}>Download chat text</span>
-
                                         <DownloadIcon />
                                     </button>
                                     <CSSTransition

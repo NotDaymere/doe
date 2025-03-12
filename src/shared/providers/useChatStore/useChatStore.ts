@@ -8,6 +8,7 @@ import { IBranchDialog } from "../../types/BranchDialog";
 import { IMessageNode } from "../../types/MessageNode";
 import { testTextAndCharts } from "../../../components/chat-message/mockData";
 import { useVersionHistoryStore } from "../index";
+import {TableSelectedAreaType} from "../../../widgets/home-screens/lib/enums/TableSelectedAreaTypeEnum";
 
 const initialMessages: IMessage[] = [
     {
@@ -145,6 +146,15 @@ interface ChatState {
     isHyperlinkInputOpen: boolean;
     setIsHyperlinkInputOpen: (isHyperlinkInput: boolean) => void;
 
+    isTablePromptVisible: boolean;
+    selectedArea: {
+        type: TableSelectedAreaType | null;
+        value: string | number | null;
+    };
+
+    setIsTablePromptVisible: (visible: boolean) => void;
+    setSelectedArea: (area: { type: TableSelectedAreaType | null;
+    value: string | number | null }) => void;
 }
 
 export const useChatStore = create<ChatState>()((set, get) => ({
@@ -346,6 +356,13 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
     isHyperlinkInputOpen: false,
     setIsHyperlinkInputOpen: (isHyperlinkInputOpen) => set(() => ({isHyperlinkInputOpen})),
+
+    isTablePromptVisible: false,
+    selectedArea: { type: null, value: null },
+
+    setIsTablePromptVisible: (visible: boolean) => set(() => ({ isTablePromptVisible: visible })),
+    setSelectedArea: (area) => set(() => ({ selectedArea: area })),
+
 
     messageNodeMap: initialMessageNodeMap(initialMessages),
 
