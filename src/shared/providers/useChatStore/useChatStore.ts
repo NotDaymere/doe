@@ -101,7 +101,6 @@ interface ChatState {
     getSavedPlaygroundLast: () => IPlayground | null;
     getSavedPlaygroundLastByType: (type: "code" | "table" | "source") => IPlayground | null;
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
-    setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
 
     messages: IMessage[];
     setMessages: (messages: IMessage[]) => void;

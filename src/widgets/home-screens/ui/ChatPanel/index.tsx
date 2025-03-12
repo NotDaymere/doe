@@ -40,7 +40,8 @@ export const ChatPanel: React.FC = () => {
         cancelReply,
         isReplyLoading,
         getLastCurrentVersionMessageNode,
-        addMessageNode
+        addMessageNode,
+        setIsCurrentBranchOpen
     } = useChatStore();
 
     const [clearContent, setClearContent] = React.useState(false);
@@ -167,6 +168,7 @@ export const ChatPanel: React.FC = () => {
                 const newBranch = addSavedBranch(text, [userMessage], [branchDialog], userMessage.id);
                 setCurrentBranch(newBranch);
                 setIsCreateBranchChatMode(false);
+                setIsCurrentBranchOpen(true);
             }
 
             const lastNodeForReply = getLastCurrentVersionMessageNode();
