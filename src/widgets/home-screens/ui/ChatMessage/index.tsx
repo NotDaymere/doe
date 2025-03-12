@@ -51,6 +51,7 @@ import ChartRenderer from "./assets/ChatRenderer/ChatRenderer";
 import MessageColumnsChart from "./assets/MessageColumnsChart/MessageColumnsChart";
 import { mockColumnsChartMessageData } from "./assets/MessageColumnsChart/mockColumnsChartMessageData";
 import { usePanel } from "../../lib";
+import GeneralLogo from "../GeneralLogo/GeneralLogo";
 
 interface Props {
     data: IMessage;
@@ -428,6 +429,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             <div className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
                                 <MessageLogoIcon fillPath={"currentColor"}/>
                             </div>
+                            <GeneralLogo />
                         </div>
                     )}
                     <MessageNodeVersionSelector message={data}/>
