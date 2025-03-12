@@ -312,12 +312,19 @@ export const ChatPanel: React.FC = () => {
                                                 Send <ArrowUpIcon />
                                             </button>
                                         ) : (
-                                            <button className={css.panel_hammerBtn}>
+                                            <button
+                                                className={clsx(
+                                                    css.panel_button,
+                                                    css.panel_hammerBtn
+                                                )}
+                                            >
                                                 <HammerIcon />
                                             </button>
                                         )
                                     ) : (
-                                        <button className={css.panel_callBtn}>
+                                        <button
+                                            className={clsx(css.panel_button, css.panel_callBtn)}
+                                        >
                                             <CallVoiceIcon />
                                         </button>
                                     )}

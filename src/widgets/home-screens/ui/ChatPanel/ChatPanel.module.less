@@ -66,7 +66,7 @@
     display: flex;
     align-items: center;
     gap: 14px;
-
+    border: 1px solid var(--border-references);
     box-shadow: 2px 8px 16px rgba(#000, 5%);
     z-index: 10;
 
@@ -286,8 +286,8 @@
 .panel_main {
     width: 100%;
 
-    background: #f8f8f8;
-    border: 1px solid #dddddd;
+    background: var(--bg-chat-input);
+    border: 1px solid var(--border-chat-input);
     border-radius: 16px;
     padding: 8px;
     padding-left: 10px;
@@ -317,33 +317,32 @@
     overflow-y: auto;
 }
 
-.panel_callBtn,
 .panel_button {
     width: 36px;
     height: 36px;
-    border: 1px solid #dddddd;
+    border: 1px solid var(--border-chat-input-action-button);
     border-radius: 50%;
     flex-shrink: 0;
 
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all 120ms ease;
 
     svg {
         flex-shrink: 0;
-    }
-
-    &:disabled {
-        cursor: default;
-        background: rgba(#b5b5b5, 20%);
-    }
-}
-
-.panel_button {
-    svg {
         width: 17px;
         height: 17px;
-        fill: #b5b5b5;
+        fill: var(--icon-chat-input-action-button);
+    }
+    &:hover {
+        background-color: var(--bg-chat-input-action-button-hover);
+        border-color: var(--border-chat-input-action-button-hover);
+    }
+    &:disabled {
+        cursor: default;
+        background: var(--bg-chat-input-action-button-disabled);
+        border: none;
     }
 }
 
@@ -351,35 +350,32 @@
     height: 36px;
     padding: 10px 22px;
     border-radius: 12px;
-    background: rgb(31, 31, 31);
+    border: 1px solid var(--border-chat-input-submit-button);
+    background: var(--bg-chat-input-submit-button);
     display: flex;
     align-items: center;
     gap: 2px;
 
     .setFontSohneBuch(14px);
 
-    color: #f8f8f8;
+    color: var(--text-chat-input-submit-button);
 
     svg {
         width: 13px;
         height: 13px;
-        stroke: #f8f8f8;
+        stroke: var(--icon-chat-input-submit-button);
     }
 }
 
 .panel_callBtn {
-    transition: background 120ms ease;
+    transition: all 120ms ease;
 
     svg {
         width: 17px;
         height: 17px;
-        fill: #5b5b5b;
-        transition: fill 120ms ease;
     }
 
     &:hover {
-        background: #5b5b5b;
-
         svg {
             fill: #5cb9ff;
         }
@@ -414,21 +410,15 @@
     align-items: center;
     align-content: center;
     border-radius: 50px;
-    border: 1px solid #dddddd;
+    border: 1px solid var(--border-chat-input-action-button);
     height: 36px;
     width: 36px;
     min-width: 36px;
     min-height: 36px;
-    color: #5b5b5b;
-    transition:
-        background 0.3s ease,
-        color 0.3s ease,
-        border 0.3s ease;
-
+    color: var(--icon-chat-input-action-button);
+    transition: all 0.3s ease;
     &:hover {
-        color: #ffffff;
-        background-color: #5b5b5b;
-        border: none;
+        background-color: var(--bg-chat-input-action-button-hover);
     }
 }
 
