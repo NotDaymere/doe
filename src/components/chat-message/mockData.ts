@@ -338,6 +338,7 @@ export const testTextAndCharts = `
     const area = calculateArea(5);
     console.log("Area:", area);
   </block-code>
+    <p></p>
     <p>Here is some inline code: <inline-code>let y = 10;</inline-code>.</p>  
   
 </response>
