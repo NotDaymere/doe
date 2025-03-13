@@ -17,6 +17,7 @@ interface CustomBarLabelProps {
     value?: number | string;
     payload: CustomBarLabelPayload;
     selectedId: string | null;
+    containerWidth?: number; // Новое свойство для ширины контейнера
 }
 
 export const CustomBarLabel: FC<CustomBarLabelProps> = ({
@@ -27,11 +28,13 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
                                                             value,
                                                             payload,
                                                             selectedId,
+                                                            containerWidth,
                                                         }) => {
     const xNum = typeof x === 'number' ? x : Number(x);
     const yNum = typeof y === 'number' ? y : Number(y);
     const widthNum = typeof width === 'number' ? width : Number(width);
     const heightNum = typeof height === 'number' ? height : Number(height);
+    const containerWidthNum = containerWidth ?? 500; // Значение по умолчанию
 
     const originalData = payload.payload;
 
@@ -40,14 +43,11 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
     }
 
     const barCenter = xNum + widthNum / 2;
-
     const barTop = yNum;
-
     const yAxisX = 20;
 
     return (
         <g>
-
             <circle
                 cx={barCenter}
                 cy={barTop - 6}
@@ -95,6 +95,16 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
             >
                 {value}
             </text>
+
+            <line
+                x1={barCenter}
+                y1={barTop}
+                x2={containerWidthNum}
+                y2={barTop}
+                stroke="#000"
+                strokeDasharray="3 3"
+                strokeWidth={2}
+            />
         </g>
     );
 };
