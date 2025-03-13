@@ -77,15 +77,58 @@ export function useDragFile(props: Props = {}) {
         setDragTarget(false);
     };
 
-    const handleDragDropTarget = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDragDropTarget = async (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-        const filesWithId = Array.from(event.dataTransfer.files).map(file => {
-            return Object.assign(file, {
-                id: `${Date.now()}-${Math.random()}`
-            }) as FileWithId;
-        });
+
+        let filesWithId: FileWithId[] = Array.from(event.dataTransfer.files).map((file) =>
+            Object.assign(file, {
+                id: `${Date.now()}-${Math.random()}`,
+            }) as FileWithId
+        );
+
+        const linkItems = Array.from(event.dataTransfer.items).filter(
+            (item) => item.kind === "string" && item.type === "text/uri-list"
+        );
+
+        for (const item of linkItems) {
+            const url = await new Promise<string>((resolve) => item.getAsString(resolve));
+
+            if (/^https?:\/\//i.test(url)) {
+
+                let fileName = "unknown";
+                try {
+                    const urlObj = new URL(url);
+                    const lastSegment = urlObj.href;
+                    fileName = lastSegment || fileName;
+                } catch {
+
+                }
+                let blob: Blob;
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`Non-200 status: ${response.status}`);
+                    }
+                    blob = await response.blob();
+                } catch (error) {
+                    console.error("Could not fetch the link content (possibly CORS issue).", error);
+                    blob = new Blob(
+                        [`Could not fetch the real content from:\n${url}`],
+                        { type: "text/plain" }
+                    );
+                }
+
+                const fileWithId = Object.assign(
+                    new File([blob], fileName, { type: blob.type }),
+                    { id: `${Date.now()}-${Math.random()}` }
+                ) as FileWithId;
+
+                filesWithId.push(fileWithId);
+            } else {
+                console.log("Dropped link that is not http/https:", url);
+            }
+        }
         props.onUploadFiles?.(filesWithId);
-        stopDrag();
     };
 
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
