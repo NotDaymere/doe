@@ -463,9 +463,19 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         <MessageColumnsChart data={mockColumnsChartMessageData}/>
                         <MessageLineChart data={mockLineChartMessageData}/>
                         <MessageChart data={mockChartMessageData}/>
+                        <text className={"message-text"}>
+                            Here's a simple project idea: a manager platform in Notion,
+                            focusing on task management, milestones, and clear goals for the Microsoft Imagine Cup. I've
+                            chosen a project to create a simple to-do list application as an example.
+                        </text>
+                        <p><br className="ProseMirror-trailingBreak" /></p>
+                        <text className={"message-text"}>
+                            Give me a moment to access your Notion, then you should be able to view the document.
+                        </text>
+                        <p><br className="ProseMirror-trailingBreak" /></p>
                         <MessageFrame data={mockMessageFrameData}/>
                         <text className={"message-text"}>Now Ill show the output in the table:</text>
-                        <MessageTable tableData={mockTableData}/>
+                        <MessageTable tableData={mockTableData} />
                         <Flex justify={"flex-start"} className={"message-actions"} vertical>
                             <Flex>
                                 <TableRandomValues />
