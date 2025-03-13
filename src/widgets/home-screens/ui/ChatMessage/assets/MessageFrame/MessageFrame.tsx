@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import './MessageFrame.less';
+import NotionLogoIcon from "../../../../../../shared/icons/NotionLogo.icon";
 
 interface MessageFrameData {
     title?: string;
@@ -30,12 +31,22 @@ const MessageFrame: FC<MessageFrameProps> = ({ data }) => {
             <div className={`message-frame ${isMinimized ? 'minimized' : ''}`}>
                 <div className="message-frame-titlebar">
                     <div className="window-controls">
-                        <span className="window-control close" onClick={handleClose} title="Close" />
-                        <span className="window-control minimize" onClick={handleMinimize} title="Minimize" />
-                        <span className="window-control maximize" onClick={handleMaximize} title="Maximize" />
+                        {/*<span className="window-control close" onClick={handleClose} title="Close" />*/}
+                        <div
+                            className="window-control minimize"
+                            onClick={handleMinimize} title="Minimize"
+                        >
+                        </div>
+                            <div
+                                className="window-control maximize"
+                                onClick={handleMaximize} title="Maximize">
+                            </div>
                     </div>
                     <div className="window-title">
                         {title}
+                    </div>
+                    <div className="notion_logo">
+                        <NotionLogoIcon/>
                     </div>
                 </div>
                 {!isMinimized && (
@@ -54,7 +65,6 @@ const MessageFrame: FC<MessageFrameProps> = ({ data }) => {
                 )}
             </div>
         </div>
-
     );
 };
 

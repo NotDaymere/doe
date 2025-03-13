@@ -5,7 +5,7 @@
 }
 
 .message-frame {
-  width: 90%;
+  width: -webkit-fill-available;
   margin: 20px auto;
   border: 1px solid rgba(237, 237, 237, 0.9);
   border-radius: 10px;
@@ -23,10 +23,12 @@
     background-color: rgba(237, 237, 237, 0.9);
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 50px;
     padding: 0 10px;
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
+    font-family: Sohne;
 
     .window-controls {
       display: flex;
@@ -34,8 +36,8 @@
       margin-right: 10px;
 
       .window-control {
-        width: 12px;
-        height: 12px;
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
         display: inline-block;
         margin-right: 8px;
@@ -51,18 +53,18 @@
         }
 
         &.minimize {
-          background-color: #ffbd2e;
+          background: #FFD6004D;
+          border: 1px solid #FFD600;
         }
 
         &.maximize {
-          background-color: #28c940;
+          background: #8BCF164D;
+          border: 1px solid #8BCF16;
         }
       }
     }
 
     .window-title {
-      flex: 1;
-      font-weight: 500;
       font-size: 16px;
       color: #1F1F1F;
     }
@@ -70,7 +72,6 @@
 
   .message-frame-content {
     position: relative;
-    padding: 20px;
 
     .message-frame-background {
       position: absolute;
@@ -98,4 +99,16 @@
       margin-bottom: 16px;
     }
   }
+}
+
+.notion_logo {
+  height: 30px;
+  width: 30px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background-color: #FFFFFF;
+  border: 1px solid #DDDDDD;
 }
