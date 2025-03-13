@@ -23,24 +23,26 @@ export const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
         if (!pdf || !containerRef.current) return;
 
         (async () => {
-            const containerWidth = containerRef.current.clientWidth;
-            const containerHeight = containerRef.current.clientHeight;
+            if(containerRef?.current?.clientWidth && containerRef?.current?.clientHeight) {
+                const containerWidth = containerRef.current.clientWidth;
+                const containerHeight = containerRef.current.clientHeight;
 
-            if (!containerWidth || !containerHeight) {
-                console.warn("Container has zero size, using scale=1 by default");
-                setScale(1);
-                return;
+                if (!containerWidth || !containerHeight) {
+                    console.warn("Container has zero size, using scale=1 by default");
+                    setScale(1);
+                    return;
+                }
+
+                const page = await pdf.getPage(1);
+                const viewport = page.getViewport({ scale: 1 });
+
+                const widthRatio = containerWidth / viewport.width;
+                const heightRatio = containerHeight / viewport.height;
+
+                const bestScale = Math.min(widthRatio, heightRatio);
+
+                setScale(bestScale);
             }
-
-            const page = await pdf.getPage(1);
-            const viewport = page.getViewport({ scale: 1 });
-
-            const widthRatio = containerWidth / viewport.width;
-            const heightRatio = containerHeight / viewport.height;
-
-            const bestScale = Math.min(widthRatio, heightRatio);
-
-            setScale(bestScale);
         })();
     }, [pdf]);
 
@@ -59,8 +61,9 @@ export const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
 
                 canvas.width = viewport.width;
                 canvas.height = viewport.height;
-
+                if(containerRef?.current) {
                 containerRef.current.appendChild(canvas);
+                }
 
                 const context = canvas.getContext("2d");
                 if (context) {
