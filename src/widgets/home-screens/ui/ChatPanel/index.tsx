@@ -55,7 +55,6 @@ export const ChatPanel: React.FC = () => {
     const { isTablePromptVisible, setIsTablePromptVisible } = useChatStore();
     const { selectedArea } = useChatStore();
 
-
     React.useEffect(() => {
         const handleSelectionChange = () => {
             const selection = window.getSelection();
@@ -134,9 +133,7 @@ export const ChatPanel: React.FC = () => {
         }
     }, [isCreateBranchChatMode]);
 
-
     const handleSend = async () => {
-
         const userMessage: IMessage = {
             id: Date.now(),
             isUser: true,
@@ -144,19 +141,22 @@ export const ChatPanel: React.FC = () => {
             content: text,
             files: files,
         };
+
         reset();
         setClearContent(true);
+
         if (isCurrentBranchOpen && currentBranch) {
             const reply = await doMessageReply();
             const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
             addMessageNode(lastNodeForUserMessage, userMessage);
+
             const branchDialog = {
                 userRequest: userMessage,
                 botMessages: reply,
             };
             addDialogToCurrentBranch(branchDialog);
-        } else {
 
+        } else {
             const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
             addMessageNode(lastNodeForUserMessage, userMessage);
             reset();
@@ -179,6 +179,7 @@ export const ChatPanel: React.FC = () => {
             addMessageNode(lastNodeForReply, reply);
         }
     };
+
     const handleChangeEditor = (e: string) => {
         setClearContent(false);
         setText(e);
@@ -248,6 +249,7 @@ export const ChatPanel: React.FC = () => {
                         </p>
                     </div>
                 )}
+
                 {files.length > 0 && (
                     <div className={css.panel_files_mask}>
                         <FileListForUpload
@@ -300,6 +302,7 @@ export const ChatPanel: React.FC = () => {
                         </button>
                     </div>
                 )}
+
                 <div className={css.panel_main}>
                     <MagicMenu
                         onDispatchDoe={() => prompt.togglePrompt(true)}
@@ -310,6 +313,7 @@ export const ChatPanel: React.FC = () => {
                             <BranchIcon width={16} height={16} fill={"currentColor"} />
                         </div>
                     )}
+
                     <Editor
                         ref={editorRef}
                         key={placeholder}
@@ -324,6 +328,7 @@ export const ChatPanel: React.FC = () => {
                         clearContent={clearContent}
                         placeholder={placeholder}
                     />
+
                     <SwitchTransition>
                         {isReplyLoading ? (
                             <CSSTransition
@@ -339,15 +344,14 @@ export const ChatPanel: React.FC = () => {
                                 mountOnEnter
                                 unmountOnExit
                             >
-
                                 <button className={css.panel_loadingBtn}>
                                     <div className={css.chat_response_stop_icon}>
                                         <ChatResponseStopIcon
                                             fill="currentColor"
-                                            onClick={handleStopReply} />
+                                            onClick={handleStopReply}
+                                        />
                                     </div>
                                 </button>
-
                             </CSSTransition>
                         ) : (
                             <CSSTransition
@@ -358,7 +362,7 @@ export const ChatPanel: React.FC = () => {
                                     enter: css.fadeEnter,
                                     enterActive: css.fadeEnterActive,
                                     exit: css.fadeExit,
-                                    exitActive: css.fadeExitActive
+                                    exitActive: css.fadeExitActive,
                                 }}
                                 mountOnEnter
                                 unmountOnExit
@@ -371,9 +375,9 @@ export const ChatPanel: React.FC = () => {
                                         <MicrophoneIcon />
                                     </button>
 
-                                    { isTablePromptVisible ? (
+                                    {isTablePromptVisible ? (
                                         <button className={css.panel_send_table_data_btn}>
-                                            <SendTableDataIcon fill = "currentColor"/>
+                                            <SendTableDataIcon fill="currentColor" />
                                         </button>
                                     ) : (
                                         !prompt.active ? (
@@ -392,7 +396,6 @@ export const ChatPanel: React.FC = () => {
                                             </button>
                                         )
                                     )}
-
                                 </>
                             </CSSTransition>
                         )}
