@@ -1,9 +1,8 @@
-import { CSSTransition } from "react-transition-group";
 import MinusIcon from "src/shared/icons/Minus.icon";
 import MinimizeIcon from "src/shared/icons/Minimize.icon";
-import { FC, ReactElement, useEffect, useState } from "react";
+import { FC, ReactElement, useState } from "react";
+import classNames from "classnames";
 import css from "./Bookmarks.module.less";
-import { useClickOut } from "src/shared/hooks/useClickOut";
 
 interface IProps {
     icon: ReactElement;
@@ -14,46 +13,36 @@ interface IProps {
 }
 
 const Bookmarks: FC<IProps> = ({ icon, title, bookmark, isActive, setIsActive }) => {
-    const [showBookmarks, setShowBookmarks] = useState(false);
-
-    useEffect(() => {
-        if (isActive) {
-            setShowBookmarks(true);
-
-            return () => {
-                setShowBookmarks(false);
-                setIsActive(false);
-            };
-        } else {
-            setShowBookmarks(false);
-            setIsActive(false);
-        }
-    }, [isActive]);
-
-    const ref = useClickOut({
-        handler: () => {
-            setIsActive(false);
-        },
-    });
+    const [close, setClose] = useState(false);
 
     return (
-        <CSSTransition in={showBookmarks} timeout={500} classNames={css} unmountOnExit>
-            <div className={css.bookmarks} ref={ref}>
-                <div className={css.bookmarkHeader}>
-                    <div className={css.bookmarkTitle}>
-                        {icon}
-                        <span>{title}</span>
-                    </div>
-                    <div className={css.minimizeButton}>
-                        <MinimizeIcon width={12} height={12} />
-                    </div>
+        <div
+            className={classNames(css.bookmarks, {
+                [css.bookmarksShow]: isActive,
+                [css.bookmarksClose]: close,
+            })}
+        >
+            <div className={classNames(css.bookmarkHeader, { [css.bookmarkHeaderShow]: isActive })}>
+                <div className={css.bookmarkTitle}>
+                    {icon}
+                    <span>{title}</span>
                 </div>
-                <div className={css.bookmark}>
-                    <span>{bookmark}</span>
-                    <MinusIcon width={12} height={2} className={css.removeButton} />
+                <div className={css.minimizeButton}>
+                    <MinimizeIcon
+                        width={12}
+                        height={12}
+                        onClick={() => {
+                            setClose(true);
+                            setTimeout(() => setIsActive(false), 300);
+                        }}
+                    />
                 </div>
             </div>
-        </CSSTransition>
+            <div className={classNames(css.bookmark, { [css.bookmarkShow]: isActive })}>
+                <span>{bookmark}</span>
+                <MinusIcon width={12} height={2} className={css.removeButton} />
+            </div>
+        </div>
     );
 };
 
