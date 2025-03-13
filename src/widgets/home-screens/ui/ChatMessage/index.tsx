@@ -463,6 +463,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         <MessageColumnsChart data={mockColumnsChartMessageData}/>
                         <MessageLineChart data={mockLineChartMessageData}/>
                         <MessageChart data={mockChartMessageData}/>
+
+                        <MessageColumnsChart data={mockColumnsChartMessageData} />
                         <text className={"message-text"}>
                             Here's a simple project idea: a manager platform in Notion,
                             focusing on task management, milestones, and clear goals for the Microsoft Imagine Cup. I've
@@ -473,7 +475,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             Give me a moment to access your Notion, then you should be able to view the document.
                         </text>
                         <p><br className="ProseMirror-trailingBreak" /></p>
-                        <MessageFrame data={mockMessageFrameData}/>
+                        <MessageFrame data={mockMessageFrameData} />
                         <text className={"message-text"}>Now Ill show the output in the table:</text>
                         <MessageTable tableData={mockTableData} />
                         <Flex justify={"flex-start"} className={"message-actions"} vertical>
@@ -499,8 +501,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 <span className={css.button_steps_label}>See all steps</span>
                             </button>
                             <Flex gap={10}>
-                                    <button
-                                        className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
+                                <button
+                                    className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
                                         onClick={isPaused ? handlePlay : handleStop}
                                     >
                                         <span className={css.tooltip}>Listen answer</span>
