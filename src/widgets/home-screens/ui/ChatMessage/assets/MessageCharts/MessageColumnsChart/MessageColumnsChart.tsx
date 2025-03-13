@@ -12,13 +12,7 @@ import {
 } from 'recharts';
 import { CustomBarLabel } from './CustomBarLabel';
 import './MessageColumnsChart.less';
-
-export interface ChartMessageData {
-    id: string;
-    label: string;
-    value: number;
-    percentile: number;
-}
+import { ChartMessageData } from "./mockColumnsChartMessageData";
 
 interface MessageChartProps {
     data: ChartMessageData[];
@@ -38,8 +32,8 @@ const MessageColumnsChart: FC<MessageChartProps> = ({ data }) => {
     ];
 
     return (
-        <div className="message-chart">
-            <div className="chart-container">
+        <div className="column-message-chart">
+            <div className="column-chart-container">
                 <ResponsiveContainer width="100%" height={400}>
                     <BarChart
                         data={data}
