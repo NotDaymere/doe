@@ -454,7 +454,9 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 );
                             })}
                         </MathJax>
-                        <MessageLineChart data={mockLineChartMessageData}/>
+                        <text>Now I’ll plot the output inline instead of using code:</text>
+                        <MessageLineChart data={mockLineChartMessageData} />
+                        <text>Now I’ll plot the output inline instead of using code:</text>
                         <MessageColumnsChart data={mockColumnsChartMessageData} />
                         <text className={"message-text"}>
                             Here's a simple project idea: a manager platform in Notion,

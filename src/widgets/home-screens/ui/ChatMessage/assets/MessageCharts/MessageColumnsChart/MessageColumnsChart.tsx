@@ -23,17 +23,16 @@ const MessageColumnsChart: FC<MessageChartProps> = ({ data }) => {
     const selectedData = data.find((item) => item.id === selectedId);
 
     const gradients = [
-        { start: '#FF8B12', end: '#FFE89D' },
-        { start: 'rgba(0,141,175,0.6)', end: 'rgba(48,214,235,0.2)' },
-        { start: '#8BCF16', end: 'rgba(139,207,22,0.2)' },
-        { start: '#FFC813', end: 'rgba(255,200,19,0.2)' },
-        { start: '#FF6B6B', end: 'rgba(255,107,107,0.2)' },
-        { start: '#A66CFF', end: 'rgba(166,108,255,0.2)' },
+        { start: '#FFC813', end: '#FFC81333' },
+        { start: '#8BCF16', end: '#8BCF1633' },
+        { start: '#008DAF99', end: '#30D6EB33' },
+        { start: '#FF8B12', end: 'rgba(255,139,18,0.27)' },
     ];
 
     return (
         <div className="column-message-chart">
             <div className="column-chart-container">
+                <div className="column-message-chart-title">Codeforces Elo / percentile</div>
                 <ResponsiveContainer width="100%" height={400}>
                     <BarChart
                         data={data}
@@ -60,13 +59,24 @@ const MessageColumnsChart: FC<MessageChartProps> = ({ data }) => {
                                 <stop offset="0%" stopColor="#ccc" stopOpacity={1} />
                                 <stop offset="100%" stopColor="#eee" stopOpacity={1} />
                             </linearGradient>
+
                         </defs>
 
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="label" />
-                        <YAxis />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false}/>
 
-                        <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                        <XAxis
+                            dataKey="label"
+                            tick={{ fill: '#CFCFCF', fontSize: 16 }}
+                            axisLine={{ stroke: '#CFCFCF', strokeWidth: 1 }}
+                            tickLine={false}
+                        />
+                        <YAxis
+                            tick={{ fill: '#CFCFCF', fontSize: 16 }}
+                            axisLine={false}
+                            tickLine={false}
+                        />
+
+                        <Bar dataKey="value" radius={[12, 12, 12, 12]} >
                             <LabelList
                                 dataKey="value"
                                 content={({ x, y, width, height, value, index }) => {
@@ -91,14 +101,15 @@ const MessageColumnsChart: FC<MessageChartProps> = ({ data }) => {
 
                                 let fillColor = `url(#gradient-${item.id})`;
                                 if (isAnySelected && !isSelected) {
-                                    fillColor = 'url(#grayGradient)';
+                                    fillColor = "url(#grayGradient)";
                                 }
 
                                 return (
                                     <Cell
                                         key={item.id}
                                         fill={fillColor}
-                                        style={{ cursor: 'pointer' }}
+                                        className={`chart-bar ${isSelected ? "selected" : ""}`}
+                                        style={{ cursor: "pointer" }}
                                         onClick={() => {
                                             if (isSelected) {
                                                 setSelectedId(null);
