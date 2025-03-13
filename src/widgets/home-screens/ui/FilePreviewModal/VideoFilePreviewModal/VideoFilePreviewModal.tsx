@@ -1,5 +1,4 @@
-import React from "react";
-import {useRef, useState, useEffect} from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import css from "./VideoFilePreviewModal.module.less";
 import FilePreviewModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
@@ -18,17 +17,19 @@ interface VideoModalProps {
     isLoading?: boolean;
 }
 
-const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileName, fileExt }) => {
-
+const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
+                                                              url, onClose, fileName, fileExt
+                                                          }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
+
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const progressBarRef = useRef<HTMLDivElement>(null);
     const [isDraggingProgress, setIsDraggingProgress] = useState(false);
+    const [isMuted, setIsMuted] = useState(false);
 
     const togglePlayPause = () => {
         if (!videoRef.current) return;
-
         if (videoRef.current.paused) {
             videoRef.current.play();
             setIsPlaying(true);
@@ -38,12 +39,17 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileNa
         }
     };
 
+    const toggleMute = () => {
+        if (!videoRef.current) return;
+        videoRef.current.muted = !videoRef.current.muted;
+        setIsMuted(videoRef.current.muted);
+    };
+
     const handleTimeUpdate = () => {
         if (!videoRef.current) return;
         const { currentTime, duration } = videoRef.current;
         setProgress((currentTime / duration) * 100);
     };
-
 
     const updateVideoTime = (clientX: number) => {
         if (!videoRef.current || !progressBarRef.current) return;
@@ -112,9 +118,10 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileNa
                     {isPlaying ? <div></div> : <VideoPlayIcon />}
                 </button>
 
-                <div  ref={progressBarRef}
-                      className={css.progressBarContainer}
-                      onMouseDown={handleProgressMouseDown}
+                <div
+                    ref={progressBarRef}
+                    className={css.progressBarContainer}
+                    onMouseDown={handleProgressMouseDown}
                 >
                     <div className={css.progressBar} style={{ width: `${progress}%` }}>
                         <div className={css.progressBarHandle}></div>
@@ -123,24 +130,28 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url, onClose, fileNa
             </div>
 
             <div className={css.modalContentEditPanel}>
+                <div className={css.modalContentEditPanelItem} onClick={toggleMute}>
+                    <ModalContentPanelVolumeIcon
+                        fill={isMuted ? "#B5B5B5" : "#3D3D3D"}
+                    />
+                </div>
+                <div className={css.separator}></div>
+
+                <div className={css.modalContentEditPanelItem} onClick={togglePlayPause}>
+                    <ModalContentPanelVideoPlayIcon fill="currentColor" />
+                </div>
+                <div className={css.separator}></div>
+
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelVolumeIcon fill="currentColor"/>
+                    <ModalContentPanelCutIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelVideoPlayIcon fill="currentColor"/>
+                    <ModalContentPanelScissorsIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelCutIcon fill="currentColor"/>
-                </div>
-                <div className={css.separator}></div>
-                <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelScissorsIcon fill="currentColor"/>
-                </div>
-                <div className={css.separator}></div>
-                <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelEditIcon fill="currentColor"/>
+                    <ModalContentPanelEditIcon fill="currentColor" />
                 </div>
             </div>
         </FilePreviewModalOverlay>,
