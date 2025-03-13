@@ -9,6 +9,7 @@ import { IMessageNode } from "../../types/MessageNode";
 import { testTextAndCharts } from "../../../components/chat-message/mockData";
 import { useVersionHistoryStore } from "../index";
 import {TableSelectedAreaType} from "../../../widgets/home-screens/lib/enums/TableSelectedAreaTypeEnum";
+import { useState } from "react";
 
 const initialMessages: IMessage[] = [
     {
@@ -155,6 +156,9 @@ interface ChatState {
     setIsTablePromptVisible: (visible: boolean) => void;
     setSelectedArea: (area: { type: TableSelectedAreaType | null;
     value: string | number | null }) => void;
+
+    isMaximized: boolean;
+    setIsMaximized: (isMaximized: boolean) => void;
 }
 
 export const useChatStore = create<ChatState>()((set, get) => ({
@@ -362,6 +366,9 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
     setIsTablePromptVisible: (visible: boolean) => set(() => ({ isTablePromptVisible: visible })),
     setSelectedArea: (area) => set(() => ({ selectedArea: area })),
+
+    isMaximized: false,
+    setIsMaximized: (isMaximized) => set(() => ({isMaximized})),
 
 
     messageNodeMap: initialMessageNodeMap(initialMessages),
