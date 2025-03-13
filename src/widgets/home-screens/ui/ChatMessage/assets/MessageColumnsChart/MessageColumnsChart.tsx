@@ -11,7 +11,7 @@ import {
     Tooltip
 } from 'recharts';
 import { CustomBarLabel } from './CustomBarLabel';
-import './MessageChart.less';
+import './MessageColumnsChart.less';
 
 export interface ChartMessageData {
     id: string;
@@ -24,7 +24,7 @@ interface MessageChartProps {
     data: ChartMessageData[];
 }
 
-const MessageChart: FC<MessageChartProps> = ({ data }) => {
+const MessageColumnsChart: FC<MessageChartProps> = ({ data }) => {
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const selectedData = data.find((item) => item.id === selectedId);
 
@@ -137,4 +137,4 @@ const MessageChart: FC<MessageChartProps> = ({ data }) => {
     );
 };
 
-export default MessageChart;
+export default MessageColumnsChart;
