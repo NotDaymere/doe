@@ -36,7 +36,7 @@ const MessageFrame: FC<MessageFrameProps> = ({ data }) => {
     return (
         <>
             <div className="message-frame-layout">
-                <div className={`message-frame ${isMinimized ? 'minimized' : ''}`}>
+                <div className="message-frame" >
                     <div className="message-frame-titlebar">
                         <div className="window-controls">
                             <div
