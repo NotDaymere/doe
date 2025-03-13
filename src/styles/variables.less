@@ -1,342 +1,227 @@
-// SIDEBAR
 :root {
-    --bg-color-sidebar: var(--color-white-100);
-    --divider: var(--color-neutral-400-20);
-    --bg-sidebar-action-button-default: transparent;
-    --icon-sidebar-action-button-default: var(--color-neutral-400);
-    --bg-sidebar-action-button-hover: var(--color-neutral-100);
-    --icon-sidebar-action-button-hover: var(--color-neutral-600);
-    --bg-sidebar-action-button-active: var(--color-neutral-100);
-    --icon-sidebar-action-button-active: var(--color-neutral-950);
-}
-body.dark {
-    --bg-color-sidebar: var(--color-neutral-900);
-    --divider: var(--color-white-07);
-    --bg-sidebar-action-button-default: transparent;
-    --icon-sidebar-action-button-default: var(--color-white-36);
-    --bg-sidebar-action-button-hover: var(--color-white-05);
-    --icon-sidebar-action-button-hover: var(--color-white-85);
-    --bg-sidebar-action-button-active: var(--color-white-16);
-    --icon-sidebar-action-button-active: var(--color-white-100);
-}
-// CLEAR CHAT BUTTON
-:root {
-    --bg-clear-button: transparent;
-    --border-clear-button: var(--color-neutral-150);
-    --icon-clear-button: var(--color-neutral-150);
-    --bg-clear-button-hover: var(--color-red-500-20);
-    --border-clear-button-hover: var(--color-red-500);
-    --icon-clear-button-hover: var(--color-red-500);
-}
-body.dark {
-    --bg-clear-button: transparent;
-    --border-clear-button: var(--color-white-16);
-    --icon-clear-button: var(--color-white-36);
-    --bg-clear-button-hover: var(--color-red-500-20);
-    --border-clear-button-hover: var(--color-red-500);
-    --icon-clear-button-hover: var(--color-red-500);
-}
-// GAIA WIDGET
-:root {
-    --icon-color-gaia-sidebar: var(--color-neutral-200);
-    --bg-gaia-widget-small: var(--color-neutral-950-20);
-    --border-gaia-widget-small: var(--color-neutral-950-05);
-    --bg-gaia-widget-full: var(--color-neutral-950-35);
-    --border-gaia-widget-full: var(--color-neutral-950-05);
-    --bg-gaia-icons: var(--color-white-80);
-    --divider-gaia-widget: var(--color-black-05);
-}
-body.dark {
-    --icon-color-gaia-sidebar: var(--color-white-36);
-    --bg-gaia-widget-small: var(--color-white-16);
-    --border-gaia-widget-small: var(--color-neutral-950-05);
-    --bg-gaia-widget-full: var(--color-white-16);
-    --border-gaia-widget-full: var(--color-white-05);
-    --bg-gaia-icons: var(--color-white-16);
-    --divider-gaia-widget: var(--color-white-05);
-}
+    // general backgrounds
+    --bg-general: var(--color-white-100); // --color-white-100, --color-neutral-900
+    --bg-var-1: var(--color-neutral-100); // --color-neutral-100, --color-white-05
+    --bg-var-2: var(--color-neutral-100); // --color-neutral-100, --color-white-16
+    --bg-var-3: var(--color-red-500-20); // --color-red-500-20, --color-red-500-20
+    --bg-var-4: var(--color-neutral-950-20); // --color-neutral-950-20, --color-white-16
+    --bg-var-5: var(--color-neutral-950-35); // --color-neutral-950-35, --color-white-16
+    --bg-var-6: var(--color-white-80); // --color-white-80, --color-white-16
+    --bg-var-7: var(--color-neutral-950); // --color-neutral-950, --color-white-100
+    --bg-var-8: transparent; // transparent, --color-white-16
+    --bg-var-9: var(--color-neutral-400-20); // --color-neutral-400-20, --color-white-16
+    --bg-var-10: var(--color-white-80); // --color-white-80, --color-white-05
+    --bg-var-11: var(--color-white-100); // --color-white-100, --color-white-16
+    --bg-var-12: var(--color-neutral-950-35); // --color-neutral-950-35, --color-white-07
+    --bg-var-13: var(--color-neutral-100); // --color-neutral-100, --color-white-07
+    --bg-var-14: var(--color-neutral-950); // --color-neutral-950, --color-white-16
+    --bg-var-15: var(--color-neutral-100); // --color-neutral-100, --color-white-36
+    --bg-var-16: var(--color-white-100); // --color-white-100, --color-white-85
+    --bg-var-17: var(--color-neutral-100); // --color-neutral-100, --color-neutral-950
+    --bg-var-18: var(--color-white-70); // --color-white-70, --color-white-11
+    --bg-var-19: var(--color-neutral-150-20); // --color-neutral-150-20, --color-white-05
+    --bg-var-20: var(--color-white-80); // --color-white-80, --color-neutral-950
+    --bg-var-21: var(--color-neutral-110); // --color-neutral-200, --color-white-11
+    --bg-var-22: var(--color-neutral-120); // --color-neutral-120, --color-neutral-900
+    --bg-var-23: var(--color-neutral-110); // --color-neutral-110, --color-neutral-900
+    --bg-var-24: var(--color-white-100); // --color-neutral-900, --color-white-100
 
-// CHAT INPUT
-:root {
-    --bg-chat-input: var(--color-neutral-100);
-    --border-chat-input: var(--color-neutral-150);
-    --text-chat-input: var(--color-neutral-950);
-}
-body.dark {
-    --bg-chat-input: var(--color-white-05);
-    --border-chat-input: var(--color-white-11);
-    --text-chat-input: var(--color-neutral-120);
-}
-// CHAT INPUT SUBMIT BUTTON
-:root {
-    --bg-chat-input-submit-button: var(--color-neutral-950);
-    --border-chat-input-submit-button: var(--color-neutral-200);
-    --text-chat-input-submit-button: var(--color-neutral-100);
-    --icon-chat-input-submit-button: var(--color-neutral-100);
-}
-body.dark {
-    --bg-chat-input-submit-button: var(--color-white-100);
-    --border-chat-input-submit-button: var(--color-white-16);
-    --text-chat-input-submit-button: var(--color-neutral-950);
-    --icon-chat-input-submit-button: var(--color-neutral-950);
-}
-// CHAT INPUT ACTION BUTTON
-:root {
-    --bg-chat-input-action-button: transparent;
-    --bg-chat-input-action-button-hover: transparent;
-    --bg-chat-input-action-button-disabled: var(--color-neutral-400-20);
-    --border-chat-input-action-button: var(--color-neutral-150);
-    --border-chat-input-action-button-hover: var(--color-neutral-150);
-    --icon-chat-input-action-button: var(--color-neutral-600);
-}
-body.dark {
-    --bg-chat-input-action-button: transparent;
-    --bg-chat-input-action-button-hover: var(--color-white-16);
-    --bg-chat-input-action-button-disabled: var(--color-white-16);
-    --border-chat-input-action-button: var(--color-white-16);
-    --border-chat-input-action-button-hover: transparent;
-    --icon-chat-input-action-button: var(--color-white-85);
-}
-/* MAGIC BUTTON */
-:root {
-    --bg-magic-button: linear-gradient(to bottom, var(--color-white-100), transparent);
-    --icon-magic-button: var(--color-neutral-600);
-}
-body.dark {
-    --bg-magic-button: linear-gradient(to bottom, var(--color-white-16), var(--color-white-05));
-    --icon-magic-button: var(--color-white-85);
-}
-// MAGIC MENU
-:root {
-    --bg-magic-menu: var(--color-white-80);
-    --border-magic-menu: var(--color-neutral-150);
-    --divider-magic-menu: var(--color-neutral-100);
-}
-body.dark {
-    --bg-magic-menu: var(--color-white-05);
-    --border-magic-menu: var(--color-white-11);
-    --divider-magic-menu: var(--color-white-07);
-}
-//MAGIC MENU ITEM
-:root {
-    --bg-magic-menu-item-hover: var(--color-neutral-100);
-    --border-magic-menu-item-hover: var(--color-neutral-150);
-    --border-magic-menu-item: var(--color-neutral-100);
-    --text-magic-menu-item: var(--color-neutral-500);
-    --text-magic-menu-item-hover: var(--color-neutral-950);
-    --icon-magic-menu-item: var(--color-neutral-500);
-    --bg-magic-menu-item-btn: var(--color-white-100);
-    --icon-magic-menu-item-btn: var(--color-neutral-950);
-}
-body.dark {
-    --bg-magic-menu-item-hover: var(--color-white-16);
-    --border-magic-menu-item-hover: var(--color-white-24);
-    --border-magic-menu-item: var(--color-white-05);
-    --text-magic-menu-item: var(--color-neutral-350);
-    --text-magic-menu-item-hover: var(--color-white-100);
-    --icon-magic-menu-item: var(--color-white-16);
-    --bg-magic-menu-item-btn: var(--color-white-16);
-    --icon-magic-menu-item-btn: var(--color-white-100);
-}
-// CONNECT APP MENU
-:root {
-    --bg-connect-app-menu: var(--color-white-100);
-    --border-connect-app-menu: var(--color-neutral-100);
-    --divider-connect-app-menu: var(--color-neutral-100);
-    --bg-connect-app-menu-item-hover: var(--color-neutral-100);
-    --border-connect-app-menu-item-hover: var(--color-neutral-150);
-    --bg-connect-app-menu-tooltip: var(--color-neutral-950-35);
-    --border-connect-app-menu-tooltip: var(--color-neutral-950-05);
-    --text-connect-app-menu-tooltip: var(--color-neutral-100);
-}
-body.dark {
-    --bg-connect-app-menu: var(--color-neutral-900);
-    --border-connect-app-menu: var(--color-white-11);
-    --divider-connect-app-menu: var(--color-neutral-700);
-    --bg-connect-app-menu-item-hover: var(--color-white-16);
-    --border-connect-app-menu-item-hover: var(--color-white-100);
-    --bg-connect-app-menu-tooltip: var(--color-white-07);
-    --border-connect-app-menu-tooltip: var(--color-neutral-950-05);
-    --text-connect-app-menu-tooltip: var(--color-white-100);
-}
-/* UPLOAD FROM APP MENU */
-:root {
-    --bg-upload-app-menu: var(--color-white-100);
-    --border-upload-app-menu: var(--color-neutral-150);
-    --bg-header-upload-app-menu: var(--color-neutral-100);
-    --icon-search-upload-app-menu: var(--color-neutral-950);
-    --text-search-upload-app-menu: var(--color-neutral-950);
-    --placeholder-search-upload-app-menu: var(--color-neutral-950-35);
-    --bg-select-upload-app-menu: var(--color-neutral-950);
-    --border-select-upload-app-menu: var(--color-neutral-180);
-    --text-select-upload-app-menu: var(--color-neutral-950);
-    --icon-select-upload-app-menu: var(--color-neutral-600);
-    --bg-hover-item-upload-app-menu: var(--color-white-100);
-    --text-item-upload-app-menu: var(--color-neutral-950);
-}
-body.dark {
-    --bg-upload-app-menu: var(--color-neutral-900);
-    --border-upload-app-menu: var(--color-white-11);
-    --bg-header-upload-app-menu: var(--color-white-07);
-    --icon-search-upload-app-menu: var(--color-white-100);
-    --text-search-upload-app-menu: var(--color-white-100);
-    --placeholder-search-upload-app-menu: var(--color-white-80);
-    --bg-select-upload-app-menu: var(--color-white-16);
-    --border-select-upload-app-menu: transparent;
-    --text-select-upload-app-menu: var(--color-neutral-400);
-    --icon-select-upload-app-menu: var(--color-white-85);
-    --bg-upload-app-menu-item-hover: var(--color-white-16);
-    --text-upload-app-menu-item: var(--color-white-100);
-}
+    //borders
+    --border-var-1: var(--color-neutral-150); // --color-neutral-150, --color-white-16
+    --border-var-2: var(--color-red-500); // --color-red-500, --color-red-500
+    --border-var-3: var(--color-neutral-950-05); // --color-neutral-950-05, --color-neutral-950-05
+    --border-var-4: var(--color-neutral-950-05); // --color-neutral-950-05, --color-white-05
+    --border-var-5: var(--color-white-11); // --color-white-11, --color-white-11
+    --border-var-6: var(--color-neutral-200); // --color-neutral-200, --color-white-16
+    --border-var-7: var(--color-neutral-150); // --color-neutral-150, transparent
+    --border-var-8: var(--color-neutral-150); // --color-neutral-150, --color-white-11
+    --border-var-9: var(--color-neutral-150); // --color-neutral-150, --color-white-24
+    --border-var-10: var(--color-neutral-100); // --color-neutral-100, --color-white-05
+    --border-var-11: var(--color-neutral-100); // --color-neutral-100, --color-white-11
+    --border-var-12: var(--color-neutral-150); // --color-neutral-150, --color-white-100
+    --border-var-13: var(--color-neutral-180); // --color-neutral-180, transparent
+    --border-var-14: var(--color-neutral-100); // --color-neutral-100, --color-white-16
+    --border-var-15: var(--color-white-100); // --color-white-100, --color-white-16
+    --border-var-16: var(--color-neutral-300); // --color-neutral-300, --color-white-09
+    --border-var-17: var(--color-white-100); // --color-white-100, --color-white-05
 
-// REFERENCES POPUP
-:root {
-    --bg-references: var(--color-white-80);
-    --border-references: var(--color-neutral-100);
-    --text-references: var(--color-neutral-950);
-    --bg-icon-references: var(--color-neutral-100);
-    --icon-references: var(--color-neutral-400);
-    --bg-close-btn-references: var(--color-neutral-100);
-    --border-close-btn-references: var(--color-neutral-150);
-    --icon-close-btn-references: var(--color-neutral-150);
-    --bg-references-btn: var(--color-white-100);
-    --bg-references-btn-hover: var(--color-white-100);
-}
-body.dark {
-    --bg-references: var(--color-white-16);
-    --border-references: var(--color-white-16);
-    --text-references: var(--color-white-100);
-    --bg-icon-references: var(--color-white-36);
-    --icon-references: var(--color-white-85);
-    --bg-close-btn-references: var(--color-white-05);
-    --border-close-btn-references: var(--color-white-11);
-    --icon-close-btn-references: var(--color-neutral-400);
-    --bg-references-btn: var(--color-white-100);
-    --bg-references-btn-hover: var(--color-white-85);
-}
-:root {
-    --bg-color-main: #ffffff;
-    --bg-color-input: #f6f6f6;
-    --bg-message-editor: #efefef;
-    --bg-close-message-editor: #d1d1d1;
-    --btn-color-primary: #fff;
-    --btn-color-inactive: #f0f0f0;
-    --btn-color-border: #d0d0d0;
-    --icon-color-primary: #000;
-    --icon-color-secondary: #7c7c7c;
-    --border-color-primary: #acacac56;
-    --gaia-button-bg: #f0f0f0;
-    --text-color-primary: #000;
-    --table-border-color: #cccccc;
-    --font-sohne: "Sohne";
-    --font-inter: "Inter";
-    --font-sf-mono: "SF Mono";
-}
-/* CHAT CONTAINER */
-:root {
-    --bg-chat-container: var(--color-neutral-100);
-}
-body.dark {
-    --bg-chat-container: var(--color-neutral-950);
-}
-/* TALK MODE BUBBLE MESSAGE */
-:root {
-    --bg-talk-mode-bubble-message: var(--color-white-70);
-    --border-talk-mode-bubble-message: var(--color-white-100);
-    --text-talk-mode-bubble-message: linear-gradient(
+    // dividers
+    --divider-var-1: var(--color-neutral-400-20); // --color-neutral-400-20, --color-white-07
+    --divider-var-2: var(--color-black-05); // --color-black-05, --color-white-05
+    --divider-var-3: var(--color-neutral-100); // --color-neutral-100, --color-white-07
+    --divider-var-4: var(--color-neutral-100); // --color-neutral-100, --color-neutral-700
+
+    //icons
+    --icon-var-1: var(--color-neutral-400); // --color-neutral-400, --color-white-36
+    --icon-var-2: var(--color-neutral-600); // --color-neutral-600, --color-white-85
+    --icon-var-3: var(--color-neutral-950); // --color-neutral-950, --color-white-100
+    --icon-var-4: var(--color-neutral-150); // --color-neutral-150, --color-white-36
+    --icon-var-5: var(--color-red-500); // --color-red-500, --color-red-500
+    --icon-var-6: var(--color-neutral-200); // --color-neutral-200, --color-white-36
+    --icon-var-7: var(--color-neutral-100); // --color-neutral-100, --color-neutral-950
+    --icon-var-8: var(--color-neutral-500); // --color-neutral-500, --color-white-16
+    --icon-var-9: var(--color-neutral-400); // --color-neutral-400, --color-white-85
+    --icon-var-10: var(--color-neutral-150); // --color-neutral-150, --color-neutral-400
+    --icon-var-11: var(--color-neutral-600); // --color-neutral-600, --color-white-36
+    --icon-var-12: var(--color-neutral-600); // --color-neutral-600, --color-neutral-400
+    --icon-var-13: var(--color-neutral-600); // --color-neutral-600, --color-white-60
+
+    //text
+    --text-var-1: var(--color-neutral-950); // --color-neutral-950, --color-neutral-120
+    --text-var-2: var(--color-neutral-100); // --color-neutral-100, --color-neutral-950
+    --text-var-3: var(--color-neutral-500); // --color-neutral-500, --color-neutral-350
+    --text-var-4: var(--color-neutral-950); // --color-neutral-950, --color-white-100
+    --text-var-5: var(--color-neutral-100); // --color-neutral-100, --color-white-100
+    --text-var-6: var(--color-neutral-950-35); // --color-neutral-950-35, --color-white-80
+    --text-var-7: var(--color-neutral-950); // --color-neutral-950, --color-neutral-400
+    --text-var-8: var(--color-neutral-600); // --color-neutral-600, --color-neutral-350
+    --text-var-9: var(--color-neutral-200); // --color-neutral-200, --color-neutral-500
+    --text-var-10: var(--color-white-100); // --color-white-100, --color-neutral-120
+    --text-var-11: var(--color-neutral-600); // --color-neutral-600, --color-neutral-400
+    --text-var-12: var(--color-neutral-200); // --color-neutral-200, --color-neutral-350
+
+    //text gradients
+    --text-gradient-var-1: linear-gradient(
         to right,
         var(--color-black-60),
         var(--color-black-10)
-    );
-    --bg-talk-mode-close-button: var(--color-neutral-150-20);
-    --border-talk-mode-close-button: var(--color-neutral-150);
-    --icon-talk-mode-close-button: var(--color-neutral-150);
+    ); // linear-gradient(to right, --color-black-60, --color-black-10), linear-gradient(to right, --color-white-60, --color-white-100)
 }
+
 body.dark {
-    --bg-talk-mode-bubble-message: var(--color-white-11);
-    --border-talk-mode-bubble-message: var(--color-white-16);
-    --text-talk-mode-bubble-message: linear-gradient(
-        to right,
-        var(--color-white-60),
-        var(--color-white-100)
-    );
-    --bg-talk-mode-close-button: var(--color-white-05);
-    --border-talk-mode-close-button: var(--color-white-11);
-    --icon-talk-mode-close-button: var(--color-neutral-400);
+    // general backgrounds
+    --bg-general: var(--color-neutral-900);
+    --bg-transparent: transparent;
+    --bg-var-1: var(--color-white-05);
+    --bg-var-2: var(--color-white-16);
+    --bg-var-3: var(--color-red-500-20);
+    --bg-var-4: var(--color-white-16);
+    --bg-var-5: var(--color-white-16);
+    --bg-var-6: var(--color-white-16);
+    --bg-var-7: var(--color-white-100);
+    --bg-var-8: var(--color-white-16);
+    --bg-var-9: var(--color-white-16);
+    --bg-var-10: var(--color-white-05);
+    --bg-var-11: var(--color-white-16);
+    --bg-var-12: var(--color-white-07);
+    --bg-var-13: var(--color-white-07);
+    --bg-var-14: var(--color-white-16);
+    --bg-var-15: var(--color-white-36);
+    --bg-var-16: var(--color-white-85);
+    --bg-var-17: var(--color-neutral-950);
+    --bg-var-18: var(--color-white-11);
+    --bg-var-19: var(--color-white-05);
+    --bg-var-20: var(--color-neutral-900);
+    --bg-var-21: var(--color-white-11);
+    --bg-var-22: var(--color-neutral-900);
+    --bg-var-23: var(--color-neutral-900);
+    --bg-var-24: var(--color-neutral-900);
+    //borders
+    --border-var-1: var(--color-white-16);
+    --border-var-2: var(--color-red-500);
+    --border-var-3: var(--color-neutral-950-05);
+    --border-var-4: var(--color-white-05);
+    --border-var-5: var(--color-white-11);
+    --border-var-6: var(--color-white-16);
+    --border-var-7: transparent;
+    --border-var-8: var(--color-white-11);
+    --border-var-9: var(--color-white-24);
+    --border-var-10: var(--color-white-05);
+    --border-var-11: var(--color-white-11);
+    --border-var-12: var(--color-white-100);
+    --border-var-13: transparent;
+    --border-var-14: var(--color-white-16);
+    --border-var-15: var(--color-white-16);
+    --border-var-16: var(--color-white-09);
+    --border-var-17: var(--color-white-05);
+
+    // dividers
+    --divider-var-1: var(--color-white-07);
+    --divider-var-2: var(--color-white-05);
+    --divider-var-3: var(--color-white-07);
+    --divider-var-4: var(--color-neutral-700);
+    //icons
+    --icon-var-1: var(--color-white-36);
+    --icon-var-2: var(--color-white-85);
+    --icon-var-3: var(--color-white-100);
+    --icon-var-4: var(--color-white-36);
+    --icon-var-5: var(--color-red-500);
+    --icon-var-6: var(--color-white-36);
+    --icon-var-7: var(--color-neutral-950);
+    --icon-var-8: var(--color-white-16);
+    --icon-var-9: var(--color-white-85);
+    --icon-var-10: var(--color-neutral-400);
+    --icon-var-11: var(--color-white-36);
+    --icon-var-12: var(--color-neutral-400);
+    --icon-var-13: var(--color-white-60);
+
+    //text
+    --text-var-1: var(--color-neutral-120);
+    --text-var-2: var(--color-neutral-950);
+    --text-var-3: var(--color-neutral-350);
+    --text-var-4: var(--color-white-100);
+    --text-var-5: var(--color-white-100);
+    --text-var-6: var(--color-white-80);
+    --text-var-7: var(--color-neutral-400);
+    --text-var-8: var(--color-neutral-350);
+    --text-var-9: var(--color-neutral-500);
+    --text-var-10: var(--color-neutral-120);
+    --text-var-11: var(--color-neutral-400);
+    --text-var-12: var(--color-neutral-350);
+
+    //text gradients
+    --text-gradient-var-1: linear-gradient(to right, var(--color-white-60), var(--color-white-100));
 }
-/* TALK MODE ACTIONS PANEL */
+
+/* MAGIC BUTTON */
 :root {
-    --bg-talk-mode-actions-panel: var(--color-white-80);
-    --border-talk-mode-actions-panel: var(--color-neutral-100);
-    --icon-talk-mode-actions-panel: var(--color-neutral-400);
-    --bg-active-talk-mode-actions-panel: var(--color-neutral-200);
+    --bg-magic-button: linear-gradient(to bottom, var(--color-white-100), transparent);
 }
 body.dark {
-    --bg-talk-mode-actions-panel: var(--color-neutral-950);
-    --border-talk-mode-actions-panel: var(--color-white-05);
-    --icon-talk-mode-actions-panel: var(--color-white-36);
-    --bg-active-talk-mode-actions-panel: var(--color-white-11);
+    --bg-magic-button: linear-gradient(to bottom, var(--color-white-16), var(--color-white-05));
 }
 
 /* ALL BRANCHES BUTTON */
 :root {
-    --bg-all-branches-button: var(--color-neutral-120);
-    --border-all-branches-button: var(--color-neutral-300);
-    --bg-inner-all-branches-button: var(--color-white-100);
     --icon-all-branches-button: url("#branches-gradient-light");
     --icon-all-branches-button-hover: url("#branches-gradient-light-hover");
 }
 body.dark {
-    --bg-all-branches-button: var(--color-neutral-900);
-    --border-all-branches-button: var(--color-white-09);
-    --bg-inner-all-branches-button: var(--color-white-16);
     --icon-all-branches-button: url("#branches-gradient-dark");
     --icon-all-branches-button-hover: var(--color-white-100);
 }
-// ALL BRANCHES
+
 :root {
-    --bg-all-branches: var(--color-neutral-110);
-    --border-all-branches: var(--color-neutral-150);
-    --text-all-branches-header: var(--color-neutral-600);
-    --icon-all-branches-header: var(--color-neutral-600);
-    --bg-all-branches-header-button: var(--color-neutral-100);
-    --icon-all-branches-header-button: var(--color-neutral-600);
-    --bg-all-branches-list: var(--color-white-80);
-    --border-all-branches-list: var(--color-white-100);
-    --icon-all-branches-item: var(--color-neutral-400);
-    --text-all-branches-item: var(--color-neutral-200);
-    --bg-all-branches-item-hover: var(--color-neutral-100);
-    --icon-all-branches-item-hover: var(--color-neutral-600);
-    --text-all-branches-item-hover: var(--color-neutral-950);
-}
-body.dark {
-    --bg-all-branches: var(--color-neutral-900);
-    --border-all-branches: var(--color-white-11);
-    --text-all-branches-header: var(--color-neutral-350);
-    --icon-all-branches-header: var(--color-white-36);
-    --bg-all-branches-header-button: var(--color-white-16);
-    --icon-all-branches-header-button: var(--color-neutral-400);
-    --bg-all-branches-list: var(--color-white-05);
-    --border-all-branches-list: var(--color-white-05);
-    --icon-all-branches-item: var(--color-white-36);
-    --text-all-branches-item: var(--color-neutral-500);
-    --bg-all-branches-item-hover: var(--color-white-16);
-    --icon-all-branches-item-hover: var(--color-white-85);
-    --text-all-branches-item-hover: var(--color-white-100);
+    --bg-color-main: rgb(255, 255, 255);
+    --bg-color-input: rgb(246, 246, 246);
+    --bg-message-editor: rgb(239, 239, 239);
+    --bg-close-message-editor: rgb(209, 209, 209);
+    --btn-color-primary: rgb(255, 255, 255);
+    --btn-color-inactive: rgb(240, 240, 240);
+    --btn-color-border: rgb(208, 208, 208);
+    --icon-color-primary: rgb(0, 0, 0);
+    --icon-color-secondary: rgb(124, 124, 124);
+    --border-color-primary: rgba(172, 172, 172, 0.337);
+    --gaia-button-bg: rgb(240, 240, 240);
+    --text-color-primary: rgb(0, 0, 0);
+    --table-border-color: rgb(204, 204, 204);
+    --font-sohne: "Sohne";
+    --font-inter: "Inter";
+    --font-sf-mono: "SF Mono";
 }
 // Dark mode
 body.dark {
-    --bg-color-main: #1f1f1f;
-    --bg-color-input: #2f2f2f;
-    --btn-color-primary: #242424;
-    --bg-close-message-editor: #3a3a3a;
-    --bg-message-editor: #2f2f2f;
-    --btn-color-inactive: #2f2f2f;
-    --btn-color-border: #3f3f3f;
-    --icon-color-primary: #fff;
-    --icon-color-secondary: #7c7c7c;
-    --border-color-primary: #979797;
-    --gaia-button-bg: #2f2f2f;
-    --text-color-primary: #fff;
-    --table-border-color: #3f3f3f;
+    --bg-color-main: rgb(31, 31, 31);
+    --bg-color-input: rgb(47, 47, 47);
+    --btn-color-primary: rgb(36, 36, 36);
+    --bg-close-message-editor: rgb(58, 58, 58);
+    --bg-message-editor: rgb(47, 47, 47);
+    --btn-color-inactive: rgb(47, 47, 47);
+    --btn-color-border: rgb(63, 63, 63);
+    --icon-color-primary: rgb(255, 255, 255);
+    --icon-color-secondary: rgb(124, 124, 124);
+    --border-color-primary: rgb(151, 151, 151);
+    --gaia-button-bg: rgb(47, 47, 47);
+    --text-color-primary: rgb(255, 255, 255);
+    --table-border-color: rgb(63, 63, 63);
 }

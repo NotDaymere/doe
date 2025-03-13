@@ -7,7 +7,7 @@
     flex-direction: column;
 
     height: 100%;
-    background-color: var(--bg-color-sidebar);
+    background-color: var(--bg-general);
     &::-webkit-scrollbar {
         display: none;
     }
@@ -27,7 +27,7 @@
 .sidebar_profile {
     margin-top: 16px;
     padding-top: 20px;
-    border-top: 1px solid var(--divider);
+    border-top: 1px solid var(--divider-var-1);
 }
 .sidebar_profile_img {
     width: 40px;
@@ -46,7 +46,7 @@
 .sidebar_controls {
     margin-top: 20px;
     padding-top: 12px;
-    border-top: 1px solid var(--divider);
+    border-top: 1px solid var(--divider-var-1);
 
     overflow-y: auto;
     height: 0;
@@ -67,7 +67,7 @@
 
     + .sidebar_controls_group {
         padding-top: 12px;
-        border-top: 1px solid var(--divider);
+        border-top: 1px solid var(--divider-var-1);
     }
 }
 
@@ -75,7 +75,7 @@
     width: 40px;
     height: 40px;
     border-radius: 12px;
-    background-color: var(--bg-sidebar-action-button-default);
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -95,18 +95,18 @@
     svg {
         width: 20px;
         height: 20px;
-        fill: var(--icon-sidebar-action-button-default);
+        fill: var(--icon-var-1);
     }
     &:hover {
-        background-color: var(--bg-sidebar-action-button-hover);
+        background-color: var(--bg-var-1);
         svg {
-            fill: var(--icon-sidebar-action-button-hover);
+            fill: var(--icon-var-2);
         }
     }
     &[data-active="true"] {
-        background-color: var(--bg-sidebar-action-button-active);
+        background-color: var(--bg-var-2);
         svg {
-            fill: var(--icon-sidebar-action-button-active);
+            fill: var(--icon-var-3);
         }
     }
 }
@@ -120,19 +120,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--bg-clear-button);
+    background-color: transparent;
     border-radius: 12px;
-    border: 1px solid var(--border-clear-button);
+    border: 1px solid var(--border-var-1);
     svg {
         width: 20px;
         height: 20px;
-        fill: var(--icon-clear-button);
+        fill: var(--icon-var-4);
     }
     &:hover {
-        background-color: var(--bg-clear-button-hover);
-        border-color: var(--border-clear-button-hover);
+        background-color: var(--bg-var-3);
+        border-color: var(--border-var-2);
         svg {
-            fill: var(--icon-clear-button-hover);
+            fill: var(--icon-var-4);
         }
     }
 }

@@ -14,9 +14,9 @@
 
     &:hover,
     &._active {
-        background: var(--bg-magic-menu-item-hover);
-        border: 1px solid var(--border-magic-menu-item-hover);
-        color: var(--text-magic-menu-item-hover);
+        background: var(--bg-var-2);
+        border: 1px solid var(--border-var-9);
+        color: var(--text-var-4);
         border-radius: 12px;
 
         > span > svg {
@@ -29,9 +29,9 @@
     // width: 148px;
     padding: 4px;
     border-radius: 12px;
-    border: 1px solid var(--border-connect-app-menu);
+    border: 1px solid var(--border-var-11);
 
-    background: var(--bg-connect-app-menu);
+    background: var(--bg-general);
     position: absolute;
     bottom: 8px;
     left: calc(100% - 8px);
@@ -62,13 +62,13 @@
         content: attr(data-label);
         padding: 2px 8px;
         border-radius: 6px;
-        background: var(--bg-connect-app-menu-tooltip);
-        border: 1px solid var(--border-connect-app-menu-tooltip);
+        background: var(--bg-var-12);
+        border: 1px solid var(--border-var-3);
         backdrop-filter: blur(20px);
         box-shadow: 0 4px 20px rgba(#000, 6%);
 
         .setFontSohneBuch(14px);
-        color: var(--text-connect-app-menu-tooltip);
+        color: var(--text-var-5);
 
         position: absolute;
         bottom: 18px;
@@ -82,8 +82,8 @@
     }
 
     &:hover {
-        border-color: var(--border-connect-app-menu-item-hover);
-        background-color: var(--bg-connect-app-menu-item-hover);
+        border-color: var(--border-var-12);
+        background-color: var(--bg-var-2);
         &::after {
             opacity: 1;
             z-index: 50;
