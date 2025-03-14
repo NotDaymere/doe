@@ -69,6 +69,13 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
         );
     };
 
+    const handleCopy = () => {
+        if (selectedData) {
+            const textToCopy = `${selectedData.value}/${selectedData.percentile}th`;
+            navigator.clipboard.writeText(textToCopy);
+        }
+    };
+
     return (
         <div className="column-message-chart">
             <div className="column-message-chart-title">Codeforces Elo / percentile</div>
@@ -155,19 +162,17 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
                                         marginRight: "6px",
                                     }}
                                 ></span>
-                                <span >{selectedData.label}</span>
+                                <span>{selectedData.label}</span>
                             </div>
-
                         </div>
                         <span className="line"></span>
                         <div className="value-percentile-container">
-                            <span >{selectedData.value}/{selectedData.percentile}th</span>
-                            <button className="copy-button">
-                                <div><ScreenShareIcon/></div>
+                            <span>{selectedData.value}/{selectedData.percentile}th</span>
+                            <button className="copy-button" onClick={handleCopy}>
+                                <div><ScreenShareIcon /></div>
                                 <span>Copy</span>
                             </button>
                         </div>
-
                         <div className="details">
                             <p className="selected-data">Codeforces Elo:</p>
                             <span className="selected-data-item">{selectedData.value}</span>
