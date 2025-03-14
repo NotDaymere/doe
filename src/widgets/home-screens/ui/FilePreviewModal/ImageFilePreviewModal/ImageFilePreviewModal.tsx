@@ -29,23 +29,23 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({ url, onClose, fileNa
 
             <div className={css.modalContentEditPanel}>
                 <div className={css.modalContentEditPanelItem}>
-                     <ModalContentPanelCutIcon fill="currentColor"/>
+                    <ModalContentPanelCutIcon fill="inherit" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelPencilIcon fill="currentColor"/>
+                    <ModalContentPanelPencilIcon fill="inherit" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelEditIcon fill="currentColor"/>
+                    <ModalContentPanelEditIcon fill="inherit" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelColorsIcon fill="currentColor"/>
+                    <ModalContentPanelColorsIcon fill="inherit" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelAddTextIcon fill="currentColor"/>
+                    <ModalContentPanelAddTextIcon fill="inherit" />
                 </div>
             </div>
         </FilePreviewModalOverlay>,

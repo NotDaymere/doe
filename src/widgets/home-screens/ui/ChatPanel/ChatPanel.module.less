@@ -155,7 +155,7 @@
         content: "";
         width: calc(100% - 2px);
         height: calc(100% - 2px);
-        background: #fff;
+        background: var(--bg-var-32);
         z-index: 12;
         position: absolute;
         top: 1px;
@@ -177,7 +177,7 @@
     opacity: 1;
     transition: opacity 300ms ease;
     position: relative;
-    color: #355302;
+    color: var(--text-var-19);
     z-index: 20;
     padding-left: 10px;
 }
@@ -197,7 +197,7 @@
         content: "";
         width: 30%;
         height: 30%;
-        background: #8bcf16;
+        background: var(--color-green-300);
         position: absolute;
         top: 0;
         left: 0;
@@ -222,7 +222,7 @@
         transition: opacity 300ms ease;
         z-index: 14;
         transform: translate(100%, 0);
-        background-image: radial-gradient(circle, #cdf38d 1px, transparent 1px);
+        background-image: radial-gradient(circle, rgb(205, 243, 141) 1px, transparent 1px);
         mask-image: radial-gradient(black, transparent 70%);
         background-size: 10px 10px;
         background-position: 0 0;
@@ -234,8 +234,8 @@
     height: 36px;
     border-radius: 12px;
     flex-shrink: 0;
-    background: #d9f4ac;
-    border: 1px solid #8bcf16;
+    background: var(--bg-var-33);
+    border: 1px solid var(--color-green-400);
     position: relative;
     transition: opacity 300ms ease;
     z-index: 15;
@@ -244,7 +244,7 @@
         width: 12px;
         height: 12px;
         flex-shrink: 0;
-        fill: #8bcf16;
+        fill: var(--color-green-400);
 
         position: absolute;
         left: 50%;
@@ -442,6 +442,9 @@
     right: -9px;
     top: 31%;
     z-index: 20;
+    svg {
+        stroke: var(--icon-var-14);
+    }
 }
 
 .panel_drag_upload_files_wrapper {
@@ -477,11 +480,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    background-color: #f3fae9;
+    background-color: var(--bg-var-32);
     z-index: 100;
-    border: 1px dashed #8bcf16;
+    border: 1px dashed var(--color-green-400);
     .setFontSohneBuch(16px, 1.1, normal);
-    color: #355302;
+    color: var(--text-var-19);
 }
 
 .panel_uploading_files_icon {
@@ -514,7 +517,7 @@
 
 .progressFill {
     height: 100%;
-    background-color: #8bcf16;
+    background-color: var(--color-green-400);
     animation: fillBar 5s linear forwards;
     z-index: 1005;
 }

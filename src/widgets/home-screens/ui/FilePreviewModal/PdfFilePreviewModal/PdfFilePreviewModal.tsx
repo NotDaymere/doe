@@ -1,5 +1,5 @@
 import React from "react";
-import {useRef, useState, useEffect} from "react";
+import { useRef, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import css from "./PdfFilePreviewModal.module.less";
 import FilePreviewModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
@@ -28,14 +28,11 @@ const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isZoomed, setIsZoomed] = useState<boolean>(false);
 
-
     useEffect(() => {
         const loadingTask = pdfjsLib.getDocument(url);
-        loadingTask.promise.then(
-            (loadedPdf: any) => {
-                setPdf(loadedPdf);
-            }
-        );
+        loadingTask.promise.then((loadedPdf: any) => {
+            setPdf(loadedPdf);
+        });
     }, [url]);
 
     useEffect(() => {
@@ -46,7 +43,6 @@ const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
 
         for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
             pdf.getPage(pageNumber).then((page: any) => {
-
                 const viewport = page.getViewport({ scale });
 
                 const canvas = document.createElement("canvas");
@@ -67,7 +63,6 @@ const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
             });
         }
     }, [pdf, isZoomed]);
-
 
     useEffect(() => {
         const container = containerRef.current;
@@ -120,23 +115,20 @@ const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
 
     return (
         <div className={css.modalPdfContainer}>
-            <div className={css.modalPdf} ref={containerRef}>
-
-            </div>
+            <div className={css.modalPdf} ref={containerRef}></div>
             <div className={css.modalPdfPageSlideWrapper}>
                 <button className={css.prevAndNextButton} onClick={prevPage}>
                     <ArrowLeftIcon opacity={currentPage <= 1 ? 0.3 : 1} />
                 </button>
                 <span>
-                    {currentPage}{pdf ? ` / ${pdf.numPages}` : ""}
+                    {currentPage}
+                    {pdf ? ` / ${pdf.numPages}` : ""}
                 </span>
                 <button className={css.prevAndNextButton} onClick={nextPage}>
                     <ArrowRightIcon opacity={pdf && currentPage >= pdf.numPages ? 0.3 : 1} />
                 </button>
             </div>
-            <button
-                className={css.zoomButton}
-                onClick={() => setIsZoomed(prev => !prev)}>
+            <button className={css.zoomButton} onClick={() => setIsZoomed((prev) => !prev)}>
                 <ZoomPdfFileIcon />
             </button>
         </div>
@@ -155,19 +147,19 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({ url, onClose, fileName, 
             <PDFViewer url={url} />
             <div className={css.modalContentEditPanel}>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelRedactIcon fill="currentColor"/>
+                    <ModalContentPanelRedactIcon fill="inherit" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelPencilIcon fill="currentColor"/>
+                    <ModalContentPanelPencilIcon fill="inherit" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelAddTextIcon fill="currentColor"/>
+                    <ModalContentPanelAddTextIcon fill="inherit" />
                 </div>
             </div>
         </FilePreviewModalOverlay>,
-        document.body,
+        document.body
     );
 };
 
