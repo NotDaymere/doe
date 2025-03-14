@@ -1,122 +1,124 @@
 .table-playground {
-  background-color: #F1F1F1;
-  position: relative;
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-
-  .editor-section {
-    flex: 1;
-    min-height: 0;
+    background-color: #f1f1f1;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-  }
+    overflow: auto;
 
-  .editor-wrapper {
-    flex: 1;
-    min-height: 0;
-  }
-
-  .action-buttons {
-    margin-top: auto;
-    padding-left: 16px;
-    padding-right: 16px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 8px;
-    position: sticky;
-    width: 100%;
-    height: 0;
-    z-index: 1000;
-    bottom: 24px;
-
-    opacity: 1;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-
-    &.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .editor-section {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
     }
 
-    .action-buttons-right-part {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .editor-wrapper {
+        flex: 1;
+        min-height: 0;
     }
-    .ant-btn {
-      padding: 2px;
-      margin: 0;
-      height: 36px;
-      width: 36px;
-      transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+
+    .action-buttons {
+        margin-top: auto;
+        padding-left: 16px;
+        padding-right: 16px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 8px;
+        position: sticky;
+        width: 100%;
+        height: 0;
+        z-index: 1000;
+        bottom: 24px;
+
+        opacity: 1;
+        transform: translateY(10px);
+        transition:
+            opacity 0.3s ease-out,
+            transform 0.3s ease-out;
+
+        &.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .action-buttons-right-part {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .ant-btn {
+            padding: 2px;
+            margin: 0;
+            height: 36px;
+            width: 36px;
+            transition:
+                transform 0.2s ease-in-out,
+                opacity 0.2s ease-in-out;
+        }
+        button {
+            transition: width 500ms;
+            animation: fadeIn 0.45s ease-out forwards;
+        }
     }
-    button {
-      transition: width 500ms;
-      animation: fadeIn 0.45s ease-out forwards;
-    }
-  }
 }
 .tiptap-editor {
-  outline: none;
-  border: none;
-  padding: 24px;
-  padding-top: 16px;
-  font-family: 'Söhne', sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 22.4px;
-  letter-spacing: 0;
-  background: inherit;
-  color: #1F1F1F;
-  caret-color: #9747FF;
+    outline: none;
+    border: none;
+    padding: 24px;
+    padding-top: 16px;
+    font-family: "Söhne", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22.4px;
+    letter-spacing: 0;
+    background: inherit;
+    color: #1f1f1f;
+    caret-color: #9747ff;
 
-  &::selection {
-    background-color: #F1E7FF !important;
-    color: #1F1F1F !important;
-  }
+    &::selection {
+        background-color: var(--bg-var-29) !important;
+        color: var(--text-var-1) !important;
+    }
 }
-.tiptap{
-  outline: none;
-  border: none;
+.tiptap {
+    outline: none;
+    border: none;
 }
 
 .tabs-panel {
-  border-radius: 12px;
-  background: rgba(181, 181, 181, 0.2);
-  border: 1px solid rgba(221, 221, 221, 1);
-  padding: 0;
-  margin: 0;
+    border-radius: 12px;
+    background: rgba(181, 181, 181, 0.2);
+    border: 1px solid rgba(221, 221, 221, 1);
+    padding: 0;
+    margin: 0;
 }
 
 .tabs-panel-playground {
-  border-radius: 16px 16px 0 0;
-  background: #F1F1F1;
-  margin: 0;
-  color: #1F1F1F;
-  padding-top: 16px;
-  padding-left: 24px;
-  padding-bottom: 16px;
-  font-size: 16px;
-  font-weight: 500;
-  position: relative;
-  bottom: -10px;
+    border-radius: 16px 16px 0 0;
+    background: #f1f1f1;
+    margin: 0;
+    color: #1f1f1f;
+    padding-top: 16px;
+    padding-left: 24px;
+    padding-bottom: 16px;
+    font-size: 16px;
+    font-weight: 500;
+    position: relative;
+    bottom: -10px;
 }
 ::selection {
-  background-color: #F1E7FF !important;
-
+    background-color: var(--bg-var-29) !important;
 }
 .tiptap-editor,
 .tiptap,
 .table-playground,
 .tiptap-editor * {
-  &::selection {
-    background-color: #F1E7FF !important;
-
-  }
+    &::selection {
+        background-color: var(--bg-var-29) !important;
+    }
 }

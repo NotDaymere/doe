@@ -81,21 +81,23 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
     const {
         editor,
-        setEditor ,
+        setEditor,
         isCurrentBranchOpen,
         addMessageNodeVersion,
         addMessageNode,
         getLastCurrentVersionMessageNode,
-        doMessageReply
+        doMessageReply,
     } = useChatStore();
 
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
     const { setPlayground } = useApp().app;
 
-
     const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
-    const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{ top: number; left: number } | null>(null);
+    const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{
+        top: number;
+        left: number;
+    } | null>(null);
 
     const { setSelectedText, setIsShowReferencePanel } = useChatContext();
 
@@ -115,10 +117,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             const selection = window.getSelection();
             const selectionText = selection ? selection.toString().trim() : "";
 
-            if (
-                selection &&
-                selectionText
-            ) {
+            if (selection && selectionText) {
                 const range = selection.getRangeAt(0);
                 const rects = range.getClientRects();
                 if (rects.length === 0) return;
@@ -140,7 +139,10 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             ? selectionTop + (topDiff > 0 ? maxDistance : -maxDistance)
                             : candidateTop;
 
-                    setReferenceButtonPosition({ top: clampedTop + offsetY, left: candidateLeft + offsetX });
+                    setReferenceButtonPosition({
+                        top: clampedTop + offsetY,
+                        left: candidateLeft + offsetX,
+                    });
                 } else {
                     setReferenceButtonPosition({ top: selectionTop, left: selectionLeft });
                 }
@@ -250,7 +252,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             content: content,
         };
 
-
         addMessageNodeVersion(data.id, newMessage);
 
         setUpdatedContent(content);
@@ -259,7 +260,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         const reply = await doMessageReply();
         const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
         addMessageNode(lastNodeForUserMessage, reply);
-
     };
 
     const cancelEdit = (id: number) => {
@@ -322,15 +322,12 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             onClick={() => cancelEdit(data.id)}
                         >
                             <span className={css.svg_wrapper}>
-                                 <span className={css.tooltip}>Cancel</span>
+                                <span className={css.tooltip}>Cancel</span>
                                 <CrossIcon />
                             </span>
                         </button>
 
-                        <button
-                            className={css.edit_controls_saveBtn}
-                            onClick={handleEdit}
-                        >
+                        <button className={css.edit_controls_saveBtn} onClick={handleEdit}>
                             <span className={css.svg_wrapper}>
                                 <span className={css.tooltip}>Send edit</span>
                                 <SendIcon />
@@ -350,15 +347,14 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         return (
             <div className={css.input_container}>
                 <div className={`${isCurrentBranchOpen ? css.input_open_branch : css.input} `}>
-
-                    {!isCurrentBranchOpen &&
+                    {!isCurrentBranchOpen && (
                         <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
                             <span className={css.svg_wrapper}>
                                 <PenIcon />
                                 <span className={css.tooltip}>Edit</span>
                             </span>
                         </button>
-                    }
+                    )}
                     <div
                         className={`${isCurrentBranchOpen ? css.input_message_branch : css.input_message} `}
                         dangerouslySetInnerHTML={{
@@ -372,9 +368,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         onReferenceClick={handleReferenceClick}
                     />
                 </div>
-                {!isCurrentBranchOpen &&
-                    <MessageNodeVersionSelector message={data}/>
-                }
+                {!isCurrentBranchOpen && <MessageNodeVersionSelector message={data} />}
             </div>
         );
     }
@@ -384,7 +378,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             <div
                 className={`${isCurrentBranchOpen ? css.chat_message_branch : css.chat_message}  ${data.isUser ? css.user_message : css.bot_message}`}
             >
-
                 <ReferenceButton
                     isVisible={referenceButtonVisible}
                     position={referenceButtonPosition}
@@ -395,16 +388,22 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 <div className={css.sub_bot_message_info_container}>
                     {!data.isUser && (
                         <div
-                            className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
-                            <div className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
-                                <MessageLogoIcon fillPath={"currentColor"}/>
+                            className={`${css.bot_logo_background} ${
+                                isCurrentBranchOpen
+                                    ? css.bot_logo_background_open
+                                    : css.bot_logo_background
+                            }`}
+                        >
+                            <div
+                                className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_open : css.bot_logo}`}
+                            >
+                                <MessageLogoIcon />
                             </div>
                         </div>
                     )}
-                    <MessageNodeVersionSelector message={data}/>
+                    <MessageNodeVersionSelector message={data} />
                 </div>
                 <div className={css.message_content}>
-
                     <div ref={messageRef}>
                         <MathJax>
                             {parsedContent.map((part, index) => {
@@ -428,7 +427,9 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 );
                             })}
                         </MathJax>
-                        <text className={"message-text"}>Now Ill show the output in the table:</text>
+                        <text className={"message-text"}>
+                            Now Ill show the output in the table:
+                        </text>
                         <Flex justify={"flex-start"} className={"message-actions"} vertical>
                             <Flex>
                                 <TableRandomValues />
@@ -442,7 +443,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
                     {!data.isUser && (
                         <Flex justify={"space-between"} className={"message-actions"}>
-
                             <button onClick={openSourcePlayground} className={css.button_steps}>
                                 <SvgIcon
                                     style={{ width: "15px", height: "15px", marginRight: "2px" }}
@@ -451,15 +451,15 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 <span className={css.button_steps_label}>See all steps</span>
                             </button>
                             <Flex gap={10}>
-                                    <button
-                                        className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
-                                        onClick={isPaused ? handlePlay : handleStop}
-                                    >
-                                        <span className={css.tooltip}>Listen answer</span>
-                                        <div className={css.button_container}>
-                                            <PlayIcon fill="currentColor" />
-                                        </div>
-                                    </button>
+                                <button
+                                    className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
+                                    onClick={isPaused ? handlePlay : handleStop}
+                                >
+                                    <span className={css.tooltip}>Listen answer</span>
+                                    <div className={css.button_container}>
+                                        <PlayIcon fill="currentColor" />
+                                    </div>
+                                </button>
 
                                 <div className={css.download} ref={downloadRef}>
                                     <button
@@ -491,7 +491,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                     <span className={css.tooltip}>Copy chat text</span>
                                     <CopyIcon />
                                 </button>
-
                             </Flex>
                         </Flex>
                     )}

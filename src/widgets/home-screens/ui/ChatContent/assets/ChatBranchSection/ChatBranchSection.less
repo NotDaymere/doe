@@ -1,90 +1,104 @@
 .chat-branch-section {
-  background: linear-gradient(273.07deg, rgba(255, 205, 205, 0.12) -11.76%, #F8F8F8 18.11%, #FFF9E6 47.97%, #F8F8F8 77.84%, #E4F4FF 107.71%, #F8F8F8 137.58%);
-  border: 2px dashed rgba(221, 221, 221, 1);
-  border-radius: 8px;
-  width: calc(100% - 60px);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-  justify-content: center;
-  box-sizing: border-box;
-  margin-left: 60px;
-  padding: 20px;
-  color: rgba(91, 91, 91, 1);
-  transition: background 0.3s ease, color 0.3s ease;
-  position: relative;
-  cursor: pointer;
-  max-width: 900px;
+    background: var(--bg-gradient-var-6);
 
-  .chat-text {
+    border: 2px dashed var(--border-var-1);
+    border-radius: 8px;
+    width: calc(100% - 60px);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    box-sizing: border-box;
+    margin-left: 60px;
+    padding: 20px;
+    color: var(--icon-var-17);
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
     position: relative;
-    font-weight: 500;
-    font-size: 16px;
-    color: rgba(91, 91, 91, 1);
-    display: inline-block;
-  }
-
-  .normal-text {
-    transition: opacity 0.3s ease;
-  }
-
-  .gradient-text {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, #FF7E7E 0%, #B1B1B1 23%, #FFBF49 43%, #B1B1B1 68.5%, #67A4FF 95.5%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .branch-options-button {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
     cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-  }
-
-  &:hover,
-  &.active {
-    background: #FFFFFF;
-    color: rgba(246, 132, 132, 1);
+    max-width: 900px;
+    min-height: 62px;
+    .chat-text {
+        position: relative;
+        font-weight: 500;
+        font-size: 16px;
+        color: var(--text-var-8);
+        display: inline-block;
+    }
 
     .normal-text {
-      opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
     .gradient-text {
-      opacity: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            rgb(255, 126, 126) 0%,
+            #b1b1b1 23%,
+            #ffbf49 43%,
+            #b1b1b1 68.5%,
+            #67a4ff 95.5%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .branch-options-button {
-      opacity: 1;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        svg {
+            fill: var(--icon-var-3);
+        }
     }
-  }
+
+    &:hover,
+    &.active {
+        background: var(--bg-var-30);
+        color: rgba(246, 132, 132, 1);
+        border-color: var(--border-var-21);
+
+        .normal-text {
+            opacity: 0;
+        }
+
+        .gradient-text {
+            opacity: 1;
+        }
+
+        .branch-options-button {
+            opacity: 1;
+        }
+    }
 }
 
 .chat-branch-section-container {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }

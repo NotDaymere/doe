@@ -1,41 +1,40 @@
 .input_container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: end;
-  justify-content: end;
-  position: relative;
-  width: 100%;
-  max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: end;
+    justify-content: end;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
 }
 
 .input {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  gap: 8px;
-  width: 100%;
-  margin-top: 8px;
-  position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+    margin-top: 8px;
+    position: relative;
 }
 .input_open_branch {
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 20px;
-  position: relative;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+    position: relative;
 }
-
 
 .input_editBtn {
     cursor: pointer;
     height: 30px;
     border-radius: 8px;
     padding: 8px;
-    background: #f1e7ff;
-    border: 1px solid #9747ff;
+    background: var(--bg-var-27);
+    border: 1px solid var(--border-var-19);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,17 +50,16 @@
     svg {
         width: 12px;
         height: 12px;
-        fill: #9747ff;
+        fill: var(--color-purple-500);
     }
 
     &:hover {
-        background: darken(#f1e7ff, 3%);
         width: auto; /* Expand width dynamically */
     }
 
     .tooltip {
         margin-left: 0;
-        color: #5b2b99;
+        color: var(--text-var-14);
         font-size: 14px;
         display: inline-block;
         max-width: 0;
@@ -84,33 +82,33 @@
     }
 }
 .input_message {
-  position: relative;
+    position: relative;
     padding: 8px 12px;
     border-radius: 12px;
-    border: 1px dashed #b5b5b5;
+    border: 1px dashed var(--border-var-18);
     max-width: 80%;
     .setFontSohneBuch(16px, 1.4, normal);
-    color: #1f1f1f;
+    color: var(--text-var-1);
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
 }
 .input_message_branch {
-  padding: 8px 12px;
-  border-radius: 12px;
-  border: 1px dashed #b5b5b5;
-  max-width: 100%;
-  .setFontSohneBuch(16px, 1.4, normal);
-  color: #1f1f1f;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px dashed var(--border-var-18);
+    max-width: 100%;
+    .setFontSohneBuch(16px, 1.4, normal);
+    color: var(--text-var-1);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 // Edit
 .edit {
     border-radius: 16px;
-    border: 1px solid #dddddd;
-    background: #fbfbfb;
+    border: 1px solid var(--border-var-1);
+    background: var(--bg-var-28);
     padding: 20px;
     width: calc(100% - 66px);
     align-self: end;
@@ -118,7 +116,7 @@
 .edit_editor_editor {
     padding-right: 10px;
     .setFontSohneBuch(16px, 1.2, normal);
-    color: #1f1f1f;
+    color: var(--text-var-1);
 
     max-height: 160px;
     overflow-y: auto;
@@ -132,77 +130,77 @@
 
 .edit_controls_cancelBtn,
 .edit_controls_saveBtn {
-  cursor: pointer;
-  height: 30px;
-  border-radius: 8px;
-  padding: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition:
-          background 125ms ease,
-          width 300ms ease;
+    cursor: pointer;
+    height: 30px;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition:
+        background 125ms ease,
+        width 300ms ease;
 
-  .svg-wprapper {
-    position: relative;
-    display: inline-block;
-  }
+    .svg-wprapper {
+        position: relative;
+        display: inline-block;
+    }
 
+    svg {
+        width: 12px;
+        height: 12px;
+    }
 
-  svg {
-    width: 12px;
-    height: 12px;
-  }
+    &:hover {
+        width: auto;
+    }
 
-  &:hover {
-    width: auto;
-  }
-
-  .tooltip {
-    margin-left: 0;
-    margin-right: 0;
-    font-size: 14px;
-    display: inline-block;
-    max-width: 0;
-    -webkit-transition:
+    .tooltip {
+        margin-left: 0;
+        margin-right: 0;
+        font-size: 14px;
+        display: inline-block;
+        max-width: 0;
+        -webkit-transition:
             max-width 0.3s,
             margin-left 0.35s,
             margin-right 0.3s;
-    transition:
+        transition:
             max-width 0.3s,
             margin-right 0.3s,
             margin-left 0.35s;
-    vertical-align: top;
-    white-space: nowrap;
-    overflow: hidden;
-  }
+        vertical-align: top;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 
-  &:hover .tooltip {
-    max-width: 300px;
-    margin-right: 6px;
-  }
+    &:hover .tooltip {
+        max-width: 300px;
+        margin-right: 6px;
+    }
 }
 
 .edit_controls_cancelBtn {
-    border: 1px solid #dddddd;
+    border: 1px solid var(--border-var-1);
+    color: var(--text-var-16);
     svg {
-        fill: #5b5b5b;
+        fill: var(--icon-var-2);
         width: 10px;
         height: 10px;
     }
 }
 .edit_controls_saveBtn {
-    background: #1f1f1f;
+    background: var(--bg-var-7);
     svg {
-        fill: #ffffff;
+        fill: var(--text-var-17);
     }
-  .tooltip {
-    color: #ffffff;
-  }
+    .tooltip {
+        color: var(--text-var-17);
+    }
 
-  &:hover .tooltip {
-    color: #ffffff;
-  }
+    &:hover .tooltip {
+        color: var(--text-var-17);
+    }
 }
 
 .user {
@@ -210,7 +208,7 @@
 }
 
 .chat_message {
-   .setFontSohneBuch(16px, 1.2, normal);
+    .setFontSohneBuch(16px, 1.2, normal);
     display: flex;
     margin: 8px 0;
     padding: 10px;
@@ -219,14 +217,14 @@
     overflow-wrap: break-word;
 }
 .chat_message_branch {
-  .setFontSohneBuch(16px, 1.2, normal);
-  display: flex;
-  margin: 8px 0;
-  padding: 10px;
-  width: 100%;
-  word-wrap: break-word;
-  word-break: break-word;
-  overflow-wrap: break-word;
+    .setFontSohneBuch(16px, 1.2, normal);
+    display: flex;
+    margin: 8px 0;
+    padding: 10px;
+    width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .user_message {
@@ -234,7 +232,7 @@
     justify-content: flex-end;
     background-color: #efefef;
     border-radius: 16px;
-  .setFontSohneBuch(16px, 1.2, normal);
+    .setFontSohneBuch(16px, 1.2, normal);
 }
 
 .bot_message {
@@ -247,23 +245,24 @@
     z-index: 1;
     display: flex;
     flex-direction: column;
-    background-color: #fff;
+    background-color: var(--bg-var-30);
+    color: var(--text-var-1);
     border-radius: 16px;
     padding: 20px;
     gap: 20px;
-  .setFontSohneBuch(16px, 1.2, normal);
+    .setFontSohneBuch(16px, 1.2, normal);
 }
 .message_content::selection,
 .message_content *::selection {
-  background-color: rgba(241, 231, 255, 1);
+    background-color: var(--bg-var-29);
 }
 .message_content::-moz-selection,
 .message_content *::-moz-selection {
-  background-color: rgba(241, 231, 255, 1);
+    background-color: var(--bg-var-29);
 }
 .message_content::-webkit-selection,
 .message_content *::-webkit-selection {
-  background-color: rgba(241, 231, 255, 1);
+    background-color: var(--bg-var-29);
 }
 
 .edit_button {
@@ -276,14 +275,18 @@
     padding: 4px;
     cursor: pointer;
 }
-.sub_bot_message_info_container{
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  margin-right: 8px;
-  gap: 16px;
+.sub_bot_message_info_container {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin-right: 8px;
+    gap: 16px;
 }
+
+//for gradient borders
 .bot_logo {
+    position: relative;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -291,66 +294,48 @@
     min-width: 46px;
     height: 46px;
     min-height: 46px;
-    background-color: #fff;
+    background: var(--bg-var-31);
+
     border-radius: 8px;
     margin: auto;
     svg {
         width: 20px;
         height: 20px;
+        fill: var(--icon-doe-msg-logo);
+    }
+    &_open {
+        background: var(--bg-gradient-var-5);
+
+        svg {
+            fill: var(--icon-doe-msg-logo-branches);
+        }
     }
 }
 
-//for gradient borders
-.bot_logo {
-  position: relative;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  min-width: 46px;
-  height: 46px;
-  min-height: 46px;
-  background-color: #fff;
-  border-radius: 8px;
-  margin: auto;
-  svg {
-    width: 20px;
-    height: 20px;
-  }
-}
-
 .bot_logo_background {
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  min-width: 48px;
-  height: 48px;
-  min-height: 48px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    min-height: 48px;
 
-  background-image: linear-gradient(
-          to right bottom,
-          rgba(141, 141, 141, 0.46),
-          rgba(255, 255, 255, 1)
-  );
-  border-radius: 8px;
-  transition: all 0.3s ease;
+    background-image: var(--bg-gradient-var-3);
+
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    &_open {
+        background-image: linear-gradient(
+            135deg,
+            rgba(141, 141, 141, 0.76) 11.46%,
+            var(--color-white-100) 91.67%
+        );
+        box-shadow: 0 3px 12px 0 rgba(31, 31, 31, 0.05);
+    }
 }
 
-.bot_logo_background_open {
-  color: #FFFFFF !important;
-  background: linear-gradient(180deg, #5B5B5B 0%, #1F1F1F 100%) !important;
-  border: 1px solid !important;
-  border-image-source: linear-gradient(135deg, rgba(141, 141, 141, 0.46) 11.46%, #FFFFFF 91.67%) !important;
-  box-shadow: 0 3px 12px 0 rgba(31, 31, 31, 0.05) !important;
-  fill: #FFFFFF;
-  svg {
-    color: #FFFFFF !important;
-    fill: #FFFFFF;
-  }
-}
 .button_steps {
     border-radius: 1000px;
     padding: 8px 14px;
@@ -394,7 +379,7 @@
     }
 
     &:hover.button_container {
-      background: transparent;
+        background: transparent;
     }
 
     .tooltip {
@@ -422,93 +407,94 @@
     }
 
     &:hover .button_container {
-      background: transparent;
+        background: transparent;
     }
 }
 
 .glowing_border {
-  flex-shrink: 0;
-  cursor: pointer;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  border-radius: 18px;
-  padding: 8.5px;
-  overflow: hidden;
-  white-space: nowrap;
-  position: relative;
-  max-width: 35px;
-  border: 5px transparent;
-  background-color: transparent;
+    flex-shrink: 0;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    border-radius: 18px;
+    padding: 8.5px;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    max-width: 35px;
+    border: 5px transparent;
+    background-color: transparent;
 
-  svg path {
-    fill: #5B2B99;
-  }
+    svg path {
+        fill: #5b2b99;
+    }
 
-  .tooltip {
-    display: none;
-  }
-
+    .tooltip {
+        display: none;
+    }
 }
 
 .glowing_border::before {
-  content: "";
-  position: absolute;
-  top:  -4px;
-  left:  -4px;
-  right:  -4px;
-  bottom:  -4px;
-  border-radius: 50%;
-  background: conic-gradient(
-          from 0deg,
-          rgba(151, 71, 255, 0.72) 0deg,
-          rgba(181, 122, 255, 0.71) 90deg,
-          #9747FF00  180deg,
-          rgba(181, 122, 255, 0.63) 270deg,
-          rgba(151, 71, 255, 0.72) 360deg
-  );
-  z-index: -1;
-  animation: rotate 3s linear infinite, shimmer 3s ease-in-out infinite;
-
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        rgba(151, 71, 255, 0.72) 0deg,
+        rgba(181, 122, 255, 0.71) 90deg,
+        #9747ff00 180deg,
+        rgba(181, 122, 255, 0.63) 270deg,
+        rgba(151, 71, 255, 0.72) 360deg
+    );
+    z-index: -1;
+    animation:
+        rotate 3s linear infinite,
+        shimmer 3s ease-in-out infinite;
 }
 
 @keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes shimmer {
-  0%, 100% {
-    filter: brightness(1);
-  }
-  50% {
-    filter: brightness(1.3);
-  }
+    0%,
+    100% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.3);
+    }
 }
 
 .button_container {
-  border-radius: 50%;
-  min-width: 33px;
-  height: 33px;
-  background-color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-  z-index: 1;
+    border-radius: 50%;
+    min-width: 33px;
+    height: 33px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    z-index: 1;
 
-  &:hover {
-    background: #ffffff;
-  }
+    &:hover {
+        background: #ffffff;
+    }
 }
 
 .button_steps_green {

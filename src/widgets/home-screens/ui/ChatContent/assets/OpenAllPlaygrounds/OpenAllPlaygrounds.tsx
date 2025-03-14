@@ -92,32 +92,7 @@ export default function OpenAllPlaygrounds({
                 </button>
             </div>
             <div className={"open-all-playgrounds-content"}>
-                {[
-                    {
-                        id: "1",
-                        name: "Приклад коду",
-                        type: "code",
-                        open: true,
-                        data: {
-                            language: "javascript",
-                            code: "console.log('Привіт, світ!');",
-                        },
-                        text: "console.log('Привіт, світ!');",
-                    },
-                    {
-                        id: "2",
-                        name: "Таблиця даних",
-                        type: "table",
-                        open: false,
-                        data: {
-                            headers: ["Ім'я", "Вік", "Місто"],
-                            rows: [
-                                ["Іван", "30", "Київ"],
-                                ["Марія", "25", "Львів"],
-                            ],
-                        },
-                    },
-                ].map((savedPlayground, index) => (
+                {savedPlaygrounds.map((savedPlayground, index) => (
                     <div
                         key={savedPlayground.id}
                         className={`open-all-playgrounds-content-example ${

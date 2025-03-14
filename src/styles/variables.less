@@ -24,7 +24,20 @@
     --bg-var-21: var(--color-neutral-110); // --color-neutral-200, --color-white-11
     --bg-var-22: var(--color-neutral-120); // --color-neutral-120, --color-neutral-900
     --bg-var-23: var(--color-neutral-110); // --color-neutral-110, --color-neutral-900
-    --bg-var-24: var(--color-white-100); // --color-neutral-900, --color-white-100
+    --bg-var-24: var(--color-white-100); // --color-white-100, --color-neutral-900
+    --bg-var-25: var(--color-neutral-100); // --color-neutral-100, --color-white-16
+    --bg-var-26: var(--color-neutral-450); // --color-neutral-450, --color-neutral-910
+    --bg-var-27: var(--color-purple-100); // --color-purple-100, --color-purple-500-11
+    --bg-var-28: var(--color-neutral-100); // --color-neutral-100, transparent
+    --bg-var-29: var(--color-purple-100); // --color-purple-100, --color-purple-500-24
+    --bg-var-30: var(--color-white-100); // --color-white-100, --color-white-07
+    --bg-var-31: var(
+        --color-white-100
+    ); /* --color-white-100, linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.11) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+    )*/
 
     //borders
     --border-var-1: var(--color-neutral-150); // --color-neutral-150, --color-white-16
@@ -44,6 +57,10 @@
     --border-var-15: var(--color-white-100); // --color-white-100, --color-white-16
     --border-var-16: var(--color-neutral-300); // --color-neutral-300, --color-white-09
     --border-var-17: var(--color-white-100); // --color-white-100, --color-white-05
+    --border-var-18: var(--color-neutral-400); // --color-neutral-400, --color-white-16
+    --border-var-19: var(--color-purple-500); // --color-purple-500, --color-purple-500-85
+    --border-var-20: var(--color-black-10); // --color-black-10, --color-white-36
+    --border-var-21: var(--color-neutral-150); // --color-neutral-150, --color-white-05
 
     // dividers
     --divider-var-1: var(--color-neutral-400-20); // --color-neutral-400-20, --color-white-07
@@ -65,6 +82,10 @@
     --icon-var-11: var(--color-neutral-600); // --color-neutral-600, --color-white-36
     --icon-var-12: var(--color-neutral-600); // --color-neutral-600, --color-neutral-400
     --icon-var-13: var(--color-neutral-600); // --color-neutral-600, --color-white-60
+    --icon-var-14: var(--color-neutral-600); // --color-neutral-600, --color-white-100
+    --icon-var-15: var(--color-neutral-400); // --color-neutral-400, --color-white-60
+    --icon-var-16: var(--color-neutral-150); // --color-neutral-150, --color-white-16
+    --icon-var-17: var(--color-neutral-600); // --color-neutral-600, --color-neutral-350
 
     //text
     --text-var-1: var(--color-neutral-950); // --color-neutral-950, --color-neutral-120
@@ -79,13 +100,12 @@
     --text-var-10: var(--color-white-100); // --color-white-100, --color-neutral-120
     --text-var-11: var(--color-neutral-600); // --color-neutral-600, --color-neutral-400
     --text-var-12: var(--color-neutral-200); // --color-neutral-200, --color-neutral-350
-
-    //text gradients
-    --text-gradient-var-1: linear-gradient(
-        to right,
-        var(--color-black-60),
-        var(--color-black-10)
-    ); // linear-gradient(to right, --color-black-60, --color-black-10), linear-gradient(to right, --color-white-60, --color-white-100)
+    --text-var-13: var(--color-neutral-400); // --color-neutral-400, --color-neutral-500
+    --text-var-14: var(--color-purple-700); // --color-purple-700, --color-purple-500-76
+    --text-var-15: var(--color-neutral-600); // --color-neutral-600, --color-white-85
+    --text-var-16: var(--color-neutral-600); // --color-neutral-600, --color-neutral-120
+    --text-var-17: var(--color-white-100); // --color-white-100, --color-neutral-950
+    --text-var-18: var(--color-neutral-400); // --color-neutral-400, --color-neutral-350
 }
 
 body.dark {
@@ -116,6 +136,13 @@ body.dark {
     --bg-var-22: var(--color-neutral-900);
     --bg-var-23: var(--color-neutral-900);
     --bg-var-24: var(--color-neutral-900);
+    --bg-var-25: var(--color-white-16);
+    --bg-var-26: var(--color-neutral-910);
+    --bg-var-27: var(--color-purple-500-11);
+    --bg-var-28: transparent;
+    --bg-var-29: var(--color-purple-500-24);
+    --bg-var-30: var(--color-white-07);
+    --bg-var-31: linear-gradient(180deg, var(--color-white-11) 0%, var(--color-white-05) 100%);
     //borders
     --border-var-1: var(--color-white-16);
     --border-var-2: var(--color-red-500);
@@ -134,6 +161,10 @@ body.dark {
     --border-var-15: var(--color-white-16);
     --border-var-16: var(--color-white-09);
     --border-var-17: var(--color-white-05);
+    --border-var-18: var(--color-white-16);
+    --border-var-19: var(--color-purple-500-85);
+    --border-var-20: var(--color-white-36);
+    --border-var-21: var(--color-white-05);
 
     // dividers
     --divider-var-1: var(--color-white-07);
@@ -154,7 +185,10 @@ body.dark {
     --icon-var-11: var(--color-white-36);
     --icon-var-12: var(--color-neutral-400);
     --icon-var-13: var(--color-white-60);
-
+    --icon-var-14: var(--color-white-100);
+    --icon-var-15: var(--color-white-60);
+    --icon-var-16: var(--color-white-16);
+    --icon-var-17: var(--color-neutral-350);
     //text
     --text-var-1: var(--color-neutral-120);
     --text-var-2: var(--color-neutral-950);
@@ -168,11 +202,77 @@ body.dark {
     --text-var-10: var(--color-neutral-120);
     --text-var-11: var(--color-neutral-400);
     --text-var-12: var(--color-neutral-350);
-
-    //text gradients
-    --text-gradient-var-1: linear-gradient(to right, var(--color-white-60), var(--color-white-100));
+    --text-var-13: var(--color-neutral-500);
+    --text-var-14: var(--color-purple-500-76);
+    --text-var-15: var(--color-white-85);
+    --text-var-16: var(--color-neutral-120);
+    --text-var-17: var(--color-neutral-950);
+    --text-var-18: var(--color-neutral-350);
 }
 
+// GRADIENTS
+:root {
+    //background gradients
+    --bg-gradient-var-1: linear-gradient(90deg, transparent 0%, var(--color-neutral-150) 100%);
+    --bg-gradient-var-2: linear-gradient(90deg, var(--color-neutral-150) 0%, transparent 100%);
+    --bg-gradient-var-3: linear-gradient(
+        135deg,
+        var(--color-neutral-500-46) 11.46%,
+        var(--color-white-100) 91.67%
+    );
+    --bg-gradient-var-4: linear-gradient(
+        135deg,
+        var(--color-white-11) 11.46%,
+        var(--color-white-05) 91.67%
+    );
+    --bg-gradient-var-5: linear-gradient(
+        180deg,
+        var(--color-neutral-600) 0%,
+        var(--color-neutral-950) 100%
+    );
+    --bg-gradient-var-6: linear-gradient(
+        273.07deg,
+        rgba(255, 205, 205, 0.12) -11.76%,
+        #f8f8f8 18.11%,
+        #fff9e6 47.97%,
+        #f8f8f8 77.84%,
+        #e4f4ff 107.71%,
+        #f8f8f8 137.58%
+    );
+    //text gradients
+    --text-gradient-var-1: linear-gradient(to right, var(--color-black-60), var(--color-black-10));
+}
+body.dark {
+    //background gradients
+    --bg-gradient-var-1: linear-gradient(90deg, transparent 0%, var(--color-white-16) 100%);
+    --bg-gradient-var-2: linear-gradient(90deg, var(--color-white-16) 0%, transparent 100%);
+
+    --bg-gradient-var-3: linear-gradient(
+        135deg,
+        var(--color-white-11) 11.46%,
+        var(--color-white-05) 91.67%
+    );
+    --bg-gradient-var-4: linear-gradient(
+        135deg,
+        var(--color-neutral-500-46) 11.46%,
+        var(--color-white-100) 91.67%
+    );
+    --bg-gradient-var-5: linear-gradient(
+        -15deg,
+        var(--color-white-05) 20%,
+        var(--color-white-100) 100%
+    );
+    --bg-gradient-var-6: linear-gradient(
+        90.48deg,
+        rgba(255, 205, 205, 0.024) -19.77%,
+        rgba(255, 114, 114, 0.2) 4.99%,
+        rgba(255, 174, 0, 0.2) 29.75%,
+        rgba(255, 95, 95, 0.2) 54.52%,
+        rgba(0, 123, 255, 0.2) 79.28%,
+        rgba(254, 120, 120, 0.2) 104.04%
+    ); //text gradients
+    --text-gradient-var-1: linear-gradient(to right, var(--color-white-60), var(--color-white-100));
+}
 /* MAGIC BUTTON */
 :root {
     --bg-magic-button: linear-gradient(to bottom, var(--color-white-100), transparent);
@@ -185,10 +285,14 @@ body.dark {
 :root {
     --icon-all-branches-button: url("#branches-gradient-light");
     --icon-all-branches-button-hover: url("#branches-gradient-light-hover");
+    --icon-doe-msg-logo: url("#doe-msg-logo-light");
+    --icon-doe-msg-logo-branches: url("#doe-msg-logo-dark");
 }
 body.dark {
     --icon-all-branches-button: url("#branches-gradient-dark");
     --icon-all-branches-button-hover: var(--color-white-100);
+    --icon-doe-msg-logo: url("#doe-msg-logo-dark");
+    --icon-doe-msg-logo-branches: url("#doe-msg-logo-light");
 }
 
 :root {

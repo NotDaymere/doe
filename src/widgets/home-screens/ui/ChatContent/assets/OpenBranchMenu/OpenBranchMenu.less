@@ -18,7 +18,8 @@
     backdrop-filter: blur(100px);
     display: flex;
     flex-direction: column;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--bg-general);
+    border: 1px solid var(--border-var-10);
     justify-content: flex-start;
     align-items: stretch;
     gap: 8px;
@@ -57,7 +58,7 @@
     font-weight: 500;
     gap: 5px;
     .setFontSohneBuch(16px, 1.4, normal);
-    color: rgba(181, 181, 181, 1);
+    color: var(--text-var-18);
     border: 1px solid transparent;
     transition:
         background-color 0.3s ease,
@@ -69,17 +70,17 @@
             background-color 0.3s ease,
             fill 0.3s ease,
             border 0.3s ease;
-        fill: rgba(181, 181, 181, 1);
+        fill: var(--icon-var-15);
     }
     .text-margin-bottom {
         margin-bottom: -4px;
     }
 }
 .open-menu-branches-menu-button:hover {
-    background: #f8f8f8;
-    border: 1px solid #dddddd;
-    color: #1f1f1f;
+    background: var(--bg-var-2);
+    border: 1px solid var(--border-var-21);
+    color: var(--text-var-4);
     svg {
-        fill: #5b5b5b;
+        fill: var(--icon-var-14);
     }
 }
