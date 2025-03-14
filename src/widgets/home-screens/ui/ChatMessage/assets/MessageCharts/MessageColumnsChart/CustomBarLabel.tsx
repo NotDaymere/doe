@@ -17,7 +17,7 @@ interface CustomBarLabelProps {
     value?: number | string;
     payload: CustomBarLabelPayload;
     selectedId: string | null;
-    containerWidth?: number; // Новое свойство для ширины контейнера
+    containerWidth?: number;
 }
 
 export const CustomBarLabel: FC<CustomBarLabelProps> = ({
@@ -33,36 +33,30 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
     const xNum = typeof x === 'number' ? x : Number(x);
     const yNum = typeof y === 'number' ? y : Number(y);
     const widthNum = typeof width === 'number' ? width : Number(width);
-    const heightNum = typeof height === 'number' ? height : Number(height);
-    const containerWidthNum = containerWidth ?? 500; // Значение по умолчанию
-
+    const containerWidthNum = containerWidth ?? 500;
     const originalData = payload.payload;
-
-    if (!originalData || originalData.id !== selectedId) {
-        return null;
-    }
-
     const barCenter = xNum + widthNum / 2;
     const barTop = yNum;
-    const yAxisX = 20;
-
+    if (selectedId === null) {
+        return (
+            <text
+                x={barCenter}
+                y={barTop - 8}
+                textAnchor="middle"
+                fill="#B5B5B5"
+                fontSize={14}
+                fontWeight="bold"
+            >
+                {value} / {originalData.percentile}th
+            </text>
+        );
+    }
+    if (originalData.id !== selectedId) {
+        return null;
+    }
     return (
         <g>
-            <circle
-                cx={barCenter}
-                cy={barTop - 6}
-                r={6}
-                fill="#000"
-            />
-
-            <rect
-                x={barCenter - 50}
-                y={barTop - 34}
-                width={100}
-                height={28}
-                rx={4}
-                fill="#000"
-            />
+            <rect x={barCenter - 40} y={barTop - 35} width={80} height={28} rx={15} ry={15} fill="#000" />
             <text
                 x={barCenter}
                 y={barTop - 16}
@@ -73,19 +67,17 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
             >
                 {value} / {originalData.percentile}%
             </text>
-
             <line
-                x1={yAxisX + 50}
+                x1={30 + 50}
                 y1={barTop}
                 x2={barCenter}
                 y2={barTop}
-                stroke="#000"
+                stroke="#5B5B5B"
                 strokeDasharray="3 3"
                 strokeWidth={2}
             />
-
             <text
-                x={yAxisX + 50}
+                x={20 + 50}
                 y={barTop}
                 textAnchor="end"
                 alignmentBaseline="middle"
@@ -95,16 +87,16 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
             >
                 {value}
             </text>
-
             <line
                 x1={barCenter}
                 y1={barTop}
-                x2={containerWidthNum}
+                x2={30 + 510}
                 y2={barTop}
-                stroke="#000"
+                stroke="#5B5B5B"
                 strokeDasharray="3 3"
                 strokeWidth={2}
             />
+            <circle cx={barCenter} cy={barTop - 1} r={5} fill="#000" stroke="#fff" strokeWidth={2} />
         </g>
     );
 };
