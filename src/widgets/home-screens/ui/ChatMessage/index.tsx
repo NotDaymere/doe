@@ -97,7 +97,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         addMessageNodeVersion,
         addMessageNode,
         getLastCurrentVersionMessageNode,
-        doMessageReply
+        doMessageReply,
+        isHyperlinkInputOpen
     } = useChatStore();
 
     const parsedContent = parseContent(content);
@@ -346,12 +347,14 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             </span>
                         </button>
                     </div>
-                    <ReferenceButton
-                        isVisible={referenceButtonVisible}
-                        position={referenceButtonPosition}
-                        onClose={handleClose}
-                        onReferenceClick={handleReferenceClick}
-                    />
+                    {!isHyperlinkInputOpen &&
+                        <ReferenceButton
+                            isVisible={referenceButtonVisible}
+                            position={referenceButtonPosition}
+                            onClose={handleClose}
+                            onReferenceClick={handleReferenceClick}
+                        />
+                    }
                 </div>
             );
         }
@@ -396,12 +399,14 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             )}
                         </div>
                     </div>
-                    <ReferenceButton
-                        isVisible={referenceButtonVisible}
-                        position={referenceButtonPosition}
-                        onClose={handleClose}
-                        onReferenceClick={handleReferenceClick}
-                    />
+                    {!isHyperlinkInputOpen &&
+                        <ReferenceButton
+                            isVisible={referenceButtonVisible}
+                            position={referenceButtonPosition}
+                            onClose={handleClose}
+                            onReferenceClick={handleReferenceClick}
+                        />
+                    }
                 </div>
                 {!isCurrentBranchOpen &&
                     <MessageNodeVersionSelector message={data} />
@@ -415,13 +420,14 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             <div
                 className={`${isCurrentBranchOpen ? css.chat_message_branch : css.chat_message}  ${data.isUser ? css.user_message : css.bot_message}`}
             >
-
-                <ReferenceButton
-                    isVisible={referenceButtonVisible}
-                    position={referenceButtonPosition}
-                    onClose={handleClose}
-                    onReferenceClick={handleReferenceClick}
-                />
+                {!isHyperlinkInputOpen &&
+                    <ReferenceButton
+                        isVisible={referenceButtonVisible}
+                        position={referenceButtonPosition}
+                        onClose={handleClose}
+                        onReferenceClick={handleReferenceClick}
+                    />
+                }
 
                 <div className={css.sub_bot_message_info_container}>
                     {!data.isUser && (
