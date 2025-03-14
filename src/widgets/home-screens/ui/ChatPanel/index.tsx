@@ -23,7 +23,6 @@ import HandCursorIcon from "../../../../shared/icons/HandCursor.icon";
 import BranchIcon from "../../../../shared/icons/Branch.icon";
 import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgress.icon";
 import { IMessage } from "src/shared/types/Message";
-import { HyperlinkInput } from "./assets/HyperlinkInput/HyperlinkInput";
 import SendTableDataIcon from "../../../../shared/icons/SendTableData.icon";
 
 export const ChatPanel: React.FC = () => {
@@ -42,56 +41,18 @@ export const ChatPanel: React.FC = () => {
         isReplyLoading,
         getLastCurrentVersionMessageNode,
         addMessageNode,
-        setIsCurrentBranchOpen
+        setIsCurrentBranchOpen,
+        isHyperlinkInputOpen,
+        setIsHyperlinkInputOpen
     } = useChatStore();
 
     const [clearContent, setClearContent] = React.useState(false);
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore();
     const [loadingFile, setLoadingFile] = React.useState<string | undefined>(undefined);
 
-    const { isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
-    const [hyperlinkPosition, setHyperlinkPosition] = React.useState<{ top: number; left: number } | null>(null);
-
     const { isTablePromptVisible, setIsTablePromptVisible } = useChatStore();
     const { selectedArea } = useChatStore();
-
-    React.useEffect(() => {
-        const handleSelectionChange = () => {
-            const selection = window.getSelection();
-            const text = selection ? selection.toString().trim() : "";
-
-            if (selection && text && selection.rangeCount > 0) {
-                const range = selection.getRangeAt(0);
-                const rects = range.getClientRects();
-                if (rects.length === 0) {
-                    setHyperlinkPosition(null);
-                    return;
-                }
-
-                const lastRect = rects[rects.length - 1];
-                const selectionTop = lastRect.top + window.scrollY;
-                const selectionLeft = lastRect.left + window.scrollX;
-
-                const offsetY = -40;
-                const offsetX = 0;
-
-                setHyperlinkPosition({
-                    top: selectionTop + offsetY,
-                    left: selectionLeft + offsetX,
-                });
-            } else {
-                setHyperlinkPosition(null);
-            }
-        };
-
-        document.addEventListener("mouseup", handleSelectionChange);
-        document.addEventListener("selectionchange", handleSelectionChange);
-
-        return () => {
-            document.removeEventListener("mouseup", handleSelectionChange);
-            document.removeEventListener("selectionchange", handleSelectionChange);
-        };
-    }, []);
+    const panelRef = React.useRef<HTMLDivElement>(null);
 
     const {
         drag,
@@ -132,6 +93,42 @@ export const ChatPanel: React.FC = () => {
             (editorRef.current as any).focus();
         }
     }, [isCreateBranchChatMode]);
+
+    const [showLinkInput, setShowLinkInput] = React.useState(false);
+    const [linkUrl, setLinkUrl] = React.useState("");
+    const [savedRange, setSavedRange] = React.useState<Range | null>(null);
+
+    const handleTextSelection = React.useCallback(() => {
+        const selection = window.getSelection();
+        if (!selection) return;
+
+        const selectedText = selection.toString();
+        if (selectedText.trim().length > 0) {
+            const range = selection.getRangeAt(0);
+            setSavedRange(range);
+
+            setShowLinkInput(true);
+        }
+    }, []);
+
+    const handleApplyLink = React.useCallback(() => {
+        if (!savedRange || linkUrl.trim().length === 0) {
+            setShowLinkInput(false);
+            return;
+        }
+
+        const selection = window.getSelection();
+        if (selection) {
+            selection.removeAllRanges();
+            selection.addRange(savedRange);
+        }
+
+        document.execCommand("createLink", false, linkUrl);
+
+        setShowLinkInput(false);
+        setLinkUrl("");
+        setSavedRange(null);
+    }, [savedRange, linkUrl]);
 
     const handleSend = async () => {
         const userMessage: IMessage = {
@@ -180,9 +177,9 @@ export const ChatPanel: React.FC = () => {
         }
     };
 
-    const handleChangeEditor = (e: string) => {
+    const handleChangeEditor = (value: string) => {
         setClearContent(false);
-        setText(e);
+        setText(value);
     };
 
     const handleKeyPress = async (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -197,15 +194,18 @@ export const ChatPanel: React.FC = () => {
     };
 
     return (
-        <div className={playground.open ? (playgroundFullscreen ? css.panel_playground_fullscreen : css.panel_playground) : css.panel}
-             onDragStart={handleDragStart}
-             onDragOver={handleDragOver}
-             onDragLeave={handleDragCancel}
+        <div
+            ref={panelRef}
+            className={
+                playground.open
+                    ? (playgroundFullscreen ? css.panel_playground_fullscreen : css.panel_playground)
+                    : css.panel
+            }
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragCancel}
         >
             {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
-            {isHyperlinkInputOpen &&
-                <HyperlinkInput inputPosition={ hyperlinkPosition } />
-            }
             <div
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
@@ -216,7 +216,9 @@ export const ChatPanel: React.FC = () => {
                     <div className={css.panel_prompt}>
                         <ReplyIcon className={css.panel_prompt_icon} />
                         <div className={css.reference_panel}>
-                            <button onClick={() => setIsShowReferencePanel(false)}><CloseIcon /></button>
+                            <button onClick={() => setIsShowReferencePanel(false)}>
+                                <CloseIcon />
+                            </button>
                             <div className={css.referencePanelContent}>{selectedText}</div>
                         </div>
                     </div>
@@ -226,7 +228,9 @@ export const ChatPanel: React.FC = () => {
                     <div className={css.panel_prompt}>
                         <ReplyIcon className={css.panel_prompt_icon} />
                         <div className={css.table_prompt_panel}>
-                            <button onClick={() => setIsTablePromptVisible(false)}><CloseIcon /></button>
+                            <button onClick={() => setIsTablePromptVisible(false)}>
+                                <CloseIcon />
+                            </button>
                             <div className={css.referencePanelContent}>
                                 {selectedArea.type} {selectedArea.value}
                             </div>
@@ -260,31 +264,32 @@ export const ChatPanel: React.FC = () => {
                         />
                     </div>
                 )}
-                {loadingFile && (() => {
-                    const [fileName, progressStr] = loadingFile.split("|||");
-                    const progress = Number(progressStr) || 0;
-                    return (
-                        <div className={css.panel_uploading_files} key={fileName}>
-                            <div className={css.uploading_file}>
-                                <div className={css.panel_uploading_files_icon}>
-                                    <UploadFilesProgressIcon />
-                                </div>
-                                <div className={css.panel_uploading_files_name_and_progressbar}>
-                                    <div className={css.panel_uploading_files_name_and_progress}>
-                                        <span>{fileName}</span>
-                                        <span>{progress}%</span>
+                {loadingFile &&
+                    (() => {
+                        const [fileName, progressStr] = loadingFile.split("|||");
+                        const progress = Number(progressStr) || 0;
+                        return (
+                            <div className={css.panel_uploading_files} key={fileName}>
+                                <div className={css.uploading_file}>
+                                    <div className={css.panel_uploading_files_icon}>
+                                        <UploadFilesProgressIcon />
                                     </div>
-                                    <div className={css.progressBar}>
-                                        <div
-                                            className={css.progressFill}
-                                            style={{ width: `${progress}%` }}
-                                        ></div>
+                                    <div className={css.panel_uploading_files_name_and_progressbar}>
+                                        <div className={css.panel_uploading_files_name_and_progress}>
+                                            <span>{fileName}</span>
+                                            <span>{progress}%</span>
+                                        </div>
+                                        <div className={css.progressBar}>
+                                            <div
+                                                className={css.progressFill}
+                                                style={{ width: `${progress}%` }}
+                                            ></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })()}
+                        );
+                    })()}
 
                 {drag && (
                     <div className={css.panel_drag}>
@@ -308,7 +313,7 @@ export const ChatPanel: React.FC = () => {
                         onDispatchDoe={() => prompt.togglePrompt(true)}
                         onUploadFiles={(values) => setFiles([...files, ...values])}
                     />
-                    {isCreateBranchChatMode && (
+                    {isCreateBranchChatMode &&  (
                         <div className={css.panel_branchIcon}>
                             <BranchIcon width={16} height={16} fill={"currentColor"} />
                         </div>
@@ -327,7 +332,31 @@ export const ChatPanel: React.FC = () => {
                         classNameEditor={css.panel_editor_editor}
                         clearContent={clearContent}
                         placeholder={placeholder}
+                        onMouseUp={handleTextSelection}
                     />
+
+                    {showLinkInput && isHyperlinkInputOpen && (
+                        <div
+                            className={css.hyperlinkForm}
+                            style={{
+                                position: "absolute",
+                                bottom: "100%",
+                                left: 0,
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                                marginBottom: "8px",
+                                zIndex: 1000,
+                            }}
+                        >
+                            <input
+                                value={linkUrl}
+                                onChange={(e) => setLinkUrl(e.target.value)}
+                                placeholder="Enter URL"
+                            />
+                            <button onClick={handleApplyLink}>Send</button>
+                        </div>
+                    )}
 
                     <SwitchTransition>
                         {isReplyLoading ? (

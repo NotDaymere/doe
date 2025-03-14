@@ -12,6 +12,7 @@ type Props = {
     className?: string;
     clearContent?: boolean;
     handleKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
+    onMouseUp?: React.MouseEventHandler<HTMLDivElement>;
 } & EditorProps;
 
 export const Editor = forwardRef<EditorRef, Props>(({
@@ -42,7 +43,7 @@ export const Editor = forwardRef<EditorRef, Props>(({
 
     return (
         <div className={clsx(css.editor, className)}>
-            <EditorContent editor={editor} onKeyDown={handleKeyDown} />
+            <EditorContent editor={editor} onKeyDown={handleKeyDown} onMouseUp={editorProps.onMouseUp}/>
         </div>
     );
 });
