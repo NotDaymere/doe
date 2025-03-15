@@ -24,6 +24,7 @@ import BranchIcon from "../../../../shared/icons/Branch.icon";
 import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgress.icon";
 import { IMessage } from "src/shared/types/Message";
 import SendTableDataIcon from "../../../../shared/icons/SendTableData.icon";
+import { extractFilesFromLinks, FileWithId } from "../../lib/helpers/LinkToFileTransformer";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
@@ -111,7 +112,7 @@ export const ChatPanel: React.FC = () => {
         }
     }, []);
 
-    const handleApplyLink = React.useCallback(() => {
+    const handleApplyLink = React.useCallback(async () => {
         if (!savedRange || linkUrl.trim().length === 0) {
             setShowLinkInput(false);
             return;
@@ -125,10 +126,45 @@ export const ChatPanel: React.FC = () => {
 
         document.execCommand("createLink", false, linkUrl);
 
+        if (linkUrl.trim().length === 0) {
+            setShowLinkInput(false);
+            return;
+        }
+
+        let fileName = "unknown";
+        try {
+            const urlObj = new URL(linkUrl);
+            fileName = urlObj.href || fileName;
+        } catch {
+            // Игнорируем ошибки
+        }
+
+        let blob: Blob;
+        try {
+            const response = await fetch(linkUrl);
+            if (!response.ok) {
+                throw new Error(`Non-200 status: ${response.status}`);
+            }
+            blob = await response.blob();
+        } catch (error) {
+            console.error("Failed to fetch content from the link (possibly a CORS issue).", error);
+            blob = new Blob(
+                [`Failed to fetch actual content from the link:\n${linkUrl}`],
+                { type: "text/plain" }
+            );
+        }
+
+        const fileWithId = Object.assign(
+            new File([blob], fileName, { type: blob.type }),
+            { id: `${Date.now()}-${Math.random()}` }
+        ) as FileWithId;
+
+        setFiles([...files, fileWithId]);
+
         setShowLinkInput(false);
         setLinkUrl("");
         setSavedRange(null);
-    }, [savedRange, linkUrl]);
+    }, [savedRange, linkUrl, files, setFiles, setShowLinkInput, setLinkUrl, setSavedRange]);
 
     const handleSend = async () => {
         const userMessage: IMessage = {
