@@ -14,7 +14,6 @@ import { useChatStore } from "src/shared/providers";
 
 // Shared components
 import { Editor } from "src/shared/components/Editor";
-import { useApp } from "src/components/app";
 import {FileListForDisplay} from "../../../../shared/components/FileList/FileListForDisplay";
 
 // Icons
@@ -55,6 +54,8 @@ import { usePanel } from "../../lib";
 import MessageLineChart from "./assets/MessageCharts/MessageLineChart/MessageLineChart";
 import { mockLineChartMessageData } from "./assets/MessageCharts/MessageLineChart/mockLineChartMessageData";
 import { IPlayground } from "../../../../shared/types/Playground";
+import AllBranches from "../ChatContent/assets/AllBranches/AllBranches";
+import AllPlaygrounds from "../ChatContent/assets/AllPlaygrounds/AllPlaygrounds";
 
 interface Props {
     data: IMessage;
@@ -107,7 +108,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setSavedPlaygrounds,
         savedPlaygrounds,
         deleteSavedPlaygrounds,
-        updateSavedPlaygrounds
+        updateSavedPlaygrounds,
+        playgroundFullscreen
     } = useChatStore();
 
     const parsedContent = parseContent(content);
@@ -119,6 +121,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
     const { setSelectedText, setIsShowReferencePanel } = useChatContext();
     const {setFiles} = usePanel();
+    const [isShowLogoPopup, setIsShowLogoPopup] = React.useState(false);
     const [isPaused, setIsPaused] = React.useState(true);
     const [isAllStepOpen, setIsAllStepOpen] = React.useState(false);
     const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
@@ -555,11 +558,43 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     />
                 }
 
+
+
+                {!isHyperlinkInputOpen && (
+                    <ReferenceButton
+                        isVisible={referenceButtonVisible}
+                        position={referenceButtonPosition}
+                        onClose={handleClose}
+                        onReferenceClick={handleReferenceClick}
+                    />
+                )}
                 <div className={css.sub_bot_message_info_container}>
-                    {!data.isUser && (
-                        <GeneralLogo />
-                    )}
-                    <MessageNodeVersionSelector message={data}/>
+                    <div className={css.logoWrapper}>
+                        <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
+                            <GeneralLogo />
+                        </div>
+                        <CSSTransition
+                            in={isShowLogoPopup}
+                            timeout={300}
+                            classNames={{
+                                enter: css.logoPopupEnter,
+                                enterActive: css.logoPopupEnterActive,
+                                exit: css.logoPopupExit,
+                                exitActive: css.logoPopupExitActive,
+                            }}
+                            unmountOnExit
+                        >
+                            <div className={css.logoPopup}>
+                                {!playgroundFullscreen && (
+                                    <>
+                                        <AllBranches />
+                                        <AllPlaygrounds />
+                                    </>
+                                )}
+                            </div>
+                        </CSSTransition>
+                    </div>
+                    <MessageNodeVersionSelector message={data} />
                 </div>
                 <div className={css.message_content}>
 

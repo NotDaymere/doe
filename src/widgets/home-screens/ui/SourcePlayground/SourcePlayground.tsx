@@ -1,12 +1,10 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import "./SourcePlayground.less";
-import { useChatStore} from "src/shared/providers";
 import { App } from "src/types";
 import { SourceData, sourceDataParser } from "../../../../components/source-playground/helpers/sourceDataParser";
 import { sourceData } from "../../../../components/source-playground/mockSourceData";
 import { Divider, Flex, Typography } from "antd";
 import { SvgIcon } from "../../../../components/icon";
-import { CloseCircleOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography
 
