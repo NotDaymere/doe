@@ -41,14 +41,13 @@ const MessageFrame: FC<MessageFrameProps> = ({ data }) => {
                         <div className="window-controls">
                             <div
                                 className="window-control minimize"
-                                onClick={handleMinimize} title="Minimize"
+                                onClick={handleMinimize}
                             >
                                 <CollapseWidgetIntoStringIcon stroke="currentColor"/>
                             </div>
                             <div
                                 className={`window-control ${isMinimized ? 'default' : 'maximize'}`}
                                 onClick={!isMinimized ? handleMaximize : undefined}
-                                title="Maximize"
                             >
                                 <ExpandWidgetIcon fill="currentColor"/>
                             </div>
