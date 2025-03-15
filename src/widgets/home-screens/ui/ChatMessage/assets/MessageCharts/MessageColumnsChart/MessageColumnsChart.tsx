@@ -11,8 +11,9 @@ import {
 } from 'recharts';
 import { CustomBarLabel } from './CustomBarLabel';
 import './MessageColumnsChart.less';
-import { ChartMessageData } from './mockColumnsChartMessageData';
 import ScreenShareIcon from "../../../../../../../shared/icons/ScreenShare.icon";
+import { ChartMessageData } from "../ChartDataParser";
+
 
 const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
     const [selectedId, setSelectedId] = useState<string | null>(null);

@@ -1,10 +1,5 @@
-export interface ChartMessageData {
-    id: string;
-    label: string;
-    value: number;
-    percentile: number;
-    color: string;
-}
+import { ChartMessageData } from "../ChartDataParser";
+
 
 export const mockLineChartMessageData: ChartMessageData[] = [
     { id: 'bcm', label: 'BCM', value: 2206, percentile: 99, color: '#FFDB65' },
