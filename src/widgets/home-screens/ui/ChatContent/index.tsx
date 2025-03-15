@@ -7,8 +7,9 @@ import Link from "@tiptap/extension-link";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import Underline from "@tiptap/extension-underline";
+
+import { useAppStore, useChatStore } from "src/shared/providers";
 import { useEditor } from "@tiptap/react";
-import { useChatStore } from "src/shared/providers";
 import {
     CustomCodeBlock,
     CustomInlineCode,
@@ -25,6 +26,7 @@ import css from "./ChatContent.module.less";
 import { ScrollDownButton } from "./assets/ScrollDownButton/ScrollDownButton";
 import { ChatRegularView } from "./assets/ContentChatRegularView/ContentChatRegularView";
 import { ChatBranchView } from "./assets/ChatBranchView/ChatBranchView";
+import Reflections from "./assets/Reflections/Reflections";
 
 interface Props {
     editMsgMode: {
@@ -51,7 +53,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         currentBranchDialog,
         setCurrentBranchDialog,
     } = useChatStore();
-
+    const { talkModeActive} = useAppStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
@@ -185,7 +187,11 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     />
                 )}
 
+                {!talkModeActive &&
+                    <Reflections/>
+                }
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
+
                 <TalkMode targetRef={chatRef} />
             </div>
     </div>
