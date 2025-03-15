@@ -405,16 +405,50 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             });
         }
     };
-    const openSourcePlayground = () => {
-        const newPlayground: IPlayground = {
-            id: "see_all_steps",
-            name: "See All Steps",
-            type: "source",
-            data: null,
-            open: false,
-        };
-        newPlayground.open = true;
-        setSavedPlaygrounds(newPlayground);
+    const openSourcePlayground = (sourceData: string) => {
+        const {
+            savedPlaygrounds,
+            deleteSavedPlaygrounds,
+            setSavedPlaygrounds,
+            setPlayground,
+            updateSavedPlaygrounds
+        } = useChatStore.getState();
+
+        const existingSource = savedPlaygrounds.find(p => p.type === "source" && p.id === "see_all_steps");
+
+        if (existingSource) {
+            if (existingSource.data === sourceData && existingSource.open) {
+                deleteSavedPlaygrounds(existingSource.id);
+                setPlayground({
+                    type: null,
+                    name: "",
+                    open: false,
+                    data: null,
+                    text: "",
+                    id: null,
+                });
+            } else {
+                const newPlayground: IPlayground = {
+                    id: "see_all_steps",
+                    name: "See All Steps",
+                    type: "source",
+                    data: sourceData,
+                    open: true,
+                };
+                updateSavedPlaygrounds(newPlayground);
+                setPlayground(newPlayground);
+            }
+        } else {
+            const newPlayground: IPlayground = {
+                id: "see_all_steps",
+                name: "See All Steps",
+                type: "source",
+                data: sourceData,
+                open: true,
+            };
+            setSavedPlaygrounds(newPlayground);
+            setPlayground(newPlayground);
+        }
     };
 
     if (data.isUser) {
