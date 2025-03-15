@@ -16,7 +16,6 @@
     align-items: center;
     background: #FFFFFFB2;
     border-radius: 12px;
-    width: 100%;
     border: 2px solid #FFFFFF;
   }
 
@@ -33,16 +32,39 @@
   }
 
   .info-container {
-    width: 150px;
+    width: 160px;
+    max-width: 160px;
     height: 410px;
     min-height: 100%;
-    padding: 20px 20px;
+    padding: 20px;
     background: #fff;
     display: flex;
     flex-direction: column;
     gap: 10px;
     border-radius: 12px;
     border: 2px solid #FFFFFF;
+    overflow: hidden;
+    transition:
+            opacity 0.3s ease,
+            transform 0.3s ease,
+            max-width 0.3s ease,
+            padding 0.3s ease,
+            margin 0.3s ease;
+
+    &.visible {
+      opacity: 1;
+      transform: translateX(0);
+      max-width: 160px;
+      padding: 20px;
+    }
+
+    &.hidden {
+      opacity: 0;
+      transform: translateX(20px);
+      max-width: 0;
+      padding: 0;
+      margin: 0;
+    }
 
     .info-container-selected-data {
       display: flex;
@@ -119,3 +141,4 @@
   width: 110px;
   border-bottom: 1px dashed #CFCFCF;
 }
+

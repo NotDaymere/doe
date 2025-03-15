@@ -14,7 +14,6 @@ import './MessageColumnsChart.less';
 import ScreenShareIcon from "../../../../../../../shared/icons/ScreenShare.icon";
 import { ChartMessageData } from "../ChartDataParser";
 
-
 const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const selectedData = data.find((item) => item.id === selectedId);
@@ -26,10 +25,41 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
         { start: '#FF8B12', end: 'rgb(255,238,219)' },
     ];
 
-    const selectedIndex =
-        selectedData !== undefined ? data.findIndex((item) => item.id === selectedData.id) : -1;
-    const selectedColor =
-        selectedIndex !== -1 ? gradients[selectedIndex % gradients.length].start : '';
+    const selectedIndex = selectedData !== undefined ? data.findIndex((item) => item.id === selectedData.id) : -1;
+    const selectedColor = selectedIndex !== -1 ? gradients[selectedIndex % gradients.length].start : '';
+
+    const dataMaxValue = Math.max(...data.map(item => item.value));
+
+    const niceCeil = (x: number): number => {
+        const exponent = Math.floor(Math.log10(x));
+        const fraction = x / Math.pow(10, exponent);
+        let niceFraction: number;
+        if (fraction <= 1) {
+            niceFraction = 1;
+        } else if (fraction <= 2) {
+            niceFraction = 2;
+        } else if (fraction <= 2.5) {
+            niceFraction = 2.5;
+        } else if (fraction <= 5) {
+            niceFraction = 5;
+        } else if (fraction <= 6) {
+            niceFraction = 6;
+        } else {
+            niceFraction = 10;
+        }
+        return niceFraction * Math.pow(10, exponent);
+    };
+
+    const desiredIntervals = 4;
+    let step = niceCeil(dataMaxValue / desiredIntervals);
+    let maxTick = Math.ceil(dataMaxValue / step) * step;
+    if (dataMaxValue % step === 0) {
+        maxTick = maxTick + step;
+    }
+    const ticks: number[] = [];
+    for (let t = 0; t <= maxTick; t += step) {
+        ticks.push(t);
+    }
 
     const renderCustomTick = (props: any) => {
         const { x, y, payload, index } = props;
@@ -43,7 +73,7 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
             <g transform={`translate(${x}, ${y + 10})`}>
                 <g textAnchor="middle" alignmentBaseline="middle">
                     <rect
-                        x={-bulletOffset * 2}
+                        x={-bulletOffset * 3}
                         y={-bulletSize}
                         width={bulletSize}
                         height={bulletSize}
@@ -100,13 +130,8 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
                                 </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis
-                                dataKey="label"
-                                axisLine={{ stroke: '#CFCFCF', strokeWidth: 1 }}
-                                tickLine={false}
-                                tick={renderCustomTick}
-                            />
-                            <YAxis tick={{ fill: '#CFCFCF', fontSize: 16 }} axisLine={false} tickLine={false} />
+                            <XAxis dataKey="label" tick={renderCustomTick} axisLine={false} tickLine={false} />
+                            <YAxis tick={{ fill: '#CFCFCF', fontSize: 16 }} axisLine={false} tickLine={false} domain={[0, maxTick]} ticks={ticks} />
                             <Bar dataKey="value" radius={[12, 12, 12, 12]}>
                                 <LabelList
                                     dataKey="value"
@@ -148,41 +173,43 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
-                {selectedData && (
-                    <div className="info-container">
-                        <div className="info-container-selected-data">
-                            <h3 className="selected-data">Selected data:</h3>
-                            <div className="selected-data-item">
-                                <span
-                                    style={{
-                                        display: "inline-block",
-                                        width: "10px",
-                                        height: "10px",
-                                        background: selectedColor,
-                                        borderRadius: "2px",
-                                        marginRight: "6px",
-                                    }}
-                                ></span>
-                                <span>{selectedData.label}</span>
-                            </div>
+                <div className={selectedData ? "info-container visible" : "info-container hidden"}>
+                    <div className="info-container-selected-data">
+                        <h3 className="selected-data">Selected data:</h3>
+                        <div className="selected-data-item">
+                            <span
+                                style={{
+                                    display: "inline-block",
+                                    width: "10px",
+                                    height: "10px",
+                                    background: selectedData ? selectedColor : "#ccc",
+                                    borderRadius: "2px",
+                                    marginRight: "6px",
+                                }}
+                            ></span>
+                            <span>{selectedData && (selectedData.label)}</span>
                         </div>
-                        <span className="line"></span>
-                        <div className="value-percentile-container">
-                            <span>{selectedData.value}/{selectedData.percentile}th</span>
+                    </div>
+                    <span className="line"></span>
+                    <div className="value-percentile-container">
+                        <span>
+                            {selectedData && (`${selectedData.value}/${selectedData.percentile}th`)}
+                        </span>
+                        {selectedData && (
                             <button className="copy-button" onClick={handleCopy}>
                                 <div><ScreenShareIcon /></div>
                                 <span>Copy</span>
                             </button>
-                        </div>
-                        <div className="details">
-                            <p className="selected-data">Codeforces Elo:</p>
-                            <span className="selected-data-item">{selectedData.value}</span>
-                            <span className="line"></span>
-                            <p className="selected-data">Percentile:</p>
-                            <span className="selected-data-item">{selectedData.percentile}%</span>
-                        </div>
+                        )}
                     </div>
-                )}
+                    <div className="details">
+                        <p className="selected-data">Codeforces Elo:</p>
+                        <span className="selected-data-item">{selectedData && (selectedData.value)}</span>
+                        <span className="line"></span>
+                        <p className="selected-data">Percentile:</p>
+                        <span className="selected-data-item">{selectedData && (`${selectedData.percentile}%`)}</span>
+                    </div>
+                </div>
             </div>
         </div>
     );
