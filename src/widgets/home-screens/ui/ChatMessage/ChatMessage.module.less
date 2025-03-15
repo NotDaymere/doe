@@ -622,7 +622,37 @@
     font-size: 16px;
     font-weight: 400;
 }
+:global(p) {
+  :global(.citation-container) {
+    position: relative;
+    display: inline-block;
+    text-underline-color: #9747FF;
 
+    :global(.citation) {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      font-size: 11px;
+      font-weight: 500;
+      border: 1px solid transparent;
+      border-radius: 50% 50% 50% 0 ;
+      cursor: pointer !important;
+      color: #9747FF;
+      background-color: transparent;
+      text-decoration: none !important;
+      transition: border, 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+
+      &:hover {
+        border: 1px solid #9747ff;
+        background-color: #9747ff;
+        color: #FFFFFF !important;
+      }
+    }
+  }
+}
 :global(.code-without-output) {
     display: flex;
     flex-direction: column;

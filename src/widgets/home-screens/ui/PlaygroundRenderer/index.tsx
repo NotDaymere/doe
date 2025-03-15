@@ -2,6 +2,8 @@ import { FC } from "react"
 import { App } from "src/types"
 import TablePlayground from "../TablePlayground"
 import CodePlayground from "../CodePlayground";
+import SourcePlayground from "../../../../components/source-playground";
+import IframePlayground from "../IframePlayground/IframePlayground";
 
 const PlaygroundRenderer: FC<Partial<App.Playground>> = ({ id, type }) => {
   switch (type) {
@@ -9,8 +11,10 @@ const PlaygroundRenderer: FC<Partial<App.Playground>> = ({ id, type }) => {
        return <CodePlayground id={id}/>
     case "table":
       return <TablePlayground id={id}/>
-    // case "source":
-    //   return <SourcePlayground />
+    case "source":
+      return <SourcePlayground/>
+    case "iframe":
+          return <IframePlayground/>
     default:
       return
   }
