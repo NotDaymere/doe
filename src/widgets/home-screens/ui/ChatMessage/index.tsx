@@ -104,7 +104,10 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setCitationPlaygroundRef,
         setIsCitationPlayground,
         setPlayground,
-        setSavedPlaygrounds
+        setSavedPlaygrounds,
+        savedPlaygrounds,
+        deleteSavedPlaygrounds,
+        updateSavedPlaygrounds
     } = useChatStore();
 
     const parsedContent = parseContent(content);
@@ -117,6 +120,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const { setSelectedText, setIsShowReferencePanel } = useChatContext();
     const {setFiles} = usePanel();
     const [isPaused, setIsPaused] = React.useState(true);
+    const [isAllStepOpen, setIsAllStepOpen] = React.useState(false);
     const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
 
     React.useEffect(() => {
@@ -203,13 +207,10 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             });
 
             if (citationPlaygroundRef === citationUrl) {
-                const { savedPlaygrounds, deleteSavedPlaygrounds, setPlayground } = useChatStore.getState();
                 const existingIframe = savedPlaygrounds.find(p => p.type === "iframe");
                 if (existingIframe) {
                     deleteSavedPlaygrounds(existingIframe.id);
                 }
-                setCitationPlaygroundRef(null);
-                setIsCitationPlayground(false);
                 setPlayground({
                     type: null,
                     name: "",
@@ -218,6 +219,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     text: "",
                     id: null,
                 });
+                setCitationPlaygroundRef(null);
+                setIsCitationPlayground(false);
             } else {
                 target.classList.add("citation-active");
 
@@ -243,7 +246,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     open: true,
                 };
 
-                const { savedPlaygrounds, updateSavedPlaygrounds, setSavedPlaygrounds, setPlayground } = useChatStore.getState();
                 const existingIframe = savedPlaygrounds.find(p => p.type === "iframe");
                 if (existingIframe) {
                     const updatedPlayground = { ...existingIframe, ...newPlayground };
@@ -406,39 +408,15 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         }
     };
     const openSourcePlayground = (sourceData: string) => {
-        const {
-            savedPlaygrounds,
-            deleteSavedPlaygrounds,
-            setSavedPlaygrounds,
-            setPlayground,
-            updateSavedPlaygrounds
-        } = useChatStore.getState();
+        if (isAllStepOpen) {
 
-        const existingSource = savedPlaygrounds.find(p => p.type === "source" && p.id === "see_all_steps");
-
-        if (existingSource) {
-            if (existingSource.data === sourceData && existingSource.open) {
-                deleteSavedPlaygrounds(existingSource.id);
-                setPlayground({
-                    type: null,
-                    name: "",
-                    open: false,
-                    data: null,
-                    text: "",
-                    id: null,
-                });
-            } else {
-                const newPlayground: IPlayground = {
-                    id: "see_all_steps",
-                    name: "See All Steps",
-                    type: "source",
-                    data: sourceData,
-                    open: true,
-                };
-                updateSavedPlaygrounds(newPlayground);
-                setPlayground(newPlayground);
+            const existingAllStep = savedPlaygrounds.find(p => p.type === "source");
+            if (existingAllStep) {
+                deleteSavedPlaygrounds(existingAllStep.id);
             }
+            setIsAllStepOpen(false);
         } else {
+
             const newPlayground: IPlayground = {
                 id: "see_all_steps",
                 name: "See All Steps",
@@ -446,8 +424,18 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 data: sourceData,
                 open: true,
             };
-            setSavedPlaygrounds(newPlayground);
-            setPlayground(newPlayground);
+
+            const existingAllStep = savedPlaygrounds.find(p => p.type === "source");
+            if (existingAllStep) {
+                const updatedPlayground = { ...existingAllStep, ...newPlayground };
+                updateSavedPlaygrounds(updatedPlayground);
+                setPlayground(updatedPlayground);
+            } else {
+                setSavedPlaygrounds(newPlayground);
+                setPlayground(newPlayground);
+            }
+
+            setIsAllStepOpen(true);
         }
     };
 
@@ -635,8 +623,10 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
                     {!data.isUser && (
                         <Flex justify={"space-between"} className={"message-actions"}>
-
-                            <button onClick={openSourcePlayground} className={css.button_steps}>
+                            <button
+                                onClick={() => openSourcePlayground(data.id.toString())}
+                                className={css.button_steps}
+                            >
                                 <SvgIcon
                                     style={{ width: "15px", height: "15px", marginRight: "2px" }}
                                     type={"seeAllStepsVioletIcon"}
@@ -644,15 +634,15 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 <span className={css.button_steps_label}>See all steps</span>
                             </button>
                             <Flex gap={10}>
-                                    <button
-                                        className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
-                                        onClick={isPaused ? handlePlay : handleStop}
-                                    >
-                                        <span className={css.tooltip}>Listen answer</span>
-                                        <div className={css.button_container}>
-                                            <PlayIcon fill="currentColor" />
-                                        </div>
-                                    </button>
+                                <button
+                                    className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
+                                    onClick={isPaused ? handlePlay : handleStop}
+                                >
+                                    <span className={css.tooltip}>Listen answer</span>
+                                    <div className={css.button_container}>
+                                        <PlayIcon fill="currentColor" />
+                                    </div>
+                                </button>
 
                                 <div className={css.download} ref={downloadRef}>
                                     <button
