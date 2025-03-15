@@ -1,5 +1,9 @@
 import React from "react";
-import { extractFilesFromLinks, FileWithId } from "../helpers/LinkToFileTransformer";
+import { extractFilesFromLinks } from "../helpers/LinkToFileTransformer";
+
+export interface FileWithId extends File {
+    id: string;
+}
 
 interface Props {
     onUploadFiles?: (files: FileWithId[]) => void;
