@@ -1,4 +1,5 @@
-export const mockChartMessageData = [
+import { ChartMessageData } from "../ChartDataParser";
+
 export interface ChartMessageData {
     id: string;
     label: string;

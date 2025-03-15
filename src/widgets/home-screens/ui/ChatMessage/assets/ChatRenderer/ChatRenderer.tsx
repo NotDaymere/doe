@@ -40,6 +40,10 @@ import {
     parseWordCloudData,
 } from "./Utils/ChartParsers";
 
+import MessageColumnsChart from "../MessageCharts/MessageColumnsChart/MessageColumnsChart";
+import MessageLineChart from "../MessageCharts/MessageLineChart/MessageLineChart";
+import { parseColumnBarMessageChartData, parseLineMessageChartData } from "../MessageCharts/ChartDataParser";
+
 export interface ChartData {
     type: GoogleChartWrapperChartType | string;
     data: any;
@@ -174,7 +178,6 @@ const parseXML = (xmlString: string): ChartData[] => {
         const chartType = chartElement.getAttribute("type") as ChartType;
         const orientation = chartElement.getAttribute("orientation") || "horizontal";
         const stacked = chartElement.getAttribute("stacked") === "true";
-        console.log("orientation", orientation);
         const mappedChartType = getChartType(chartType, orientation, stacked);
 
         const layout = parseLayout(chartElement);
@@ -268,7 +271,6 @@ type ChartComponentMap = {
 const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
     const charts = useMemo(() => parseXML(input), [input]);
     const chartComponentMap: ChartComponentMap = {
-        LineChart: GoogleChart,
         PieChart: GoogleChart,
         ScatterChart: GoogleChart,
         BubbleChart: GoogleChart,
@@ -279,8 +281,6 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
         TreeMap: GoogleChart,
         Sankey: GoogleChart,
         SteppedAreaChart: GoogleChart,
-        BarChart: GoogleChart,
-        ColumnChart: GoogleChart,
     };
 
     return (
@@ -320,6 +320,18 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
                     );
                 } else {
                     switch (chart.type) {
+                        case "BarChart":
+                            return (
+                               <MessageColumnsChart data={parseColumnBarMessageChartData(chart)} />
+                            );
+                        case "ColumnChart":
+                            return (
+                                <MessageColumnsChart data={parseColumnBarMessageChartData(chart)} />
+                            );
+                        case "LineChart":
+                            return (
+                                <MessageLineChart data={parseLineMessageChartData(chart)}/>
+                            );
                         case "Violin":
                             return (
                                 <div

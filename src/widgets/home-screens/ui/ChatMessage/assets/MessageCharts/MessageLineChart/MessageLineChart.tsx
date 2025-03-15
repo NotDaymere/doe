@@ -10,14 +10,8 @@ import {
     CartesianGrid
 } from 'recharts';
 import './MessageLineChart.less';
+import { ChartMessageData } from "../ChartDataParser";
 
-interface ChartMessageData {
-    id: string;
-    label: string;
-    value: number;
-    percentile: number;
-    color: string;
-}
 
 interface MessageChartProps {
     data: ChartMessageData[];

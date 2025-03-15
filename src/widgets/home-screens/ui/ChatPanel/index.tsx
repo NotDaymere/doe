@@ -24,7 +24,7 @@ import BranchIcon from "../../../../shared/icons/Branch.icon";
 import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgress.icon";
 import { IMessage } from "src/shared/types/Message";
 import SendTableDataIcon from "../../../../shared/icons/SendTableData.icon";
-import { extractFilesFromLinks, FileWithId } from "../../lib/helpers/LinkToFileTransformer";
+import { FileWithId } from "../../lib/helpers/LinkToFileTransformer";
 
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
