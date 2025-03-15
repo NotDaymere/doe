@@ -17,11 +17,11 @@ interface Props {
 type ScrollPosition = "start" | "middle" | "end";
 
 export const FileListForUpload: React.FC<Props> = ({
-                                              files,
-                                              onChange,
-                                              className,
-                                              onLoadingStatusChange}) => {
-
+                                                       files,
+                                                       onChange,
+                                                       className,
+                                                       onLoadingStatusChange
+                                                   }) => {
     const containerRef = React.useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = React.useState(false);
     const startX = React.useRef(0);
@@ -34,10 +34,12 @@ export const FileListForUpload: React.FC<Props> = ({
     const dragged = useRef<boolean>(false);
     const DRAG_THRESHOLD = 3;
     const CLICK_THRESHOLD = 1000;
-
     const [loadedFiles, setLoadedFiles] = useState<string[]>([]);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [showAllFiles, setShowAllFiles] = useState(false);
+
+    const isLink = (file: FileWithId) =>
+        file.name.startsWith("http://") || file.name.startsWith("https://");
 
     useEffect(() => {
         const urls: Record<string, string> = {};
@@ -45,7 +47,6 @@ export const FileListForUpload: React.FC<Props> = ({
             urls[file.id] = URL.createObjectURL(file);
         });
         setFileURLs(urls);
-
         return () => {
             Object.values(urls).forEach(url => URL.revokeObjectURL(url));
         };
@@ -55,8 +56,7 @@ export const FileListForUpload: React.FC<Props> = ({
         setLoadedFiles(prev => prev.filter(id => files.some(file => file.id === id)));
     }, [files]);
 
-    const activeFile = files.find(file => !loadedFiles.includes(file.id));
-
+    const activeFile = files.find(file => !loadedFiles.includes(file.id) && !isLink(file));
 
     useEffect(() => {
         if (activeFile) {
@@ -92,12 +92,9 @@ export const FileListForUpload: React.FC<Props> = ({
     const onMouseDown = (e: React.MouseEvent) => {
         if (!containerRef.current) return;
         setIsDragging(true);
-
         dragged.current = false;
-
         mouseDownTime.current = Date.now();
         longPress.current = false;
-
         startX.current = e.pageX - containerRef.current.offsetLeft;
         scrollLeft.current = containerRef.current.scrollLeft;
         containerRef.current.style.cursor = "grabbing";
@@ -108,11 +105,9 @@ export const FileListForUpload: React.FC<Props> = ({
         e.preventDefault();
         const x = e.pageX - containerRef.current.offsetLeft;
         const walk = x - startX.current;
-
         if (Math.abs(walk) > DRAG_THRESHOLD) {
             dragged.current = true;
         }
-
         containerRef.current.scrollLeft = scrollLeft.current - walk;
     };
 
@@ -120,7 +115,6 @@ export const FileListForUpload: React.FC<Props> = ({
         if (!containerRef.current) return;
         setIsDragging(false);
         containerRef.current.style.cursor = "grab";
-
         if (mouseDownTime.current) {
             const duration = Date.now() - mouseDownTime.current;
             longPress.current = duration >= CLICK_THRESHOLD;
@@ -165,7 +159,11 @@ export const FileListForUpload: React.FC<Props> = ({
         }
     }, []);
 
-    const allFilesLoaded = files.length > 1 ? loadedFiles.length === files.length : true;
+    const nonLinkFiles = files.filter(file => !isLink(file));
+
+    const allFilesLoaded = nonLinkFiles.length > 1
+        ? loadedFiles.length === nonLinkFiles.length
+        : true;
 
     return (
         <>
@@ -190,7 +188,7 @@ export const FileListForUpload: React.FC<Props> = ({
             >
                 {allFilesLoaded &&
                     files.map(file =>
-                            loadedFiles.includes(file.id) && (
+                            (isLink(file) || loadedFiles.includes(file.id)) && (
                                 <FileItem
                                     name={file.name}
                                     mimetype={file.type}
@@ -199,12 +197,12 @@ export const FileListForUpload: React.FC<Props> = ({
                                     key={file.id}
                                 />
                             )
-                    )}
+                    )
+                }
             </div>
-
-            {!allFilesLoaded && files.length > 0 && (
+            {!allFilesLoaded && nonLinkFiles.length > 0 && (
                 <div className={css.partial_loaded_files}>
-                    {files.length > 2 && (
+                    {nonLinkFiles.length > 2 && (
                         <button
                             className={css.toggle_loaded_files}
                             onClick={() => setShowAllFiles(prev => !prev)}
@@ -216,9 +214,8 @@ export const FileListForUpload: React.FC<Props> = ({
                             )}
                         </button>
                     )}
-
                     <div className={clsx(css.all_files_container, { [css.expanded]: showAllFiles })}>
-                        {(showAllFiles ? files : files.slice(-2)).map(file => (
+                        {(showAllFiles ? nonLinkFiles : nonLinkFiles.slice(-2)).map(file => (
                             <div key={file.id} className={css.partial_file_name_container}>
                                 <UploadFilesProgressIcon />
                                 <span className={css.partial_file_name}>{file.name}</span>
