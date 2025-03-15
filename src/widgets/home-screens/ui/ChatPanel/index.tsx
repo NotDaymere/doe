@@ -161,6 +161,7 @@ export const ChatPanel: React.FC = () => {
 
         setFiles([...files, fileWithId]);
 
+        setIsHyperlinkInputOpen(false);
         setShowLinkInput(false);
         setLinkUrl("");
         setSavedRange(null);
@@ -178,11 +179,24 @@ export const ChatPanel: React.FC = () => {
         reset();
         setClearContent(true);
 
-        if (isCurrentBranchOpen && currentBranch) {
+
+
+        if (isCreateBranchChatMode) {
+            const reply = await doMessageReply();
+            const branchDialog = {
+                userRequest: userMessage,
+                botMessages: reply,
+            };
+            const newBranch = addSavedBranch(text, [userMessage], [branchDialog], userMessage.id);
+            setCurrentBranch(newBranch);
+            setIsCreateBranchChatMode(false);
+            setIsCurrentBranchOpen(true);
+        }
+        else if (isCurrentBranchOpen && currentBranch) {
+
             const reply = await doMessageReply();
             const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
             addMessageNode(lastNodeForUserMessage, userMessage);
-
             const branchDialog = {
                 userRequest: userMessage,
                 botMessages: reply,
@@ -194,20 +208,7 @@ export const ChatPanel: React.FC = () => {
             addMessageNode(lastNodeForUserMessage, userMessage);
             reset();
             setClearContent(true);
-
             const reply = await doMessageReply();
-            const branchDialog = {
-                userRequest: userMessage,
-                botMessages: reply,
-            };
-
-            if (isCreateBranchChatMode) {
-                const newBranch = addSavedBranch(text, [userMessage], [branchDialog], userMessage.id);
-                setCurrentBranch(newBranch);
-                setIsCreateBranchChatMode(false);
-                setIsCurrentBranchOpen(true);
-            }
-
             const lastNodeForReply = getLastCurrentVersionMessageNode();
             addMessageNode(lastNodeForReply, reply);
         }
