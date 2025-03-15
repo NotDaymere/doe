@@ -5,6 +5,7 @@ import MessageFrameModal  from "./MessageFrameModal/MessageFrameModal"
 import { useChatStore } from "../../../../../../shared/providers";
 import ExpandWidgetIcon from "../../../../../../shared/icons/ExpandWidget.icon";
 import CollapseWidgetIntoStringIcon from "../../../../../../shared/icons/CollapseWidgetIntoString.icon";
+import EnterFullscreenIcon from "../../../../../../shared/icons/EnterFullscreen.icon";
 
 interface MessageFrameData {
     title?: string;
@@ -50,6 +51,10 @@ const MessageFrame: FC<MessageFrameProps> = ({ data }) => {
                                 onClick={!isMinimized ? handleMaximize : undefined}
                             >
                                 <ExpandWidgetIcon fill="currentColor"/>
+                            </div>
+                            <div className="enter-fullscreen-tooltip">
+                                <div className="enter-fullscreen-icon"><EnterFullscreenIcon/></div>
+                                <span>Enter Fullscreen</span>
                             </div>
                         </div>
                         <div className="window-title">
