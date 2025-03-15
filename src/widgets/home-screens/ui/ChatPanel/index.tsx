@@ -44,7 +44,7 @@ export const ChatPanel: React.FC = () => {
         addMessageNode,
         setIsCurrentBranchOpen,
         isHyperlinkInputOpen,
-        setIsHyperlinkInputOpen
+        setIsHyperlinkInputOpen,
     } = useChatStore();
 
     const [clearContent, setClearContent] = React.useState(false);
@@ -63,7 +63,7 @@ export const ChatPanel: React.FC = () => {
         handleDragOverTarget,
         handleDragStart,
         handleDragOver,
-        handleDragCancel
+        handleDragCancel,
     } = useDragFile({
         onUploadFiles(uploadFiles) {
             setFiles([...files, ...uploadFiles]);
@@ -71,11 +71,7 @@ export const ChatPanel: React.FC = () => {
     });
 
     const prompt = usePrompt();
-    const {
-        selectedText,
-        isShowReferencePanel,
-        setIsShowReferencePanel
-    } = useChatContext();
+    const { selectedText, isShowReferencePanel, setIsShowReferencePanel } = useChatContext();
 
     const placeholder = React.useMemo(() => {
         if (isCreateBranchChatMode) {
@@ -87,17 +83,73 @@ export const ChatPanel: React.FC = () => {
         return "Ask Doe anything you’d like about the world...";
     }, [isCreateBranchChatMode, playgroundFullscreen]);
 
-    const editorRef = React.useRef(null);
+    const editorRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         if (isCreateBranchChatMode && editorRef.current) {
-            (editorRef.current as any).focus();
+            (editorRef.current as HTMLDivElement).focus();
         }
     }, [isCreateBranchChatMode]);
 
     const [showLinkInput, setShowLinkInput] = React.useState(false);
     const [linkUrl, setLinkUrl] = React.useState("");
     const [savedRange, setSavedRange] = React.useState<Range | null>(null);
+
+    const [linkInputPosition, setLinkInputPosition] = React.useState({ top: 0, left: 0 });
+    const lastMouseEventRef = React.useRef<MouseEvent | null>(null);
+
+    const skipPositionUpdate = React.useRef(false);
+
+    React.useEffect(() => {
+        const handleMouseUp = (e: MouseEvent) => {
+            lastMouseEventRef.current = e;
+            updateLinkInputPosition();
+        };
+
+        const handleSelectionChange = () => {
+            updateLinkInputPosition();
+        };
+
+        function updateLinkInputPosition() {
+            if (skipPositionUpdate.current) return;
+
+            const selection = window.getSelection();
+            if (!selection) return;
+            const selectionText = selection.toString().trim();
+            if (selectionText === "") return;
+
+            const range = selection.getRangeAt(0);
+            const rects = range.getClientRects();
+            if (rects.length === 0) return;
+            const lastRect = rects[rects.length - 1];
+            const selectionTop = lastRect.bottom + window.scrollY;
+            const selectionLeft = lastRect.right + window.scrollX;
+            const maxDistance = 30;
+            const offsetY = -70;
+            const offsetX = -20;
+
+            if (lastMouseEventRef.current) {
+                const candidateTop = lastMouseEventRef.current.pageY;
+                const candidateLeft = lastMouseEventRef.current.pageX;
+                const topDiff = candidateTop - selectionTop;
+                const clampedTop =
+                    Math.abs(topDiff) > maxDistance
+                        ? selectionTop + (topDiff > 0 ? maxDistance : -maxDistance)
+                        : candidateTop;
+                setLinkInputPosition({ top: clampedTop + offsetY, left: candidateLeft + offsetX });
+            } else {
+                setLinkInputPosition({ top: selectionTop + offsetY, left: selectionLeft + offsetX });
+            }
+        }
+
+        document.addEventListener("mouseup", handleMouseUp);
+        document.addEventListener("selectionchange", handleSelectionChange);
+
+        return () => {
+            document.removeEventListener("mouseup", handleMouseUp);
+            document.removeEventListener("selectionchange", handleSelectionChange);
+        };
+    }, []);
 
     const handleTextSelection = React.useCallback(() => {
         const selection = window.getSelection();
@@ -107,7 +159,6 @@ export const ChatPanel: React.FC = () => {
         if (selectedText.trim().length > 0) {
             const range = selection.getRangeAt(0);
             setSavedRange(range);
-
             setShowLinkInput(true);
         }
     }, []);
@@ -118,28 +169,33 @@ export const ChatPanel: React.FC = () => {
             return;
         }
 
+        skipPositionUpdate.current = true;
+
         const selection = window.getSelection();
         if (selection) {
             selection.removeAllRanges();
             selection.addRange(savedRange);
         }
-
         document.execCommand("createLink", false, linkUrl);
 
-        if (linkUrl.trim().length === 0) {
-            setShowLinkInput(false);
-            return;
-        }
+        setTimeout(() => {
+            window.getSelection()?.removeAllRanges();
+            if (editorRef.current && typeof (editorRef.current as HTMLDivElement).blur === "function") {
+                (editorRef.current as HTMLDivElement).blur();
+            } else {
+                if (document.activeElement && typeof (document.activeElement as HTMLElement).blur === "function") {
+                    (document.activeElement as HTMLElement).blur();
+                }
+            }
+        }, 100);
 
         let fileName = "unknown";
         try {
             const urlObj = new URL(linkUrl);
             fileName = urlObj.href || fileName;
-        } catch {
-            // Игнорируем ошибки
-        }
+        } catch {}
 
-        let blob: Blob;
+        let blob;
         try {
             const response = await fetch(linkUrl);
             if (!response.ok) {
@@ -148,16 +204,12 @@ export const ChatPanel: React.FC = () => {
             blob = await response.blob();
         } catch (error) {
             console.error("Failed to fetch content from the link (possibly a CORS issue).", error);
-            blob = new Blob(
-                [`Failed to fetch actual content from the link:\n${linkUrl}`],
-                { type: "text/plain" }
-            );
+            blob = new Blob([`Failed to fetch actual content from the link:\n${linkUrl}`], { type: "text/plain" });
         }
 
-        const fileWithId = Object.assign(
-            new File([blob], fileName, { type: blob.type }),
-            { id: `${Date.now()}-${Math.random()}` }
-        ) as FileWithId;
+        const fileWithId = Object.assign(new File([blob], fileName, { type: blob.type }), {
+            id: `${Date.now()}-${Math.random()}`,
+        }) as FileWithId;
 
         setFiles([...files, fileWithId]);
 
@@ -165,7 +217,11 @@ export const ChatPanel: React.FC = () => {
         setShowLinkInput(false);
         setLinkUrl("");
         setSavedRange(null);
-    }, [savedRange, linkUrl, files, setFiles, setShowLinkInput, setLinkUrl, setSavedRange]);
+
+        setTimeout(() => {
+            skipPositionUpdate.current = false;
+        }, 300);
+    }, [savedRange, linkUrl, files, setFiles, setIsHyperlinkInputOpen]);
 
     const handleSend = async () => {
         const userMessage: IMessage = {
@@ -179,8 +235,6 @@ export const ChatPanel: React.FC = () => {
         reset();
         setClearContent(true);
 
-
-
         if (isCreateBranchChatMode) {
             const reply = await doMessageReply();
             const branchDialog = {
@@ -191,9 +245,7 @@ export const ChatPanel: React.FC = () => {
             setCurrentBranch(newBranch);
             setIsCreateBranchChatMode(false);
             setIsCurrentBranchOpen(true);
-        }
-        else if (isCurrentBranchOpen && currentBranch) {
-
+        } else if (isCurrentBranchOpen && currentBranch) {
             const reply = await doMessageReply();
             const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
             addMessageNode(lastNodeForUserMessage, userMessage);
@@ -202,7 +254,6 @@ export const ChatPanel: React.FC = () => {
                 botMessages: reply,
             };
             addDialogToCurrentBranch(branchDialog);
-
         } else {
             const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
             addMessageNode(lastNodeForUserMessage, userMessage);
@@ -235,7 +286,9 @@ export const ChatPanel: React.FC = () => {
             ref={panelRef}
             className={
                 playground.open
-                    ? (playgroundFullscreen ? css.panel_playground_fullscreen : css.panel_playground)
+                    ? playgroundFullscreen
+                        ? css.panel_playground_fullscreen
+                        : css.panel_playground
                     : css.panel
             }
             onDragStart={handleDragStart}
@@ -290,7 +343,6 @@ export const ChatPanel: React.FC = () => {
                         </p>
                     </div>
                 )}
-
                 {files.length > 0 && (
                     <div className={css.panel_files_mask}>
                         <FileListForUpload
@@ -330,7 +382,9 @@ export const ChatPanel: React.FC = () => {
 
                 {drag && (
                     <div className={css.panel_drag}>
-                        <p className={css.panel_drag_text}>Upload files, folders, text content, or code here.</p>
+                        <p className={css.panel_drag_text}>
+                            Upload files, folders, text content, or code here.
+                        </p>
                         <div className={css.panel_drag_background}>
                             <div className={css.panel_drag_upload_files_wrapper}>
                                 <UploadFilesIcon width={14} height={20} />
@@ -350,7 +404,7 @@ export const ChatPanel: React.FC = () => {
                         onDispatchDoe={() => prompt.togglePrompt(true)}
                         onUploadFiles={(values) => setFiles([...files, ...values])}
                     />
-                    {isCreateBranchChatMode &&  (
+                    {isCreateBranchChatMode && (
                         <div className={css.panel_branchIcon}>
                             <BranchIcon width={16} height={16} fill={"currentColor"} />
                         </div>
@@ -372,17 +426,23 @@ export const ChatPanel: React.FC = () => {
                         onMouseUp={handleTextSelection}
                     />
 
-                    {showLinkInput && isHyperlinkInputOpen && (
+                    <CSSTransition
+                        in={showLinkInput && isHyperlinkInputOpen}
+                        timeout={300}
+                        classNames={{
+                            enter: css.linkEnter,
+                            enterActive: css.linkEnterActive,
+                            exit: css.linkExit,
+                            exitActive: css.linkExitActive,
+                        }}
+                        unmountOnExit
+                    >
                         <div
-                            className={css.hyperlinkForm}
+                            className={css.hyperlink_form}
                             style={{
-                                position: "absolute",
-                                bottom: "100%",
-                                left: 0,
-                                width: "100%",
-                                display: "flex",
-                                justifyContent: "center",
-                                marginBottom: "8px",
+                                position: "fixed",
+                                top: linkInputPosition.top,
+                                left: linkInputPosition.left,
                                 zIndex: 1000,
                             }}
                         >
@@ -390,10 +450,28 @@ export const ChatPanel: React.FC = () => {
                                 value={linkUrl}
                                 onChange={(e) => setLinkUrl(e.target.value)}
                                 placeholder="Enter URL"
+                                onFocus={() => {
+                                    window.getSelection()?.removeAllRanges();
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        (e.currentTarget as HTMLInputElement).blur();
+                                        handleApplyLink();
+                                        setTimeout(() => {
+                                            window.getSelection()?.removeAllRanges();
+                                            if (
+                                                document.activeElement &&
+                                                typeof (document.activeElement as HTMLElement).blur === "function"
+                                            ) {
+                                                (document.activeElement as HTMLElement).blur();
+                                            }
+                                        }, 100);
+                                    }
+                                }}
                             />
-                            <button onClick={handleApplyLink}>Send</button>
                         </div>
-                    )}
+                    </CSSTransition>
 
                     <SwitchTransition>
                         {isReplyLoading ? (
@@ -445,22 +523,20 @@ export const ChatPanel: React.FC = () => {
                                         <button className={css.panel_send_table_data_btn}>
                                             <SendTableDataIcon fill="currentColor" />
                                         </button>
-                                    ) : (
-                                        !prompt.active ? (
-                                            !questionCodeMessage ? (
-                                                <button className={css.panel_submitBtn} onClick={handleSend}>
-                                                    Send <ArrowUpIcon />
-                                                </button>
-                                            ) : (
-                                                <button className={css.panel_hammerBtn}>
-                                                    <HammerIcon />
-                                                </button>
-                                            )
+                                    ) : !prompt.active ? (
+                                        !questionCodeMessage ? (
+                                            <button className={css.panel_submitBtn} onClick={handleSend}>
+                                                Send <ArrowUpIcon />
+                                            </button>
                                         ) : (
-                                            <button className={css.panel_callBtn}>
-                                                <CallVoiceIcon />
+                                            <button className={css.panel_hammerBtn}>
+                                                <HammerIcon />
                                             </button>
                                         )
+                                    ) : (
+                                        <button className={css.panel_callBtn}>
+                                            <CallVoiceIcon />
+                                        </button>
                                     )}
                                 </>
                             </CSSTransition>

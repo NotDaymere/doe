@@ -126,6 +126,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const [isAllStepOpen, setIsAllStepOpen] = React.useState(false);
     const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
 
+
     React.useEffect(() => {
         const lastMouseEvent = { current: null as MouseEvent | null };
 

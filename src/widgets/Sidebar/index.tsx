@@ -12,6 +12,7 @@ import { useEditorContext } from "src/shared/components/Editor";
 import { useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "./ui";
 import css from "./Sidebar.module.less";
+import clsx from "clsx";
 
 export const Sidebar: React.FC = () => {
     const { editor } = useChatStore();
@@ -99,8 +100,8 @@ export const Sidebar: React.FC = () => {
                     </button>
 
 
-                    <button 
-                        className={css.sidebar_controls_btn}
+                    <button
+                        className={clsx(css.sidebar_controls_btn, { [css.active]: isHyperlinkInputOpen })}
                         onPointerDown={pointerDown}
                         onClick={() => setIsHyperlinkInputOpen(!isHyperlinkInputOpen)}
                     >
