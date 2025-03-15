@@ -23,6 +23,15 @@ const initialMessages: IMessage[] = [
         content: `<p>Here's a simple project idea: a Task Manager command-line application in Python. It will allow you to add, view, and delete tasks. In the structure, we'll be able to add and view all tasks, delete tasks by number, and mark tasks as completed.</p>
                     <p><br class="ProseMirror-trailingBreak"></p>
                     <p>We will write this code completely in Python.</p>
+                    
+                     <p>
+                      Here is a citation: 
+                      <span class="citation-container" id="citation-ref-1" data-citation-url="https://en.wikipedia.org/wiki/Yoneda_lemma">
+                        <span class="cited-text">This is a cited quote.</span>
+                        <sup class="citation">1</sup>
+                      </span> 
+                    </p>
+                    
                     <p><br class="ProseMirror-trailingBreak"></p>
                     <p>The Python code for the deletion function is as follows:</p>
                     <p><br class="ProseMirror-trailingBreak"></p>
@@ -85,6 +94,11 @@ interface ChatState {
     questionCodeMessage: IQuestionCodeMessage | null;
     setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
 
+    isCitationPlayground: boolean;
+    citationPlaygroundRef: string | null;
+    setIsCitationPlayground: (isCitationPlayground: boolean) => void;
+    setCitationPlaygroundRef: (ref: string | null) => void;
+
     playground: IPlayground;
     savedPlaygrounds: IPlayground[];
     playgroundFullscreen: boolean;
@@ -98,9 +112,9 @@ interface ChatState {
     deleteSavedPlaygrounds: (id: string | null) => void;
     getSavedPlayground: (id: string | null) => IPlayground | null;
     getOpenSavedPlaygrounds: () => IPlayground[];
-    getOpenSavedPlaygroundsByType: (type: "code" | "table" | "source") => IPlayground[];
+    getOpenSavedPlaygroundsByType: (type: "code" | "table" | "source" | "iframe") => IPlayground[];
     getSavedPlaygroundLast: () => IPlayground | null;
-    getSavedPlaygroundLastByType: (type: "code" | "table" | "source") => IPlayground | null;
+    getSavedPlaygroundLastByType: (type: "code" | "table" | "source" | "iframe") => IPlayground | null;
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
 
     messages: IMessage[];
@@ -176,6 +190,11 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     savedPlaygrounds: [],
     playgroundFullscreen: false,
     questionCodeMessage: null,
+
+    isCitationPlayground: false,
+    citationPlaygroundRef: null,
+    setIsCitationPlayground: (isCitationPlayground) => set(() => ({ isCitationPlayground })),
+    setCitationPlaygroundRef: (ref) => set(() => ({ citationPlaygroundRef: ref })),
 
     replyTimeoutId: null,
 

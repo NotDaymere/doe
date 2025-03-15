@@ -1,4 +1,4 @@
-import React, { Dispatch, useState } from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 
 // External libraries
 import { Editor as EditorTiptap } from "@tiptap/react";
@@ -54,6 +54,7 @@ import { mockColumnsChartMessageData } from "./assets/MessageCharts/MessageColum
 import { usePanel } from "../../lib";
 import MessageLineChart from "./assets/MessageCharts/MessageLineChart/MessageLineChart";
 import { mockLineChartMessageData } from "./assets/MessageCharts/MessageLineChart/mockLineChartMessageData";
+import { IPlayground } from "../../../../shared/types/Playground";
 
 interface Props {
     data: IMessage;
@@ -98,12 +99,17 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         addMessageNode,
         getLastCurrentVersionMessageNode,
         doMessageReply,
-        isHyperlinkInputOpen
+        isHyperlinkInputOpen,
+        citationPlaygroundRef,
+        setCitationPlaygroundRef,
+        setIsCitationPlayground,
+        setPlayground,
+        setSavedPlaygrounds
     } = useChatStore();
 
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
-    const { setPlayground } = useApp().app;
+
 
     const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
     const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{ top: number; left: number } | null>(null);
@@ -169,6 +175,100 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             document.removeEventListener("selectionchange", handleSelectionChange);
         };
     }, []);
+
+    useEffect(() => {
+        const handleCitationClick = (event: Event) => {
+            event.preventDefault();
+            const target = (event.target as HTMLElement).closest(".citation-container");
+            if (!target) return;
+
+            const citationUrl = target.getAttribute("data-citation-url");
+            if (!citationUrl) return;
+
+            const allCitationContainers = document.querySelectorAll(".citation-container");
+            allCitationContainers.forEach((container) => {
+                container.classList.remove("citation-active");
+
+                const citedText = container.querySelector(".cited-text") as HTMLElement | null;
+                if (citedText) {
+                    citedText.style.textDecoration = "";
+                }
+
+                const citationElement = container.querySelector(".citation") as HTMLElement | null;
+                if (citationElement) {
+                    citationElement.style.border = "";
+                    citationElement.style.backgroundColor = "";
+                    citationElement.style.color = "";
+                }
+            });
+
+            if (citationPlaygroundRef === citationUrl) {
+                const { savedPlaygrounds, deleteSavedPlaygrounds, setPlayground } = useChatStore.getState();
+                const existingIframe = savedPlaygrounds.find(p => p.type === "iframe");
+                if (existingIframe) {
+                    deleteSavedPlaygrounds(existingIframe.id);
+                }
+                setCitationPlaygroundRef(null);
+                setIsCitationPlayground(false);
+                setPlayground({
+                    type: null,
+                    name: "",
+                    open: false,
+                    data: null,
+                    text: "",
+                    id: null,
+                });
+            } else {
+                target.classList.add("citation-active");
+
+                const citedText = target.querySelector(".cited-text") as HTMLElement | null;
+                if (citedText) {
+                    citedText.style.textDecoration = "underline dashed #9747FF";
+                }
+
+                const citationElement = target.querySelector(".citation") as HTMLElement | null;
+                if (citationElement) {
+                    citationElement.style.border = "1px solid #9747ff";
+                    citationElement.style.backgroundColor = "#9747ff";
+                    citationElement.style.color = "#FFFFFF";
+                }
+
+                const domain = new URL(citationUrl).hostname;
+                const newId = Date.now().toString();
+                const newPlayground: IPlayground = {
+                    id: newId,
+                    name: `Citation: ${domain}`,
+                    type: "iframe",
+                    data: citationUrl,
+                    open: true,
+                };
+
+                const { savedPlaygrounds, updateSavedPlaygrounds, setSavedPlaygrounds, setPlayground } = useChatStore.getState();
+                const existingIframe = savedPlaygrounds.find(p => p.type === "iframe");
+                if (existingIframe) {
+                    const updatedPlayground = { ...existingIframe, ...newPlayground };
+                    updateSavedPlaygrounds(updatedPlayground);
+                    setPlayground(updatedPlayground);
+                } else {
+                    setSavedPlaygrounds(newPlayground);
+                    setPlayground(newPlayground);
+                }
+                setCitationPlaygroundRef(citationUrl);
+                setIsCitationPlayground(true);
+            }
+        };
+
+        document.addEventListener("click", handleCitationClick);
+        return () => {
+            document.removeEventListener("click", handleCitationClick);
+        };
+    }, [
+        citationPlaygroundRef,
+        setCitationPlaygroundRef,
+        setIsCitationPlayground,
+        setSavedPlaygrounds,
+        setPlayground,
+    ]);
 
     const handleClose = () => {
         setReferenceButtonVisible(false);
@@ -306,11 +406,15 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         }
     };
     const openSourcePlayground = () => {
-        setPlayground((prev) => ({
-            ...prev,
+        const newPlayground: IPlayground = {
+            id: "see_all_steps",
+            name: "See All Steps",
             type: "source",
-            open: true,
-        }));
+            data: null,
+            open: false,
+        };
+        newPlayground.open = true;
+        setSavedPlaygrounds(newPlayground);
     };
 
     if (data.isUser) {
