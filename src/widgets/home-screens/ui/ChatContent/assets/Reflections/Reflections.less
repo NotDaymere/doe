@@ -1,0 +1,127 @@
+.reflections-container {
+  position: fixed;
+  bottom: 130px;
+  left: 90px;
+  z-index: 9999;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+
+  transition: width 0.3s, height 0.3s, transform 0.3s, opacity 0.3s;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.reflections-container.closed {
+  width: 40px;
+  height: 40px;
+}
+
+.reflections-container.closed .small-content,
+.reflections-container.closed .expanded-content {
+  display: none;
+}
+
+.reflections-container.small {
+  width: 200px;
+}
+
+.reflections-container.small .expanded-content {
+  display: none;
+}
+
+.small-content {
+  padding: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.small-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.small-time {
+  font-size: 12px;
+  color: #666;
+}
+.small-add-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+.small-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.small-title {
+  margin: 0 8px;
+  font-weight: 600;
+}
+.small-count {
+  background-color: #f8f8f8;
+  padding: 2px 6px;
+  border-radius: 12px;
+}
+
+.reflections-container.expanded {
+  width: 320px;
+}
+
+.expanded-content {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.reflections-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fafafa;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+}
+.reflections-drag-bar {
+  flex: 1;
+  color: #999;
+  cursor: grab;
+}
+.reflections-pin-icon {
+  cursor: pointer;
+}
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.reflections-body {
+  flex: 1;
+  padding: 8px 12px;
+  overflow-y: auto;
+}
+.reflection-item {
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+}
+.reflection-item.pinned {
+  background-color: #ffe8a6;
+}
