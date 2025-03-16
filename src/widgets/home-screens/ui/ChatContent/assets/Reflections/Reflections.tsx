@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Reflections.less";
 import ReflectionIcon from "../../../../../../shared/icons/ReflectionIcon";
-import PinIcon from "../../../../../../shared/icons/PinIcon";
 
 const ViewModes = {
     CLOSED: "closed",
@@ -29,7 +28,6 @@ export default function Reflections() {
         return undefined;
     }, [mode, isHovering, isPinned]);
 
-    // Слушатель кликов вне контейнера
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
