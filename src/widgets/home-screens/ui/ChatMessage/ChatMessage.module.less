@@ -24,6 +24,7 @@
   align-items: flex-end;
   justify-content: flex-end;
   width: 100%;
+  margin: 8px;
 }
 
 .user_message_and_edit_button {
@@ -812,5 +813,39 @@
     transition: 300ms ease;
     transition-property: transform, opacity;
 }
+
+
+
+.message_with_button_container {
+  display: flex;
+  align-items: flex-start;
+
+  .fav_button {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 16px;
+    height: 16px;
+    margin-top: 20px;
+    color: #B5B5B5;
+    opacity: 0;
+    transition:
+            opacity 0.3s ease,
+            color 0.3s ease;
+
+  }
+
+  .fav_button_liked {
+    color: #FFD600 !important;
+    opacity: 1 !important;
+  }
+
+  &:hover .fav_button {
+    opacity: 1 !important;
+  }
+
+}
+
 
 

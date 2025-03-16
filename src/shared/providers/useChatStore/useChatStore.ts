@@ -126,6 +126,7 @@ interface ChatState {
     replyTimeoutId: number | null;
     replyPromiseReject?: (reason?: any) => void;
 
+    changeMessage: (oldMessage: IMessage, newMessage: IMessage) => IMessage | null;
     messageNodeMap: Record<string, IMessageNode>;
     addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) => void;
     addMessageNodeVersion: (current: IMessageNode | string | IMessage | number, message: IMessage) => void;
@@ -555,5 +556,38 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             currentNode = nextNode;
         }
         return currentNode;
+    },
+    changeMessage: (oldMessage: IMessage, newMessage: IMessage): IMessage | null => {
+        let result: IMessage | null = null;
+        set((state) => {
+            let targetKey: string | undefined;
+            for (const key in state.messageNodeMap) {
+                if (state.messageNodeMap[key]?.message?.id === oldMessage.id) {
+                    targetKey = key;
+                    break;
+                }
+            }
+            if (!targetKey || !state.messageNodeMap[targetKey]) {
+                result = null;
+                return {};
+            }
+            const updatedNode = {
+                ...state.messageNodeMap[targetKey]!,
+                message: newMessage,
+            };
+            const updatedMessageNodeMap = {
+                ...state.messageNodeMap,
+                [targetKey]: updatedNode,
+            };
+            const updatedMessages = state.messages.map(msg =>
+                msg.id === oldMessage.id ? newMessage : msg
+            );
+            result = newMessage;
+            return {
+                messageNodeMap: updatedMessageNodeMap,
+                messages: updatedMessages,
+            };
+        });
+        return result;
     },
 }));
