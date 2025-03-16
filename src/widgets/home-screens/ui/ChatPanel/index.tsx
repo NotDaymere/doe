@@ -270,7 +270,113 @@ export const ChatPanel: React.FC = () => {
         setText(value);
     };
 
+    const normalizeUrl = (url: string): string => {
+        try {
+            return new URL(url, window.location.href).toString();
+        } catch (error) {
+            return url.trim();
+        }
+    };
+
+    const cleanUrl = (url: string): string => {
+        try {
+            const decodedUrl = decodeURIComponent(url);
+
+            const match = decodedUrl.match(/^(https?:\/\/[^\s<]+)/i);
+            const cleaned = match ? match[0] : decodedUrl;
+
+            return new URL(cleaned, window.location.href).toString();
+        } catch (error) {
+            return url.trim();
+        }
+    };
+
+    const processLinksFromText = async () => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, "text/html");
+        const anchors = doc.querySelectorAll("a");
+        let newFiles: FileWithId[] = [];
+
+        const anchorLinks = new Set<string>();
+
+        for (const anchor of Array.from(anchors)) {
+            let link = anchor.getAttribute("href");
+            if (!link) continue;
+
+            link = cleanUrl(link);
+
+            if (files.some((file) => file.name === link) || anchorLinks.has(link)) {
+                continue;
+            }
+
+            anchorLinks.add(link);
+
+            let blob;
+            try {
+                const response = await fetch(link);
+                if (!response.ok) {
+                    throw new Error(`Non-200 status: ${response.status}`);
+                }
+                blob = await response.blob();
+            } catch (error) {
+                console.error("Failed to fetch content from link (possibly due to CORS).", error);
+                blob = new Blob([`Failed to fetch content from link:\n${link}`], {
+                    type: "text/plain",
+                });
+            }
+
+            const fileWithId = Object.assign(
+                new File([blob], link, { type: blob.type }),
+                { id: `${Date.now()}-${Math.random()}` }
+            ) as FileWithId;
+
+            newFiles.push(fileWithId);
+        }
+
+        const urlRegex = /(https?:\/\/[^\s'"]+)/gi;
+        const plainLinks = text.match(urlRegex) || [];
+
+        const uniquePlainLinks = new Set(plainLinks.map(link => cleanUrl(link)));
+
+        for (const link of uniquePlainLinks) {
+
+            if (files.some((file) => file.name === link) || anchorLinks.has(link)) {
+                continue;
+            }
+
+            let blob;
+            try {
+                const response = await fetch(link);
+                if (!response.ok) {
+                    throw new Error(`Non-200 status: ${response.status}`);
+                }
+                blob = await response.blob();
+            } catch (error) {
+                console.error("Failed to fetch content from link (possibly due to CORS).", error);
+                blob = new Blob([`Failed to fetch content from link:\n${link}`], {
+                    type: "text/plain",
+                });
+            }
+
+            const fileWithId = Object.assign(
+                new File([blob], link, { type: blob.type }),
+                { id: `${Date.now()}-${Math.random()}` }
+            ) as FileWithId;
+
+            newFiles.push(fileWithId);
+        }
+
+        if (newFiles.length > 0) {
+            setFiles([...files, ...newFiles]);
+        }
+    };
+
     const handleKeyPress = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === "Tab") {
+            e.preventDefault();
+            await processLinksFromText();
+            return;
+        }
         if (e.code === "Enter" && !e.shiftKey) {
             e.preventDefault();
             await handleSend();
