@@ -177,14 +177,15 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
                         isRotated ? css.translateIconRotatedWrapper : css.translateIconWrapper
                     }
                 >
-                    <button
-                        className={css.translateIcon}
-                        onClick={() => setShowLangPopup(!showLangPopup)}
-                    >
+                    <button className={css.translateIcon} onClick={() => setShowLangPopup(true)}>
                         <TextForTranslateIcon width={20} height={20} />
                     </button>
                     {showLangPopup && (
-                        <div className={css.langPopup}>
+                        <div
+                            className={classNames(css.langPopup, {
+                                [css.langPopupRotated]: isRotated,
+                            })}
+                        >
                             <LangPopup
                                 text={langText}
                                 onChange={handleEnteringLanguage}
@@ -242,17 +243,6 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
                                 />
                             </>
                         )}
-                        {/* {isUploadFiles && (
-                            // <div className={css.uploadFilesIcons}>
-                            <TranslationActionButtons
-                                magicMenuItems={MAGIC_MENU_ITEMS}
-                                isDisabledUpload={isUploadingFiles}
-                                alignEnd={isVoiceMode}
-                                blurButton={true}
-                                isDragging={drag}
-                            />
-                            // </div>
-                        )} */}
                         {textToTranslate && !isUploadFiles && (
                             <div
                                 className={classNames(css.textForTranslate, {
