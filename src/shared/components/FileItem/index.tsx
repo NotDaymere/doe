@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import clsx from "clsx";
 import css from "./FileItem.module.less";
 import CrossIcon from "src/shared/icons/Cross.icon";
@@ -22,6 +22,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                                                       onDelete,
                                                   }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentIconIndex, setCurrentIconIndex] = useState(0);
 
     const info = useMemo(() => {
         if (name.startsWith("http://") || name.startsWith("https://")) {
@@ -36,12 +37,14 @@ export const FileItem: React.FC<FileItemProps> = ({
                     filename: fileName,
                     mimetype,
                     ext: urlObj.hostname,
+                    isUrl: true,
                 };
             } catch {
                 return {
                     filename: name,
                     mimetype,
                     ext: "",
+                    isUrl: false,
                 };
             }
         } else {
@@ -53,30 +56,33 @@ export const FileItem: React.FC<FileItemProps> = ({
                 filename,
                 mimetype,
                 ext,
+                isUrl: false,
             };
         }
     }, [name, mimetype]);
 
     const extLower = info.ext.toLowerCase();
-
-    const iconURL = useMemo(() => {
-        if ((name.startsWith("http://") || name.startsWith("https://"))) {
+    const candidateIconURLs = useMemo((): string[] => {
+        if (name.startsWith("http://") || name.startsWith("https://")) {
             return [
                 `https://logo.clearbit.com/${info.ext}?size=128`,
                 `https://www.google.com/s2/favicons?domain=${info.ext}&sz=64`,
                 `https://icons.duckduckgo.com/ip3/${info.ext}.ico`,
                 "/img/icons/file-file.svg",
             ];
+        } else if (["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower)) {
+            return ["/img/icons/file-image.svg"];
+        } else if (["mp4", "webm", "ogg"].includes(extLower)) {
+            return ["/img/icons/file-media.svg"];
         } else {
-            if (["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower)) {
-                return "/img/icons/file-image.svg";
-            }
-            if (["mp4", "webm", "ogg"].includes(extLower)) {
-                return "/img/icons/file-media.svg";
-            }
-            return "/img/icons/file-file.svg";
+            return ["/img/icons/file-file.svg"];
         }
-    }, [info, extLower]);
+    }, [name, info.ext, extLower]);
+
+    // Сброс индекса кандидатов, если меняется список
+    useEffect(() => {
+        setCurrentIconIndex(0);
+    }, [candidateIconURLs]);
 
     const handleClick = () => {
         if (name.startsWith("http://") || name.startsWith("https://")) {
@@ -97,22 +103,27 @@ export const FileItem: React.FC<FileItemProps> = ({
         <>
             <div className={clsx(css.file, className)} onClick={handleClick}>
                 <div className={css.file_icon}>
-                    <img src={iconURL} alt="" />
+                    <img
+                        src={candidateIconURLs[currentIconIndex]}
+                        alt=""
+                        onError={() =>
+                            setCurrentIconIndex((prevIndex) => {
+                                const nextIndex = prevIndex + 1;
+                                return nextIndex < candidateIconURLs.length ? nextIndex : prevIndex;
+                            })
+                        }
+                    />
                 </div>
                 <div className={css.file_content}>
                     <p className={css.file_name}>
-                        <span>
-                            {info.filename.length > 15
-                                ? `${info.filename.slice(0, 15)}...`
-                                : info.filename}
-                        </span>
-
-                        {!(name.startsWith("http://") || name.startsWith("https://")) && (
-                            <>.{info.ext}</>
-                        )}
+            <span>
+              {info.filename.length > 15
+                  ? `${info.filename.slice(0, 15)}...`
+                  : info.filename}
+            </span>
+                        {!(name.startsWith("http://") || name.startsWith("https://")) && <>.{info.ext}</>}
                     </p>
                     <p className={css.file_ext}>
-
                         {name.startsWith("http://") || name.startsWith("https://")
                             ? info.ext
                             : info.ext}
