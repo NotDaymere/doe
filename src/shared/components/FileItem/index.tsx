@@ -60,14 +60,23 @@ export const FileItem: React.FC<FileItemProps> = ({
     const extLower = info.ext.toLowerCase();
 
     const iconURL = useMemo(() => {
-        if (["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower)) {
-            return "/img/icons/file-image.svg";
+        if ((name.startsWith("http://") || name.startsWith("https://"))) {
+            return [
+                `https://logo.clearbit.com/${info.ext}?size=128`,
+                `https://www.google.com/s2/favicons?domain=${info.ext}&sz=64`,
+                `https://icons.duckduckgo.com/ip3/${info.ext}.ico`,
+                "/img/icons/file-file.svg",
+            ];
+        } else {
+            if (["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower)) {
+                return "/img/icons/file-image.svg";
+            }
+            if (["mp4", "webm", "ogg"].includes(extLower)) {
+                return "/img/icons/file-media.svg";
+            }
+            return "/img/icons/file-file.svg";
         }
-        if (["mp4", "webm", "ogg"].includes(extLower)) {
-            return "/img/icons/file-media.svg";
-        }
-        return "/img/icons/file-file.svg";
-    }, [extLower]);
+    }, [info, extLower]);
 
     const handleClick = () => {
         if (name.startsWith("http://") || name.startsWith("https://")) {
