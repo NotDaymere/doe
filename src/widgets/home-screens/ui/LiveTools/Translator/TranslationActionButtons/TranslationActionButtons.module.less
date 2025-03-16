@@ -1,0 +1,68 @@
+.translationActionButtons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+}
+
+.magicMenu {
+    position: relative;
+    cursor: pointer;
+}
+
+.menu {
+    top: -130px;
+    bottom: unset;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.alignEnd {
+    align-items: flex-end;
+}
+
+.noGap {
+    gap: 0;
+}
+
+.blur {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    // background: #b7ff3c;
+    // // height: 20px;
+    // filter: blur(16px);
+    // backdrop-filter: blur(20px);
+    background: radial-gradient(circle, rgba(217, 244, 172, 1) 0%, rgba(#f8fdf0, 1) 100%);
+    path {
+        fill: #8bcf16;
+    }
+}
+
+.dragging {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    // background: #d9f4ac;
+    // border: 1px solid #8bcf16;
+    background: #b7ff3c;
+    // height: 20px;
+    filter: blur(16px);
+    position: relative;
+    transition: opacity 300ms ease;
+
+    svg {
+        width: 12px;
+        height: 12px;
+        flex-shrink: 0;
+        fill: #8bcf16;
+
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
