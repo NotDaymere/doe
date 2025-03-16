@@ -26,7 +26,7 @@ const initialMessages: IMessage[] = [
                     
                      <p>
                       Here is a citation: 
-                      <span class="citation-container" id="citation-ref-1" data-citation-url="https://en.wikipedia.org/wiki/Yoneda_lemma">
+                      <span class="citation-container" id="citation-ref-1" data-citation-url="https://en.wikipedia.org/wiki/Number_theory">
                         <span class="cited-text">This is a cited quote.</span>
                         <sup class="citation">1</sup>
                       </span> 

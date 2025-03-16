@@ -7,6 +7,7 @@ import hljs from "highlight.js";
 import jsPDF from "jspdf";
 import { Flex } from "antd";
 import { CSSTransition } from "react-transition-group";
+import clsx from "clsx";
 
 // Shared types & providers
 import { IMessage } from "src/shared/types/Message";
@@ -57,6 +58,7 @@ import { mockLineChartMessageData } from "./assets/MessageCharts/MessageLineChar
 import { IPlayground } from "../../../../shared/types/Playground";
 import AllBranches from "../ChatContent/assets/AllBranches/AllBranches";
 import AllPlaygrounds from "../ChatContent/assets/AllPlaygrounds/AllPlaygrounds";
+import SeeAllStepsIcon from "../../../../shared/icons/SeeAllSteps.icon";
 
 interface Props {
     data: IMessage;
@@ -666,13 +668,17 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         <Flex justify={"space-between"} className={"message-actions"}>
                             <button
                                 onClick={() => openSourcePlayground(data.id.toString())}
-                                className={css.button_steps}
+                                className={clsx(css.button_steps, { [css.steps_open]: isAllStepOpen })}
                             >
-                                <SvgIcon
-                                    style={{ width: "15px", height: "15px", marginRight: "2px" }}
-                                    type={"seeAllStepsVioletIcon"}
-                                />
-                                <span className={css.button_steps_label}>See all steps</span>
+                                <SeeAllStepsIcon />
+                                <span
+                                    className={clsx({
+                                        [css.button_steps_open_label]: isAllStepOpen,
+                                        [css.button_steps_label]: !isAllStepOpen,
+                                    })}
+                                >
+                                    See all steps
+                                </span>
                             </button>
                             <Flex gap={10}>
                                 <button
