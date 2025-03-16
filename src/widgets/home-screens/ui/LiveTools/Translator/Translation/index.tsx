@@ -18,7 +18,7 @@ import PlaygroundIcon from "src/shared/icons/Playground.icon";
 import { useDragFile } from "src/widgets/home-screens/lib";
 import { TRANSLATION_MENU_OPTIONS, TranslationMenuOptionsType } from "src/shared/types/Translation";
 import RecordIcon from "src/shared/icons/Record.icon";
-import FileLoadingProgress from "../../LiveToolsWrapper/FileLoadingProgress";
+import FileLoadingProgress from "../FileLoadingProgress";
 import { splitText } from "./helpers";
 import FilesList from "../FilesList";
 import TranslationActionButtons from "../TranslationActionButtons";
@@ -112,10 +112,10 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
     });
 
     useEffect(() => {
-        if (drag) {
+        if (dragTarget) {
             setIsUploadFiles(true);
         }
-    }, [drag]);
+    }, [dragTarget]);
 
     const uploadFiles = () => {
         const input = document.createElement("input") as HTMLInputElement;
@@ -201,6 +201,7 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
                 <div
                     className={classNames(css.textForTranslateWrapper, {
                         [css.uploadArea]: isUploadFiles,
+                        [css.noEvents]: showLangPopup,
                     })}
                     onDragStart={handleDragStart}
                     onDragOver={handleDragOver}
@@ -299,7 +300,7 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
                         )}
                     </div>
                 </div>
-                {isUploadFiles && <FilesList files={files} />}
+                {isUploadFiles && <FilesList files={files} isRotated={isRotated} />}
             </div>
             <div className={css.translationBlock}>
                 <div className={css.buttonsWrapper}>

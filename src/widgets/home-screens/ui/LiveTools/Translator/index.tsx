@@ -8,7 +8,7 @@ import { TRANSLATION_MENU_OPTIONS, TranslationMenuOptionsType } from "src/shared
 import { useAppStore } from "src/shared/providers";
 import Chip from "src/shared/components/Chip";
 import StarsIcon from "src/shared/icons/Stars.icon";
-import LiveToolsWrapper from "../LiveToolsWrapper";
+import LiveToolsWrapper from "./LiveToolsWrapper";
 import DictionaryIcon from "src/shared/icons/Dictionary.icon";
 import css from "./Translator.module.less";
 

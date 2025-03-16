@@ -5,7 +5,7 @@
     gap: 20px;
     padding: 10px 14px;
     color: #fff;
-    background-color: rgba(#1f1f1f, 68%);
+    background-color: #676767;
     border: 1px solid #626262;
     border-radius: 12px;
 }
@@ -19,6 +19,74 @@
 .attachmentIcon {
     margin-right: 0;
     margin-left: auto;
+}
+
+.dragWrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+
+    &._over {
+        .panel_drag_text,
+        .panel_drag_btn {
+            opacity: 0.1;
+        }
+        .panel_drag::after,
+        .panel_drag::before {
+            opacity: 1;
+        }
+    }
+    position: relative;
+}
+
+.panel_drag {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    max-width: 500px;
+    background: linear-gradient(to bottom, #fff, #fff), rgba(#f3ffdf, 0.3);
+    z-index: 11;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+
+    &::after,
+    &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(#638130, 1) 30%,
+            rgba(#616c4d, 1) 100%
+        );
+        background-size: 100% 100%;
+        height: 30px;
+        filter: blur(16px);
+        opacity: 0;
+        transition: opacity 400ms ease;
+    }
+
+    &::before {
+        width: 102px;
+    }
+
+    &::after {
+        width: 270px;
+    }
+}
+
+.colorIcon path {
+    fill: #636f4f;
 }
 
 .enter {

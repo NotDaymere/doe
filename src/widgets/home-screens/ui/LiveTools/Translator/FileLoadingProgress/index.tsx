@@ -1,6 +1,5 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import classNames from "classnames";
-import { CSSTransition } from "react-transition-group";
 import FileFilledIcon from "src/shared/icons/FileFilled.icon";
 import css from "./FileLoadingProgress.module.less";
 
@@ -16,7 +15,11 @@ const FileLoadingProgress: FC<IProps> = ({ fileName, progress, isRotated }) => {
             <FileFilledIcon width={10} height={12} />
             <div className={css.fileLoadingName}>
                 <div className={css.fileInfo}>
-                    <span className={isRotated ? css.fileNameShorten : ""}>{fileName}</span>
+                    <span
+                        className={classNames(css.fileName, { [css.fileNameShorten]: isRotated })}
+                    >
+                        {fileName}
+                    </span>
                     <span>{progress}%</span>
                 </div>
                 <div className={css.loadingProgress}>

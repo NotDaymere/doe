@@ -1,8 +1,8 @@
 import DoeIcon from "src/shared/icons/Doe.icon";
 import { FC, ReactElement, ReactNode, useState } from "react";
-import { MagicMenu } from "../MagicMenu";
+import { MagicMenu } from "../../MagicMenu";
 import classNames from "classnames";
-import Bookmarks from "./Bookmarks";
+import Bookmarks from "../Bookmarks";
 import TranslationIcon from "src/shared/icons/Translation.icon";
 import { useChatStore } from "src/shared/providers";
 import { MODE, ModeType } from "src/shared/types/Chat";
