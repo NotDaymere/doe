@@ -3,7 +3,6 @@ import "./Reflections.less";
 import ReflectionIcon from "../../../../../../shared/icons/ReflectionIcon";
 import PinIcon from "../../../../../../shared/icons/PinIcon";
 
-// Три режима
 const ViewModes = {
     CLOSED: "closed",
     SMALL: "small",
@@ -14,8 +13,11 @@ export default function Reflections() {
     const [mode, setMode] = useState(ViewModes.CLOSED);
     const [isHovering, setIsHovering] = useState(false);
     const [isPinned, setIsPinned] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startY, setStartY] = useState<number | null>(null);
+    const [showDragBar, setShowDragBar] = useState(false);
 
-    const containerRef = useRef(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (mode === ViewModes.SMALL && !isHovering && !isPinned) {
@@ -23,10 +25,23 @@ export default function Reflections() {
                 setMode(ViewModes.CLOSED);
             }, 5000);
             return () => clearTimeout(timer);
-        }else {
-            return null
         }
+        return undefined;
     }, [mode, isHovering, isPinned]);
+
+    // Слушатель кликов вне контейнера
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+                setMode(ViewModes.CLOSED);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const handleMouseEnterIcon = () => {
         if (mode === ViewModes.CLOSED) {
@@ -35,14 +50,62 @@ export default function Reflections() {
     };
 
     const handleMouseEnterContainer = () => {
-        if (mode === ViewModes.SMALL) setIsHovering(true);
+        if (mode === ViewModes.SMALL || mode === ViewModes.EXPANDED) {
+            setIsHovering(true);
+            setShowDragBar(true);
+        }
     };
 
     const handleMouseLeaveContainer = () => {
-        if (mode === ViewModes.SMALL) setIsHovering(false);
+        if (mode === ViewModes.SMALL || mode === ViewModes.EXPANDED) {
+            setIsHovering(false);
+            setShowDragBar(false);
+        }
     };
 
-    const handleExpand = () => {
+    const handleContainerMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if ((mode !== ViewModes.SMALL && mode !== ViewModes.EXPANDED) || !containerRef.current)
+            return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const relativeY = e.clientY - rect.top;
+        setShowDragBar(relativeY < 30 ? true : showDragBar);
+    };
+
+    const handleDragBarMouseEnter = () => {
+        if (mode === ViewModes.SMALL || mode === ViewModes.EXPANDED) {
+            setShowDragBar(true);
+        }
+    };
+
+    const handleDragBarMouseLeave = () => {
+        if (mode === ViewModes.SMALL || mode === ViewModes.EXPANDED) {
+            setShowDragBar(false);
+        }
+    };
+
+    const handleSmallMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+        setStartY(e.clientY);
+        setIsDragging(true);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+        if (!isDragging || startY === null) return;
+        const distance = startY - e.clientY;
+        if (distance > 50) {
+            setMode(ViewModes.EXPANDED);
+            setIsDragging(false);
+        }
+    };
+
+    const handleMouseUpOrLeave = () => {
+        setIsDragging(false);
+    };
+
+    const handlePinClick = () => {
+        setIsPinned((prev) => !prev);
+    };
+
+    const handleExpandByPlus = () => {
         if (mode === ViewModes.SMALL) {
             setMode(ViewModes.EXPANDED);
         }
@@ -54,9 +117,22 @@ export default function Reflections() {
         }
     };
 
-    const handlePinClick = () => {
-        setIsPinned((prev) => !prev);
-    };
+    useEffect(() => {
+        if (isDragging) {
+            window.addEventListener("mousemove", handleMouseMove);
+            window.addEventListener("mouseup", handleMouseUpOrLeave);
+            window.addEventListener("mouseleave", handleMouseUpOrLeave);
+        } else {
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUpOrLeave);
+            window.removeEventListener("mouseleave", handleMouseUpOrLeave);
+        }
+        return () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUpOrLeave);
+            window.removeEventListener("mouseleave", handleMouseUpOrLeave);
+        };
+    }, [isDragging, startY]);
 
     return (
         <div
@@ -64,17 +140,26 @@ export default function Reflections() {
             className={`reflections-container ${mode}`}
             onMouseEnter={handleMouseEnterContainer}
             onMouseLeave={handleMouseLeaveContainer}
+            onMouseMove={handleContainerMouseMove}
         >
-
             <div className="icon" onMouseEnter={handleMouseEnterIcon}>
                 <ReflectionIcon />
             </div>
 
 
-            <div className="small-content" onClick={handleExpand}>
+            <div className="small-content" onClick={handleExpandByPlus}>
+                <div
+                    className="small-drag-bar"
+                    onMouseDown={handleSmallMouseDown}
+                    onMouseEnter={handleDragBarMouseEnter}
+                    onMouseLeave={handleDragBarMouseLeave}
+                    style={{ opacity: showDragBar ? 1 : 0 }}
+                />
                 <div className="small-header">
                     <span className="small-time">Latest Today, 9:41 AM</span>
-                    <button className="small-add-btn">+</button>
+                    <button className="small-add-btn" onClick={handleExpandByPlus}>
+                        +
+                    </button>
                 </div>
                 <div className="small-footer">
                     <ReflectionIcon />
@@ -83,42 +168,13 @@ export default function Reflections() {
                 </div>
             </div>
 
-
             <div className="expanded-content">
                 <div className="reflections-header">
-                    <div className="reflections-drag-bar" onMouseDown={handleExpand}>
-                        Drag Me or Click
-                    </div>
-                    <div className="reflections-pin-icon" onClick={handlePinClick}>
-                        <PinIcon pinned={isPinned} />
-                    </div>
-                    <button className="close-btn" onClick={handleCollapse}>
-                        &times;
-                    </button>
-                </div>
-                <div className="reflections-body">
-                    <h4>Pinned</h4>
-                    <div className="reflection-item pinned">
-                        <span>Pinned Reflection Example</span>
+                    <div>
+                        <ReflectionIcon />
+                        <span className="small-title">Reflections</span>
                     </div>
 
-                    <h4>Today, 9:41 AM</h4>
-                    <div className="reflection-item">
-                        <span>Today’s conclusion from Demo. Lorem ipsum dolor sit amet.</span>
-                    </div>
-                    <div className="reflection-item">
-                        <span>All work and no play make Joe a dull boy.</span>
-                    </div>
-
-                    <h4>Wed, 4:32 AM</h4>
-                    <div className="reflection-item">
-                        <span>Another reflection…</span>
-                    </div>
-
-                    <h4>Tue, 4:32 AM</h4>
-                    <div className="reflection-item">
-                        <span>And one more reflection…</span>
-                    </div>
                 </div>
             </div>
         </div>
