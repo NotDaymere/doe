@@ -6,4 +6,5 @@ export interface IMessage {
     files?: FileWithId[];
     isUser: boolean;
     isCode: boolean;
+    isLiked?: boolean;
 }
