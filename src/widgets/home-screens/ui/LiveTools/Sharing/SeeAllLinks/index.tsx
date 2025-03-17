@@ -6,9 +6,9 @@ import { CSSTransition } from "react-transition-group";
 import LinkWPIcon from "src/shared/icons/LinkWP.icon";
 import LinkWOPIcon from "src/shared/icons/LinkWOP.icon";
 import LinkIndexedIcon from "src/shared/icons/LinkIndexed.icon";
-import StopIcon from "src/shared/icons/Stop.icon";
 import MoveIcon from "src/shared/icons/Move.icon";
 import { useClickOut } from "src/shared/hooks/useClickOut";
+import RemoveIcon from "src/shared/icons/Remove.icon";
 import css from "./SeeAllLinks.module.less";
 
 enum LinkType {
@@ -96,11 +96,18 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
     const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
     const [hoveredPasswordId, setHoveredPasswordId] = useState<string | null>(null);
 
-    const handlePasswordClick = (id: string) => {
-        setShowPasswords((prevState) => ({
-            ...prevState,
-            [id]: !prevState[id],
-        }));
+    const handlePasswordClick = async (e: Event, id: string) => {
+        if (showPasswords[id]) {
+            const password = results.find((result) => result.id === id)?.password || "";
+            navigator.clipboard.writeText(password);
+        } else {
+            setShowPasswords((prevState) => {
+                return {
+                    ...prevState,
+                    [id]: true,
+                };
+            });
+        }
     };
 
     const handleDeleteClick = (id: string) => {
@@ -208,7 +215,7 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
                                 </div>
                                 <div
                                     className={css.password}
-                                    onClick={() => handlePasswordClick(result.id)}
+                                    onClick={(e: any) => handlePasswordClick(e, result.id)}
                                     onMouseEnter={() => setHoveredPasswordId(result.id)}
                                     onMouseLeave={() => setHoveredPasswordId(null)}
                                 >
@@ -236,7 +243,7 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
                                         className={css.removeButton}
                                         onClick={() => handleDeleteClick(result.id)}
                                     >
-                                        <StopIcon width={15} height={15} />
+                                        <RemoveIcon width={15} height={15} />
                                     </button>
                                     <button className={css.moveButton}>
                                         <MoveIcon width={15} height={15} />

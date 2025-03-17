@@ -39,7 +39,7 @@ const TranslationActionButtons: FC<IProps> = ({
                 />
             </div>
         )}
-        <PlanetIcon width={15} height={15} className={css.cursor} />
+        <PlanetIcon width={15} height={15} className={css.planetIcon} />
     </div>
 );
 

@@ -8,11 +8,12 @@ import css from "./LangPopup.module.less";
 interface IProps {
     text: string;
     onChange: (e: any) => void;
+    onFileLoad: () => void;
     isActive: boolean;
     setIsActive: (value: boolean) => void;
 }
 
-const LangPopup: FC<IProps> = ({ text, onChange, isActive, setIsActive }) => {
+const LangPopup: FC<IProps> = ({ text, onChange, onFileLoad, isActive, setIsActive }) => {
     const [showPopup, setShowPopup] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const combinedRef = useRef<HTMLDivElement>(null);
@@ -28,7 +29,7 @@ const LangPopup: FC<IProps> = ({ text, onChange, isActive, setIsActive }) => {
         handleDragCancel,
     } = useDragFile({
         onUploadFiles(uploadFiles) {
-            console.log("uploaded");
+            onFileLoad();
         },
     });
 

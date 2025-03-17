@@ -17,7 +17,6 @@ import SharedWithYouIcon from "src/shared/icons/SharedWithYou.icon";
 import { MODE } from "src/shared/types/Chat";
 import TranslationActiveIcon from "src/shared/icons/TranslationActive.icon";
 import SharedWithYouActiveIcon from "src/shared/icons/SharedWithYouActive.icon";
-import Sharing from "../home-screens/ui/LiveTools/Sharing";
 import css from "./Sidebar.module.less";
 
 export const Sidebar: React.FC = () => {
@@ -134,9 +133,6 @@ export const Sidebar: React.FC = () => {
             <button className={css.sidebar_removeMsg}>
                 <TrashIcon />
             </button>
-            {isSharingActive && (
-                <Sharing isActive={isSharingActive} setIsActive={setIsSharingActive} />
-            )}
         </aside>
     );
 };

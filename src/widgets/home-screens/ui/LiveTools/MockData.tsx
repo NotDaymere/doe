@@ -31,3 +31,19 @@ export const TRANSLATED_TEXT_BOTTOM_PART = `<span className={css.bottomText}>Kon
 export const VOICE_TEXT_TO_TRANSLATE_PART = `Hello, I’m Shelley Duvall. You may recognize me from my roles in films like The Shining or Popeye, or perhaps from my work as the creator and host of Faerie Tale Theatre. Acting has been a significant`;
 export const VOICE_TRANSLATED_TEXT_TOP_PART = `你好，我是雪莉·杜瓦尔。您可能会从我在《闪灵》或《大力水手》等电影中的角色中认出我，或者可能从我作为《童话剧场》的创作者和主持人的工作中认出我。演戏已经是一件很重要的事了`;
 export const VOICE_TRANSLATED_TEXT_BOTTOM_PART = `Nǐ hǎo, wǒ shì xuě lì·dù wǎ'ěr. Nín kěnéng huì cóng wǒ zài “shǎn líng” huò “dàlì shuǐshǒu” děng diànyǐng zhōng de juésè zhōng rèn chū wǒ, huòzhě kěnéng cóng wǒ zuòwéi “tónghuà jùchǎng” de chuàngzuò zhě hé zhǔchí rén de gōngzuò zhōng rèn chū wǒ. Yǎnxì yǐjīng shì yī jiàn hěn zhòngyào de shìle`;
+
+export const LOADED_IMAGE_TRANSLATION = `  <span>Venta a Crédito</span>
+                        <span> Estado:</span>
+                        <span>000000 - Aprobado</span>
+                        <span>Tipo de Tarjeta: M/C</span>
+                        <span>Número de Tarjeta: XXXXXXXXXXXX (oculto)</span>
+                        <span>Propietario de la Tarjeta: (oculto)</span>
+                        <span>Método de Ingreso: Chip</span>
+                        <span>Código de Autorización: 028723</span>
+                        <span>Aplicación: MASTERCARD</span>
+                        <span>AID: A0000000041010</span>
+                        <span>TC:</span>
+                        <span>18% de Propina: 8.91</span>
+                        <span>Monto Total: 63.10</span>
+                        <span>Propina Adicional: ______</span>
+                        <span>Total: ______</span>`;

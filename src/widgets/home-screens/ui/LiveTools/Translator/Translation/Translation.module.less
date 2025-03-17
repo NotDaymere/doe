@@ -82,6 +82,22 @@
     border-color: #8bcf15;
 }
 
+.uploadedImage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    img {
+        height: fit-content;
+    }
+}
+
+.uploadedButtons {
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
 .noEvents {
     pointer-events: none;
 }
@@ -95,6 +111,13 @@
     position: absolute;
     right: 8px;
     top: 2px;
+}
+
+.imageText {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    .setFontSohneBuch(16px);
 }
 
 .text {
