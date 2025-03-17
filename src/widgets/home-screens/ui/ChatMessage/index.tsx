@@ -196,32 +196,35 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
     React.useEffect(() => {
         const handleCitationClick = (event: Event) => {
+            const targetElement = event.target as HTMLElement;
+
+            const citationContainer = targetElement.closest(".citation-container");
+            if (!citationContainer) {
+                return;
+            }
+
             const fileInput = document.getElementById("fileInput");
-            if (fileInput && fileInput.contains(event.target as Node)) {
+            if (fileInput && fileInput.contains(targetElement)) {
                 return;
             }
 
             event.preventDefault();
-            const target = (event.target as HTMLElement).closest(".citation-container");
-            if (!target) return;
 
-            const citationUrl = target.getAttribute("data-citation-url");
+            const citationUrl = citationContainer.getAttribute("data-citation-url");
             if (!citationUrl) return;
 
             const allCitationContainers = document.querySelectorAll(".citation-container");
             allCitationContainers.forEach((container) => {
                 container.classList.remove("citation-active");
-
                 const citedText = container.querySelector(".cited-text") as HTMLElement | null;
                 if (citedText) {
                     citedText.style.textDecoration = "";
                 }
-
-                const citationElement = container.querySelector(".citation") as HTMLElement | null;
-                if (citationElement) {
-                    citationElement.style.border = "";
-                    citationElement.style.backgroundColor = "";
-                    citationElement.style.color = "";
+                const citationEl = container.querySelector(".citation") as HTMLElement | null;
+                if (citationEl) {
+                    citationEl.style.border = "";
+                    citationEl.style.backgroundColor = "";
+                    citationEl.style.color = "";
                 }
             });
 
@@ -241,14 +244,14 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 setCitationPlaygroundRef(null);
                 setIsCitationPlayground(false);
             } else {
-                target.classList.add("citation-active");
+                citationContainer.classList.add("citation-active");
 
-                const citedText = target.querySelector(".cited-text") as HTMLElement | null;
+                const citedText = citationContainer.querySelector(".cited-text") as HTMLElement | null;
                 if (citedText) {
                     citedText.style.textDecoration = "underline dashed #9747FF";
                 }
 
-                const citationElement = target.querySelector(".citation") as HTMLElement | null;
+                const citationElement = citationContainer.querySelector(".citation") as HTMLElement | null;
                 if (citationElement) {
                     citationElement.style.border = "1px solid #9747ff";
                     citationElement.style.backgroundColor = "#9747ff";
