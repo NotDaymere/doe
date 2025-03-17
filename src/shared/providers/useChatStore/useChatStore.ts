@@ -52,7 +52,11 @@ const initialMessages: IMessage[] = [
                     result = delete_element(my_list, element_to_delete)
                     print(result)  # Output: [1, 2, 4, 5]
                     </code></pre>
-                    </block-code>`,
+                    </block-code>
+                     <p>Copy the code into a Python file, e.g., <inline-code>task_mna.py</inline-code></p>
+                     <p><br/></p>
+                       
+`,
         files: [],
         isCode: true,
         isUser: false,
