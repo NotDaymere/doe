@@ -8,8 +8,8 @@ import LinkWOPIcon from "src/shared/icons/LinkWOP.icon";
 import LinkIndexedIcon from "src/shared/icons/LinkIndexed.icon";
 import MoveIcon from "src/shared/icons/Move.icon";
 import { useClickOut } from "src/shared/hooks/useClickOut";
-import RemoveIcon from "src/shared/icons/Remove.icon";
 import css from "./SeeAllLinks.module.less";
+import RemoveIcon from "src/shared/icons/Remove.icon";
 
 enum LinkType {
     LINK_WITH_PW = "LINK_WITH_PW",
@@ -95,6 +95,19 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
     const [showSeeAllLink, setShowSeeAllLink] = useState(false);
     const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
     const [hoveredPasswordId, setHoveredPasswordId] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!search) {
+            setResults(SEARCH_RESULTS);
+        } else {
+            const results = SEARCH_RESULTS.filter((result) =>
+                isCaseSensitive
+                    ? result.text.includes(search)
+                    : result.text.toLowerCase().includes(search.toLowerCase())
+            );
+            setResults([...results]);
+        }
+    }, [search, isCaseSensitive]);
 
     const handlePasswordClick = async (e: Event, id: string) => {
         if (showPasswords[id]) {
@@ -197,61 +210,63 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
                             onChange={(event: any) => setIsCaseSensitive(event.target.checked)}
                         />
                     </div>
-                    <div className={css.results}>
-                        <div className={css.bold}>Name</div>
-                        <div className={css.bold}>Password</div>
-                        <div className={css.bold}>Published</div>
-                        <div className={css.bold}></div>
-                        {results.map((result, index) => (
-                            <>
-                                <div key={index} className={css.linkResult}>
-                                    <button
-                                        className={css.resultIcon}
-                                        onClick={() => handleLinkTypeButtonClick(result.id)}
+                    {results.length > 0 && (
+                        <div className={css.results}>
+                            <div className={css.bold}>Name</div>
+                            <div className={css.bold}>Password</div>
+                            <div className={css.bold}>Published</div>
+                            <div className={css.bold}></div>
+                            {results.map((result, index) => (
+                                <>
+                                    <div key={index} className={css.linkResult}>
+                                        <button
+                                            className={css.resultIcon}
+                                            onClick={() => handleLinkTypeButtonClick(result.id)}
+                                        >
+                                            {renderButton(result.linkType)}
+                                        </button>
+                                        <span className={css.link}>{result.text}</span>
+                                    </div>
+                                    <div
+                                        className={css.password}
+                                        onClick={(e: any) => handlePasswordClick(e, result.id)}
+                                        onMouseEnter={() => setHoveredPasswordId(result.id)}
+                                        onMouseLeave={() => setHoveredPasswordId(null)}
                                     >
-                                        {renderButton(result.linkType)}
-                                    </button>
-                                    <span className={css.link}>{result.text}</span>
-                                </div>
-                                <div
-                                    className={css.password}
-                                    onClick={(e: any) => handlePasswordClick(e, result.id)}
-                                    onMouseEnter={() => setHoveredPasswordId(result.id)}
-                                    onMouseLeave={() => setHoveredPasswordId(null)}
-                                >
-                                    {result.password &&
-                                        (showPasswords[result.id] ? (
-                                            result.password
-                                        ) : (
-                                            <div className={css.passwordWrapper}>
-                                                <div className={css.hidePassword}>
-                                                    {Array.from({ length: 12 }).map(() => (
-                                                        <div className={css.dot} />
-                                                    ))}
-                                                </div>
-                                                {hoveredPasswordId === result.id && (
-                                                    <div className={css.passwordHint}>
-                                                        click to reveal
+                                        {result.password &&
+                                            (showPasswords[result.id] ? (
+                                                result.password
+                                            ) : (
+                                                <div className={css.passwordWrapper}>
+                                                    <div className={css.hidePassword}>
+                                                        {Array.from({ length: 12 }).map(() => (
+                                                            <div className={css.dot} />
+                                                        ))}
                                                     </div>
-                                                )}
-                                            </div>
-                                        ))}
-                                </div>
-                                <div className={css.published}>{result.published}</div>
-                                <div className={css.actions}>
-                                    <button
-                                        className={css.removeButton}
-                                        onClick={() => handleDeleteClick(result.id)}
-                                    >
-                                        <RemoveIcon width={15} height={15} />
-                                    </button>
-                                    <button className={css.moveButton}>
-                                        <MoveIcon width={15} height={15} />
-                                    </button>
-                                </div>
-                            </>
-                        ))}
-                    </div>
+                                                    {hoveredPasswordId === result.id && (
+                                                        <div className={css.passwordHint}>
+                                                            click to reveal
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                    </div>
+                                    <div className={css.published}>{result.published}</div>
+                                    <div className={css.actions}>
+                                        <button
+                                            className={css.removeButton}
+                                            onClick={() => handleDeleteClick(result.id)}
+                                        >
+                                            <RemoveIcon width={15} height={15} />
+                                        </button>
+                                        <button className={css.moveButton}>
+                                            <MoveIcon width={15} height={15} />
+                                        </button>
+                                    </div>
+                                </>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </CSSTransition>
