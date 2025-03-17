@@ -1,18 +1,13 @@
-import DictionaryIcon from "src/shared/icons/Dictionary.icon";
-import css from "./Listener.module.less";
-import DoeIcon from "src/shared/icons/Doe.icon";
-import LiveTools from "..";
 import { useMemo, useState } from "react";
-import { useAppStore } from "src/shared/providers";
-import { TRANSLATION_MENU_OPTIONS } from "src/shared/types/Translation";
 import SummaryIcon from "src/shared/icons/Summary.icon";
 import NotesIcon from "src/shared/icons/Notes";
 import ResearchIcon from "src/shared/icons/Research.icon";
-import LiveToolsWrapper from "../LiveToolsWrapper";
+import LiveToolsWrapper from "../Translator/LiveToolsWrapper";
 import StarsIcon from "src/shared/icons/Stars.icon";
 import RecordBookmarkIcon from "src/shared/icons/RecordBookmark.icon";
 import classNames from "classnames";
-import RecordingPlayer from "./RecordingPlayer";
+import AudioRecorder from "./AudioRecorder";
+import css from "./Listener.module.less";
 
 export type RecordState = "isRecording" | "isPaused" | "isStopped";
 
@@ -163,13 +158,9 @@ const Listener = () => {
             magicMenuItems={MAGIC_MENU_ITEMS}
             magicButtonIcon={<StarsIcon width={21} height={28} />}
             magicButtonClass={css.magicButton}
+            isRotated={false}
         >
-            <RecordingPlayer
-                state={record}
-                onPause={handlePauseClick}
-                onPlay={handlePlayClick}
-                onStop={handleStopClick}
-            />
+            <AudioRecorder />
             <div className={css.recordingText}>
                 {renderText(record)}
                 {/* <ul>
