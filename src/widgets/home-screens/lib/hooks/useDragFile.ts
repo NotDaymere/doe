@@ -1,4 +1,5 @@
 import React from "react";
+import { extractFilesFromLinks } from "../helpers/LinkToFileTransformer";
 
 export interface FileWithId extends File {
     id: string;
@@ -77,15 +78,19 @@ export function useDragFile(props: Props = {}) {
         setDragTarget(false);
     };
 
-    const handleDragDropTarget = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDragDropTarget = async (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-        const filesWithId = Array.from(event.dataTransfer.files).map(file => {
-            return Object.assign(file, {
-                id: `${Date.now()}-${Math.random()}`
-            }) as FileWithId;
-        });
+
+        let filesWithId: FileWithId[] = Array.from(event.dataTransfer.files).map((file) =>
+            Object.assign(file, {
+                id: `${Date.now()}-${Math.random()}`,
+            }) as FileWithId
+        );
+
+        const linkFiles = await extractFilesFromLinks(event.dataTransfer.items);
+        filesWithId = filesWithId.concat(linkFiles);
+
         props.onUploadFiles?.(filesWithId);
-        stopDrag();
     };
 
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {

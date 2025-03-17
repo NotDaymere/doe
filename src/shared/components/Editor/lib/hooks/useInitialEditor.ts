@@ -22,9 +22,12 @@ export function useInitialEditor(props: EditorProps) {
             Text,
             Link.configure({
                 autolink: false,
-                openOnClick: false,
+                openOnClick: true,
                 linkOnPaste: false,
                 protocols: ["http", "https", "mailto", "tel"],
+                HTMLAttributes: {
+                    style: "color: #127FFF; text-decoration: underline",
+                },
             }),
             Bold,
             Italic,

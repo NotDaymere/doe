@@ -24,7 +24,6 @@ interface ChatRegularViewProps {
 }
 
 export const ChatRegularView: React.FC<ChatRegularViewProps> = ({
-                                                                    playgroundFullscreen,
                                                                     messageQueue,
                                                                     editor,
                                                                     editMsgMode,
@@ -34,12 +33,7 @@ export const ChatRegularView: React.FC<ChatRegularViewProps> = ({
 
     return (
         <>
-            {!playgroundFullscreen && (
-                <div className={css.content_top_actions_container}>
-                    <AllBranches />
-                    <AllPlaygrounds />
-                </div>
-            )}
+
             <div className={css.content_chat}>
                 {messageQueue.map((item, index) => {
                     const branch = savedBranches.find(b => b.mainMessageId === item.id);

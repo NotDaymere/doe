@@ -24,6 +24,13 @@ export const testTextAndCharts = `
   <p>Here is some <sup>superscript</sup> and <sub>subscript</sub> text.</p>
   <p>Here is some <highlight>highlighted text</highlight>.</p>
   <p>Here is a tab: <tab /></p>
+    <p>
+        Here is a citation: 
+        <span class="citation-container" id="citation-ref-1" data-citation-url="https://en.wikipedia.org/wiki/Yoneda_lemma">
+          <span class="cited-text">This is a cited quote.</span>
+          <sup class="citation">1</sup>
+       </span> 
+     </p>
   <p><large-text>Waterfall Chart</large-text></p>
   <chart type="waterfall">
     <data>

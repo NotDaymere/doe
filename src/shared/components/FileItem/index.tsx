@@ -1,14 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import clsx from "clsx";
 import css from "./FileItem.module.less";
 import CrossIcon from "src/shared/icons/Cross.icon";
-import PdfFilePreviewModal
-    from "../../../widgets/home-screens/ui/FilePreviewModal/PdfFilePreviewModal/PdfFilePreviewModal";
-import ImageFilePreviewModal
-    from "../../../widgets/home-screens/ui/FilePreviewModal/ImageFilePreviewModal/ImageFilePreviewModal";
-import VideoFilePreviewModal
-    from "../../../widgets/home-screens/ui/FilePreviewModal/VideoFilePreviewModal/VideoFilePreviewModal";
-
+import PdfFilePreviewModal from "../../../widgets/home-screens/ui/FilePreviewModal/PdfFilePreviewModal/PdfFilePreviewModal";
+import ImageFilePreviewModal from "../../../widgets/home-screens/ui/FilePreviewModal/ImageFilePreviewModal/ImageFilePreviewModal";
+import VideoFilePreviewModal from "../../../widgets/home-screens/ui/FilePreviewModal/VideoFilePreviewModal/VideoFilePreviewModal";
 
 interface FileItemProps {
     name: string;
@@ -16,43 +12,82 @@ interface FileItemProps {
     url?: string;
     className?: string;
     onDelete?: () => void;
-
 }
 
-export const FileItem: React.FC<FileItemProps> = ({ name,
-                                                    mimetype,
-                                                    url,
-                                                    className,
-                                                    onDelete,
-                                                    }) => {
+export const FileItem: React.FC<FileItemProps> = ({
+                                                      name,
+                                                      mimetype,
+                                                      url,
+                                                      className,
+                                                      onDelete,
+                                                  }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentIconIndex, setCurrentIconIndex] = useState(0);
 
     const info = useMemo(() => {
-        const segments = name.split(".");
-        const ext = segments.pop() ?? "";
-        const path = segments.join(".").split(/\/\\/gi);
-        const filename = path.pop() || "";
-        return {
-            filename,
-            mimetype,
-            ext,
-        };
+        if (name.startsWith("http://") || name.startsWith("https://")) {
+            try {
+                const urlObj = new URL(name);
+                let fileName = urlObj.pathname;
+                if (fileName.startsWith("/")) {
+                    fileName = fileName.slice(1);
+                }
+                if (!fileName) fileName = "index";
+                return {
+                    filename: fileName,
+                    mimetype,
+                    ext: urlObj.hostname,
+                    isUrl: true,
+                };
+            } catch {
+                return {
+                    filename: name,
+                    mimetype,
+                    ext: "",
+                    isUrl: false,
+                };
+            }
+        } else {
+            const segments = name.split(".");
+            const ext = segments.pop() ?? "";
+            const path = segments.join(".").split(/[/\\]/gi);
+            const filename = path.pop() || "";
+            return {
+                filename,
+                mimetype,
+                ext,
+                isUrl: false,
+            };
+        }
     }, [name, mimetype]);
 
     const extLower = info.ext.toLowerCase();
+    const candidateIconURLs = useMemo((): string[] => {
+        if (name.startsWith("http://") || name.startsWith("https://")) {
+            return [
+                `https://logo.clearbit.com/${info.ext}?size=128`,
+                `https://www.google.com/s2/favicons?domain=${info.ext}&sz=64`,
+                `https://icons.duckduckgo.com/ip3/${info.ext}.ico`,
+                "/img/icons/file-file.svg",
+            ];
+        } else if (["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower)) {
+            return ["/img/icons/file-image.svg"];
+        } else if (["mp4", "webm", "ogg"].includes(extLower)) {
+            return ["/img/icons/file-media.svg"];
+        } else {
+            return ["/img/icons/file-file.svg"];
+        }
+    }, [name, info.ext, extLower]);
 
-    const iconURL = useMemo(() => {
-        if (["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower)) {
-            return "/img/icons/file-image.svg";
-        }
-        if (["mp4", "webm", "ogg"].includes(extLower)) {
-            return "/img/icons/file-media.svg";
-        }
-        return "/img/icons/file-file.svg";
-    }, [extLower]);
+    // Сброс индекса кандидатов, если меняется список
+    useEffect(() => {
+        setCurrentIconIndex(0);
+    }, [candidateIconURLs]);
 
     const handleClick = () => {
-        if (
+        if (name.startsWith("http://") || name.startsWith("https://")) {
+            window.open(name, "_blank");
+        } else if (
             ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) ||
             ["mp4", "webm", "ogg"].includes(extLower) ||
             extLower === "pdf"
@@ -61,61 +96,80 @@ export const FileItem: React.FC<FileItemProps> = ({ name,
         }
     };
 
-    const shortenFileName = info.filename.length > 10 ? `${info.filename.slice(0, 10)}...` : info.filename;
+    const shortenFileName =
+        info.filename.length > 10 ? `${info.filename.slice(0, 10)}...` : info.filename;
 
     return (
         <>
-        <div className={clsx(css.file, className)} onClick={handleClick}>
-            <div className={css.file_icon}>
-                <img src={iconURL} alt="" />
+            <div className={clsx(css.file, className)} onClick={handleClick}>
+                <div className={css.file_icon}>
+                    <img
+                        src={candidateIconURLs[currentIconIndex]}
+                        alt=""
+                        onError={() =>
+                            setCurrentIconIndex((prevIndex) => {
+                                const nextIndex = prevIndex + 1;
+                                return nextIndex < candidateIconURLs.length ? nextIndex : prevIndex;
+                            })
+                        }
+                    />
+                </div>
+                <div className={css.file_content}>
+                    <p className={css.file_name}>
+            <span>
+              {info.filename.length > 15
+                  ? `${info.filename.slice(0, 15)}...`
+                  : info.filename}
+            </span>
+                        {!(name.startsWith("http://") || name.startsWith("https://")) && <>.{info.ext}</>}
+                    </p>
+                    <p className={css.file_ext}>
+                        {name.startsWith("http://") || name.startsWith("https://")
+                            ? info.ext
+                            : info.ext}
+                    </p>
+                </div>
+                {onDelete && (
+                    <button
+                        className={css.file_deleteBtn}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete();
+                        }}
+                    >
+                        <CrossIcon />
+                    </button>
+                )}
             </div>
-            <div className={css.file_content}>
-                <p className={css.file_name}>
-                        <span>
-                            {info.filename.length > 15
-                                ? `${info.filename.slice(0, 15)}...`
-                                : info.filename}
-                        </span>
-                    .{info.ext}
-                </p>
-                <p className={css.file_ext}>{info.ext}</p>
-            </div>
-            {onDelete && (
-                <button
-                    className={css.file_deleteBtn}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete();
-                    }}
-                >
-                    <CrossIcon />
-                </button>
-            )}
-        </div>
 
-    {
-        isModalOpen && extLower === "pdf" && url && (
-            <PdfFilePreviewModal
-                url={url}
-                onClose={() => setIsModalOpen(false)}
-                fileName={shortenFileName}
-                fileExt={info.ext} />
-        )}
-    {
-        isModalOpen && ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) && url && (
-                <ImageFilePreviewModal
+            {isModalOpen && extLower === "pdf" && url && (
+                <PdfFilePreviewModal
                     url={url}
                     onClose={() => setIsModalOpen(false)}
                     fileName={shortenFileName}
-                    fileExt={info.ext}/>
+                    fileExt={info.ext}
+                />
             )}
-            {isModalOpen && ["mp4", "webm", "ogg"].includes(extLower) && url && (
-                <VideoFilePreviewModal
-                    url={url}
-                    onClose={() => setIsModalOpen(false)}
-                    fileName={shortenFileName}
-                    fileExt={info.ext}/>
-            )}
+            {isModalOpen &&
+                ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) &&
+                url && (
+                    <ImageFilePreviewModal
+                        url={url}
+                        onClose={() => setIsModalOpen(false)}
+                        fileName={shortenFileName}
+                        fileExt={info.ext}
+                    />
+                )}
+            {isModalOpen &&
+                ["mp4", "webm", "ogg"].includes(extLower) &&
+                url && (
+                    <VideoFilePreviewModal
+                        url={url}
+                        onClose={() => setIsModalOpen(false)}
+                        fileName={shortenFileName}
+                        fileExt={info.ext}
+                    />
+                )}
         </>
     );
 };
