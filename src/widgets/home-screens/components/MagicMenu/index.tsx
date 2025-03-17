@@ -106,6 +106,5 @@ export const MagicMenu: React.FC<Props> = ({
                 }}
             />
         </>
-
     );
 };
