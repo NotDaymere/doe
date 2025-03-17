@@ -1,21 +1,25 @@
 import React from "react";
 import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
-import './TableRandomValues.less';
+import css from "./TableRandomValues.module.less";
 import { useChatStore } from "src/shared/providers";
 import { IPlayground } from "src/shared/types/Playground";
 
 function TableRandomValues() {
-    const { playground,
+    const {
+        playground,
         setPlayground,
         setSavedPlaygrounds,
-        updateSavedPlaygrounds, getOpenSavedPlaygrounds,
-        getSavedPlaygroundLastByType, getOpenSavedPlaygroundsByType } = useChatStore();
+        updateSavedPlaygrounds,
+        getOpenSavedPlaygrounds,
+        getSavedPlaygroundLastByType,
+        getOpenSavedPlaygroundsByType,
+    } = useChatStore();
     const openTablePlayground = () => {
-        const oldPlayground = getSavedPlaygroundLastByType('table');
+        const oldPlayground = getSavedPlaygroundLastByType("table");
         if (getOpenSavedPlaygrounds().length >= 2) {
             const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
             console.log(lastPlayground);
-            if (lastPlayground && lastPlayground.type != 'table') {
+            if (lastPlayground && lastPlayground.type != "table") {
                 lastPlayground.open = false;
                 updateSavedPlaygrounds(lastPlayground);
             }
@@ -33,7 +37,7 @@ function TableRandomValues() {
             setPlayground(newPlayground);
             return;
         }
-        if ((getOpenSavedPlaygroundsByType('table').length > 0) ) {
+        if (getOpenSavedPlaygroundsByType("table").length > 0) {
             oldPlayground.open = false;
             updateSavedPlaygrounds(oldPlayground);
             const newPlayground: IPlayground = {
@@ -53,13 +57,12 @@ function TableRandomValues() {
         }
     };
     return (
-        <button onClick={openTablePlayground}
-                className={`table-playground-button ${playground.type == 'table' && 'table-playground-button-active'}`}
-
+        <button
+            onClick={openTablePlayground}
+            className={`${css["table-playground-button"]} ${playground.type == "table" && css["table-playground-button-active"]}`}
         >
             <TableIcon /> Tabular random values
         </button>
-
-    )
+    );
 }
-export default TableRandomValues
+export default TableRandomValues;

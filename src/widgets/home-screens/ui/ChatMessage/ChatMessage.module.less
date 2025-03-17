@@ -340,6 +340,7 @@
     border-radius: 1000px;
     padding: 8px 14px;
     box-shadow: 0px 2px 15px 0px #0000000d;
+    background-color: var(--bg-var-11);
 }
 
 .button_steps_grey {
@@ -354,7 +355,7 @@
     align-content: center;
     border-radius: 18px;
     padding: 8.5px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-var-1);
     overflow: hidden;
     white-space: nowrap;
     transition:
@@ -364,27 +365,23 @@
 
     svg path {
         flex-shrink: 0;
-        fill: #b5b5b5;
+        fill: var(--icon-var-9);
     }
 
     &:hover {
-        border: 1px solid #8d8d8d;
-        background: #f8f8f8;
+        border: 1px solid var(--color-neutral-500);
+        background: var(--bg-var-25);
         width: auto; /* Expand width dynamically */
         border-radius: 20px;
 
         svg path {
-            fill: #5b5b5b;
+            fill: var(--icon-var-2);
         }
-    }
-
-    &:hover.button_container {
-        background: transparent;
     }
 
     .tooltip {
         margin-right: 0;
-        color: #5b5b5b;
+        color: var(--text-var-8);
         font-size: 14px;
         display: inline-block;
         max-width: 0;
@@ -405,10 +402,6 @@
         margin-right: 4px;
         max-width: 300px;
     }
-
-    &:hover .button_container {
-        background: transparent;
-    }
 }
 
 .glowing_border {
@@ -428,11 +421,9 @@
     max-width: 35px;
     border: 5px transparent;
     background-color: transparent;
-
-    svg path {
-        fill: #5b2b99;
+    .button_container {
+        background-color: var(--bg-general);
     }
-
     .tooltip {
         display: none;
     }
@@ -446,14 +437,8 @@
     right: -4px;
     bottom: -4px;
     border-radius: 50%;
-    background: conic-gradient(
-        from 0deg,
-        rgba(151, 71, 255, 0.72) 0deg,
-        rgba(181, 122, 255, 0.71) 90deg,
-        #9747ff00 180deg,
-        rgba(181, 122, 255, 0.63) 270deg,
-        rgba(151, 71, 255, 0.72) 360deg
-    );
+    background: var(--bg-gradient-var-7);
+
     z-index: -1;
     animation:
         rotate 3s linear infinite,
@@ -483,7 +468,7 @@
     border-radius: 50%;
     min-width: 33px;
     height: 33px;
-    background-color: #ffffff;
+    // background-color: #ffffff;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -492,9 +477,9 @@
     margin: 0;
     z-index: 1;
 
-    &:hover {
-        background: #ffffff;
-    }
+    // &:hover {
+    //     background: #ffffff;
+    // }
 }
 
 .button_steps_green {
@@ -508,7 +493,7 @@
     border-radius: 12px;
     padding: 7px;
     background-color: transparent;
-    border: 1px solid #8bcf16;
+    border: 1px solid var(--border-var-25);
     transition: 0.3s all ease;
     overflow: hidden;
     white-space: nowrap;
@@ -525,16 +510,16 @@
     }
 
     svg path {
-        fill: #8bcf16;
+        fill: var(--color-green-400);
     }
 
     &:hover {
-        background: #f3ffdf;
+        background: var(--bg-var-40);
         width: auto;
     }
 
     .tooltip {
-        color: #355302;
+        color: var(--text-var-22);
         font-size: 14px;
         display: inline-block;
         max-width: 0;
@@ -558,7 +543,7 @@
 }
 
 .button_steps_label {
-    background: linear-gradient(90.09deg, #9747ff -24.88%, #1f1f1f 72.4%);
+    background: var(--text-gradient-var-2);
     background-clip: text;
     background-size: 100%;
     -webkit-background-clip: text;
@@ -609,8 +594,8 @@
 
     :global(.output) {
         padding: 1em;
-        color: white;
-        background-color: #8d8d8d;
+        color: var(--text-var-23);
+        background-color: var(--bg-var-42);
         border-bottom-right-radius: 10px;
         border-bottom-left-radius: 10px;
     }
@@ -637,22 +622,24 @@
             justify-content: center;
             align-items: center;
             border-radius: 12px;
-            border: 1px solid #fff;
-            background: white;
+            border: 1px solid var(--border-var-22);
+            background: var(--bg-var-41);
             box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
             backdrop-filter: blur(8px);
 
             li {
+                width: 100%;
                 cursor: pointer;
                 padding: 8px;
-                color: #b5b5b5;
+                color: var(--text-var-13);
                 font-size: 16px;
                 border: 1px solid transparent;
 
                 &:hover {
                     border-radius: 8px;
-                    border: 1px solid #f8f8f8;
-                    color: #1f1f1f;
+                    border: 1px solid var(--border-var-10);
+                    background-color: var(--bg-var-30);
+                    color: var(--text-var-4);
                 }
             }
         }

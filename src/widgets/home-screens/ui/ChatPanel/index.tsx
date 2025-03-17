@@ -14,7 +14,6 @@ import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useChatContext } from "../../lib/hooks/ChatContext";
-import CloseIcon from "../../../../shared/icons/Close.icon";
 import QuestionCodeMessage from "./assets/QuestionCodeMessage/QuestionCodeMessage";
 import HammerIcon from "src/shared/icons/HammerIcon";
 import ChatResponseStopIcon from "../../../../shared/icons/ChatResponseStopIcon";
