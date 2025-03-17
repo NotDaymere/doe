@@ -86,6 +86,7 @@ export const MagicMenu: React.FC<Props> = ({
                 </CSSTransition>
             </div>
             <input
+                id={"fileInput"}
                 ref={fileInputRef}
                 type="file"
                 multiple
