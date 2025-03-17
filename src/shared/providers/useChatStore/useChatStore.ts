@@ -133,7 +133,6 @@ interface ChatState {
     getBranchById: (id: string | number) => IBranch | null;
     currentBranchDialog: number | null;
     setCurrentBranchDialog: (dialogIndex: number | null) => void;
-
     isUploadFileChatMode: boolean;
     setIsUploadFileChatMode: (isCreateBranchChatMode: boolean) => void;
 }

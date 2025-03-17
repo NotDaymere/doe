@@ -36,25 +36,16 @@ export default function MultiplePlaygroundRenderer() {
                 savedPlaygrounds.length > 1 && (
                     <div className={'saved-playgrounds'}>
                         <Flex className={"saved-playgrounds-container"}>
-                            {
-                                savedPlaygrounds.map((savedPlayground, index) => {
-                                    const id = savedPlayground.id;
-                                    return (
-                                        <>
-
-                                            <div key={id || index}>
-                                                <OpenFromSavedPlayground
-                                                    savedPlayground={savedPlayground}
-                                                    length={savedPlaygrounds.length}
-                                                />
-                                            </div>
-                                            {(savedPlaygrounds.length < 4 && (savedPlaygrounds.length-1) != index)
-                                                &&  <span className="separator" />
-                                            }
-                                        </>
-                                    );
-                                })
-                            }
+                            {savedPlaygrounds.map((savedPlayground, index) => (
+                                <>
+                                    <OpenFromSavedPlayground
+                                        key={savedPlayground.id || index}
+                                        savedPlayground={savedPlayground}
+                                        length={savedPlaygrounds.length}
+                                    />
+                                    {(savedPlaygrounds.length < 4 && (savedPlaygrounds.length - 1) !== index) && <span className="separator" />}
+                                </>
+                            ))}
                         </Flex>
                     </div>
                 )

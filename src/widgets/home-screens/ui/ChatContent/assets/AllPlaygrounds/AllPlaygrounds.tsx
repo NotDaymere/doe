@@ -18,8 +18,7 @@ export default function AllPlaygrounds() {
         <div className={"position-fixed"}>
             <button className={"all-playgrounds-button"} onClick={changeActiveAllPlaygrounds}>
                 <div className={"all-playgrounds-icon-container"}>
-                    {activeAllPlaygrounds && <AllPlaygroundsIcon />}
-                    {!activeAllPlaygrounds && <DoePlaygroundStars />}
+                    <DoePlaygroundStars />
                 </div>
             </button>
             {activeAllPlaygrounds && (

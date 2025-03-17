@@ -43,6 +43,7 @@ import DownloadCSV from "./assets/DownloadCSV/DownloadCSV";
 import PythonTaskManager from "./assets/PythonTaskManager/PythonTaskManager";
 import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
 import { MessageNodeVersionSelector } from "./assets/MessageNodeVersionSelector/MessageNodeVersionSelector";
+import GeneralLogo from "../GeneralLogo/GeneralLogo";
 
 interface Props {
     data: IMessage;
@@ -386,21 +387,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 />
 
                 <div className={css.sub_bot_message_info_container}>
-                    {!data.isUser && (
-                        <div
-                            className={`${css.bot_logo_background} ${
-                                isCurrentBranchOpen
-                                    ? css.bot_logo_background_open
-                                    : css.bot_logo_background
-                            }`}
-                        >
-                            <div
-                                className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_open : css.bot_logo}`}
-                            >
-                                <MessageLogoIcon />
-                            </div>
-                        </div>
-                    )}
+                    {!data.isUser && <GeneralLogo />}
                     <MessageNodeVersionSelector message={data} />
                 </div>
                 <div className={css.message_content}>
