@@ -194,8 +194,13 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         };
     }, []);
 
-    useEffect(() => {
+    React.useEffect(() => {
         const handleCitationClick = (event: Event) => {
+            const fileInput = document.getElementById("fileInput");
+            if (fileInput && fileInput.contains(event.target as Node)) {
+                return;
+            }
+
             event.preventDefault();
             const target = (event.target as HTMLElement).closest(".citation-container");
             if (!target) return;

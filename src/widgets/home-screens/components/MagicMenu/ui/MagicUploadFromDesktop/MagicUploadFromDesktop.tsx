@@ -14,8 +14,15 @@ export const MagicUploadFromDesktop: React.FC<MagicUploadFromDesktopProps> = ({
                                                                                   fileInputRef,
                                                                               }) => {
     const handleClick = () => {
-        fileInputRef.current?.click();
-        setActiveMenu(false);
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+            console.log("click() method called");
+            setTimeout(() => {
+                setActiveMenu(false);
+            }, 300);
+        } else {
+            console.warn("miss file ref");
+        }
     };
 
     return (
