@@ -7,8 +7,9 @@
     border: 1px solid var(--border-var-10);
     box-shadow: 0px 0px 12px 0px #0000000d;
     background: var(--bg-general);
-    border-radius: 5px;
+    border-radius: 12px;
     position: fixed;
+    padding: 6px;
     svg path {
         fill: var(--icon-var-1);
     }
@@ -47,17 +48,27 @@
     background-color: var(--bg-general);
     margin: 0;
     &:hover {
-        background-color: var(--bg-general) !important;
+        background-color: var(--bg-var-13) !important;
+        svg path {
+            fill: var(--icon-var-2);
+        }
     }
 }
 .button-active {
-    border: 1px solid rgba(181, 181, 181, 1);
-    background: rgba(248, 248, 248, 1);
+    border: 1px solid var(--border-var-28);
+    background: var(--bg-var-2);
     padding: 0;
     min-width: 30px;
     height: 100%;
     max-height: fit-content;
     min-height: 30px;
+    svg path {
+        fill: var(--icon-var-2);
+    }
+    &:hover {
+        background: var(--bg-var-2) !important;
+        border: 1px solid var(--border-var-28) !important;
+    }
 }
 .editable-text {
     border: 1px solid #ccc;
