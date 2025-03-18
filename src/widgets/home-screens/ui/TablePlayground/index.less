@@ -44,36 +44,61 @@
         flex: 1;
         min-height: 0;
     }
-
+    .ant-table {
+        background: transparent !important;
+    }
+    .ant-table-container {
+        border-top: none !important;
+        border-inline-start: 1px solid transparent !important;
+    }
     .table {
         position: relative;
         cursor: pointer;
         padding: 1px;
         border-radius: 16px;
+        .ant-table-thead .ant-table-cell {
+            background: var(--bg-var-44);
+        }
         .selected-column {
             &:is(th) {
-                background: #9747ff !important;
+                background: var(--bg-var-46) !important;
             }
             &:is(td) {
-                background: #f1e7ff !important;
+                background: var(--color-green-400-11);
+                &:hover {
+                    background: var(--color-green-400-11) !important;
+                    border: 1px solid var(--color-green-400) !important;
+                }
             }
         }
-
         .ant-table-cell {
-            background: #ffffff !important;
-            border: 1px solid #ddd;
+            background: transparent;
+            border: 1px solid var(--border-var-8);
+            border-left: 1px solid transparent;
+            border-inline-end: 1px solid var(--border-var-8) !important;
+            color: var(--text-var-4);
+
+            &:last-child {
+                border-inline-end: 1px solid transparent !important;
+            }
+        }
+        tbody .ant-table-cell:hover {
+            background: var(--bg-var-45);
+        }
+        .ant-table-cell-row-hover:not(:hover):not(:first-child) {
+            background: none;
         }
         .ant-table-row td:first-child {
-            background: var(--bg-var-18) !important;
+            background: var(--bg-var-44);
         }
         .selected-cell {
-            background: #6a04f8 !important;
+            background: #6a04f8;
             outline: 1px solid #9747ff;
             z-index: 100000;
         }
         th.ant-table-cell {
-            padding: 10px 17px !important;
-            border: 1px solid #ddd;
+            padding: 10px 17px;
+            border-top: 1px solid transparent;
         }
     }
     .action-buttons {
@@ -146,19 +171,11 @@
         border: none;
     }
 
-    .tabs-panel {
-        border-radius: 12px;
-        background: rgba(181, 181, 181, 0.2);
-        border: 1px solid rgba(221, 221, 221, 1);
-        padding: 0;
-        margin: 0;
-    }
-
     .tabs-panel-playground {
         border-radius: 16px 16px 0 0;
         background: transparent;
-        margin: 0;
         color: var(--text-var-4);
+        margin: 0;
         padding-top: 30px;
         padding-left: 24px;
         padding-right: 24px;

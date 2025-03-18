@@ -18,6 +18,7 @@ import FullscreenGeneralLogo from "../TablePlayground/assets/FullscreenGeneralLo
 import { App } from "../../../../types";
 import PlaygroundAction from "../PlaygroundAction/PlaygroundAction";
 import HistoryButton from "../TablePlayground/assets/HistoryButton/HistoryButton";
+import { useTheme } from "src/shared/hooks/useTheme";
 
 const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     function adjustPosition(
@@ -140,7 +141,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             "editorCursor.foreground": "#9747FF",
         },
     };
-
+    const { theme } = useTheme();
     const handleCollapsePlayground = () => {
         const newPlayground = getOpenSavedPlaygrounds().at(1) || {
             type: null,
@@ -157,7 +158,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         setEditorInstance(editor);
         editor.focus();
         monaco.editor.defineTheme("myCustomTheme", customTheme);
-        monaco.editor.setTheme("myCustomTheme");
+        monaco.editor.setTheme(theme === "dark" ? "vs-dark" : "myCustomTheme");
         editor.onMouseUp(() => {
             setIsPen(false);
             handleEditorMouseUp(editor);
@@ -167,6 +168,11 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             handleEditorMouseUp(editor);
         });
     };
+    useEffect(() => {
+        console.log("change theme", theme);
+
+        monaco.editor.setTheme(theme === "dark" ? "vs-dark" : "myCustomTheme");
+    }, [theme]);
 
     const handleEditorMouseUp = (editor: monaco.editor.IStandaloneCodeEditor) => {
         updateSelectedText(editor);
@@ -285,7 +291,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                             autoIndent: "none",
                             detectIndentation: false,
                         }}
-                        className="table-playground-editor"
+                        className="code-playground-editor"
                         defaultValue={
                             playgroundState?.text ||
                             `def delete_element(my_list, element):

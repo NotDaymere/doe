@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 export type Themes = "light" | "dark";
 export const useTheme = () => {
     const localTheme = localStorage.getItem("theme") as Themes | null;
-    console.log(" useTheme ~ localTheme:", localTheme);
     const [appTheme, setAppTheme] = useState<Themes>(localTheme ?? "light");
     const toggleTheme = () => {
         const nextTheme = appTheme === "light" ? "dark" : "light";
