@@ -28,7 +28,6 @@ export const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
                 canvas.width = viewport.width;
                 canvas.height = viewport.height;
 
-                // Если ещё не зумили — растягиваем CSS‑ом на 100% ширины контейнера
                 if (!hasZoomed) {
                     canvas.style.width = "100%";
                     canvas.style.height = "auto";
