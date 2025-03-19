@@ -18,6 +18,7 @@ const FilePreviewModalOverlay: React.FC<ModalOverlayProps> = ({
                                                        fileExt,
                                                        fileNameContainerClass,
                                                        modalContentClass,
+
 }) => {
     return (
         <div className={css.modalOverlay} onClick={onClose}>

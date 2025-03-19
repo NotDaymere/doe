@@ -60,6 +60,7 @@ import AllBranches from "../ChatContent/assets/AllBranches/AllBranches";
 import AllPlaygrounds from "../ChatContent/assets/AllPlaygrounds/AllPlaygrounds";
 import SeeAllStepsIcon from "../../../../shared/icons/SeeAllSteps.icon";
 import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
+import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
 
 interface Props {
     data: IMessage;
@@ -609,7 +610,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     <div className={css.sub_bot_message_info_container}>
                         <div className={css.logoWrapper}>
                             <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
-                                <GeneralLogo />
+                                {isCurrentBranchOpen
+                                    ?< div
+                                    className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                                        <div
+                                        className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                                        <MessageLogoIcon fillPath={"currentColor"} />
+                                        </div>
+                                    </div>
+
+                                    :<GeneralLogo />}
                             </div>
                             <CSSTransition
                                 in={isShowLogoPopup}
