@@ -144,7 +144,6 @@ export default function Reflections() {
                 <ReflectionIcon />
             </div>
 
-
             <div className="small-content" onClick={handleExpandByPlus}>
                 <div
                     className="small-drag-bar"
@@ -172,7 +171,6 @@ export default function Reflections() {
                         <ReflectionIcon />
                         <span className="small-title">Reflections</span>
                     </div>
-
                 </div>
             </div>
         </div>

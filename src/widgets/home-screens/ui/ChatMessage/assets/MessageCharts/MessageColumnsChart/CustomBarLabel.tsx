@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 
 interface PayloadData {
     id: string;
@@ -21,18 +21,18 @@ interface CustomBarLabelProps {
 }
 
 export const CustomBarLabel: FC<CustomBarLabelProps> = ({
-                                                            x,
-                                                            y,
-                                                            width,
-                                                            height,
-                                                            value,
-                                                            payload,
-                                                            selectedId,
-                                                            containerWidth,
-                                                        }) => {
-    const xNum = typeof x === 'number' ? x : Number(x);
-    const yNum = typeof y === 'number' ? y : Number(y);
-    const widthNum = typeof width === 'number' ? width : Number(width);
+    x,
+    y,
+    width,
+    height,
+    value,
+    payload,
+    selectedId,
+    containerWidth,
+}) => {
+    const xNum = typeof x === "number" ? x : Number(x);
+    const yNum = typeof y === "number" ? y : Number(y);
+    const widthNum = typeof width === "number" ? width : Number(width);
     const containerWidthNum = containerWidth ?? 500;
     const originalData = payload.payload;
     const barCenter = xNum + widthNum / 2;
@@ -56,7 +56,15 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
     }
     return (
         <g>
-            <rect x={barCenter - 40} y={barTop - 35} width={80} height={28} rx={15} ry={15} fill="#000" />
+            <rect
+                x={barCenter - 40}
+                y={barTop - 35}
+                width={80}
+                height={28}
+                rx={15}
+                ry={15}
+                fill="#000"
+            />
             <text
                 x={barCenter}
                 y={barTop - 16}
@@ -96,7 +104,14 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
                 strokeDasharray="3 3"
                 strokeWidth={2}
             />
-            <circle cx={barCenter} cy={barTop - 1} r={5} fill="#000" stroke="#fff" strokeWidth={2} />
+            <circle
+                cx={barCenter}
+                cy={barTop - 1}
+                r={5}
+                fill="#000"
+                stroke="#fff"
+                strokeWidth={2}
+            />
         </g>
     );
 };
