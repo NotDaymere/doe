@@ -36,16 +36,19 @@
     // position: relative;
     height: 100%;
     border-radius: 16px;
-    overflow-y: scroll;
+    overflow-y: auto;
     background: var(--bg-var-17);
     padding-top: 20px;
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
     &::-webkit-scrollbar-track {
-        background: #fa0808;
-        border-radius: 16px;
+        background: transparent;
     }
     &::-webkit-scrollbar-thumb {
-        background: #e90a0a;
-        border-radius: 16px;
+        background-color: var(--bg-var-53);
+        border-radius: 3px;
     }
 }
 // .content_inner::before {
