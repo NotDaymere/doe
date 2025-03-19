@@ -173,7 +173,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     />
                 )}
 
-                {!talkModeActive &&
+                {!talkModeActive && !playgroundFullscreen &&
                     <Reflections/>
                 }
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
