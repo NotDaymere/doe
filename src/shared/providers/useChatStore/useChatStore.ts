@@ -71,15 +71,15 @@ const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMes
     let previousNode = messageNodeMap.root;
 
     initialMessages.forEach((message, index) => {
-        const id = (index + 1).toString();
+        const nodeId = message.id ? String(message.id) : (index + 1).toString();
         const node: IMessageNode = {
-            id,
+            id: nodeId,
             parent: previousNode,
             children: [],
             message,
             isRootNode: false,
         };
-        messageNodeMap[id] = node;
+        messageNodeMap[nodeId] = node;
         previousNode.children!.push(node);
         previousNode.currentChildrenVersion = previousNode.children!.length - 1;
         previousNode = node;
@@ -406,7 +406,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             } else {
                 actualParent = state.messageNodeMap["root"];
             }
-            const newId = (Object.keys(state.messageNodeMap).length + 1).toString();
+            const newId = message.id ? String(message.id) : (Object.keys(state.messageNodeMap).length + 1).toString();
             const newNode: IMessageNode = {
                 id: newId,
                 parent: actualParent,
@@ -429,6 +429,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             return { messageNodeMap: updatedMap, messages: [...state.messages, message] };
         }),
 
+
     addMessageNodeVersion: (current: IMessageNode | string | IMessage | number, message: IMessage) =>
         set((state) => {
             let currentNode: IMessageNode | undefined;
@@ -450,7 +451,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 currentNode = state.messageNodeMap["root"];
             }
             const parentOfCurrent = currentNode.parent || state.messageNodeMap["root"];
-            const newId = (Object.keys(state.messageNodeMap).length + 1).toString();
+            const newId = message.id ? String(message.id) : (Object.keys(state.messageNodeMap).length + 1).toString();
             const newNode: IMessageNode = {
                 id: newId,
                 parent: parentOfCurrent,

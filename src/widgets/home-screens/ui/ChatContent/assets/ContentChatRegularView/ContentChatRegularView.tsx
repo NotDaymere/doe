@@ -1,11 +1,10 @@
 import React from "react";
-import AllPlaygrounds from "../AllPlaygrounds/AllPlaygrounds";
-import AllBranches from "../AllBranches/AllBranches";
 import { ChatMessageDate } from "../ChatMessageData/ChatMessageDate";
 import ChatBranchSection from "../ChatBranchSection/ChatBranchSection";
 import { ChatMessage } from "../../../ChatMessage";
 import { useChatStore } from "../../../../../../shared/providers";
 import css from "./ContentChatRegularView.module.less";
+import { message } from "antd";
 
 interface ChatRegularViewProps {
     playgroundFullscreen: boolean;
@@ -40,15 +39,15 @@ export const ChatRegularView: React.FC<ChatRegularViewProps> = ({
                     let hasBranch = false;
                     if (branch) {
                         if (branch.mainMessageId === item.id) {
-                            const foundMessage = branch.messages.find(m => m.id === item.id);
-                            hasBranch = !!foundMessage;
+                            hasBranch = branch.mainMessageId === item.id;
                         }
                     }
+
                     return (
                         <React.Fragment key={item.id}>
                             <ChatMessageDate id={index} />
-                            {hasBranch ? (
-                                <ChatBranchSection messageId={item.id} />
+                            {hasBranch && branch ? (
+                                <ChatBranchSection branch={branch} />
                             ) : (
                                 <ChatMessage
                                     data={item}

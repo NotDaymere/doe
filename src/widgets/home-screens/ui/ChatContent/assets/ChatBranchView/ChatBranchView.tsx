@@ -31,7 +31,7 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                                               }) => (
     <div>
         <div className={css.content_chat_branch_messages}>
-            {currentBranch.messages.slice(-3, -1).map((item: any, index: number) => (
+            {currentBranch.messages.slice(-3, -1).map((item, index) => (
                 <React.Fragment key={item.id}>
                     <ChatMessageDate id={index} />
                     <ChatMessage
@@ -44,7 +44,7 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
             ))}
         </div>
         <div className={css.content_chat_branch_dialogs}>
-            {currentBranch.dialogsMessages.map((dialog: any, index: number) => (
+            {currentBranch.dialogsMessages.map((dialog, index) => (
                 <React.Fragment key={index}>
                     <div
                         ref={(el) => (dialogRefs.current[index] = el)}

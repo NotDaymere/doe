@@ -5,13 +5,14 @@ import ThreeVerticalDots from "../../../../../../shared/icons/ThreeVerticalDots"
 import BranchIcon from "../../../../../../shared/icons/Branch.icon";
 import BranchQuickView from "../BranchQuickView/BranchQuickView";
 import OpenBranchMenu from "../OpenBranchMenu/OpenBranchMenu";
+import { IBranch } from "../../../../../../shared/types/Branch";
 
 interface ChatMessageDateProps {
-    messageId?: number;
+    branch: IBranch;
     isOpenBrunch?: boolean;
 }
 
-const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ messageId, isOpenBrunch = false }) => {
+const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunch = false }) => {
     const {
         currentBranch,
         savedBranches,
@@ -23,15 +24,9 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ messageId, isOpenBr
 
     const branchToDisplay = isOpenBrunch
         ? currentBranch
-        : savedBranches.find(b => b.mainMessageId === messageId);
+        : branch;
 
     if (!branchToDisplay) return null;
-
-    if (!isOpenBrunch) {
-        if (branchToDisplay.mainMessageId !== messageId) return null;
-        const foundMessage = branchToDisplay.messages.find(message => message.id === messageId);
-        if (!foundMessage) return null;
-    }
 
     const text = branchToDisplay.name;
 

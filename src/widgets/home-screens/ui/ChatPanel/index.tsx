@@ -45,6 +45,7 @@ export const ChatPanel: React.FC = () => {
         setIsCurrentBranchOpen,
         isHyperlinkInputOpen,
         setIsHyperlinkInputOpen,
+        getMessageQueueFromNode
     } = useChatStore();
 
     const [clearContent, setClearContent] = React.useState(false);
@@ -241,7 +242,12 @@ export const ChatPanel: React.FC = () => {
                 userRequest: userMessage,
                 botMessages: reply,
             };
-            const newBranch = addSavedBranch(text, [userMessage], [branchDialog], userMessage.id);
+            const messagesHistory = getMessageQueueFromNode();
+            const newBranch = addSavedBranch(text, messagesHistory, [branchDialog], userMessage.id);
+            const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
+            addMessageNode(lastNodeForUserMessage, userMessage);
+            const lastNodeForReply = getLastCurrentVersionMessageNode();
+            addMessageNode(lastNodeForReply, reply);
             setCurrentBranch(newBranch);
             setIsCreateBranchChatMode(false);
             setIsCurrentBranchOpen(true);
