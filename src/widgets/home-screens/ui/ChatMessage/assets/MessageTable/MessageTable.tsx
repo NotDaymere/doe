@@ -37,9 +37,18 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
         updateSavedPlaygrounds,
         setSavedPlaygrounds,
         getOpenSavedPlaygroundsByType,
+        isTablePromptVisible,
         setIsTablePromptVisible,
         setSelectedArea,
     } = useChatStore();
+
+    React.useEffect(() => {
+        if (!isTablePromptVisible) {
+            setSelectedColumn(null);
+            setSelectedRow(null);
+            setSelectedCell(null);
+        }
+    }, [isTablePromptVisible]);
 
     const [activeMenu, setActiveMenu] = React.useState(false);
     const downloadMenuRef = React.useRef<HTMLDivElement>(null);
