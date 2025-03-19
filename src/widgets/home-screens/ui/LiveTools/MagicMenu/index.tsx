@@ -1,12 +1,12 @@
 import classNames from "classnames";
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import MagicMenuItem from "./MagicMenuItem";
+import MagicMenuItem, { IMagicMenuItem } from "./MagicMenuItem";
 import { useAppStore } from "src/shared/providers";
 import css from "./MagicMenu.module.less";
 
 interface IProps {
-    items: any;
+    items: IMagicMenuItem[];
     magicButtonIcon: ReactElement;
     magicButtonClass?: string;
     classes?: string;

@@ -10,6 +10,7 @@ import Chip from "src/shared/components/Chip";
 import StarsIcon from "src/shared/icons/Stars.icon";
 import LiveToolsWrapper from "./LiveToolsWrapper";
 import DictionaryIcon from "src/shared/icons/Dictionary.icon";
+import ScreenIcon from "src/shared/icons/Screen.icon";
 import css from "./Translator.module.less";
 
 const Translator = () => {
@@ -61,7 +62,10 @@ const Translator = () => {
     const renderChipContent = (translationOption: TranslationMenuOptionsType) => {
         switch (translationOption) {
             case TRANSLATION_MENU_OPTIONS.CONNECT_TO_CAMERA:
-                return { label: "", icon: null };
+                return {
+                    label: "Screen Sharing is On",
+                    icon: <ScreenIcon width={17} height={13} />,
+                };
             case TRANSLATION_MENU_OPTIONS.PRACTICE_ENGLISH:
                 return {
                     label: "Practice English is On",
@@ -81,10 +85,9 @@ const Translator = () => {
         switch (mode) {
             case TRANSLATION_MENU_OPTIONS.TRANSLATION:
             case TRANSLATION_MENU_OPTIONS.VOICE_MODE:
-            default:
-                return <Translation mode={mode} isRotated={isRotated} onRotate={setIsRotated} />;
             case TRANSLATION_MENU_OPTIONS.CONNECT_TO_CAMERA:
-                return <span>CONNECT_TO_CAMERA</span>;
+            default:
+                return <Translation isRotated={isRotated} onRotate={setIsRotated} />;
             case TRANSLATION_MENU_OPTIONS.PRACTICE_ENGLISH:
                 return (
                     <PracticeMode

@@ -28,7 +28,7 @@ const LangPopup: FC<IProps> = ({ text, onChange, onFileLoad, isActive, setIsActi
         handleDragOver,
         handleDragCancel,
     } = useDragFile({
-        onUploadFiles(uploadFiles) {
+        onUploadFiles() {
             onFileLoad();
         },
     });

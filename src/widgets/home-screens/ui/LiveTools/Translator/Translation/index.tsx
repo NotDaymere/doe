@@ -1,104 +1,34 @@
 import classNames from "classnames";
-import {
-    LOADED_IMAGE_TRANSLATION,
-    TEXT_TO_TRANSLATE_PART,
-    TRANSLATED_TEXT_BOTTOM_PART,
-    TRANSLATED_TEXT_TOP_PART,
-    VOICE_TEXT_TO_TRANSLATE_PART,
-    VOICE_TRANSLATED_TEXT_BOTTOM_PART,
-    VOICE_TRANSLATED_TEXT_TOP_PART,
-} from "../../MockData";
-import TranslatedTextIcon from "src/shared/icons/TranslatedText.icon";
-import VolumeIcon from "src/shared/icons/Volume.icon";
 import TextForTranslateIcon from "src/shared/icons/TextForTranslate.icon";
 import RotateButton from "../RotateButton";
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import DeviceIcon from "src/shared/icons/Device.icon";
 import AppsIcon from "src/shared/icons/Apps.icon";
 import PlaygroundIcon from "src/shared/icons/Playground.icon";
 import { useDragFile } from "src/widgets/home-screens/lib";
-import { TRANSLATION_MENU_OPTIONS, TranslationMenuOptionsType } from "src/shared/types/Translation";
-import RecordIcon from "src/shared/icons/Record.icon";
+import { TRANSLATION_MENU_OPTIONS } from "src/shared/types/Translation";
 import FileLoadingProgress from "../FileLoadingProgress";
-import { splitText } from "./helpers";
 import FilesList from "../FilesList";
 import TranslationActionButtons from "../TranslationActionButtons";
 import LangPopup from "../LangPopup";
+import { useFileLoading } from "./useFileLoading";
+import TranslatedText from "./TranslatedText";
+import TextToTranslate from "./TranslatedText/TextToTranslate";
+import { IMagicMenuItem } from "../../MagicMenu/MagicMenuItem";
+import { useAppStore } from "src/shared/providers";
 import css from "./Translation.module.less";
-import Popover from "src/shared/components/Popover";
 
 interface IProps {
-    mode: TranslationMenuOptionsType;
     isRotated: boolean;
     onRotate: (value: boolean) => void;
 }
 
-const DURATION = 1000;
-
-const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
+const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
+    const { activeTranslationOption: mode } = useAppStore();
     const isVoiceMode = mode === TRANSLATION_MENU_OPTIONS.VOICE_MODE;
-    const [isUploadFiles, setIsUploadFiles] = useState(false);
-    const [isUploadingFiles, setIsUploadingFiles] = useState(false);
-    const [progress, setProgress] = useState(0);
-    const [files, setFiles] = useState<File[]>([]);
-    const [currentFile, setCurrentFile] = useState<File | null>(null);
     const [showLangPopup, setShowLangPopup] = useState(false);
     const [langText, setLangText] = useState("");
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
-    const textRef = useRef<HTMLDivElement>(null);
-    const [selectedText, setSelectedText] = useState("");
-
-    const simulateFileUpload = (duration: number) => {
-        return new Promise<void>((resolve) => {
-            let currentProgress = 0;
-            const step = 100 / (duration / 10);
-
-            const interval = setInterval(() => {
-                currentProgress += step;
-                setProgress(currentProgress);
-                if (currentProgress >= 100) {
-                    clearInterval(interval);
-                    resolve();
-                }
-            }, 100);
-        });
-    };
-
-    const resetProgress = () => {
-        return new Promise<void>((resolve) => {
-            setProgress(100);
-            setTimeout(() => {
-                setProgress(0);
-                resolve();
-            }, 1);
-        });
-    };
-
-    const addFilesWithDelay = async (filesArray: File[], delay: number) => {
-        setIsUploadingFiles(true);
-        setIsUploadFiles(true);
-
-        const addNextFile = async () => {
-            const currItem = filesArray.shift();
-            if (!currItem) return;
-
-            setCurrentFile(currItem);
-            setProgress(0);
-
-            await simulateFileUpload(DURATION);
-
-            setFiles((prevFiles) => [...prevFiles, currItem]);
-
-            if (filesArray.length !== 0) {
-                await resetProgress();
-                await new Promise((resolve) => setTimeout(resolve, delay));
-                await addNextFile();
-            }
-        };
-
-        await addNextFile();
-        setIsUploadingFiles(false);
-    };
+    const [translateFromImage, setTranslateFromImage] = useState(false);
 
     const {
         drag,
@@ -111,57 +41,26 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
         handleDragCancel,
     } = useDragFile({
         onUploadFiles(uploadFiles) {
-            if (isUploadingFiles) return;
+            if (isUploadingFile) return;
             addFilesWithDelay(uploadFiles, 1000);
         },
     });
 
-    useEffect(() => {
-        if (dragTarget) {
-            setIsUploadFiles(true);
-            setIsUploadFiles(true);
-            setIsImageLoaded(false);
-        }
-    }, [dragTarget]);
-
-    useEffect(() => {
-        if (isImageLoaded) {
-            setIsUploadFiles(false);
-        }
-    }, [isImageLoaded]);
-
-    const uploadFiles = () => {
-        const input = document.createElement("input") as HTMLInputElement;
-        input.type = "file";
-        input.multiple = true;
-        input.onchange = (event: Event) => {
-            setIsImageLoaded(false);
-            const newFiles = Array.from((event.target as any)?.files) as File[];
-            addFilesWithDelay(newFiles, 1000);
-            input.remove();
-        };
-        input.click();
-    };
+    const {
+        uploadFiles,
+        progress,
+        isUploadingFile,
+        isUploadFiles,
+        addFilesWithDelay,
+        files,
+        currentFile,
+    } = useFileLoading(translateFromImage, setTranslateFromImage, dragTarget);
 
     const handleEnteringLanguage = (e: any) => {
         setLangText(e.target.value);
     };
 
-    useEffect(() => {
-        return () => {
-            setIsUploadFiles(false);
-            setIsUploadingFiles(false);
-            setIsImageLoaded(false);
-        };
-    }, []);
-
-    const handleMouseUp = () => {
-        const selection = window.getSelection();
-        const selectedText = selection?.toString() || "";
-        setSelectedText(selectedText);
-    };
-
-    const MAGIC_MENU_ITEMS = useMemo(
+    const MAGIC_MENU_ITEMS: IMagicMenuItem[] = useMemo(
         () => [
             {
                 icon: <DeviceIcon width={18} height={11} />,
@@ -186,10 +85,6 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
         []
     );
 
-    const textToTranslate = TEXT_TO_TRANSLATE_PART || VOICE_TEXT_TO_TRANSLATE_PART;
-    const translatedTopText = TRANSLATED_TEXT_TOP_PART || VOICE_TRANSLATED_TEXT_TOP_PART;
-    const translatedBottomText = TRANSLATED_TEXT_BOTTOM_PART || VOICE_TRANSLATED_TEXT_BOTTOM_PART;
-
     return (
         <>
             <div className={css.translationBlock}>
@@ -210,7 +105,7 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
                             <LangPopup
                                 text={langText}
                                 onChange={handleEnteringLanguage}
-                                onFileLoad={() => setIsImageLoaded(true)}
+                                onFileLoad={() => setTranslateFromImage(true)}
                                 isActive={showLangPopup}
                                 setIsActive={setShowLangPopup}
                             />
@@ -236,26 +131,9 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
                         onDragLeave={handleDragLeaveTarget}
                     >
                         {drag && <div className={css.panel_drag}></div>}
-                        {isImageLoaded && !isUploadFiles && (
-                            <div className={css.uploadedImage}>
-                                <img
-                                    src="/translate-example.png"
-                                    alt="loaded image for translate"
-                                />
-                                <div className={css.uploadedButtons}>
-                                    <TranslationActionButtons
-                                        magicMenuItems={MAGIC_MENU_ITEMS}
-                                        isDisabledUpload={isUploadingFiles}
-                                        alignEnd={isVoiceMode}
-                                        blurButton={false}
-                                        isDragging={drag}
-                                    />
-                                </div>
-                            </div>
-                        )}
-                        {isUploadFiles && !isImageLoaded && (
+                        {isUploadFiles && !translateFromImage && (
                             <>
-                                {isUploadingFiles && !dragTarget ? (
+                                {isUploadingFile && !dragTarget ? (
                                     <div className={css.fileLoadingProgress}>
                                         <FileLoadingProgress
                                             fileName={currentFile?.name || ""}
@@ -276,148 +154,30 @@ const Translation: FC<IProps> = ({ mode, isRotated, onRotate }) => {
                                 )}
                                 <TranslationActionButtons
                                     magicMenuItems={MAGIC_MENU_ITEMS}
-                                    isDisabledUpload={isUploadingFiles}
+                                    isDisabledUpload={isUploadingFile}
                                     alignEnd={isVoiceMode}
                                     blurButton={true}
                                     isDragging={drag}
                                 />
                             </>
                         )}
-                        {textToTranslate && !isUploadFiles && !isImageLoaded && (
-                            <div
-                                className={classNames(css.textForTranslate, {
-                                    [css.textForTranslateRow]: isVoiceMode,
-                                })}
-                            >
-                                <div
-                                    className={classNames(css.textWrapper, {
-                                        [css.textWrapperRotated]: isRotated,
-                                    })}
-                                >
-                                    {isVoiceMode && !isUploadFiles ? (
-                                        <div className={css.record}>
-                                            <RecordIcon width={18} height={16} />
-                                        </div>
-                                    ) : null}
-                                    {textToTranslate && !isUploadFiles && (
-                                        <>
-                                            {isVoiceMode ? (
-                                                <div className={css.inline}>
-                                                    <span>
-                                                        {
-                                                            splitText(VOICE_TEXT_TO_TRANSLATE_PART)
-                                                                .beforeLastDot
-                                                        }
-                                                    </span>
-                                                    <span className={css.lastSentence}>
-                                                        {
-                                                            splitText(VOICE_TEXT_TO_TRANSLATE_PART)
-                                                                .afterLastDot
-                                                        }
-                                                    </span>
-                                                </div>
-                                            ) : (
-                                                <div
-                                                    className={css.text}
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: TEXT_TO_TRANSLATE_PART,
-                                                    }}
-                                                />
-                                            )}
-                                        </>
-                                    )}
-                                </div>
-                                {!isUploadFiles && (
-                                    <TranslationActionButtons
-                                        magicMenuItems={MAGIC_MENU_ITEMS}
-                                        isDisabledUpload={isUploadingFiles}
-                                        alignEnd={isVoiceMode}
-                                        isDragging={drag}
-                                    />
-                                )}
-                            </div>
-                        )}
+                        <TextToTranslate
+                            translateFromImage={translateFromImage}
+                            isUploadFiles={isUploadFiles}
+                            isRotated={isRotated}
+                            isUploadingFile={isUploadingFile}
+                            drag={drag}
+                            magicMenuItems={MAGIC_MENU_ITEMS}
+                        />
                     </div>
                 </div>
                 {isUploadFiles && <FilesList files={files} isRotated={isRotated} />}
             </div>
-            <div className={css.translationBlock}>
-                <div className={css.buttonsWrapper}>
-                    <div className={css.icons}>
-                        {translatedTopText && translatedBottomText && (
-                            <div className={css.volumeIcon}>
-                                <VolumeIcon width={17} height={13} />
-                            </div>
-                        )}
-                        <div className={css.translateIcon}>
-                            <TranslatedTextIcon width={20} height={20} />
-                        </div>
-                    </div>
-                    {isRotated && (
-                        <div className={css.rotateButton}>
-                            <RotateButton
-                                onClick={() => onRotate(!isRotated)}
-                                isRotaded={isRotated}
-                            />
-                        </div>
-                    )}
-                </div>
-                {isImageLoaded && (
-                    <div
-                        className={css.translatedTextWrapper}
-                        ref={textRef}
-                        onMouseUp={handleMouseUp}
-                    >
-                        <div
-                            className={css.imageText}
-                            dangerouslySetInnerHTML={{
-                                __html: LOADED_IMAGE_TRANSLATION,
-                            }}
-                        />
-                        {/* {selectedText && (
-                            <Popover
-                                content={
-                                    <div
-                                        className={css.imageText}
-                                        dangerouslySetInnerHTML={{
-                                            __html: LOADED_IMAGE_TRANSLATION,
-                                        }}
-                                    />
-                                }
-                            />
-                        )} */}
-                    </div>
-                )}
-                {translatedTopText && translatedBottomText && !isImageLoaded && (
-                    <div className={css.translatedTextWrapper}>
-                        <div
-                            className={css.text}
-                            dangerouslySetInnerHTML={{
-                                __html: isVoiceMode
-                                    ? VOICE_TRANSLATED_TEXT_TOP_PART
-                                    : TRANSLATED_TEXT_TOP_PART,
-                            }}
-                        />
-                        {isVoiceMode ? (
-                            <div className={css.inline}>
-                                <span className={css.bottomText}>
-                                    {splitText(VOICE_TRANSLATED_TEXT_BOTTOM_PART).beforeLastDot}
-                                </span>
-                                <span className={css.lastSentenceTranslated}>
-                                    {splitText(VOICE_TRANSLATED_TEXT_BOTTOM_PART).afterLastDot}
-                                </span>
-                            </div>
-                        ) : (
-                            <div
-                                className={classNames(css.text, css.bottomText)}
-                                dangerouslySetInnerHTML={{
-                                    __html: TRANSLATED_TEXT_BOTTOM_PART,
-                                }}
-                            />
-                        )}
-                    </div>
-                )}
-            </div>
+            <TranslatedText
+                translateFromImage={translateFromImage}
+                isRotated={isRotated}
+                onRotate={onRotate}
+            />
         </>
     );
 };
