@@ -1,36 +1,43 @@
 .open-from-saved-playground-button {
-  min-width: 30px;
-  width: auto;
-  max-width: 950px;
-  height: 30px;
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left: 5px;
-  padding-right: 5px;
-  gap: 4px;
-  flex-grow: 1;
+    min-width: 30px;
+    width: auto;
+    max-width: 950px;
+    height: 30px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    gap: 4px;
+    flex-grow: 1;
+    svg path {
+        fill: var(--icon-var-1);
+    }
 }
 .open-from-saved-playground-name {
-  flex-grow: 1;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  color: #B5B5B5;
-  mask-image: linear-gradient(90deg, #B5B5B5 31.76%, rgba(181, 181, 181, 0.1) 61.82%);
-  max-width: 150px;
+    flex-grow: 1;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    color: var(--text-var-24);
+    mask-image: linear-gradient(90deg, rgb(181, 181, 181) 1.76%, rgba(181, 181, 181, 0.1) 91.82%);
+    max-width: 150px;
 }
 .open-from-saved-playground-button-active {
-  background: #FFFFFF;
-  min-width: fit-content;
-  width: auto;
-  max-width: none;
-  flex-grow: 1;
-  .open-from-saved-playground-name {
-    color: #5B5B5B;
-    white-space: nowrap;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
+    background: var(--bg-var-49);
+    min-width: fit-content;
+    width: auto;
+    max-width: none;
+    flex-grow: 1;
+    color: var(--text-var-15);
+    svg path {
+        fill: var(--icon-var-2);
+    }
+    .open-from-saved-playground-name {
+        color: var(--text-var-15);
+        white-space: nowrap;
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
 }

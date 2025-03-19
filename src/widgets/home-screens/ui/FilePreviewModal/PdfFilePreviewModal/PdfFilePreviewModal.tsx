@@ -19,12 +19,7 @@ interface PdfModalProps {
     isLoading?: boolean;
 }
 
-const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
-                                                          url,
-                                                          onClose,
-                                                          fileName,
-                                                          fileExt,
-                                                      }) => {
+const PdfFilePreviewModal: React.FC<PdfModalProps> = ({ url, onClose, fileName, fileExt }) => {
     return createPortal(
         <FilePreviewModalOverlay
             onClose={onClose}
@@ -36,15 +31,15 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
             <PDFViewer url={url} />
             <div className={css.modalContentEditPanel}>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelRedactIcon fill="currentColor" />
+                    <ModalContentPanelRedactIcon fill="inherit" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelPencilIcon fill="currentColor" />
+                    <ModalContentPanelPencilIcon fill="inherit" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelAddTextIcon fill="currentColor" />
+                    <ModalContentPanelAddTextIcon fill="inherit" />
                 </div>
             </div>
         </FilePreviewModalOverlay>,

@@ -49,7 +49,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         isCurrentBranchOpen,
         currentBranchDialog,
         setCurrentBranchDialog,
-        getOpenSavedPlaygrounds
+        getOpenSavedPlaygrounds,
     } = useChatStore();
     const { talkModeActive} = useAppStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);

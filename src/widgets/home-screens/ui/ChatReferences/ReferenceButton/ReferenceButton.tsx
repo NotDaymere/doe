@@ -10,11 +10,11 @@ interface ReferenceButtonProps {
 }
 
 const ReferenceButton: React.FC<ReferenceButtonProps> = ({
-                                                             position = { top: 0, left: 0 },
-                                                             isVisible,
-                                                             onClose,
-                                                             onReferenceClick,
-                                                         }) => {
+    position = { top: 0, left: 0 },
+    isVisible,
+    onClose,
+    onReferenceClick,
+}) => {
     const handleClick = () => {
         onClose();
         onReferenceClick();
@@ -26,10 +26,12 @@ const ReferenceButton: React.FC<ReferenceButtonProps> = ({
     return (
         <div
             className={`reference-btn-container ${isVisible ? "visible" : ""}`}
-            style={{
-                "--top": `${position.top}px`,
-                "--left": `${position.left}px`,
-            } as React.CSSProperties}
+            style={
+                {
+                    "--top": `${position.top}px`,
+                    "--left": `${position.left}px`,
+                } as React.CSSProperties
+            }
         >
             <button onClick={handleClick}>
                 <ReferenceIcon fill="currentColor" />

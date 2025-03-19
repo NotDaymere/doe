@@ -1,6 +1,4 @@
 import React from "react";
-import LightThemeIcon from "src/shared/icons/LightTheme.icon";
-import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
 import BoldIcon from "src/shared/icons/Bold.icon";
 import UnderlineIcon from "src/shared/icons/Underline.icon";
@@ -13,54 +11,48 @@ import { useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "./ui";
 import css from "./Sidebar.module.less";
 import clsx from "clsx";
+import { CorporaIcon } from "src/shared/icons/CorporaIcon";
+import { ChatsIcon } from "src/shared/icons/ChatsIcon";
+import { StarIcon } from "src/shared/icons/StarIcon";
+import { TagsIcon } from "src/shared/icons/TagsIcon";
+import { TranslationsIcon } from "src/shared/icons/TranslationsIcon";
+import { RecordingIcon } from "src/shared/icons/RecordingIcon";
+import { SharedIcon } from "src/shared/icons/SharedIcon";
+import ThemeToggleSwitch from "src/shared/components/ThemeToggler";
 
 export const Sidebar: React.FC = () => {
     const { editor } = useChatStore();
     const editorState = useEditorContext(editor);
     const { playground } = useChatStore();
-    const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
+    const { isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
     const pointerDown = (event: React.PointerEvent) => {
         event.preventDefault();
     };
-
 
     return (
         <aside className={playground.open ? css.sidebar_playground : css.sidebar}>
             <SidebarGaia />
             <div className={css.sidebar_profile}>
-                <img 
-                    className={css.sidebar_profile_img} 
-                    src="/temp/profile.jpg" 
-                    alt="" 
-                />
+                <img className={css.sidebar_profile_img} src="/temp/profile.jpg" alt="" />
             </div>
-            <div className={css.sidebar_theme}>
-                <div className={css.sidebar_theme_toggler}>
-                    <button className={css.sidebar_theme_btn} disabled>
-                        <LightThemeIcon />
-                    </button>
-                    <button className={css.sidebar_theme_btn}>
-                        <MoonIcon />
-                    </button>
-                </div>
-            </div>
+            <ThemeToggleSwitch className={css.sidebar_theme} />
             <div className={css.sidebar_controls}>
                 <div className={css.sidebar_controls_group}>
                     <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/corpora.svg" alt="" />
+                        <CorporaIcon />
                     </button>
                     <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/chats.svg" alt="" />
+                        <ChatsIcon />
                     </button>
                     <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/star.svg" alt="" />
+                        <StarIcon />
                     </button>
                     <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/tags.svg" alt="" />
+                        <TagsIcon />
                     </button>
                 </div>
                 <div className={css.sidebar_controls_group}>
-                    <button 
+                    <button
                         className={css.sidebar_controls_btn}
                         onPointerDown={pointerDown}
                         onClick={editorState.toggleBold}
@@ -68,7 +60,7 @@ export const Sidebar: React.FC = () => {
                     >
                         <BoldIcon />
                     </button>
-                    <button 
+                    <button
                         className={css.sidebar_controls_btn}
                         onPointerDown={pointerDown}
                         onClick={editorState.toggleUnderline}
@@ -76,7 +68,7 @@ export const Sidebar: React.FC = () => {
                     >
                         <UnderlineIcon />
                     </button>
-                    <button 
+                    <button
                         className={css.sidebar_controls_btn}
                         onPointerDown={pointerDown}
                         onClick={editorState.toggleItalic}
@@ -84,13 +76,10 @@ export const Sidebar: React.FC = () => {
                     >
                         <ItalicIcon />
                     </button>
-                    <button 
-                        className={css.sidebar_controls_btn}
-                        onPointerDown={pointerDown}
-                    >
+                    <button className={css.sidebar_controls_btn} onPointerDown={pointerDown}>
                         <FunctionIcon />
                     </button>
-                    <button 
+                    <button
                         className={css.sidebar_controls_btn}
                         onPointerDown={pointerDown}
                         onClick={editorState.toggleCode}
@@ -99,9 +88,10 @@ export const Sidebar: React.FC = () => {
                         <CodeIcon />
                     </button>
 
-
                     <button
-                        className={clsx(css.sidebar_controls_btn, { [css.active]: isHyperlinkInputOpen })}
+                        className={clsx(css.sidebar_controls_btn, {
+                            [css.active]: isHyperlinkInputOpen,
+                        })}
                         onPointerDown={pointerDown}
                         onClick={() => setIsHyperlinkInputOpen(!isHyperlinkInputOpen)}
                     >
@@ -110,16 +100,15 @@ export const Sidebar: React.FC = () => {
                 </div>
                 <div className={css.sidebar_controls_group}>
                     <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/translations.svg" alt="" />
+                        <TranslationsIcon />
                     </button>
                     <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/recording.svg" alt="" />
+                        <RecordingIcon />
                     </button>
-
                 </div>
                 <div className={css.sidebar_controls_group}>
                     <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/shared.svg" alt="" />
+                        <SharedIcon />
                     </button>
                 </div>
             </div>

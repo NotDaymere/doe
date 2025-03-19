@@ -14,7 +14,6 @@ import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useChatContext } from "../../lib/hooks/ChatContext";
-import CloseIcon from "../../../../shared/icons/Close.icon";
 import QuestionCodeMessage from "./assets/QuestionCodeMessage/QuestionCodeMessage";
 import HammerIcon from "src/shared/icons/HammerIcon";
 import ChatResponseStopIcon from "../../../../shared/icons/ChatResponseStopIcon";
@@ -23,6 +22,8 @@ import HandCursorIcon from "../../../../shared/icons/HandCursor.icon";
 import BranchIcon from "../../../../shared/icons/Branch.icon";
 import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgress.icon";
 import { IMessage } from "src/shared/types/Message";
+import CloseIcon from "../../../../shared/icons/Close.icon";
+import { Close } from "src/shared/icons/Close";
 import SendTableDataIcon from "../../../../shared/icons/SendTableData.icon";
 import { FileWithId } from "../../lib/helpers/LinkToFileTransformer";
 
@@ -138,7 +139,10 @@ export const ChatPanel: React.FC = () => {
                         : candidateTop;
                 setLinkInputPosition({ top: clampedTop + offsetY, left: candidateLeft + offsetX });
             } else {
-                setLinkInputPosition({ top: selectionTop + offsetY, left: selectionLeft + offsetX });
+                setLinkInputPosition({
+                    top: selectionTop + offsetY,
+                    left: selectionLeft + offsetX,
+                });
             }
         }
 
@@ -180,10 +184,16 @@ export const ChatPanel: React.FC = () => {
 
         setTimeout(() => {
             window.getSelection()?.removeAllRanges();
-            if (editorRef.current && typeof (editorRef.current as HTMLDivElement).blur === "function") {
+            if (
+                editorRef.current &&
+                typeof (editorRef.current as HTMLDivElement).blur === "function"
+            ) {
                 (editorRef.current as HTMLDivElement).blur();
             } else {
-                if (document.activeElement && typeof (document.activeElement as HTMLElement).blur === "function") {
+                if (
+                    document.activeElement &&
+                    typeof (document.activeElement as HTMLElement).blur === "function"
+                ) {
                     (document.activeElement as HTMLElement).blur();
                 }
             }
@@ -204,7 +214,9 @@ export const ChatPanel: React.FC = () => {
             blob = await response.blob();
         } catch (error) {
             console.error("Failed to fetch content from the link (possibly a CORS issue).", error);
-            blob = new Blob([`Failed to fetch actual content from the link:\n${linkUrl}`], { type: "text/plain" });
+            blob = new Blob([`Failed to fetch actual content from the link:\n${linkUrl}`], {
+                type: "text/plain",
+            });
         }
 
         const fileWithId = Object.assign(new File([blob], fileName, { type: blob.type }), {
@@ -325,10 +337,9 @@ export const ChatPanel: React.FC = () => {
                 });
             }
 
-            const fileWithId = Object.assign(
-                new File([blob], link, { type: blob.type }),
-                { id: `${Date.now()}-${Math.random()}` }
-            ) as FileWithId;
+            const fileWithId = Object.assign(new File([blob], link, { type: blob.type }), {
+                id: `${Date.now()}-${Math.random()}`,
+            }) as FileWithId;
 
             newFiles.push(fileWithId);
         }
@@ -336,10 +347,9 @@ export const ChatPanel: React.FC = () => {
         const urlRegex = /(https?:\/\/[^\s'"]+)/gi;
         const plainLinks = text.match(urlRegex) || [];
 
-        const uniquePlainLinks = new Set(plainLinks.map(link => cleanUrl(link)));
+        const uniquePlainLinks = new Set(plainLinks.map((link) => cleanUrl(link)));
 
         for (const link of uniquePlainLinks) {
-
             if (files.some((file) => file.name === link) || anchorLinks.has(link)) {
                 continue;
             }
@@ -358,10 +368,9 @@ export const ChatPanel: React.FC = () => {
                 });
             }
 
-            const fileWithId = Object.assign(
-                new File([blob], link, { type: blob.type }),
-                { id: `${Date.now()}-${Math.random()}` }
-            ) as FileWithId;
+            const fileWithId = Object.assign(new File([blob], link, { type: blob.type }), {
+                id: `${Date.now()}-${Math.random()}`,
+            }) as FileWithId;
 
             newFiles.push(fileWithId);
         }
@@ -401,7 +410,9 @@ export const ChatPanel: React.FC = () => {
             onDragOver={handleDragOver}
             onDragLeave={handleDragCancel}
         >
-            {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
+            {questionCodeMessage && (
+                <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />
+            )}
             <div
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
@@ -412,8 +423,11 @@ export const ChatPanel: React.FC = () => {
                     <div className={css.panel_prompt}>
                         <ReplyIcon className={css.panel_prompt_icon} />
                         <div className={css.reference_panel}>
-                            <button onClick={() => setIsShowReferencePanel(false)}>
-                                <CloseIcon />
+                            <button
+                                className={css.reference_panel_close_btn}
+                                onClick={() => setIsShowReferencePanel(false)}
+                            >
+                                <Close />
                             </button>
                             <div className={css.referencePanelContent}>{selectedText}</div>
                         </div>
@@ -470,7 +484,9 @@ export const ChatPanel: React.FC = () => {
                                         <UploadFilesProgressIcon />
                                     </div>
                                     <div className={css.panel_uploading_files_name_and_progressbar}>
-                                        <div className={css.panel_uploading_files_name_and_progress}>
+                                        <div
+                                            className={css.panel_uploading_files_name_and_progress}
+                                        >
                                             <span>{fileName}</span>
                                             <span>{progress}%</span>
                                         </div>
@@ -568,7 +584,8 @@ export const ChatPanel: React.FC = () => {
                                             window.getSelection()?.removeAllRanges();
                                             if (
                                                 document.activeElement &&
-                                                typeof (document.activeElement as HTMLElement).blur === "function"
+                                                typeof (document.activeElement as HTMLElement)
+                                                    .blur === "function"
                                             ) {
                                                 (document.activeElement as HTMLElement).blur();
                                             }
@@ -631,16 +648,26 @@ export const ChatPanel: React.FC = () => {
                                         </button>
                                     ) : !prompt.active ? (
                                         !questionCodeMessage ? (
-                                            <button className={css.panel_submitBtn} onClick={handleSend}>
+                                            <button
+                                                className={css.panel_submitBtn}
+                                                onClick={handleSend}
+                                            >
                                                 Send <ArrowUpIcon />
                                             </button>
                                         ) : (
-                                            <button className={css.panel_hammerBtn}>
+                                            <button
+                                                className={clsx(
+                                                    css.panel_button,
+                                                    css.panel_hammerBtn
+                                                )}
+                                            >
                                                 <HammerIcon />
                                             </button>
                                         )
                                     ) : (
-                                        <button className={css.panel_callBtn}>
+                                        <button
+                                            className={clsx(css.panel_button, css.panel_callBtn)}
+                                        >
                                             <CallVoiceIcon />
                                         </button>
                                     )}

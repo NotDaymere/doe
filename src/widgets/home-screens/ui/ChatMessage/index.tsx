@@ -16,7 +16,7 @@ import { useChatStore } from "src/shared/providers";
 // Shared components
 import { Editor } from "src/shared/components/Editor";
 import { useApp } from "src/components/app";
-import {FileListForDisplay} from "../../../../shared/components/FileList/FileListForDisplay";
+import { FileListForDisplay } from "../../../../shared/components/FileList/FileListForDisplay";
 
 // Icons
 import CrossIcon from "src/shared/icons/Cross.icon";
@@ -116,17 +116,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         deleteSavedPlaygrounds,
         updateSavedPlaygrounds,
         changeMessage,
-        playgroundFullscreen
+        playgroundFullscreen,
     } = useChatStore();
 
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
 
-
     const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
     const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{
         top: number;
-        left: number
+        left: number;
     } | null>(null);
 
     const { setSelectedText, setIsShowReferencePanel } = useChatContext();
@@ -135,7 +134,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const [isPaused, setIsPaused] = React.useState(true);
     const [isAllStepOpen, setIsAllStepOpen] = React.useState(false);
     const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
-
 
     React.useEffect(() => {
         const lastMouseEvent = { current: null as MouseEvent | null };
@@ -150,10 +148,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             const selection = window.getSelection();
             const selectionText = selection ? selection.toString().trim() : "";
 
-            if (
-                selection &&
-                selectionText
-            ) {
+            if (selection && selectionText) {
                 const range = selection.getRangeAt(0);
                 const rects = range.getClientRects();
                 if (rects.length === 0) return;
@@ -175,7 +170,10 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             ? selectionTop + (topDiff > 0 ? maxDistance : -maxDistance)
                             : candidateTop;
 
-                    setReferenceButtonPosition({ top: clampedTop + offsetY, left: candidateLeft + offsetX });
+                    setReferenceButtonPosition({
+                        top: clampedTop + offsetY,
+                        left: candidateLeft + offsetX,
+                    });
                 } else {
                     setReferenceButtonPosition({ top: selectionTop, left: selectionLeft });
                 }
@@ -229,7 +227,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             });
 
             if (citationPlaygroundRef === citationUrl) {
-                const existingIframe = savedPlaygrounds.find(p => p.type === "iframe");
+                const existingIframe = savedPlaygrounds.find((p) => p.type === "iframe");
                 if (existingIframe) {
                     deleteSavedPlaygrounds(existingIframe.id);
                 }
@@ -246,12 +244,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             } else {
                 citationContainer.classList.add("citation-active");
 
-                const citedText = citationContainer.querySelector(".cited-text") as HTMLElement | null;
+                const citedText = citationContainer.querySelector(
+                    ".cited-text"
+                ) as HTMLElement | null;
                 if (citedText) {
                     citedText.style.textDecoration = "underline dashed #9747FF";
                 }
 
-                const citationElement = citationContainer.querySelector(".citation") as HTMLElement | null;
+                const citationElement = citationContainer.querySelector(
+                    ".citation"
+                ) as HTMLElement | null;
                 if (citationElement) {
                     citationElement.style.border = "1px solid #9747ff";
                     citationElement.style.backgroundColor = "#9747ff";
@@ -268,7 +270,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     open: true,
                 };
 
-                const existingIframe = savedPlaygrounds.find(p => p.type === "iframe");
+                const existingIframe = savedPlaygrounds.find((p) => p.type === "iframe");
                 if (existingIframe) {
                     const updatedPlayground = { ...existingIframe, ...newPlayground };
                     updateSavedPlaygrounds(updatedPlayground);
@@ -385,7 +387,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             content: content,
         };
 
-
         addMessageNodeVersion(data.id, newMessage);
 
         setUpdatedContent(content);
@@ -394,7 +395,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         const reply = await doMessageReply();
         const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
         addMessageNode(lastNodeForUserMessage, reply);
-
     };
 
     const cancelEdit = (id: number) => {
@@ -420,7 +420,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             const content = messageRef.current;
 
             doc.html(content, {
-                callback: function(doc) {
+                callback: function (doc) {
                     doc.save("response.pdf");
                 },
                 html2canvas: { scale: 0.3 },
@@ -431,14 +431,12 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     };
     const openSourcePlayground = (sourceData: string) => {
         if (isAllStepOpen) {
-
-            const existingAllStep = savedPlaygrounds.find(p => p.type === "source");
+            const existingAllStep = savedPlaygrounds.find((p) => p.type === "source");
             if (existingAllStep) {
                 deleteSavedPlaygrounds(existingAllStep.id);
             }
             setIsAllStepOpen(false);
         } else {
-
             const newPlayground: IPlayground = {
                 id: "see_all_steps",
                 name: "See All Steps",
@@ -447,7 +445,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 open: true,
             };
 
-            const existingAllStep = savedPlaygrounds.find(p => p.type === "source");
+            const existingAllStep = savedPlaygrounds.find((p) => p.type === "source");
             if (existingAllStep) {
                 const updatedPlayground = { ...existingAllStep, ...newPlayground };
                 updateSavedPlaygrounds(updatedPlayground);
@@ -468,14 +466,13 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         };
 
         const changeResult = changeMessage(data, newMessage);
-        setIsLiked(changeResult?.isLiked || false)
+        setIsLiked(changeResult?.isLiked || false);
     };
-
 
     const renderFavButton = () => {
         return (
             <button
-                className={clsx(css.fav_button, { [css.fav_button_liked]: isLiked})}
+                className={clsx(css.fav_button, { [css.fav_button_liked]: isLiked })}
                 onClick={handleLike}
             >
                 <FavoriteIcon fill="currentColor" />
@@ -483,12 +480,11 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         );
     };
 
-
     if (data.isUser) {
         if (editMsgMode.isEditMsgMode && editMsgMode.msgId === data.id) {
             return (
                 <div className={css.message_with_button_container}>
-                <div className={css.edit}>
+                    <div className={css.edit}>
                         <Editor
                             value={content}
                             onChange={setContent}
@@ -503,30 +499,27 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 className={css.edit_controls_cancelBtn}
                                 onClick={() => cancelEdit(data.id)}
                             >
-                            <span className={css.svg_wrapper}>
-                                 <span className={css.tooltip}>Cancel</span>
-                                <CrossIcon />
-                            </span>
+                                <span className={css.svg_wrapper}>
+                                    <span className={css.tooltip}>Cancel</span>
+                                    <CrossIcon />
+                                </span>
                             </button>
 
-                            <button
-                                className={css.edit_controls_saveBtn}
-                                onClick={handleEdit}
-                            >
-                            <span className={css.svg_wrapper}>
-                                <span className={css.tooltip}>Send edit</span>
-                                <SendIcon />
-                            </span>
+                            <button className={css.edit_controls_saveBtn} onClick={handleEdit}>
+                                <span className={css.svg_wrapper}>
+                                    <span className={css.tooltip}>Send edit</span>
+                                    <SendIcon />
+                                </span>
                             </button>
                         </div>
-                        {!isHyperlinkInputOpen &&
+                        {!isHyperlinkInputOpen && (
                             <ReferenceButton
                                 isVisible={referenceButtonVisible}
                                 position={referenceButtonPosition}
                                 onClose={handleClose}
                                 onReferenceClick={handleReferenceClick}
                             />
-                        }
+                        )}
                     </div>
                     {renderFavButton()}
                 </div>
@@ -535,18 +528,21 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
         return (
             <div className={css.message_with_button_container}>
-            <div className={css.input_container}>
+                <div className={css.input_container}>
                     <div className={`${isCurrentBranchOpen ? css.input_open_branch : css.input} `}>
                         <div className={css.user_message_container}>
                             <div className={css.user_message_and_edit_button}>
-                                {!isCurrentBranchOpen &&
-                                    <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
-                            <span className={css.svg_wrapper}>
-                                <PenIcon />
-                                <span className={css.tooltip}>Edit</span>
-                            </span>
+                                {!isCurrentBranchOpen && (
+                                    <button
+                                        className={css.input_editBtn}
+                                        onClick={() => toggleEdit(data.id)}
+                                    >
+                                        <span className={css.svg_wrapper}>
+                                            <PenIcon />
+                                            <span className={css.tooltip}>Edit</span>
+                                        </span>
                                     </button>
-                                }
+                                )}
 
                                 <div
                                     className={`${isCurrentBranchOpen ? css.input_message_branch : css.input_message} `}
@@ -555,7 +551,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                     }}
                                 ></div>
                             </div>
-
 
                             <div
                                 className={css.file_container}
@@ -574,18 +569,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 )}
                             </div>
                         </div>
-                        {!isHyperlinkInputOpen &&
+                        {!isHyperlinkInputOpen && (
                             <ReferenceButton
                                 isVisible={referenceButtonVisible}
                                 position={referenceButtonPosition}
                                 onClose={handleClose}
                                 onReferenceClick={handleReferenceClick}
                             />
-                        }
+                        )}
                     </div>
-                    {!isCurrentBranchOpen &&
-                        <MessageNodeVersionSelector message={data} />
-                    }
+                    {!isCurrentBranchOpen && <MessageNodeVersionSelector message={data} />}
                 </div>
                 {renderFavButton()}
             </div>
@@ -598,17 +591,20 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 <div
                     className={`${isCurrentBranchOpen ? css.chat_message_branch : css.chat_message}  ${data.isUser ? css.user_message : css.bot_message}`}
                 >
-                    {!isHyperlinkInputOpen &&
+                    {!isHyperlinkInputOpen && (
                         <ReferenceButton
                             isVisible={referenceButtonVisible}
                             position={referenceButtonPosition}
                             onClose={handleClose}
                             onReferenceClick={handleReferenceClick}
                         />
-                    }
+                    )}
                     <div className={css.sub_bot_message_info_container}>
                         <div className={css.logoWrapper}>
-                            <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
+                            <div
+                                onClick={() => setIsShowLogoPopup((prev) => !prev)}
+                                style={{ cursor: "pointer" }}
+                            >
                                 <GeneralLogo />
                             </div>
                             <CSSTransition
@@ -635,7 +631,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         <MessageNodeVersionSelector message={data} />
                     </div>
                     <div className={css.message_content}>
-
                         <div ref={messageRef}>
                             <MathJax>
                                 {parsedContent.map((part, index) => {
@@ -664,18 +659,25 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             <text>Now I’ll plot the output inline instead of using code:</text>
                             <MessageColumnsChart data={mockColumnsChartMessageData} />
                             <text className={"message-text"}>
-                                Here's a simple project idea: a manager platform in Notion,
-                                focusing on task management, milestones, and clear goals for the Microsoft Imagine Cup.
-                                I've
-                                chosen a project to create a simple to-do list application as an example.
+                                Here's a simple project idea: a manager platform in Notion, focusing
+                                on task management, milestones, and clear goals for the Microsoft
+                                Imagine Cup. I've chosen a project to create a simple to-do list
+                                application as an example.
                             </text>
-                            <p><br className="ProseMirror-trailingBreak" /></p>
+                            <p>
+                                <br className="ProseMirror-trailingBreak" />
+                            </p>
                             <text className={"message-text"}>
-                                Give me a moment to access your Notion, then you should be able to view the document.
+                                Give me a moment to access your Notion, then you should be able to
+                                view the document.
                             </text>
-                            <p><br className="ProseMirror-trailingBreak" /></p>
+                            <p>
+                                <br className="ProseMirror-trailingBreak" />
+                            </p>
                             <MessageFrame data={mockMessageFrameData} />
-                            <text className={"message-text"}>Now Ill show the output in the table:</text>
+                            <text className={"message-text"}>
+                                Now Ill show the output in the table:
+                            </text>
                             <MessageTable tableData={mockTableData} />
                             <Flex justify={"flex-start"} className={"message-actions"} vertical>
                                 <Flex>
@@ -692,7 +694,9 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             <Flex justify={"space-between"} className={"message-actions"}>
                                 <button
                                     onClick={() => openSourcePlayground(data.id.toString())}
-                                    className={clsx(css.button_steps, { [css.steps_open]: isAllStepOpen })}
+                                    className={clsx(css.button_steps, {
+                                        [css.steps_open]: isAllStepOpen,
+                                    })}
                                 >
                                     <SeeAllStepsIcon />
                                     <span
@@ -701,8 +705,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                             [css.button_steps_label]: !isAllStepOpen,
                                         })}
                                     >
-                                    See all steps
-                                </span>
+                                        See all steps
+                                    </span>
                                 </button>
                                 <Flex gap={10}>
                                     <button
@@ -732,11 +736,20 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                             mountOnEnter
                                             unmountOnExit
                                         >
-                                            <div className={css.download_menu} ref={downloadMenuRef}>
+                                            <div
+                                                className={css.download_menu}
+                                                ref={downloadMenuRef}
+                                            >
                                                 <ul>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.png</li>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.txt</li>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.pdf</li>
+                                                    <li onClick={setCloseHandler(downloadPDF)}>
+                                                        .png
+                                                    </li>
+                                                    <li onClick={setCloseHandler(downloadPDF)}>
+                                                        .txt
+                                                    </li>
+                                                    <li onClick={setCloseHandler(downloadPDF)}>
+                                                        .pdf
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </CSSTransition>
@@ -745,7 +758,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                         <span className={css.tooltip}>Copy chat text</span>
                                         <CopyIcon />
                                     </button>
-
                                 </Flex>
                             </Flex>
                         )}

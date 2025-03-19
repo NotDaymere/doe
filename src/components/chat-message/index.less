@@ -1,121 +1,117 @@
-
 .message-container {
-  display: flex;
-
-  &.user {
-    justify-content: flex-end;
-  }
-
-  .chat-message {
     display: flex;
-    margin: 8px 0;
-    padding: 10px;
-    word-wrap: break-word;
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
 
-  .user-message {
-    align-self: flex-end;
-    justify-content: flex-end;
-    background-color: #EFEFEF;
-    border-radius: 16px;
-  }
-
-  .bot-message {
-    align-self: flex-start;
-    justify-content: flex-start;
-    border-top-left-radius: 0;
-  }
-
-  .message-content {
-    display: flex;
-    flex-direction: column;
-    white-space: pre-wrap;
-  }
-
-  .edit-button {
-    cursor: pointer;
-    box-shadow: none;
-    background: none;
-    border: none;
-    height: fit-content;
-    margin: auto 10px 10px 0;
-    padding: 4px;
-    cursor: pointer;
-  }
-
-  .bot-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    min-width: 40px;
-    height: 40px;
-    min-height: 40px;
-    margin-right: 8px;
-    background-color: #fff;
-    border: 1px solid #EFEFEF;
-    border-radius: 8px;
-
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  .code-without-output {
-    code {
-      border-radius: 10px;
-    }
-  }
-
-  .code-inline-output{
-    background: #e8e8e8 !important;
-    color: rgba(255, 95, 95, 1) !important;
-    code {
-      background: #e8e8e8 !important;
-      color: rgba(255, 95, 95, 1) !important;
+    &.user {
+        justify-content: flex-end;
     }
 
-    * {
-      background: #e8e8e8 !important;
-      color: rgba(255, 95, 95, 1) !important;
-    }
-  }
-
-
-  .code-with-output {
-    display: flex;
-    flex-direction: column;
-
-    pre {
-      margin-bottom: 0;
-
-      code {
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-      }
+    .chat-message {
+        display: flex;
+        margin: 8px 0;
+        padding: 10px;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
     }
 
-    .output {
-      padding: 1em;
-      color: white;
-      background-color: #8D8D8D;
-      border-bottom-right-radius: 10px;
-      border-bottom-left-radius: 10px;
+    .user-message {
+        align-self: flex-end;
+        justify-content: flex-end;
+        background-color: #efefef;
+        border-radius: 16px;
     }
-  }
 
+    .bot-message {
+        align-self: flex-start;
+        justify-content: flex-start;
+        border-top-left-radius: 0;
+    }
 
-  .typewriter-cursor {
-    display: none;
-  }
+    .message-content {
+        display: flex;
+        flex-direction: column;
+        white-space: pre-wrap;
+    }
+
+    .edit-button {
+        cursor: pointer;
+        box-shadow: none;
+        background: none;
+        border: none;
+        height: fit-content;
+        margin: auto 10px 10px 0;
+        padding: 4px;
+        cursor: pointer;
+    }
+
+    .bot-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        min-height: 40px;
+        margin-right: 8px;
+        background-color: #fff;
+        border: 1px solid #efefef;
+        border-radius: 8px;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .code-without-output {
+        code {
+            border-radius: 10px;
+        }
+    }
+
+    .code-inline-output {
+        background: #e8e8e8 !important;
+        color: rgba(255, 95, 95, 1) !important;
+        code {
+            background: #e8e8e8 !important;
+            color: rgba(255, 95, 95, 1) !important;
+        }
+
+        * {
+            background: #e8e8e8 !important;
+            color: rgba(255, 95, 95, 1) !important;
+        }
+    }
+
+    .code-with-output {
+        display: flex;
+        flex-direction: column;
+
+        pre {
+            margin-bottom: 0;
+
+            code {
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+            }
+        }
+
+        .output {
+            padding: 1em;
+            color: var(--text-var-23);
+            background-color: var(--bg-var-42);
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+    }
+
+    .typewriter-cursor {
+        display: none;
+    }
 }
 .table-playground-button {
-  margin-bottom: 15px;
-  background: rgba(248, 248, 248, 1);
-  border: 2px solid rgba(221, 221, 221, 1);
-  border-radius: 10px;
+    margin-bottom: 15px;
+    background: rgba(248, 248, 248, 1);
+    border: 2px solid rgba(221, 221, 221, 1);
+    border-radius: 10px;
 }
-

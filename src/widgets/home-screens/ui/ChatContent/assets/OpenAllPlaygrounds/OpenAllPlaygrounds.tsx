@@ -1,6 +1,6 @@
-import './OpenAllPlaygrounds.less';
+import "./OpenAllPlaygrounds.less";
 import { useEffect, useRef, useState } from "react";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg";
 import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 import { useChatStore } from "src/shared/providers";
@@ -12,10 +12,19 @@ type OpenAllPlaygroundsProps = {
     activeAllPlaygrounds: boolean;
 };
 
-export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenAllPlaygroundsProps) {
+export default function OpenAllPlaygrounds({
+    changeActiveAllPlaygrounds,
+}: OpenAllPlaygroundsProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const { savedPlaygrounds, getOpenSavedPlaygrounds, updateSavedPlaygrounds, getSavedPlayground } = useChatStore();
-    const [activeOpenAllPlaygroundsMenu, setActiveOpenAllPlaygroundsMenu] = useState<string | null>(null);
+    const {
+        savedPlaygrounds,
+        getOpenSavedPlaygrounds,
+        updateSavedPlaygrounds,
+        getSavedPlayground,
+    } = useChatStore();
+    const [activeOpenAllPlaygroundsMenu, setActiveOpenAllPlaygroundsMenu] = useState<string | null>(
+        null
+    );
     const [activeAllPlaygrounds, setActiveAllPlaygrounds] = useState<boolean>(true);
     const [contentIdHover, setContentIdHover] = useState<string | null>(null);
     const contentMouseUp = (id: string | null) => {
@@ -23,23 +32,23 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
             return;
         }
         setContentIdHover(id);
-    }
+    };
     const contentMouseDown = () => {
         if (activeOpenAllPlaygroundsMenu) {
             return;
         }
         setContentIdHover(null);
-    }
+    };
     const changeActiveOpenAllPlaygroundsMenu = (id: string | null = null) => {
         if (activeOpenAllPlaygroundsMenu) {
-            setActiveOpenAllPlaygroundsMenu(null)
+            setActiveOpenAllPlaygroundsMenu(null);
             return;
         }
-        setActiveOpenAllPlaygroundsMenu(id)
-    }
+        setActiveOpenAllPlaygroundsMenu(id);
+    };
 
     const openSavedPlaygroundStatus = (id: string | null) => {
-        const savedPlayground = getSavedPlayground(id)
+        const savedPlayground = getSavedPlayground(id);
         const maxLength = 2;
         if (getOpenSavedPlaygrounds().length >= maxLength) {
             return;
@@ -47,7 +56,7 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
         if (!savedPlayground) return;
         savedPlayground.open = true;
         updateSavedPlaygrounds(savedPlayground);
-    }
+    };
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -63,35 +72,43 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
     }, [changeActiveAllPlaygrounds]);
 
     return ReactDOM.createPortal(
-            <div ref={containerRef} className={`open-all-playgrounds-container ${ getOpenSavedPlaygrounds().length < 1 && 'open-all-playgrounds-container-without-playground'} ${!activeAllPlaygrounds && 'close'}`}>
-            <div className={'open-all-playgrounds-header'}>
-                <div className={'open-all-playgrounds-header-text'}>
-                    <DoePlaygroundStars />All Playgrounds
+        <div
+            ref={containerRef}
+            className={`open-all-playgrounds-container ${getOpenSavedPlaygrounds().length < 1 && "open-all-playgrounds-container-without-playground"} ${!activeAllPlaygrounds && "close"}`}
+        >
+            <div className={"open-all-playgrounds-header"}>
+                <div className={"open-all-playgrounds-header-text"}>
+                    <DoePlaygroundStars />
+                    All Playgrounds
                 </div>
-                <button className={'open-all-playgrounds-header-button'}
-                        onClick={()=>
-                            {changeActiveAllPlaygrounds()
-                            setActiveAllPlaygrounds(false)}}>
+                <button
+                    className={"open-all-playgrounds-header-button"}
+                    onClick={() => {
+                        changeActiveAllPlaygrounds();
+                        setActiveAllPlaygrounds(false);
+                    }}
+                >
                     <DecreasePlaygroundIcon />
                 </button>
             </div>
-            <div className={'open-all-playgrounds-content'}>
+            <div className={"open-all-playgrounds-content"}>
                 {savedPlaygrounds.map((savedPlayground, index) => (
                     <div
                         key={savedPlayground.id}
                         className={`open-all-playgrounds-content-example ${
-                            contentIdHover == savedPlayground.id && 'open-all-playgrounds-content-example-hover'
+                            contentIdHover == savedPlayground.id &&
+                            "open-all-playgrounds-content-example-hover"
                         }`}
                         onMouseMove={() => contentMouseUp(savedPlayground.id)}
                         onMouseOut={contentMouseDown}
                         onClick={() => openSavedPlaygroundStatus(savedPlayground.id)}
                     >
-                       <div className={'open-all-playgrounds-content-name'}>
-                           <DoePlaygroundStars/>
-                           <p>{ savedPlayground.name }</p>
-                       </div>
+                        <div className={"open-all-playgrounds-content-name"}>
+                            <DoePlaygroundStars />
+                            <p>{savedPlayground.name}</p>
+                        </div>
                         <button
-                            className={'open-all-playgrounds-content-example-button'}
+                            className={"open-all-playgrounds-content-example-button"}
                             onClick={(event) => {
                                 event.stopPropagation();
                                 changeActiveOpenAllPlaygroundsMenu(savedPlayground.id);
@@ -104,13 +121,13 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
                     </div>
                 ))}
             </div>
-            {activeOpenAllPlaygroundsMenu
-                && <AllPlaygroundsMenu
-                    activeOpenAllPlaygroundsMenu = {activeOpenAllPlaygroundsMenu}
-                    changeActiveOpenAllPlaygroundsMenu = {changeActiveOpenAllPlaygroundsMenu}
-                    changeActiveAllPlaygrounds = {changeActiveAllPlaygrounds}
+            {activeOpenAllPlaygroundsMenu && (
+                <AllPlaygroundsMenu
+                    activeOpenAllPlaygroundsMenu={activeOpenAllPlaygroundsMenu}
+                    changeActiveOpenAllPlaygroundsMenu={changeActiveOpenAllPlaygroundsMenu}
+                    changeActiveAllPlaygrounds={changeActiveAllPlaygrounds}
                 />
-            }
+            )}
         </div>,
         document.body
     );

@@ -24,23 +24,22 @@ interface ChatRegularViewProps {
 }
 
 export const ChatRegularView: React.FC<ChatRegularViewProps> = ({
-                                                                    messageQueue,
-                                                                    editor,
-                                                                    editMsgMode,
-                                                                    setEditMsgMode,
-                                                                }) => {
+    messageQueue,
+    editor,
+    editMsgMode,
+    setEditMsgMode,
+}) => {
     const { savedBranches } = useChatStore();
 
     return (
         <>
-
             <div className={css.content_chat}>
                 {messageQueue.map((item, index) => {
-                    const branch = savedBranches.find(b => b.mainMessageId === item.id);
+                    const branch = savedBranches.find((b) => b.mainMessageId === item.id);
                     let hasBranch = false;
                     if (branch) {
                         if (branch.mainMessageId === item.id) {
-                            const foundMessage = branch.messages.find(m => m.id === item.id);
+                            const foundMessage = branch.messages.find((m) => m.id === item.id);
                             hasBranch = !!foundMessage;
                         }
                     }

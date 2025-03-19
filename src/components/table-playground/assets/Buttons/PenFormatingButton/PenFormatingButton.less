@@ -1,18 +1,21 @@
 .pen-button {
-  padding: 0;
-  margin: 0;
-  width: 36px;
-  height: 36px;
-  border: 1px solid #5B5B5B;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+    padding: 0;
+    margin: 0;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border-var-27);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 
-  background: rgba(241, 241, 241, 1);
+    background: transparent;
+    svg path {
+        fill: var(--icon-var-11);
+    }
 }
 .pen-button-active {
-  background: rgba(255, 255, 255, 1);
-  border: 1px solid #ffffff;
+    background: var(--bg-var-16);
+    border: 1px solid transparent;
 }
