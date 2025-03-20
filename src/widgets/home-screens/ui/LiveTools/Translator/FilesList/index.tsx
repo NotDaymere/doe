@@ -7,12 +7,16 @@ import classNames from "classnames";
 interface IProps {
     files: File[];
     isRotated: boolean;
+    classes?: string;
 }
 
-const FilesList: FC<IProps> = ({ files, isRotated }) => (
+const FilesList: FC<IProps> = ({ files, isRotated, classes }) => (
     <div className={css.filesList}>
         {files?.map((file, index) => (
-            <div className={css.file} key={`${file.name}_${index}`}>
+            <div
+                className={classNames(css.file, classes ? classes : null)}
+                key={`${file.name}_${index}`}
+            >
                 <FileFilledIcon width={10} height={12} className={css.fileIcon} />
                 <span className={classNames(css.fileName, { [css.fileNameShorten]: isRotated })}>
                     {file.name}

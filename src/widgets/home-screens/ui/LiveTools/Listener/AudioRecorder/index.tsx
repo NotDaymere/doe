@@ -4,22 +4,14 @@ import PlayIcon from "src/shared/icons/Play.icon";
 import StopIcon from "src/shared/icons/Stop.icon";
 import classNames from "classnames";
 import WaveSurfer from "wavesurfer.js";
+import RecordPlugin from "wavesurfer.js/dist/plugins/record.esm.js";
 import css from "./AudioRecorder.module.less";
 
 const AudioRecorder = () => {
     const [isRecording, setIsRecording] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     const [isStopped, setIsStopped] = useState(false);
-    const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isAudioPaused, setIsAudioPaused] = useState(false);
-
-    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-    const audioChunksRef = useRef<Blob[]>([]);
-    const audioContextRef = useRef<AudioContext | null>(null);
-    const analyserRef = useRef<AnalyserNode | null>(null);
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const animationRef = useRef<number | null>(null);
 
     const [seconds, setSeconds] = useState(0);
     const [isActive, setIsActive] = useState(false);
@@ -27,6 +19,71 @@ const AudioRecorder = () => {
 
     const waveformRef = useRef<HTMLDivElement | null>(null);
     const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null);
+
+    const waveformRecordRef = useRef<HTMLDivElement | null>(null);
+    const [wavesurferRecord, setWavesurferRecord] = useState<RecordPlugin | null>(null);
+
+    useEffect(() => {
+        if (!waveformRecordRef.current) return;
+
+        const wavesurfer = WaveSurfer.create({
+            container: waveformRecordRef.current,
+            waveColor: "#FF0004",
+            progressColor: "transparent",
+            barWidth: 1,
+            barGap: 2,
+            barHeight: 22,
+            height: 30,
+        });
+
+        const record = wavesurfer.registerPlugin(
+            RecordPlugin.create({
+                renderRecordedAudio: false,
+            })
+        );
+
+        setWavesurferRecord(record);
+
+        record.on("record-end", (blob) => {
+            if (!waveformRef.current) return;
+            const recordedUrl = URL.createObjectURL(blob);
+
+            const recordedWaveSurfer = WaveSurfer.create({
+                container: waveformRef.current,
+                waveColor: "#CFCFCF",
+                progressColor: "#1F1F1F",
+                barWidth: 1,
+                barGap: 2,
+                barHeight: 22,
+                height: 30,
+                url: recordedUrl,
+            });
+
+            setWavesurfer(recordedWaveSurfer);
+
+            recordedWaveSurfer.on("play", () => setIsPlaying(true));
+            recordedWaveSurfer.on("pause", () => setIsPlaying(false));
+            recordedWaveSurfer.on("finish", () => setSeconds(0));
+        });
+
+        return () => {
+            wavesurfer.destroy();
+        };
+    }, []);
+
+    const startRecording = () => {
+        wavesurferRecord?.startRecording();
+        setIsRecording(true);
+        setIsActive(true);
+        setSeconds(0);
+    };
+
+    const stopRecording = () => {
+        wavesurferRecord?.stopRecording();
+        setIsActive(false);
+        setIsRecording(false);
+        setIsStopped(true);
+    };
 
     useEffect(() => {
         if (isActive || isPlaying) {
@@ -46,37 +103,6 @@ const AudioRecorder = () => {
         };
     }, [isActive, isPlaying]);
 
-    useEffect(() => {
-        if (!waveformRef.current || !audioUrl) return;
-
-        let wavesurf = WaveSurfer.create({
-            container: waveformRef.current,
-            waveColor: "#cfcfcf",
-            progressColor: "#1f1f1f",
-            cursorWidth: 1,
-            cursorColor: "#1f1f1f",
-            barWidth: 1,
-            height: 30,
-            normalize: true,
-            hideScrollbar: true,
-            url: audioUrl,
-        });
-
-        wavesurf.on("ready", () => {
-            setIsPlaying(false);
-        });
-
-        wavesurf.on("finish", () => {
-            setIsPlaying(false);
-        });
-
-        setWavesurfer(wavesurf);
-
-        return () => {
-            wavesurf.destroy();
-        };
-    }, [audioUrl, waveformRef.current]);
-
     const formatTime = (time: number) => {
         const minutes = Math.floor(time / 60);
         const remainingSeconds = time % 60;
@@ -85,141 +111,16 @@ const AudioRecorder = () => {
         }`;
     };
 
-    const startRecording = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mediaRecorder = new MediaRecorder(stream);
-            mediaRecorderRef.current = mediaRecorder;
-            audioChunksRef.current = [];
-
-            mediaRecorder.ondataavailable = (event) => {
-                audioChunksRef.current.push(event.data);
-            };
-
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
-                const audioUrl = URL.createObjectURL(audioBlob);
-                setAudioUrl(audioUrl);
-                stopVisualizing();
-            };
-
-            mediaRecorder.start();
-            setIsActive(true);
-            setIsRecording(true);
-            setIsPaused(false);
-            setIsStopped(false);
-            startVisualizingStream(stream);
-        } catch (err) {
-            console.error("Error accessing microphone:", err);
-        }
-    };
-
-    const stopRecording = () => {
-        setIsActive(false);
-
-        if (mediaRecorderRef.current) {
-            mediaRecorderRef.current.stop();
-            if (!isAudioPaused) {
-                setSeconds(0);
-            }
-
-            setIsRecording(false);
-            setIsPaused(false);
-            setIsStopped(true);
-        }
-    };
-
     const pauseRecording = () => {
         setIsPaused((prev) => !prev);
-        if (mediaRecorderRef.current) {
-            if (isPaused) {
-                mediaRecorderRef.current.resume();
-                setIsPaused(false);
-                setIsActive(true);
-            } else {
-                mediaRecorderRef.current.pause();
-                setIsPaused(true);
-                setIsActive(false);
-            }
-        }
-    };
-
-    const resizeCanvas = () => {
-        const canvas = canvasRef.current;
-        const canvasContext = canvasRef.current?.getContext("2d");
-
-        if (!canvas || !canvasContext) return;
-
-        const pixelRatio = window.devicePixelRatio || 1;
-        const canvasWidth = canvas.clientWidth * pixelRatio;
-        const canvasHeight = canvas.clientHeight * pixelRatio;
-
-        canvas.width = canvasWidth;
-        canvas.height = canvasHeight;
-
-        canvasContext.scale(pixelRatio, pixelRatio);
-    };
-
-    const drawBars = () => {
-        const canvas = canvasRef.current;
-        const canvasContext = canvasRef.current?.getContext("2d");
-
-        if (!canvas || !canvasContext) return;
-
-        const bufferLength = analyserRef?.current?.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength || 0);
-
-        analyserRef?.current?.getByteFrequencyData(dataArray);
-
-        canvasContext.clearRect(0, 0, canvas.width!, canvas.height!);
-
-        const barWidth = 1;
-        const barSpacing = 2;
-        const barHeight = 6;
-        const totalBars = Math.floor(canvas?.clientWidth / (barWidth + barSpacing));
-
-        let x = 0;
-        const centerY = canvas.clientHeight / 2;
-
-        for (let i = 0; i < totalBars; i++) {
-            canvasContext.fillStyle = "#cfcfcf";
-            canvasContext.fillRect(x, centerY - barHeight / 2, barWidth, barHeight);
-            x += barWidth + barSpacing;
-        }
-
-        x = (canvas.clientWidth - totalBars * (barWidth + barSpacing)) / 2;
-
-        for (let i = 0; i < totalBars; i++) {
-            const dynamicBarHeight = dataArray[i] / 2;
-            canvasContext.fillStyle = isRecording || isPaused ? "#ff5f56" : "#1f1f1f";
-            canvasContext.fillRect(x, centerY - dynamicBarHeight / 2, barWidth, dynamicBarHeight);
-            x += barWidth + barSpacing;
-        }
-
-        animationRef.current = requestAnimationFrame(() => drawBars());
-    };
-
-    const startVisualizingStream = (stream: MediaStream) => {
-        audioContextRef.current = new AudioContext();
-        const source = audioContextRef.current.createMediaStreamSource(stream);
-        analyserRef.current = audioContextRef.current.createAnalyser();
-        source.connect(analyserRef.current);
-        analyserRef.current.fftSize = 256;
-
-        resizeCanvas();
-
-        drawBars();
-        window.addEventListener("resize", () => resizeCanvas());
-    };
-
-    const stopVisualizing = () => {
-        if (animationRef.current) {
-            cancelAnimationFrame(animationRef.current);
-            animationRef.current = null;
-        }
-        if (audioContextRef.current) {
-            audioContextRef.current.close();
-            audioContextRef.current = null;
+        if (isPaused) {
+            wavesurferRecord?.resumeRecording();
+            setIsPaused(false);
+            setIsActive(true);
+        } else {
+            wavesurferRecord?.pauseRecording();
+            setIsPaused(true);
+            setIsActive(false);
         }
     };
 
@@ -227,38 +128,14 @@ const AudioRecorder = () => {
         if (isPlaying) {
             wavesurfer?.pause();
         } else {
+            setSeconds(0);
             wavesurfer?.play();
         }
     };
 
-    useEffect(() => {
-        if (!wavesurfer) return;
-
-        const handlePlay = () => setIsPlaying(true);
-        const handlePause = () => setIsPlaying(false);
-
-        wavesurfer.on("play", handlePlay);
-        wavesurfer.on("pause", handlePause);
-    }, [wavesurfer]);
-
-    useEffect(() => {
-        resizeCanvas();
-
-        drawBars();
-        window.addEventListener("resize", () => resizeCanvas());
-
-        return () => {
-            stopVisualizing();
-        };
-    }, []);
-
-    useEffect(() => {
-        drawBars();
-    }, [isRecording]);
-
     return (
         <div className={css.audioRecorder}>
-            {isStopped && audioUrl ? (
+            {isStopped ? (
                 <div className={css.playRecord}>
                     <button
                         className={classNames(css.actionButton, css.actionButtonStopped)}
@@ -277,7 +154,7 @@ const AudioRecorder = () => {
                 </div>
             ) : (
                 <>
-                    <canvas ref={canvasRef} width={400} height={100} className={css.waveform} />
+                    <div ref={waveformRecordRef} className={css.audioPlayer} />
                     <div className={css.timer}>{formatTime(seconds)}</div>
                     <div className={css.actions}>
                         {isRecording && (

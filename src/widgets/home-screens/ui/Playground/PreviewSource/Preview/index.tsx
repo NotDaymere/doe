@@ -64,15 +64,17 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
         };
     }, [scale]);
 
-    const onWheelEvent = throttle((event: Event) => {
+    const onWheelEvent = throttle((event: any) => {
         event.preventDefault();
 
-        if (event instanceof WheelEvent) {
-            if (event.deltaY > 0) {
-                if (scale - 0.05 <= 0) return;
-                setScale(scale - 0.05);
-            } else if (event.deltaY < 0) {
-                setScale(scale + 0.05);
+        if (event.ctrlKey) {
+            if (event instanceof WheelEvent) {
+                if (event.deltaY > 0) {
+                    if (scale - 0.05 <= 0) return;
+                    setScale(scale - 0.05);
+                } else if (event.deltaY < 0) {
+                    setScale(scale + 0.05);
+                }
             }
         }
     }, 100);

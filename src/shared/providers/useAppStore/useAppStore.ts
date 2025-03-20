@@ -7,10 +7,12 @@ export interface AppState {
     editor: Editor | null;
     theme: "light" | "dark";
     gaiaActive: boolean;
+    gaiaSidebarActive: boolean;
     playground: IPlayground;
     previewPlayground: IPreviewPlayground;
     activeTranslationOption: TranslationMenuOptionsType;
     setGaiaActive: (bool: boolean) => void;
+    setGaiaSidebarActive: (bool: boolean) => void;
     setActiveEditor: (editor: Editor | null) => void;
     setTheme: (value: "light" | "dark") => void;
     setPlayground: (data: IPlayground) => void;
@@ -21,6 +23,7 @@ export interface AppState {
 export const useAppStore = create<AppState>()((set) => ({
     editor: null,
     gaiaActive: false,
+    gaiaSidebarActive: false,
     theme: "light",
     playground: {
         type: null,
@@ -36,6 +39,7 @@ export const useAppStore = create<AppState>()((set) => ({
     },
     activeTranslationOption: TRANSLATION_MENU_OPTIONS.TRANSLATION,
     setGaiaActive: (gaiaActive) => set(() => ({ gaiaActive })),
+    setGaiaSidebarActive: (gaiaSidebarActive) => set(() => ({ gaiaSidebarActive })),
     setActiveEditor: (editor) => set(() => ({ editor })),
     setTheme: (theme) => set(() => ({ theme })),
     setPlayground: (playground) => set(() => ({ playground })),

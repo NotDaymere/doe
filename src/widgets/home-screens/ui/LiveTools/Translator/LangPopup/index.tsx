@@ -3,20 +3,22 @@ import { FC, useEffect, useRef, useState } from "react";
 import AttachmentIcon from "src/shared/icons/Attachment.icon";
 import { useDragFile } from "src/widgets/home-screens/lib";
 import classNames from "classnames";
+import FilesList from "../FilesList";
 import css from "./LangPopup.module.less";
 
 interface IProps {
     text: string;
     onChange: (e: any) => void;
-    onFileLoad: () => void;
     isActive: boolean;
     setIsActive: (value: boolean) => void;
+    isRotated: boolean;
 }
 
-const LangPopup: FC<IProps> = ({ text, onChange, onFileLoad, isActive, setIsActive }) => {
+const LangPopup: FC<IProps> = ({ text, onChange, isActive, setIsActive, isRotated }) => {
     const [showPopup, setShowPopup] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const combinedRef = useRef<HTMLDivElement>(null);
+    const [files, setFiles] = useState<File[]>([]);
 
     const {
         drag,
@@ -28,8 +30,8 @@ const LangPopup: FC<IProps> = ({ text, onChange, onFileLoad, isActive, setIsActi
         handleDragOver,
         handleDragCancel,
     } = useDragFile({
-        onUploadFiles() {
-            onFileLoad();
+        onUploadFiles(uploadFiles) {
+            setFiles([...files, ...uploadFiles]);
         },
     });
 
@@ -92,6 +94,13 @@ const LangPopup: FC<IProps> = ({ text, onChange, onFileLoad, isActive, setIsActi
                         onDragLeave={handleDragLeaveTarget}
                     >
                         {drag && <div className={css.panel_drag} />}
+                        {files && !drag && (
+                            <FilesList
+                                files={files}
+                                isRotated={isRotated}
+                                classes={css.filesList}
+                            />
+                        )}
                         <div className={classNames(css.attachmentIcon, { [css.colorIcon]: drag })}>
                             <AttachmentIcon width={15} height={15} />
                         </div>

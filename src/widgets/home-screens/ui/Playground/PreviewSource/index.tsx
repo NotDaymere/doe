@@ -42,14 +42,16 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                 className={css.previewSource}
                 id="previewSource"
             >
-                <Preview type={type} url={data} isModalView={false} />
-                {type !== "web" && (
-                    <button className={css.expandView} onClick={() => setIsModalOpen(true)}>
-                        <ExpandDoubleIcon width={20} height={20} />
-                    </button>
-                )}
+                <div className={css.preview}>
+                    <Preview type={type} url={data} isModalView={false} />
+                    {type !== "web" && (
+                        <button className={css.expandView} onClick={() => setIsModalOpen(true)}>
+                            <ExpandDoubleIcon width={20} height={20} />
+                        </button>
+                    )}
 
-                {renderOpenInNewWindowButtonClick()}
+                    {renderOpenInNewWindowButtonClick()}
+                </div>
             </div>
             <div className={css.modal}>
                 <Modal

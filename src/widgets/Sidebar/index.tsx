@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import LightThemeIcon from "src/shared/icons/LightTheme.icon";
 import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
@@ -9,8 +9,7 @@ import FunctionIcon from "src/shared/icons/Function.icon";
 import CodeIcon from "src/shared/icons/Code.icon";
 import LinkIcon from "src/shared/icons/Link.icon";
 import { useEditorContext } from "src/shared/components/Editor";
-import { useChatStore } from "src/shared/providers";
-import { SidebarGaia } from "./ui";
+import { useAppStore, useChatStore } from "src/shared/providers";
 import TranslationIcon from "src/shared/icons/Translation.icon";
 import TapeIcon from "src/shared/icons/Tape.icon";
 import SharedWithYouIcon from "src/shared/icons/SharedWithYou.icon";
@@ -18,18 +17,37 @@ import { MODE } from "src/shared/types/Chat";
 import TranslationActiveIcon from "src/shared/icons/TranslationActive.icon";
 import SharedWithYouActiveIcon from "src/shared/icons/SharedWithYouActive.icon";
 import css from "./Sidebar.module.less";
+import GlobalIcon from "src/shared/icons/Global.icon";
 
 export const Sidebar: React.FC = () => {
     const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
     const editorState = useEditorContext(editor);
+    const { gaiaActive, setGaiaActive, setGaiaSidebarActive } = useAppStore();
+
+    const toggleGaia = () => {
+        setGaiaActive(!gaiaActive);
+        setGaiaSidebarActive(false);
+    };
 
     const pointerDown = (event: React.PointerEvent) => {
         event.preventDefault();
     };
 
+    const handleGaiaButtonHover = () => {
+        if (gaiaActive) return;
+        setGaiaSidebarActive(true);
+    };
+
     return (
         <aside className={css.sidebar}>
-            <SidebarGaia />
+            <button
+                className={css.gaia_btn}
+                onClick={toggleGaia}
+                onMouseEnter={handleGaiaButtonHover}
+                onMouseLeave={() => setGaiaSidebarActive(false)}
+            >
+                <GlobalIcon />
+            </button>
 
             <div className={css.sidebar_profile}>
                 <img className={css.sidebar_profile_img} src="/temp/profile.jpg" alt="" />

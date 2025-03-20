@@ -105,9 +105,9 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
                             <LangPopup
                                 text={langText}
                                 onChange={handleEnteringLanguage}
-                                onFileLoad={() => setTranslateFromImage(true)}
                                 isActive={showLangPopup}
                                 setIsActive={setShowLangPopup}
+                                isRotated={isRotated}
                             />
                         </div>
                     )}

@@ -15,22 +15,20 @@
 }
 
 .welcomeText {
-    width: 100%;
-    margin: 0 auto;
     font-family: CMU Serif;
     font-size: 24px;
     line-height: 140%;
     letter-spacing: 0;
-    max-width: 821px;
+    width: 821px;
     white-space: normal;
     word-break: break-word;
-    position: relative;
     text-align: center;
 }
 
 .welcomeText > span {
     word-break: break-word;
     white-space: normal;
+    position: relative;
 }
 
 .italic {
@@ -60,10 +58,17 @@
     }
 }
 
-.dot {
-    width: 18px;
-    height: 18px;
-    background-color: #1f1f1f;
-    border-radius: 100%;
+.caret {
+    width: 2px;
+    height: 1.2em;
+    background-color: #000;
     display: inline-block;
+    vertical-align: middle;
+    animation: caretBlink 1s steps(1) infinite;
+}
+
+@keyframes caretBlink {
+    50% {
+        opacity: 0;
+    }
 }
