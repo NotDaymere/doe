@@ -57,7 +57,7 @@ export default function MessagesOfDayList({
                 </div>
                 <div className="messages-count-and-button">
                     {unreadCount > 0 && <div className="message-count">{unreadCount}</div>}
-                    <div className="small-add-btn" onClick={toggleMessageList}>
+                    <div className="message-list-add-btn" onClick={toggleMessageList}>
                         {isMessageListVisible ? "-" : "+"}
                     </div>
                 </div>
