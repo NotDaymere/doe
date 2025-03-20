@@ -44,7 +44,6 @@ import DownloadCSV from "./assets/DownloadCSV/DownloadCSV";
 import PythonTaskManager from "./assets/PythonTaskManager/PythonTaskManager";
 
 import { MessageNodeVersionSelector } from "./assets/MessageNodeVersionSelector/MessageNodeVersionSelector";
-import GeneralLogo from "../GeneralLogo/GeneralLogo";
 import MessageTable from "./assets/MessageTable/MessageTable";
 import MessageFrame from "./assets/MessageFrame/MessageFrame";
 import { mockTableData } from "./assets/MessageTable/mockTableData";
@@ -56,8 +55,6 @@ import { usePanel } from "../../lib";
 import MessageLineChart from "./assets/MessageCharts/MessageLineChart/MessageLineChart";
 import { mockLineChartMessageData } from "./assets/MessageCharts/MessageLineChart/mockLineChartMessageData";
 import { IPlayground } from "../../../../shared/types/Playground";
-import AllBranches from "../ChatContent/assets/AllBranches/AllBranches";
-import AllPlaygrounds from "../ChatContent/assets/AllPlaygrounds/AllPlaygrounds";
 import SeeAllStepsIcon from "../../../../shared/icons/SeeAllSteps.icon";
 import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
 import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
@@ -132,7 +129,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
     const { setSelectedText, setIsShowReferencePanel } = useChatContext();
     const { setFiles } = usePanel();
-    const [isShowLogoPopup, setIsShowLogoPopup] = React.useState(false);
+
     const [isPaused, setIsPaused] = React.useState(true);
     const [isAllStepOpen, setIsAllStepOpen] = React.useState(false);
     const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
@@ -529,7 +526,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             />
                         }
                     </div>
-                    {renderFavButton()}
+                    {!isCurrentBranchOpen && renderFavButton()}
                 </div>
             );
         }
@@ -588,7 +585,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         <MessageNodeVersionSelector message={data} />
                     }
                 </div>
-                {renderFavButton()}
+                {!isCurrentBranchOpen && renderFavButton()}
             </div>
         );
     }
@@ -609,38 +606,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     }
                     <div className={css.sub_bot_message_info_container}>
                         <div className={css.logoWrapper}>
-                            <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
-                                {isCurrentBranchOpen
-                                    ?< div
+
+                                {isCurrentBranchOpen && (
+                                    <div
                                     className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
                                         <div
                                         className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
                                         <MessageLogoIcon fillPath={"currentColor"} />
                                         </div>
                                     </div>
-
-                                    :<GeneralLogo />}
-                            </div>
-                            <CSSTransition
-                                in={isShowLogoPopup}
-                                timeout={300}
-                                classNames={{
-                                    enter: css.logoPopupEnter,
-                                    enterActive: css.logoPopupEnterActive,
-                                    exit: css.logoPopupExit,
-                                    exitActive: css.logoPopupExitActive,
-                                }}
-                                unmountOnExit
-                            >
-                                <div className={css.logoPopup}>
-                                    {!playgroundFullscreen && (
-                                        <>
-                                            <AllBranches />
-                                            <AllPlaygrounds />
-                                        </>
-                                    )}
-                                </div>
-                            </CSSTransition>
+                                )}
                         </div>
                         <MessageNodeVersionSelector message={data} />
                     </div>
@@ -761,7 +736,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         )}
                     </div>
                 </div>
-                {renderFavButton()}
+                {!isCurrentBranchOpen && renderFavButton()}
             </div>
         );
     }

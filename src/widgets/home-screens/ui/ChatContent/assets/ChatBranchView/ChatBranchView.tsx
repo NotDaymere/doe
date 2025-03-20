@@ -45,7 +45,7 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
         </div>
         <div className={css.content_chat_branch_dialogs}>
             {currentBranch.dialogsMessages.map((dialog, index) => (
-                <React.Fragment key={index}>
+                <div key={index}>
                     <div
                         ref={(el) => (dialogRefs.current[index] = el)}
                         className={css.content_chat_branch}
@@ -66,7 +66,7 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                             />
                         </div>
                     </div>
-                </React.Fragment>
+                </div>
             ))}
         </div>
     </div>

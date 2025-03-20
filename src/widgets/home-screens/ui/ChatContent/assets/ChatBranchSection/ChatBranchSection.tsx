@@ -8,7 +8,7 @@ import OpenBranchMenu from "../OpenBranchMenu/OpenBranchMenu";
 import { IBranch } from "../../../../../../shared/types/Branch";
 
 interface ChatMessageDateProps {
-    branch: IBranch;
+    branch?: IBranch;
     isOpenBrunch?: boolean;
 }
 
@@ -51,13 +51,12 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunc
     return (
         <div className="chat-branch-section-container">
             <div
-                className={`chat-branch-section ${isActiveBranchMenu ? 'active' : ''}`}
+                className="chat-branch-section"
                 onClick={handleContainerClick}
             >
                 <BranchIcon width={16} height={16} fill="currentColor" />
                 <span className="chat-text">
-                    <span className="normal-text">{text}</span>
-                    <span className="gradient-text">{text}</span>
+                    <span>{text}</span>
                 </span>
                 <button className="branch-options-button" onClick={handleButtonClick}>
                     <ThreeVerticalDots fill="currentColor" />

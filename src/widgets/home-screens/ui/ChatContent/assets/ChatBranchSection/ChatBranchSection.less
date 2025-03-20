@@ -1,16 +1,16 @@
 .chat-branch-section {
-  background: linear-gradient(273.07deg, rgba(255, 205, 205, 0.12) -11.76%, #F8F8F8 18.11%, #FFF9E6 47.97%, #F8F8F8 77.84%, #E4F4FF 107.71%, #F8F8F8 137.58%);
-  border: 2px dashed rgba(221, 221, 221, 1);
-  border-radius: 8px;
-  width: calc(100% - 60px);
+  background-color: rgba(181, 181, 181, 0.2);
+  border: 3px solid rgba(181, 181, 181, 0.53);
+  border-radius: 12px;
+  height: 40px;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
   justify-content: center;
   box-sizing: border-box;
-  margin-left: 60px;
-  padding: 20px;
+  margin-right: 60px;
+  padding: 10px;
   color: rgba(91, 91, 91, 1);
   transition: background 0.3s ease, color 0.3s ease;
   position: relative;
@@ -25,60 +25,17 @@
     display: inline-block;
   }
 
-  .normal-text {
-    transition: opacity 0.3s ease;
-  }
-
-  .gradient-text {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, #FF7E7E 0%, #B1B1B1 23%, #FFBF49 43%, #B1B1B1 68.5%, #67A4FF 95.5%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .branch-options-button {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
     background: none;
     border: none;
     cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    opacity: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 4px;
   }
 
-  &:hover,
-  &.active {
-    background: #FFFFFF;
-    color: rgba(246, 132, 132, 1);
-
-    .normal-text {
-      opacity: 0;
-    }
-
-    .gradient-text {
-      opacity: 1;
-    }
-
-    .branch-options-button {
-      opacity: 1;
-    }
-  }
 }
 
 .chat-branch-section-container {
@@ -86,5 +43,5 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 }

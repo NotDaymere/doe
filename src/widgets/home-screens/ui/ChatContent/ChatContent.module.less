@@ -54,8 +54,42 @@
   border-radius: 16px;
 }
 
-
 .content_chat_branch_wrapper{
   backdrop-filter: blur(15px)
+}
 
+.logoWrapper {
+  position: fixed;
+  top: 50px;
+  left: 100px;
+}
+
+.logoPopup {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: absolute;
+}
+
+.logoPopupEnter {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.logoPopupEnterActive {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.logoPopupExit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.logoPopupExitActive {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
 }

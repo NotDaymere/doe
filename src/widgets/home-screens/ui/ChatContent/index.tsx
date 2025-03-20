@@ -26,6 +26,10 @@ import { ScrollDownButton } from "./assets/ScrollDownButton/ScrollDownButton";
 import { ChatRegularView } from "./assets/ContentChatRegularView/ContentChatRegularView";
 import { ChatBranchView } from "./assets/ChatBranchView/ChatBranchView";
 import Reflections from "./assets/Reflections/Reflections";
+import GeneralLogo from "../GeneralLogo/GeneralLogo";
+import AllBranches from "./assets/AllBranches/AllBranches";
+import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
+import { CSSTransition } from "react-transition-group";
 
 interface Props {
     editMsgMode: {
@@ -54,6 +58,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     const { talkModeActive} = useAppStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+    const [isShowLogoPopup, setIsShowLogoPopup] = React.useState(false);
 
     const editor = useEditor({
         extensions: [
@@ -173,13 +178,42 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     />
                 )}
 
+                {!isCurrentBranchOpen && (
+                    <div className={css.logoWrapper}>
+                        <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
+                            <GeneralLogo />
+                        </div>
+                        <CSSTransition
+                            in={isShowLogoPopup}
+                            timeout={300}
+                            classNames={{
+                                enter: css.logoPopupEnter,
+                                enterActive: css.logoPopupEnterActive,
+                                exit: css.logoPopupExit,
+                                exitActive: css.logoPopupExitActive,
+                            }}
+                            unmountOnExit
+                        >
+                            <div className={css.logoPopup}>
+                                {!playgroundFullscreen && (
+                                    <>
+                                        <AllBranches />
+                                        <AllPlaygrounds />
+                                    </>
+                                )}
+                            </div>
+                        </CSSTransition>
+                    </div>
+                )}
+
+
                 {!talkModeActive && !playgroundFullscreen &&
-                    <Reflections/>
+                    <Reflections />
                 }
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
 
                 <TalkMode targetRef={chatRef} />
             </div>
-    </div>
+        </div>
     );
 };

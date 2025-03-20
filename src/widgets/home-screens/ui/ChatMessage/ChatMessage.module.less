@@ -287,6 +287,7 @@
     border-radius: 16px;
     padding: 20px;
     gap: 20px;
+    max-width: 890px;
   .setFontSohneBuch(16px, 1.2, normal);
 }
 .message_content::selection,
@@ -321,35 +322,7 @@
   gap: 16px;
 }
 
-.logoPopup {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  position: absolute;
-}
 
-.logoPopupEnter {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-.logoPopupEnterActive {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 300ms, transform 300ms;
-}
-
-.logoPopupExit {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.logoPopupExitActive {
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: opacity 300ms, transform 300ms;
-}
 .bot_logo {
     display: flex;
     align-items: center;
@@ -819,6 +792,7 @@
 .message_with_button_container {
   display: flex;
   align-items: flex-start;
+  width: 100%;
 
   .fav_button {
     display: flex;
