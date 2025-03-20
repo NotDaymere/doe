@@ -10,7 +10,18 @@
     margin-top: 20px;
     margin-bottom: 20px;
 }
-
+.line-message-chart {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    min-height: 400px;
+    padding: 40px 40px;
+    background: var(--bg-var-61);
+    border-radius: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 .column-message-chart-title {
     font-size: 16px;
     font-weight: 600;
@@ -52,11 +63,17 @@
     font-weight: 500;
     font-size: 18px;
 }
+.yAxis text {
+    fill: var(--text-var-9);
+}
+.xAxis text {
+    fill: var(--text-var-4);
+}
 
 .selected-data {
     font-size: 16px;
     font-weight: 600;
-    color: #cfcfcf;
+    color: var(--text-var-12);
 }
 
 .selected-data-item {
@@ -90,5 +107,5 @@
 .line {
     display: inline-block;
     width: 110px;
-    border-bottom: 1px dashed #cfcfcf;
+    border-bottom: 1px dashed var(--border-var-8);
 }

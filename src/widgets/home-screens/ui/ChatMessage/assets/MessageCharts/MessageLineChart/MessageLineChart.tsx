@@ -86,7 +86,7 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
                         ry={2}
                     />
                     {words.length > 1 ? (
-                        <text x="0" y="0" fill="#CFCFCF" fontSize={16}>
+                        <text x="0" y="0" fill="red" fontSize={16}>
                             <tspan x="0" dy="0">
                                 {words[0]}
                             </tspan>
@@ -127,17 +127,26 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
                                     ))}
                                 </linearGradient>
                                 <linearGradient id="grayGradient" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#eee" stopOpacity={0.7} />
-                                    <stop offset="100%" stopColor="#f9f9f9" stopOpacity={0.7} />
+                                    <stop
+                                        offset="0%"
+                                        stopColor="rgb(141, 141, 141)"
+                                        stopOpacity={0.2}
+                                    />
+                                    <stop offset="100%" stopColor="rgba(181, 181, 181, 0.2)" />
                                 </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" horizontal vertical={false} />
+                            <CartesianGrid
+                                strokeDasharray="3 3"
+                                horizontal
+                                vertical={false}
+                                stroke="var(--border-var-8)"
+                            />
                             <XAxis
                                 dataKey="label"
                                 tick={<CustomXAxisTick />}
                                 tickLine={false}
                                 padding={{ left: 20, right: 20 }}
-                                axisLine={{ stroke: "#ccc", opacity: 1 }}
+                                axisLine={{ stroke: "var(--border-var-8)", opacity: 1 }}
                             />
                             <YAxis axisLine={false} tickLine={false} />
                             <Bar

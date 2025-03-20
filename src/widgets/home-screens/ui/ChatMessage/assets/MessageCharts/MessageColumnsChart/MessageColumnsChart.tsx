@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState } from "react";
 import {
     BarChart,
     Bar,
@@ -8,9 +8,9 @@ import {
     ResponsiveContainer,
     Cell,
     LabelList,
-} from 'recharts';
-import { CustomBarLabel } from './CustomBarLabel';
-import './MessageColumnsChart.less';
+} from "recharts";
+import { CustomBarLabel } from "./CustomBarLabel";
+import "./MessageColumnsChart.less";
 import ScreenShareIcon from "../../../../../../../shared/icons/ScreenShare.icon";
 import { ChartMessageData } from "../ChartDataParser";
 
@@ -19,16 +19,18 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
     const selectedData = data.find((item) => item.id === selectedId);
 
     const gradients = [
-        { start: '#FFC813', end: '#fdf7e0' },
-        { start: '#8BCF16', end: '#effbdb' },
-        { start: '#02bfed', end: '#e7f9fb' },
-        { start: '#FF8B12', end: 'rgb(255,238,219)' },
+        { start: "#FFC813", end: "#fdf7e0" },
+        { start: "#8BCF16", end: "#effbdb" },
+        { start: "#02bfed", end: "#e7f9fb" },
+        { start: "#FF8B12", end: "rgb(255,238,219)" },
     ];
 
-    const selectedIndex = selectedData !== undefined ? data.findIndex((item) => item.id === selectedData.id) : -1;
-    const selectedColor = selectedIndex !== -1 ? gradients[selectedIndex % gradients.length].start : '';
+    const selectedIndex =
+        selectedData !== undefined ? data.findIndex((item) => item.id === selectedData.id) : -1;
+    const selectedColor =
+        selectedIndex !== -1 ? gradients[selectedIndex % gradients.length].start : "";
 
-    const dataMaxValue = Math.max(...data.map(item => item.value));
+    const dataMaxValue = Math.max(...data.map((item) => item.value));
 
     const niceCeil = (x: number): number => {
         const exponent = Math.floor(Math.log10(x));
@@ -65,7 +67,7 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
         const { x, y, payload, index } = props;
         const gradient = gradients[index % gradients.length];
         const labelText = payload.value;
-        const words = labelText.split(' ');
+        const words = labelText.split(" ");
         const bulletSize = 10;
         const spacing = 6;
         const bulletOffset = bulletSize + spacing;
@@ -87,7 +89,7 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
                                 {words[0]}
                             </tspan>
                             <tspan x="0" dy="1.2em">
-                                {words.slice(1).join(' ')}
+                                {words.slice(1).join(" ")}
                             </tspan>
                         </text>
                     ) : (
@@ -118,7 +120,14 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
                                 {data.map((item, index) => {
                                     const g = gradients[index % gradients.length];
                                     return (
-                                        <linearGradient key={item.id} id={`gradient-${item.id}`} x1="0" y1="0" x2="0" y2="1">
+                                        <linearGradient
+                                            key={item.id}
+                                            id={`gradient-${item.id}`}
+                                            x1="0"
+                                            y1="0"
+                                            x2="0"
+                                            y2="1"
+                                        >
                                             <stop offset="0%" stopColor={g.start} stopOpacity={1} />
                                             <stop offset="100%" stopColor={g.end} stopOpacity={1} />
                                         </linearGradient>
@@ -129,9 +138,24 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
                                     <stop offset="100%" stopColor="#eee" stopOpacity={1} />
                                 </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="label" tick={renderCustomTick} axisLine={false} tickLine={false} />
-                            <YAxis tick={{ fill: '#CFCFCF', fontSize: 16 }} axisLine={false} tickLine={false} domain={[0, maxTick]} ticks={ticks} />
+                            <CartesianGrid
+                                strokeDasharray="3 3"
+                                vertical={false}
+                                stroke="var(--border-var-8)"
+                            />
+                            <XAxis
+                                dataKey="label"
+                                tick={renderCustomTick}
+                                axisLine={{ stroke: "var(--border-var-8)", opacity: 1 }}
+                                tickLine={false}
+                            />
+                            <YAxis
+                                tick={{ fill: "#CFCFCF", fontSize: 16 }}
+                                axisLine={false}
+                                tickLine={false}
+                                domain={[0, maxTick]}
+                                ticks={ticks}
+                            />
                             <Bar dataKey="value" radius={[12, 12, 12, 12]}>
                                 <LabelList
                                     dataKey="value"
@@ -155,14 +179,14 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
                                     const isAnySelected = selectedId !== null;
                                     let fillColor = `url(#gradient-${item.id})`;
                                     if (isAnySelected && !isSelected) {
-                                        fillColor = 'url(#grayGradient)';
+                                        fillColor = "url(#grayGradient)";
                                     }
                                     return (
                                         <Cell
                                             key={item.id}
                                             fill={fillColor}
-                                            className={`chart-bar ${isSelected ? 'selected' : ''}`}
-                                            style={{ cursor: 'pointer' }}
+                                            className={`chart-bar ${isSelected ? "selected" : ""}`}
+                                            style={{ cursor: "pointer" }}
                                             onClick={() => {
                                                 setSelectedId(isSelected ? null : item.id);
                                             }}
@@ -187,27 +211,33 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
                                     marginRight: "6px",
                                 }}
                             ></span>
-                            <span>{selectedData && (selectedData.label)}</span>
+                            <span>{selectedData && selectedData.label}</span>
                         </div>
                     </div>
                     <span className="line"></span>
                     <div className="value-percentile-container">
                         <span>
-                            {selectedData && (`${selectedData.value}/${selectedData.percentile}th`)}
+                            {selectedData && `${selectedData.value}/${selectedData.percentile}th`}
                         </span>
                         {selectedData && (
                             <button className="copy-button" onClick={handleCopy}>
-                                <div><ScreenShareIcon /></div>
+                                <div>
+                                    <ScreenShareIcon />
+                                </div>
                                 <span>Copy</span>
                             </button>
                         )}
                     </div>
                     <div className="details">
                         <p className="selected-data">Codeforces Elo:</p>
-                        <span className="selected-data-item">{selectedData && (selectedData.value)}</span>
+                        <span className="selected-data-item">
+                            {selectedData && selectedData.value}
+                        </span>
                         <span className="line"></span>
                         <p className="selected-data">Percentile:</p>
-                        <span className="selected-data-item">{selectedData && (`${selectedData.percentile}%`)}</span>
+                        <span className="selected-data-item">
+                            {selectedData && `${selectedData.percentile}%`}
+                        </span>
                     </div>
                 </div>
             </div>

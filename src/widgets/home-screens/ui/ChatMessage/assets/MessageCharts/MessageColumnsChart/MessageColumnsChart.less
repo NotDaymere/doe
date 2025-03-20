@@ -10,7 +10,12 @@
     border-radius: 12px;
     margin-top: 20px;
     margin-bottom: 20px;
-
+    .yAxis text {
+        fill: var(--text-var-9);
+    }
+    .xAxis text {
+        fill: var(--text-var-4);
+    }
     .column-chart {
         display: flex;
         flex-direction: column;
@@ -24,13 +29,13 @@
     .selected-data {
         font-weight: 500;
         font-size: 18px;
-        color: #cfcfcf;
+        color: var(--text-var-12);
     }
 
     .selected-data-item {
         font-size: 16px;
         font-weight: 600;
-        color: #1f1f1f;
+        color: var(--text-var-4);
     }
 
     .info-container {
@@ -84,7 +89,7 @@
         gap: 30px;
         background: var(--bg-var-1);
         border-radius: 12px;
-        color: #5b5b5b;
+        color: var(--text-var-21);
         font-size: 15px;
         font-weight: bold;
         margin-top: 5px;
@@ -96,11 +101,11 @@
             flex-direction: row;
             gap: 5px;
             font-size: 14px;
-            color: #b5b5b5;
+            color: var(--text-var-18);
             font-weight: 1000;
 
             svg {
-                fill: #b5b5b5;
+                fill: var(--icon-var-1);
                 height: 15px;
                 width: 18px;
             }
@@ -140,5 +145,5 @@
 .line {
     display: inline-block;
     width: 110px;
-    border-bottom: 1px dashed #cfcfcf;
+    border-bottom: 1px dashed var(--border-var-8);
 }
