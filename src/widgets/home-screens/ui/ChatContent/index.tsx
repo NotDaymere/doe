@@ -59,6 +59,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
     const [isShowLogoPopup, setIsShowLogoPopup] = React.useState(false);
+    const {isSideBarOpen} = useChatStore();
 
     const editor = useEditor({
         extensions: [
@@ -179,7 +180,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                 )}
 
                 {!isCurrentBranchOpen && (
-                    <div className={css.logoWrapper}>
+                    <div className={!isSideBarOpen ? css.logoWrapper : css.logoWrapperSideBarOpen}>
                         <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
                             <GeneralLogo />
                         </div>
@@ -207,8 +208,8 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                 )}
 
 
-                {!talkModeActive && !playgroundFullscreen &&
-                    <Reflections />
+                {!talkModeActive && !playgroundFullscreen && !isCurrentBranchOpen &&
+                        <Reflections />
                 }
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
 

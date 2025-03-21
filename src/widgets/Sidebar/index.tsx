@@ -2,130 +2,128 @@ import React from "react";
 import LightThemeIcon from "src/shared/icons/LightTheme.icon";
 import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
-import BoldIcon from "src/shared/icons/Bold.icon";
-import UnderlineIcon from "src/shared/icons/Underline.icon";
-import ItalicIcon from "src/shared/icons/Italic.icon";
-import FunctionIcon from "src/shared/icons/Function.icon";
-import CodeIcon from "src/shared/icons/Code.icon";
-import LinkIcon from "src/shared/icons/Link.icon";
 import { useEditorContext } from "src/shared/components/Editor";
 import { useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "./ui";
 import css from "./Sidebar.module.less";
-import clsx from "clsx";
+import { Theme } from "@monaco-editor/react";
+import { SideBarMenu } from "./ui/SideBarMenu/SideBarMenu";
+import { TextFormatting } from "./ui/Text formatting/TextFormatting";
+import { LiveTools } from "./ui/Live tools/LiveTools";
 
 export const Sidebar: React.FC = () => {
+    const { isSideBarOpen, setIsSideBarOpen } = useChatStore();
     const { editor } = useChatStore();
     const editorState = useEditorContext(editor);
     const { playground } = useChatStore();
-    const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
-    const pointerDown = (event: React.PointerEvent) => {
-        event.preventDefault();
+    // const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
+    const [theme, setTheme] = React.useState<"Light" | "Dark">("Light")
+
+    const handleOpenSideBar = () => {
+        setIsSideBarOpen(!isSideBarOpen);
     };
 
+    const handleToggleTheme = (theme: "Light" | "Dark") => {
+        setTheme(theme);
+    };
+
+    const ballPositionStyle = isSideBarOpen
+        ? { left: theme === "Light" ? "6px" : "37px" }
+        : { top: theme === "Light" ? "6px" : "37px" };
 
     return (
-        <aside className={playground.open ? css.sidebar_playground : css.sidebar}>
+        <aside className={playground.open ? css.sidebar_playground : isSideBarOpen ? css.sidebar_open : css.sidebar}>
+
             <SidebarGaia />
-            <div className={css.sidebar_profile}>
-                <img 
-                    className={css.sidebar_profile_img} 
-                    src="/temp/profile.jpg" 
-                    alt="" 
-                />
+
+            <div className={css.sidebar_separator}>
+                <div className={css.inner_sidebar_separator}></div>
             </div>
-            <div className={css.sidebar_theme}>
-                <div className={css.sidebar_theme_toggler}>
-                    <button className={css.sidebar_theme_btn} disabled>
-                        <LightThemeIcon />
-                    </button>
-                    <button className={css.sidebar_theme_btn}>
-                        <MoonIcon />
-                    </button>
+
+            <div className={css.profile_container}>
+                <div className={css.sidebar_profile}>
+                    <img
+                        className={css.sidebar_profile_img}
+                        src="/temp/profile.jpg"
+                        alt=""
+                    />
                 </div>
+                {isSideBarOpen && (
+                    <div className={css.profile_user_info}>
+                        <div className={css.profile_username}>John Doe</div>
+                        <div className={css.profile_email}>johndoe@gmail.com</div>
+                    </div>
+                )}
+            </div>
+
+            <div className={css.sidebar_theme_container}>
+                <div className={css.theme_toggle}>
+                    <div
+                        className={css.theme_toggle_ball}
+                        style={ballPositionStyle}
+                    />
+                    <div
+                        className={
+                            theme === "Light"
+                                ? css.toggle_light_theme_active_icon
+                                : css.toggle_light_theme_icon
+                        }
+                        onClick={() => handleToggleTheme("Light")}
+                    >
+                        <LightThemeIcon width={20} height={20} />
+                    </div>
+                    <div
+                        className={
+                            theme === "Dark"
+                                ? css.toggle_dark_theme_active_icon
+                                : css.toggle_dark_theme_icon
+                        }
+                        onClick={() => handleToggleTheme("Dark")}
+                    >
+                        <MoonIcon width={20} height={20} />
+                    </div>
+                </div>
+                {isSideBarOpen && (
+                    <div className={css.theme_name}>
+                        {theme} Theme
+                    </div>
+                )}
+            </div>
+
+            <div className={css.sidebar_separator}>
+                <div className={css.inner_sidebar_separator}></div>
             </div>
             <div className={css.sidebar_controls}>
-                <div className={css.sidebar_controls_group}>
-                    <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/corpora.svg" alt="" />
-                    </button>
-                    <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/chats.svg" alt="" />
-                    </button>
-                    <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/star.svg" alt="" />
-                    </button>
-                    <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/tags.svg" alt="" />
-                    </button>
+
+                <SideBarMenu />
+                <div className={css.sidebar_separator}>
+                    <div className={css.inner_sidebar_separator}></div>
                 </div>
-                <div className={css.sidebar_controls_group}>
-                    <button 
-                        className={css.sidebar_controls_btn}
-                        onPointerDown={pointerDown}
-                        onClick={editorState.toggleBold}
-                        data-active={editorState.isBold}
-                    >
-                        <BoldIcon />
-                    </button>
-                    <button 
-                        className={css.sidebar_controls_btn}
-                        onPointerDown={pointerDown}
-                        onClick={editorState.toggleUnderline}
-                        data-active={editorState.isUnderline}
-                    >
-                        <UnderlineIcon />
-                    </button>
-                    <button 
-                        className={css.sidebar_controls_btn}
-                        onPointerDown={pointerDown}
-                        onClick={editorState.toggleItalic}
-                        data-active={editorState.isItalic}
-                    >
-                        <ItalicIcon />
-                    </button>
-                    <button 
-                        className={css.sidebar_controls_btn}
-                        onPointerDown={pointerDown}
-                    >
-                        <FunctionIcon />
-                    </button>
-                    <button 
-                        className={css.sidebar_controls_btn}
-                        onPointerDown={pointerDown}
-                        onClick={editorState.toggleCode}
-                        data-active={editorState.isCode}
-                    >
-                        <CodeIcon />
-                    </button>
+                <TextFormatting />
+                <div className={css.sidebar_separator}>
+                    <div className={css.inner_sidebar_separator}></div>
+                </div>
+                <div className={css.margin_bottom}>
+                    <LiveTools />
+                </div>
 
 
-                    <button
-                        className={clsx(css.sidebar_controls_btn, { [css.active]: isHyperlinkInputOpen })}
-                        onPointerDown={pointerDown}
-                        onClick={() => setIsHyperlinkInputOpen(!isHyperlinkInputOpen)}
-                    >
-                        <LinkIcon />
+                <div className={css.delete_all_messages_btn_container}>
+                    <button className={css.delete_all_messages_btn}>
+                        <TrashIcon />
                     </button>
-                </div>
-                <div className={css.sidebar_controls_group}>
-                    <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/translations.svg" alt="" />
-                    </button>
-                    <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/recording.svg" alt="" />
-                    </button>
-
-                </div>
-                <div className={css.sidebar_controls_group}>
-                    <button className={css.sidebar_controls_btn}>
-                        <img src="/img/icons/shared.svg" alt="" />
-                    </button>
+                    <div className={css.delete_all_messages_btn_tooltip}>
+                        Delete All Messages
+                    </div>
                 </div>
             </div>
-            <button className={css.sidebar_removeMsg}>
-                <TrashIcon />
-            </button>
+
+
+            <div
+                className={css.sidebar_resize_handler}
+                onClick={handleOpenSideBar}
+            />
+
         </aside>
     );
 };

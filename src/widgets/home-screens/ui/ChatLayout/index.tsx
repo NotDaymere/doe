@@ -11,6 +11,7 @@ interface EditModeState {
 }
 export const ChatLayout: React.FC = () => {
     const { playground, playgroundFullscreen, getOpenSavedPlaygrounds } = useChatStore();
+    const {isSideBarOpen} = useChatStore();
     const [editMsgMode, setEditMsgMode] = React.useState<EditModeState>({
         isEditMsgMode: false,
         msgId: null,
@@ -24,7 +25,7 @@ export const ChatLayout: React.FC = () => {
                         <Sidebar />
                     </div>
                 }
-                <div className={css.layout_chat}>
+                <div className={!isSideBarOpen ? css.layout_chat : css.sidebar_open_layout_chat}>
                     <ChatContent editMsgMode={editMsgMode} setEditMsgMode={setEditMsgMode} />
                     {editMsgMode.isEditMsgMode ? null : <ChatPanel />}
                 </div>

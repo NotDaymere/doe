@@ -177,6 +177,9 @@ interface ChatState {
 
     isMaximized: boolean;
     setIsMaximized: (isMaximized: boolean) => void;
+
+    isSideBarOpen: boolean;
+    setIsSideBarOpen: (isSideBarOpen: boolean) => void;
 }
 
 export const useChatStore = create<ChatState>()((set, get) => ({
@@ -393,6 +396,8 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     isMaximized: false,
     setIsMaximized: (isMaximized) => set(() => ({isMaximized})),
 
+    isSideBarOpen: false,
+    setIsSideBarOpen: (isSideBarOpen)=> set(() => ({isSideBarOpen})),
 
     messageNodeMap: initialMessageNodeMap(initialMessages),
 
