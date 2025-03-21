@@ -488,7 +488,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         if (editMsgMode.isEditMsgMode && editMsgMode.msgId === data.id) {
             return (
                 <div className={css.message_with_button_container}>
-                <div className={css.edit}>
+                    <div className={css.edit}>
                         <Editor
                             value={content}
                             onChange={setContent}
@@ -535,7 +535,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
         return (
             <div className={css.message_with_button_container}>
-            <div className={css.input_container}>
+                <div className={css.input_container}>
                     <div className={`${isCurrentBranchOpen ? css.input_open_branch : css.input} `}>
                         <div className={css.user_message_container}>
                             <div className={css.user_message_and_edit_button}>
@@ -595,66 +595,61 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     if (data.isCode) {
         return (
             <div className={css.message_with_button_container}>
-                {!isHyperlinkInputOpen &&
-                    <ReferenceButton
-                        isVisible={referenceButtonVisible}
-                        position={referenceButtonPosition}
-                        onClose={handleClose}
-                        onReferenceClick={handleReferenceClick}
-                    />
-                }
-                {!isHyperlinkInputOpen && (
-                    <ReferenceButton
-                        isVisible={referenceButtonVisible}
-                        position={referenceButtonPosition}
-                        onClose={handleClose}
-                        onReferenceClick={handleReferenceClick}
-                    />
-                )}
-                <div className={css.sub_bot_message_info_container}>
-                    {!data.isUser && (
-                        <div
-                            className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
-                            <div className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
-                                <MessageLogoIcon fillPath={"currentColor"}/>
+                <div
+                    className={`${isCurrentBranchOpen ? css.chat_message_branch : css.chat_message}  ${data.isUser ? css.user_message : css.bot_message}`}
+                >
+                    {!isHyperlinkInputOpen &&
+                        <ReferenceButton
+                            isVisible={referenceButtonVisible}
+                            position={referenceButtonPosition}
+                            onClose={handleClose}
+                            onReferenceClick={handleReferenceClick}
+                        />
+                    }
+                    <div className={css.sub_bot_message_info_container}>
+                        <div className={css.logoWrapper}>
+                            <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
+                                <GeneralLogo />
                             </div>
-                            <GeneralLogo />
+                            <CSSTransition
+                                in={isShowLogoPopup}
+                                timeout={300}
+                                classNames={{
+                                    enter: css.logoPopupEnter,
+                                    enterActive: css.logoPopupEnterActive,
+                                    exit: css.logoPopupExit,
+                                    exitActive: css.logoPopupExitActive,
+                                }}
+                                unmountOnExit
+                            >
+                                <div className={css.logoPopup}>
+                                    {!playgroundFullscreen && (
+                                        <>
+                                            <AllBranches />
+                                            <AllPlaygrounds />
+                                        </>
+                                    )}
+                                </div>
+                            </CSSTransition>
                         </div>
-                    )}
-                    <MessageNodeVersionSelector message={data}/>
-                    <div className={css.logoWrapper}>
-                        <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
-                            <GeneralLogo />
-                        </div>
-                        <CSSTransition
-                            in={isShowLogoPopup}
-                            timeout={300}
-                            classNames={{
-                                enter: css.logoPopupEnter,
-                                enterActive: css.logoPopupEnterActive,
-                                exit: css.logoPopupExit,
-                                exitActive: css.logoPopupExitActive,
-                            }}
-                            unmountOnExit
-                        >
-                            <div className={css.logoPopup}>
-                                {!playgroundFullscreen && (
-                                    <>
-                                        <AllBranches />
-                                        <AllPlaygrounds />
-                                    </>
-                                )}
-                            </div>
-                        </CSSTransition>
+                        <MessageNodeVersionSelector message={data} />
                     </div>
-                    <MessageNodeVersionSelector message={data} />
-                </div>
-                <div className={css.message_content}>
+                    <div className={css.message_content}>
 
-                    <div ref={messageRef}>
-                        <MathJax>
-                            {parsedContent.map((part, index) => {
-                                if (part.type === "text" && !data.isUser) {
+                        <div ref={messageRef}>
+                            <MathJax>
+                                {parsedContent.map((part, index) => {
+                                    if (part.type === "text" && !data.isUser) {
+                                        return (
+                                            <div
+                                                dangerouslySetInnerHTML={{
+                                                    __html: parseTextFormatting(part.content),
+                                                }}
+                                            />
+                                        );
+                                    } else if (part.type === "chart" && !data.isUser) {
+                                        return <ChartRenderer key={index} input={part.content} />;
+                                    }
                                     return (
                                         <div
                                             dangerouslySetInnerHTML={{
@@ -662,46 +657,36 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                             }}
                                         />
                                     );
-                                } else if (part.type === "chart" && !data.isUser) {
-                                    return <ChartRenderer key={index} input={part.content} />;
-                                }
-                                return (
-                                    <div
-                                        dangerouslySetInnerHTML={{
-                                            __html: parseTextFormatting(part.content),
-                                        }}
-                                    />
-                                );
-                            })}
-                        </MathJax>
-                        <text>Now I’ll plot the output inline instead of using code:</text>
-                        <MessageLineChart data={mockLineChartMessageData} />
-                        <text>Now I’ll plot the output inline instead of using code:</text>
-                        <MessageChart data={mockChartMessageData}/>
-                        <MessageColumnsChart data={mockColumnsChartMessageData} />
-                        <text className={"message-text"}>
-                            Here's a simple project idea: a manager platform in Notion,
-                            focusing on task management, milestones, and clear goals for the Microsoft Imagine Cup. I've
-                            chosen a project to create a simple to-do list application as an example.
-                        </text>
-                        <p><br className="ProseMirror-trailingBreak" /></p>
-                        <text className={"message-text"}>
-                            Give me a moment to access your Notion, then you should be able to view the document.
-                        </text>
-                        <p><br className="ProseMirror-trailingBreak" /></p>
-                        <MessageFrame data={mockMessageFrameData} />
-                        <text className={"message-text"}>Now Ill show the output in the table:</text>
-                        <MessageTable tableData={mockTableData} />
-                        <Flex justify={"flex-start"} className={"message-actions"} vertical>
-                            <Flex>
-                                <TableRandomValues />
-                                <DownloadCSV />
+                                })}
+                            </MathJax>
+                            <text>Now I’ll plot the output inline instead of using code:</text>
+                            <MessageLineChart data={mockLineChartMessageData} />
+                            <text>Now I’ll plot the output inline instead of using code:</text>
+                            <MessageColumnsChart data={mockColumnsChartMessageData} />
+                            <text className={"message-text"}>
+                                Here's a simple project idea: a manager platform in Notion,
+                                focusing on task management, milestones, and clear goals for the Microsoft Imagine Cup.
+                                I've
+                                chosen a project to create a simple to-do list application as an example.
+                            </text>
+                            <p><br className="ProseMirror-trailingBreak" /></p>
+                            <text className={"message-text"}>
+                                Give me a moment to access your Notion, then you should be able to view the document.
+                            </text>
+                            <p><br className="ProseMirror-trailingBreak" /></p>
+                            <MessageFrame data={mockMessageFrameData} />
+                            <text className={"message-text"}>Now Ill show the output in the table:</text>
+                            <MessageTable tableData={mockTableData} />
+                            <Flex justify={"flex-start"} className={"message-actions"} vertical>
+                                <Flex>
+                                    <TableRandomValues />
+                                    <DownloadCSV />
+                                </Flex>
+                                <Flex>
+                                    <PythonTaskManager />
+                                </Flex>
                             </Flex>
-                            <Flex>
-                                <PythonTaskManager />
-                            </Flex>
-                        </Flex>
-                    </div>
+                        </div>
 
                         {!data.isUser && (
                             <Flex justify={"space-between"} className={"message-actions"}>
@@ -765,9 +750,11 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             </Flex>
                         )}
                     </div>
+                </div>
                 {renderFavButton()}
             </div>
         );
     }
+
     return <div className={css.message}>{null}</div>;
 };

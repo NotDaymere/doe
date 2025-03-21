@@ -157,18 +157,18 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
             }
         >
             <div className={css.content_inner} ref={chatRef}>
-                {!playgroundFullscreen && <AllPlaygrounds />}
-                <div className={css.content_chat} ref={chatRef}>
-                    {messages.map((item) => (
-                        <ChatMessage
-                            data={item}
-                            key={item.id}
-                            editor={editor}
-                            editMsgMode={editMsgMode}
-                            setEditMsgMode={setEditMsgMode}
-                        />
-                    ))}
-                </div>
+                {/*{!playgroundFullscreen && <AllPlaygrounds />}*/}
+                {/*<div className={css.content_chat} ref={chatRef}>*/}
+                {/*    {messages.map((item) => (*/}
+                {/*        <ChatMessage*/}
+                {/*            data={item}*/}
+                {/*            key={item.id}*/}
+                {/*            editor={editor}*/}
+                {/*            editMsgMode={editMsgMode}*/}
+                {/*            setEditMsgMode={setEditMsgMode}*/}
+                {/*        />*/}
+                {/*    ))}*/}
+                {/*</div>*/}
                 {!(isCurrentBranchOpen && currentBranch && currentBranch.messages) ? (
                     <ChatRegularView
                         playgroundFullscreen={playgroundFullscreen}
