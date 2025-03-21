@@ -1,31 +1,63 @@
-import CustomBarChartTwo from "../../../PreviewChart/Component/CustomChartBar/CustomChartBarTwo";
+import Papa from "papaparse";
 import Databox from "../Databox/Databox";
 import CustomChartBar from "./components/CustomBarChart";
 import "./UploadChartBody.less";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 function UploadChartBody() {
     const fileInputRef = useRef(null);
+    const [data, setData] = useState([]);
+    const [chartData, setChartData] = useState([]);
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
-    const handleFileChange = (event) => {
+    const handleFileChange = (event:any) => {
         const file = event.target.files[0];
         if (file) {
-            console.log("File uploaded:", file.name);
+            Papa.parse(file, {
+                header: true,
+                dynamicTyping: true,
+                complete: (result) => {
+                    console.log("Parsed CSV Result:", result.data);
+                    if (result.data && result.data.length > 0) {
+                        const firstRow = result.data[0];
+                        const formattedData = Object.keys(firstRow).map((key, index) => ({
+                            group: key,
+                            value: firstRow[key] || 0,
+                            label: String(firstRow[key] || 0),
+                            color: generateColor(index),
+                        }));
+                        setData(formattedData);
+                        setChartData(formattedData);
+                        console.log("Formatted Chart Data:", formattedData);
+                    }
+                },
+                error: (error) => {
+                    console.error("Error parsing CSV file:", error);
+                },
+            });
         }
+    };
+
+    const generateColor = (index) => {
+        const colors = ["#FFDB65", "#BEE380", "#FFB364", "#A0D2DB"];
+        return colors[index % colors.length];
     };
 
     return (
         <div className="edit_contanier">
             <div className="left">
                 <p>Edit Data</p>
-                <Databox title="BCM (projected)" color="#FFDB65" valueNumber={0} />
-                <Databox title="o1" color="#BEE380" valueNumber={0} />
-                <Databox title="o1" color="#BEE380" valueNumber={0} />
-                <Databox title="o1-ioi" color="#FFB364" valueNumber={0} />
+                {data.map((item, index) => (
+                    <Databox
+                        key={index}
+                        title={item.group}
+                        color={item.color}
+                        valueNumber={item.value}
+                    />
+                ))}
                 <div className="scalebox">
                     <p>Scale</p>
                     <div className="numbers">
@@ -43,14 +75,16 @@ function UploadChartBody() {
                     ref={fileInputRef}
                     style={{ display: "none" }}
                     onChange={handleFileChange}
+                    accept=".csv"
                 />
             </div>
             <div className="right">
                 <div className="right-inner">
-                <CustomChartBar />
+                    <CustomChartBar data={chartData} />
                 </div>
             </div>
         </div>
     );
 }
+
 export default UploadChartBody;
