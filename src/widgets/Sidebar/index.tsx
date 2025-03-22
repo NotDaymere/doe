@@ -32,7 +32,7 @@ export const Sidebar: React.FC = () => {
         : { top: theme === "Light" ? "6px" : "37px" };
 
     return (
-        <aside className={playground.open ? css.sidebar_playground : isSideBarOpen ? css.sidebar_open : css.sidebar}>
+        <aside className={isSideBarOpen ? css.sidebar_open : css.sidebar}>
 
             <SidebarGaia />
 

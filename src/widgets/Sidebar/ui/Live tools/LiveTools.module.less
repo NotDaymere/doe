@@ -57,6 +57,14 @@
     color: #CFCFCF;
     font-size: 14px;
     font-weight: 500;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s ease-out,
+    color 0.3s ease-out;
+
+    &:hover {
+      color: #1F1F1F;
+    }
 
     .live_tools_show_actions_btn {
       padding-bottom: 3px;
@@ -75,8 +83,8 @@
                   color 0.3s ease-out;
 
       &:hover {
-        color: #8D8D8D!important;
-        background-color: #FFFFFF;
+        color: #1F1F1F!important;
+        background-color: rgba(220, 220, 220, 0.68);
       }
     }
   }

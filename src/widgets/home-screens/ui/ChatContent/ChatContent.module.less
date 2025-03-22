@@ -42,6 +42,7 @@
     overflow-y: scroll;
     background: #f8f8f8;
     padding-top: 20px;
+    overflow-x: hidden;
 }
 .content_inner::before {
   content: "";
@@ -69,6 +70,21 @@
   position: fixed;
   top: 45px;
   left: 295px;
+
+}
+
+.logoWrapperPlaygroundOpen {
+  position: fixed;
+  top: 90px;
+  left: 90px;
+  z-index: 10000;
+}
+
+.logoWrapperPlaygroundAndSideBarOpen {
+  position: fixed;
+  top: 90px;
+  left: 295px;
+  z-index: 10000;
 }
 
 .logoPopup {

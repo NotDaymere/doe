@@ -180,7 +180,13 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                 )}
 
                 {!isCurrentBranchOpen && (
-                    <div className={!isSideBarOpen ? css.logoWrapper : css.logoWrapperSideBarOpen}>
+                    <div className={getOpenSavedPlaygrounds().length <= 0
+                                    ? !isSideBarOpen
+                                        ? css.logoWrapper
+                                        : css.logoWrapperSideBarOpen
+                                    : !isSideBarOpen
+                                        ? css.logoWrapperPlaygroundOpen
+                                        : css.logoWrapperPlaygroundAndSideBarOpen}>
                         <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
                             <GeneralLogo />
                         </div>
