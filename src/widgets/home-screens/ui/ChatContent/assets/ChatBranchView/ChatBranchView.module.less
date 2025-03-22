@@ -13,26 +13,23 @@
 }
 
 .content_chat_branch {
-  margin: 0 auto;
+  width: 100% !important;
   height: 100%;
-  max-width: 100%;
+  max-width: 80vw;
+  min-width: 80vw;
   padding-left: 60px;
   padding-right: 60px;
   box-sizing: border-box;
   display: flex;
-  justify-content: flex-start;
   flex-direction: column;
   gap: 10px;
-  flex-shrink: 0;
-  min-width: 80vw;
 }
 
 .content_chat_branch_dialogs {
   display: flex;
   flex-direction: row;
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  width: max-content;
+  position: absolute;
+  left: 0;
 }
 
 .content_chat_branch_dialog {
@@ -42,6 +39,4 @@
   gap: 22px;
   width: 100%;
   justify-content: center;
-  flex-shrink: 0;
-  min-width: 80vw;
 }
