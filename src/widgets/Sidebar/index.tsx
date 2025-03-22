@@ -10,14 +10,21 @@ import { Theme } from "@monaco-editor/react";
 import { SideBarMenu } from "./ui/SideBarMenu/SideBarMenu";
 import { TextFormatting } from "./ui/Text formatting/TextFormatting";
 import { LiveTools } from "./ui/Live tools/LiveTools";
+import ChangeProfileIcon from "../../shared/icons/ChangeProfileIcon";
+import {ProfileMockData} from "./ui/ProfileMockData";
+import {Profile} from "./ui/Profile";
+import AddProfileIcon from "../../shared/icons/AddProfileIcon";
+import {CSSTransition} from "react-transition-group";
 
 export const Sidebar: React.FC = () => {
     const { isSideBarOpen, setIsSideBarOpen } = useChatStore();
     const { editor } = useChatStore();
     const editorState = useEditorContext(editor);
     const { playground } = useChatStore();
-    // const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
     const [theme, setTheme] = React.useState<"Light" | "Dark">("Light")
+    const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false)
+    const [profiles, setProfiles] = React.useState<Profile[]>(ProfileMockData);
+
 
     const handleOpenSideBar = () => {
         setIsSideBarOpen(!isSideBarOpen);
@@ -30,6 +37,18 @@ export const Sidebar: React.FC = () => {
     const ballPositionStyle = isSideBarOpen
         ? { left: theme === "Light" ? "6px" : "37px" }
         : { top: theme === "Light" ? "6px" : "37px" };
+
+    const handleOpenChangeProfilePanel = () => {
+        setIsChangeProfilePanelOpen(!isChangeProfilePanelOpen)
+    };
+
+    const currentProfile = profiles.find(p => p.isCurrent);
+
+    const handleSelectProfile = (id: number) => {
+        setProfiles(prev =>
+            prev.map(p => ({ ...p, isCurrent: p.id === id }))
+        );
+    };
 
     return (
         <aside className={isSideBarOpen ? css.sidebar_open : css.sidebar}>
@@ -44,17 +63,66 @@ export const Sidebar: React.FC = () => {
                 <div className={css.sidebar_profile}>
                     <img
                         className={css.sidebar_profile_img}
-                        src="/temp/profile.jpg"
-                        alt=""
+                        src={currentProfile ? currentProfile.imgSrc : ""}
                     />
                 </div>
                 {isSideBarOpen && (
-                    <div className={css.profile_user_info}>
-                        <div className={css.profile_username}>John Doe</div>
-                        <div className={css.profile_email}>johndoe@gmail.com</div>
+                    <div className={css.profile_user_info_container}>
+                        <div className={css.profile_user_info}>
+                            <div className={css.profile_username}>{currentProfile ? currentProfile.username : ""}</div>
+                            <div className={css.profile_email}>{currentProfile ? currentProfile.email : ""}</div>
+                        </div>
+                        <div
+                            className={css.change_profile_btn}
+                            onClick={handleOpenChangeProfilePanel}
+                            data-active={isChangeProfilePanelOpen}>
+                            <ChangeProfileIcon fill="currentColor" width={11} height={15}/>
+                        </div>
                     </div>
                 )}
             </div>
+            <CSSTransition
+                in={isChangeProfilePanelOpen}
+                timeout={300}
+                classNames={{
+                    enter: css['changeProfile-enter'],
+                    enterActive: css['changeProfile-enter-active'],
+                    exit: css['changeProfile-exit'],
+                    exitActive: css['changeProfile-exit-active']
+                }}
+                unmountOnExit
+            >
+                <div className={css.change_profile_list}>
+                    {ProfileMockData.map(profile => (
+                        <div
+                            key={profile.id}
+                            className={css.profile_container}
+                            onClick={() => handleSelectProfile(profile.id)}>
+                            <div className={css.sidebar_profile}>
+                                <img
+                                    className={css.sidebar_profile_img}
+                                    src={profile.imgSrc}
+                                />
+                            </div>
+                            <div className={css.profile_user_info_container}>
+                                <div className={css.profile_user_info}>
+                                    <div className={css.profile_username}>{profile.username}</div>
+                                    <div className={css.profile_email}>{profile.email}</div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    <div className={css.add_profile_btn}>
+                        <div className={css.add_profile_btn_icon}>
+                            <AddProfileIcon/>
+                        </div>
+                        <div>
+                            Add account
+                        </div>
+                    </div>
+                </div>
+            </CSSTransition>
 
             <div className={css.sidebar_theme_container}>
                 <div className={css.theme_toggle}>
