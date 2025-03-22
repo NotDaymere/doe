@@ -1,6 +1,6 @@
 .modalVideo {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   display: block;
   margin: 0 auto;
   overflow: hidden;
@@ -8,8 +8,6 @@
   border-radius: 20px;
   position: relative;
   z-index: 1500;
-  width: auto;
-  height: auto;
 }
 
 .modalFileNameVideoContainer {
@@ -48,9 +46,6 @@
   display: flex;
   justify-content: center;
   z-index: 1500;
-  width: fit-content;
-  max-width: 50%;
-  max-height: 70%;
 }
 
 .modalContentVideo:hover .modalFileNameVideoContainer {
@@ -102,7 +97,7 @@
   align-items: center;
   border-radius: 10px;
   padding: 5px;
-  bottom: 50px;
+  bottom: 60px;
   left: 30px;
   z-index: 10000;
   gap: 5px;
@@ -121,13 +116,10 @@
   height: 1px;
 }
 
-.progressBarContainer {
-  position: absolute;
-  z-index: 5000;
-  background-color: #EFF5FD;
-}
-
 .videoWrapper {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 20px;
   display: flex;
   justify-content: center;
 }
@@ -135,8 +127,8 @@
 .progressBarContainer {
   position: absolute;
   z-index: 10000;
-  bottom: 10%;
-  width: 90%;
+  bottom: 40px;
+  width: 85%;
   height: 7px;
   background-color: #FFFFFF33;
   cursor: pointer;
