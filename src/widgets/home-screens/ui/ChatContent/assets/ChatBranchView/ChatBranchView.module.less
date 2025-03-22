@@ -23,18 +23,25 @@
   justify-content: flex-start;
   flex-direction: column;
   gap: 10px;
+  flex-shrink: 0;
+  min-width: 80vw;
 }
 
 .content_chat_branch_dialogs {
   display: flex;
   flex-direction: row;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  width: max-content;
 }
+
 .content_chat_branch_dialog {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   gap: 22px;
-
   width: 100%;
   justify-content: center;
+  flex-shrink: 0;
+  min-width: 80vw;
 }
