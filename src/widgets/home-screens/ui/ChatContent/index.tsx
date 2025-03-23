@@ -86,7 +86,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         ],
     });
 
-    const messageNodeMap = useChatStore((state) => state.messageNodeMap);
+    const messageNodeMap = useChatStore((state) => state.currentChat?.messageNodes || {});
 
     const messageQueue = React.useMemo(() => {
         return useChatStore.getState().getMessageQueueFromNode();
