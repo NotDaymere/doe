@@ -93,7 +93,7 @@ const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMes
 const defaultChat: IChat = {
     id: "init-chat",
     name: "Сhat 01",
-    messageNodes: initialMessageNodeMap(initialMessages),
+    messageNodeMap: initialMessageNodeMap(initialMessages),
     tags: [ChatTagsEnum.Green],
     notificationsCount: 2,
     branches: []
@@ -122,7 +122,7 @@ export interface ChatState {
     setQuestionCodeMessage: (questionCodeMessage: IQuestionCodeMessage) => void;
 
     setCurrentChat: (chat: IChat) => void;
-    currentChat: IChat | null;
+    currentChat: IChat;
     chats: IChat[];
     addChat: (chat: IChat) => void;
     addNewChat: (chat: IChat) => void;
@@ -156,6 +156,8 @@ export interface ChatState {
     replyTimeoutId: number | null;
     replyPromiseReject?: (reason?: any) => void;
 
+    messages: IMessage[];
+    setMessages: (messages: IMessage[]) => void;
     changeMessage: (oldMessage: IMessage, newMessage: IMessage) => IMessage | null;
     addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) => void;
     addMessageNodeVersion: (current: IMessageNode | string | IMessage | number, message: IMessage) => void;
@@ -195,16 +197,13 @@ export interface ChatState {
 export const useChatStore = create<ChatState>()((set, get) => ({
 
     initChat: (messages: IMessage[]) => {
-        const messageNodes = initialMessageNodeMap(messages);
-        const initializedChat: IChat = {
-            ...defaultChat,
-            messageNodes,
-        };
-        set(() => ({
-            currentChat: initializedChat,
-            chats: [initializedChat],
-        }));
+        const messageNodeMap = initialMessageNodeMap(messages);
+        const initializedChat: IChat = { ...defaultChat, messageNodeMap };
+        set(() => ({ currentChat: initializedChat, chats: [initializedChat] }));
     },
+
+    messages: initialMessages,
+    setMessages: (messages) => set(() => ({ messages })),
 
     customTagNames: defaultTagNames,
     isTyping: false,
@@ -241,19 +240,18 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 });
                 currentReplyTimeoutId = null;
                 currentReplyReject = null;
-                const newMessage: IMessage = {
+                resolve({
                     id: Date.now() + 1,
                     isUser: false,
                     isCode: true,
                     content: testTextAndCharts,
                     files: [],
-                };
-                get().addMessageNode(undefined, newMessage);
-                resolve(newMessage);
+                });
             }, 3000);
             set({ replyTimeoutId: currentReplyTimeoutId, replyPromiseReject: currentReplyReject });
         });
     },
+
 
     cancelReply: () => {
         if (currentReplyTimeoutId !== null) {
@@ -266,6 +264,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 replyTimeoutId: null,
                 replyPromiseReject: undefined,
             });
+
             currentReplyTimeoutId = null;
             currentReplyReject = null;
         }
@@ -357,8 +356,8 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         };
         const branchName = stripHTML(name);
         const state = get();
-        const newId = state.currentChat?.branches.length
-            ? Math.max(...state.currentChat!.branches.map((p) => Number(p.id) || 0)) + 1
+        const newId = state.currentChat.branches.length > 0
+            ? Math.max(...state.currentChat.branches.map((p) => Number(p.id) || 0)) + 1
             : 1;
         const newBranch = {
             id: newId,
@@ -367,62 +366,78 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             dialogsMessages,
             mainMessageId,
         };
-        if (!state.currentChat) return newBranch;
-        const updatedChat = {
-            ...state.currentChat,
-            branches: [...state.currentChat.branches, newBranch],
-        };
-        const updatedChats = state.chats.map(chat => chat.id === updatedChat.id ? updatedChat : chat);
-        set({ currentChat: updatedChat, savedBranches: updatedChat.branches, chats: updatedChats });
+        set({
+            currentChat: {
+                ...state.currentChat,
+                branches: [...state.currentChat.branches, newBranch],
+            }
+        });
         return newBranch;
     },
 
     getBranchById: (id: string | number) => {
-        return get().currentChat?.branches.find((branch) => String(branch.id) === String(id)) || null;
+        return get().currentChat.branches.find(
+            (branch) => String(branch.id) === String(id)
+        ) || null;
     },
-
     addDialogToCurrentBranch: (dialog: IBranchDialog) =>
         set((state) => {
-            if (!state.currentChat) return state;
-            const updatedBranches = state.currentChat.branches.map((b) =>
-                b.id === state.currentBranch?.id ? { ...b, dialogsMessages: [...b.dialogsMessages, dialog] } : b
-            );
-            const updatedChat = { ...state.currentChat, branches: updatedBranches };
-            const updatedCurrentBranch = updatedBranches.find((b) => b.id === state.currentBranch?.id) || state.currentBranch;
-            return { currentChat: updatedChat, savedBranches: updatedChat.branches, currentBranch: updatedCurrentBranch };
-        }),
+            if (!state.currentBranch) return state;
 
+            const updatedBranches = state.currentChat.branches.map((b) =>
+                b.id === state.currentBranch!.id
+                    ? { ...b, dialogsMessages: [...b.dialogsMessages, dialog] }
+                    : b
+            );
+
+            const updatedCurrentBranch =
+                updatedBranches.find((b) => b.id === state.currentBranch!.id) || state.currentBranch;
+
+            return {
+                currentChat: {
+                    ...state.currentChat,
+                    branches: updatedBranches,
+                },
+                currentBranch: updatedCurrentBranch,
+            };
+        }),
     deleteSavedBranch: (id) =>
         set((state) => {
-            if (!state.currentChat) return state;
-            const isCurrentBranchDeleted = state.currentBranch && String(state.currentBranch.id) === String(id);
-            const updatedBranches = state.currentChat.branches.filter((branch) => branch.id !== id);
-            const updatedChat = { ...state.currentChat, branches: updatedBranches };
+            const isCurrentBranchDeleted =
+                state.currentBranch && String(state.currentBranch.id) === String(id);
+
+            const updatedBranches = state.currentChat.branches.filter(
+                (branch) => String(branch.id) !== String(id)
+            );
+
             return {
-                currentChat: updatedChat,
-                savedBranches: updatedBranches,
+                currentChat: {
+                    ...state.currentChat,
+                    branches: updatedBranches,
+                },
                 currentBranch: isCurrentBranchDeleted ? null : state.currentBranch,
                 currentBranchDialog: isCurrentBranchDeleted ? null : state.currentBranchDialog,
             };
         }),
-
     setCurrentBranch: (branch: IBranch | string | number | null) => {
         if (branch === null) {
             set({ currentBranch: null, currentBranchDialog: null });
         } else if (typeof branch === "object") {
             set({ currentBranch: branch, currentBranchDialog: null });
         } else {
-            const foundBranch = get().currentChat?.branches.find((b) => String(b.id) === String(branch));
+            const foundBranch = get().currentChat.branches.find(
+                (b) => String(b.id) === String(branch)
+            );
             set({ currentBranch: foundBranch || null, currentBranchDialog: null });
         }
     },
-
     setCurrentBranchDialog: (dialogIndex: number | null) => set({ currentBranchDialog: dialogIndex }),
     setIsCreateBranchChatMode: (isCreateBranchChatMode) => set(() => ({ isCreateBranchChatMode })),
     setIsCurrentBranchOpen: (open: boolean) => set(() => ({ isCurrentBranchOpen: open })),
 
     setCurrentChat: (chat: IChat) => {
         set(() => ({
+            savedBranches: chat.branches,
             currentChat: chat,
             currentBranch: null,
             currentBranchDialog: null,
@@ -448,6 +463,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         if (chat) {
             set(() => ({
                 currentChat: chat,
+                savedBranches: chat.branches,
                 currentBranch: null,
                 currentBranchDialog: null,
                 isCreateBranchChatMode: false,
@@ -493,18 +509,17 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
     addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) =>
         set((state) => {
-            if (!state.currentChat) return {};
+
+            console.log("parent", parent);
             let actualParent: IMessageNode | undefined;
             if (typeof parent === "string") {
-                actualParent = state.currentChat.messageNodes[parent];
+                actualParent = state.currentChat.messageNodeMap[parent];
             } else if (parent) {
                 actualParent = parent;
             } else {
-                actualParent = state.currentChat.messageNodes["root"];
+                actualParent = state.currentChat.messageNodeMap["root"];
             }
-            const newId = message.id
-                ? String(message.id)
-                : (Object.keys(state.currentChat.messageNodes).length + 1).toString();
+            const newId = message.id ? String(message.id) : (Object.keys(state.currentChat.messageNodeMap).length + 1).toString();
             const newNode: IMessageNode = {
                 id: newId,
                 parent: actualParent,
@@ -519,40 +534,43 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 actualParent.currentChildrenVersion = updatedChildren.length - 1;
             }
 
-            const updatedNodes = {
-                ...state.currentChat.messageNodes,
+            const updatedMap = {
+                ...state.currentChat.messageNodeMap,
                 [newId]: newNode,
             };
-            const updatedChat = { ...state.currentChat, messageNodes: updatedNodes };
-            const updatedChats = state.chats.map(chat => chat.id === updatedChat.id ? updatedChat : chat);
-            return { currentChat: updatedChat, chats: updatedChats };
+
+            return {
+                currentChat: {
+                    ...state.currentChat,
+                    messageNodeMap: updatedMap,
+                },
+                messages: [...state.messages, message]
+            };
         }),
+
 
     addMessageNodeVersion: (current: IMessageNode | string | IMessage | number, message: IMessage) =>
         set((state) => {
-            if (!state.currentChat) return {};
             let currentNode: IMessageNode | undefined;
             if (typeof current === "object") {
                 if ("isRootNode" in current) {
                     currentNode = current as IMessageNode;
                 } else {
-                    currentNode = Object.values(state.currentChat.messageNodes).find(
+                    currentNode = Object.values(state.currentChat.messageNodeMap).find(
                         (n) => n.message && n.message.id === (current as IMessage).id
                     );
                 }
             } else {
-                currentNode = state.currentChat.messageNodes[current.toString()];
+                currentNode = state.currentChat.messageNodeMap[current.toString()];
                 if (!currentNode) {
-                    currentNode = Object.values(state.currentChat.messageNodes).find((n) => n.message && n.message.id === current);
+                    currentNode = Object.values(state.currentChat.messageNodeMap).find((n) => n.message && n.message.id === current);
                 }
             }
             if (!currentNode) {
-                currentNode = state.currentChat.messageNodes["root"];
+                currentNode = state.currentChat.messageNodeMap["root"];
             }
-            const parentOfCurrent = currentNode.parent || state.currentChat.messageNodes["root"];
-            const newId = message.id
-                ? String(message.id)
-                : (Object.keys(state.currentChat.messageNodes).length + 1).toString();
+            const parentOfCurrent = currentNode.parent || state.currentChat.messageNodeMap["root"];
+            const newId = message.id ? String(message.id) : (Object.keys(state.currentChat.messageNodeMap).length + 1).toString();
             const newNode: IMessageNode = {
                 id: newId,
                 parent: parentOfCurrent,
@@ -567,9 +585,14 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 parentOfCurrent.children = updatedChildren;
                 parentOfCurrent.currentChildrenVersion = updatedChildren.length - 1;
             }
-            const updatedNodes = { ...state.currentChat.messageNodes, [newId]: newNode };
-            const updatedChat = { ...state.currentChat, messageNodes: updatedNodes };
-            return { currentChat: updatedChat };
+            const updatedMap = { ...state.currentChat.messageNodeMap, [newId]: newNode };
+            return {
+                currentChat: {
+                    ...state.currentChat,
+                    messageNodeMap: updatedMap,
+                },
+                messages: [...state.messages, message]
+            };
         }),
 
     changeCurrentNodeVersion: (
@@ -577,30 +600,29 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         direction: "prev" | "next"
     ) =>
         set((state) => {
-            if (!state.currentChat) return {};
             let targetNode: IMessageNode | undefined;
             if (typeof node === "object") {
                 if ("isRootNode" in node) {
                     targetNode = node as IMessageNode;
                 } else {
                     const msg = node as IMessage;
-                    targetNode = Object.values(state.currentChat.messageNodes).find(
+                    targetNode = Object.values(state.currentChat.messageNodeMap).find(
                         (n) => n.message && n.message.id === msg.id
                     );
                 }
             } else {
-                targetNode = state.currentChat.messageNodes[node.toString()];
+                targetNode = state.currentChat.messageNodeMap[node.toString()];
                 if (!targetNode) {
-                    targetNode = Object.values(state.currentChat.messageNodes).find(
+                    targetNode = Object.values(state.currentChat.messageNodeMap).find(
                         (n) => n.message && n.message.id === node
                     );
                 }
             }
-            if (!targetNode) return {};
+            if (!targetNode) return state;
             const parent = targetNode.parent;
-            if (!parent || !parent.children || parent.children.length === 0) return {};
+            if (!parent || !parent.children || parent.children.length === 0) return state;
             const currentIndex = parent.children.findIndex((n) => n.id === targetNode!.id);
-            if (currentIndex === -1) return {};
+            if (currentIndex === -1) return state;
             let newIndex = parent.currentChildrenVersion ?? currentIndex;
             if (direction === "prev") {
                 newIndex = Math.max(0, newIndex - 1);
@@ -608,15 +630,17 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 newIndex = Math.min(parent.children.length - 1, newIndex + 1);
             }
             parent.currentChildrenVersion = newIndex;
-            const updatedChat = { ...state.currentChat };
-            return { currentChat: updatedChat };
+            return {  currentChat: {
+                    ...state.currentChat,
+                    messageNodeMap: { ...state.currentChat.messageNodeMap }
+                } };
         }),
+
 
     getMessageQueueFromNode: () => {
         const state = get();
-        if (!state.currentChat) return [];
         const result: IMessage[] = [];
-        let currentNode = state.currentChat.messageNodes["root"];
+        let currentNode = state.currentChat.messageNodeMap["root"];
         while (currentNode && currentNode.children && currentNode.children.length > 0) {
             const versionIndex = currentNode.currentChildrenVersion ?? 0;
             if (versionIndex < 0 || versionIndex >= currentNode.children.length) break;
@@ -629,28 +653,25 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         return result;
     },
 
-    getFavouritesMessages: () => {
-        const messages = get().getMessageQueueFromNode();
-        return messages.filter(message => message.isLiked === true);
-    },
+
+    getFavouritesMessages: () => get().getMessageQueueFromNode().filter(m => m.isLiked),
 
     getCurrentMessageNodeVersionInfo: (node: IMessageNode | string | IMessage | number) => {
         const state = get();
-        if (!state.currentChat) return null;
         let targetNode: IMessageNode | undefined;
         if (typeof node === "object") {
             if ("isRootNode" in node) {
                 targetNode = node as IMessageNode;
             } else {
                 const msg = node as IMessage;
-                targetNode = Object.values(state.currentChat.messageNodes).find(
+                targetNode = Object.values(state.currentChat.messageNodeMap).find(
                     (n) => n.message && n.message.id === msg.id
                 );
             }
         } else {
-            targetNode = state.currentChat.messageNodes[node.toString()];
+            targetNode = state.currentChat.messageNodeMap[node.toString()];
             if (!targetNode) {
-                targetNode = Object.values(state.currentChat.messageNodes).find(
+                targetNode = Object.values(state.currentChat.messageNodeMap).find(
                     (n) => n.message && n.message.id === node
                 );
             }
@@ -659,52 +680,56 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         const parent = targetNode.parent;
         const childrenCount = parent.children ? parent.children.length : 0;
         const currentVersion = parent.currentChildrenVersion ?? 0;
-        return { totalVersions: childrenCount, currentVersion: currentVersion };
+        return {
+            totalVersions: childrenCount,
+            currentVersion: currentVersion,
+        };
     },
 
     getLastCurrentVersionMessageNode: () => {
         const state = get();
-        if (!state.currentChat) {
-            throw new Error("No current chat available");
-        }
-        let currentNode = state.currentChat.messageNodes["root"];
+        let currentNode = state.currentChat.messageNodeMap["root"];
         while (currentNode && currentNode.children && currentNode.children.length > 0) {
             const index = currentNode.currentChildrenVersion ?? 0;
             const nextNode = currentNode.children[index];
             if (!nextNode) break;
             currentNode = nextNode;
         }
-
-        return currentNode!;
+        return currentNode;
     },
 
     changeMessage: (oldMessage: IMessage, newMessage: IMessage): IMessage | null => {
         let result: IMessage | null = null;
-        set((state) => {
-            if (!state.currentChat) return {};
+        set(state => {
             let targetKey: string | undefined;
-            for (const key in state.currentChat.messageNodes) {
-                if (state.currentChat.messageNodes[key]?.message?.id === oldMessage.id) {
+            for (const key in state.currentChat.messageNodeMap) {
+                if (state.currentChat.messageNodeMap[key]?.message?.id === oldMessage.id) {
                     targetKey = key;
                     break;
                 }
             }
-            if (!targetKey || !state.currentChat.messageNodes[targetKey]) {
+            if (!targetKey || !state.currentChat.messageNodeMap[targetKey]) {
                 result = null;
                 return {};
             }
             const updatedNode = {
-                ...state.currentChat.messageNodes[targetKey]!,
+                ...state.currentChat.messageNodeMap[targetKey]!,
                 message: newMessage,
             };
-            const updatedNodes = {
-                ...state.currentChat.messageNodes,
+            const updatedMessageNodeMap = {
+                ...state.currentChat.messageNodeMap,
                 [targetKey]: updatedNode,
             };
+            const updatedMessages = state.messages.map(msg =>
+                msg.id === oldMessage.id ? newMessage : msg
+            );
             result = newMessage;
-            const updatedChat = { ...state.currentChat, messageNodes: updatedNodes };
             return {
-                currentChat: updatedChat,
+                currentChat: {
+                    ...state.currentChat,
+                    messageNodeMap: updatedMessageNodeMap,
+                    messages: [...state.messages, updatedMessages]
+                },
             };
         });
         return result;

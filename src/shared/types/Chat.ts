@@ -5,7 +5,7 @@ import { IBranch } from "./Branch";
 export interface IChat {
     id: string;
     name: string;
-    messageNodes: Record<string, IMessageNode>;
+    messageNodeMap: Record<string, IMessageNode>;
     tags: ChatTagsEnum[];
     notificationsCount: number;
     branches: IBranch[];
