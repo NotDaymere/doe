@@ -24,7 +24,11 @@ const TAG_META: Record<ChatTagsEnum, { defaultName: string; color: string }> = {
 
 export const SideBarMenu = () => {
     const { isSideBarOpen } = useAppStore();
-    const { chats, currentChat, customTagNames } = useChatStore();
+    const { chats,
+        currentChat,
+        customTagNames ,
+        getAllFavouritesMessages
+    } = useChatStore();
     const [isSideBarMenuOpen, setIsSideBarMenuOpen] = React.useState(true);
     const [isCorporaOpen, setIsCorporaOpen] = React.useState(false);
     const [isIndividualChatOpen, setIsIndividualChatOpen] = React.useState(false);
@@ -60,6 +64,32 @@ export const SideBarMenu = () => {
     const handleToggleChatBranches = (chatId: string) => {
         setExpandedChatId((prev) => (prev === chatId ? null : chatId));
     };
+
+    function extractPreviewText(html: string): string {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        let result = '';
+
+        doc.body.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                result += node.textContent;
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                const el = node as HTMLElement;
+
+                if (el.tagName === 'IMG') {
+                    const img = el as HTMLImageElement;
+                    result += img.alt || img.src;
+                } else if (el.tagName === 'A') {
+                    const anchor = el as HTMLAnchorElement;
+                    result += anchor.textContent?.trim() || anchor.href;
+                } else {
+                    result += el.textContent;
+                }
+            }
+        });
+
+        result = result.trim();
+        return result.length > 30 ? result.slice(0, 30) + '…' : result;
+    }
 
     return (
         <div className={isSideBarOpen ? css.sidebar_open_menu : css.sidebar_menu}>
@@ -190,7 +220,17 @@ export const SideBarMenu = () => {
                             </div>
                         )}
                     </div>
-
+                    {isFavouritesOpen && (
+                        <div className={css.favourites_list}>
+                            {getAllFavouritesMessages().flatMap(group =>
+                                group.messages.map(msg => (
+                                    <div key={msg.id} className={css.favourite_item}>
+                                        {extractPreviewText(msg.content)}
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    )}
                     <div
                         className={css.sidebar_menu_action_container}
                         data-active={isTagsOpen}

@@ -109,8 +109,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         savedPlaygrounds,
         deleteSavedPlaygrounds,
         updateSavedPlaygrounds,
-        changeMessage,
-        playgroundFullscreen
+        setMessageLike
     } = useChatStore();
     const {
         editor,
@@ -462,13 +461,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     };
 
     const handleLike = () => {
-        const newMessage: IMessage = {
-            ...data,
-            isLiked: !isLiked,
-        };
-
-        const changeResult = changeMessage(data, newMessage);
-        setIsLiked(changeResult?.isLiked || false)
+        setMessageLike(data.id, !isLiked);
+        setIsLiked(prev => !prev);
     };
 
 

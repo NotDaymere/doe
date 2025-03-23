@@ -168,6 +168,8 @@ export interface ChatState {
     getCurrentMessageNodeVersionInfo: (
         node: IMessageNode | string | IMessage | number
     ) => { totalVersions: number; currentVersion: number } | null;
+    setMessageLike: (messageOrId: number | IMessage, liked: boolean) => void;
+    getAllFavouritesMessages: () => { chatId: string; chatName: string; messages: IMessage[] }[];
 
     isCreateBranchChatMode: boolean;
     setIsCreateBranchChatMode: (isCreateBranchChatMode: boolean) => void;
@@ -657,8 +659,43 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         return result;
     },
 
+    setMessageLike: (messageOrId: number | IMessage, liked: boolean) =>
+        set((state) => {
+            const id = typeof messageOrId === "number" ? messageOrId : messageOrId.id;
 
-    getFavouritesMessages: () => get().getMessageQueueFromNode().filter(m => m.isLiked),
+            const updatedMessages = state.messages.map(msg =>
+                msg.id === id ? { ...msg, isLiked: liked } : msg
+            );
+
+            const updatedMessageNodeMap = { ...state.currentChat.messageNodeMap };
+            Object.values(updatedMessageNodeMap).forEach(node => {
+                if (node.message?.id === id) {
+                    node.message = { ...node.message, isLiked: liked };
+                }
+            });
+
+            return {
+                messages: updatedMessages,
+                currentChat: {
+                    ...state.currentChat,
+                    messageNodeMap: updatedMessageNodeMap,
+                },
+            };
+        }),
+
+    getAllFavouritesMessages: () => {
+        const state = get();
+        return state.chats
+            .map(chat => {
+                const likedMessages = Object.values(chat.messageNodeMap)
+                    .map(node => node.message)
+                    .filter((msg): msg is IMessage => msg !== undefined && msg.isLiked === true);
+
+                return { chatId: chat.id, chatName: chat.name, messages: likedMessages };
+            })
+            .filter(item => item.messages.length > 0);
+    },
+    getFavouritesMessages: () => get().getMessageQueueFromNode().filter(m => m.isLiked === true),
 
     getCurrentMessageNodeVersionInfo: (node: IMessageNode | string | IMessage | number) => {
         const state = get();
