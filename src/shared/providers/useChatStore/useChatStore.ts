@@ -114,7 +114,7 @@ const defaultTagNames = new Map<ChatTagsEnum, string>([
 let currentReplyTimeoutId: number | null = null;
 let currentReplyReject: ((reason?: any) => void) | null = null;
 
-interface ChatState {
+export interface ChatState {
     editor: Editor | null;
     isTyping: boolean;
 
@@ -165,7 +165,7 @@ interface ChatState {
     getLastCurrentVersionMessageNode: () => IMessageNode;
     getCurrentMessageNodeVersionInfo: (
         node: IMessageNode | string | IMessage | number
-    ) => { totalVersions: number, currentVersion: number } | null;
+    ) => { totalVersions: number; currentVersion: number } | null;
 
     isCreateBranchChatMode: boolean;
     setIsCreateBranchChatMode: (isCreateBranchChatMode: boolean) => void;
@@ -186,9 +186,8 @@ interface ChatState {
     currentBranchDialog: number | null;
     setCurrentBranchDialog: (dialogIndex: number | null) => void;
 
-    addTagToChat: (chatId: string, tag: ChatTagsEnum) => void;
-    removeTagFromChat: (chatId: string, tag: ChatTagsEnum) => void;
     renameTag: (tag: ChatTagsEnum, newName: string) => void;
+    setChatTags: (chatId: string, newTags: ChatTagsEnum[]) => void;
 
     initChat: (messages: IMessage[]) => void;
 }
@@ -473,46 +472,17 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         });
     },
 
-    addTagToChat: (chatId: string, tag: ChatTagsEnum) => {
+    setChatTags: (chatId: string, newTags: ChatTagsEnum[]) =>
         set((state) => {
-            const updatedChats = state.chats.map(chat => {
-                if (chat.id === chatId) {
-                    if (!chat.tags.includes(tag)) {
-                        return { ...chat, tags: [...chat.tags, tag] };
-                    }
-                }
-                return chat;
-            });
+            const updatedChats = state.chats.map((chat) =>
+                chat.id === chatId ? { ...chat, tags: newTags } : chat
+            );
             let updatedCurrentChat = state.currentChat;
             if (state.currentChat && state.currentChat.id === chatId) {
-                if (!state.currentChat.tags.includes(tag)) {
-                    updatedCurrentChat = { ...state.currentChat, tags: [...state.currentChat.tags, tag] };
-                }
+                updatedCurrentChat = { ...state.currentChat, tags: newTags };
             }
-            return {
-                chats: updatedChats,
-                currentChat: updatedCurrentChat,
-            };
-        });
-    },
-    removeTagFromChat: (chatId: string, tag: ChatTagsEnum) => {
-        set((state) => {
-            const updatedChats = state.chats.map(chat => {
-                if (chat.id === chatId) {
-                    return { ...chat, tags: chat.tags.filter(t => t !== tag) };
-                }
-                return chat;
-            });
-            let updatedCurrentChat = state.currentChat;
-            if (state.currentChat && state.currentChat.id === chatId) {
-                updatedCurrentChat = { ...state.currentChat, tags: state.currentChat.tags.filter(t => t !== tag) };
-            }
-            return {
-                chats: updatedChats,
-                currentChat: updatedCurrentChat,
-            };
-        });
-    },
+            return { chats: updatedChats, currentChat: updatedCurrentChat };
+        }),
     renameTag: (tag: ChatTagsEnum, newName: string) => {
         set((state) => {
             const updatedTagNames = new Map(state.customTagNames);

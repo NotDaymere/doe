@@ -7,26 +7,30 @@ import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
 import TagsIcon from "../../../../shared/icons/TagsIcon";
 import SearchIcon from "../../../../shared/icons/SearchIcon";
 import CloseIcon from "../../../../shared/icons/CloseIcon";
+import { ChatTagsEnum } from "../../../../shared/enums/ChatTagsEnum";
 
 
-const getTagColor = (chat: any) => {
-
-    if (chat.tags?.includes("Green")) return "green";
-    if (chat.tags?.includes("Red")) return "red";
-    return "#888";
+const TAG_META: Record<ChatTagsEnum, { defaultName: string; color: string }> = {
+    [ChatTagsEnum.Green]: { defaultName: "Green", color: "#4CAF50" },
+    [ChatTagsEnum.Orange]: { defaultName: "Orange", color: "#FF9800" },
+    [ChatTagsEnum.Purple]: { defaultName: "Purple", color: "#9C27B0" },
+    [ChatTagsEnum.Yellow]: { defaultName: "Yellow", color: "#FFEB3B" },
+    [ChatTagsEnum.Red]: { defaultName: "Red", color: "#F44336" },
+    [ChatTagsEnum.Blue]: { defaultName: "Blue", color: "#2196F3" },
+    [ChatTagsEnum.Black]: { defaultName: "Black", color: "#212121" },
+    [ChatTagsEnum.Beige]: { defaultName: "Beige", color: "#F5F5DC" },
+    [ChatTagsEnum.Gray]: { defaultName: "Gray", color: "#9E9E9E" },
 };
 
 export const SideBarMenu = () => {
     const { isSideBarOpen } = useAppStore();
-    const { chats } = useChatStore();
-
+    const { chats, customTagNames } = useChatStore();
     const [isSideBarMenuOpen, setIsSideBarMenuOpen] = React.useState(true);
     const [isCorporaOpen, setIsCorporaOpen] = React.useState(false);
     const [isIndividualChatOpen, setIsIndividualChatOpen] = React.useState(false);
     const [isFavouritesOpen, setIsFavouritesOpen] = React.useState(false);
     const [isTagsOpen, setIsTagsOpen] = React.useState(false);
     const [isSearchInputOpen, setIsSearchInputOpen] = React.useState(false);
-
     const [expandedChatId, setExpandedChatId] = React.useState<string | null>(null);
 
     const handleOpenSideBarMenu = () => {
@@ -92,7 +96,10 @@ export const SideBarMenu = () => {
                         </div>
                         <div className={css.sidebar_menu_action_btn_tooltip}>
                             <div>Individual Chats</div>
-                            <div className={css.show_more_btn} onClick={handleOpenIndividualChat}>
+                            <div
+                                className={css.show_more_btn}
+                                onClick={handleOpenIndividualChat}
+                            >
                                 {!isIndividualChatOpen ? "+" : "-"}
                             </div>
                         </div>
@@ -100,24 +107,32 @@ export const SideBarMenu = () => {
 
                     {isIndividualChatOpen && (
                         <div className={css.chats_container}>
-                            {chats.map((chat) => {
+                            {chats.map(chat => {
                                 const isOpen = expandedChatId === chat.id;
                                 return (
                                     <div key={chat.id}>
-                                        <div
-                                            className={css.chat_item}
-                                            onClick={() => handleToggleChatBranches(chat.id)}
-                                        >
-                                            <div
-                                                className={css.chat_tag}
-                                                style={{ backgroundColor: getTagColor(chat) }}
-                                            />
+                                        <div className={css.chat_item} onClick={() => setExpandedChatId(prev => prev === chat.id ? null : chat.id)}>
+                                            <div className={css.tags_wrapper}>
+                                                {chat.tags?.map(tag => {
+                                                    const { color, defaultName } = TAG_META[tag];
+                                                    return (
+                                                        <div
+                                                            key={tag}
+                                                            className={css.chat_tag}
+                                                            style={{ backgroundColor: color }}
+                                                            title={customTagNames.get(tag) ?? defaultName}
+                                                        />
+                                                    );
+                                                }) ?? (
+                                                    <div className={css.chat_tag} style={{ backgroundColor: "#888" }} />
+                                                )}
+                                            </div>
                                             <div className={css.chat_name}>{chat.name}</div>
                                         </div>
 
-                                        {isOpen && chat.branches && (
+                                        {isOpen && chat.branches?.length > 0 && (
                                             <div className={css.branches_list}>
-                                                {chat.branches.map((branch: any) => (
+                                                {chat.branches.map(branch => (
                                                     <div key={branch.id} className={css.branch_item}>
                                                         {branch.name}
                                                     </div>
