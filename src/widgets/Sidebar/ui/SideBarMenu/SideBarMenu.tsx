@@ -27,8 +27,12 @@ export const SideBarMenu = () => {
     const { chats,
         currentChat,
         customTagNames ,
-        getAllFavouritesMessages
+        getAllFavouritesMessages,
+        getChatsByTags
     } = useChatStore();
+
+    const chatsByTags = getChatsByTags();
+
     const [isSideBarMenuOpen, setIsSideBarMenuOpen] = React.useState(true);
     const [isCorporaOpen, setIsCorporaOpen] = React.useState(false);
     const [isIndividualChatOpen, setIsIndividualChatOpen] = React.useState(false);
@@ -36,6 +40,7 @@ export const SideBarMenu = () => {
     const [isTagsOpen, setIsTagsOpen] = React.useState(false);
     const [isSearchInputOpen, setIsSearchInputOpen] = React.useState(false);
     const [expandedChatId, setExpandedChatId] = React.useState<string | null>(null);
+    const [selectedTag, setSelectedTag] = React.useState<ChatTagsEnum | null>(null);
 
     const handleOpenSideBarMenu = () => {
         setIsSideBarMenuOpen(!isSideBarMenuOpen);
@@ -231,19 +236,70 @@ export const SideBarMenu = () => {
                             )}
                         </div>
                     )}
-                    <div
-                        className={css.sidebar_menu_action_container}
-                        data-active={isTagsOpen}
-                    >
-                        <div className={css.sidebar_menu_action_btn}>
-                            <TagsIcon fill="currentColor" />
-                        </div>
-                        <div className={css.sidebar_menu_action_btn_tooltip}>
-                            <div>Tags</div>
-                            <div className={css.show_more_btn} onClick={handleOpenTags}>
-                                {!isTagsOpen ? "+" : "-"}
+                    <div className={css.menu_actions_section_container}>
+
+                        <div className={css.sidebar_menu_action_container} data-active={isTagsOpen}>
+                            <div className={css.sidebar_menu_action_btn}>
+                                <TagsIcon fill="currentColor" />
+                            </div>
+                            <div className={css.sidebar_menu_action_btn_tooltip}>
+                                <div>Tags</div>
+                                <div className={css.show_more_btn} onClick={() => {
+                                    setIsTagsOpen(prev => !prev);
+                                    setSelectedTag(null);
+                                }}>
+                                    {!isTagsOpen ? "+" : "-"}
+                                </div>
                             </div>
                         </div>
+
+                        {isTagsOpen && (
+                            <div className={css.tags_container}>
+
+                                {Object.entries(chatsByTags)
+                                    .filter(([tag, chats]) => tag !== "untagged" && chats.length > 0)
+                                    .map(([tag, chats]) => (
+                                        <div
+                                            key={tag}
+                                            className={css.tag_item}
+                                            onClick={() => setSelectedTag(tag as ChatTagsEnum)}
+                                        >
+                                            {(customTagNames.get(tag as ChatTagsEnum) ?? TAG_META[tag as ChatTagsEnum].defaultName)}
+                                            &nbsp;({chats.length})
+                                        </div>
+                                    ))
+                                }
+
+                                {selectedTag && (
+                                    <div className={css.tag_chats_list}>
+                                        {chatsByTags[selectedTag].map(chat => {
+                                            const isOpen = expandedChatId === chat.id;
+                                            const branches = chat.id === currentChat.id
+                                                ? currentChat.branches
+                                                : chat.branches ?? [];
+
+                                            return (
+                                                <div key={chat.id}>
+                                                    <div className={css.chat_item} onClick={() => handleToggleChatBranches(chat.id)}>
+                                                        <div className={css.chat_name}>{chat.name}</div>
+                                                    </div>
+
+                                                    {isOpen && branches.length > 0 && (
+                                                        <div className={css.branches_list}>
+                                                            {branches.map(branch => (
+                                                                <div key={branch.id} className={css.branch_item}>
+                                                                    {branch.name}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

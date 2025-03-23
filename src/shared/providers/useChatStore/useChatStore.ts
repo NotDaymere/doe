@@ -192,6 +192,7 @@ export interface ChatState {
 
     renameTag: (tag: ChatTagsEnum, newName: string) => void;
     setChatTags: (chatId: string, newTags: ChatTagsEnum[]) => void;
+    getChatsByTags: () => Record<string, IChat[]>;
 
     initChat: (messages: IMessage[]) => void;
 }
@@ -773,6 +774,25 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 },
             };
         });
+        return result;
+    },
+
+    getChatsByTags: (): Record<string, IChat[]> => {
+        const chats = get().chats;
+        const result: Record<string, IChat[]> = { untagged: [] };
+
+        chats.forEach(chat => {
+            if (!chat.tags || chat.tags.length === 0) {
+                result.untagged.push(chat);
+            } else {
+                chat.tags.forEach(tag => {
+                    const key = String(tag);
+                    if (!result[key]) result[key] = [];
+                    result[key].push(chat);
+                });
+            }
+        });
+
         return result;
     },
 }));
