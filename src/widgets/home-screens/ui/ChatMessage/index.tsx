@@ -58,6 +58,7 @@ import { IPlayground } from "../../../../shared/types/Playground";
 import SeeAllStepsIcon from "../../../../shared/icons/SeeAllSteps.icon";
 import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
 import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
+import GeneralLogo from "../GeneralLogo/GeneralLogo";
 
 interface Props {
     data: IMessage;
@@ -607,7 +608,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     }
                     <div className={css.sub_bot_message_info_container}>
                         <div className={css.logoWrapper}>
-
+                                <GeneralLogo/>
                                 {isCurrentBranchOpen && (
                                     <div
                                     className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>

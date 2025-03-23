@@ -30,6 +30,7 @@ import GeneralLogo from "../GeneralLogo/GeneralLogo";
 import AllBranches from "./assets/AllBranches/AllBranches";
 import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
 import { CSSTransition } from "react-transition-group";
+import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
 
 interface Props {
     editMsgMode: {
@@ -187,32 +188,16 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                                     : !isSideBarOpen
                                         ? css.logoWrapperPlaygroundOpen
                                         : css.logoWrapperPlaygroundAndSideBarOpen}>
-                        <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
-                            <GeneralLogo />
+                        <div className={css.logoPopup}>
+                            {!playgroundFullscreen && (
+                                <>
+                                    <AllPlaygrounds />
+                                    <AllBranches />
+                                </>
+                            )}
                         </div>
-                        <CSSTransition
-                            in={isShowLogoPopup}
-                            timeout={300}
-                            classNames={{
-                                enter: css.logoPopupEnter,
-                                enterActive: css.logoPopupEnterActive,
-                                exit: css.logoPopupExit,
-                                exitActive: css.logoPopupExitActive,
-                            }}
-                            unmountOnExit
-                        >
-                            <div className={css.logoPopup}>
-                                {!playgroundFullscreen && (
-                                    <>
-                                        <AllBranches />
-                                        <AllPlaygrounds />
-                                    </>
-                                )}
-                            </div>
-                        </CSSTransition>
                     </div>
                 )}
-
 
                 {!talkModeActive && !playgroundFullscreen && !isCurrentBranchOpen &&
                         <Reflections />
