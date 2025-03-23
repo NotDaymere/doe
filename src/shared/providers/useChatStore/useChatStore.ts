@@ -366,12 +366,16 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             dialogsMessages,
             mainMessageId,
         };
+        const updatedBranches = [...state.currentChat.branches, newBranch];
+
         set({
             currentChat: {
                 ...state.currentChat,
-                branches: [...state.currentChat.branches, newBranch],
-            }
+                branches: updatedBranches,
+            },
+            savedBranches: updatedBranches,
         });
+
         return newBranch;
     },
 
@@ -415,6 +419,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                     ...state.currentChat,
                     branches: updatedBranches,
                 },
+                savedBranches: state.currentChat.branches,
                 currentBranch: isCurrentBranchDeleted ? null : state.currentBranch,
                 currentBranchDialog: isCurrentBranchDeleted ? null : state.currentBranchDialog,
             };
@@ -510,7 +515,6 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) =>
         set((state) => {
 
-            console.log("parent", parent);
             let actualParent: IMessageNode | undefined;
             if (typeof parent === "string") {
                 actualParent = state.currentChat.messageNodeMap[parent];

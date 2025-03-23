@@ -255,8 +255,6 @@ export const ChatPanel: React.FC = () => {
             setIsCurrentBranchOpen(true);
         } else if (isCurrentBranchOpen && currentBranch) {
             const reply = await doMessageReply();
-            const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
-            addMessageNode(lastNodeForUserMessage, userMessage);
             const branchDialog = {
                 userRequest: userMessage,
                 botMessages: reply,
