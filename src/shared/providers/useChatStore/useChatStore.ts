@@ -193,7 +193,7 @@ interface ChatState {
 }
 
 export const useChatStore = create<ChatState>()((set, get) => ({
-    // Инициализация сообщений и messageNodeMap на основе defaultChat
+
     initChat: (messages: IMessage[]) =>
         set(() => ({
             messages,
@@ -204,7 +204,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
     isTyping: false,
     editor: null,
-    // Загружаем сообщения сразу из defaultChat
+
     messages: defaultChat.messages,
 
     playground: {
@@ -219,7 +219,6 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     playgroundFullscreen: false,
     questionCodeMessage: null,
 
-    // Активный чат сразу установлен как defaultChat
     currentChat: defaultChat,
     chats: [defaultChat],
 
