@@ -608,8 +608,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     }
                     <div className={css.sub_bot_message_info_container}>
                         <div className={css.logoWrapper}>
-                                <GeneralLogo/>
-                                {isCurrentBranchOpen && (
+
+                                {isCurrentBranchOpen ? (
                                     <div
                                     className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
                                         <div
@@ -617,7 +617,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                         <MessageLogoIcon fillPath={"currentColor"} />
                                         </div>
                                     </div>
-                                )}
+                                ) : <GeneralLogo/>}
                         </div>
                         <MessageNodeVersionSelector message={data} />
                     </div>

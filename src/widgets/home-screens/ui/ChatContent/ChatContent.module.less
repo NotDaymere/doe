@@ -87,33 +87,60 @@
 }
 
 .logoPopup {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  width: 55px;
+  height: 105px;
+}
+
+.allBranchesContainer {
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  transition: transform 0.3s ease, top 0.3s ease;
 }
 
-.logoPopupEnter {
-  opacity: 0;
-  transform: translateY(-20px);
+.allPlaygroundsWrapper {
+  position: absolute;
+  top: 8px;
+  left: 5px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  transition: transform 0.3s ease, top 0.3s ease;
 }
 
-.logoPopupEnterActive {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 300ms, transform 300ms;
+.allBranchesContainer {
+  transform: rotate(-20deg);
+  z-index: 2;
 }
 
-.logoPopupExit {
-  opacity: 1;
-  transform: translateY(0);
+.allPlaygroundsWrapper {
+  transform: rotate(20deg);
+  z-index: 10;
 }
 
-.logoPopupExitActive {
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: opacity 300ms, transform 300ms;
+.logoPopup:hover .allBranchesContainer {
+  transform: rotate(0deg);
+}
+
+.logoPopup:hover .allPlaygroundsWrapper {
+  transform: rotate(0deg);
+  top: 58px;
+  left: 0;
+}
+
+
+.logoPopup:hover .allPlaygroundsWrapper {
+  top: 58px;
+  transform: rotate(0deg);
 }
 
 

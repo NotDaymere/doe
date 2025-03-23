@@ -188,19 +188,21 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                                     : !isSideBarOpen
                                         ? css.logoWrapperPlaygroundOpen
                                         : css.logoWrapperPlaygroundAndSideBarOpen}>
-                        <div className={css.logoPopup}>
                             {!playgroundFullscreen && (
-                                <>
-                                    <AllPlaygrounds />
-                                    <AllBranches />
-                                </>
+                                <div className={css.logoPopup}>
+                                    <div className={css.allPlaygroundsWrapper}>
+                                        <AllPlaygrounds />
+                                    </div>
+                                    <div className={css.allBranchesContainer}>
+                                        <AllBranches />
+                                    </div>
+                                </div>
                             )}
-                        </div>
                     </div>
                 )}
 
                 {!talkModeActive && !playgroundFullscreen && !isCurrentBranchOpen &&
-                        <Reflections />
+                    <Reflections />
                 }
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
 
