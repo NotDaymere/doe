@@ -12,7 +12,7 @@ import { CSSTransition } from "react-transition-group";
 import ArrowUpReflectionsIcon from "../../../../../../shared/icons/ArrowUpReflectionsIcon";
 import CloseSearchInputIcon from "../../../../../../shared/icons/CloseSearchInputIcon";
 import LatestMessageInfo from "./LatestMessageInfo";
-import { useChatStore } from "../../../../../../shared/providers";
+import { useAppStore, useChatStore } from "../../../../../../shared/providers";
 import {clsx} from "clsx";
 
 const ViewModes = {
@@ -22,7 +22,7 @@ const ViewModes = {
 };
 
 export default function Reflections() {
-    const {isSideBarOpen} = useChatStore();
+    const {isSideBarOpen} = useAppStore();
     const [progress, setProgress] = useState(0);
     const [startProgress, setStartProgress] = useState(0);
     const [isDragging, setIsDragging] = useState(false);

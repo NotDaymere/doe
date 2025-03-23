@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { Table, TableProps } from "antd";
-import { useChatStore } from "../../../../../../shared/providers";
+import { useAppStore, useChatStore } from "../../../../../../shared/providers";
 import { IPlayground } from "../../../../../../shared/types/Playground";
 import "./MessageTable.less";
 import DownloadTableIcon from "../../../../../../shared/icons/DownloadTable.icon";
@@ -30,17 +30,18 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
     const [selectedRow, setSelectedRow] = useState<number | null>(null);
     const [selectedCell, setSelectedCell] = useState<string | null>(null);
     const {
-        editor,
         setPlayground,
         getSavedPlaygroundLastByType,
         getOpenSavedPlaygrounds,
         updateSavedPlaygrounds,
         setSavedPlaygrounds,
         getOpenSavedPlaygroundsByType,
+    } = useChatStore();
+    const {
         isTablePromptVisible,
         setIsTablePromptVisible,
         setSelectedArea,
-    } = useChatStore();
+    } = useAppStore();
 
     React.useEffect(() => {
         if (!isTablePromptVisible) {

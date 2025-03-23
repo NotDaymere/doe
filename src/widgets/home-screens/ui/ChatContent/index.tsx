@@ -59,7 +59,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
     const [isShowLogoPopup, setIsShowLogoPopup] = React.useState(false);
-    const {isSideBarOpen} = useChatStore();
+    const {isSideBarOpen} = useAppStore();
 
     const editor = useEditor({
         extensions: [

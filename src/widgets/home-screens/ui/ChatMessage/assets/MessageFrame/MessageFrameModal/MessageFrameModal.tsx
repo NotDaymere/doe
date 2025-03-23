@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import ReactDOM from 'react-dom';
 import NotionLogoIcon from "../../../../../../../shared/icons/NotionLogo.icon";
 import "./MessageFrameModal.less"
-import { useChatStore } from "../../../../../../../shared/providers";
+import { useAppStore, useChatStore } from "../../../../../../../shared/providers";
 import CollapseWidgetIcon from "../../../../../../../shared/icons/CollapseWidget.icon";
 
 interface MessageFrameModalProps {
@@ -17,7 +17,7 @@ const MessageFrameModal: FC<MessageFrameModalProps> = ({
                                                            iframeUrl,
 
                                                        }) => {
-    const { isMaximized, setIsMaximized } = useChatStore();
+    const { isMaximized, setIsMaximized } = useAppStore();
 
     const handleCloseModal = () => {
         setIsMaximized(!isMaximized);

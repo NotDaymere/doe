@@ -7,7 +7,7 @@ import CallVoiceIcon from "src/shared/icons/CallVoice.icon";
 import MicrophoneIcon from "src/shared/icons/Microphone.icon";
 import ReplyIcon from "src/shared/icons/Reply.icon";
 import ScreenShareIcon from "src/shared/icons/ScreenShare.icon";
-import { useChatStore } from "src/shared/providers";
+import { useAppStore, useChatStore } from "src/shared/providers";
 import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
 import { FileListForUpload } from "src/shared/components/FileList/FileListForUpload";
 import css from "./ChatPanel.module.less";
@@ -43,8 +43,7 @@ export const ChatPanel: React.FC = () => {
         getLastCurrentVersionMessageNode,
         addMessageNode,
         setIsCurrentBranchOpen,
-        isHyperlinkInputOpen,
-        setIsHyperlinkInputOpen,
+
         getMessageQueueFromNode
     } = useChatStore();
 
@@ -52,8 +51,11 @@ export const ChatPanel: React.FC = () => {
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore();
     const [loadingFile, setLoadingFile] = React.useState<string | undefined>(undefined);
 
-    const { isTablePromptVisible, setIsTablePromptVisible } = useChatStore();
-    const { selectedArea } = useChatStore();
+    const { isTablePromptVisible, setIsTablePromptVisible } = useAppStore();
+    const { isHyperlinkInputOpen,
+            setIsHyperlinkInputOpen,
+            selectedArea
+    } = useAppStore();
     const panelRef = React.useRef<HTMLDivElement>(null);
 
     const {

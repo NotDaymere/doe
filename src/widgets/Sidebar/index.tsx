@@ -3,7 +3,7 @@ import LightThemeIcon from "src/shared/icons/LightTheme.icon";
 import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
 import { useEditorContext } from "src/shared/components/Editor";
-import { useChatStore } from "src/shared/providers";
+import { useAppStore, useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "./ui";
 import css from "./Sidebar.module.less";
 import { Theme } from "@monaco-editor/react";
@@ -17,8 +17,8 @@ import AddProfileIcon from "../../shared/icons/AddProfileIcon";
 import {CSSTransition} from "react-transition-group";
 
 export const Sidebar: React.FC = () => {
-    const { isSideBarOpen, setIsSideBarOpen } = useChatStore();
-    const { editor } = useChatStore();
+    const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
+    const { editor } = useAppStore();
     const editorState = useEditorContext(editor);
     const { playground } = useChatStore();
     const [theme, setTheme] = React.useState<"Light" | "Dark">("Light")

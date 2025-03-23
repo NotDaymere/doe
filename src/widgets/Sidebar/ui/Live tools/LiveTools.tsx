@@ -3,11 +3,11 @@ import css from "./LiveTools.module.less";
 import TranslateIcon from "../../../../shared/icons/TranslateIcon";
 import RecordIcon from "../../../../shared/icons/RecordIcon";
 import ShareIcon from "../../../../shared/icons/ShareIcon";
-import { useChatStore } from "../../../../shared/providers";
+import { useAppStore } from "../../../../shared/providers";
 
 export const LiveTools = () => {
 
-    const { isSideBarOpen } = useChatStore();
+    const { isSideBarOpen } = useAppStore();
     const [isSideBarLiveToolsOpen, setIsSideBarLiveToolsOpen] = React.useState(true);
 
     const handleOpenSideBarLiveTools = () => {

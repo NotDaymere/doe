@@ -8,14 +8,14 @@ import CodeIcon from "../../../../shared/icons/Code.icon";
 import clsx from "clsx";
 import LinkIcon from "../../../../shared/icons/Link.icon";
 import { useEditorContext } from "src/shared/components/Editor";
-import { useChatStore } from "../../../../shared/providers";
+import { useAppStore, useChatStore } from "../../../../shared/providers";
 
 export const TextFormatting = () => {
 
-    const { isSideBarOpen } = useChatStore();
-    const { editor } = useChatStore();
+    const { isSideBarOpen } = useAppStore();
+    const { editor } = useAppStore();
     const editorState = useEditorContext(editor);
-    const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
+    const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useAppStore();
     const [isSideBarTextFormattingOpen, setIsSideBarTextFormattingOpen] = React.useState(true);
 
     const pointerDown = (event: React.PointerEvent) => {

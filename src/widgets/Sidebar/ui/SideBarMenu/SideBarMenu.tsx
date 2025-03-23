@@ -1,5 +1,5 @@
 import React from "react";
-import { useChatStore } from "../../../../shared/providers";
+import { useAppStore, useChatStore } from "../../../../shared/providers";
 import css from "./SideBarMenu.module.less"
 import CorporaIcon from "../../../../shared/icons/CorporaIcon";
 import IndividualChatsIcon from "../../../../shared/icons/IndividualChatsIcon";
@@ -9,7 +9,7 @@ import SearchIcon from "../../../../shared/icons/SearchIcon";
 import CloseIcon from "../../../../shared/icons/CloseIcon";
 
 export const SideBarMenu = () => {
-    const { isSideBarOpen } = useChatStore();
+    const { isSideBarOpen } = useAppStore();
 
     const [isSideBarMenuOpen, setIsSideBarMenuOpen] = React.useState(true);
     const [isCorporaOpen, setIsCorporaOpen] = React.useState(false);

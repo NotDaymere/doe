@@ -26,7 +26,7 @@ export const MagicMenu: React.FC<Props> = ({
     const ref = useClickOut({
         handler: () => setActiveMenu(false)
     });
-    const isUploadFileChatMode = useChatStore((state) => state.isUploadFileChatMode);
+    const isUploadFileChatMode = useAppStore((state) => state.isUploadFileChatMode);
     const {setTalkModeActive } = useAppStore();
     const toggleMenu = () => setActiveMenu(!activeMenu);
     const fileInputRef = React.useRef<HTMLInputElement>(null);

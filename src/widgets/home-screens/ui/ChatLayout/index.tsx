@@ -3,7 +3,7 @@ import { Sidebar } from "src/widgets/Sidebar";
 import { ChatContent } from "../ChatContent";
 import { ChatPanel } from "../ChatPanel";
 import css from "./ChatLayout.module.less";
-import { useChatStore } from "../../../../shared/providers";
+import { useAppStore, useChatStore } from "../../../../shared/providers";
 import { ChatProvider } from "../../lib/hooks/ChatContext";
 interface EditModeState {
     isEditMsgMode: boolean;
@@ -11,7 +11,7 @@ interface EditModeState {
 }
 export const ChatLayout: React.FC = () => {
     const { playground, playgroundFullscreen, getOpenSavedPlaygrounds } = useChatStore();
-    const {isSideBarOpen} = useChatStore();
+    const {isSideBarOpen} = useAppStore();
     const [editMsgMode, setEditMsgMode] = React.useState<EditModeState>({
         isEditMsgMode: false,
         msgId: null,

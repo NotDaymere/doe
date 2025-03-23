@@ -11,7 +11,7 @@ import clsx from "clsx";
 
 // Shared types & providers
 import { IMessage } from "src/shared/types/Message";
-import { useChatStore } from "src/shared/providers";
+import { useAppStore, useChatStore } from "src/shared/providers";
 
 // Shared components
 import { Editor } from "src/shared/components/Editor";
@@ -97,17 +97,12 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const [isLiked, setIsLiked] = useState(data.isLiked || false);
 
     const {
-        editor,
         setEditor,
         isCurrentBranchOpen,
         addMessageNodeVersion,
         addMessageNode,
         getLastCurrentVersionMessageNode,
         doMessageReply,
-        isHyperlinkInputOpen,
-        citationPlaygroundRef,
-        setCitationPlaygroundRef,
-        setIsCitationPlayground,
         setPlayground,
         setSavedPlaygrounds,
         savedPlaygrounds,
@@ -116,7 +111,13 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         changeMessage,
         playgroundFullscreen
     } = useChatStore();
-
+    const {
+        editor,
+        isHyperlinkInputOpen,
+        citationPlaygroundRef,
+        setCitationPlaygroundRef,
+        setIsCitationPlayground,
+    } = useAppStore();
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
 
