@@ -10,58 +10,7 @@ import { testTextAndCharts } from "../../../components/chat-message/mockData";
 import { useVersionHistoryStore } from "../index";
 import {TableSelectedAreaType} from "../../../widgets/home-screens/lib/enums/TableSelectedAreaTypeEnum";
 
-const initialMessages: IMessage[] = [
-    {
-        id: 1,
-        content: "<p>Create a simple project for me in any <strong>language</strong>.</p>",
-        files: [],
-        isCode: false,
-        isUser: true,
-    },
-    {
-        id: 2,
-        content: `<p>Here's a simple project idea: a Task Manager command-line application in Python. It will allow you to add, view, and delete tasks. In the structure, we'll be able to add and view all tasks, delete tasks by number, and mark tasks as completed.</p>
-                    <p><br class="ProseMirror-trailingBreak"></p>
-                    <p>We will write this code completely in Python.</p>
-                    
-                     <p>
-                      Here is a citation: 
-                      <span class="citation-container" id="citation-ref-1" data-citation-url="https://en.wikipedia.org/wiki/Number_theory">
-                        <span class="cited-text">This is a cited quote.</span>
-                        <sup class="citation">1</sup>
-                      </span> 
-                    </p>
-                    
-                    <p><br class="ProseMirror-trailingBreak"></p>
-                    <p>The Python code for the deletion function is as follows:</p>
-                    <p><br class="ProseMirror-trailingBreak"></p>
-                    <block-code>
-                    <pre><code>
-                    def delete_element(my_list, element):
-                        """Removes the first occurrence of the element from the list."""
-                        try:
-                            my_list.remove(element)
-                            return my_list
-                        except ValueError:
-                            return f"Element {element} not found in the list."
-                    
-                    # Example usage
-                    my_list = [1, 2, 3, 4, 5]
-                    element_to_delete = 3
-                    
-                    result = delete_element(my_list, element_to_delete)
-                    print(result)  # Output: [1, 2, 4, 5]
-                    </code></pre>
-                    </block-code>
-                     <p>Copy the code into a Python file, e.g., <inline-code>task_mna.py</inline-code></p>
-                     <p><br/></p>
-                       
-`,
-        files: [],
-        isCode: true,
-        isUser: false,
-    },
-];
+
 
 const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMessageNode> => {
     const messageNodeMap: Record<string, IMessageNode> = {
@@ -180,12 +129,21 @@ interface ChatState {
 
     isSideBarOpen: boolean;
     setIsSideBarOpen: (isSideBarOpen: boolean) => void;
+
+    initChat: (messages: IMessage[]) => void;
 }
 
 export const useChatStore = create<ChatState>()((set, get) => ({
+    initChat: (messages: IMessage[]) =>
+        set(() => ({
+            messages,
+            messageNodeMap: initialMessageNodeMap(messages),
+        })),
+
+
     isTyping: false,
     editor: null,
-    messages: initialMessages,
+    messages: [],
 
     playground: {
         type: null,
@@ -399,7 +357,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     isSideBarOpen: false,
     setIsSideBarOpen: (isSideBarOpen)=> set(() => ({isSideBarOpen})),
 
-    messageNodeMap: initialMessageNodeMap(initialMessages),
+    messageNodeMap: initialMessageNodeMap([]),
 
     addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) =>
         set((state) => {
