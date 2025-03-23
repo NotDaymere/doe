@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppStore, useChatStore } from "../../../../shared/providers";
 import css from "./SideBarMenu.module.less";
 import CorporaIcon from "../../../../shared/icons/CorporaIcon";
@@ -8,18 +8,22 @@ import TagsIcon from "../../../../shared/icons/TagsIcon";
 import SearchIcon from "../../../../shared/icons/SearchIcon";
 import CloseIcon from "../../../../shared/icons/CloseIcon";
 import { ChatTagsEnum } from "../../../../shared/enums/ChatTagsEnum";
+import ThreeDotsIcon from "../../../../shared/icons/ThreeDotsIcon";
+import BranchIcon from "../../../../shared/icons/Branch.icon";
+import AllBranchesMenu from "../../../home-screens/ui/ChatContent/assets/AllBranchesMenu/AllBranchesMenu";
+import { CSSTransition } from "react-transition-group";
 
 
 const TAG_META: Record<ChatTagsEnum, { defaultName: string; color: string }> = {
-    [ChatTagsEnum.Green]: { defaultName: "Green", color: "#4CAF50" },
-    [ChatTagsEnum.Orange]: { defaultName: "Orange", color: "#FF9800" },
-    [ChatTagsEnum.Purple]: { defaultName: "Purple", color: "#9C27B0" },
-    [ChatTagsEnum.Yellow]: { defaultName: "Yellow", color: "#FFEB3B" },
-    [ChatTagsEnum.Red]: { defaultName: "Red", color: "#F44336" },
-    [ChatTagsEnum.Blue]: { defaultName: "Blue", color: "#2196F3" },
-    [ChatTagsEnum.Black]: { defaultName: "Black", color: "#212121" },
-    [ChatTagsEnum.Beige]: { defaultName: "Beige", color: "#F5F5DC" },
-    [ChatTagsEnum.Gray]: { defaultName: "Gray", color: "#9E9E9E" },
+    [ChatTagsEnum.Green]: { defaultName: "Green", color: "#A9ED34" },
+    [ChatTagsEnum.Purple]: { defaultName: "Purple", color: "#BF6FFF" },
+    [ChatTagsEnum.Orange]: { defaultName: "Orange", color: "#FFA930" },
+    [ChatTagsEnum.Yellow]: { defaultName: "Yellow", color: "#FFD600" },
+    [ChatTagsEnum.Red]: { defaultName: "Red", color: "#FF5F5F" },
+    [ChatTagsEnum.Blue]: { defaultName: "Blue", color: "#28ABFB" },
+    [ChatTagsEnum.Black]: { defaultName: "Black", color: "#5B5B5B" },
+    [ChatTagsEnum.Beige]: { defaultName: "Beige", color: "#FFFBE9" },
+    [ChatTagsEnum.Gray]: { defaultName: "Gray", color: "#DDDDDD" },
 };
 
 export const SideBarMenu = () => {
@@ -38,10 +42,18 @@ export const SideBarMenu = () => {
     const [isIndividualChatOpen, setIsIndividualChatOpen] = React.useState(false);
     const [isFavouritesOpen, setIsFavouritesOpen] = React.useState(false);
     const [isTagsOpen, setIsTagsOpen] = React.useState(false);
-    const [isSearchInputOpen, setIsSearchInputOpen] = React.useState(false);
-    const [expandedChatId, setExpandedChatId] = React.useState<string | null>(null);
-    const [selectedTag, setSelectedTag] = React.useState<ChatTagsEnum | null>(null);
 
+    const [isIndividualChatsSearchInputOpen, setIsIndividualChatsSearchInputOpen] = React.useState(false);
+    const [isFavouritesSearchInputOpen, setIsFavouritesSearchInputOpen] = React.useState(false);
+
+    const [expandedChatId, setExpandedChatId] = React.useState<string | null>(null);
+    const [activeTagPanelChatId, setActiveTagPanelChatId] = useState<string | null>(null);
+    const [activeTagPanelTag, setActiveTagPanelTag] = useState<ChatTagsEnum | null>(null);
+
+    const [isBranchMenuOpen, setIsBranchMenuOpen] = React.useState(false);
+    const menuPosition = { top: 450, right: -130 };
+    const [activeOpenAllBranchesMenu, setActiveOpenAllBranchesMenu] = useState<number | null>(null);
+    const [selectedTag, setSelectedTag] = React.useState<ChatTagsEnum | null>(null);
     const handleOpenSideBarMenu = () => {
         setIsSideBarMenuOpen(!isSideBarMenuOpen);
     };
@@ -62,8 +74,12 @@ export const SideBarMenu = () => {
         setIsTagsOpen(!isTagsOpen);
     };
 
-    const handleOpenSearchInput = () => {
-        setIsSearchInputOpen(!isSearchInputOpen);
+    const handleOpenFavouritesSearchInput = () => {
+        setIsFavouritesSearchInputOpen(!isFavouritesSearchInputOpen);
+    };
+
+    const handleOpenIndividualChatsSearchInput = () => {
+        setIsIndividualChatsSearchInputOpen(!isIndividualChatsSearchInputOpen);
     };
 
     const handleToggleChatBranches = (chatId: string) => {
@@ -95,7 +111,9 @@ export const SideBarMenu = () => {
         result = result.trim();
         return result.length > 30 ? result.slice(0, 30) + '…' : result;
     }
-
+    const handleOpenBranchMenu = () => {
+        setIsBranchMenuOpen(!isBranchMenuOpen);
+    }
     return (
         <div className={isSideBarOpen ? css.sidebar_open_menu : css.sidebar_menu}>
             <div className={css.menu_actions_section_name}>
@@ -123,25 +141,54 @@ export const SideBarMenu = () => {
                     </div>
 
                     <div
-                        className={css.sidebar_menu_action_container}
+                        className={
+                            !isIndividualChatsSearchInputOpen
+                                ? css.sidebar_menu_action_container
+                                : css.sidebar_search_input_container
+                        }
                         data-active={isIndividualChatOpen}
                     >
-                        <div className={css.sidebar_menu_action_btn}>
-                            <IndividualChatsIcon fill="currentColor" />
+                        <div className={css.sidebar_menu_action_btn}
+                             onClick={isIndividualChatOpen ? handleOpenIndividualChatsSearchInput : undefined}>
+                            {!isIndividualChatOpen ? (
+                                <IndividualChatsIcon fill="currentColor" />
+                            ) : (
+                                isSideBarOpen
+                                ? <SearchIcon fill="currentColor" />
+                                : <IndividualChatsIcon fill="currentColor" />
+                            )}
+
                         </div>
-                        <div className={css.sidebar_menu_action_btn_tooltip}>
-                            <div>Individual Chats</div>
-                            <div
-                                className={css.show_more_btn}
-                                onClick={handleOpenIndividualChat}
-                            >
-                                {!isIndividualChatOpen ? "+" : "-"}
+
+
+                        {isIndividualChatOpen && isIndividualChatsSearchInputOpen && isSideBarOpen ? (
+                            <div className={css.sidebar_search_input}>
+                                <input
+                                    className={css.search_input}
+                                    type="text"
+                                    placeholder="Search..."
+                                    autoFocus
+                                />
+                                <div onClick={handleOpenIndividualChatsSearchInput}>
+                                    <CloseIcon />
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className={css.sidebar_menu_action_btn_tooltip}>
+                                <div>Individual Chats</div>
+                                <div
+                                    className={css.show_more_btn}
+                                    onClick={handleOpenIndividualChat}
+                                >
+                                    {!isIndividualChatOpen ? "+" : "-"}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    {isIndividualChatOpen && (
+                    {isIndividualChatOpen && isSideBarOpen && (
                         <div className={css.chats_container}>
+                            <div className={css.chats}>Chats</div>
                             {chats.map(chat => {
                                 const isOpen = expandedChatId === chat.id;
                                 const branches = chat.id === currentChat.id
@@ -150,6 +197,10 @@ export const SideBarMenu = () => {
 
                                 return (
                                     <div key={chat.id}>
+                                    <div className={css.chat_item}
+                                             data-active={isOpen}
+                                             >
+                                        <div className={css.chat_item_tag_and_name}>
                                         <div
                                             className={css.chat_item}
                                             onClick={() => setExpandedChatId(prev => (prev === chat.id ? null : chat.id))}
@@ -163,12 +214,53 @@ export const SideBarMenu = () => {
                                                             className={css.chat_tag}
                                                             style={{ backgroundColor: color }}
                                                             title={customTagNames.get(tag) ?? defaultName}
+                                                            onClick={e => {
+                                                                e.stopPropagation();
+                                                                setActiveTagPanel(prev => (prev === chat.id ? null : chat.id));
+                                                            }}
                                                         />
                                                     );
                                                 })}
+                                                }) ?? (
+                                                    <div className={css.chat_tag}
+                                                         style={{ backgroundColor: "#888" }}
+                                                         onClick={e => {
+                                                             e.stopPropagation();
+                                                             setActiveTagPanel(prev => prev === chat.id ? null : chat.id);
+                                                         }}/>
+                                                )}
                                             </div>
                                             <div className={css.chat_name}>{chat.name}</div>
+                                            <div className={css.chat_notifications_count}>
+                                                {chat.notificationsCount}
+                                            </div>
                                         </div>
+
+                                        <div className={css.chat_tools}>
+                                            <div><ThreeDotsIcon /></div>
+                                                <div
+                                                    className={css.show_more_btn}
+                                                    data-active={isOpen}
+                                                    onClick={() => setExpandedChatId(prev => prev === chat.id ? null : chat.id)}
+                                                >
+                                                    {!isOpen ? "+" : "-"}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {activeTagPanel === chat.id && (
+                                            <div className={css.tag_panel}>
+                                                {[ChatTagsEnum.Green, ChatTagsEnum.Purple, ChatTagsEnum.Orange, ChatTagsEnum.Yellow].map(tag => (
+                                                    <div
+                                                        key={tag}
+                                                        className={css.chat_tag}
+                                                        style={{ backgroundColor: TAG_META[tag].color }}
+                                                        title={TAG_META[tag].defaultName}
+                                                    />
+                                                ))}
+                                                <div className={css.three_dots}><ThreeDotsIcon /></div>
+                                            </div>
+                                        )}
 
                                         {isOpen && branches.length > 0 && (
                                             <div className={css.branches_list}>
@@ -177,6 +269,43 @@ export const SideBarMenu = () => {
                                                         {branch.name}
                                                     </div>
                                                 ))}
+                                        {isOpen && chat.branches?.length > 0 && (
+                                            <div className={css.branches_list_container}>
+                                                <div>Branches</div>
+                                                <div className={css.branches_list}>
+                                                    {chat.branches.map(branch => (
+                                                        <div key={branch.id} className={css.branch_item}>
+                                                            <div className={css.branch_icon_and_name}>
+                                                                <div>
+                                                                    <BranchIcon fill="currentColor" width={16}
+                                                                                height={16} />
+                                                                </div>
+                                                                <div className={css.branch_name}>
+                                                                    {branch.name}
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                className={css.branch_three_dots}
+                                                                onClick={handleOpenBranchMenu}>
+                                                                <ThreeDotsIcon />
+                                                            </div>
+
+                                                            <CSSTransition
+                                                                in={isBranchMenuOpen && branch.id !== null}
+                                                                timeout={200}
+                                                                classNames="branchMenu"
+                                                                unmountOnExit
+                                                            >
+                                                                <AllBranchesMenu
+                                                                    position={menuPosition}
+                                                                    branchId={branch.id!}
+                                                                    setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
+                                                                />
+                                                            </CSSTransition>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
                                             </div>
                                         )}
                                     </div>
@@ -187,7 +316,7 @@ export const SideBarMenu = () => {
 
                     <div
                         className={
-                            !isSearchInputOpen
+                            !isFavouritesSearchInputOpen
                                 ? css.sidebar_menu_action_container
                                 : css.sidebar_search_input_container
                         }
@@ -195,16 +324,18 @@ export const SideBarMenu = () => {
                     >
                         <div
                             className={css.sidebar_menu_action_btn}
-                            onClick={isFavouritesOpen ? handleOpenSearchInput : undefined}
+                            onClick={isFavouritesOpen && isSideBarOpen ? handleOpenFavouritesSearchInput : undefined}
                         >
                             {!isFavouritesOpen ? (
                                 <FavoriteIcon fill="currentColor" />
                             ) : (
-                                <SearchIcon fill="currentColor" />
+                                isSideBarOpen
+                                ? <SearchIcon fill="currentColor" />
+                                : <FavoriteIcon fill="currentColor" />
                             )}
                         </div>
 
-                        {isFavouritesOpen && isSearchInputOpen ? (
+                        {isFavouritesOpen && isFavouritesSearchInputOpen ? (
                             <div className={css.sidebar_search_input}>
                                 <input
                                     className={css.search_input}
@@ -212,7 +343,7 @@ export const SideBarMenu = () => {
                                     placeholder="Search..."
                                     autoFocus
                                 />
-                                <div onClick={handleOpenSearchInput}>
+                                <div onClick={handleOpenFavouritesSearchInput}>
                                     <CloseIcon />
                                 </div>
                             </div>
