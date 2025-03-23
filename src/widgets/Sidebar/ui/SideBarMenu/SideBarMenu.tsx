@@ -28,7 +28,8 @@ const TAG_META: Record<ChatTagsEnum, { defaultName: string; color: string }> = {
 
 export const SideBarMenu = () => {
     const { isSideBarOpen } = useAppStore();
-    const { chats,
+    const {
+        chats,
         currentChat,
         customTagNames ,
         getAllFavouritesMessages,
@@ -47,8 +48,7 @@ export const SideBarMenu = () => {
     const [isFavouritesSearchInputOpen, setIsFavouritesSearchInputOpen] = React.useState(false);
 
     const [expandedChatId, setExpandedChatId] = React.useState<string | null>(null);
-    const [activeTagPanelChatId, setActiveTagPanelChatId] = useState<string | null>(null);
-    const [activeTagPanelTag, setActiveTagPanelTag] = useState<ChatTagsEnum | null>(null);
+    const [activeTagPanel, setActiveTagPanel] = useState<string | null>(null);
 
     const [isBranchMenuOpen, setIsBranchMenuOpen] = React.useState(false);
     const menuPosition = { top: 450, right: -130 };
@@ -114,6 +114,8 @@ export const SideBarMenu = () => {
     const handleOpenBranchMenu = () => {
         setIsBranchMenuOpen(!isBranchMenuOpen);
     }
+
+
     return (
         <div className={isSideBarOpen ? css.sidebar_open_menu : css.sidebar_menu}>
             <div className={css.menu_actions_section_name}>
@@ -186,9 +188,19 @@ export const SideBarMenu = () => {
                         )}
                     </div>
 
+
+
+
+
+
+
+
+
+
                     {isIndividualChatOpen && isSideBarOpen && (
                         <div className={css.chats_container}>
                             <div className={css.chats}>Chats</div>
+
                             {chats.map(chat => {
                                 const isOpen = expandedChatId === chat.id;
                                 const branches = chat.id === currentChat.id
@@ -197,47 +209,48 @@ export const SideBarMenu = () => {
 
                                 return (
                                     <div key={chat.id}>
-                                    <div className={css.chat_item}
+                                        <div className={css.chat_item}
                                              data-active={isOpen}
-                                             >
-                                        <div className={css.chat_item_tag_and_name}>
-                                        <div
-                                            className={css.chat_item}
-                                            onClick={() => setExpandedChatId(prev => (prev === chat.id ? null : chat.id))}
                                         >
-                                            <div className={css.tags_wrapper}>
-                                                {chat.tags?.map(tag => {
-                                                    const { color, defaultName } = TAG_META[tag];
-                                                    return (
-                                                        <div
-                                                            key={tag}
-                                                            className={css.chat_tag}
-                                                            style={{ backgroundColor: color }}
-                                                            title={customTagNames.get(tag) ?? defaultName}
-                                                            onClick={e => {
-                                                                e.stopPropagation();
-                                                                setActiveTagPanel(prev => (prev === chat.id ? null : chat.id));
-                                                            }}
-                                                        />
-                                                    );
-                                                })}
-                                                }) ?? (
-                                                    <div className={css.chat_tag}
-                                                         style={{ backgroundColor: "#888" }}
-                                                         onClick={e => {
-                                                             e.stopPropagation();
-                                                             setActiveTagPanel(prev => prev === chat.id ? null : chat.id);
-                                                         }}/>
-                                                )}
-                                            </div>
-                                            <div className={css.chat_name}>{chat.name}</div>
-                                            <div className={css.chat_notifications_count}>
-                                                {chat.notificationsCount}
-                                            </div>
-                                        </div>
+                                            <div className={css.chat_item_tag_and_name}>
+                                                {/*<div*/}
+                                                {/*    className={css.chat_item}*/}
+                                                {/*    data-active={isOpen}*/}
+                                                {/*    onClick={() => setExpandedChatId(prev => (prev === chat.id ? null : chat.id))}*/}
+                                                {/*>*/}
+                                                <div className={css.tags_wrapper}>
+                                                    {chat.tags?.map(tag => {
+                                                        const { color, defaultName } = TAG_META[tag];
+                                                        return (
+                                                            <div
+                                                                key={tag}
+                                                                className={css.chat_tag}
+                                                                style={{ backgroundColor: color }}
+                                                                title={customTagNames.get(tag) ?? defaultName}
+                                                                onClick={e => {
+                                                                    e.stopPropagation();
+                                                                    setActiveTagPanel(prev => (prev === chat.id ? null : chat.id));
+                                                                }}
+                                                            />
+                                                        );
 
-                                        <div className={css.chat_tools}>
-                                            <div><ThreeDotsIcon /></div>
+                                                    }) ?? (
+                                                        <div className={css.chat_tag}
+                                                             style={{ backgroundColor: "#888" }}
+                                                             onClick={e => {
+                                                                 e.stopPropagation();
+                                                                 setActiveTagPanel(prev => prev === chat.id ? null : chat.id);
+                                                             }} />
+                                                    )}
+                                                </div>
+                                                <div className={css.chat_name}>{chat.name}</div>
+                                                <div className={css.chat_notifications_count}>
+                                                    {chat.notificationsCount}
+                                                </div>
+
+                                            </div>
+                                            <div className={css.chat_tools}>
+                                                <div><ThreeDotsIcon /></div>
                                                 <div
                                                     className={css.show_more_btn}
                                                     data-active={isOpen}
@@ -246,7 +259,12 @@ export const SideBarMenu = () => {
                                                     {!isOpen ? "+" : "-"}
                                                 </div>
                                             </div>
+
+
+
+
                                         </div>
+
 
                                         {activeTagPanel === chat.id && (
                                             <div className={css.tag_panel}>
@@ -262,13 +280,15 @@ export const SideBarMenu = () => {
                                             </div>
                                         )}
 
-                                        {isOpen && branches.length > 0 && (
-                                            <div className={css.branches_list}>
-                                                {branches.map(branch => (
-                                                    <div key={branch.id} className={css.branch_item}>
-                                                        {branch.name}
-                                                    </div>
-                                                ))}
+                                        {/*{isOpen && branches.length > 0 && (*/}
+                                        {/*    <div className={css.branches_list}>*/}
+                                        {/*        {branches.map(branch => (*/}
+                                        {/*            <div key={branch.id} className={css.branch_item}>*/}
+                                        {/*                {branch.name}*/}
+                                        {/*            </div>*/}
+                                        {/*        ))}*/}
+                                        {/*    </div>*/}
+
                                         {isOpen && chat.branches?.length > 0 && (
                                             <div className={css.branches_list_container}>
                                                 <div>Branches</div>
@@ -305,7 +325,6 @@ export const SideBarMenu = () => {
                                                         </div>
                                                     ))}
                                                 </div>
-
                                             </div>
                                         )}
                                     </div>
@@ -313,6 +332,11 @@ export const SideBarMenu = () => {
                             })}
                         </div>
                     )}
+
+
+
+
+
 
                     <div
                         className={
@@ -434,6 +458,6 @@ export const SideBarMenu = () => {
                     </div>
                 </div>
             )}
-        </div>
+       </div>
     );
 };
