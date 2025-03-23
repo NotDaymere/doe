@@ -13,7 +13,7 @@ import { useAppStore, useChatStore } from "../../../../shared/providers";
 export const TextFormatting = () => {
 
     const { isSideBarOpen } = useAppStore();
-    const { editor } = useAppStore();
+    const { editor } = useChatStore();
     const editorState = useEditorContext(editor);
     const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useAppStore();
     const [isSideBarTextFormattingOpen, setIsSideBarTextFormattingOpen] = React.useState(true);
