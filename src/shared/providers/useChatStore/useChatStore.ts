@@ -157,6 +157,7 @@ export interface ChatState {
     addChat: (chat: IChat) => void;
     switchChat: (chatId: string) => void;
     renameChat: (chatId: string, newName: string) => void;
+    removeChat: (chatId: string) => void;
 
     customTagNames: Map<ChatTagsEnum, string>;
 
@@ -520,7 +521,18 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             };
         });
     },
-
+    removeChat: (chatId: string) =>
+        set((state) => {
+            const updatedChats = state.chats.filter(chat => chat.id !== chatId);
+            let updatedCurrentChat = state.currentChat;
+            if (state.currentChat && state.currentChat.id === chatId) {
+                updatedCurrentChat = updatedChats[0] || null;
+            }
+            return {
+                chats: updatedChats,
+                currentChat: updatedCurrentChat,
+            };
+        }),
     setChatTags: (chatId: string, newTags: ChatTagsEnum[]) =>
         set((state) => {
             const updatedChats = state.chats.map((chat) =>
