@@ -560,7 +560,6 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
     addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) =>
         set((state) => {
-
             let actualParent: IMessageNode | undefined;
             if (typeof parent === "string") {
                 actualParent = state.currentChat.messageNodeMap[parent];
@@ -687,36 +686,26 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         }),
 
 
-    getMessageQueueFromNode: () => {
-        const state = get();
-        const result: IMessage[] = [];
-        let currentNode = state.currentChat.messageNodeMap["root"];
-        while (currentNode && currentNode.children && currentNode.children.length > 0) {
-            const versionIndex = currentNode.currentChildrenVersion ?? 0;
-            if (versionIndex < 0 || versionIndex >= currentNode.children.length) break;
-            const nextNode = currentNode.children[versionIndex];
-            if (nextNode && nextNode.message) {
-                result.push(nextNode.message);
-            }
-            currentNode = nextNode;
-        }
-        return result;
-    },
+
 
     setMessageLike: (messageOrId: number | IMessage, liked: boolean) =>
         set((state) => {
-            const id = typeof messageOrId === "number" ? messageOrId : messageOrId.id;
+            const id = String(typeof messageOrId === "number" ? messageOrId : messageOrId.id);
 
             const updatedMessages = state.messages.map(msg =>
-                msg.id === id ? { ...msg, isLiked: liked } : msg
+                String(msg.id) === id ? { ...msg, isLiked: liked } : msg
             );
 
             const updatedMessageNodeMap = { ...state.currentChat.messageNodeMap };
             Object.values(updatedMessageNodeMap).forEach(node => {
-                if (node.message?.id === id) {
+                if (node.message && String(node.message.id) === id) {
                     node.message = { ...node.message, isLiked: liked };
                 }
             });
+
+            const updatedChats = state.chats.map(chat =>
+                chat.id === state.currentChat.id ? { ...chat, messageNodeMap: updatedMessageNodeMap } : chat
+            );
 
             return {
                 messages: updatedMessages,
@@ -724,6 +713,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                     ...state.currentChat,
                     messageNodeMap: updatedMessageNodeMap,
                 },
+                chats: updatedChats,
             };
         }),
     changeMessageName: (messageId: number, newName: string) =>
@@ -747,6 +737,23 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 },
             };
         }),
+
+    getMessageQueueFromNode: () => {
+        const state = get();
+        const result: IMessage[] = [];
+        let currentNode = state.currentChat.messageNodeMap["root"];
+        while (currentNode && currentNode.children && currentNode.children.length > 0) {
+            const versionIndex = currentNode.currentChildrenVersion ?? 0;
+            if (versionIndex < 0 || versionIndex >= currentNode.children.length) break;
+            const nextNode = currentNode.children[versionIndex];
+            if (nextNode && nextNode.message) {
+                result.push(nextNode.message);
+            }
+            currentNode = nextNode;
+        }
+        return result;
+    },
+
     getAllFavouritesMessages: () => {
         const state = get();
         const result = state.chats
@@ -754,11 +761,9 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 const likedMessages = Object.values(chat.messageNodeMap)
                     .map(node => node.message)
                     .filter((msg): msg is IMessage => msg !== undefined && msg.isLiked === true);
-                console.log(`Chat: ${chat.id} - ${chat.name}:`, likedMessages);
                 return { chatId: chat.id, chatName: chat.name, messages: likedMessages };
             })
             .filter(item => item.messages.length > 0);
-        console.log("Result:", result);
         return result;
     },
     getFavouritesMessages: () => get().getMessageQueueFromNode().filter(m => m.isLiked === true),
