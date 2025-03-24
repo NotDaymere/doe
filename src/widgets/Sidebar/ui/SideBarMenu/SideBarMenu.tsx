@@ -543,53 +543,58 @@ export const SideBarMenu = () => {
                             </div>
                         </div>
 
-                        {isTagsOpen && (
-                            <div className={css.tags_container}>
+                    {isTagsOpen && (
+                        <div className={css.tags_container}>
+                            {Object.entries(chatsByTags)
+                                .filter(([tag, chats]) => tag !== "untagged" && chats.length > 0)
+                                .map(([tag, chats]) => {
+                                    const tagEnum = tag as ChatTagsEnum;
+                                    const color = TAG_META[tagEnum].color;
+                                    const customName = customTagNames.get(tagEnum) ?? TAG_META[tagEnum].defaultName;
 
-                                {Object.entries(chatsByTags)
-                                    .filter(([tag, chats]) => tag !== "untagged" && chats.length > 0)
-                                    .map(([tag, chats]) => (
+                                    return (
                                         <div
                                             key={tag}
                                             className={css.tag_item}
-                                            onClick={() => setSelectedTag(tag as ChatTagsEnum)}
+                                            onClick={() => setSelectedTag(tagEnum)}
                                         >
-                                            {(customTagNames.get(tag as ChatTagsEnum) ?? TAG_META[tag as ChatTagsEnum].defaultName)}
-                                            &nbsp;({chats.length})
+                                            <div
+                                                className={`${css.chat_tag} ${selectedTag === tagEnum ? css.current_chat_tag : ""}`}
+                                                style={{ backgroundColor: color }}
+                                            />
+                                            <div>{customName}&nbsp;({chats.length})</div>
                                         </div>
-                                    ))
-                                }
+                                    );
+                                })}
 
-                                {selectedTag && (
-                                    <div className={css.tag_chats_list}>
-                                        {chatsByTags[selectedTag].map(chat => {
-                                            const isOpen = expandedChatId === chat.id;
-                                            const branches = chat.id === currentChat.id
-                                                ? currentChat.branches
-                                                : chat.branches ?? [];
+                            {selectedTag && (
+                                <div className={css.tag_chats_list}>
+                                    {chatsByTags[selectedTag].map(chat => {
+                                        const isOpen = expandedChatId === chat.id;
+                                        const branches = chat.id === currentChat.id ? currentChat.branches : chat.branches ?? [];
 
-                                            return (
-                                                <div key={chat.id}>
-                                                    <div className={css.chat_item} onClick={() => handleToggleChatBranches(chat.id)}>
-                                                        <div className={css.chat_name}>{chat.name}</div>
-                                                    </div>
-
-                                                    {isOpen && branches.length > 0 && (
-                                                        <div className={css.branches_list}>
-                                                            {branches.map(branch => (
-                                                                <div key={branch.id} className={css.branch_item}>
-                                                                    {branch.name}
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
+                                        return (
+                                            <div key={chat.id}>
+                                                <div className={css.chat_item} onClick={() => handleToggleChatBranches(chat.id)}>
+                                                    <div className={css.chat_name}>{chat.name}</div>
                                                 </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                                                {isOpen && branches.length > 0 && (
+                                                    <div className={css.branches_list}>
+                                                        {branches.map(branch => (
+                                                            <div key={branch.id} className={css.branch_item}>
+                                                                {branch.name}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {/*</div>*/}
                 </div>
             )}
