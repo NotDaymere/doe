@@ -61,6 +61,25 @@ print(result)  # Output: [1, 2, 4, 5]
     },
 ];
 
+const initialMessagesChat2: IMessage[] = [
+    {
+        id: 101,
+        content: "<p>Welcome to Chat 02! This is a mock message from the user.</p>",
+        files: [],
+        isCode: false,
+        isUser: true,
+    },
+    {
+        id: 102,
+        content: "<p>This is a mock reply in Chat 02. Enjoy your conversation!</p>",
+        files: [],
+        isCode: false,
+        isUser: false,
+    },
+];
+
+
+
 const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMessageNode> => {
     const messageNodeMap: Record<string, IMessageNode> = {
         root: { id: "root", isRootNode: true, children: [] },
@@ -96,6 +115,17 @@ const defaultChat: IChat = {
     messageNodeMap: initialMessageNodeMap(initialMessages),
     tags: [ChatTagsEnum.Green],
     notificationsCount: 2,
+    branches: []
+};
+
+const defaultMessageNodeMapChat2 = initialMessageNodeMap(initialMessagesChat2);
+
+const defaultChat2: IChat = {
+    id: "init-chat-2",
+    name: "Chat 02",
+    messageNodeMap: defaultMessageNodeMapChat2,
+    tags: [ChatTagsEnum.Blue, ChatTagsEnum.Green],
+    notificationsCount: 1,
     branches: []
 };
 
@@ -199,6 +229,7 @@ export interface ChatState {
 
 export const useChatStore = create<ChatState>()((set, get) => ({
 
+
     initChat: (messages: IMessage[]) => {
         const messageNodeMap = initialMessageNodeMap(messages);
         const initializedChat: IChat = { ...defaultChat, messageNodeMap };
@@ -225,7 +256,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     questionCodeMessage: null,
 
     currentChat: defaultChat,
-    chats: [defaultChat],
+    chats: [defaultChat, defaultChat2],
 
     replyTimeoutId: null,
     isReplyLoading: false,
