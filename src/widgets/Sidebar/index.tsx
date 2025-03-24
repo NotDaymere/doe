@@ -20,7 +20,7 @@ export const Sidebar: React.FC = () => {
     const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
     const { editor } = useAppStore();
     const editorState = useEditorContext(editor);
-    const { playground } = useChatStore();
+    const { playground , clearCurrentChatMessages} = useChatStore();
     const [theme, setTheme] = React.useState<"Light" | "Dark">("Light")
     const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false)
     const [profiles, setProfiles] = React.useState<Profile[]>(ProfileMockData);
@@ -49,6 +49,10 @@ export const Sidebar: React.FC = () => {
             prev.map(p => ({ ...p, isCurrent: p.id === id }))
         );
     };
+
+    const handleDeleteAllMessages = () => {
+        clearCurrentChatMessages();
+    }
 
     return (
         <aside className={isSideBarOpen ? css.sidebar_open : css.sidebar}>
@@ -177,13 +181,17 @@ export const Sidebar: React.FC = () => {
 
 
                 <div className={css.delete_all_messages_btn_container}>
-                    <button className={css.delete_all_messages_btn}>
+                    <button
+                        className={css.delete_all_messages_btn}
+                        onClick={handleDeleteAllMessages}
+                    >
                         <TrashIcon />
                     </button>
                     <div className={css.delete_all_messages_btn_tooltip}>
                         Delete All Messages
                     </div>
                 </div>
+
             </div>
 
 

@@ -89,7 +89,7 @@ export const SideBarMenu = () => {
     const [isChatsByTagsOpen, setIsChatsByTagsOpen] = React.useState(false);
 
     const activeChat = chats.find(c => c.id === activeTagPanel) ?? null;
-    const [selectedTags, setSelectedTags] = useState<ChatTagsEnum[]>(activeChat?.tags ?? []);
+    const [selectedTags, setSelectedTags] = React.useState<ChatTagsEnum[]>([]);
 
     const [inputValue, setInputValue] = useState("");
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -219,6 +219,15 @@ export const SideBarMenu = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [showAllTags, activeTagPanel]);
 
+    React.useEffect(() => {
+        if (activeTagPanel) {
+            const panelChat = chats.find(c => c.id === activeTagPanel);
+            setSelectedTags(panelChat?.tags ?? []);
+        } else {
+            setSelectedTags([]);
+        }
+        setInputValue("");
+    }, [activeTagPanel, chats]);
 
     return (
         <div className={isSideBarOpen ? css.sidebar_open_menu : css.sidebar_menu}>
@@ -258,8 +267,15 @@ export const SideBarMenu = () => {
                         data-active={isIndividualChatOpen}
                         onClick={handleOpenIndividualChat}
                     >
-                        <div className={css.sidebar_menu_action_btn}
-                             onClick={isIndividualChatOpen ? handleOpenIndividualChatsSearchInput : undefined}>
+                        <div
+                            className={css.sidebar_menu_action_btn}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (isIndividualChatOpen) {
+                                    handleOpenIndividualChatsSearchInput();
+                                }
+                            }}
+                        >
                             {!isIndividualChatOpen ? (
                                 <IndividualChatsIcon fill="currentColor" />
                             ) : (
@@ -309,6 +325,7 @@ export const SideBarMenu = () => {
                                     <div key={chat.id}>
                                         <div className={css.chat_item}
                                              data-active={isOpen}
+                                             onClick={() => setExpandedChatId(prev => prev === chat.id ? null : chat.id)}
                                         >
                                             {editingChatId === chat.id ? (
                                                 <div className={css.chat_item_editing}>
@@ -365,12 +382,15 @@ export const SideBarMenu = () => {
                                                             position: { top: e.clientY, left: e.clientX + 30 },
                                                         });
                                                     }}>
-                                                        <ThreeDotsIcon />
+                                                        <div className={css.three_dots}>
+                                                            <ThreeDotsIcon />
+                                                        </div>
+
                                                     </div>
                                                     <div
                                                         className={css.show_more_btn}
                                                         data-active={isOpen}
-                                                        onClick={() => setExpandedChatId(prev => prev === chat.id ? null : chat.id)}
+
                                                     >
                                                         {!isOpen ? "+" : "-"}
                                                     </div>
@@ -406,30 +426,37 @@ export const SideBarMenu = () => {
                                                                 onChange={e => setInputValue(e.target.value)}
                                                                 onKeyDown={e => {
                                                                     if (e.key === " " && inputValue.trim()) {
-                                                                        const match = Object.entries(TAG_META)
-                                                                            .find(([key, meta]) => meta.defaultName.toLowerCase() === inputValue.trim().toLowerCase());
-                                                                        if (match) {
-                                                                            const tagEnum = match[0] as ChatTagsEnum;
-                                                                            if (!chat.tags?.includes(tagEnum)) {
-                                                                                setChatTags(chat.id, [...(chat.tags ?? []), tagEnum]);
-                                                                                setSelectedTags(prev => [...prev, tagEnum]);
+                                                                        const query = inputValue.trim().toLowerCase();
+                                                                        const matchEntry = Object.entries(TAG_META)
+                                                                            .find(([key, meta]) => {
+                                                                                const tagEnum = key as ChatTagsEnum;
+                                                                                const defaultName = meta.defaultName.toLowerCase();
+                                                                                const customName = customTagNames.get(tagEnum)?.toLowerCase();
+                                                                                return defaultName === query || customName === query;
+                                                                            });
+
+                                                                        if (matchEntry) {
+                                                                            const tagEnum = matchEntry[0] as ChatTagsEnum;
+                                                                            if (!selectedTags.includes(tagEnum)) {
+                                                                                const updated = [...selectedTags, tagEnum];
+                                                                                setChatTags(chat.id, updated);
+                                                                                setSelectedTags(updated);
                                                                             }
                                                                         }
+
                                                                         setInputValue("");
                                                                         e.preventDefault();
                                                                     }
                                                                 }}
+
                                                                 onFocus={() => setShowAllTags(chat.id)}
+                                                                autoFocus
                                                             />
                                                         </div>
 
-
-                                                        {Object.entries(TAG_META).map(([tag, {
-                                                            defaultName,
-                                                            color,
-                                                        }]) => {
+                                                        {Object.entries(TAG_META).map(([tag, { defaultName, color }]) => {
                                                             const tagEnum = tag as ChatTagsEnum;
-                                                            const isSelected = chat.tags?.includes(tagEnum);
+                                                            const isSelected = selectedTags.includes(tagEnum);
                                                             const customName = customTagNames.get(tagEnum) ?? defaultName;
                                                             const isEditing = editingTag === tagEnum;
 
@@ -440,10 +467,14 @@ export const SideBarMenu = () => {
                                                                     onClick={e => {
                                                                         e.stopPropagation();
                                                                         if (!isEditing) {
-                                                                            const updatedTags = isSelected
-                                                                                ? chat.tags!.filter(t => t !== tagEnum)
-                                                                                : [...(chat.tags ?? []), tagEnum];
-                                                                            setChatTags(chat.id, updatedTags);
+                                                                            const updated = isSelected
+                                                                                ? selectedTags.filter(t => t !== tagEnum)
+                                                                                : [...selectedTags, tagEnum];
+
+                                                                            setChatTags(chat.id, updated);
+                                                                            setSelectedTags(updated);
+                                                                            setInputValue("");
+                                                                            inputRef.current?.focus();
                                                                         }
                                                                     }}
                                                                 >
@@ -451,7 +482,6 @@ export const SideBarMenu = () => {
                                                                         className={`${css.chat_tag} ${isSelected ? css.current_chat_tag : ""}`}
                                                                         style={{ backgroundColor: color }}
                                                                     />
-
                                                                     {isEditing ? (
                                                                         <input
                                                                             className={css.edit_tag_input}
@@ -472,7 +502,6 @@ export const SideBarMenu = () => {
                                                                     ) : (
                                                                         <div>{customName}</div>
                                                                     )}
-
                                                                     {!isEditing && (
                                                                         <div
                                                                             className={css.edit_tag_name_btn}
@@ -488,6 +517,7 @@ export const SideBarMenu = () => {
                                                                 </div>
                                                             );
                                                         })}
+
                                                     </div>
                                                 ) : (
                                                     <div className={css.tag_panel}>
@@ -614,7 +644,12 @@ export const SideBarMenu = () => {
                     >
                         <div
                             className={css.sidebar_menu_action_btn}
-                            onClick={isFavouritesOpen && isSideBarOpen ? handleOpenFavouritesSearchInput : undefined}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (isFavouritesOpen && isSideBarOpen) {
+                                    handleOpenFavouritesSearchInput();
+                                }
+                            }}
                         >
                             {!isFavouritesOpen ? (
                                 <FavoriteIcon fill="currentColor" />
@@ -827,9 +862,6 @@ export const SideBarMenu = () => {
                                 })}
                         </div>
                     )}
-
-
-                    {/*</div>*/}
                 </div>
             )}
         </div>
