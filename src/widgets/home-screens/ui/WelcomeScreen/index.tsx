@@ -4,7 +4,7 @@ import WelcomeMagicIcon from "src/shared/icons/WelcomeMagic.icon";
 import { useChatStore } from "src/shared/providers";
 import css from "./WelcomeScreen.module.less";
 
-const TYPING_SPEED = 50;
+const TYPING_SPEED = 25;
 
 const WelcomeScreen = () => {
     const [firstPart, setFirstPart] = useState("");
@@ -28,17 +28,17 @@ const WelcomeScreen = () => {
         speed: number,
         setCaretVisible: React.Dispatch<React.SetStateAction<boolean>>
     ): Promise<void> => {
+        setNinthPart;
         for (let i = 0; i < text.length; i++) {
-            setCaretVisible(true);
             await sleep(speed);
             setDisplayText((prev) => prev + text[i]);
-            setCaretVisible(false);
             await sleep(speed);
         }
     };
 
     useEffect(() => {
         const typeEffect = async (): Promise<void> => {
+            setCaretVisible(true);
             setDisableButtons(true);
             await typeText("I'm ", setFirstPart, TYPING_SPEED, setCaretVisible);
             setTimeout(() => {
@@ -64,6 +64,7 @@ const WelcomeScreen = () => {
                 setNinthPart(<WelcomeMagicIcon width={308} height={287} className={css.magic} />);
             }, TYPING_SPEED);
             setDisableButtons(false);
+            setCaretVisible(false);
         };
         typeEffect();
     }, []);
