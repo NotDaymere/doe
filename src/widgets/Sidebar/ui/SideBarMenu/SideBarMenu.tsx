@@ -16,6 +16,7 @@ import PenIcon from "../../../../shared/icons/Pen.icon";
 import StarsIcon from "../../../../shared/icons/Stars.icon";
 import UserMessageIcon from "../../../../shared/icons/UserMessage.icon";
 import { BookmarksActions } from "./Bookmarks/BookmarksActions/BookmarksActions";
+import { IndividualChatsActions } from "./IndividualChats/IndividualChatsActions/IndividualChatsActions";
 
 
 const TAG_META: Record<ChatTagsEnum, { defaultName: string; color: string }> = {
@@ -41,7 +42,11 @@ export const SideBarMenu = () => {
         setChatTags,
         renameTag,
         switchChat,
-        setActiveMessage
+        setActiveMessage,
+        changeMessageName,
+        setMessageLike,
+        renameChat,
+        removeChat,
     } = useChatStore();
 
     const chatsByTags = getChatsByTags();
@@ -59,14 +64,33 @@ export const SideBarMenu = () => {
     const [activeTagPanel, setActiveTagPanel] = useState<string | null>(null);
 
     const [isBranchMenuOpen, setIsBranchMenuOpen] = React.useState(false);
-    const menuPosition = { top: 450, right: -130 };
+    const [menuPosition, setMenuPosition] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
+
+    const [bookmarksActionsPosition, setBookmarksActionsPosition] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
     const [isBookmarksActionsOpen, setIsBookmarksActionsOpen] = useState<boolean>(false);
+
+    const [individualChatsActionsPosition, setIndividualChatsActionsPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+    const [isIndividualChatsActionsOpen, setIsIndividualChatsActionsOpen] = useState<boolean>(false);
+    const [activeChatForActions, setActiveChatForActions] = useState<{
+        id: string;
+        name: string;
+        position: { top: number; left: number };
+    } | null>(null);
+    const [editingChatId, setEditingChatId] = useState<string | null>(null);
+    const [editingChatValue, setEditingChatValue] = useState("");
+
+
+
     const [activeOpenAllBranchesMenu, setActiveOpenAllBranchesMenu] = useState<number | null>(null);
     const [showAllTags, setShowAllTags] = useState<string | null>(null);
     const [editingTag, setEditingTag] = useState<ChatTagsEnum | null>(null);
     const [editValue, setEditValue] = useState("");
     const [selectedTag, setSelectedTag] = React.useState<ChatTagsEnum | null>(null);
     const [isChatsByTagsOpen, setIsChatsByTagsOpen] = React.useState(false);
+
+    const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
+    const [editingMessageValue, setEditingMessageValue] = useState("");
+    const [activeBookmarkMessage, setActiveBookmarkMessage] = useState<any>(null);
 
     const handleOpenSideBarMenu = () => {
         setIsSideBarMenuOpen(!isSideBarMenuOpen);
@@ -81,6 +105,7 @@ export const SideBarMenu = () => {
     };
 
     const handleOpenFavourites = () => {
+
         setIsFavouritesOpen(!isFavouritesOpen);
     };
 
@@ -100,8 +125,41 @@ export const SideBarMenu = () => {
         setExpandedChatId((prev) => (prev === chatId ? null : chatId));
     };
 
-    const handleOpenBookmarksActions = () => {
-        setIsBookmarksActionsOpen(!isBookmarksActionsOpen)
+    const handleOpenIndividualChatsActions = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        setIndividualChatsActionsPosition({ top: event.clientY, left: event.clientX - 370 });
+        setIsIndividualChatsActionsOpen(prev => !prev);
+    };
+
+    const handleOpenBookmarksActions = (
+        event: React.MouseEvent,
+        msg: { id: number; name?: string; content: string }
+    ) => {
+        event.stopPropagation();
+        setActiveBookmarkMessage(msg);
+        setBookmarksActionsPosition({ top: event.clientY, right: event.clientX - 330 });
+        setIsBookmarksActionsOpen(prev => !prev);
+    };
+    const handleRename = () => {
+        if (activeBookmarkMessage) {
+            const raw = activeBookmarkMessage.name ?? activeBookmarkMessage.content;
+            setEditingMessageId(activeBookmarkMessage.id);
+            setEditingMessageValue(extractPreviewText(raw));
+            setIsBookmarksActionsOpen(false);
+            setActiveBookmarkMessage(null);
+        }
+    };
+    const finishEditing = (messageId: number) => {
+        changeMessageName(messageId, editingMessageValue.trim());
+        setEditingMessageId(null);
+        setEditingMessageValue("");
+    };
+    const handleDelete = () => {
+        if (activeBookmarkMessage) {
+            setMessageLike(activeBookmarkMessage.id, false);
+            setIsBookmarksActionsOpen(false);
+            setActiveBookmarkMessage(null);
+        }
     };
 
     const handleOpenChatsByTags = () => {
@@ -134,9 +192,11 @@ export const SideBarMenu = () => {
         return result.length > 15 ? result.slice(0, 15) + '…' : result;
     }
 
-    const handleOpenBranchMenu = () => {
+    const handleOpenBranchMenu = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        setMenuPosition({ top: event.clientY, right: event.clientX - 350 });
         setIsBranchMenuOpen(!isBranchMenuOpen);
-    }
+    };
 
     const panelRef = React.useRef<HTMLDivElement>(null);
 
@@ -166,20 +226,23 @@ export const SideBarMenu = () => {
 
             {isSideBarMenuOpen && (
                 <div className={css.menu_actions_section_container}>
+
                     <div
                         className={css.sidebar_menu_action_container}
                         data-active={isCorporaOpen}
+                        onClick={handleOpenCorpora}
                     >
                         <div className={css.sidebar_menu_action_btn}>
                             <CorporaIcon fill="currentColor" />
                         </div>
                         <div className={css.sidebar_menu_action_btn_tooltip}>
                             <div>Corpora</div>
-                            <div className={css.show_more_btn} onClick={handleOpenCorpora}>
+                            <div className={css.show_more_btn} >
                                 {!isCorporaOpen ? "+" : "-"}
                             </div>
                         </div>
                     </div>
+
 
                     <div
                         className={
@@ -188,6 +251,7 @@ export const SideBarMenu = () => {
                                 : css.sidebar_search_input_container
                         }
                         data-active={isIndividualChatOpen}
+                        onClick={handleOpenIndividualChat}
                     >
                         <div className={css.sidebar_menu_action_btn}
                              onClick={isIndividualChatOpen ? handleOpenIndividualChatsSearchInput : undefined}>
@@ -195,10 +259,9 @@ export const SideBarMenu = () => {
                                 <IndividualChatsIcon fill="currentColor" />
                             ) : (
                                 isSideBarOpen
-                                ? <SearchIcon fill="currentColor" />
-                                : <IndividualChatsIcon fill="currentColor" />
+                                    ? <SearchIcon fill="currentColor" />
+                                    : <IndividualChatsIcon fill="currentColor" />
                             )}
-
                         </div>
 
 
@@ -219,7 +282,7 @@ export const SideBarMenu = () => {
                                 <div>Individual Chats</div>
                                 <div
                                     className={css.show_more_btn}
-                                    onClick={handleOpenIndividualChat}
+
                                 >
                                     {!isIndividualChatOpen ? "+" : "-"}
                                 </div>
@@ -242,53 +305,73 @@ export const SideBarMenu = () => {
                                         <div className={css.chat_item}
                                              data-active={isOpen}
                                         >
-                                            <div className={css.chat_item_tag_and_name}>
-                                                <div className={css.tags_wrapper}
-                                                     data-count={Math.min(chat.tags?.length ?? 0, 3)}
-                                                     onClick={e => {
-                                                         e.stopPropagation();
-                                                         setActiveTagPanel(prev => (prev === chat.id ? null : chat.id));
-                                                     }}>
-                                                    {chat.tags?.map(tag => {
-                                                        const { color, defaultName } = TAG_META[tag];
-                                                        return (
+                                            {editingChatId === chat.id ? (
+                                                <div className={css.chat_item_editing}>
+                                                    <div className={css.chat_tag} style={{ backgroundColor: TAG_META[chat.tags?.[0] || ChatTagsEnum.Gray].color }} />
+                                                    <input
+                                                        className={css.edit_chat_input}
+                                                        autoFocus
+                                                        value={editingChatValue}
+                                                        onChange={e => setEditingChatValue(e.target.value)}
+                                                        onKeyDown={e => {
+                                                            if (e.key === "Enter") {
+                                                                renameChat(chat.id, editingChatValue.trim() || chat.name);
+                                                                setEditingChatId(null);
+                                                            }
+                                                        }}
+                                                        onBlur={() => {
+                                                            renameChat(chat.id, editingChatValue.trim() || chat.name);
+                                                            setEditingChatId(null);
+                                                        }}
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className={css.chat_item_tag_and_name}>
+                                                    <div
+                                                        className={css.tags_wrapper}
+                                                        data-count={Math.min(chat.tags?.length ?? 0, 3)}
+                                                        onClick={e => {
+                                                            e.stopPropagation();
+                                                            setActiveTagPanel(prev => (prev === chat.id ? null : chat.id));
+                                                        }}
+                                                    >
+                                                        {chat.tags?.slice(0, 3).map(tag => (
                                                             <div
                                                                 key={tag}
                                                                 className={css.chat_tag}
-                                                                style={{ backgroundColor: color }}
-                                                                title={customTagNames.get(tag) ?? defaultName}
-                                                                onClick={e => {
-                                                                    e.stopPropagation();
-                                                                    setActiveTagPanel(prev => (prev === chat.id ? null : chat.id));
-                                                                }}
+                                                                style={{ backgroundColor: TAG_META[tag].color }}
+                                                                title={customTagNames.get(tag) ?? TAG_META[tag].defaultName}
                                                             />
-                                                        );
-
-                                                    }) ?? (
-                                                        <div className={css.chat_tag}
-                                                             style={{ backgroundColor: "#888" }}
-                                                             onClick={e => {
-                                                                 e.stopPropagation();
-                                                                 setActiveTagPanel(prev => prev === chat.id ? null : chat.id);
-                                                             }} />
-                                                    )}
-                                                </div>
-                                                <div className={css.chat_name}>{chat.name}</div>
-                                                <div className={css.chat_notifications_count}>
-                                                    {chat.notificationsCount}
+                                                        ))}
+                                                    </div>
+                                                    <div className={css.chat_name}>{chat.name}</div>
+                                                    <div
+                                                        className={css.chat_notifications_count}>{chat.notificationsCount}</div>
                                                 </div>
 
-                                            </div>
-                                            <div className={css.chat_tools}>
-                                                <div><ThreeDotsIcon /></div>
-                                                <div
-                                                    className={css.show_more_btn}
-                                                    data-active={isOpen}
-                                                    onClick={() => setExpandedChatId(prev => prev === chat.id ? null : chat.id)}
-                                                >
-                                                    {!isOpen ? "+" : "-"}
+                                            )}
+                                            {editingChatId !== chat.id && (
+                                                <div className={css.chat_tools}>
+                                                    <div onClick={e => {
+                                                        e.stopPropagation();
+                                                        setActiveChatForActions({
+                                                            id: chat.id,
+                                                            name: chat.name,
+                                                            position: { top: e.clientY, left: e.clientX + 30 },
+                                                        });
+                                                    }}>
+                                                        <ThreeDotsIcon />
+                                                    </div>
+                                                    <div
+                                                        className={css.show_more_btn}
+                                                        data-active={isOpen}
+                                                        onClick={() => setExpandedChatId(prev => prev === chat.id ? null : chat.id)}
+                                                    >
+                                                        {!isOpen ? "+" : "-"}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )}
+
                                         </div>
 
 
@@ -300,7 +383,13 @@ export const SideBarMenu = () => {
                                                             <TagsIcon />
                                                             <div>Assigning Tag</div>
                                                         </div>
-                                                        {Object.entries(TAG_META).map(([tag, { defaultName, color }]) => {
+                                                        <div>
+                                                            <input/>
+                                                        </div>
+                                                        {Object.entries(TAG_META).map(([tag, {
+                                                            defaultName,
+                                                            color,
+                                                        }]) => {
                                                             const tagEnum = tag as ChatTagsEnum;
                                                             const isSelected = chat.tags?.includes(tagEnum);
                                                             const customName = customTagNames.get(tagEnum) ?? defaultName;
@@ -448,8 +537,29 @@ export const SideBarMenu = () => {
                             })}
                         </div>
                     )}
+                    {activeChatForActions && (() => {
+                        const { id, name, position } = activeChatForActions;
 
-
+                        return (
+                            <IndividualChatsActions
+                                position={position}
+                                onClose={() => setActiveChatForActions(null)}
+                                onRename={() => {
+                                    setEditingChatId(id);
+                                    setEditingChatValue(name);
+                                    setActiveChatForActions(null);
+                                }}
+                                onDelete={() => {
+                                    removeChat(id);
+                                    setActiveChatForActions(null);
+                                }}
+                                onOpen={() => {
+                                    switchChat(id);
+                                    setActiveChatForActions(null);
+                                }}
+                            />
+                        );
+                    })()}
 
 
 
@@ -461,6 +571,8 @@ export const SideBarMenu = () => {
                                 : css.sidebar_search_input_container
                         }
                         data-active={isFavouritesOpen}
+                        onClick={handleOpenFavourites}
+
                     >
                         <div
                             className={css.sidebar_menu_action_btn}
@@ -490,13 +602,13 @@ export const SideBarMenu = () => {
                         ) : (
                             <div className={css.sidebar_menu_action_btn_tooltip}>
                                 <div>Favourites</div>
-                                <div className={css.show_more_btn} onClick={handleOpenFavourites}>
+                                <div className={css.show_more_btn} >
                                     {!isFavouritesOpen ? "+" : "-"}
                                 </div>
                             </div>
                         )}
                     </div>
-                    {isFavouritesOpen && (
+                    {isFavouritesOpen && isSideBarOpen && (
                         <div className={css.favourites_list}>
                             {getAllFavouritesMessages().flatMap(group =>
                                 group.messages.map(msg => (
@@ -510,14 +622,35 @@ export const SideBarMenu = () => {
                                             setActiveMessage(msg);
                                         }}
                                     >
-                                        <div className={css.user_or_code_icon}>
-                                            {msg.isCode
-                                                ? <StarsIcon width={14} height={18} />
-                                                : <UserMessageIcon width={9} height={8} />}
+                                        <div className={css.favourite_icon_and_name}>
+                                            <div className={css.user_or_code_icon}>
+                                                {msg.isCode
+                                                    ? <StarsIcon width={14} height={18} />
+                                                    : <UserMessageIcon width={9} height={8} />}
+                                            </div>
+                                            {editingMessageId === msg.id ? (
+                                                <input
+                                                    autoFocus
+                                                    value={editingMessageValue}
+                                                    onChange={(e) => setEditingMessageValue(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === "Enter") {
+                                                            finishEditing(msg.id);
+                                                        }
+                                                    }}
+                                                    onBlur={() => finishEditing(msg.id)}
+                                                />
+                                            ) : (
+                                                <div>
+                                                    {msg.name
+                                                        ? extractPreviewText(msg.name)
+                                                        : extractPreviewText(msg.content)}
+                                                </div>
+                                            )}
                                         </div>
-                                        <div>{extractPreviewText(msg.content)}</div>
+
                                         <div
-                                            onClick={handleOpenBookmarksActions}
+                                            onClick={(e) => handleOpenBookmarksActions(e, msg)}
                                             className={css.three_dots}
                                         >
                                             <ThreeDotsIcon />
@@ -529,29 +662,30 @@ export const SideBarMenu = () => {
                     )}
 
                     {isBookmarksActionsOpen && (
-                        <BookmarksActions/>
+                        <BookmarksActions position={bookmarksActionsPosition}
+                                          onRename={handleRename}
+                                          onDelete={handleDelete}/>
                     )}
 
-                    {/*<div className={css.sidebar_menu_action_container}>*/}
-                        <div className={css.sidebar_menu_action_container}
-                             data-active={isTagsOpen}
-                             onClick={() => {
-                                 setIsTagsOpen(prev => !prev);
-                                 setSelectedTag(null);
-                             }}>
-                            <div className={css.sidebar_menu_action_btn}>
-                                <TagsIcon fill="currentColor" />
-                            </div>
-                            <div className={css.sidebar_menu_action_btn_tooltip}>
-                                <div>Tags</div>
-                                <div className={css.show_more_btn}
-                                    >
-                                    {!isTagsOpen ? "+" : "-"}
-                                </div>
+                    <div className={css.sidebar_menu_action_container}
+                         data-active={isTagsOpen}
+                         onClick={() => {
+                             setIsTagsOpen(prev => !prev);
+                             setSelectedTag(null);
+                         }}>
+                        <div className={css.sidebar_menu_action_btn}>
+                            <TagsIcon fill="currentColor" />
+                        </div>
+                        <div className={css.sidebar_menu_action_btn_tooltip}>
+                            <div>Tags</div>
+                            <div className={css.show_more_btn}
+                            >
+                                {!isTagsOpen ? "+" : "-"}
                             </div>
                         </div>
+                    </div>
 
-                    {isTagsOpen && (
+                    {isTagsOpen && isSideBarOpen && (
                         <div className={css.tags_container}>
                             {Object.entries(chatsByTags)
                                 .filter(([tag, chats]) => tag !== "untagged" && chats.length > 0)
@@ -562,50 +696,97 @@ export const SideBarMenu = () => {
                                     const isOpen = selectedTag === tagEnum;
 
                                     return (
-                                        <div
-                                            key={tag}
-                                            className={css.tag_item}
-                                            onClick={() => setSelectedTag(isOpen ? null : tagEnum)}
-                                        >
-                                            <div className={css.chat_item_tag_and_name}>
-                                                <div
-                                                    className={`${css.chat_tag} ${isOpen ? css.current_chat_tag : ""}`}
-                                                    style={{ backgroundColor: color }}
-                                                />
-                                                <div>{customName}&nbsp;</div>
+                                        <React.Fragment key={tag}>
+                                            <div
+                                                className={css.tag_item}
+                                                onClick={() => setSelectedTag(isOpen ? null : tagEnum)}
+                                                data-active={isOpen}>
+                                                <div className={css.chat_item_tag_and_name}>
+                                                    <div
+                                                        className={`${css.chat_tag} ${isOpen ? css.current_chat_tag : ""}`}
+                                                        style={{ backgroundColor: color }}
+                                                    />
+                                                    <div>{customName}&nbsp;</div>
+                                                </div>
+                                                <div className={css.show_more_btn}>{isOpen ? "–" : "+"}</div>
                                             </div>
-                                            <div className={css.show_more_btn}>
-                                                {isOpen ? "-" : "+"}
-                                            </div>
-                                        </div>
+
+                                            {isOpen && (
+                                                <div className={css.tag_chats_list}>
+                                                    <div className={css.chats}>Chats</div>
+                                                    {chats.map(chat => {
+                                                        const isChatOpen = expandedChatId === chat.id;
+                                                        const branches = chat.id === currentChat.id
+                                                            ? currentChat.branches
+                                                            : chat.branches ?? [];
+
+                                                        return (
+                                                            <div key={chat.id}>
+                                                                <div
+                                                                    className={css.chat_item}
+                                                                    onClick={() => handleToggleChatBranches(chat.id)}
+                                                                >
+                                                                    <div className={css.chat_item_tag_and_name}>
+                                                                        <div
+                                                                            className={css.chat_tag}
+                                                                            style={{ backgroundColor: TAG_META[selectedTag!].color }}
+                                                                            title={customTagNames.get(selectedTag!) ?? TAG_META[selectedTag!].defaultName}
+                                                                        />
+                                                                        <div className={css.chat_name}>{chat.name}</div>
+                                                                    </div>
+                                                                    <div
+                                                                        className={css.show_more_btn}
+                                                                        data-active={isChatOpen}>
+                                                                        {!isChatOpen ? "+" : "-"}
+                                                                    </div>
+                                                                </div>
+
+                                                                {isChatOpen && branches.length > 0 && (
+                                                                    <div className={css.branches_list_container}>
+                                                                        <div>Branches</div>
+                                                                        <div className={css.branches_list}>
+                                                                            {branches.map(branch => (
+                                                                                <div key={branch.id} className={css.branch_item}>
+                                                                                    <div className={css.branch_icon_and_name}>
+                                                                                        <div>
+                                                                                            <BranchIcon fill="currentColor" width={16}
+                                                                                                        height={16} />
+                                                                                        </div>
+                                                                                        <div className={css.branch_name}>
+                                                                                            {branch.name}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        className={css.branch_three_dots}
+                                                                                        onClick={handleOpenBranchMenu}>
+                                                                                        <ThreeDotsIcon />
+                                                                                    </div>
+
+                                                                                    <CSSTransition
+                                                                                        in={isBranchMenuOpen && branch.id !== null}
+                                                                                        timeout={200}
+                                                                                        classNames="branchMenu"
+                                                                                        unmountOnExit
+                                                                                    >
+                                                                                        <AllBranchesMenu
+                                                                                            position={menuPosition}
+                                                                                            branchId={branch.id!}
+                                                                                            setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
+                                                                                        />
+                                                                                    </CSSTransition>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
+                                        </React.Fragment>
                                     );
                                 })}
-
-                            {selectedTag && (
-                                <div className={css.tag_chats_list}>
-                                    {chatsByTags[selectedTag].map(chat => {
-                                        const isOpen = expandedChatId === chat.id;
-                                        const branches = chat.id === currentChat.id ? currentChat.branches : chat.branches ?? [];
-
-                                        return (
-                                            <div key={chat.id}>
-                                                <div className={css.chat_item} onClick={() => handleToggleChatBranches(chat.id)}>
-                                                    <div className={css.chat_name}>{chat.name}</div>
-                                                </div>
-                                                {isOpen && branches.length > 0 && (
-                                                    <div className={css.branches_list}>
-                                                        {branches.map(branch => (
-                                                            <div key={branch.id} className={css.branch_item}>
-                                                                {branch.name}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
                         </div>
                     )}
 
@@ -613,6 +794,6 @@ export const SideBarMenu = () => {
                     {/*</div>*/}
                 </div>
             )}
-       </div>
+        </div>
     );
 };

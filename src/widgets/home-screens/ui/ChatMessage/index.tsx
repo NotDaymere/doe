@@ -95,8 +95,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const [content, setContent] = React.useState(data.content);
     const [updatedContent, setUpdatedContent] = useState(data.content);
 
-    const [isLiked, setIsLiked] = useState(data.isLiked || false);
-
     const {
         setEditor,
         isCurrentBranchOpen,
@@ -461,15 +459,13 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     };
 
     const handleLike = () => {
-        setMessageLike(data.id, !isLiked);
-        setIsLiked(prev => !prev);
+        setMessageLike(data.id, !data.isLiked);
     };
-
 
     const renderFavButton = () => {
         return (
             <button
-                className={clsx(css.fav_button, { [css.fav_button_liked]: isLiked})}
+                className={clsx(css.fav_button, { [css.fav_button_liked]: data.isLiked})}
                 onClick={handleLike}
             >
                 <FavoriteIcon fill="currentColor" />

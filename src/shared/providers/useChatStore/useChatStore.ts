@@ -526,6 +526,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             };
         });
     },
+
     removeChat: (chatId: string) =>
         set((state) => {
             const updatedChats = state.chats.filter(chat => chat.id !== chatId);
@@ -716,6 +717,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 chats: updatedChats,
             };
         }),
+
     changeMessageName: (messageId: number, newName: string) =>
         set((state) => {
             const updatedMessages = state.messages.map((msg) =>
