@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ChatMessageDate } from "../ChatMessageData/ChatMessageDate";
 import ChatBranchSection from "../ChatBranchSection/ChatBranchSection";
 import { ChatMessage } from "../../../ChatMessage";
 import { useChatStore } from "../../../../../../shared/providers";
 import css from "./ContentChatRegularView.module.less";
-import { message } from "antd";
 
 interface ChatRegularViewProps {
     playgroundFullscreen: boolean;
@@ -28,38 +27,40 @@ export const ChatRegularView: React.FC<ChatRegularViewProps> = ({
                                                                     editMsgMode,
                                                                     setEditMsgMode,
                                                                 }) => {
-    const { savedBranches } = useChatStore();
+    const { savedBranches, activeMessage, setActiveMessage } = useChatStore();
+
+    useEffect(() => {
+        if (activeMessage) {
+            const element = document.getElementById(`chat-msg-${activeMessage.id}`);
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+            setActiveMessage(null);
+        }
+    }, [activeMessage, setActiveMessage]);
 
     return (
-        <>
+        <div className={css.content_chat}>
+            {messageQueue.map((item, index) => {
+                const branch = savedBranches.find(b => b.mainMessageId === item.id);
+                const hasBranch = !!(branch && branch.mainMessageId === item.id);
 
-            <div className={css.content_chat}>
-                {messageQueue.map((item, index) => {
-                    const branch = savedBranches.find(b => b.mainMessageId === item.id);
-                    let hasBranch = false;
-                    if (branch) {
-                        if (branch.mainMessageId === item.id) {
-                            hasBranch = branch.mainMessageId === item.id;
-                        }
-                    }
-
-                    return (
-                        <React.Fragment key={item.id}>
-                            <ChatMessageDate id={index} />
-                            {hasBranch && branch ? (
-                                <ChatBranchSection branch={branch} />
-                            ) : (
-                                <ChatMessage
-                                    data={item}
-                                    editor={editor}
-                                    editMsgMode={editMsgMode}
-                                    setEditMsgMode={setEditMsgMode}
-                                />
-                            )}
-                        </React.Fragment>
-                    );
-                })}
-            </div>
-        </>
+                return (
+                    <div key={item.id} id={`chat-msg-${item.id}`}>
+                        <ChatMessageDate id={index} />
+                        {hasBranch && branch ? (
+                            <ChatBranchSection branch={branch} />
+                        ) : (
+                            <ChatMessage
+                                data={item}
+                                editor={editor}
+                                editMsgMode={editMsgMode}
+                                setEditMsgMode={setEditMsgMode}
+                            />
+                        )}
+                    </div>
+                );
+            })}
+        </div>
     );
 };

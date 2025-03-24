@@ -1,10 +1,10 @@
-import React from "react";
-
+import React, { useEffect } from "react";
 import css from "./ChatBranchView.module.less";
 import { ChatMessageDate } from "../ChatMessageData/ChatMessageDate";
 import { ChatMessage } from "../../../ChatMessage";
 import ChatBranchSection from "../ChatBranchSection/ChatBranchSection";
 import { IBranch } from "../../../../../../shared/types/Branch";
+import { useChatStore } from "../../../../../../shared/providers";
 
 interface ChatBranchViewProps {
     currentBranch: IBranch;
@@ -29,18 +29,32 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                                                   setEditMsgMode,
                                                                   dialogRefs,
                                                               }) => {
+    const { activeMessage, setActiveMessage } = useChatStore();
+
+    useEffect(() => {
+        if (activeMessage) {
+            const element = document.getElementById(`chat-msg-${activeMessage.id}`);
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+            setActiveMessage(null);
+        }
+    }, [activeMessage, setActiveMessage]);
+
     return (
         <div>
             <div className={css.content_chat_branch_messages}>
                 {currentBranch.messages.slice(-3).map((item, index) => (
                     <React.Fragment key={item.id}>
                         <ChatMessageDate id={index} />
-                        <ChatMessage
-                            data={item}
-                            editor={editor}
-                            editMsgMode={editMsgMode}
-                            setEditMsgMode={setEditMsgMode}
-                        />
+                        <div id={`chat-msg-${item.id}`}>
+                            <ChatMessage
+                                data={item}
+                                editor={editor}
+                                editMsgMode={editMsgMode}
+                                setEditMsgMode={setEditMsgMode}
+                            />
+                        </div>
                     </React.Fragment>
                 ))}
             </div>
@@ -50,18 +64,22 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                         <div className={css.content_chat_branch}>
                             <ChatBranchSection isOpenBrunch={true} />
                             <div className={css.content_chat_branch_dialog}>
-                                <ChatMessage
-                                    data={dialog.userRequest}
-                                    editor={editor}
-                                    editMsgMode={editMsgMode}
-                                    setEditMsgMode={setEditMsgMode}
-                                />
-                                <ChatMessage
-                                    data={dialog.botMessages}
-                                    editor={editor}
-                                    editMsgMode={editMsgMode}
-                                    setEditMsgMode={setEditMsgMode}
-                                />
+                                <div id={`chat-msg-${dialog.userRequest.id}`}>
+                                    <ChatMessage
+                                        data={dialog.userRequest}
+                                        editor={editor}
+                                        editMsgMode={editMsgMode}
+                                        setEditMsgMode={setEditMsgMode}
+                                    />
+                                </div>
+                                <div id={`chat-msg-${dialog.botMessages.id}`}>
+                                    <ChatMessage
+                                        data={dialog.botMessages}
+                                        editor={editor}
+                                        editMsgMode={editMsgMode}
+                                        setEditMsgMode={setEditMsgMode}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </React.Fragment>

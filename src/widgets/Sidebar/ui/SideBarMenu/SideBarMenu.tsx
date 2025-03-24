@@ -39,7 +39,9 @@ export const SideBarMenu = () => {
         getAllFavouritesMessages,
         getChatsByTags,
         setChatTags,
-        renameTag
+        renameTag,
+        switchChat,
+        setActiveMessage
     } = useChatStore();
 
     const chatsByTags = getChatsByTags();
@@ -462,8 +464,8 @@ export const SideBarMenu = () => {
                                 <FavoriteIcon fill="currentColor" />
                             ) : (
                                 isSideBarOpen
-                                ? <SearchIcon fill="currentColor" />
-                                : <FavoriteIcon fill="currentColor" />
+                                    ? <SearchIcon fill="currentColor" />
+                                    : <FavoriteIcon fill="currentColor" />
                             )}
                         </div>
 
@@ -492,28 +494,37 @@ export const SideBarMenu = () => {
                         <div className={css.favourites_list}>
                             {getAllFavouritesMessages().flatMap(group =>
                                 group.messages.map(msg => (
-                                    <div key={msg.id} className={css.favourite_item}>
+                                    <div
+                                        key={msg.id}
+                                        className={css.favourite_item}
+                                        onClick={() => {
+                                            if (currentChat.id !== group.chatId) {
+                                                switchChat(group.chatId);
+                                            }
+                                            setActiveMessage(msg);
+                                        }}
+                                    >
                                         <div className={css.user_or_code_icon}>
                                             {msg.isCode
-                                            ? <StarsIcon width={14} height={18}/>
-                                            : <UserMessageIcon width={9} height={8}/>}
+                                                ? <StarsIcon width={14} height={18} />
+                                                : <UserMessageIcon width={9} height={8} />}
                                         </div>
                                         <div>{extractPreviewText(msg.content)}</div>
                                         <div
                                             onClick={handleOpenBookmarksActions}
-                                            className={css.three_dots}>
+                                            className={css.three_dots}
+                                        >
                                             <ThreeDotsIcon />
                                         </div>
-
                                     </div>
                                 ))
                             )}
                         </div>
                     )}
+
                     {isBookmarksActionsOpen && (
                         <BookmarksActions/>
                     )}
-
 
                     {/*<div className={css.sidebar_menu_action_container}>*/}
                         <div className={css.sidebar_menu_action_container}

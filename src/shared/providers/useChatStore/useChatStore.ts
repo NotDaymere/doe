@@ -186,6 +186,8 @@ export interface ChatState {
     replyTimeoutId: number | null;
     replyPromiseReject?: (reason?: any) => void;
 
+    activeMessage: IMessage | null;
+    setActiveMessage: (message: IMessage | null) => void;
     changeMessageName: (messageId: number, newName: string) => void;
     messages: IMessage[];
     setMessages: (messages: IMessage[]) => void;
@@ -304,6 +306,9 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             currentReplyReject = null;
         }
     },
+
+    activeMessage: null,
+    setActiveMessage: (message: IMessage | null) => set({ activeMessage: message }),
 
     setEditor: (editor) => set(() => ({ editor })),
     setTyping: (isTyping) => set(() => ({ isTyping })),
