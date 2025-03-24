@@ -66,6 +66,8 @@ export const SideBarMenu = () => {
     const [editingTag, setEditingTag] = useState<ChatTagsEnum | null>(null);
     const [editValue, setEditValue] = useState("");
     const [selectedTag, setSelectedTag] = React.useState<ChatTagsEnum | null>(null);
+    const [isChatsByTagsOpen, setIsChatsByTagsOpen] = React.useState(false);
+
     const handleOpenSideBarMenu = () => {
         setIsSideBarMenuOpen(!isSideBarMenuOpen);
     };
@@ -100,6 +102,10 @@ export const SideBarMenu = () => {
 
     const handleOpenBookmarksActions = () => {
         setIsBookmarksActionsOpen(!isBookmarksActionsOpen)
+    };
+
+    const handleOpenChatsByTags = () => {
+        setIsChatsByTagsOpen(!isChatsByTagsOpen)
     };
 
     function extractPreviewText(html: string): string {
@@ -528,68 +534,83 @@ export const SideBarMenu = () => {
 
                     {/*<div className={css.sidebar_menu_action_container}>*/}
                         <div className={css.sidebar_menu_action_container}
-                             data-active={isTagsOpen}>
+                             data-active={isTagsOpen}
+                             onClick={() => {
+                                 setIsTagsOpen(prev => !prev);
+                                 setSelectedTag(null);
+                             }}>
                             <div className={css.sidebar_menu_action_btn}>
                                 <TagsIcon fill="currentColor" />
                             </div>
                             <div className={css.sidebar_menu_action_btn_tooltip}>
                                 <div>Tags</div>
-                                <div className={css.show_more_btn} onClick={() => {
-                                    setIsTagsOpen(prev => !prev);
-                                    setSelectedTag(null);
-                                }}>
+                                <div className={css.show_more_btn}
+                                    >
                                     {!isTagsOpen ? "+" : "-"}
                                 </div>
                             </div>
                         </div>
 
-                        {isTagsOpen && (
-                            <div className={css.tags_container}>
+                    {isTagsOpen && (
+                        <div className={css.tags_container}>
+                            {Object.entries(chatsByTags)
+                                .filter(([tag, chats]) => tag !== "untagged" && chats.length > 0)
+                                .map(([tag, chats]) => {
+                                    const tagEnum = tag as ChatTagsEnum;
+                                    const color = TAG_META[tagEnum].color;
+                                    const customName = customTagNames.get(tagEnum) ?? TAG_META[tagEnum].defaultName;
+                                    const isOpen = selectedTag === tagEnum;
 
-                                {Object.entries(chatsByTags)
-                                    .filter(([tag, chats]) => tag !== "untagged" && chats.length > 0)
-                                    .map(([tag, chats]) => (
+                                    return (
                                         <div
                                             key={tag}
                                             className={css.tag_item}
-                                            onClick={() => setSelectedTag(tag as ChatTagsEnum)}
+                                            onClick={() => setSelectedTag(isOpen ? null : tagEnum)}
                                         >
-                                            {(customTagNames.get(tag as ChatTagsEnum) ?? TAG_META[tag as ChatTagsEnum].defaultName)}
-                                            &nbsp;({chats.length})
+                                            <div>
+
+                                            </div>
+                                            <div
+                                                className={`${css.chat_tag} ${isOpen ? css.current_chat_tag : ""}`}
+                                                style={{ backgroundColor: color }}
+                                            />
+                                            <div>{customName}&nbsp;({chats.length})</div>
+                                            <div className={css.show_more_btn}>
+                                                {isOpen ? "-" : "+"}
+                                            </div>
                                         </div>
-                                    ))
-                                }
+                                    );
+                                })}
 
-                                {selectedTag && (
-                                    <div className={css.tag_chats_list}>
-                                        {chatsByTags[selectedTag].map(chat => {
-                                            const isOpen = expandedChatId === chat.id;
-                                            const branches = chat.id === currentChat.id
-                                                ? currentChat.branches
-                                                : chat.branches ?? [];
+                            {selectedTag && (
+                                <div className={css.tag_chats_list}>
+                                    {chatsByTags[selectedTag].map(chat => {
+                                        const isOpen = expandedChatId === chat.id;
+                                        const branches = chat.id === currentChat.id ? currentChat.branches : chat.branches ?? [];
 
-                                            return (
-                                                <div key={chat.id}>
-                                                    <div className={css.chat_item} onClick={() => handleToggleChatBranches(chat.id)}>
-                                                        <div className={css.chat_name}>{chat.name}</div>
-                                                    </div>
-
-                                                    {isOpen && branches.length > 0 && (
-                                                        <div className={css.branches_list}>
-                                                            {branches.map(branch => (
-                                                                <div key={branch.id} className={css.branch_item}>
-                                                                    {branch.name}
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
+                                        return (
+                                            <div key={chat.id}>
+                                                <div className={css.chat_item} onClick={() => handleToggleChatBranches(chat.id)}>
+                                                    <div className={css.chat_name}>{chat.name}</div>
                                                 </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                                                {isOpen && branches.length > 0 && (
+                                                    <div className={css.branches_list}>
+                                                        {branches.map(branch => (
+                                                            <div key={branch.id} className={css.branch_item}>
+                                                                {branch.name}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+
                     {/*</div>*/}
                 </div>
             )}
