@@ -1,6 +1,6 @@
 import React, { SVGProps } from "react";
 
-const CopyIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
+const CopyButtonIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
     return (
         <svg
             {...props}
@@ -24,4 +24,4 @@ const CopyIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
     );
 };
 
-export default CopyIcon;
+export default CopyButtonIcon;

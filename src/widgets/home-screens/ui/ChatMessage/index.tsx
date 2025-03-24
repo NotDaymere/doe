@@ -32,9 +32,9 @@ import { parseTextFormatting } from "src/components/chat-message/parseTextFormat
 // Styles
 import css from "./ChatMessage.module.less";
 import "highlight.js/styles/github-dark.css";
-import PlayIcon from "src/shared/icons/Play.icon";
+import PlayButtonIcon from "src/shared/icons/PlayButton.icon";
 import DownloadIcon from "src/shared/icons/Download.icon";
-import CopyIcon from "src/shared/icons/Copy.icon";
+import CopyButtonIcon from "src/shared/icons/CopyButton.icon";
 import { useClickOut } from "src/shared/hooks/useClickOut";
 import ReferenceButton from "../ChatReferences/ReferenceButton/ReferenceButton";
 
@@ -711,7 +711,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                     >
                                         <span className={css.tooltip}>Listen answer</span>
                                         <div className={css.button_container}>
-                                            <PlayIcon fill="currentColor" />
+                                            <PlayButtonIcon fill="currentColor" />
                                         </div>
                                     </button>
 
@@ -743,7 +743,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                     </div>
                                     <button onClick={handleCopy} className={css.button_steps_green}>
                                         <span className={css.tooltip}>Copy chat text</span>
-                                        <CopyIcon />
+                                        <CopyButtonIcon />
                                     </button>
 
                                 </Flex>

@@ -1,6 +1,6 @@
 import React, { SVGProps } from "react";
 
-const PlayIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
+const PlayButtonIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
     return (
         <svg
             {...props}
@@ -36,4 +36,4 @@ const PlayIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
     );
 };
 
-export default PlayIcon;
+export default PlayButtonIcon;

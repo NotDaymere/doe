@@ -2,8 +2,8 @@ import React from "react";
 import css from "./MessageNodeVersionSelector.module.less";
 import { IMessage } from "../../../../../../shared/types/Message";
 import { useChatStore } from "../../../../../../shared/providers";
-import ArrowLeftIcon from "../../../../../../shared/icons/ArrowLeft.icon";
-import ArrowRightIcon from "../../../../../../shared/icons/ArrowRight.icon";
+import ArrowLeftButtonIcon from "../../../../../../shared/icons/ArrowLeftButton.icon";
+import ArrowRightButtonIcon from "../../../../../../shared/icons/ArrowRightButton.icon";
 
 interface MessageNodeVersionSelectorProps {
     message: IMessage;
@@ -36,7 +36,7 @@ export const MessageNodeVersionSelector: React.FC<MessageNodeVersionSelectorProp
                 onClick={handlePrevVersion}
                 disabled={versionInfo.currentVersion === 0}
             >
-                <ArrowLeftIcon fill={"currentColor"}/>
+                <ArrowLeftButtonIcon fill={"currentColor"}/>
             </button>
             <span className={css.messageNodeVersionText}>
                 {`${versionInfo.currentVersion + 1} / ${versionInfo.totalVersions}`}
@@ -46,7 +46,7 @@ export const MessageNodeVersionSelector: React.FC<MessageNodeVersionSelectorProp
                 onClick={handleNextVersion}
                 disabled={versionInfo.currentVersion === versionInfo.totalVersions - 1}
             >
-                <ArrowRightIcon fill={"currentColor"}/>
+                <ArrowRightButtonIcon fill={"currentColor"}/>
             </button>
         </div>
     );

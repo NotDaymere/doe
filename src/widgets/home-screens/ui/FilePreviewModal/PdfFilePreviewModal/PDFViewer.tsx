@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import css from "./PdfFilePreviewModal.module.less";
-import ArrowLeftIcon from "../../../../../shared/icons/ArrowLeft.icon";
-import ArrowRightIcon from "../../../../../shared/icons/ArrowRight.icon";
+import ArrowLeftButtonIcon from "../../../../../shared/icons/ArrowLeftButton.icon";
+import ArrowRightButtonIcon from "../../../../../shared/icons/ArrowRightButton.icon";
 
 export const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -156,14 +156,14 @@ export const PDFViewer: React.FC<{ url: string }> = ({ url }) => {
 
             <div className={css.modalPdfPageSlideWrapper}>
                 <button className={css.prevAndNextButton} onClick={prevPage}>
-                    <ArrowLeftIcon opacity={currentPage <= 1 ? 0.3 : 1} />
+                    <ArrowLeftButtonIcon opacity={currentPage <= 1 ? 0.3 : 1} />
                 </button>
                 <span>
           {currentPage}
                     {pdf ? ` / ${pdf.numPages}` : ""}
         </span>
                 <button className={css.prevAndNextButton} onClick={nextPage}>
-                    <ArrowRightIcon
+                    <ArrowRightButtonIcon
                         opacity={pdf && currentPage >= pdf.numPages ? 0.3 : 1}
                     />
                 </button>
