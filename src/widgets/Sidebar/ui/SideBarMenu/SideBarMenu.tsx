@@ -567,6 +567,9 @@ export const SideBarMenu = () => {
                                             className={css.tag_item}
                                             onClick={() => setSelectedTag(isOpen ? null : tagEnum)}
                                         >
+                                            <div>
+
+                                            </div>
                                             <div
                                                 className={`${css.chat_tag} ${isOpen ? css.current_chat_tag : ""}`}
                                                 style={{ backgroundColor: color }}
