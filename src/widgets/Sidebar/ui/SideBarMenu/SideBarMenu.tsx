@@ -515,7 +515,7 @@ export const SideBarMenu = () => {
                     )}
 
 
-                    <div className={css.menu_actions_section_container}>
+                    {/*<div className={css.sidebar_menu_action_container}>*/}
                         <div className={css.sidebar_menu_action_container}
                              data-active={isTagsOpen}>
                             <div className={css.sidebar_menu_action_btn}>
@@ -579,7 +579,7 @@ export const SideBarMenu = () => {
                                 )}
                             </div>
                         )}
-                    </div>
+                    {/*</div>*/}
                 </div>
             )}
        </div>
