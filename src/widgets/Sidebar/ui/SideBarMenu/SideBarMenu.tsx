@@ -567,14 +567,13 @@ export const SideBarMenu = () => {
                                             className={css.tag_item}
                                             onClick={() => setSelectedTag(isOpen ? null : tagEnum)}
                                         >
-                                            <div>
-
+                                            <div className={css.chat_item_tag_and_name}>
+                                                <div
+                                                    className={`${css.chat_tag} ${isOpen ? css.current_chat_tag : ""}`}
+                                                    style={{ backgroundColor: color }}
+                                                />
+                                                <div>{customName}&nbsp;</div>
                                             </div>
-                                            <div
-                                                className={`${css.chat_tag} ${isOpen ? css.current_chat_tag : ""}`}
-                                                style={{ backgroundColor: color }}
-                                            />
-                                            <div>{customName}&nbsp;({chats.length})</div>
                                             <div className={css.show_more_btn}>
                                                 {isOpen ? "-" : "+"}
                                             </div>
