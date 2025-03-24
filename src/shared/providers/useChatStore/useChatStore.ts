@@ -507,6 +507,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             }
             return { chats: updatedChats, currentChat: updatedCurrentChat };
         }),
+
     renameTag: (tag: ChatTagsEnum, newName: string) => {
         set((state) => {
             const updatedTagNames = new Map(state.customTagNames);

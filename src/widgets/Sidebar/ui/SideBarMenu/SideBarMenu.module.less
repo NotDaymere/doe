@@ -107,7 +107,119 @@
         margin-bottom: 10px;
       }
 
+      .all_tags_panel {
+        position: absolute;
+        display: flex;
+        background-color: rgba(237, 237, 237, 0.82);
+        flex-direction: column;
+        align-content: center;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 7px;
+        padding-left: 15px;
+        border-radius: 9px;
+        box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.09);
+        backdrop-filter: blur(20px);
+        width: 181px;
+        height: 370px;
+        gap: 5px;
+
+        .assigning_tags {
+          display: flex;
+          flex-direction: row;
+          align-content: center;
+          align-items: center;
+          justify-content: flex-start;
+          width: 100%;
+          gap: 10px;
+          padding-top: 7px;
+          color: #CFCFCF;
+          font-size: 14px;
+          font-weight: 500;
+        }
+
+        .tags_input {
+          height: 27px;
+          border-radius: 4px;
+          width: 100%;
+          color: #a30c0c;
+        }
+
+        .selected_tag_item {
+          color: #1F1F1F !important;
+          background: rgba(202, 202, 202, 0.4) !important;
+        }
+
+        .tag_item {
+          position: relative;
+          background: transparent;
+          display: flex;
+          align-items: center;
+          align-content: center;
+          justify-content: flex-start;
+          flex-direction: row;
+          gap: 10px;
+          width: fit-content;
+          max-width: 150px;
+          font-size: 14px;
+          font-weight: 500;
+          color: #B5B5B5;
+          cursor: pointer;
+          height: 27px;
+          border-radius: 8px;
+          padding: 5px;
+          border: 1px solid transparent;
+          transition: border 0.3s ease,
+                      background 0.3s ease,
+                      color 0.3s ease;
+
+          &:hover {
+            border: 1px solid #bdbdbd;
+            background: rgba(209, 209, 209, 0.34);
+            color: #1F1F1F;
+            max-width: 110px;
+
+            .edit_tag_name_btn {
+              opacity: 1;
+              pointer-events: auto;
+              transform: translateX(0);
+            }
+          }
+
+          .chat_tag {
+            min-width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: auto;
+            border: 1px solid #ededed;
+          }
+
+          .edit_tag_name_btn {
+            opacity: 0;
+            pointer-events: none;
+            max-width: 20px;
+            max-height: 20px;
+            min-width: 20px;
+            min-height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+            background: rgba(205, 205, 205, 0.47);
+            transform: translateX(-20px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+
+            svg path {
+              fill: #5B5B5B;
+            }
+          }
+        }
+      }
+
       .tag_panel {
+        position: absolute;
         display: flex;
         margin-left: 9px;
         background-color: rgba(237, 237, 237, 0.82);
@@ -124,12 +236,17 @@
         gap: 5px;
 
         .chat_tag {
-          width: 16px;
+          min-width: 16px;
           height: 16px;
           border-radius: 50%;
           background-color: #F0A;
           cursor: pointer;
           pointer-events: auto;
+          border: 1px solid #ededed;
+        }
+
+        .current_chat_tag {
+          border: 1px solid #7c7c7c !important;
         }
 
         .three_dots {
@@ -179,17 +296,36 @@
           align-content: center;
           flex-direction: row;
 
-          .chat_tag {
+          .tags_wrapper {
+            position: relative;
             width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            margin-right: 8px;
-            background-color: #F0A;
-            cursor: pointer;
-            pointer-events: auto;
+            display: inline-flex;
+            align-items: center;
+            transition: width 0.2s ease;
+
+            &[data-count="2"] { width: 24px; }
+            &[data-count="3"] { width: 32px; }
+
+            .chat_tag {
+              position: absolute;
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
+              margin-right: 8px;
+              cursor: pointer;
+              pointer-events: auto;
+              border: 1px solid #ededed;
+              transition: left 0.2s ease;
+
+              &:nth-child(1) { left: 0; z-index: 15}
+              &:nth-child(2) { left: 8px; z-index: 10}
+              &:nth-child(3) { left: 16px; z-index: 5 }
+              &:nth-child(n+4) { display: none; }
+            }
           }
 
           .chat_name {
+            margin-left: 8px;
             font-size: 14px;
             font-weight: 500;
             color: #1F1F1F;
@@ -419,6 +555,65 @@
           }
         }
       }
+
+
+    }
+
+    .favourites_list {
+      padding: 7px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-content: center;
+      justify-content: flex-start;
+      gap: 7px;
+      width: 100%;
+
+
+      .favourite_item {
+        align-items: center;
+        align-content: center;
+        justify-content: flex-start;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        width: 100%;
+        height: 40px;
+        padding: 7px;
+        border-radius: 8px;
+        font-weight: 400;
+        font-size: 14px;
+        color: #1F1F1F;
+        cursor: pointer;
+        background: transparent;
+        transition: background 0.3s ease;
+
+        &:hover {
+          background: rgba(202, 202, 202, 0.4);
+        }
+
+        .three_dots {
+          display: flex;
+          align-content: center;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          height: 20px;
+          margin-left: 50px;
+        }
+
+        .user_or_code_icon {
+          display: flex;
+          align-content: center;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          height: 20px;
+          border-radius: 4px;
+          background: rgba(202, 202, 202, 0.4);
+        }
+      }
+
     }
   }
 
