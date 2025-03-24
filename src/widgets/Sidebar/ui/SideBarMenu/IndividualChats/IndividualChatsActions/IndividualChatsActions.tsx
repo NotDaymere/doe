@@ -55,7 +55,7 @@ export const IndividualChatsActions = ({ position, onClose, onRename, onDelete, 
                 </div>
             </div>
             <div
-                className={css.individual_chats_action}
+                className={`${css.individual_chats_action} ${css.delete}`}
                 onClick={onDelete}>
                 <div className={css.individual_chats_actions_container_delete_icon}>
                     <TrashIcon />

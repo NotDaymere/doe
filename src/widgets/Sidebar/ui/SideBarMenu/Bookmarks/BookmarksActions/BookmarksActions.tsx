@@ -13,6 +13,7 @@ interface BookmarksActionsProps {
 }
 
 export const BookmarksActions = ({ position, onRename, onDelete }: BookmarksActionsProps) => {
+
     return (
         <div className={css.bookmarks_actions_container} style={{ top: position.top, right: position.right }}>
             <div
@@ -24,7 +25,7 @@ export const BookmarksActions = ({ position, onRename, onDelete }: BookmarksActi
                 <div>Rename</div>
             </div>
             <div
-                className={css.bookmarks_action}
+                className={`${css.bookmarks_action} ${css.delete}`}
                 onClick={onDelete}>
                 <div className={css.icon}>
                     <TrashIcon />

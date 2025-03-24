@@ -88,6 +88,11 @@ export const SideBarMenu = () => {
     const [selectedTag, setSelectedTag] = React.useState<ChatTagsEnum | null>(null);
     const [isChatsByTagsOpen, setIsChatsByTagsOpen] = React.useState(false);
 
+    const activeChat = chats.find(c => c.id === activeTagPanel) ?? null;
+    const [selectedTags, setSelectedTags] = useState<ChatTagsEnum[]>(activeChat?.tags ?? []);
+
+    const [inputValue, setInputValue] = useState("");
+    const inputRef = React.useRef<HTMLInputElement>(null);
     const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
     const [editingMessageValue, setEditingMessageValue] = useState("");
     const [activeBookmarkMessage, setActiveBookmarkMessage] = useState<any>(null);
@@ -383,9 +388,42 @@ export const SideBarMenu = () => {
                                                             <TagsIcon />
                                                             <div>Assigning Tag</div>
                                                         </div>
-                                                        <div>
-                                                            <input/>
+
+                                                        <div className={css.input_container}>
+                                                            {selectedTags.map(tagEnum => (
+                                                                <div
+                                                                    key={tagEnum}
+                                                                    className={css.tag_chip}
+                                                                    style={{ backgroundColor: TAG_META[tagEnum].color }}
+                                                                >
+                                                                    {customTagNames.get(tagEnum) ?? TAG_META[tagEnum].defaultName}
+                                                                </div>
+                                                            ))}
+                                                            <input
+                                                                ref={inputRef}
+                                                                className={css.tag_input}
+                                                                value={inputValue}
+                                                                onChange={e => setInputValue(e.target.value)}
+                                                                onKeyDown={e => {
+                                                                    if (e.key === " " && inputValue.trim()) {
+                                                                        const match = Object.entries(TAG_META)
+                                                                            .find(([key, meta]) => meta.defaultName.toLowerCase() === inputValue.trim().toLowerCase());
+                                                                        if (match) {
+                                                                            const tagEnum = match[0] as ChatTagsEnum;
+                                                                            if (!chat.tags?.includes(tagEnum)) {
+                                                                                setChatTags(chat.id, [...(chat.tags ?? []), tagEnum]);
+                                                                                setSelectedTags(prev => [...prev, tagEnum]);
+                                                                            }
+                                                                        }
+                                                                        setInputValue("");
+                                                                        e.preventDefault();
+                                                                    }
+                                                                }}
+                                                                onFocus={() => setShowAllTags(chat.id)}
+                                                            />
                                                         </div>
+
+
                                                         {Object.entries(TAG_META).map(([tag, {
                                                             defaultName,
                                                             color,
@@ -444,7 +482,7 @@ export const SideBarMenu = () => {
                                                                                 setEditValue(customName);
                                                                             }}
                                                                         >
-                                                                            <PenIcon width={11} height={11}/>
+                                                                            <PenIcon width={11} height={11} />
                                                                         </div>
                                                                     )}
                                                                 </div>
