@@ -125,7 +125,6 @@ export interface ChatState {
     currentChat: IChat;
     chats: IChat[];
     addChat: (chat: IChat) => void;
-    addNewChat: (chat: IChat) => void;
     switchChat: (chatId: string) => void;
     renameChat: (chatId: string, newName: string) => void;
 
@@ -156,6 +155,7 @@ export interface ChatState {
     replyTimeoutId: number | null;
     replyPromiseReject?: (reason?: any) => void;
 
+    changeMessageName: (messageId: number, newName: string) => void;
     messages: IMessage[];
     setMessages: (messages: IMessage[]) => void;
     changeMessage: (oldMessage: IMessage, newMessage: IMessage) => IMessage | null;
@@ -460,12 +460,6 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             currentChat: state.currentChat || chat,
         })),
 
-    addNewChat: (chat: IChat) =>
-        set((state) => ({
-            chats: [...state.chats, chat],
-            currentChat: chat,
-        })),
-
     switchChat: (chatId: string) => {
         const chat = get().chats.find((c) => c.id === chatId);
         if (chat) {
@@ -684,7 +678,27 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 },
             };
         }),
+    changeMessageName: (messageId: number, newName: string) =>
+        set((state) => {
+            const updatedMessages = state.messages.map((msg) =>
+                msg.id === messageId ? { ...msg, name: newName } : msg
+            );
 
+            const updatedMessageNodeMap = { ...state.currentChat.messageNodeMap };
+            Object.values(updatedMessageNodeMap).forEach((node) => {
+                if (node.message && node.message.id === messageId) {
+                    node.message = { ...node.message, name: newName } as IMessage;
+                }
+            });
+
+            return {
+                messages: updatedMessages,
+                currentChat: {
+                    ...state.currentChat,
+                    messageNodeMap: updatedMessageNodeMap,
+                },
+            };
+        }),
     getAllFavouritesMessages: () => {
         const state = get();
         return state.chats
