@@ -203,6 +203,7 @@ export interface ChatState {
     ) => { totalVersions: number; currentVersion: number } | null;
     setMessageLike: (messageOrId: number | IMessage, liked: boolean) => void;
     getAllFavouritesMessages: () => { chatId: string; chatName: string; messages: IMessage[] }[];
+    clearCurrentChatMessages: () => void;
 
     isCreateBranchChatMode: boolean;
     setIsCreateBranchChatMode: (isCreateBranchChatMode: boolean) => void;
@@ -306,7 +307,25 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             currentReplyReject = null;
         }
     },
+    clearCurrentChatMessages: () => set((state) => {
+        const rootNode = state.currentChat.messageNodeMap["root"];
 
+        const newMessageNodeMap = {
+            root: {
+                ...rootNode,
+                children: [],
+                currentChildrenVersion: 0,
+            },
+        };
+
+        return {
+            currentChat: {
+                ...state.currentChat,
+                messageNodeMap: newMessageNodeMap,
+            },
+            messages: [],
+        };
+    }),
     activeMessage: null,
     setActiveMessage: (message: IMessage | null) => set({ activeMessage: message }),
 
