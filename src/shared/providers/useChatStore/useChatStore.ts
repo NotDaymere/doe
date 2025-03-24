@@ -749,15 +749,17 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         }),
     getAllFavouritesMessages: () => {
         const state = get();
-        return state.chats
+        const result = state.chats
             .map(chat => {
                 const likedMessages = Object.values(chat.messageNodeMap)
                     .map(node => node.message)
                     .filter((msg): msg is IMessage => msg !== undefined && msg.isLiked === true);
-
+                console.log(`Chat: ${chat.id} - ${chat.name}:`, likedMessages);
                 return { chatId: chat.id, chatName: chat.name, messages: likedMessages };
             })
             .filter(item => item.messages.length > 0);
+        console.log("Result:", result);
+        return result;
     },
     getFavouritesMessages: () => get().getMessageQueueFromNode().filter(m => m.isLiked === true),
 
