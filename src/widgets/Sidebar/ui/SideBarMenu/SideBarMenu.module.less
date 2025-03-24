@@ -123,6 +123,7 @@
         width: 181px;
         height: 370px;
         gap: 5px;
+        z-index: 50;
 
         .assigning_tags {
           display: flex;
@@ -234,6 +235,7 @@
         width: 110px;
         height: 32px;
         gap: 5px;
+        z-index: 50;
 
         .chat_tag {
           min-width: 16px;
@@ -617,12 +619,14 @@
 
     .tags_container {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       align-content: center;
-      justify-content: center;
+      justify-content: flex-start;
+
+      flex-direction: column;
+      width: 100%;
 
       .tag_item {
-        position: relative;
         background: transparent;
         display: flex;
         align-items: center;
@@ -634,7 +638,7 @@
         max-width: 150px;
         font-size: 14px;
         font-weight: 500;
-        color: #B5B5B5;
+        color: #5B5B5B;
         cursor: pointer;
         height: 27px;
         border-radius: 8px;
@@ -643,6 +647,40 @@
         transition: border 0.3s ease,
         background 0.3s ease,
         color 0.3s ease;
+
+        .chat_tag {
+          min-width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          cursor: pointer;
+          pointer-events: auto;
+          border: 1px solid #ededed;
+        }
+
+        .show_more_btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-content: center;
+            border-radius: 4px;
+            font-size: 20px !important;
+            cursor: pointer;
+            padding-bottom: 3px;
+            background-color: transparent;
+            width: 20px;
+            height: 20px;
+            color: #8D8D8D;
+            transition: background-color 0.3s ease-out;
+
+            &[data-active="true"] {
+              background-color: #FFFFFF;
+              color: #8D8D8D;
+            }
+
+            &:hover {
+              background-color: #FFFFFF;
+            }
+        }
       }
     }
   }

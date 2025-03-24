@@ -66,6 +66,8 @@ export const SideBarMenu = () => {
     const [editingTag, setEditingTag] = useState<ChatTagsEnum | null>(null);
     const [editValue, setEditValue] = useState("");
     const [selectedTag, setSelectedTag] = React.useState<ChatTagsEnum | null>(null);
+    const [isChatsByTagsOpen, setIsChatsByTagsOpen] = React.useState(false);
+
     const handleOpenSideBarMenu = () => {
         setIsSideBarMenuOpen(!isSideBarMenuOpen);
     };
@@ -100,6 +102,10 @@ export const SideBarMenu = () => {
 
     const handleOpenBookmarksActions = () => {
         setIsBookmarksActionsOpen(!isBookmarksActionsOpen)
+    };
+
+    const handleOpenChatsByTags = () => {
+        setIsChatsByTagsOpen(!isChatsByTagsOpen)
     };
 
     function extractPreviewText(html: string): string {
@@ -528,16 +534,18 @@ export const SideBarMenu = () => {
 
                     {/*<div className={css.sidebar_menu_action_container}>*/}
                         <div className={css.sidebar_menu_action_container}
-                             data-active={isTagsOpen}>
+                             data-active={isTagsOpen}
+                             onClick={() => {
+                                 setIsTagsOpen(prev => !prev);
+                                 setSelectedTag(null);
+                             }}>
                             <div className={css.sidebar_menu_action_btn}>
                                 <TagsIcon fill="currentColor" />
                             </div>
                             <div className={css.sidebar_menu_action_btn_tooltip}>
                                 <div>Tags</div>
-                                <div className={css.show_more_btn} onClick={() => {
-                                    setIsTagsOpen(prev => !prev);
-                                    setSelectedTag(null);
-                                }}>
+                                <div className={css.show_more_btn}
+                                    >
                                     {!isTagsOpen ? "+" : "-"}
                                 </div>
                             </div>
@@ -551,18 +559,22 @@ export const SideBarMenu = () => {
                                     const tagEnum = tag as ChatTagsEnum;
                                     const color = TAG_META[tagEnum].color;
                                     const customName = customTagNames.get(tagEnum) ?? TAG_META[tagEnum].defaultName;
+                                    const isOpen = selectedTag === tagEnum;
 
                                     return (
                                         <div
                                             key={tag}
                                             className={css.tag_item}
-                                            onClick={() => setSelectedTag(tagEnum)}
+                                            onClick={() => setSelectedTag(isOpen ? null : tagEnum)}
                                         >
                                             <div
-                                                className={`${css.chat_tag} ${selectedTag === tagEnum ? css.current_chat_tag : ""}`}
+                                                className={`${css.chat_tag} ${isOpen ? css.current_chat_tag : ""}`}
                                                 style={{ backgroundColor: color }}
                                             />
                                             <div>{customName}&nbsp;({chats.length})</div>
+                                            <div className={css.show_more_btn}>
+                                                {isOpen ? "-" : "+"}
+                                            </div>
                                         </div>
                                     );
                                 })}
@@ -594,6 +606,7 @@ export const SideBarMenu = () => {
                             )}
                         </div>
                     )}
+
 
                     {/*</div>*/}
                 </div>
