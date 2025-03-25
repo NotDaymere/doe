@@ -30,7 +30,8 @@ export const SidebarGaia: React.FC = () => {
                     // unmountOnExit
                     mountOnEnter
                 >
-                    <p className={css.gaia_hint} ref={nodeRef}>
+                    <p className={css.gaia_hint}
+                       ref={nodeRef}>
                         Environmental savings per (calculated per token) by using our models compared to
                         existing SOTA models.
                         <br />

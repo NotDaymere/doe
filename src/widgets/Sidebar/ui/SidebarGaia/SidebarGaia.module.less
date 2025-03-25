@@ -2,6 +2,7 @@
     position: relative;
     z-index: 50;
     padding-left: 5px;
+    width: 50px;
 
     &._active {
         .gaia_hint {
@@ -30,6 +31,7 @@
     width: 40px;
     height: 40px;
     padding: 8px;
+    margin-left: 3px;
 
     svg {
         width: 100%;
@@ -38,6 +40,8 @@
         transition: fill 200ms ease;
     }
 }
+
+
 
 .gaia_hint {
     position: absolute;
@@ -80,6 +84,12 @@
         top: 2px;
         transform: translateX(-10px);
     }
+}
+
+.css.gaia_hint_open {
+  &::before {
+    left: 200px;
+  }
 }
 
 .enter,
