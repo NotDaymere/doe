@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import React, { Dispatch, useEffect } from "react";
 import Bold from "@tiptap/extension-bold";
 import Document from "@tiptap/extension-document";
 import History from "@tiptap/extension-history";
@@ -20,6 +20,9 @@ import {
 } from "src/components/tiptap-editor/extensions/index";
 import { useChatController } from "../..";
 import { ChatMessage } from "../ChatMessage";
+import classNames from "classnames";
+import MagicIcon from "src/shared/icons/Magic.icon";
+import QuickSearch from "../QuickSearch";
 import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
 import { TalkMode } from "../TalkMode";
 import css from "./ChatContent.module.less";
@@ -44,7 +47,6 @@ interface Props {
 export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) => {
     const { chatRef } = useChatController();
     const {
-        playground,
         playgroundFullscreen,
         getOpenSavedPlaygrounds,
         currentBranch,
@@ -52,8 +54,10 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         isCurrentBranchOpen,
         currentBranchDialog,
         setCurrentBranchDialog,
+        showQuickSearch,
+        setShowQuickSearch,
     } = useChatStore();
-    const { talkModeActive} = useAppStore();
+    const { talkModeActive, setPlayground, playground} = useAppStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
@@ -146,6 +150,29 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         }
     }, [messageQueue]);
 
+    useEffect(() => {
+        const handleKeyDown = (event: any) => {
+            if ((event.metaKey || event.ctrlKey) && event.key === "f") {
+                event.preventDefault();
+                setShowQuickSearch(true);
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
+
+    const handleStepsButtonClick = () => {
+        setPlayground({
+            ...playground,
+            type: "source",
+            open: !playground.open,
+        });
+    };
+
     return (
         <div
             className={
@@ -157,18 +184,6 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
             }
         >
             <div className={css.content_inner} ref={chatRef}>
-                {/*{!playgroundFullscreen && <AllPlaygrounds />}*/}
-                {/*<div className={css.content_chat} ref={chatRef}>*/}
-                {/*    {messages.map((item) => (*/}
-                {/*        <ChatMessage*/}
-                {/*            data={item}*/}
-                {/*            key={item.id}*/}
-                {/*            editor={editor}*/}
-                {/*            editMsgMode={editMsgMode}*/}
-                {/*            setEditMsgMode={setEditMsgMode}*/}
-                {/*        />*/}
-                {/*    ))}*/}
-                {/*</div>*/}
                 {!(isCurrentBranchOpen && currentBranch && currentBranch.messages) ? (
                     <ChatRegularView
                         playgroundFullscreen={playgroundFullscreen}
@@ -193,6 +208,22 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
 
                 <TalkMode targetRef={chatRef} />
+                {/*<div className={css.actions}>*/}
+                {/*    /!*<button*!/*/}
+                {/*    /!*    className={classNames(css.steps_button, {*!/*/}
+                {/*    /!*        [css.active_steps_button]: playground.open,*!/*/}
+                {/*    /!*    })}*!/*/}
+                {/*    /!*    onClick={handleStepsButtonClick}*!/*/}
+                {/*    /!*>*!/*/}
+                {/*    /!*    <MagicIcon /> See all steps*!/*/}
+                {/*    /!*</button>*!/*/}
+                {/*</div>*/}
+
+                {showQuickSearch && (
+                    <div className={css.quickSearch}>
+                        <QuickSearch onClose={setShowQuickSearch} />
+                    </div>
+                )}
             </div>
     </div>
     );

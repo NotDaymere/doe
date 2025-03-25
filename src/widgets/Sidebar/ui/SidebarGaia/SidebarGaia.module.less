@@ -15,6 +15,7 @@
 
 .gaia_btn_wrapper {
     position: relative;
+}
 
     &:hover {
         .gaia_hint {
@@ -22,7 +23,6 @@
             visibility: visible;
         }
     }
-}
 
 .gaia_btn {
     background: transparent;
@@ -43,18 +43,21 @@
     left: 100%;
     top: 4px;
     transform: translateX(22px);
+  position: fixed;
+  left: 72px;
+  top: 40px;
 
     width: 266px;
     padding: 14px;
     padding-left: 20px;
     border-radius: 14px;
-    background: rgba(#1F1F1F, 0.45);
+    background: rgba(#1f1f1f, 0.45);
     backdrop-filter: blur(45px);
     box-shadow: 0 4px 20px rgba(#000, 0.06);
 
     .setFontSohneBuch(16px, 1.05, normal);
     color: #FFF;
-
+    z-index: 999;
     opacity: 0;
     visibility: hidden;
     transition: 200ms ease;
@@ -77,10 +80,23 @@
         left: 0;
         top: 2px;
         transform: translateX(-10px);
+        z-index: 999;
     }
 }
 
-.enter,
+.enter {
+    opacity: 0;
+}
 .enterActive {
-    opacity: 0 !important;
+    opacity: 1;
+
+    transition: opacity 1s;
+}
+
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: opacity 1s;
 }

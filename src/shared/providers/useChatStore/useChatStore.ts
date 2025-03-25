@@ -1,5 +1,6 @@
 import { Editor } from "@tiptap/react";
 import { IBranch } from "src/shared/types/Branch";
+import { MODE, ModeType } from "src/shared/types/Chat";
 import { IMessage } from "src/shared/types/Message";
 import { create } from "zustand";
 import { IPlayground } from "src/shared/types/Playground";
@@ -122,6 +123,13 @@ interface ChatState {
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
 
     messages: IMessage[];
+    messagesCount: number;
+    showQuickSearch: boolean;
+    mode: ModeType;
+    disableButtons: boolean;
+    isSharingActive: boolean;
+    setIsSharingActive: (isSharingActive: boolean) => void;
+
     setMessages: (messages: IMessage[]) => void;
     doMessageReply: () => Promise<IMessage>;
     cancelReply: () => void;
@@ -129,6 +137,10 @@ interface ChatState {
     setIsReplyLoading: (loading: boolean) => void;
     replyTimeoutId: number | null;
     replyPromiseReject?: (reason?: any) => void;
+    setMessagesCount: (messagesCount: number) => void;
+    setShowQuickSearch: (showQuickSearch: boolean) => void;
+    setMode: (mode: ModeType) => void;
+    setDisableButtons: (disableButtons: boolean) => void;
 
     changeMessage: (oldMessage: IMessage, newMessage: IMessage) => IMessage | null;
     messageNodeMap: Record<string, IMessageNode>;
@@ -173,7 +185,7 @@ interface ChatState {
 
     setIsTablePromptVisible: (visible: boolean) => void;
     setSelectedArea: (area: { type: TableSelectedAreaType | null;
-    value: string | number | null }) => void;
+        value: string | number | null }) => void;
 
     isMaximized: boolean;
     setIsMaximized: (isMaximized: boolean) => void;
@@ -594,4 +606,14 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         });
         return result;
     },
+    messagesCount: 0,
+    showQuickSearch: false,
+    mode: MODE.INITIAL,
+    disableButtons: false,
+    isSharingActive: false,
+    setMessagesCount: (messagesCount) => set(() => ({ messagesCount })),
+    setShowQuickSearch: (showQuickSearch) => set(() => ({ showQuickSearch })),
+    setMode: (mode) => set(() => ({ mode })),
+    setDisableButtons: (disableButtons) => set(() => ({ disableButtons })),
+    setIsSharingActive: (isSharingActive) => set(() => ({ isSharingActive })),
 }));

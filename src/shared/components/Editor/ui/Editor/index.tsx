@@ -1,6 +1,6 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle, useEffect } from "react";
 import clsx from "clsx";
-import { EditorContent } from "@tiptap/react";
+import { EditorContent, Editor as IEditor } from "@tiptap/react";
 import { EditorProps, useInitialEditor } from "../..";
 import css from "./Editor.module.less";
 
@@ -28,7 +28,7 @@ export const Editor = forwardRef<EditorRef, Props>(({
         ...editorProps,
         classNameEditor: clsx(css.editor_editor, classNameEditor),
         classNameFocus: clsx(css.editor_focused, classNameFocus),
-        classNamePlaceholder: clsx(css.editor_placeholder, classNamePlaceholder)
+        classNamePlaceholder: clsx(css.editor_placeholder, classNamePlaceholder),
     });
 
     React.useEffect(() => {

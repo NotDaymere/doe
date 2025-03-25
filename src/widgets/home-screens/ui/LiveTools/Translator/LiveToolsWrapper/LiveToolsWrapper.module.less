@@ -1,0 +1,95 @@
+.translator {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 30px;
+    gap: 30px;
+    overflow: auto;
+}
+
+.magicMenu {
+    position: relative;
+}
+
+.magicButton {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(#1f1f1f, 0.05);
+    background: linear-gradient(to bottom, #d7d7d7 0%, #fff 100%);
+    margin: 0 auto;
+}
+
+.translationWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f8f8;
+    border-radius: 16px;
+}
+
+.translation {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 16px;
+    min-height: calc(100vh - 186px);
+}
+
+.bookmarksButton {
+    height: fit-content;
+}
+
+.bookmarks {
+    position: fixed;
+    top: 95px;
+    left: 95px;
+    z-index: 10;
+}
+
+.translationAreaWrapper {
+    width: calc(100% - 68px);
+    display: flex;
+    justify-content: center;
+    padding: 44px 116px 44px 0;
+}
+
+.translationArea {
+    width: 100%;
+    height: max-content;
+    max-width: 892px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 10px 20px 20px 20px;
+    background-color: #fff;
+    border-radius: 16px;
+}
+
+.translationAreaRotated {
+    display: flex;
+    flex-direction: row;
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fefefe;
+    border: 1px solid #cbcbcb;
+    border-radius: 12px;
+    margin-right: 20px;
+
+    path {
+        fill: #353930;
+    }
+}

@@ -3,7 +3,7 @@ import { App } from "src/types"
 import TablePlayground from "../TablePlayground"
 import CodePlayground from "../CodePlayground";
 import IframePlayground from "../IframePlayground/IframePlayground";
-import SourcePlayground from "../SourcePlayground/SourcePlayground";
+import SourcePlayground from "../Playground/SourcePlayground";
 
 const PlaygroundRenderer: FC<Partial<App.Playground>> = ({ id, type }) => {
   switch (type) {
@@ -12,7 +12,7 @@ const PlaygroundRenderer: FC<Partial<App.Playground>> = ({ id, type }) => {
     case "table":
       return <TablePlayground id={id}/>
     case "source":
-      return <SourcePlayground/>
+      return <SourcePlayground isActive={true}/>
     case "iframe":
           return <IframePlayground/>
     default:

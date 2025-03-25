@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Editor } from "src/shared/components/Editor";
+import { Editor as IEditor } from "@tiptap/react";
 import { InputDynamicWidth } from "src/shared/components/InputDynamicWidth";
 import ArrowUpIcon from "src/shared/icons/ArrowUp.icon";
 import CallVoiceIcon from "src/shared/icons/CallVoice.icon";
@@ -25,9 +26,60 @@ import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgres
 import { IMessage } from "src/shared/types/Message";
 import SendTableDataIcon from "../../../../shared/icons/SendTableData.icon";
 import { FileWithId } from "../../lib/helpers/LinkToFileTransformer";
+import Hints from "../WelcomeScreen/Hints";
+import HintsTyping from "../WelcomeScreen/HintsTyping";
+import ShareScreenInfo from "../ShareScreen/ShareScreenInfo";
+import CableIcon from "src/shared/icons/Cable.icon";
+import BluetoothIcon from "src/shared/icons/Bluetooth.icon";
+import ScreenIcon from "src/shared/icons/Screen.icon";
+import { IScreenSharePopup, ShareType } from "src/shared/types/ScreenShare";
+import ScreenShareMenu from "../ShareScreen/ScreenShareMenu";
+import { Simulate } from "react-dom/test-utils";
+import reset = Simulate.reset;
+
+interface IShareScreen {
+    expandedButtons: boolean;
+    shareType: ShareType | null;
+}
+
+export const SCREEN_SHARE_CONFIG: IScreenSharePopup = {
+    shareScreen: {
+        title: "Share your computer screen",
+        description: `<span>Start broadcasting your desktop device screen. You can continue working with Doe with full functionality while the screen is being broadcast and Doe is interacting with the screen content.</span>`,
+        label: "Share computer screen",
+        icon: <ScreenIcon width={14} height={12} className={css.screenShareIcon} />,
+        videoUrl: "",
+    },
+    shareViaBluetooth: {
+        title: "Share your mobile screen",
+        description: `<span>To switch to sharing mode, connect your mobile device to your computer <strong>via a cable</strong>.</span>
+            <span>You can also connect your device <strong>via Bluetooth</strong> if a cable connection is not available.<span/>`,
+        label: "Share Mobile screen via Bluetooth",
+        icon: <BluetoothIcon width={15} height={15} className={css.screenShareBluetoothIcon} />,
+        videoUrl: "/screen-share/bluetooth_connection_success.MP4",
+    },
+    shareViaCabel: {
+        title: "Share your mobile screen",
+        description: `<span>To switch to sharing mode, connect your mobile device to your computer <strong>via a cable.</strong></span><span>You can also connect your device <strong>via Bluetooth</strong> if a cable connection is not available. <span/>`,
+        label: "Share Mobile screen via a cable",
+        icon: <CableIcon width={21} height={5} className={css.screenShareIcon} />,
+        videoUrl: "",
+    },
+    connectionFailed: {
+        title: "Connection failed",
+        description: `<span>Check if the connection method you selected is correct and try again. Or change the connection method to another.<span/>`,
+        actions: true,
+        videoUrl: "",
+    },
+    connectionSuccessful: {
+        title: "Connection successful!",
+        description: "You can now continue working in screen sharing mode with Doe.",
+        videoUrl: "",
+    },
+};
 
 export const ChatPanel: React.FC = () => {
-    const { text, files, setText, setFiles, reset } = usePanel();
+    const { text, files, setText, setFiles } = usePanel();
     const {
         setEditor,
         isCreateBranchChatMode,
@@ -45,6 +97,12 @@ export const ChatPanel: React.FC = () => {
         setIsCurrentBranchOpen,
         isHyperlinkInputOpen,
         setIsHyperlinkInputOpen,
+        setMessagesCount,
+        messagesCount,
+        messages,
+        setMessages,
+        disableButtons,
+        setDisableButtons,
     } = useChatStore();
 
     const [clearContent, setClearContent] = React.useState(false);
@@ -55,7 +113,7 @@ export const ChatPanel: React.FC = () => {
     const { selectedArea } = useChatStore();
     const panelRef = React.useRef<HTMLDivElement>(null);
 
-    const {
+    const { 
         drag,
         dragTarget,
         handleDragDropTarget,
@@ -69,6 +127,20 @@ export const ChatPanel: React.FC = () => {
             setFiles([...files, ...uploadFiles]);
         },
     });
+
+    const panelWrapperRef = useRef<HTMLDivElement>(null);
+    const [showHints, setShowHints] = useState({ hints: messagesCount === 0, typingHints: false });
+    const [shareScreenConfig, setShareScreenConfig] = useState<IShareScreen>({
+        expandedButtons: false,
+        shareType: null,
+    });
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const prompt = usePrompt();
     const { selectedText, isShowReferencePanel, setIsShowReferencePanel } = useChatContext();
@@ -163,6 +235,47 @@ export const ChatPanel: React.FC = () => {
         }
     }, []);
 
+    const onSendMessage = (text: string) => {
+        if (!text || text === "<p></p>") return;
+
+        setMessagesCount(messagesCount + 1);
+        setDisableButtons(false);
+
+        setMessages([
+            ...messages,
+            {
+                id: messages.length,
+                content: text,
+                files: [],
+                isCode: false,
+                isUser: true,
+            },
+        ]);
+        setText("");
+    };
+
+    const handleFocusEditor = (editor: IEditor | null) => {
+        setEditor(editor);
+        setShowHints({ hints: false, typingHints: true });
+    };
+
+    const handleBlurEditor = () => {
+        setEditor(null);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (panelWrapperRef.current && !panelWrapperRef.current.contains(event.target as Node)) {
+            setShowHints({ ...showHints, typingHints: false });
+        }
+    };
+
+    const onShareScreenClickOutside = () => {
+        setShareScreenConfig({
+            shareType: null,
+            expandedButtons: false,
+        });
+    };
+
     const handleApplyLink = React.useCallback(async () => {
         if (!savedRange || linkUrl.trim().length === 0) {
             setShowLinkInput(false);
@@ -232,7 +345,7 @@ export const ChatPanel: React.FC = () => {
             files: files,
         };
 
-        reset();
+        // reset();
         setClearContent(true);
 
         if (isCreateBranchChatMode) {
@@ -257,7 +370,7 @@ export const ChatPanel: React.FC = () => {
         } else {
             const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
             addMessageNode(lastNodeForUserMessage, userMessage);
-            reset();
+            // reset();
             setClearContent(true);
             const reply = await doMessageReply();
             const lastNodeForReply = getLastCurrentVersionMessageNode();
@@ -407,6 +520,7 @@ export const ChatPanel: React.FC = () => {
                 onDragOver={handleDragOverTarget}
                 onDrop={handleDragDropTarget}
                 onDragLeave={handleDragLeaveTarget}
+                ref={panelWrapperRef}
             >
                 {isShowReferencePanel && (
                     <div className={css.panel_prompt}>
@@ -519,18 +633,64 @@ export const ChatPanel: React.FC = () => {
                     <Editor
                         ref={editorRef}
                         key={placeholder}
-                        readOnly={prompt.active}
+                        readOnly={prompt.active || disableButtons}
                         value={text}
                         onChange={handleChangeEditor}
                         handleKeyDown={handleKeyPress}
-                        onFocus={setEditor}
-                        onBlur={() => setEditor(null)}
+                        // onFocus={setEditor}
+                        // onBlur={() => setEditor(null)}
+                        // onChange={setText}
+                        onFocus={handleFocusEditor}
+                        onBlur={handleBlurEditor}
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
                         clearContent={clearContent}
-                        placeholder={placeholder}
+                        placeholder="Ask Doe anything you’d like about the world..."
                         onMouseUp={handleTextSelection}
                     />
+                    <ScreenShareMenu
+                        isActive={shareScreenConfig.expandedButtons}
+                        type={shareScreenConfig.shareType}
+                        onConfig={(type) =>
+                            setShareScreenConfig({ ...shareScreenConfig, shareType: type })
+                        }
+                        onClickOutside={onShareScreenClickOutside}
+                    />
+                    {!shareScreenConfig.expandedButtons && (
+                        <button
+                            className={css.screenShareButton}
+                            disabled={disableButtons}
+                            onMouseEnter={(event) => {
+                                if (!event.currentTarget.disabled) {
+                                    setShareScreenConfig({
+                                        ...shareScreenConfig,
+                                        expandedButtons: true,
+                                    });
+                                }
+                            }}
+                        >
+                            <ScreenShareIcon width={16} height={16} />
+                        </button>
+                    )}
+                    {shareScreenConfig.shareType && (
+                        <ShareScreenInfo
+                            isActive={!!shareScreenConfig.shareType}
+                            onClickOutside={onShareScreenClickOutside}
+                            {...SCREEN_SHARE_CONFIG[shareScreenConfig.shareType]}
+                        />
+                    )}
+                    <button className={css.panel_button}>
+                        <MicrophoneIcon />
+                    </button>
+                    {!prompt.active ? (
+                        <button className={css.panel_submitBtn} onClick={() => onSendMessage(text)}>
+                            Send <ArrowUpIcon />
+                        </button>
+                    ) : (
+                        <button className={css.panel_callBtn}>
+                            <CallVoiceIcon />
+                        </button>
+                    )}
 
                     <CSSTransition
                         in={showLinkInput && isHyperlinkInputOpen}
@@ -649,6 +809,20 @@ export const ChatPanel: React.FC = () => {
                         )}
                     </SwitchTransition>
                 </div>
+                {messagesCount === 0 && (
+                    <div className={css.hintsWrapper}>
+                        {showHints.typingHints && messagesCount === 0 && (
+                            <div className={css.typingHints}>
+                                <HintsTyping onSelect={(hint: string) => onSendMessage(hint)} />
+                            </div>
+                        )}
+                        {showHints.hints && (
+                            <div className={css.hints}>
+                                <Hints onSelect={(hint: string) => onSendMessage(hint)} />
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

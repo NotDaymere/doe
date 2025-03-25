@@ -12,5 +12,9 @@ vite.config.js
 node_modules
 .env.*
 !.env.example
-.idea
 package-lock.json
+
+
+.DS_Store
+settings.json
+.vercel

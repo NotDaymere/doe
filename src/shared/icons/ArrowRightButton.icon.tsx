@@ -7,7 +7,7 @@ interface ArrowRightIconProps extends React.SVGProps<SVGSVGElement> {
     opacity?: number;
 }
 
-const ArrowRightButtonIcon: FC<ArrowRightIconProps> = ({
+const ArrowRightIcon: FC<ArrowRightIconProps> = ({
                                                      fill = "white",
                                                      width = "10",
                                                      height = "8",
@@ -31,4 +31,4 @@ const ArrowRightButtonIcon: FC<ArrowRightIconProps> = ({
     </svg>
 );
 
-export default ArrowRightButtonIcon;
+export default ArrowRightIcon;

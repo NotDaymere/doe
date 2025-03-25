@@ -1,0 +1,48 @@
+.magicMenu {
+    position: relative;
+
+    &:hover {
+        .menuWrapper {
+            display: block;
+        }
+    }
+}
+
+.menuWrapper {
+    margin-bottom: 20px;
+    height: 170px;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, -10px);
+    display: none;
+}
+
+.menu {
+    width: max-content;
+    padding: 6px;
+    border-radius: 16px;
+    background: rgba(#fff, 0.8);
+    border: 1px solid #dddddd;
+    backdrop-filter: blur(80px);
+    box-shadow: 0 0 12px rgba(#000, 5%);
+}
+
+.enter {
+    opacity: 0;
+}
+
+.enterActive {
+    opacity: 1;
+    transition: 0.5s ease-in;
+    transition-property: transform, opacity;
+}
+
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: 0.5s ease-in;
+    transition-property: opacity;
+}

@@ -92,7 +92,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         };
     };
 
-    // const [isEdit, setEdit] = React.useState(false);
+    const [isEdit, setEdit] = React.useState(false);
+
     const [content, setContent] = React.useState(data.content);
     const [updatedContent, setUpdatedContent] = useState(data.content);
 
@@ -116,7 +117,9 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         deleteSavedPlaygrounds,
         updateSavedPlaygrounds,
         changeMessage,
-        playgroundFullscreen
+        playgroundFullscreen,
+        setMessagesCount,
+        messagesCount,
     } = useChatStore();
 
     const parsedContent = parseContent(content);
@@ -377,6 +380,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     };
 
     const handleEdit = async () => {
+        handleSendButtonClick()
+
         const newId = Date.now();
 
         const newMessage: IMessage = {
@@ -401,6 +406,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setContent(data.content);
         setEditMsgMode({ isEditMsgMode: false, msgId: null });
         // setEditMsgMode(false);
+        setEdit(false);
+
     };
     const handleCopy = () => {
         if (messageRef.current) {
@@ -471,7 +478,13 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setIsLiked(changeResult?.isLiked || false)
     };
 
+    const handleSendButtonClick = () => {
+        setMessagesCount(messagesCount + 1);
+    };
 
+    const toggleEditUnauthorized = () => {
+        setEdit(!isEdit);
+    };
     const renderFavButton = () => {
         return (
             <button
@@ -756,5 +769,17 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         );
     }
 
-    return <div className={css.message}>{null}</div>;
+    return (
+        <div className={css.input}>
+            <button className={css.input_editBtn} onClick={toggleEditUnauthorized}>
+                <PenIcon />
+            </button>
+            <div
+                className={css.input_message}
+                dangerouslySetInnerHTML={{
+                    __html: data.content,
+                }}
+            />
+        </div>
+    );
 };

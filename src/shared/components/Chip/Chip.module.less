@@ -1,0 +1,31 @@
+.chip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 0 16px;
+    white-space: nowrap;
+    height: 36px;
+    border: 1px solid #a6a6a6;
+    border-radius: 1000px;
+    background-color: rgba(#1f1f1f, 0.35);
+    color: #f8f8f8;
+    z-index: 999;
+    opacity: 1;
+}
+
+.enter {
+    opacity: 0;
+}
+.enterActive {
+    opacity: 1;
+    transition: opacity 300ms;
+}
+
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: opacity 300ms;
+}

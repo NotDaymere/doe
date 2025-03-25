@@ -7,6 +7,7 @@
   letter-spacing: @letterSpacing;
 }
 .panel {
+    width: 100%;
     padding: 30px 0;
     padding-left: 10px;
     padding-right: 86px;
@@ -123,6 +124,7 @@
 .panel_files {
     left: 0;
     bottom: 100%;
+    transform: translateY(-15px);
     width: 100%;
     padding-bottom: 5px;
     z-index: 5;
@@ -140,25 +142,31 @@
 .panel_drag {
     overflow: hidden;
     position: absolute;
-
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
     border-radius: 16px;
-    padding: 0 8px;
+    background: linear-gradient(to bottom, #fff, #fff), rgba(#f3ffdf, 0.3);
+    border: 1px dotted #8bcf16;
+    z-index: 11;
+
+    padding: 0 16px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
 
+    &::after,
     &::before {
         content: "";
         display: block;
         position: absolute;
         transform: translate(-50%, -50%);
-        background: #8BCF16;
-        height: 17px;
+        background: #b7ff3c;
         filter: blur(5px);
+        opacity: 0;
         transition: opacity 300ms ease;
         z-index: 1;
         top: -1px;
@@ -176,6 +184,9 @@
         animation: snake 4s linear infinite;
     }
 
+    &::before {
+        width: 102px;
+    }
 
     &::after {
         content: "";
@@ -236,7 +247,7 @@
         transition: opacity 300ms ease;
         z-index: 16;
     }
-    
+
     //dots on green background
     &::before {
         content: "";
@@ -247,7 +258,7 @@
         left: 0;
         transition: opacity 300ms ease;
         z-index: 14;
-        transform: translate(100%, 0); 
+        transform: translate(100%, 0);
         background-image: radial-gradient(circle, #CDF38D 1px, transparent 1px);
         mask-image: radial-gradient(black, transparent 70% );
         background-size: 10px 10px;
@@ -310,16 +321,19 @@
 }
 
 .panel_main {
+    position: relative;
     width: 100%;
+    height: 56px;
 
     background: #f8f8f8;
     border: 1px solid #dddddd;
     border-radius: 16px;
     padding: 8px;
     padding-left: 10px;
+    padding-right: 7px;
 
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 8px;
 }
 .panel_branchIcon{
@@ -635,3 +649,131 @@
 
 
 
+
+
+
+.hintsWrapper {
+    height: 150px;
+}
+
+.hints {
+    padding-top: 16px;
+    margin: 0 auto;
+    max-width: 750px;
+}
+
+.typingHints {
+    padding-top: 8px;
+}
+
+.shareScreenExpanded {
+    display: flex;
+    flex-direction: row;
+    height: 48px;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid #f8f8f8;
+    border-radius: 1000px;
+    background-color: #fff;
+}
+
+.expandedIcon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    border: 1px solid transparent;
+
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        fill 0.3s ease;
+
+    path {
+        fill: #b5b5b5;
+    }
+
+    &:hover {
+        background-color: rgba(#ff8b12, 0.2);
+        border-color: #ff8b12;
+
+        path {
+            fill: #ff8b12;
+        }
+    }
+}
+
+.activeShareType {
+    background-color: rgba(#ff8b12, 0.2);
+
+    path {
+        fill: #ff8b12;
+    }
+}
+
+.bluetoothIcon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    border: 1px solid transparent;
+
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        stroke 0.3s ease;
+
+    path {
+        stroke: #b5b5b5;
+    }
+
+    &:hover {
+        background-color: rgba(#ff8b12, 0.2);
+        border-color: #ff8b12;
+
+        path {
+            stroke: #ff8b12;
+        }
+    }
+}
+.activeBluetoothButton {
+    background-color: rgba(#ff8b12, 0.2);
+
+    path {
+        stroke: #ff8b12;
+    }
+}
+
+.screenShareButton {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    background-color: rgba(#b5b5b5, 0.2);
+    border-radius: 50%;
+
+    path {
+        fill: #b5b5b5;
+    }
+}
+
+.shareScreen {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 72px;
+}
+
+.screenShareIcon path {
+    fill: #ff8b12;
+}
+
+.screenShareBluetoothIcon path {
+    stroke: #ff8b12;
+}
