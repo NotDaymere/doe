@@ -3,6 +3,7 @@ import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
 import { ReactComponent as CodeIcon } from "src/assets/icons/code.svg";
 import './OpenFromSavedPlayground.less';
 import { useChatStore } from "src/shared/providers";
+import MagicIcon from "../../../../../../shared/icons/Magic.icon";
 
 interface Props {
     savedPlayground: IPlayground;
@@ -33,6 +34,7 @@ export default function OpenFromSavedPlayground({savedPlayground, length} : Prop
         >
             {savedPlayground.type == 'table' && <TableIcon />}
             {savedPlayground.type == 'code' && <CodeIcon />}
+            {savedPlayground.type == 'source' && <MagicIcon />}
             {length <= 3 && (<>
                     <span className={'open-from-saved-playground-name'}>{savedPlayground.name}</span>
                 </>

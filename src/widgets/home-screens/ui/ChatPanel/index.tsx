@@ -778,32 +778,32 @@ export const ChatPanel: React.FC = () => {
                                 unmountOnExit
                             >
                                 <>
-                                    <button className={css.panel_button} disabled>
-                                        <ScreenShareIcon />
-                                    </button>
-                                    <button className={css.panel_button}>
-                                        <MicrophoneIcon />
-                                    </button>
+                                    {/*<button className={css.panel_button} disabled>*/}
+                                    {/*    <ScreenShareIcon />*/}
+                                    {/*</button>*/}
+                                    {/*<button className={css.panel_button}>*/}
+                                    {/*    <MicrophoneIcon />*/}
+                                    {/*</button>*/}
 
-                                    {isTablePromptVisible ? (
-                                        <button className={css.panel_send_table_data_btn}>
-                                            <SendTableDataIcon fill="currentColor" />
-                                        </button>
-                                    ) : !prompt.active ? (
-                                        !questionCodeMessage ? (
-                                            <button className={css.panel_submitBtn} onClick={handleSend}>
-                                                Send <ArrowUpIcon />
-                                            </button>
-                                        ) : (
-                                            <button className={css.panel_hammerBtn}>
-                                                <HammerIcon />
-                                            </button>
-                                        )
-                                    ) : (
-                                        <button className={css.panel_callBtn}>
-                                            <CallVoiceIcon />
-                                        </button>
-                                    )}
+                                    {/*{isTablePromptVisible ? (*/}
+                                    {/*    <button className={css.panel_send_table_data_btn}>*/}
+                                    {/*        <SendTableDataIcon fill="currentColor" />*/}
+                                    {/*    </button>*/}
+                                    {/*) : !prompt.active ? (*/}
+                                    {/*    !questionCodeMessage ? (*/}
+                                    {/*        <button className={css.panel_submitBtn} onClick={handleSend}>*/}
+                                    {/*            Send <ArrowUpIcon />*/}
+                                    {/*        </button>*/}
+                                    {/*    ) : (*/}
+                                    {/*        <button className={css.panel_hammerBtn}>*/}
+                                    {/*            <HammerIcon />*/}
+                                    {/*        </button>*/}
+                                    {/*    )*/}
+                                    {/*) : (*/}
+                                    {/*    <button className={css.panel_callBtn}>*/}
+                                    {/*        <CallVoiceIcon />*/}
+                                    {/*    </button>*/}
+                                    {/*)}*/}
                                 </>
                             </CSSTransition>
                         )}

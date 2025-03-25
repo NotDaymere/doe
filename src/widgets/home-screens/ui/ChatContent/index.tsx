@@ -209,14 +209,14 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
 
                 <TalkMode targetRef={chatRef} />
                 {/*<div className={css.actions}>*/}
-                {/*    /!*<button*!/*/}
-                {/*    /!*    className={classNames(css.steps_button, {*!/*/}
-                {/*    /!*        [css.active_steps_button]: playground.open,*!/*/}
-                {/*    /!*    })}*!/*/}
-                {/*    /!*    onClick={handleStepsButtonClick}*!/*/}
-                {/*    /!*>*!/*/}
-                {/*    /!*    <MagicIcon /> See all steps*!/*/}
-                {/*    /!*</button>*!/*/}
+                {/*    <button*/}
+                {/*        className={classNames(css.steps_button, {*/}
+                {/*            [css.active_steps_button]: playground.open,*/}
+                {/*        })}*/}
+                {/*        onClick={handleStepsButtonClick}*/}
+                {/*    >*/}
+                {/*        <MagicIcon /> See all steps*/}
+                {/*    </button>*/}
                 {/*</div>*/}
 
                 {showQuickSearch && (

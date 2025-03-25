@@ -85,12 +85,12 @@ export const ChatLayout: React.FC = () => {
                             </div>
                         )}
                     </div>
-                </div>egerfgfdgdfg
+                </div>
                 {playground.open && (
                     <div
                         className={css.playground}
                         style={{ width: styles.playgroundWidth, opacity: styles.opacity }}
-                    >frgdfgdfgddffsdsdffdffdfdf
+                    >
                         <PlaygroundRenderer type={playground.type} />
                     </div>
                 )}

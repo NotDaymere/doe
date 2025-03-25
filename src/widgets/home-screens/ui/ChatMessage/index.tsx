@@ -60,6 +60,8 @@ import AllBranches from "../ChatContent/assets/AllBranches/AllBranches";
 import AllPlaygrounds from "../ChatContent/assets/AllPlaygrounds/AllPlaygrounds";
 import SeeAllStepsIcon from "../../../../shared/icons/SeeAllSteps.icon";
 import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
+import classNames from "classnames";
+import MagicIcon from "../../../../shared/icons/Magic.icon";
 
 interface Props {
     data: IMessage;
@@ -111,6 +113,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         citationPlaygroundRef,
         setCitationPlaygroundRef,
         setIsCitationPlayground,
+        playground,
         setPlayground,
         setSavedPlaygrounds,
         savedPlaygrounds,
@@ -703,20 +706,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
                         {!data.isUser && (
                             <Flex justify={"space-between"} className={"message-actions"}>
-                                <button
-                                    onClick={() => openSourcePlayground(data.id.toString())}
-                                    className={clsx(css.button_steps, { [css.steps_open]: isAllStepOpen })}
-                                >
-                                    <SeeAllStepsIcon />
-                                    <span
-                                        className={clsx({
-                                            [css.button_steps_open_label]: isAllStepOpen,
-                                            [css.button_steps_label]: !isAllStepOpen,
+                                <div className={css.actions}>
+                                    <button
+                                        className={classNames(css.steps_button, {
+                                            [css.active_steps_button]: playground.open,
                                         })}
+                                        onClick={()=> openSourcePlayground('')}
                                     >
-                                    See all steps
-                                </span>
-                                </button>
+                                        <MagicIcon /> See all steps
+                                    </button>
+                                </div>
                                 <Flex gap={10}>
                                     <button
                                         className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
