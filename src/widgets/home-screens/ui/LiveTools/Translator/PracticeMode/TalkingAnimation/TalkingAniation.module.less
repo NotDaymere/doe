@@ -1,0 +1,94 @@
+.glowingRing {
+    position: absolute;
+    width: 100px;
+    height: 120px;
+}
+
+.glowingRing svg {
+    width: 100px;
+    height: 120px;
+    animation: rotate 6s linear infinite;
+}
+
+.glowingRing path {
+    fill: none;
+    stroke: rgba(255, 205, 70, 0.8);
+    stroke-width: 2;
+    animation: morph 3.1s infinite ease-in-out;
+}
+
+@keyframes morph {
+    0%,
+    100% {
+        d: path(
+            "M100,35 C140,40 175,80 145,115 C120,150 110,170 90,150 C70,125 45,110 55,80 C65,60 75,30 100,35 Z"
+        );
+    }
+
+    25% {
+        d: path(
+            "M100,40 C140,30 180,70 160,100 C140,140 140,170 100,160 C60,150 20,120 40,100 C60,80 80,50 100,40 Z"
+        );
+    }
+
+    50% {
+        d: path(
+            "M100,30 C140,40 160,70 160,100 C160,140 130,160 100,160 C70,160 40,140 40,100 C40,60 60,30 100,30 Z"
+        );
+    }
+
+    75% {
+        d: path(
+            "M100,35 C155,50 175,80 155,110 C135,140 110,150 100,150 C50,150 25,120 40,90 C55,60 65,45 100,35 Z"
+        );
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.glowingRing2 {
+    position: absolute;
+    width: 100px;
+    height: 120px;
+}
+
+.glowingRing2 svg {
+    width: 100px;
+    height: 120px;
+    animation: rotate 10s linear infinite;
+}
+
+.glowingRing2 path {
+    fill: none;
+    stroke: rgba(246, 217, 168, 1);
+    stroke-width: 2;
+    animation: morph 2.1s infinite ease-in-out;
+}
+
+.glowingRing3 {
+    position: absolute;
+    width: 100px;
+    height: 120px;
+}
+
+.glowingRing3 svg {
+    width: 100px;
+    height: 120px;
+    animation: rotate 5s linear infinite;
+}
+
+.glowingRing3 path {
+    fill: none;
+    stroke: rgba(255, 255, 255, 1);
+    stroke-width: 3;
+    filter: drop-shadow(0px 0px 10px rgba(255, 190, 30, 1));
+    animation: morph 2.3s infinite ease-in-out;
+}
