@@ -25,6 +25,23 @@ export const Sidebar: React.FC = () => {
     const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false)
     const [profiles, setProfiles] = React.useState<Profile[]>(ProfileMockData);
 
+    const changeProfileRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                isChangeProfilePanelOpen &&
+                changeProfileRef.current &&
+                !changeProfileRef.current.contains(event.target as Node)
+            ) {
+                setIsChangeProfilePanelOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isChangeProfilePanelOpen]);
+
 
     const handleOpenSideBar = () => {
         setIsSideBarOpen(!isSideBarOpen);
@@ -96,7 +113,10 @@ export const Sidebar: React.FC = () => {
                 }}
                 unmountOnExit
             >
-                <div className={css.change_profile_list}>
+                <div
+                    className={css.change_profile_list}
+                    ref={changeProfileRef}
+                >
                     {ProfileMockData.map(profile => (
                         <div
                             key={profile.id}
