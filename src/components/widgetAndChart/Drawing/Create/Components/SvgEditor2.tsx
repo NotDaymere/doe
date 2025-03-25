@@ -19,6 +19,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     const [isEraserMode, setIsEraserMode] = useState(false);
     const [strokeWidth, setStrokeWidth] = useState(1);
     const [opacityValue, setOpacityValue] = useState(100);
+    const [showMoreTools, setShowMoreTools] = useState(false);
 
     useEffect(() => {
         // Initialize Fabric.js canvas
@@ -120,14 +121,6 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         fabricCanvas.current.forEachObject((obj) => (obj.selectable = true));
     };
 
-    const eraseSelected = () => {
-        const activeObject = fabricCanvas.current.getActiveObject();
-        if (activeObject) {
-            fabricCanvas.current.remove(activeObject);
-            fabricCanvas.current.renderAll();
-        }
-    };
-
     const toggleEraserMode = () => {
         setIsEraserMode((prev) => !prev);
     };
@@ -202,19 +195,6 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         }
         alert("Please select a text object and highlight text to format.");
         return null;
-    };
-
-    // Toggle free drawing mode
-    const toggleDrawingMode = () => {
-        const newMode = !isDrawingMode;
-        setIsDrawingMode(newMode);
-        fabricCanvas.current.isDrawingMode = newMode;
-
-        if (fabricCanvas.current.isDrawingMode) {
-            fabricCanvas.current.freeDrawingBrush = new fabric.PencilBrush(fabricCanvas.current);
-            fabricCanvas.current.freeDrawingBrush.color = "red";
-            fabricCanvas.current.freeDrawingBrush.width = 3;
-        }
     };
 
     // Function to toggle styles for selected text range
@@ -298,17 +278,6 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         }
     };
 
-    // Function to indent selected text
-    const indentText = () => {
-        const text = getSelectedTextObject();
-        if (text) {
-            text.setSelectionStyles({
-                deltaX: (text.getSelectionStyles().deltaX || 0) + indentAmount,
-            });
-            fabricCanvas.current.renderAll();
-        }
-    };
-
     const changeColor = (color) => {
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject) {
@@ -342,13 +311,14 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     const toggleTexformating = () => {
         setIsTextFormat(!isTextFormat);
         setIsDrawingFormat(false);
+        setShowMoreTools(false); // reset
         disableDrawingMode();
     };
 
     const toggleDrawingformating = () => {
         setIsTextFormat(false);
         setIsDrawingFormat(!isDrawingFormat);
-
+        setShowMoreTools(false); // reset
         enableDrawingMode();
     };
 
@@ -401,7 +371,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                         }}
                     />
                 )}
-                {isTextFormat && (
+                {isTextFormat && showMoreTools && (
                     <>
                         <div className="style textformating">
                             <DrawingToolButton
@@ -508,7 +478,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                         />
                     )}
 
-                    {isDrawingFormat && (
+                    {isDrawingFormat && showMoreTools && (
                         <div className="drawingformating">
                             <div>
                                 <DrawingToolButton
@@ -622,7 +592,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                     <div>
                         <DrawingToolButton
                             icon="/img/drawingEditorIcons/moretools.svg"
-                            onClick={() => {}}
+                            onClick={() => setShowMoreTools(!showMoreTools)}
                         />
                     </div>
                 </div>
