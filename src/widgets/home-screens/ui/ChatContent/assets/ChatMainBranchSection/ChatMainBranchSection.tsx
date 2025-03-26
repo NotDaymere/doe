@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ChatBranchSection.less';
+import './ChatMainBranchSection.less';
 import { useChatStore } from "../../../../../../shared/providers";
 import ThreeVerticalDots from "../../../../../../shared/icons/ThreeVerticalDots";
 import BranchIcon from "../../../../../../shared/icons/Branch.icon";
@@ -49,15 +49,14 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunc
     };
 
     return (
-        <div className="chat-branch-section-container">
+        <div className="chat-main-branch-section-container">
             <div
-                className={`chat-branch-section ${isActiveBranchMenu ? 'active' : ''}`}
+                className="chat-main-branch-section"
                 onClick={handleContainerClick}
             >
                 <BranchIcon width={16} height={16} fill="currentColor" />
-                <span className="chat-text">
-                    <span className="normal-text">{text}</span>
-                    <span className="gradient-text">{text}</span>
+                <span className="chat-main-text">
+                    <span>{text}</span>
                 </span>
                 <button className="branch-options-button" onClick={handleButtonClick}>
                     <ThreeVerticalDots fill="currentColor" />

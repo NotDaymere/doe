@@ -4,6 +4,7 @@ import ChatBranchSection from "../ChatBranchSection/ChatBranchSection";
 import { ChatMessage } from "../../../ChatMessage";
 import { useChatStore } from "../../../../../../shared/providers";
 import css from "./ContentChatRegularView.module.less";
+import ChatMainBranchSection from "../ChatMainBranchSection/ChatMainBranchSection";
 
 interface ChatRegularViewProps {
     playgroundFullscreen: boolean;
@@ -48,15 +49,20 @@ export const ChatRegularView: React.FC<ChatRegularViewProps> = ({
                 return (
                     <div key={item.id} id={`chat-msg-${item.id}`}>
                         <ChatMessageDate id={index} />
-                        {hasBranch && branch ? (
+                        {hasBranch && branch && !branch.isMain ? (
                             <ChatBranchSection branch={branch} />
                         ) : (
-                            <ChatMessage
-                                data={item}
-                                editor={editor}
-                                editMsgMode={editMsgMode}
-                                setEditMsgMode={setEditMsgMode}
-                            />
+                            <>
+                                {hasBranch && branch && branch.isMain &&
+                                    <ChatMainBranchSection branch={branch} />
+                                }
+                                <ChatMessage
+                                    data={item}
+                                    editor={editor}
+                                    editMsgMode={editMsgMode}
+                                    setEditMsgMode={setEditMsgMode}
+                                />
+                            </>
                         )}
                     </div>
                 );

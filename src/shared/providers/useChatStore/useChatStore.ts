@@ -12,6 +12,43 @@ import { useVersionHistoryStore } from "../index";
 import { ChatTagsEnum } from "../../enums/ChatTagsEnum";
 import { IChat } from "../../types/Chat";
 
+
+const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMessageNode> => {
+    const messageNodeMap: Record<string, IMessageNode> = {
+        root: { id: "root", isRootNode: true, children: [] },
+    };
+
+    let previousNode = messageNodeMap.root;
+
+    initialMessages.forEach((message, index) => {
+        const nodeId = message.id ? String(message.id) : String(index + 1);
+        const node: IMessageNode = {
+            id: nodeId,
+            parent: previousNode,
+            children: [],
+            message,
+            isRootNode: false,
+        };
+        messageNodeMap[nodeId] = node;
+
+        if (!previousNode.children) {
+            previousNode.children = [];
+        }
+        previousNode.children.push(node);
+        previousNode.currentChildrenVersion = previousNode.children.length - 1;
+        previousNode = node;
+    });
+
+    return messageNodeMap;
+};
+const stripAndTruncate = (html: string): string => {
+    const stripped = html.replace(/<[^>]*>/g, '').trim();
+    return stripped.length > 150
+        ? stripped.slice(0, 150) + '…'
+        : stripped;
+};
+
+//mock
 const initialMessages: IMessage[] = [
     {
         id: 1,
@@ -78,56 +115,42 @@ const initialMessagesChat2: IMessage[] = [
     },
 ];
 
-
-
-const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMessageNode> => {
-    const messageNodeMap: Record<string, IMessageNode> = {
-        root: { id: "root", isRootNode: true, children: [] },
-    };
-
-    let previousNode = messageNodeMap.root;
-
-    initialMessages.forEach((message, index) => {
-        const nodeId = message.id ? String(message.id) : String(index + 1);
-        const node: IMessageNode = {
-            id: nodeId,
-            parent: previousNode,
-            children: [],
-            message,
-            isRootNode: false,
-        };
-        messageNodeMap[nodeId] = node;
-
-        if (!previousNode.children) {
-            previousNode.children = [];
-        }
-        previousNode.children.push(node);
-        previousNode.currentChildrenVersion = previousNode.children.length - 1;
-        previousNode = node;
-    });
-
-    return messageNodeMap;
-};
-
 const defaultChat: IChat = {
     id: "init-chat",
     name: "Сhat 01",
     messageNodeMap: initialMessageNodeMap(initialMessages),
     tags: [ChatTagsEnum.Green],
     notificationsCount: 2,
-    branches: []
+    branches: [
+        {
+            id: 1,
+            name: stripAndTruncate(initialMessages[0].content),
+            messages: initialMessages,
+            dialogsMessages: [{ userRequest: initialMessages[0], botMessages: initialMessages[1]}],
+            mainMessageId: initialMessages[0].id,
+            isMain: true,
+        },
+    ],
 };
-
-const defaultMessageNodeMapChat2 = initialMessageNodeMap(initialMessagesChat2);
 
 const defaultChat2: IChat = {
     id: "init-chat-2",
     name: "Chat 02",
-    messageNodeMap: defaultMessageNodeMapChat2,
+    messageNodeMap: initialMessageNodeMap(initialMessagesChat2),
     tags: [ChatTagsEnum.Blue, ChatTagsEnum.Green],
     notificationsCount: 1,
-    branches: []
+    branches: [
+        {
+            id: 1,
+            name: stripAndTruncate(initialMessagesChat2[0].content),
+            messages: initialMessagesChat2,
+            dialogsMessages: [{ userRequest: initialMessagesChat2[0], botMessages: initialMessagesChat2[1] }],
+            mainMessageId: initialMessagesChat2[0].id,
+            isMain: true,
+        },
+    ],
 };
+//mock
 
 const defaultTagNames = new Map<ChatTagsEnum, string>([
     [ChatTagsEnum.Green, "Green"],
@@ -232,14 +255,6 @@ export interface ChatState {
 }
 
 export const useChatStore = create<ChatState>()((set, get) => ({
-
-
-    initChat: (messages: IMessage[]) => {
-        const messageNodeMap = initialMessageNodeMap(messages);
-        const initializedChat: IChat = { ...defaultChat, messageNodeMap };
-        set(() => ({ currentChat: initializedChat, chats: [initializedChat] }));
-    },
-
     messages: initialMessages,
     setMessages: (messages) => set(() => ({ messages })),
 
@@ -259,18 +274,66 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     playgroundFullscreen: false,
     questionCodeMessage: null,
 
-    currentChat: defaultChat,
-    chats: [defaultChat, defaultChat2],
+    currentChat: defaultChat, //mock
+    chats: [defaultChat, defaultChat2], //mock
 
     replyTimeoutId: null,
     isReplyLoading: false,
     setIsReplyLoading: (loading: boolean) => set(() => ({ isReplyLoading: loading })),
 
+
+    initChat: (messages: IMessage[]) => {
+        const messageNodeMap = initialMessageNodeMap(messages);
+        const initializedChat: IChat = { ...defaultChat, messageNodeMap };
+
+        if (messages.length === 1 && messages[0].isUser) {
+            const userMessage = messages[0];
+            const branchDialog: IBranchDialog = { userRequest: userMessage };
+
+            const newBranch = get().addSavedBranch(
+                stripAndTruncate(userMessage.content),
+                messages,
+                [branchDialog],
+                userMessage.id
+            );
+
+            initializedChat.branches = [newBranch];
+        }
+
+        set(() => ({ currentChat: initializedChat, chats: [initializedChat] }));
+    },
+
     doMessageReply: () => {
         set({ isReplyLoading: true });
+
         return new Promise<IMessage>((resolve, reject) => {
             currentReplyReject = reject;
             currentReplyTimeoutId = window.setTimeout(() => {
+                const replyMessage: IMessage = {
+                    id: Date.now() + 1,
+                    isUser: false,
+                    isCode: true,
+                    content: testTextAndCharts,
+                    files: [],
+                };
+
+                const state = get();
+                const mainBranch = state.currentChat.branches.find(b => b.isMain);
+
+                if (mainBranch) {
+                    const dialog = mainBranch.dialogsMessages[0];
+                    dialog.botMessages = replyMessage;
+
+                    set(s => ({
+                        currentChat: {
+                            ...s.currentChat,
+                            branches: s.currentChat.branches.map(b =>
+                                b.id === mainBranch.id ? mainBranch : b
+                            ),
+                        },
+                    }));
+                }
+
                 set({
                     isReplyLoading: false,
                     replyTimeoutId: null,
@@ -278,14 +341,9 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 });
                 currentReplyTimeoutId = null;
                 currentReplyReject = null;
-                resolve({
-                    id: Date.now() + 1,
-                    isUser: false,
-                    isCode: true,
-                    content: testTextAndCharts,
-                    files: [],
-                });
+                resolve(replyMessage);
             }, 3000);
+
             set({ replyTimeoutId: currentReplyTimeoutId, replyPromiseReject: currentReplyReject });
         });
     },
@@ -405,7 +463,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     currentBranch: null,
     currentBranchDialog: null,
     isCurrentBranchOpen: false,
-    savedBranches: [],
+    savedBranches: defaultChat.branches, //mock
 
     addSavedBranch: (name: string, messages: IMessage[], dialogsMessages: IBranchDialog[], mainMessageId?: string | number) => {
         const stripHTML = (html: string): string => {

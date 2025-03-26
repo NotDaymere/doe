@@ -5,6 +5,7 @@ import { ChatMessage } from "../../../ChatMessage";
 import ChatBranchSection from "../ChatBranchSection/ChatBranchSection";
 import { IBranch } from "../../../../../../shared/types/Branch";
 import { useChatStore } from "../../../../../../shared/providers";
+import ChatMainBranchSection from "../ChatMainBranchSection/ChatMainBranchSection";
 
 interface ChatBranchViewProps {
     currentBranch: IBranch;
@@ -62,7 +63,11 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                 {currentBranch.dialogsMessages.map((dialog, index) => (
                     <React.Fragment key={index}>
                         <div className={css.content_chat_branch}>
-                            <ChatBranchSection isOpenBrunch={true} />
+                            {currentBranch && currentBranch.isMain ?
+                                <ChatMainBranchSection isOpenBrunch={true} />
+                                :
+                                <ChatBranchSection isOpenBrunch={true} />
+                            }
                             <div className={css.content_chat_branch_dialog}>
                                 <div id={`chat-msg-${dialog.userRequest.id}`}>
                                     <ChatMessage
@@ -72,14 +77,16 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                         setEditMsgMode={setEditMsgMode}
                                     />
                                 </div>
-                                <div id={`chat-msg-${dialog.botMessages.id}`}>
-                                    <ChatMessage
-                                        data={dialog.botMessages}
-                                        editor={editor}
-                                        editMsgMode={editMsgMode}
-                                        setEditMsgMode={setEditMsgMode}
-                                    />
-                                </div>
+                                {dialog.botMessages &&
+                                    <div id={`chat-msg-${dialog.botMessages.id}`}>
+                                        <ChatMessage
+                                            data={dialog.botMessages}
+                                            editor={editor}
+                                            editMsgMode={editMsgMode}
+                                            setEditMsgMode={setEditMsgMode}
+                                        />
+                                    </div>
+                                }
                             </div>
                         </div>
                     </React.Fragment>
