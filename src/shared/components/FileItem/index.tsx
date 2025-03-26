@@ -70,7 +70,9 @@ export const FileItem: React.FC<FileItemProps> = ({
                 `https://icons.duckduckgo.com/ip3/${info.ext}.ico`,
                 "/img/icons/file-file.svg",
             ];
-        } else if (["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower)) {
+        } else if (
+            ["png", "jpg", "jpeg", "gif", "bmp", "svg", "webp"].includes(extLower)
+        ) {
             return ["/img/icons/file-image.svg"];
         } else if (["mp4", "webm", "ogg"].includes(extLower)) {
             return ["/img/icons/file-media.svg"];
@@ -79,7 +81,6 @@ export const FileItem: React.FC<FileItemProps> = ({
         }
     }, [name, info.ext, extLower]);
 
-    // Сброс индекса кандидатов, если меняется список
     useEffect(() => {
         setCurrentIconIndex(0);
     }, [candidateIconURLs]);
@@ -88,7 +89,7 @@ export const FileItem: React.FC<FileItemProps> = ({
         if (name.startsWith("http://") || name.startsWith("https://")) {
             window.open(name, "_blank");
         } else if (
-            ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) ||
+            ["png", "jpg", "jpeg", "gif", "bmp", "svg", "webp"].includes(extLower) ||
             ["mp4", "webm", "ogg"].includes(extLower) ||
             extLower === "pdf"
         ) {
@@ -124,9 +125,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                         {!(name.startsWith("http://") || name.startsWith("https://")) && <>.{info.ext}</>}
                     </p>
                     <p className={css.file_ext}>
-                        {name.startsWith("http://") || name.startsWith("https://")
-                            ? info.ext
-                            : info.ext}
+                        {info.ext}
                     </p>
                 </div>
                 {onDelete && (
@@ -151,7 +150,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                 />
             )}
             {isModalOpen &&
-                ["png", "jpg", "jpeg", "gif", "bmp", "svg"].includes(extLower) &&
+                ["png", "jpg", "jpeg", "gif", "bmp", "svg", "webp"].includes(extLower) &&
                 url && (
                     <ImageFilePreviewModal
                         url={url}
