@@ -269,14 +269,13 @@ export default function Reflections() {
     const allRead = messagesData.every(message => message.isRead);
 
     return (
-        <div className="reflections-wrapper">
+        <div className={clsx(
+            "reflections-wrapper",
+            { "sidebar-open": isSideBarOpen }
+        )} >
             <div
                 ref={containerRef}
-                className={clsx(
-                    "reflections-container",
-                    containerMode,
-                    { "sidebar-open": isSideBarOpen }
-                )}
+                className={clsx("reflections-container", containerMode)}
                 style={{
                     userSelect: "none",
                     height: finalHeight,
