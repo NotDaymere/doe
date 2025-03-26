@@ -280,7 +280,10 @@ export default function Reflections() {
                     userSelect: "none",
                     height: finalHeight,
                     width: finalWidth,
-                    transition: isDragging ? "none" : "height 300ms ease, width 300ms ease",
+                    transition: isDragging
+                        ? "height 0s ease, width 300ms ease"
+                        : "height 300ms ease, width 300ms ease"
+
                 }}
 
                 onMouseEnter={handleContainerMouseEnter}
