@@ -52,7 +52,8 @@ export default function Reflections() {
 
     const smallHeight = 80;
     const expandedHeight = 430;
-
+    const smallWidth = 200;
+    const expandedWidth = 460;
 
     useEffect(() => {
         const updateWidth = () => {
@@ -155,7 +156,6 @@ export default function Reflections() {
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-                // При клике вне контейнера всегда переходим в режим "closed"
                 setProgress(0);
                 setPersistSmall(false);
             }
@@ -260,10 +260,7 @@ export default function Reflections() {
             ? (isHoveringIcon || isHoveringContainer || persistSmall ? ViewModes.SMALL : ViewModes.CLOSED)
             : ViewModes.EXPANDED;
     const finalHeight = containerMode === ViewModes.CLOSED ? 40 : computedHeight;
-
-    const handleSmallClick = () => {
-        if (progress === 0) setProgress(1);
-    };
+    const finalWidth = containerMode === ViewModes.CLOSED ? 40 : containerMode === ViewModes.SMALL ? 200 : 360;
 
     const handleToggleFilter = (filter: "user" | "code") => {
         setMessageFilter(filter);
@@ -272,51 +269,59 @@ export default function Reflections() {
     const allRead = messagesData.every(message => message.isRead);
 
     return (
-        <div
-            ref={containerRef}
-            className={clsx(
-                "reflections-container",
-                containerMode,
-                { "sidebar-open": isSideBarOpen }
-            )}
-            style={{
-                userSelect: "none",
-                height: finalHeight,
-                transition: "none",
-            }}
-            onMouseEnter={handleContainerMouseEnter}
-            onMouseLeave={handleContainerMouseLeave}
-            onMouseMove={handleContainerMouseMove}
-        >
+        <div className="reflections-wrapper">
             <div
-                className={`icon ${allRead ? "all-read" : ""}`}
-                onMouseEnter={handleMouseEnterIcon}
-                onMouseLeave={handleMouseLeaveIcon}
-            >
-                <ReflectionIcon fill="currentColor" />
-            </div>
+                ref={containerRef}
+                className={clsx(
+                    "reflections-container",
+                    containerMode,
+                    { "sidebar-open": isSideBarOpen }
+                )}
+                style={{
+                    userSelect: "none",
+                    height: finalHeight,
+                    width: finalWidth,
+                    transition: isDragging ? "none" : "height 300ms ease, width 300ms ease",
+                }}
 
-            {containerMode !== ViewModes.CLOSED && (
+                onMouseEnter={handleContainerMouseEnter}
+                onMouseLeave={handleContainerMouseLeave}
+                onMouseMove={handleContainerMouseMove}
+            >
                 <div
-                    className="small-drag-bar"
-                    style={{
-                        cursor: isDragging ? "grabbing" : "grab",
-                        opacity: isCursorNearTop ? 1 : 0,
-                        transition: "opacity 300ms ease",
-                    }}
-                    onMouseDown={handleDragBarMouseDown}
-                />
-            )}
+                    className={`icon ${allRead ? "all-read" : ""}`}
+                    onMouseEnter={handleMouseEnterIcon}
+                    onMouseLeave={handleMouseLeaveIcon}
+                >
+                    <ReflectionIcon fill="currentColor" />
+                </div>
+
+                {containerMode !== ViewModes.CLOSED && (
+                    <div
+                        className="small-drag-bar"
+                        style={{
+                            cursor: isDragging ? "grabbing" : "grab",
+                            opacity: isCursorNearTop ? 1 : 0,
+                            transition: "opacity 300ms ease",
+                        }}
+                        onMouseDown={handleDragBarMouseDown}
+                    />
+                )}
                 <div
                     className="content-wrapper"
                     style={{
-                        overflowY: containerWidth < 460 ? "auto" : "hidden",
+                        overflowY:
+                            containerMode === ViewModes.EXPANDED && containerWidth < expandedWidth
+                                ? "auto"
+                                : "hidden",
+                        opacity: containerMode === ViewModes.CLOSED ? 0 : 1,
+                        transition: "opacity 0.3s ease-in-out 0.1s",
                         overflowX: "hidden",
                         height: containerMode === ViewModes.CLOSED ? 0 : computedHeight - 15,
                     }}
                 >
                     {containerMode === ViewModes.SMALL && progress < threshold && (
-                        <div className="small-content" onClick={handleSmallClick}>
+                        <div className="small-content">
                             <div className="small-header">
                             <span className="small-time">
                                 <LatestMessageInfo messages={messagesData} />
@@ -351,10 +356,10 @@ export default function Reflections() {
                                             />
                                             <div
                                                 className={
-                                                messageFilter === "code"
-                                                    ? "toggle-bot-message-active-icon"
-                                                    : "toggle-bot-message-icon"
-                                            }
+                                                    messageFilter === "code"
+                                                        ? "toggle-bot-message-active-icon"
+                                                        : "toggle-bot-message-icon"
+                                                }
                                                 onClick={() => handleToggleFilter("code")}
                                             >
                                                 <StarsIcon height={17} width={13} />
@@ -364,134 +369,135 @@ export default function Reflections() {
                                                     messageFilter === "user"
                                                         ? "toggle-user-message-active-icon"
                                                         : "toggle-user-message-icon"
-                                                    }
+                                                }
                                                 onClick={() => handleToggleFilter("user")}
-                                                >
-                                                    <UserMessageIcon />
+                                            >
+                                                <UserMessageIcon />
+                                            </div>
+                                        </div>
+                                        <div
+                                            className={`search-container ${isSearchVisible ? "search-visible" : ""}`}>
+                                            <div
+                                                className="search-icon"
+                                                onClick={() => setIsSearchVisible((prev) => !prev)}
+                                            >
+                                                <SearchIcon />
+                                            </div>
+                                            <CSSTransition
+                                                in={isSearchVisible}
+                                                timeout={300}
+                                                classNames="search-input"
+                                                unmountOnExit
+                                            >
+                                                <div className="search-input-container">
+                                                    <input
+                                                        type="text"
+                                                        className="search-input"
+                                                        placeholder="Search..."
+                                                        autoFocus
+                                                    />
+                                                    <div
+                                                        className="search-input-close"
+                                                        onClick={() => setIsSearchVisible(false)}
+                                                    >
+                                                        <CloseSearchInputIcon />
+                                                    </div>
                                                 </div>
+                                            </CSSTransition>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="pinned-messages">
+                                    <div className="pinned-header">
+                                        <div className="pinned">
+                                            <div
+                                                className={`straight-pin-icon ${isPinnedListVisible ? "active-pin" : ""}`}>
+                                                <StraightPin fill="currentColor" />
+                                            </div>
+                                            <div>Pinned</div>
+                                        </div>
+                                        <div className="add-message-container">
+                                            <div
+                                                className={`message-count ${pinnedMessages.length < 1 ? "display-none" : ""}`}>
+                                                {pinnedMessages.length}
                                             </div>
                                             <div
-                                                className={`search-container ${isSearchVisible ? "search-visible" : ""}`}>
-                                                <div
-                                                    className="search-icon"
-                                                    onClick={() => setIsSearchVisible((prev) => !prev)}
-                                                >
-                                                    <SearchIcon />
-                                                </div>
-                                                <CSSTransition
-                                                    in={isSearchVisible}
-                                                    timeout={300}
-                                                    classNames="search-input"
-                                                    unmountOnExit
-                                                >
-                                                    <div className="search-input-container">
-                                                        <input
-                                                            type="text"
-                                                            className="search-input"
-                                                            placeholder="Search..."
-                                                            autoFocus
-                                                        />
-                                                        <div
-                                                            className="search-input-close"
-                                                            onClick={() => setIsSearchVisible(false)}
-                                                        >
-                                                            <CloseSearchInputIcon />
-                                                        </div>
-                                                    </div>
-                                                </CSSTransition>
+                                                className="show-pined-btn"
+                                                onClick={() => {
+                                                    if (pinnedMessages.length < 1) return;
+                                                    setPinnedListVisible((prev) => !prev);
+                                                }}
+                                            >
+                                                {pinnedMessages.length < 1 ? "+" : isPinnedListVisible ? "-" : "+"}
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div className="pinned-messages">
-                                        <div className="pinned-header">
-                                            <div className="pinned">
-                                                <div
-                                                    className={`straight-pin-icon ${isPinnedListVisible ? "active-pin" : ""}`}>
-                                                    <StraightPin fill="currentColor" />
-                                                </div>
-                                                <div>Pinned</div>
-                                            </div>
-                                            <div className="add-message-container">
-                                                <div
-                                                    className={`message-count ${pinnedMessages.length < 1 ? "display-none" : ""}`}>
-                                                    {pinnedMessages.length}
-                                                </div>
-                                                <div
-                                                    className="show-pined-btn"
-                                                    onClick={() => {
-                                                        if (pinnedMessages.length < 1) return;
-                                                        setPinnedListVisible((prev) => !prev);
-                                                    }}
-                                                >
-                                                    {pinnedMessages.length < 1 ? "+" : isPinnedListVisible ? "-" : "+"}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <CSSTransition
-                                            in={isPinnedListVisible}
-                                            timeout={300}
-                                            classNames="message-list"
-                                            unmountOnExit
-                                        >
-                                            <div className="pinned-messages-list">
-                                                {pinnedMessages.map((message) => (
-                                                    <ReflectionsMessageItem
-                                                        key={message.id}
-                                                        message={message}
-                                                        onTogglePinned={handleTogglePinned}
-                                                    />
-                                                ))}
-                                            </div>
-                                        </CSSTransition>
-                                    </div>
-
-                                    <div className="messages">
-                                        {finalSortedMessages.map(({ day, messages }) => (
-                                            <MessagesOfDayList
-                                                key={day}
-                                                date={day}
-                                                messages={messages}
-                                                onTogglePinned={handleTogglePinned}
-                                                onMarkAsRead={handleMarkAsRead}
-                                            />
-                                        ))}
-                                    </div>
-
-                                    <div>
-                                        <CSSTransition
-                                            in={isAddingMessage}
-                                            timeout={300}
-                                            classNames="input-panel"
-                                            unmountOnExit
-                                        >
-                                            <div ref={messageInputRef} className="message-input-panel">
-                                                <input
-                                                    className="add-message-input"
-                                                    type="text"
-                                                    placeholder="Write down anything..."
-                                                    autoFocus
+                                    <CSSTransition
+                                        in={isPinnedListVisible}
+                                        timeout={300}
+                                        classNames="message-list"
+                                        unmountOnExit
+                                    >
+                                        <div className="pinned-messages-list">
+                                            {pinnedMessages.map((message) => (
+                                                <ReflectionsMessageItem
+                                                    key={message.id}
+                                                    message={message}
+                                                    onTogglePinned={handleTogglePinned}
                                                 />
+                                            ))}
+                                        </div>
+                                    </CSSTransition>
+                                </div>
+
+                                <div className="messages">
+                                    {finalSortedMessages.map(({ day, messages }) => (
+                                        <MessagesOfDayList
+                                            key={day}
+                                            date={day}
+                                            messages={messages}
+                                            onTogglePinned={handleTogglePinned}
+                                            onMarkAsRead={handleMarkAsRead}
+                                        />
+                                    ))}
+                                </div>
+
+                                <div>
+                                    <CSSTransition
+                                        in={isAddingMessage}
+                                        timeout={300}
+                                        classNames="input-panel"
+                                        unmountOnExit
+                                    >
+                                        <div ref={messageInputRef} className="message-input-panel">
+                                            <input
+                                                className="add-message-input"
+                                                type="text"
+                                                placeholder="Write down anything..."
+                                                autoFocus
+                                            />
                                             <div
                                                 onClick={() => setIsAddingMessage(false)}
                                                 className="send-reflections-message-icon"
                                             >
                                                 <ArrowUpReflectionsIcon />
                                             </div>
-                                    </div>
-                                </CSSTransition>
-                                {!isAddingMessage && (
-                                    <button
-                                        className="add-message-button"
-                                        onClick={() => setIsAddingMessage(true)}
-                                    >
-                                        +
-                                    </button>
-                                )}
+                                        </div>
+                                    </CSSTransition>
+                                    {!isAddingMessage && (
+                                        <button
+                                            className="add-message-button"
+                                            onClick={() => setIsAddingMessage(true)}
+                                        >
+                                            +
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </div>
     );

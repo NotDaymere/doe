@@ -209,10 +209,14 @@ export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) =>
             )}
 
             {isBookmarksActionsOpen && (
-                <BookmarksActions position={bookmarksActionsPosition}
-                                  onRename={handleRename}
-                                  onDelete={handleDelete}/>
+                <BookmarksActions
+                    position={bookmarksActionsPosition}
+                    onRename={handleRename}
+                    onDelete={handleDelete}
+                    onClose={() => setIsBookmarksActionsOpen(false)}
+                />
             )}
+
         </>
     )
 }

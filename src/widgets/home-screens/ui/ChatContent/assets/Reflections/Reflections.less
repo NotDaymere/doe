@@ -1,7 +1,25 @@
-.reflections-container {
+.reflections-wrapper {
+  background: transparent;
   position: fixed;
   bottom: 130px;
   left: 90px;
+  border-radius: 8px;
+  transition:
+          width 0.3s ease,
+          height 0.3s ease 0.3s,
+          transform 0.3s,
+          left 0.3s ease,
+          opacity 0.3s;
+  z-index: 10;
+  overflow: hidden;
+  height: 450px;
+  width: 360px;
+}
+
+.reflections-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   background-color: #FFFFFF99;
   border: 1px solid #FFFFFF;
   border-radius: 8px;
@@ -223,10 +241,12 @@
 }
 
 .expanded-content {
-  display: none;
+  display: block;
   opacity: 0;
+  overflow: hidden;
   max-height: 0;
   height: 100%;
+  transition: opacity 1000ms ease-in-out;
 }
 
 .reflections-container.expanded .expanded-content {
@@ -249,7 +269,25 @@
   flex-direction: column;
   position: relative;
   height: 100%;
+  overflow: hidden;
 }
+
+.expanded-content-enter {
+  opacity: 0;
+}
+.expanded-content-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms ease-in-out;
+}
+.expanded-content-exit {
+  opacity: 1;
+}
+.expanded-content-exit-active {
+  opacity: 0;
+  transition: opacity 1000ms ease-in-out;
+}
+
+
 
 .message-input-panel {
   position: fixed;
