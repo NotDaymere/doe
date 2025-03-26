@@ -134,6 +134,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
 
 
+    const getSelectedTextWithin = (container: HTMLElement): string => {
+        const selection = window.getSelection();
+        if (!selection || selection.rangeCount === 0) return "";
+        const range = selection.getRangeAt(0);
+        if (container.contains(range.startContainer) && container.contains(range.endContainer)) {
+            return selection.toString().trim();
+        }
+        return "";
+    };
+
     React.useEffect(() => {
         const lastMouseEvent = { current: null as MouseEvent | null };
 
@@ -144,17 +154,12 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
         const handleSelectionChange = () => {
             if (!messageRef.current) return;
-            const selection = window.getSelection();
-            const selectionText = selection ? selection.toString().trim() : "";
+            const selectionText = getSelectedTextWithin(messageRef.current);
 
-            if (
-                selection &&
-                selectionText
-            ) {
-                const range = selection.getRangeAt(0);
+            if (selectionText) {
+                const range = window.getSelection()!.getRangeAt(0);
                 const rects = range.getClientRects();
                 if (rects.length === 0) return;
-
                 const lastRect = rects[rects.length - 1];
                 const selectionTop = lastRect.bottom + window.scrollY;
                 const selectionLeft = lastRect.right + window.scrollX;
