@@ -139,14 +139,14 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
                                 strokeDasharray="3 3"
                                 horizontal
                                 vertical={false}
-                                stroke="var(--border-var-8)"
+                                stroke="var(--var-68)"
                             />
                             <XAxis
                                 dataKey="label"
                                 tick={<CustomXAxisTick />}
                                 tickLine={false}
                                 padding={{ left: 20, right: 20 }}
-                                axisLine={{ stroke: "var(--border-var-8)", opacity: 1 }}
+                                axisLine={{ stroke: "var(--var-68)", opacity: 1 }}
                             />
                             <YAxis axisLine={false} tickLine={false} />
                             <Bar

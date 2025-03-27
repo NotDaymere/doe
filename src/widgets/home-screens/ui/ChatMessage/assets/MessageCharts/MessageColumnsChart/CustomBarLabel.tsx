@@ -80,7 +80,7 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
                 y1={barTop}
                 x2={barCenter}
                 y2={barTop}
-                stroke="var(--icon-var-2)"
+                stroke="var(--var-86)"
                 strokeDasharray="3 3"
                 strokeWidth={2}
             />
@@ -89,7 +89,7 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
                 y={barTop}
                 textAnchor="end"
                 alignmentBaseline="middle"
-                fill="var(--text-var-27)"
+                fill="var(--var-125)"
                 fontSize={16}
                 fontWeight="bold"
             >
@@ -100,7 +100,7 @@ export const CustomBarLabel: FC<CustomBarLabelProps> = ({
                 y1={barTop}
                 x2={30 + 510}
                 y2={barTop}
-                stroke="var(--icon-var-2)"
+                stroke="var(--var-86)"
                 strokeDasharray="3 3"
                 strokeWidth={2}
             />

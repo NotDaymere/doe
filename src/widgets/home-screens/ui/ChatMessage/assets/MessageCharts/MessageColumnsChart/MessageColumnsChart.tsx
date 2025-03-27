@@ -141,12 +141,12 @@ const MessageColumnsChart: FC<{ data: ChartMessageData[] }> = ({ data }) => {
                             <CartesianGrid
                                 strokeDasharray="3 3"
                                 vertical={false}
-                                stroke="var(--border-var-8)"
+                                stroke="var(--var-68)"
                             />
                             <XAxis
                                 dataKey="label"
                                 tick={renderCustomTick}
-                                axisLine={{ stroke: "var(--border-var-8)", opacity: 1 }}
+                                axisLine={{ stroke: "var(--var-68)", opacity: 1 }}
                                 tickLine={false}
                             />
                             <YAxis
