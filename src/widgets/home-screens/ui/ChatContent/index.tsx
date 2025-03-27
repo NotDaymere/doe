@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import React, { Dispatch, useCallback, useMemo } from "react";
 import { useEditor } from "@tiptap/react";
 import Bold from "@tiptap/extension-bold";
 import Document from "@tiptap/extension-document";
@@ -26,11 +26,8 @@ import { ScrollDownButton } from "./assets/ScrollDownButton/ScrollDownButton";
 import { ChatRegularView } from "./assets/ContentChatRegularView/ContentChatRegularView";
 import { ChatBranchView } from "./assets/ChatBranchView/ChatBranchView";
 import Reflections from "./assets/Reflections/Reflections";
-import GeneralLogo from "../GeneralLogo/GeneralLogo";
 import AllBranches from "./assets/AllBranches/AllBranches";
 import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
-import { CSSTransition } from "react-transition-group";
-import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
 
 interface Props {
     editMsgMode: {
@@ -56,12 +53,9 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         setCurrentBranchDialog,
         getOpenSavedPlaygrounds
     } = useChatStore();
-    const { talkModeActive} = useAppStore();
+    const { talkModeActive, isSideBarOpen } = useAppStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
-    const [isShowLogoPopup, setIsShowLogoPopup] = React.useState(false);
-    const {isSideBarOpen} = useAppStore();
-
     const editor = useEditor({
         extensions: [
             Div,
@@ -113,21 +107,17 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         }
     }, [isCurrentBranchOpen, currentBranchDialog, setCurrentBranchDialog]);
 
-    const scrollToBottom = () => {
+    const scrollToBottom = useCallback(() => {
         if (chatRef.current) {
-            chatRef.current.scrollTo({
-                top: chatRef.current.scrollHeight,
-                behavior: "smooth",
-            });
+            chatRef.current.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" });
         }
-    };
+    }, [chatRef]);
 
-    const handleScroll = () => {
-        if (chatRef.current) {
-            const { scrollTop, clientHeight, scrollHeight } = chatRef.current;
-            setShowScrollDownBtn(scrollTop + clientHeight < scrollHeight - 50);
-        }
-    };
+    const handleScroll = useCallback(() => {
+        if (!chatRef.current) return;
+        const { scrollTop, clientHeight, scrollHeight } = chatRef.current;
+        setShowScrollDownBtn(scrollTop + clientHeight < scrollHeight - 50);
+    }, [chatRef]);
 
     React.useEffect(() => {
         const currentChat = chatRef.current;
@@ -179,7 +169,6 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         dialogRefs={dialogRefs}
                     />
                 )}
-
                 {!isCurrentBranchOpen && (
                     <div className={getOpenSavedPlaygrounds().length <= 0
                                     ? !isSideBarOpen
@@ -205,7 +194,6 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     <Reflections />
                 }
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
-
                 <TalkMode targetRef={chatRef} />
             </div>
         </div>

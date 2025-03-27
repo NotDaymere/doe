@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import css from "./ChatBranchView.module.less";
-import { ChatMessageDate } from "../ChatMessageData/ChatMessageDate";
+import { ChatMessageDate } from "../ChatMessageDate/ChatMessageDate";
 import { ChatMessage } from "../../../ChatMessage";
 import ChatBranchSection from "../ChatBranchSection/ChatBranchSection";
 import { IBranch } from "../../../../../../shared/types/Branch";

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { ChatMessageDate } from "../ChatMessageData/ChatMessageDate";
+import { ChatMessageDate } from "../ChatMessageDate/ChatMessageDate";
 import ChatBranchSection from "../ChatBranchSection/ChatBranchSection";
 import { ChatMessage } from "../../../ChatMessage";
 import { useChatStore } from "../../../../../../shared/providers";

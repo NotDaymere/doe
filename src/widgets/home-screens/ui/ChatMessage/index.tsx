@@ -1,8 +1,8 @@
-import React, { Dispatch, useEffect, useState } from "react";
-
+import React, { Dispatch, useCallback, useEffect, useMemo, useState } from "react";
+import ReactDOM from "react-dom";
 // External libraries
 import { Editor as EditorTiptap } from "@tiptap/react";
-import { MathJax } from "better-react-mathjax";
+import { MathJax, MathJaxContext } from "better-react-mathjax";
 import hljs from "highlight.js";
 import jsPDF from "jspdf";
 import { Flex } from "antd";
@@ -59,6 +59,7 @@ import SeeAllStepsIcon from "../../../../shared/icons/SeeAllSteps.icon";
 import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
 import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
 import GeneralLogo from "../GeneralLogo/GeneralLogo";
+import ChatMessageContent from "./ChatMessageContent";
 
 interface Props {
     data: IMessage;
@@ -116,7 +117,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setCitationPlaygroundRef,
         setIsCitationPlayground,
     } = useAppStore();
-    const parsedContent = parseContent(content);
+    const parsedContent = useMemo(() => parseContent(data.content), [data.content]);
     const messageRef = React.useRef<HTMLDivElement>(null);
 
 
@@ -144,57 +145,27 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         return "";
     };
 
-    React.useEffect(() => {
+
+    useEffect(() => {
         const lastMouseEvent = { current: null as MouseEvent | null };
-
-        const handleMouseUp = (e: MouseEvent) => {
-            lastMouseEvent.current = e;
-            handleSelectionChange();
-        };
-
+        const handleMouseUp = (e: MouseEvent) => { lastMouseEvent.current = e; handleSelectionChange(); };
         const handleSelectionChange = () => {
             if (!messageRef.current) return;
             const selectionText = getSelectedTextWithin(messageRef.current);
-
             if (selectionText) {
                 const range = window.getSelection()!.getRangeAt(0);
-                const rects = range.getClientRects();
-                if (rects.length === 0) return;
-                const lastRect = rects[rects.length - 1];
-                const selectionTop = lastRect.bottom + window.scrollY;
-                const selectionLeft = lastRect.right + window.scrollX;
-                const maxDistance = 30;
-                const offsetY = -50;
-                const offsetX = -20;
-
-                if (lastMouseEvent.current) {
-                    const candidateTop = lastMouseEvent.current.pageY;
-                    const candidateLeft = lastMouseEvent.current.pageX;
-                    const topDiff = candidateTop - selectionTop;
-
-                    const clampedTop =
-                        Math.abs(topDiff) > maxDistance
-                            ? selectionTop + (topDiff > 0 ? maxDistance : -maxDistance)
-                            : candidateTop;
-
-                    setReferenceButtonPosition({ top: clampedTop + offsetY, left: candidateLeft + offsetX });
-                } else {
-                    setReferenceButtonPosition({ top: selectionTop, left: selectionLeft });
-                }
+                const rect = range.getClientRects()[range.getClientRects().length - 1];
+                const top = rect.bottom + window.scrollY - 50;
+                const left = lastMouseEvent.current ? lastMouseEvent.current.pageX - 20 : rect.right + window.scrollX;
+                setReferenceButtonPosition({ top, left });
                 setReferenceButtonVisible(true);
-            } else {
-                handleClose();
-            }
+            } else setReferenceButtonVisible(false);
         };
-
         document.addEventListener("mouseup", handleMouseUp);
         document.addEventListener("selectionchange", handleSelectionChange);
+        return () => { document.removeEventListener("mouseup", handleMouseUp); document.removeEventListener("selectionchange", handleSelectionChange); };
+    }, [referenceButtonVisible]);
 
-        return () => {
-            document.removeEventListener("mouseup", handleMouseUp);
-            document.removeEventListener("selectionchange", handleSelectionChange);
-        };
-    }, []);
 
     React.useEffect(() => {
         const handleCitationClick = (event: Event) => {
@@ -404,33 +375,27 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setEditMsgMode({ isEditMsgMode: false, msgId: null });
         // setEditMsgMode(false);
     };
-    const handleCopy = () => {
-        if (messageRef.current) {
-            const range = document.createRange();
-            range.selectNodeContents(messageRef.current);
-            const selection = window.getSelection();
-            selection?.removeAllRanges();
-            selection?.addRange(range);
-            document.execCommand("copy");
-            selection?.removeAllRanges();
-        }
-    };
-    const downloadPDF = () => {
-        if (messageRef.current) {
-            const doc = new jsPDF();
+    const handleCopy = useCallback(() => {
+        if (!messageRef.current) return;
+        const range = document.createRange();
+        range.selectNodeContents(messageRef.current);
+        const sel = window.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+        document.execCommand("copy");
+        sel?.removeAllRanges();
+    }, []);
 
-            const content = messageRef.current;
-
-            doc.html(content, {
-                callback: function(doc) {
-                    doc.save("response.pdf");
-                },
-                html2canvas: { scale: 0.3 },
-                x: 10,
-                y: 10,
-            });
-        }
-    };
+    const downloadPDF = useCallback(() => {
+        if (!messageRef.current) return;
+        const doc = new jsPDF();
+        doc.html(messageRef.current, {
+            callback: doc => doc.save("response.pdf"),
+            html2canvas: { scale: 0.3 },
+            x: 10,
+            y: 10,
+        });
+    }, []);
     const openSourcePlayground = (sourceData: string) => {
         if (isAllStepOpen) {
 
@@ -478,7 +443,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         );
     };
 
-
     if (data.isUser) {
         if (editMsgMode.isEditMsgMode && editMsgMode.msgId === data.id) {
             return (
@@ -514,14 +478,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             </span>
                             </button>
                         </div>
-                        {!isHyperlinkInputOpen &&
-                            <ReferenceButton
-                                isVisible={referenceButtonVisible}
-                                position={referenceButtonPosition}
-                                onClose={handleClose}
-                                onReferenceClick={handleReferenceClick}
-                            />
-                        }
                     </div>
                     {!isCurrentBranchOpen && renderFavButton()}
                 </div>
@@ -569,14 +525,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                 )}
                             </div>
                         </div>
-                        {!isHyperlinkInputOpen &&
-                            <ReferenceButton
-                                isVisible={referenceButtonVisible}
-                                position={referenceButtonPosition}
-                                onClose={handleClose}
-                                onReferenceClick={handleReferenceClick}
-                            />
-                        }
                     </div>
                     {!isCurrentBranchOpen &&
                         <MessageNodeVersionSelector message={data} />
@@ -590,17 +538,19 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     if (data.isCode) {
         return (
             <div className={css.message_with_button_container}>
+                <MathJaxContext>
                 <div
                     className={`${isCurrentBranchOpen ? css.chat_message_branch : css.chat_message}  ${data.isUser ? css.user_message : css.bot_message}`}
                 >
-                    {!isHyperlinkInputOpen &&
+                    {!isHyperlinkInputOpen && ReactDOM.createPortal(
                         <ReferenceButton
                             isVisible={referenceButtonVisible}
                             position={referenceButtonPosition}
                             onClose={handleClose}
                             onReferenceClick={handleReferenceClick}
-                        />
-                    }
+                        />,
+                        document.body
+                    )}
                     <div className={css.sub_bot_message_info_container}>
                         <div className={css.logoWrapper}>
 
@@ -619,28 +569,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     <div className={css.message_content}>
 
                         <div ref={messageRef}>
-                            <MathJax>
-                                {parsedContent.map((part, index) => {
-                                    if (part.type === "text" && !data.isUser) {
-                                        return (
-                                            <div
-                                                dangerouslySetInnerHTML={{
-                                                    __html: parseTextFormatting(part.content),
-                                                }}
-                                            />
-                                        );
-                                    } else if (part.type === "chart" && !data.isUser) {
-                                        return <ChartRenderer key={index} input={part.content} />;
-                                    }
-                                    return (
-                                        <div
-                                            dangerouslySetInnerHTML={{
-                                                __html: parseTextFormatting(part.content),
-                                            }}
-                                        />
-                                    );
-                                })}
-                            </MathJax>
+                            <ChatMessageContent messageData={data}/>
+
                             <text>Now I’ll plot the output inline instead of using code:</text>
                             <MessageLineChart data={mockLineChartMessageData} />
                             <text>Now I’ll plot the output inline instead of using code:</text>
@@ -733,6 +663,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         )}
                     </div>
                 </div>
+                </MathJaxContext>
                 {!isCurrentBranchOpen && renderFavButton()}
             </div>
         );
