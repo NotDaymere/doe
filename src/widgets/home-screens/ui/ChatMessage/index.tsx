@@ -11,11 +11,12 @@ import clsx from "clsx";
 
 // Shared types & providers
 import { IMessage } from "src/shared/types/Message";
-import { useChatStore } from "src/shared/providers";
+import { useAppStore, useChatStore } from "src/shared/providers";
 
 // Shared components
 import { Editor } from "src/shared/components/Editor";
 import { useApp } from "src/components/app";
+import ExampleTableMassage from "./assets/ExampleTabelMassage/ExampleTableMassage";
 import {FileListForDisplay} from "../../../../shared/components/FileList/FileListForDisplay";
 
 // Icons
@@ -62,6 +63,7 @@ import SeeAllStepsIcon from "../../../../shared/icons/SeeAllSteps.icon";
 import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
 import classNames from "classnames";
 import MagicIcon from "../../../../shared/icons/Magic.icon";
+import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
 
 interface Props {
     data: IMessage;
@@ -95,39 +97,46 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     };
 
     const [isEdit, setEdit] = React.useState(false);
+    const [isLiked, setIsLiked] = useState(data.isLiked || false);
 
     const [content, setContent] = React.useState(data.content);
     const [updatedContent, setUpdatedContent] = useState(data.content);
-
-    const [isLiked, setIsLiked] = useState(data.isLiked || false);
-
     const {
-        editor,
         setEditor,
         isCurrentBranchOpen,
         addMessageNodeVersion,
         addMessageNode,
         getLastCurrentVersionMessageNode,
         doMessageReply,
-        isHyperlinkInputOpen,
-        citationPlaygroundRef,
-        setCitationPlaygroundRef,
-        setIsCitationPlayground,
-        playground,
         setPlayground,
         setSavedPlaygrounds,
         savedPlaygrounds,
         deleteSavedPlaygrounds,
         updateSavedPlaygrounds,
+        setMessageLike,
+        // editor,
+        // isHyperlinkInputOpen,
+        // citationPlaygroundRef,
+        // setCitationPlaygroundRef,
+        // setIsCitationPlayground,
+        playground,
         changeMessage,
         playgroundFullscreen,
         setMessagesCount,
         messagesCount,
     } = useChatStore();
-
+    const {
+        editor,
+        isHyperlinkInputOpen,
+        citationPlaygroundRef,
+        setCitationPlaygroundRef,
+        setIsCitationPlayground,
+    } = useAppStore();
     const parsedContent = parseContent(content);
     const messageRef = React.useRef<HTMLDivElement>(null);
 
+    const [versions, setVersions] = useState<string[]>([data.content]);
+    const [currentVersionIndex, setCurrentVersionIndex] = useState<number>(0);
 
     const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
     const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{
@@ -158,7 +167,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
             if (
                 selection &&
-                selectionText
+                selectionText &&
+                messageRef.current.contains(selection.anchorNode)
             ) {
                 const range = selection.getRangeAt(0);
                 const rects = range.getClientRects();
@@ -485,13 +495,18 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setMessagesCount(messagesCount + 1);
     };
 
+    // const handleLike = () => {
+    //     setMessageLike(data.id, !data.isLiked);
+    // };
+
     const toggleEditUnauthorized = () => {
         setEdit(!isEdit);
     };
+
     const renderFavButton = () => {
         return (
             <button
-                className={clsx(css.fav_button, { [css.fav_button_liked]: isLiked})}
+                className={clsx(css.fav_button, { [css.fav_button_liked]: data.isLiked })}
                 onClick={handleLike}
             >
                 <FavoriteIcon fill="currentColor" />
@@ -544,7 +559,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                             />
                         }
                     </div>
-                    {renderFavButton()}
+                    {!isCurrentBranchOpen && renderFavButton()}
                 </div>
             );
         }
@@ -603,7 +618,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         <MessageNodeVersionSelector message={data} />
                     }
                 </div>
-                {renderFavButton()}
+                {!isCurrentBranchOpen && renderFavButton()}
             </div>
         );
     }
@@ -625,7 +640,15 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     <div className={css.sub_bot_message_info_container}>
                         <div className={css.logoWrapper}>
                             <div onClick={() => setIsShowLogoPopup((prev) => !prev)} style={{ cursor: "pointer" }}>
-                                <GeneralLogo />
+                                {isCurrentBranchOpen ? (
+                                    <div
+                                        className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                                        <div
+                                            className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                                            <MessageLogoIcon fillPath={"currentColor"} />
+                                        </div>
+                                    </div>
+                                ) : <GeneralLogo />}
                             </div>
                             <CSSTransition
                                 in={isShowLogoPopup}
@@ -711,10 +734,24 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                                         className={classNames(css.steps_button, {
                                             [css.active_steps_button]: playground.open,
                                         })}
-                                        onClick={()=> openSourcePlayground('')}
+                                        onClick={() => openSourcePlayground('')}
                                     >
                                         <MagicIcon /> See all steps
                                     </button>
+                                    {/*    <button*/}
+                                    {/*        onClick={() => openSourcePlayground(data.id.toString())}*/}
+                                    {/*        className={clsx(css.button_steps, { [css.steps_open]: isAllStepOpen })}*/}
+                                    {/*    >*/}
+                                    {/*        <SeeAllStepsIcon />*/}
+                                    {/*        <span*/}
+                                    {/*            className={clsx({*/}
+                                    {/*                [css.button_steps_open_label]: isAllStepOpen,*/}
+                                    {/*                [css.button_steps_label]: !isAllStepOpen,*/}
+                                    {/*            })}*/}
+                                    {/*        >*/}
+                                    {/*    See all steps*/}
+                                    {/*</span>*/}
+                                    {/*    </button>*/}
                                 </div>
                                 <Flex gap={10}>
                                     <button
@@ -763,7 +800,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                         )}
                     </div>
                 </div>
-                {renderFavButton()}
+                {!isCurrentBranchOpen && renderFavButton()}
             </div>
         );
     }
@@ -780,5 +817,5 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 }}
             />
         </div>
-    );
-};
+    )
+}

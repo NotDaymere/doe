@@ -1,9 +1,16 @@
 import React, { SVGProps } from "react";
 
-const StarsIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
+interface StarsIconProps extends SVGProps<SVGSVGElement> {
+    width?: number | string;
+    height?: number | string;
+}
+
+const StarsIcon: React.FC<StarsIconProps> = ({ width = 20, height = 20, ...props }) => {
     return (
         <svg
             {...props}
+            width={width}
+            height={height}
             viewBox="0 0 20 20"
             stroke="none"
             xmlns="http://www.w3.org/2000/svg"

@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import EnergyIcon from "src/shared/icons/Energy.icon";
+import GlobalIcon from "src/shared/icons/Global.icon";
 import LeafIcon from "src/shared/icons/Leaf.icon";
 import TreeIcon from "src/shared/icons/Tree.icon";
 import WaterIcon from "src/shared/icons/Water.icon";
@@ -15,9 +16,10 @@ interface IProps {
 }
 
 export const SidebarGaia: React.FC<IProps> = ({ isActive, setIsActive }) => {
-    const { gaiaActive } = useAppStore();
+    const { gaiaActive, setGaiaActive } = useAppStore();
     const nodeRef = React.useRef<HTMLDivElement>(null);
 
+    const toggleGaia = () => setGaiaActive(!gaiaActive);
     const [showGaia, setShowGaia] = useState(false);
 
     useEffect(() => {
@@ -32,20 +34,24 @@ export const SidebarGaia: React.FC<IProps> = ({ isActive, setIsActive }) => {
             setIsActive(false);
         };
     }, [isActive]);
-
     return (
         <div className={clsx(css.gaia, gaiaActive && css._active)}>
             <div className={css.gaia_btn_wrapper}>
+                <button className={css.gaia_btn} onClick={toggleGaia}>
+                    <GlobalIcon />
+                </button>
                 <CSSTransition
                     classNames={css}
                     timeout={1000}
-                    in={showGaia}
+                    in={!gaiaActive}
+                    // in={showGaia}
                     nodeRef={nodeRef}
                     mountOnEnter
                 >
-                    <p className={css.gaia_hint} ref={nodeRef}>
-                        Environmental savings per (calculated per token) by using our models
-                        compared to existing SOTA models.
+                    <p className={css.gaia_hint}
+                       ref={nodeRef}>
+                        Environmental savings per (calculated per token) by using our models compared to
+                        existing SOTA models.
                         <br />
                         <br />
                         For each token you generate, we calculate tree mass{" "}

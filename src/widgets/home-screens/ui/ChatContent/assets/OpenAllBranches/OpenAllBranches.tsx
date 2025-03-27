@@ -2,7 +2,7 @@ import './OpenAllBranches.less';
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from 'react-dom';
 import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg";
-import { useChatStore } from "src/shared/providers";
+import { useAppStore, useChatStore } from "src/shared/providers";
 import ThreeVerticalDots from "../../../../../../shared/icons/ThreeVerticalDots";
 import BranchIcon from "../../../../../../shared/icons/Branch.icon";
 import AllBranchesMenu from "../AllBranchesMenu/AllBranchesMenu";
@@ -16,6 +16,7 @@ type AnimationState = "enter" | "visible" | "exit";
 export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBranchesProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const { savedBranches } = useChatStore();
+    const {isSideBarOpen} = useAppStore();
 
     const [activeOpenAllBranchesMenu, setActiveOpenAllBranchesMenu] = useState<number | null>(null);
     const [contentIdHover, setContentIdHover] = useState<number | null>(null);
@@ -68,7 +69,10 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
     };
 
     return ReactDOM.createPortal(
-        <div ref={containerRef} className={`open-all-branches-container ${animationState}`}>
+        <div
+            ref={containerRef}
+            className={`open-all-branches-container ${animationState} ${isSideBarOpen ? 'branches-sidebar-open' : ''}`}
+        >
             <div className="open-all-branches-header">
                 <div className="open-all-branches-header-text">
                     <BranchIcon />

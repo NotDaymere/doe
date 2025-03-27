@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import ReactDOM from 'react-dom';
 import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg";
 import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
-import { useChatStore } from "src/shared/providers";
+import { useAppStore, useChatStore } from "src/shared/providers";
 import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
 import AllPlaygroundsMenu from "../AllPlaygroundsMenu/AllPlaygroundsMenu";
 
@@ -18,6 +18,7 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
     const [activeOpenAllPlaygroundsMenu, setActiveOpenAllPlaygroundsMenu] = useState<string | null>(null);
     const [activeAllPlaygrounds, setActiveAllPlaygrounds] = useState<boolean>(true);
     const [contentIdHover, setContentIdHover] = useState<string | null>(null);
+    const {isSideBarOpen} = useAppStore();
     const contentMouseUp = (id: string | null) => {
         if (activeOpenAllPlaygroundsMenu) {
             return;
@@ -63,7 +64,10 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
     }, [changeActiveAllPlaygrounds]);
 
     return ReactDOM.createPortal(
-            <div ref={containerRef} className={`open-all-playgrounds-container ${ getOpenSavedPlaygrounds().length < 1 && 'open-all-playgrounds-container-without-playground'} ${!activeAllPlaygrounds && 'close'}`}>
+            <div ref={containerRef} className={`open-all-playgrounds-container
+    ${getOpenSavedPlaygrounds().length < 1 ? 'open-all-playgrounds-container-without-playground' : ''}
+    ${getOpenSavedPlaygrounds().length < 1 && isSideBarOpen ? 'playgrounds-sidebar-open' : ''}
+    ${!activeAllPlaygrounds ? 'close' : ''}`}>
             <div className={'open-all-playgrounds-header'}>
                 <div className={'open-all-playgrounds-header-text'}>
                     <DoePlaygroundStars />All Playgrounds

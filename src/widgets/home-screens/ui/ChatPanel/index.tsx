@@ -8,12 +8,14 @@ import CallVoiceIcon from "src/shared/icons/CallVoice.icon";
 import MicrophoneIcon from "src/shared/icons/Microphone.icon";
 import ReplyIcon from "src/shared/icons/Reply.icon";
 import ScreenShareIcon from "src/shared/icons/ScreenShare.icon";
-import { useChatStore } from "src/shared/providers";
+import { useAppStore, useChatStore } from "src/shared/providers";
 import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
 import { FileListForUpload } from "src/shared/components/FileList/FileListForUpload";
 import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
+import { testTextAndCharts } from "src/components/chat-message/mockData";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+
 import { useChatContext } from "../../lib/hooks/ChatContext";
 import CloseIcon from "../../../../shared/icons/Close.icon";
 import QuestionCodeMessage from "./assets/QuestionCodeMessage/QuestionCodeMessage";
@@ -79,9 +81,13 @@ export const SCREEN_SHARE_CONFIG: IScreenSharePopup = {
 };
 
 export const ChatPanel: React.FC = () => {
-    const { text, files, setText, setFiles } = usePanel();
+    const { text, files, setText, setFiles, reset } = usePanel();
+    const messages = useChatStore((state) => state.messages);
+    const [clearContent, setClearContent] = React.useState(false)
+    const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
     const {
         setEditor,
+        setMessages,
         isCreateBranchChatMode,
         setIsCreateBranchChatMode,
         addSavedBranch,
@@ -95,23 +101,24 @@ export const ChatPanel: React.FC = () => {
         getLastCurrentVersionMessageNode,
         addMessageNode,
         setIsCurrentBranchOpen,
+
+        getMessageQueueFromNode,
         isHyperlinkInputOpen,
         setIsHyperlinkInputOpen,
         setMessagesCount,
         messagesCount,
-        messages,
-        setMessages,
         disableButtons,
         setDisableButtons,
     } = useChatStore();
 
-    const [clearContent, setClearContent] = React.useState(false);
-    const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore();
     const [loadingFile, setLoadingFile] = React.useState<string | undefined>(undefined);
 
-    const { isTablePromptVisible, setIsTablePromptVisible } = useChatStore();
-    const { selectedArea } = useChatStore();
+    const { isTablePromptVisible, setIsTablePromptVisible } = useAppStore();
+    const {
+        selectedArea
+    } = useAppStore();
     const panelRef = React.useRef<HTMLDivElement>(null);
+
 
     const { 
         drag,
@@ -235,6 +242,11 @@ export const ChatPanel: React.FC = () => {
         }
     }, []);
 
+    const handleClickOutside = (event: MouseEvent) => {
+        if (panelWrapperRef.current && !panelWrapperRef.current.contains(event.target as Node)) {
+            setShowHints({ ...showHints, typingHints: false });
+        }
+    };
     const onSendMessage = (text: string) => {
         if (!text || text === "<p></p>") return;
 
@@ -253,29 +265,19 @@ export const ChatPanel: React.FC = () => {
         ]);
         setText("");
     };
-
-    const handleFocusEditor = (editor: IEditor | null) => {
-        setEditor(editor);
-        setShowHints({ hints: false, typingHints: true });
-    };
-
-    const handleBlurEditor = () => {
-        setEditor(null);
-    };
-
-    const handleClickOutside = (event: MouseEvent) => {
-        if (panelWrapperRef.current && !panelWrapperRef.current.contains(event.target as Node)) {
-            setShowHints({ ...showHints, typingHints: false });
-        }
-    };
-
     const onShareScreenClickOutside = () => {
         setShareScreenConfig({
             shareType: null,
             expandedButtons: false,
         });
     };
-
+    const handleBlurEditor = () => {
+        setEditor(null);
+    };
+    const handleFocusEditor = (editor: IEditor | null) => {
+        setEditor(editor);
+        setShowHints({ hints: false, typingHints: true });
+    };
     const handleApplyLink = React.useCallback(async () => {
         if (!savedRange || linkUrl.trim().length === 0) {
             setShowLinkInput(false);
@@ -345,7 +347,7 @@ export const ChatPanel: React.FC = () => {
             files: files,
         };
 
-        // reset();
+        reset();
         setClearContent(true);
 
         if (isCreateBranchChatMode) {
@@ -354,14 +356,17 @@ export const ChatPanel: React.FC = () => {
                 userRequest: userMessage,
                 botMessages: reply,
             };
-            const newBranch = addSavedBranch(text, [userMessage], [branchDialog], userMessage.id);
+            const messagesHistory = getMessageQueueFromNode();
+            const newBranch = addSavedBranch(text, messagesHistory, [branchDialog], userMessage.id);
+            const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
+            addMessageNode(lastNodeForUserMessage, userMessage);
+            const lastNodeForReply = getLastCurrentVersionMessageNode();
+            addMessageNode(lastNodeForReply, reply);
             setCurrentBranch(newBranch);
             setIsCreateBranchChatMode(false);
             setIsCurrentBranchOpen(true);
         } else if (isCurrentBranchOpen && currentBranch) {
             const reply = await doMessageReply();
-            const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
-            addMessageNode(lastNodeForUserMessage, userMessage);
             const branchDialog = {
                 userRequest: userMessage,
                 botMessages: reply,
@@ -370,7 +375,7 @@ export const ChatPanel: React.FC = () => {
         } else {
             const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
             addMessageNode(lastNodeForUserMessage, userMessage);
-            // reset();
+            reset();
             setClearContent(true);
             const reply = await doMessageReply();
             const lastNodeForReply = getLastCurrentVersionMessageNode();
@@ -691,6 +696,165 @@ export const ChatPanel: React.FC = () => {
                             <CallVoiceIcon />
                         </button>
                     )}
+                    <CSSTransition
+                        in={showLinkInput && isHyperlinkInputOpen}
+                        timeout={300}
+                        classNames={{
+                            enter: css.linkEnter,
+                            enterActive: css.linkEnterActive,
+                            exit: css.linkExit,
+                            exitActive: css.linkExitActive,
+                        }}
+                        unmountOnExit
+                    >
+                        <div
+                            className={css.hyperlink_form}
+                            style={{
+                                position: "fixed",
+                                top: linkInputPosition.top,
+                                left: linkInputPosition.left,
+                                zIndex: 1000,
+                            }}
+                        >
+                            <input
+                                value={linkUrl}
+                                onChange={(e) => setLinkUrl(e.target.value)}
+                                placeholder="Enter URL"
+                                onFocus={() => {
+                                    window.getSelection()?.removeAllRanges();
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        (e.currentTarget as HTMLInputElement).blur();
+                                        handleApplyLink();
+                                        setTimeout(() => {
+                                            window.getSelection()?.removeAllRanges();
+                                            if (
+                                                document.activeElement &&
+                                                typeof (document.activeElement as HTMLElement).blur === "function"
+                                            ) {
+                                                (document.activeElement as HTMLElement).blur();
+                                            }
+                                        }, 100);
+                                    }
+                                }}
+                            />
+                        </div>
+                    </CSSTransition>
+
+                    <SwitchTransition>
+                        {isReplyLoading ? (
+                            <CSSTransition
+                                in={isReplyLoading}
+                                key="loading"
+                                timeout={{ enter: 300, exit: 300 }}
+                                classNames={{
+                                    enter: css.fadeEnter,
+                                    enterActive: css.fadeEnterActive,
+                                    exit: css.fadeExit,
+                                    exitActive: css.fadeExitActive,
+                                }}
+                                mountOnEnter
+                                unmountOnExit
+                            >
+                                <button className={css.panel_loadingBtn}>
+                                    <div className={css.chat_response_stop_icon}>
+                                        <ChatResponseStopIcon
+                                            fill="currentColor"
+                                            onClick={handleStopReply}
+                                        />
+                                    </div>
+                                </button>
+                            </CSSTransition>
+                        ) : (
+                            <CSSTransition
+                                in={!isReplyLoading}
+                                key="ready"
+                                timeout={{ enter: 300, exit: 300 }}
+                                classNames={{
+                                    enter: css.fadeEnter,
+                                    enterActive: css.fadeEnterActive,
+                                    exit: css.fadeExit,
+                                    exitActive: css.fadeExitActive,
+                                }}
+                                mountOnEnter
+                                unmountOnExit
+                            >
+                                <>
+                                    <button className={css.panel_button} disabled>
+                                        <ScreenShareIcon />
+                                    </button>
+                                    <button className={css.panel_button}>
+                                        <MicrophoneIcon />
+                                    </button>
+
+                                    {isTablePromptVisible ? (
+                                        <button className={css.panel_send_table_data_btn}>
+                                            <SendTableDataIcon fill="currentColor" />
+                                        </button>
+                                    ) : !prompt.active ? (
+                                        !questionCodeMessage ? (
+                                            <button className={css.panel_submitBtn} onClick={handleSend}>
+                                                Send <ArrowUpIcon />
+                                            </button>
+                                        ) : (
+                                            <button className={css.panel_hammerBtn}>
+                                                <HammerIcon />
+                                            </button>
+                                        )
+                                    ) : (
+                                        <button className={css.panel_callBtn}>
+                                            <CallVoiceIcon />
+                                        </button>
+                                    )}
+                                </>
+                            </CSSTransition>
+                        )}
+                    </SwitchTransition>
+                    {/*<ScreenShareMenu
+                        isActive={shareScreenConfig.expandedButtons}
+                        type={shareScreenConfig.shareType}
+                        onConfig={(type) =>
+                            setShareScreenConfig({ ...shareScreenConfig, shareType: type })
+                        }
+                        onClickOutside={onShareScreenClickOutside}
+                    />
+                    {!shareScreenConfig.expandedButtons && (
+                        <button
+                            className={css.screenShareButton}
+                            disabled={disableButtons}
+                            onMouseEnter={(event) => {
+                                if (!event.currentTarget.disabled) {
+                                    setShareScreenConfig({
+                                        ...shareScreenConfig,
+                                        expandedButtons: true,
+                                    });
+                                }
+                            }}
+                        >
+                            <ScreenShareIcon width={16} height={16} />
+                        </button>
+                    )}
+                    {shareScreenConfig.shareType && (
+                        <ShareScreenInfo
+                            isActive={!!shareScreenConfig.shareType}
+                            onClickOutside={onShareScreenClickOutside}
+                            {...SCREEN_SHARE_CONFIG[shareScreenConfig.shareType]}
+                        />
+                    )}
+                    <button className={css.panel_button}>
+                        <MicrophoneIcon />
+                    </button>
+                    {!prompt.active ? (
+                        <button className={css.panel_submitBtn} onClick={() => onSendMessage(text)}>
+                            Send <ArrowUpIcon />
+                        </button>
+                    ) : (
+                        <button className={css.panel_callBtn}>
+                            <CallVoiceIcon />
+                        </button>
+                    )}
 
                     <CSSTransition
                         in={showLinkInput && isHyperlinkInputOpen}
@@ -779,36 +943,57 @@ export const ChatPanel: React.FC = () => {
                             >
                                 <>
                                     {/*<button className={css.panel_button} disabled>*/}
-                                    {/*    <ScreenShareIcon />*/}
-                                    {/*</button>*/}
-                                    {/*<button className={css.panel_button}>*/}
-                                    {/*    <MicrophoneIcon />*/}
-                                    {/*</button>*/}
+                    {/*    <ScreenShareIcon />*/}
+                    {/*</button>*/}
+                    {/*<button className={css.panel_button}>*/}
+                    {/*    <MicrophoneIcon />*/}
+                    {/*</button>*/}
 
-                                    {/*{isTablePromptVisible ? (*/}
-                                    {/*    <button className={css.panel_send_table_data_btn}>*/}
-                                    {/*        <SendTableDataIcon fill="currentColor" />*/}
-                                    {/*    </button>*/}
-                                    {/*) : !prompt.active ? (*/}
-                                    {/*    !questionCodeMessage ? (*/}
-                                    {/*        <button className={css.panel_submitBtn} onClick={handleSend}>*/}
-                                    {/*            Send <ArrowUpIcon />*/}
-                                    {/*        </button>*/}
-                                    {/*    ) : (*/}
-                                    {/*        <button className={css.panel_hammerBtn}>*/}
-                                    {/*            <HammerIcon />*/}
-                                    {/*        </button>*/}
-                                    {/*    )*/}
-                                    {/*) : (*/}
-                                    {/*    <button className={css.panel_callBtn}>*/}
-                                    {/*        <CallVoiceIcon />*/}
-                                    {/*    </button>*/}
-                                    {/*)}*/}
-                                </>
-                            </CSSTransition>
-                        )}
-                    </SwitchTransition>
-                </div>
+                    {/*{isTablePromptVisible ? (*/}
+                    {/*    <button className={css.panel_send_table_data_btn}>*/}
+                    {/*        <SendTableDataIcon fill="currentColor" />*/}
+                    {/*    </button>*/}
+                    {/*) : !prompt.active ? (*/}
+                    {/*    !questionCodeMessage ? (*/}
+                    {/*        <button className={css.panel_submitBtn} onClick={handleSend}>*/}
+                    {/*            Send <ArrowUpIcon />*/}
+                    {/*        </button>*/}
+                    {/*    ) : (*/}
+                    {/*        <button className={css.panel_hammerBtn}>*/}
+                    {/*            <HammerIcon />*/}
+                    {/*        </button>*/}
+                    {/*    )*/}
+                    {/*) : (*/}
+                    {/*    <button className={css.panel_callBtn}>*/}
+                    {/*        <CallVoiceIcon />*/}
+                    {/*    </button>*/}
+                    {/*)}*/}
+        {/*        </>*/}
+        {/*    </CSSTransition>*/}
+        {/*    )*/}
+        {/*</SwitchTransition>*/}
+                {/*    <button className={css.panel_button} disabled>*/}
+                {/*        <ScreenShareIcon />*/}
+                {/*    </button>*/}
+                {/*    <button className={css.panel_button}>*/}
+                {/*        <MicrophoneIcon />*/}
+                {/*    </button>*/}
+                {/*    {!prompt.active ? (*/}
+                {/*        !questionCodeMessage ? (*/}
+                {/*        <button className={css.panel_submitBtn} onClick={handleSend}>*/}
+                {/*            Send <ArrowUpIcon />*/}
+                {/*        </button>*/}
+                {/*        ) : (*/}
+                {/*            <button className={css.panel_hammerBtn}>*/}
+                {/*                <HammerIcon />*/}
+                {/*            </button>*/}
+                {/*        )*/}
+                {/*    ) : (*/}
+                {/*        <button className={css.panel_callBtn}>*/}
+                {/*            <CallVoiceIcon />*/}
+                {/*        </button>*/}
+                {/*    )}*/}
+                {/*</div>*/}
                 {messagesCount === 0 && (
                     <div className={css.hintsWrapper}>
                         {showHints.typingHints && messagesCount === 0 && (
@@ -824,6 +1009,7 @@ export const ChatPanel: React.FC = () => {
                     </div>
                 )}
             </div>
+        </div>
         </div>
     );
 };

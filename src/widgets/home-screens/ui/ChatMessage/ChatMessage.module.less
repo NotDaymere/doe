@@ -81,7 +81,7 @@
         background 125ms ease,
         width 300ms ease;
 
-    .svg-wprapper {
+    .svg-wrapper {
         position: relative;
         display: inline-block;
     }
@@ -262,6 +262,8 @@
     word-wrap: break-word;
     word-break: break-word;
     overflow-wrap: break-word;
+    max-width: 100%;
+    padding-right: 20px;
 }
 .chat_message_branch {
   .setFontSohneBuch(16px, 1.2, normal);
@@ -272,6 +274,7 @@
   word-wrap: break-word;
   word-break: break-word;
   overflow-wrap: break-word;
+  gap: 15px;
 }
 
 .user_message {
@@ -285,6 +288,8 @@
 .bot_message {
     align-self: flex-start;
     justify-content: flex-start;
+    display: flex;
+    gap: 15px;
 }
 
 .message_content {
@@ -296,6 +301,8 @@
     border-radius: 16px;
     padding: 20px;
     gap: 20px;
+    max-width: 890px;
+    width: 100%;
   .setFontSohneBuch(16px, 1.2, normal);
 }
 .message_content::selection,
@@ -367,6 +374,7 @@
     min-width: 46px;
     height: 46px;
     min-height: 46px;
+    margin-right: 8px;
     background-color: #fff;
     border-radius: 8px;
     margin: auto;
@@ -446,6 +454,7 @@
 
 .button_steps_grey {
     position: relative;
+    z-index: 3;
     flex-shrink: 0;
     cursor: pointer;
     min-width: 35px;
@@ -456,6 +465,7 @@
     align-content: center;
     border-radius: 18px;
     padding: 8.5px;
+    background-color: transparent;
     border: 1px solid #ddd;
     overflow: hidden;
     white-space: nowrap;
@@ -616,6 +626,7 @@
     padding: 7px;
     background-color: transparent;
     border: 1px solid #8bcf16;
+    transition: 0.3s all ease;
     overflow: hidden;
     white-space: nowrap;
     transition:
@@ -828,6 +839,7 @@
 .message_with_button_container {
   display: flex;
   align-items: flex-start;
+  width: 100%;
 
   .fav_button {
     display: flex;
