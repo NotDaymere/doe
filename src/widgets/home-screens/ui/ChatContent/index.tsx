@@ -132,13 +132,28 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     }, [chatRef]);
 
     React.useEffect(() => {
-        const currentChat = chatRef.current;
-        if (currentChat) {
-            const { scrollTop, clientHeight, scrollHeight } = currentChat;
-            if (scrollTop + clientHeight >= scrollHeight - 50) {
-                scrollToBottom();
+        if (!chatRef.current) return;
+        const container = chatRef.current;
+        let prevScrollHeight = container.scrollHeight;
+        let stableCount = 0;
+        const maxStableCount = 3;
+
+        const intervalId = setInterval(() => {
+            const currentScrollHeight = container.scrollHeight;
+            if (currentScrollHeight === prevScrollHeight) {
+                stableCount++;
+                if (stableCount >= maxStableCount) {
+                    container.scrollTop = currentScrollHeight;
+                    clearInterval(intervalId);
+                }
+            } else {
+                stableCount = 0;
+                prevScrollHeight = currentScrollHeight;
+                container.scrollTop = currentScrollHeight;
             }
-        }
+        }, 900);
+
+        return () => clearInterval(intervalId);
     }, [messageQueue]);
 
     return (
