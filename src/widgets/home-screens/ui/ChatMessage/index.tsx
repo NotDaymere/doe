@@ -121,6 +121,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const messageRef = React.useRef<HTMLDivElement>(null);
 
 
+    const selectedTextRef = React.useRef<string>("");
     const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
     const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{
         top: number;
@@ -145,26 +146,50 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         return "";
     };
 
+    const lastMouseEvent = React.useRef<MouseEvent | null>(null);
 
     useEffect(() => {
-        const lastMouseEvent = { current: null as MouseEvent | null };
-        const handleMouseUp = (e: MouseEvent) => { lastMouseEvent.current = e; handleSelectionChange(); };
+
         const handleSelectionChange = () => {
             if (!messageRef.current) return;
+
             const selectionText = getSelectedTextWithin(messageRef.current);
+
             if (selectionText) {
+                selectedTextRef.current = selectionText;
                 const range = window.getSelection()!.getRangeAt(0);
                 const rect = range.getClientRects()[range.getClientRects().length - 1];
                 const top = rect.bottom + window.scrollY - 50;
                 const left = lastMouseEvent.current ? lastMouseEvent.current.pageX - 20 : rect.right + window.scrollX;
                 setReferenceButtonPosition({ top, left });
                 setReferenceButtonVisible(true);
+
             } else setReferenceButtonVisible(false);
         };
+
+        const handleMouseUp = (e: MouseEvent) => {
+            lastMouseEvent.current = e;
+            handleSelectionChange();
+        };
+
         document.addEventListener("mouseup", handleMouseUp);
         document.addEventListener("selectionchange", handleSelectionChange);
-        return () => { document.removeEventListener("mouseup", handleMouseUp); document.removeEventListener("selectionchange", handleSelectionChange); };
+
+        return () => {
+            document.removeEventListener("mouseup", handleMouseUp);
+            document.removeEventListener("selectionchange", handleSelectionChange); };
     }, [referenceButtonVisible]);
+
+    const handleClose = () => {
+        setReferenceButtonVisible(false);
+    };
+
+    const handleReferenceClick = () => {
+        const selection = window.getSelection();
+        setSelectedText(selectedTextRef.current);
+        setIsShowReferencePanel(true);
+        if (selection) selection.removeAllRanges();
+    };
 
 
     React.useEffect(() => {
@@ -267,17 +292,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setPlayground,
     ]);
 
-    const handleClose = () => {
-        setReferenceButtonVisible(false);
-    };
 
-    const handleReferenceClick = () => {
-        const selection = window.getSelection();
-        const text = selection ? selection.toString().trim() : "";
-        setSelectedText(text);
-        setIsShowReferencePanel(true);
-        if (selection) selection.removeAllRanges();
-    };
 
     React.useEffect(() => {
         if (messageRef.current) {

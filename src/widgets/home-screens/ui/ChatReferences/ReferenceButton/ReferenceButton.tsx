@@ -30,10 +30,9 @@ const ReferenceButton: React.FC<ReferenceButtonProps> = ({
                 "--top": `${position.top}px`,
                 "--left": `${position.left}px`,
             } as React.CSSProperties}
+            onClick={handleClick}
         >
-            <button onClick={handleClick}>
                 <ReferenceIcon fill="currentColor" />
-            </button>
         </div>
     );
 };
