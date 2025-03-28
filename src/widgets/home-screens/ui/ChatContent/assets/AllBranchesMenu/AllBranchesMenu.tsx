@@ -5,6 +5,7 @@ import DialogIcon from "../../../../../../shared/icons/Dialog.icon";
 import { useChatStore } from "../../../../../../shared/providers";
 import { useState } from "react";
 import BranchQuickView from "../BranchQuickView/BranchQuickView";
+import ReactDOM from 'react-dom';
 
 interface AllBranchesMenuProps {
     branchId: number;
