@@ -136,6 +136,7 @@
       flex-direction: column;
       height: 100%;
       overflow-y: scroll;
+      width: 100%;
 
       &::-webkit-scrollbar {
         display: none;
@@ -144,12 +145,15 @@
       .margin_bottom {
         margin-bottom: 70px;
       }
+      .delete_all_messages {
+        z-index: 1000;
+        position: fixed;
+        bottom: 0px;
+        left: 15px;
+        height: 60px;
+        background: #f3f3f3;
+        .delete_all_messages_btn_container {
 
-      .delete_all_messages_btn_container {
-          z-index: 1000;
-          position: fixed;
-          bottom: 20px;
-          left: 17px;
           background-color: #f4f4f4;
           border: 2px solid #DDDDDD;
           border-radius: 12px;
@@ -158,9 +162,9 @@
           padding: 7px;
           color: #B5B5B5;
           transition:
-                border 0.3s ease,
-                background-color 0.3s ease,
-                color 0.3s ease;
+                  border 0.3s ease,
+                  background-color 0.3s ease,
+                  color 0.3s ease;
 
           &:hover {
             border: 2px solid #FF5F5F;
@@ -173,11 +177,13 @@
             height: 100%;
           }
 
-        .delete_all_messages_btn_tooltip {
-          display: none;
+          .delete_all_messages_btn_tooltip {
+            display: none;
+          }
         }
       }
-    }
+      }
+
 }
 
 .sidebar_open {
