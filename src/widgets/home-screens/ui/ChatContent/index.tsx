@@ -154,7 +154,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         }, 900);
 
         return () => clearInterval(intervalId);
-    }, [messageQueue]);
+    }, [messageQueue.length]);
 
     return (
         <div

@@ -2,6 +2,7 @@ import React from "react";
 import PenIcon from "../../../../../../shared/icons/Pen.icon";
 import TrashIcon from "../../../../../../shared/icons/Trash.icon";
 import css from "./BookmarksActions.module.less";
+import ReactDOM from "react-dom";
 
 interface BookmarksActionsProps {
     position: {
@@ -31,7 +32,7 @@ export const BookmarksActions = ({
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [onClose]);
 
-    return (
+    return ReactDOM.createPortal(
         <div
             ref={containerRef}
             className={css.bookmarks_actions_container}
@@ -49,6 +50,7 @@ export const BookmarksActions = ({
                 </div>
                 <div>Delete</div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };

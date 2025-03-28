@@ -3,8 +3,8 @@ import { MathJax } from "better-react-mathjax";
 import hljs from "highlight.js";
 import { parseContent } from "src/components/chat-message/parseContent";
 import { parseTextFormatting } from "src/components/chat-message/parseTextFormatting";
-import ChartRenderer from "./assets/ChatRenderer/ChatRenderer";
-import { IMessage } from "../../../../shared/types/Message";
+import ChartRenderer from "./ChatRenderer/ChatRenderer";
+import { IMessage } from "../../../../../shared/types/Message";
 
 interface Props {
     messageData: IMessage;

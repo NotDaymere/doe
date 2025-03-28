@@ -1,5 +1,5 @@
 .bookmarks_actions_container {
-  position: absolute;
+  position: fixed;
   width: 114px;
   height: 92px;
   padding: 6px;
@@ -60,12 +60,25 @@
   }
 
   .delete {
+    padding-right: 3px;
+    border: 1px solid transparent;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    font-size: 14px;
+    font-weight: 500;
+    gap: 3px;
+    border-radius: 12px;
+    width: 102px;
+    height: 40px;
     color: #B5B5B5;
-    background: transparent ;
+    cursor: pointer;
+    background: transparent;
     transition: background 0.3s ease-out,
     color 0.3s ease-out,
     border 0.3s ease-out;
-    border: 1px solid transparent;
 
     &:hover {
       background-color: #FF5F5F4D !important;

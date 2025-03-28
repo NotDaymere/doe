@@ -1,29 +1,13 @@
-import React, { Dispatch, useCallback, useEffect, useMemo, useState } from "react";
-import ReactDOM from "react-dom";
+import React, { Dispatch, useMemo, useState } from "react";
 // External libraries
 import { Editor as EditorTiptap } from "@tiptap/react";
-import { MathJax, MathJaxContext } from "better-react-mathjax";
 import hljs from "highlight.js";
-import jsPDF from "jspdf";
-import { Flex } from "antd";
-import { CSSTransition } from "react-transition-group";
-import clsx from "clsx";
+import { useReferenceSelection } from "../../lib/hooks/useReferenceSelection";
+
 
 // Shared types & providers
 import { IMessage } from "src/shared/types/Message";
 import { useAppStore, useChatStore } from "src/shared/providers";
-
-// Shared components
-import { Editor } from "src/shared/components/Editor";
-import { useApp } from "src/components/app";
-import {FileListForDisplay} from "../../../../shared/components/FileList/FileListForDisplay";
-
-// Icons
-import CrossIcon from "src/shared/icons/Cross.icon";
-import PenIcon from "src/shared/icons/Pen.icon";
-import SendIcon from "src/shared/icons/Send.icon";
-import { ReactComponent as Logo } from "src/assets/icons/general-logo.svg";
-import { SvgIcon } from "src/components/icon";
 
 // Chat message utilities
 import { parseContent } from "src/components/chat-message/parseContent";
@@ -32,34 +16,12 @@ import { parseTextFormatting } from "src/components/chat-message/parseTextFormat
 // Styles
 import css from "./ChatMessage.module.less";
 import "highlight.js/styles/github-dark.css";
-import PlayIcon from "src/shared/icons/Play.icon";
-import DownloadIcon from "src/shared/icons/Download.icon";
-import CopyIcon from "src/shared/icons/Copy.icon";
-import { useClickOut } from "src/shared/hooks/useClickOut";
-import ReferenceButton from "../ChatReferences/ReferenceButton/ReferenceButton";
 
 import { useChatContext } from "../../lib/hooks/ChatContext";
-import TableRandomValues from "./assets/TableRandomValues/TableRandomValues";
-import DownloadCSV from "./assets/DownloadCSV/DownloadCSV";
-import PythonTaskManager from "./assets/PythonTaskManager/PythonTaskManager";
-
-import { MessageNodeVersionSelector } from "./assets/MessageNodeVersionSelector/MessageNodeVersionSelector";
-import MessageTable from "./assets/MessageTable/MessageTable";
-import MessageFrame from "./assets/MessageFrame/MessageFrame";
-import { mockTableData } from "./assets/MessageTable/mockTableData";
-import { mockMessageFrameData } from "./assets/MessageFrame/mockMessageFrameData";
-import ChartRenderer from "./assets/ChatRenderer/ChatRenderer";
-import MessageColumnsChart from "./assets/MessageCharts/MessageColumnsChart/MessageColumnsChart";
-import { mockColumnsChartMessageData } from "./assets/MessageCharts/MessageColumnsChart/mockColumnsChartMessageData";
 import { usePanel } from "../../lib";
-import MessageLineChart from "./assets/MessageCharts/MessageLineChart/MessageLineChart";
-import { mockLineChartMessageData } from "./assets/MessageCharts/MessageLineChart/mockLineChartMessageData";
 import { IPlayground } from "../../../../shared/types/Playground";
-import SeeAllStepsIcon from "../../../../shared/icons/SeeAllSteps.icon";
-import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
-import MessageLogoIcon from "../../../../shared/icons/MessageLogo.icon";
-import GeneralLogo from "../GeneralLogo/GeneralLogo";
-import ChatMessageContent from "./ChatMessageContent";
+import { UserChatMessage } from "./assets/UserChatMessage/UserChatMeassage";
+import { CodeChatMessage } from "./assets/CodeChatMessage/CodeChatMessage";
 
 interface Props {
     data: IMessage;
@@ -77,21 +39,6 @@ interface Props {
 }
 
 export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode }) => {
-    const [activeMenu, setActiveMenu] = React.useState(false);
-    const downloadMenuRef = React.useRef<HTMLDivElement>(null);
-    const downloadRef = useClickOut({
-        handler: () => setActiveMenu(false),
-    });
-
-    const toggleMenu = () => setActiveMenu(!activeMenu);
-
-    const setCloseHandler = (fn?: () => void) => {
-        return () => {
-            fn?.();
-            setActiveMenu(false);
-        };
-    };
-
     // const [isEdit, setEdit] = React.useState(false);
     const [content, setContent] = React.useState(data.content);
     const [updatedContent, setUpdatedContent] = useState(data.content);
@@ -108,7 +55,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         savedPlaygrounds,
         deleteSavedPlaygrounds,
         updateSavedPlaygrounds,
-        setMessageLike
     } = useChatStore();
     const {
         editor,
@@ -120,76 +66,20 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const parsedContent = useMemo(() => parseContent(data.content), [data.content]);
     const messageRef = React.useRef<HTMLDivElement>(null);
 
-
-    const selectedTextRef = React.useRef<string>("");
-    const [referenceButtonVisible, setReferenceButtonVisible] = React.useState(false);
-    const [referenceButtonPosition, setReferenceButtonPosition] = React.useState<{
-        top: number;
-        left: number
-    } | null>(null);
-
     const { setSelectedText, setIsShowReferencePanel } = useChatContext();
     const { setFiles } = usePanel();
 
-    const [isPaused, setIsPaused] = React.useState(true);
     const [isAllStepOpen, setIsAllStepOpen] = React.useState(false);
-    const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
 
-
-    const getSelectedTextWithin = (container: HTMLElement): string => {
-        const selection = window.getSelection();
-        if (!selection || selection.rangeCount === 0) return "";
-        const range = selection.getRangeAt(0);
-        if (container.contains(range.startContainer) && container.contains(range.endContainer)) {
-            return selection.toString().trim();
-        }
-        return "";
-    };
-
-    const lastMouseEvent = React.useRef<MouseEvent | null>(null);
-
-    useEffect(() => {
-
-        const handleSelectionChange = () => {
-            if (!messageRef.current) return;
-
-            const selectionText = getSelectedTextWithin(messageRef.current);
-
-            if (selectionText) {
-                selectedTextRef.current = selectionText;
-                const range = window.getSelection()!.getRangeAt(0);
-                const rect = range.getClientRects()[range.getClientRects().length - 1];
-                const top = rect.bottom + window.scrollY - 50;
-                const left = lastMouseEvent.current ? lastMouseEvent.current.pageX - 20 : rect.right + window.scrollX;
-                setReferenceButtonPosition({ top, left });
-                setReferenceButtonVisible(true);
-
-            } else setReferenceButtonVisible(false);
-        };
-
-        const handleMouseUp = (e: MouseEvent) => {
-            lastMouseEvent.current = e;
-            handleSelectionChange();
-        };
-
-        document.addEventListener("mouseup", handleMouseUp);
-        document.addEventListener("selectionchange", handleSelectionChange);
-
-        return () => {
-            document.removeEventListener("mouseup", handleMouseUp);
-            document.removeEventListener("selectionchange", handleSelectionChange); };
-    }, [referenceButtonVisible]);
-
-    const handleClose = () => {
-        setReferenceButtonVisible(false);
-    };
-
-    const handleReferenceClick = () => {
-        const selection = window.getSelection();
-        setSelectedText(selectedTextRef.current);
+    const {
+        visible: referenceButtonVisible,
+        position: referenceButtonPosition,
+        close: handleClose,
+        handleReferenceClick,
+    } = useReferenceSelection(messageRef, (text) => {
+        setSelectedText(text);
         setIsShowReferencePanel(true);
-        if (selection) selection.removeAllRanges();
-    };
+    });
 
 
     React.useEffect(() => {
@@ -292,8 +182,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setPlayground,
     ]);
 
-
-
     React.useEffect(() => {
         if (messageRef.current) {
             const codeBlocks = messageRef.current.querySelectorAll("code");
@@ -302,62 +190,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             });
         }
     }, [content, messageRef]);
-
-    //speech
-    const synth = React.useRef(window.speechSynthesis);
-    React.useEffect(() => {
-        const synth = window.speechSynthesis;
-
-        const initUtterance = () => {
-            const textToSpeak = messageRef.current?.textContent || "";
-            const u = new SpeechSynthesisUtterance(textToSpeak);
-
-            const voices = synth.getVoices();
-            if (voices.length > 0) {
-                u.voice = voices.find((v) => v.lang.startsWith("en")) || voices[0];
-            }
-
-            setUtterance(u);
-        };
-
-        initUtterance();
-        //voice updating
-        const handleVoicesChanged = () => {
-            initUtterance();
-        };
-
-        synth.addEventListener("voiceschanged", handleVoicesChanged);
-
-        return () => {
-            synth.cancel();
-            synth.removeEventListener("voiceschanged", handleVoicesChanged);
-        };
-    }, []);
-
-    const handlePlay = () => {
-        if (!utterance) {
-            console.error("Utterance is not ready.");
-            return;
-        }
-
-        if (synth.current.speaking) {
-            console.warn("Already speaking.");
-            return;
-        }
-
-        utterance.onend = () => {
-            setIsPaused(true);
-        };
-
-        synth.current.speak(utterance);
-        setIsPaused(false);
-    };
-
-    const handleStop = () => {
-        synth.current.cancel();
-
-        setIsPaused(true);
-    };
 
     const toggleEdit = (id: number) => {
         setEditMsgMode({ isEditMsgMode: true, msgId: id });
@@ -390,27 +222,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setEditMsgMode({ isEditMsgMode: false, msgId: null });
         // setEditMsgMode(false);
     };
-    const handleCopy = useCallback(() => {
-        if (!messageRef.current) return;
-        const range = document.createRange();
-        range.selectNodeContents(messageRef.current);
-        const sel = window.getSelection();
-        sel?.removeAllRanges();
-        sel?.addRange(range);
-        document.execCommand("copy");
-        sel?.removeAllRanges();
-    }, []);
 
-    const downloadPDF = useCallback(() => {
-        if (!messageRef.current) return;
-        const doc = new jsPDF();
-        doc.html(messageRef.current, {
-            callback: doc => doc.save("response.pdf"),
-            html2canvas: { scale: 0.3 },
-            x: 10,
-            y: 10,
-        });
-    }, []);
     const openSourcePlayground = (sourceData: string) => {
         if (isAllStepOpen) {
 
@@ -443,245 +255,33 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         }
     };
 
-    const handleLike = () => {
-        setMessageLike(data.id, !data.isLiked);
-    };
-
-    const renderFavButton = () => {
-        return (
-            <button
-                className={clsx(css.fav_button, { [css.fav_button_liked]: data.isLiked})}
-                onClick={handleLike}
-            >
-                <FavoriteIcon fill="currentColor" />
-            </button>
-        );
-    };
 
     if (data.isUser) {
-        if (editMsgMode.isEditMsgMode && editMsgMode.msgId === data.id) {
-            return (
-                <div className={css.message_with_button_container}>
-                <div className={css.edit}>
-                        <Editor
-                            value={content}
-                            onChange={setContent}
-                            onFocus={setEditor}
-                            onBlur={() => setEditor(null)}
-                            className={css.edit_editor}
-                            classNameEditor={css.edit_editor_editor}
-                            placeholder="Edit message"
-                        />
-                        <div className={css.edit_controls}>
-                            <button
-                                className={css.edit_controls_cancelBtn}
-                                onClick={() => cancelEdit(data.id)}
-                            >
-                            <span className={css.svg_wrapper}>
-                                 <span className={css.tooltip}>Cancel</span>
-                                <CrossIcon />
-                            </span>
-                            </button>
-
-                            <button
-                                className={css.edit_controls_saveBtn}
-                                onClick={handleEdit}
-                            >
-                            <span className={css.svg_wrapper}>
-                                <span className={css.tooltip}>Send edit</span>
-                                <SendIcon />
-                            </span>
-                            </button>
-                        </div>
-                    </div>
-                    {!isCurrentBranchOpen && renderFavButton()}
-                </div>
-            );
-        }
-
-        return (
-            <div className={css.message_with_button_container}>
-            <div className={css.input_container}>
-                    <div className={`${isCurrentBranchOpen ? css.input_open_branch : css.input} `}>
-                        <div className={css.user_message_container}>
-                            <div className={css.user_message_and_edit_button}>
-                                {!isCurrentBranchOpen &&
-                                    <button className={css.input_editBtn} onClick={() => toggleEdit(data.id)}>
-                            <span className={css.svg_wrapper}>
-                                <PenIcon />
-                                <span className={css.tooltip}>Edit</span>
-                            </span>
-                                    </button>
-                                }
-
-                                <div
-                                    className={`${isCurrentBranchOpen ? css.input_message_branch : css.input_message} `}
-                                    dangerouslySetInnerHTML={{
-                                        __html: updatedContent,
-                                    }}
-                                ></div>
-                            </div>
-
-
-                            <div
-                                className={css.file_container}
-                                style={{
-                                    height: data.files && data.files.length > 0 ? "auto" : "0px",
-                                    overflow: "hidden",
-                                    transition: "height 0.3s ease",
-                                }}
-                            >
-                                {data.files && data.files.length > 0 && (
-                                    <FileListForDisplay
-                                        className={css.panel_files}
-                                        files={data.files}
-                                        onChange={setFiles}
-                                    />
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    {!isCurrentBranchOpen &&
-                        <MessageNodeVersionSelector message={data} />
-                    }
-                </div>
-                {!isCurrentBranchOpen && renderFavButton()}
-            </div>
-        );
+        return <UserChatMessage
+            data={data}
+            content={content}
+            updatedContent={updatedContent}
+            isCurrentBranchOpen={isCurrentBranchOpen}
+            cancelEdit={cancelEdit}
+            editMsgMode={editMsgMode}
+            setContent={setContent}
+            handleEdit={handleEdit}
+            toggleEdit={toggleEdit} />
     }
 
     if (data.isCode) {
-        return (
-            <div className={css.message_with_button_container}>
-                <MathJaxContext>
-                <div
-                    className={`${isCurrentBranchOpen ? css.chat_message_branch : css.chat_message}  ${data.isUser ? css.user_message : css.bot_message}`}
-                >
-                    {!isHyperlinkInputOpen && ReactDOM.createPortal(
-                        <ReferenceButton
-                            isVisible={referenceButtonVisible}
-                            position={referenceButtonPosition}
-                            onClose={handleClose}
-                            onReferenceClick={handleReferenceClick}
-                        />,
-                        document.body
-                    )}
-                    <div className={css.sub_bot_message_info_container}>
-                        <div className={css.logoWrapper}>
-
-                                {isCurrentBranchOpen ? (
-                                    <div
-                                    className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
-                                        <div
-                                        className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
-                                        <MessageLogoIcon fillPath={"currentColor"} />
-                                        </div>
-                                    </div>
-                                ) : <GeneralLogo/>}
-                        </div>
-                        <MessageNodeVersionSelector message={data} />
-                    </div>
-                    <div className={css.message_content}>
-
-                        <div ref={messageRef}>
-                            <ChatMessageContent messageData={data}/>
-
-                            <text>Now I’ll plot the output inline instead of using code:</text>
-                            <MessageLineChart data={mockLineChartMessageData} />
-                            <text>Now I’ll plot the output inline instead of using code:</text>
-                            <MessageColumnsChart data={mockColumnsChartMessageData} />
-                            <text className={"message-text"}>
-                                Here's a simple project idea: a manager platform in Notion,
-                                focusing on task management, milestones, and clear goals for the Microsoft Imagine Cup.
-                                I've
-                                chosen a project to create a simple to-do list application as an example.
-                            </text>
-                            <p><br className="ProseMirror-trailingBreak" /></p>
-                            <text className={"message-text"}>
-                                Give me a moment to access your Notion, then you should be able to view the document.
-                            </text>
-                            <p><br className="ProseMirror-trailingBreak" /></p>
-                            <MessageFrame data={mockMessageFrameData} />
-                            <text className={"message-text"}>Now Ill show the output in the table:</text>
-                            <MessageTable tableData={mockTableData} />
-                            <Flex justify={"flex-start"} className={"message-actions"} vertical>
-                                <Flex>
-                                    <TableRandomValues />
-                                    <DownloadCSV />
-                                </Flex>
-                                <Flex>
-                                    <PythonTaskManager />
-                                </Flex>
-                            </Flex>
-                        </div>
-
-                        {!data.isUser && (
-                            <Flex justify={"space-between"} className={"message-actions"}>
-                                <button
-                                    onClick={() => openSourcePlayground(data.id.toString())}
-                                    className={clsx(css.button_steps, { [css.steps_open]: isAllStepOpen })}
-                                >
-                                    <SeeAllStepsIcon />
-                                    <span
-                                        className={clsx({
-                                            [css.button_steps_open_label]: isAllStepOpen,
-                                            [css.button_steps_label]: !isAllStepOpen,
-                                        })}
-                                    >
-                                    See all steps
-                                </span>
-                                </button>
-                                <Flex gap={10}>
-                                    <button
-                                        className={`${!isPaused ? css.glowing_border : css.button_steps_grey}`}
-                                        onClick={isPaused ? handlePlay : handleStop}
-                                    >
-                                        <span className={css.tooltip}>Listen answer</span>
-                                        <div className={css.button_container}>
-                                            <PlayIcon fill="currentColor" />
-                                        </div>
-                                    </button>
-
-                                    <div className={css.download} ref={downloadRef}>
-                                        <button
-                                            onClick={toggleMenu}
-                                            className={`${css.button_steps_green} ${activeMenu ? css.active : ""}`}
-                                        >
-                                            <span className={css.tooltip}>Download chat text</span>
-
-                                            <DownloadIcon />
-                                        </button>
-                                        <CSSTransition
-                                            classNames={css}
-                                            timeout={150}
-                                            in={activeMenu}
-                                            downloadMenuRef={downloadMenuRef}
-                                            mountOnEnter
-                                            unmountOnExit
-                                        >
-                                            <div className={css.download_menu} ref={downloadMenuRef}>
-                                                <ul>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.png</li>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.txt</li>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.pdf</li>
-                                                </ul>
-                                            </div>
-                                        </CSSTransition>
-                                    </div>
-                                    <button onClick={handleCopy} className={css.button_steps_green}>
-                                        <span className={css.tooltip}>Copy chat text</span>
-                                        <CopyIcon />
-                                    </button>
-
-                                </Flex>
-                            </Flex>
-                        )}
-                    </div>
-                </div>
-                </MathJaxContext>
-                {!isCurrentBranchOpen && renderFavButton()}
-            </div>
-        );
+        return <CodeChatMessage
+            isCurrentBranchOpen={isCurrentBranchOpen}
+            data={data}
+            isHyperlinkInputOpen={isHyperlinkInputOpen}
+            referenceButtonVisible={referenceButtonVisible}
+            referenceButtonPosition={referenceButtonPosition}
+            handleClose={handleClose}
+            handleReferenceClick={handleReferenceClick}
+            messageRef={messageRef}
+            openSourcePlayground={openSourcePlayground}
+            isAllStepOpen={isAllStepOpen}
+            />
     }
 
     return <div className={css.message}>{null}</div>;
