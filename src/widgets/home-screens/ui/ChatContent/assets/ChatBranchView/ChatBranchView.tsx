@@ -63,10 +63,9 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                 {currentBranch.dialogsMessages.map((dialog, index) => (
                     <React.Fragment key={index}>
                         <div className={css.content_chat_branch}>
-                            {currentBranch && currentBranch.isMain ?
-                                <ChatMainBranchSection isOpenBrunch={true} />
-                                :
+                            {currentBranch && (
                                 <ChatBranchSection isOpenBrunch={true} />
+                                )
                             }
                             <div className={css.content_chat_branch_dialog}>
                                 <div id={`chat-msg-${dialog.userRequest.id}`}>
