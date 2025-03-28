@@ -136,7 +136,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         const container = chatRef.current;
         let prevScrollHeight = container.scrollHeight;
         let stableCount = 0;
-        const maxStableCount = 3;
+        const maxStableCount = 1;
 
         const intervalId = setInterval(() => {
             const currentScrollHeight = container.scrollHeight;
