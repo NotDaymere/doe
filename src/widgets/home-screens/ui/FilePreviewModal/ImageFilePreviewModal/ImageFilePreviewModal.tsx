@@ -84,7 +84,6 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
         ctx.beginPath();
         ctx.moveTo(lastPoint.x, lastPoint.y);
         ctx.lineTo(x, y);
-        // Используем выбранный цвет
         ctx.strokeStyle = drawingColor;
         ctx.lineWidth = 10;
         ctx.stroke();
@@ -92,15 +91,12 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
     };
 
     const endDrawing = () => {
+        if (!isDrawing) return;
         setIsDrawing(false);
-    };
-
-    const handleSave = () => {
         const canvas = canvasRef.current;
         if (!canvas) return;
         const dataUrl = canvas.toDataURL("image/png");
         onSaveDrawing(dataUrl);
-        setIsDrawingEnabled((prev) => !prev);
     };
 
     const toggleDrawingEnabled = () => {
@@ -126,19 +122,17 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                 onTouchMove={draw}
                 onTouchEnd={endDrawing}
             />
-                <div className={css.modalContentEditPanel}>
-                    <div className={css.modalContentEditPanelItem}>
-                        <ModalContentPanelCutIcon fill="currentColor" />
-                    </div>
+            <div className={css.modalContentEditPanel}>
+                <div className={css.modalContentEditPanelItem}>
+                    <ModalContentPanelCutIcon fill="currentColor" />
+                </div>
                 <div className={css.separator}></div>
                 <div
                     className={css.modalContentEditPanelItem}
                     onClick={toggleDrawingEnabled}
                     data-active={isDrawingEnabled}>
                     <ModalContentPanelPencilIcon fill="currentColor" />
-
                 </div>
-
                 {isDrawingEnabled && (
                     <div className={css.drawContainer}>
                         <input
@@ -148,27 +142,22 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                             onChange={(e) => setDrawingColor(e.target.value)}
                             style={{ marginLeft: "8px" }}
                         />
-                        <button
-                            onClick={handleSave}
-                            className={css.saveButton}>
-                            Save
-                        </button>
                     </div>
                 )}
-                    <div className={css.separator}></div>
-                    <div className={css.modalContentEditPanelItem}>
-                        <ModalContentPanelEditIcon fill="currentColor" />
-                    </div>
-                    <div className={css.separator}></div>
-                    <div className={css.modalContentEditPanelItem}>
-                        <ModalContentPanelColorsIcon fill="currentColor" />
-                    </div>
-                    <div className={css.separator}></div>
-                    <div className={css.modalContentEditPanelItem}>
+                <div className={css.separator}></div>
+                <div className={css.modalContentEditPanelItem}>
+                    <ModalContentPanelEditIcon fill="currentColor" />
+                </div>
+                <div className={css.separator}></div>
+                <div className={css.modalContentEditPanelItem}>
+                    <ModalContentPanelColorsIcon fill="currentColor" />
+                </div>
+                <div className={css.separator}></div>
+                <div className={css.modalContentEditPanelItem}>
                     <ModalContentPanelAddTextIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
-                </div>
+            </div>
         </FilePreviewModalOverlay>,
         document.body
     );
