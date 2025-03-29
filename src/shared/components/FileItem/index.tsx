@@ -61,6 +61,13 @@ export const FileItem: React.FC<FileItemProps> = ({
         }
     }, [name, mimetype]);
 
+    const [fileName, setFileName] = useState(info.filename);
+
+    useEffect(() => {
+        setFileName(info.filename);
+    }, [info.filename]);
+
+
     const extLower = info.ext.toLowerCase();
     const candidateIconURLs = useMemo((): string[] => {
         if (name.startsWith("http://") || name.startsWith("https://")) {
@@ -98,7 +105,7 @@ export const FileItem: React.FC<FileItemProps> = ({
     };
 
     const shortenFileName =
-        info.filename.length > 10 ? `${info.filename.slice(0, 10)}...` : info.filename;
+        fileName.length > 10 ? `${fileName.slice(0, 10)}...` : fileName;
 
     return (
         <>
@@ -117,12 +124,13 @@ export const FileItem: React.FC<FileItemProps> = ({
                 </div>
                 <div className={css.file_content}>
                     <p className={css.file_name}>
-            <span>
-              {info.filename.length > 15
-                  ? `${info.filename.slice(0, 15)}...`
-                  : info.filename}
-            </span>
-                        {!(name.startsWith("http://") || name.startsWith("https://")) && <>.{info.ext}</>}
+                        <span>
+                            {fileName.length > 15 ? `${fileName.slice(0, 15)}...` : fileName}
+                        </span>
+
+                        {!(name.startsWith("http://") || name.startsWith("https://")) && (
+                            <>.{info.ext}</>
+                        )}
                     </p>
                     <p className={css.file_ext}>
                         {info.ext}
@@ -147,6 +155,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                     onClose={() => setIsModalOpen(false)}
                     fileName={shortenFileName}
                     fileExt={info.ext}
+                    onRename={setFileName}
                 />
             )}
             {isModalOpen &&

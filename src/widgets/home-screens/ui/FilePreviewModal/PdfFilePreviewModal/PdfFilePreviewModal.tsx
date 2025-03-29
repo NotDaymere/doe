@@ -17,6 +17,7 @@ interface PdfModalProps {
     fileName: string;
     fileExt?: string;
     isLoading?: boolean;
+    onRename: (newName: string) => void;
 }
 
 const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
@@ -24,7 +25,15 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
                                                           onClose,
                                                           fileName,
                                                           fileExt,
+                                                          onRename,
                                                       }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [tempName, setTempName] = useState(fileName);
+
+    useEffect(() => {
+        setTempName(fileName);
+    }, [fileName]);
+
     return createPortal(
         <FilePreviewModalOverlay
             onClose={onClose}
@@ -32,20 +41,34 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
             fileName={fileName}
             fileExt={fileExt}
             fileNameContainerClass={css.modalFileNamePdfContainer}
+            isEditing={isEditing}
+            tempName={tempName}
+            onTempNameChange={setTempName}
+            onFileNameSubmit={() => {
+                onRename(tempName);
+                setIsEditing(false);
+            }}
         >
             <PDFViewer url={url} />
             <div className={css.modalContentEditPanel}>
-                <div className={css.modalContentEditPanelItem}>
+                <div
+                    className={css.modalContentEditPanelItem}
+                    data-active={isEditing}
+                    onClick={() => setIsEditing(true)}
+                >
                     <ModalContentPanelRedactIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
-                <div className={css.modalContentEditPanelItem}>
+                <div
+                    className={css.modalContentEditPanelItem}
+                >
                     <ModalContentPanelPencilIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
                     <ModalContentPanelAddTextIcon fill="currentColor" />
                 </div>
+
             </div>
         </FilePreviewModalOverlay>,
         document.body

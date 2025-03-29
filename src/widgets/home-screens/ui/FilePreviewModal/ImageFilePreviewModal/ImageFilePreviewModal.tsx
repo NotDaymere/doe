@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import css from "./ImageFilePreviewModal.module.less";
 import FilePreviewModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
@@ -16,7 +16,12 @@ interface ImageModalProps {
     isLoading?: boolean;
 }
 
-const ImageFilePreviewModal: React.FC<ImageModalProps> = ({ url, onClose, fileName, fileExt }) => {
+const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
+                                                              url,
+                                                              onClose,
+                                                              fileName,
+                                                              fileExt}) => {
+
     return createPortal(
         <FilePreviewModalOverlay
             onClose={onClose}
