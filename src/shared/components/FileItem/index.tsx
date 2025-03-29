@@ -23,6 +23,8 @@ export const FileItem: React.FC<FileItemProps> = ({
                                                   }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentIconIndex, setCurrentIconIndex] = useState(0);
+    // Поднимаем состояние сохранённого рисунка
+    const [savedImage, setSavedImage] = useState<string | undefined>(undefined);
 
     const info = useMemo(() => {
         if (name.startsWith("http://") || name.startsWith("https://")) {
@@ -66,7 +68,6 @@ export const FileItem: React.FC<FileItemProps> = ({
     useEffect(() => {
         setFileName(info.filename);
     }, [info.filename]);
-
 
     const extLower = info.ext.toLowerCase();
     const candidateIconURLs = useMemo((): string[] => {
@@ -127,14 +128,11 @@ export const FileItem: React.FC<FileItemProps> = ({
                         <span>
                             {fileName.length > 15 ? `${fileName.slice(0, 15)}...` : fileName}
                         </span>
-
                         {!(name.startsWith("http://") || name.startsWith("https://")) && (
                             <>.{info.ext}</>
                         )}
                     </p>
-                    <p className={css.file_ext}>
-                        {info.ext}
-                    </p>
+                    <p className={css.file_ext}>{info.ext}</p>
                 </div>
                 {onDelete && (
                     <button
@@ -166,6 +164,9 @@ export const FileItem: React.FC<FileItemProps> = ({
                         onClose={() => setIsModalOpen(false)}
                         fileName={shortenFileName}
                         fileExt={info.ext}
+                        // Передаём сохранённое изображение и callback для сохранения
+                        savedImage={savedImage}
+                        onSaveDrawing={setSavedImage}
                     />
                 )}
             {isModalOpen &&
