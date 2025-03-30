@@ -23,7 +23,6 @@ export const FileItem: React.FC<FileItemProps> = ({
                                                   }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentIconIndex, setCurrentIconIndex] = useState(0);
-    // Поднимаем состояние сохранённого рисунка
     const [savedImage, setSavedImage] = useState<string | undefined>(undefined);
 
     const info = useMemo(() => {
@@ -164,7 +163,6 @@ export const FileItem: React.FC<FileItemProps> = ({
                         onClose={() => setIsModalOpen(false)}
                         fileName={shortenFileName}
                         fileExt={info.ext}
-                        // Передаём сохранённое изображение и callback для сохранения
                         savedImage={savedImage}
                         onSaveDrawing={setSavedImage}
                     />
