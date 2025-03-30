@@ -7,6 +7,8 @@ import ModalContentPanelAddTextIcon from "../../../../../shared/icons/ModalConte
 import ModalContentPanelCutIcon from "../../../../../shared/icons/ModalContentPanelCut.icon";
 import ModalContentPanelEditIcon from "../../../../../shared/icons/ModalContentPanelEdit.icon";
 import ModalContentPanelColorsIcon from "../../../../../shared/icons/ModalContentPanelColors.icon";
+import {TextOverlay} from "./TextOverlay/TextOverlay";
+import {CustomDropdownSelect} from "./CustomDropdownSelect/CustomDropdownSelect";
 
 interface ImageModalProps {
     url: string;
@@ -16,126 +18,6 @@ interface ImageModalProps {
     savedImage?: string;
     onSaveDrawing: (dataUrl: string) => void;
 }
-
-interface TextOverlay {
-    id: string;
-    text: string;
-    x: number;
-    y: number;
-    editing: boolean;
-    textColor: string;
-    fontWeight: string;
-    textSize: number;
-}
-
-interface TextOverlayComponentProps {
-    overlay: TextOverlay;
-    containerRef: React.RefObject<HTMLDivElement>;
-    onUpdate: (overlay: TextOverlay) => void;
-    onMerge: (updatedOverlay: TextOverlay) => void;
-}
-
-const TextOverlayComponent: React.FC<TextOverlayComponentProps> = ({
-                                                                       overlay,
-                                                                       containerRef,
-                                                                       onUpdate,
-                                                                       onMerge,
-                                                                   }) => {
-    const [isDragging, setIsDragging] = useState(false);
-    const startOverlayRef = useRef({ x: overlay.x, y: overlay.y });
-    const startMouseRef = useRef({ x: 0, y: 0 });
-
-    const overlayRef = useRef(overlay);
-    useEffect(() => {
-        overlayRef.current = overlay;
-    }, [overlay]);
-
-    const handleDocumentMouseMove = (e: MouseEvent) => {
-        if (!containerRef.current) return;
-        const containerRect = containerRef.current.getBoundingClientRect();
-        if (isDragging) {
-            const currentMouse = {
-                x: e.clientX - containerRect.left,
-                y: e.clientY - containerRect.top,
-            };
-            const deltaX = currentMouse.x - startMouseRef.current.x;
-            const deltaY = currentMouse.y - startMouseRef.current.y;
-            const newX = startOverlayRef.current.x + deltaX;
-            const newY = startOverlayRef.current.y + deltaY;
-            onUpdate({ ...overlayRef.current, x: newX, y: newY });
-        }
-    };
-
-    const handleDocumentMouseUp = () => {
-        if (isDragging) {
-            setIsDragging(false);
-            document.removeEventListener("mousemove", handleDocumentMouseMove);
-            document.removeEventListener("mouseup", handleDocumentMouseUp);
-            onMerge({ ...overlayRef.current });
-        }
-    };
-
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!containerRef.current) return;
-        const containerRect = containerRef.current.getBoundingClientRect();
-        e.preventDefault();
-        setIsDragging(true);
-        startOverlayRef.current = { x: overlayRef.current.x, y: overlayRef.current.y };
-        startMouseRef.current = {
-            x: e.clientX - containerRect.left,
-            y: e.clientY - containerRect.top,
-        };
-        document.addEventListener("mousemove", handleDocumentMouseMove);
-        document.addEventListener("mouseup", handleDocumentMouseUp);
-        e.stopPropagation();
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            onUpdate({
-                ...overlay,
-                editing: false,
-                text: (e.target as HTMLInputElement).value,
-            });
-        }
-    };
-
-    return overlay.editing ? (
-        <input
-            type="text"
-            autoFocus
-            value={overlay.text}
-            onChange={(e) => onUpdate({ ...overlay, text: e.target.value })}
-            onKeyDown={handleKeyDown}
-            style={{
-                position: "absolute",
-                left: overlay.x,
-                top: overlay.y,
-                fontSize: `${overlay.textSize}px`,
-                padding: "2px",
-                color: overlay.textColor,
-                fontWeight: overlay.fontWeight,
-            }}
-        />
-    ) : (
-        <div
-            style={{
-                position: "absolute",
-                left: overlay.x,
-                top: overlay.y,
-                cursor: "grabbing",
-                fontSize: `${overlay.textSize}px`,
-                userSelect: "none",
-                color: overlay.textColor,
-                fontWeight: overlay.fontWeight,
-            }}
-            onMouseDown={handleMouseDown}
-        >
-            {overlay.text}
-        </div>
-    );
-};
-
 
 const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                                                               url,
@@ -168,10 +50,18 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
         const image = new Image();
         image.src = savedImage ? savedImage : url;
         image.onload = () => {
-            canvas.width = image.width;
-            canvas.height = image.height;
-            setCanvasDimensions({ width: image.width, height: image.height });
-            ctx?.drawImage(image, 0, 0, canvas.width, canvas.height);
+            const maxWidth = window.innerWidth * 0.5;
+            const maxHeight = window.innerHeight * 0.7;
+
+            const scale = Math.min(maxWidth / image.width, maxHeight / image.height, 1);
+            const scaledWidth = image.width * scale;
+            const scaledHeight = image.height * scale;
+
+            canvas.width = scaledWidth;
+            canvas.height = scaledHeight;
+            setCanvasDimensions({ width: scaledWidth, height: scaledHeight });
+
+            ctx?.drawImage(image, 0, 0, scaledWidth, scaledHeight);
         };
     }, [url, savedImage]);
 
@@ -240,7 +130,7 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
         const newOverlay: TextOverlay = {
             id: Date.now().toString(),
             text: "",
-            x: clientWidth / 2,
+            x: clientWidth / 4,
             y: clientHeight / 2,
             editing: true,
             textColor: textColor,
@@ -256,9 +146,51 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
         if (!canvas) return;
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
-        ctx.font = `${updatedOverlay.fontWeight} ${updatedOverlay.textSize}px sans-serif`;
+
+        const fontSpec = `${updatedOverlay.fontWeight} ${updatedOverlay.textSize}px sans-serif`;
+        ctx.font = fontSpec;
         ctx.fillStyle = updatedOverlay.textColor;
-        ctx.fillText(updatedOverlay.text, updatedOverlay.x, updatedOverlay.y);
+
+        const containerWidth = containerRef.current?.clientWidth || canvas.width;
+        const availableWidth = containerWidth * 0.8;
+        const lineHeight = updatedOverlay.textSize * 1.2;
+        const words = updatedOverlay.text.split(" ");
+        const lines: string[] = [];
+        let currentLine = "";
+
+        words.forEach((word) => {
+            const testLine = currentLine ? currentLine + " " + word : word;
+            if (ctx.measureText(testLine).width > availableWidth) {
+                if (currentLine) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    let subLine = "";
+                    for (let char of word) {
+                        const testSub = subLine + char;
+                        if (ctx.measureText(testSub).width > availableWidth) {
+                            lines.push(subLine);
+                            subLine = char;
+                        } else {
+                            subLine = testSub;
+                        }
+                    }
+                    currentLine = subLine;
+                }
+            } else {
+                currentLine = testLine;
+            }
+        });
+        if (currentLine) {
+            lines.push(currentLine);
+        }
+
+        let currentY = Math.round(updatedOverlay.y);
+        lines.forEach((line) => {
+            ctx.fillText(line, Math.round(updatedOverlay.x), currentY);
+            currentY += lineHeight;
+        });
+
         setTextOverlays((prev) => prev.filter((o) => o.id !== updatedOverlay.id));
         const dataUrl = canvas.toDataURL("image/png");
         onSaveDrawing(dataUrl);
@@ -272,7 +204,16 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
             fileNameContainerClass={css.modalFileNameImgContainer}
             modalContentClass={css.modalContentImg}
         >
-            <div ref={containerRef} className={css.canvas_styles}>
+            <div
+                ref={containerRef}
+                className={css.canvas_styles}
+                style={{
+                    width: `${canvasDimensions.width}px`,
+                    height: `${canvasDimensions.height}px`,
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                }}
+            >
                 <canvas
                     ref={canvasRef}
                     className={css.modalImage}
@@ -285,7 +226,7 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                     onTouchEnd={endDrawing}
                 />
                 {textOverlays.map((overlay) => (
-                    <TextOverlayComponent
+                    <TextOverlay
                         key={overlay.id}
                         overlay={overlay}
                         containerRef={containerRef}
@@ -321,7 +262,6 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                         />
                     </div>
                 )}
-
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
                     <ModalContentPanelEditIcon fill="currentColor" />
@@ -330,7 +270,6 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                 <div className={css.modalContentEditPanelItem}>
                     <ModalContentPanelColorsIcon fill="currentColor" />
                 </div>
-
                 <div className={css.separator}></div>
                 <div
                     className={css.modalContentEditPanelItem}
@@ -339,7 +278,6 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                 >
                     <ModalContentPanelAddTextIcon fill="currentColor" />
                 </div>
-
                 {isAddingText && (
                     <div
                         className={css.addTextContainer}
@@ -359,29 +297,30 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                                 onChange={(e) => setTextColor(e.target.value)}
                             />
                         </div>
-                        <select
-                            className={css.selectWeightInput}
+                        <CustomDropdownSelect
+                            name={"Weight"}
                             value={fontWeight}
-                            onChange={(e) => setFontWeight(e.target.value)}
-                        >
-                            <option value="400">Normal</option>
-                            <option value="700">Bold</option>
-                        </select>
-                        <select
-                            className={css.selectTextSize}
+                            onChange={(value: string | number) => setFontWeight(value as string)}
+                            options={[
+                                { value: "400", label: "Normal" },
+                                { value: "700", label: "Bold" },
+                            ]}
+                            dropdownClass={css.selectWeightInput}
+                        />
+
+                        <CustomDropdownSelect
+                            name={"Size"}
                             value={textSize}
-                            onChange={(e) => setTextSize(parseInt(e.target.value))}
-                        >
-                            <option value="16">16px</option>
-                            <option value="18">18px</option>
-                            <option value="20">20px</option>
-                            <option value="24">24px</option>
-                            <option value="28">28px</option>
-                            <option value="32">32px</option>
-                        </select>
+                            onChange={(val) => setTextSize(parseInt(val as string))}
+                            options={[
+                                { value: 18, label: "18px" },
+                                { value: 24, label: "24px" },
+                                { value: 30, label: "30px" },
+                            ]}
+                            dropdownClass={css.selectTextSize}
+                        />
                     </div>
                 )}
-
             </div>
         </FilePreviewModalOverlay>,
         document.body

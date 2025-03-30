@@ -1,8 +1,8 @@
 .modalImage {
-
-
+  max-width: 100%;
+  max-height: 100%;
   height: 100%;
-
+  flex-shrink: 10;
   display: block;
   margin: 0 auto;
 }
@@ -46,7 +46,6 @@
   justify-content: center;
   z-index: 1500;
   max-width: 50%;
-  max-height: 70%;
   border: 1px solid #FFFFFF;
 }
 
@@ -119,13 +118,21 @@
 
 .colorInputContainer {
   display: flex;
+  flex-direction: row;
   align-items: center;
   align-content: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 10px;
+  justify-content: space-between;
   width: 100%;
-  padding-left: 10px;
+  color: #b8b8b8;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+  padding-left: 5px;
+
+  &:hover {
+    color: #7a7a7a;
+  }
 }
 
 .colorInput {
@@ -150,12 +157,30 @@
 }
 
 .selectWeightInput {
+
   border-radius: 8px;
   border: none;
   font-size: 12px;
   padding: 5px;
   width: 100%;
+
+  :focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+
+  ::selection {
+    background-color: #ff7f50;
+    color: #fff;
+  }
+
+  ::-moz-selection {
+    background-color: #ff7f50;
+    color: #fff;
+  }
 }
+
+
 
 .addTextContainer {
   background: #FFFFFF;
@@ -172,6 +197,7 @@
   border: none;
   font-size: 12px;
   padding: 5px;
+  width: 80px;
 }
 
 .selectTextSize {
@@ -185,4 +211,6 @@
 .canvas_styles {
   position: relative;
   display: inline-block;
+  flex-shrink: 10;
 }
+
