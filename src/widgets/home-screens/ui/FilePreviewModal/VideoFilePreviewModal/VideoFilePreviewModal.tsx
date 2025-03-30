@@ -33,6 +33,8 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
     const [videoDimensions, setVideoDimensions] = useState<{ width: number; height: number } | null>(null);
     const [scaledDimensions, setScaledDimensions] = useState<{ width: number; height: number } | null>(null);
 
+    const [showSpeedPopup, setShowSpeedPopup] = useState(false);
+
     const togglePlayPause = () => {
         if (!videoRef.current) return;
         if (videoRef.current.paused) {
@@ -116,7 +118,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
 
     useEffect(() => {
         if (videoDimensions) {
-
             const maxWidth = window.innerWidth * 0.5;
             const maxHeight = window.innerHeight * 0.7;
 
@@ -130,6 +131,15 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
             });
         }
     }, [videoDimensions]);
+
+    const updatePlaybackRate = (rate: number) => {
+        if (videoRef.current) {
+            videoRef.current.playbackRate = rate;
+        }
+        setShowSpeedPopup(false);
+    };
+
+    const speedOptions = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3];
 
     return createPortal(
         <FilePreviewModalOverlay
@@ -172,9 +182,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
 
             <div className={css.modalContentEditPanel}>
                 <div className={css.modalContentEditPanelItem} onClick={toggleMute}>
-                    <ModalContentPanelVolumeIcon
-                        fill={isMuted ? "#B5B5B5" : "#3D3D3D"}
-                    />
+                    <ModalContentPanelVolumeIcon fill={isMuted ? "#B5B5B5" : "#3D3D3D"} />
                 </div>
                 <div className={css.separator}></div>
 
@@ -191,10 +199,23 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
                     <ModalContentPanelScissorsIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
-                <div className={css.modalContentEditPanelItem}>
+                <div
+                    className={css.modalContentEditPanelItem}
+                    onClick={() => setShowSpeedPopup(!showSpeedPopup)}
+                >
                     <ModalContentPanelEditIcon fill="currentColor" />
                 </div>
             </div>
+
+            {showSpeedPopup && (
+                <div className={css.speedPopup}>
+                    {speedOptions.map((option) => (
+                        <button key={option} onClick={() => updatePlaybackRate(option)}>
+                            {option}x
+                        </button>
+                    ))}
+                </div>
+            )}
         </FilePreviewModalOverlay>,
         document.body
     );
