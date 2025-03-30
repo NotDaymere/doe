@@ -7,8 +7,10 @@ import ModalContentPanelAddTextIcon from "../../../../../shared/icons/ModalConte
 import ModalContentPanelCutIcon from "../../../../../shared/icons/ModalContentPanelCut.icon";
 import ModalContentPanelEditIcon from "../../../../../shared/icons/ModalContentPanelEdit.icon";
 import ModalContentPanelColorsIcon from "../../../../../shared/icons/ModalContentPanelColors.icon";
-import {TextOverlay} from "./TextOverlay/TextOverlay";
-import {CustomDropdownSelect} from "./CustomDropdownSelect/CustomDropdownSelect";
+import { TextOverlay } from "./TextOverlay/TextOverlay";
+import { CustomDropdownSelect } from "./CustomDropdownSelect/CustomDropdownSelect";
+import ImageCropper from "./ImageCropper/ImageCropper";
+import CloseSearchInputIcon from "../../../../../shared/icons/CloseSearchInputIcon";
 
 interface ImageModalProps {
     url: string;
@@ -43,6 +45,8 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
     const [textSize, setTextSize] = useState(20);
     const [isAddingText, setIsAddingText] = useState(false);
 
+    const [isCropping, setIsCropping] = useState(false);
+
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -52,21 +56,22 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
         image.onload = () => {
             const maxWidth = window.innerWidth * 0.5;
             const maxHeight = window.innerHeight * 0.7;
-
             const scale = Math.min(maxWidth / image.width, maxHeight / image.height, 1);
             const scaledWidth = image.width * scale;
             const scaledHeight = image.height * scale;
-
             canvas.width = scaledWidth;
             canvas.height = scaledHeight;
             setCanvasDimensions({ width: scaledWidth, height: scaledHeight });
-
             ctx?.drawImage(image, 0, 0, scaledWidth, scaledHeight);
         };
     }, [url, savedImage]);
 
     const getCanvasCoordinates = (
-        e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+        e:
+            | React.MouseEvent<HTMLDivElement>
+            | React.TouchEvent<HTMLDivElement>
+            | React.MouseEvent<HTMLCanvasElement>
+            | React.TouchEvent<HTMLCanvasElement>
     ) => {
         const canvas = canvasRef.current;
         if (!canvas) return { x: 0, y: 0 };
@@ -87,7 +92,7 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
     const startDrawing = (
         e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
     ) => {
-        if (!isDrawingEnabled) return;
+        if (!isDrawingEnabled || isCropping) return;
         const { x, y } = getCanvasCoordinates(e);
         setIsDrawing(true);
         setLastPoint({ x, y });
@@ -96,7 +101,7 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
     const draw = (
         e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
     ) => {
-        if (!isDrawing) return;
+        if (!isDrawing || isCropping) return;
         const canvas = canvasRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext("2d");
@@ -112,7 +117,7 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
     };
 
     const endDrawing = () => {
-        if (!isDrawing) return;
+        if (!isDrawing || isCropping) return;
         setIsDrawing(false);
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -146,18 +151,15 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
         if (!canvas) return;
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
-
         const fontSpec = `${updatedOverlay.fontWeight} ${updatedOverlay.textSize}px sans-serif`;
         ctx.font = fontSpec;
         ctx.fillStyle = updatedOverlay.textColor;
-
         const containerWidth = containerRef.current?.clientWidth || canvas.width;
         const availableWidth = containerWidth * 0.8;
         const lineHeight = updatedOverlay.textSize * 1.2;
         const words = updatedOverlay.text.split(" ");
         const lines: string[] = [];
         let currentLine = "";
-
         words.forEach((word) => {
             const testLine = currentLine ? currentLine + " " + word : word;
             if (ctx.measureText(testLine).width > availableWidth) {
@@ -184,13 +186,11 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
         if (currentLine) {
             lines.push(currentLine);
         }
-
         let currentY = Math.round(updatedOverlay.y);
         lines.forEach((line) => {
             ctx.fillText(line, Math.round(updatedOverlay.x), currentY);
             currentY += lineHeight;
         });
-
         setTextOverlays((prev) => prev.filter((o) => o.id !== updatedOverlay.id));
         const dataUrl = canvas.toDataURL("image/png");
         onSaveDrawing(dataUrl);
@@ -212,6 +212,7 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                     height: `${canvasDimensions.height}px`,
                     maxWidth: "100%",
                     maxHeight: "100%",
+                    position: "relative",
                 }}
             >
                 <canvas
@@ -225,6 +226,16 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                     onTouchMove={draw}
                     onTouchEnd={endDrawing}
                 />
+                {isCropping && (
+                    <ImageCropper
+                        canvasRef={canvasRef}
+                        onApplyCrop={(dataUrl) => {
+                            onSaveDrawing(dataUrl);
+                            setIsCropping(false);
+                        }}
+                        onCancelCrop={() => setIsCropping(false)}
+                    />
+                )}
                 {textOverlays.map((overlay) => (
                     <TextOverlay
                         key={overlay.id}
@@ -240,9 +251,26 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                 ))}
             </div>
             <div className={css.modalContentEditPanel}>
-                <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelCutIcon fill="currentColor" />
-                </div>
+                {!isCropping
+                ? (
+                        <div
+                            className={css.modalContentEditPanelItem}
+                            onClick={() => {
+                                setIsCropping(true);
+                                setIsDrawingEnabled(false);
+                            }}
+                            data-active={isCropping}
+                        >
+                            <ModalContentPanelCutIcon fill="currentColor" />
+                        </div>
+                    )
+                : (
+                        <div
+                            onClick={() => setIsCropping(false)}
+                            className={css.modalContentEditPanelItem}
+                        ><CloseSearchInputIcon width={30} height={30}/></div>
+                    )}
+
                 <div className={css.separator}></div>
                 <div
                     className={css.modalContentEditPanelItem}
@@ -251,17 +279,6 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                 >
                     <ModalContentPanelPencilIcon fill="currentColor" />
                 </div>
-                {isDrawingEnabled && (
-                    <div className={css.drawContainer}>
-                        <input
-                            type="color"
-                            className={css.colorInput}
-                            value={drawingColor}
-                            onChange={(e) => setDrawingColor(e.target.value)}
-                            style={{ marginLeft: "8px" }}
-                        />
-                    </div>
-                )}
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
                     <ModalContentPanelEditIcon fill="currentColor" />
@@ -278,6 +295,17 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                 >
                     <ModalContentPanelAddTextIcon fill="currentColor" />
                 </div>
+                {isDrawingEnabled && (
+                    <div className={css.drawContainer}>
+                        <input
+                            type="color"
+                            className={css.colorInput}
+                            value={drawingColor}
+                            onChange={(e) => setDrawingColor(e.target.value)}
+                            style={{ marginLeft: "8px" }}
+                        />
+                    </div>
+                )}
                 {isAddingText && (
                     <div
                         className={css.addTextContainer}
@@ -307,7 +335,6 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                             ]}
                             dropdownClass={css.selectWeightInput}
                         />
-
                         <CustomDropdownSelect
                             name={"Size"}
                             value={textSize}
