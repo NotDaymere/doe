@@ -7,7 +7,7 @@ import ModalContentPanelVolumeIcon from "../../../../../shared/icons/ModalConten
 import ModalContentPanelVideoPlayIcon from "../../../../../shared/icons/ModalContentPanelVideoPlay.icon";
 import ModalContentPanelScissorsIcon from "../../../../../shared/icons/ModalContentPanelScissors.icon";
 import VideoPlayIcon from "../../../../../shared/icons/VideoPlay.icon";
-import { videoCuttingService } from "./VideoCuttingService"; // Import the service
+import { videoCuttingService } from "./VideoCuttingService";
 
 interface VideoModalProps {
     url: string;
@@ -37,16 +37,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
     const [cutProgress, setCutProgress] = useState<number>(0);
     const [cutStage, setCutStage] = useState<string>("");
     const [cutError, setCutError] = useState<string | null>(null);
-    const [currentBlobUrl, personallysetCurrentBlobUrl] = useState<string | null>(null);
     const [url, setUrl] = useState(initialUrl);
-
-    useEffect(() => {
-        console.log("VideoEncoder supported:", 'VideoEncoder' in window);
-        return () => {
-            if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
-            console.log("[CLEANUP] Component unmounted, resources cleaned");
-        };
-    }, [currentBlobUrl]);
 
     const togglePlayPause = () => {
         if (!videoRef.current || isProcessingCut) return;
@@ -190,7 +181,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                     setTimeout(() => cancelCutting(), 3000);
                 },
                 (newUrl) => {
-                    if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
                     setUrl(newUrl);
                     setIsCutting(false);
                     setCutStart(null);
@@ -236,7 +226,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                 style={scaledDimensions ? { width: `${scaledDimensions.width}px`, height: `${scaledDimensions.height}px` } : {}}
             >
                 <video className={css.modalVideo} ref={videoRef}>
-                    <source src={currentBlobUrl || url} />
+                    <source src={url} />
                     Your browser does not support video.
                 </video>
                 {isProcessingCut && (

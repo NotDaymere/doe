@@ -183,12 +183,9 @@
   background: #f0f0f0;
 }
 
-/* Новые стили для функционала вырезания */
-
-/* Маркер для вырезания */
 .cutMarker {
   position: absolute;
-  top: -5px;  // смещение над прогресс-баром
+  top: -5px;
   width: 2px;
   height: 17px;
   background-color: red;
@@ -199,7 +196,7 @@
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 10001; // значение выше, чем у playPauseButton (9999)
+  z-index: 10001;
   display: flex;
   gap: 10px;
 }
@@ -217,7 +214,7 @@
 .cutButton:hover {
   background-color: #f0f0f0;
 }
-/* Overlay при обработке вырезания */
+
 .processingOverlay {
   position: absolute;
   top: 0;
