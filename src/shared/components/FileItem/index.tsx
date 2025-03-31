@@ -24,41 +24,25 @@ export const FileItem: React.FC<FileItemProps> = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentIconIndex, setCurrentIconIndex] = useState(0);
     const [savedImage, setSavedImage] = useState<string | undefined>(undefined);
+    const [savedPdf, setSavedPdf] = useState<string | undefined>(url);
 
     const info = useMemo(() => {
         if (name.startsWith("http://") || name.startsWith("https://")) {
             try {
                 const urlObj = new URL(name);
                 let fileName = urlObj.pathname;
-                if (fileName.startsWith("/")) {
-                    fileName = fileName.slice(1);
-                }
+                if (fileName.startsWith("/")) fileName = fileName.slice(1);
                 if (!fileName) fileName = "index";
-                return {
-                    filename: fileName,
-                    mimetype,
-                    ext: urlObj.hostname,
-                    isUrl: true,
-                };
+                return { filename: fileName, mimetype, ext: urlObj.hostname, isUrl: true };
             } catch {
-                return {
-                    filename: name,
-                    mimetype,
-                    ext: "",
-                    isUrl: false,
-                };
+                return { filename: name, mimetype, ext: "", isUrl: false };
             }
         } else {
             const segments = name.split(".");
             const ext = segments.pop() ?? "";
             const path = segments.join(".").split(/[/\\]/gi);
             const filename = path.pop() || "";
-            return {
-                filename,
-                mimetype,
-                ext,
-                isUrl: false,
-            };
+            return { filename, mimetype, ext, isUrl: false };
         }
     }, [name, mimetype]);
 
@@ -77,9 +61,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                 `https://icons.duckduckgo.com/ip3/${info.ext}.ico`,
                 "/img/icons/file-file.svg",
             ];
-        } else if (
-            ["png", "jpg", "jpeg", "gif", "bmp", "svg", "webp"].includes(extLower)
-        ) {
+        } else if (["png", "jpg", "jpeg", "gif", "bmp", "svg", "webp"].includes(extLower)) {
             return ["/img/icons/file-image.svg"];
         } else if (["mp4", "webm", "ogg"].includes(extLower)) {
             return ["/img/icons/file-media.svg"];
@@ -104,8 +86,7 @@ export const FileItem: React.FC<FileItemProps> = ({
         }
     };
 
-    const shortenFileName =
-        fileName.length > 10 ? `${fileName.slice(0, 10)}...` : fileName;
+    const shortenFileName = fileName.length > 10 ? `${fileName.slice(0, 10)}...` : fileName;
 
     return (
         <>
@@ -124,12 +105,8 @@ export const FileItem: React.FC<FileItemProps> = ({
                 </div>
                 <div className={css.file_content}>
                     <p className={css.file_name}>
-                        <span>
-                            {fileName.length > 15 ? `${fileName.slice(0, 15)}...` : fileName}
-                        </span>
-                        {!(name.startsWith("http://") || name.startsWith("https://")) && (
-                            <>.{info.ext}</>
-                        )}
+                        <span>{fileName.length > 15 ? `${fileName.slice(0, 15)}...` : fileName}</span>
+                        {!(name.startsWith("http://") || name.startsWith("https://")) && <>.{info.ext}</>}
                     </p>
                     <p className={css.file_ext}>{info.ext}</p>
                 </div>
@@ -148,11 +125,12 @@ export const FileItem: React.FC<FileItemProps> = ({
 
             {isModalOpen && extLower === "pdf" && url && (
                 <PdfFilePreviewModal
-                    url={url}
+                    url={savedPdf || url}
                     onClose={() => setIsModalOpen(false)}
                     fileName={shortenFileName}
                     fileExt={info.ext}
                     onRename={setFileName}
+                    onSaveDrawing={setSavedPdf}
                 />
             )}
             {isModalOpen &&
@@ -176,7 +154,8 @@ export const FileItem: React.FC<FileItemProps> = ({
                         fileName={shortenFileName}
                         fileExt={info.ext}
                     />
-                )}
+                )
+            }
         </>
     );
 };
