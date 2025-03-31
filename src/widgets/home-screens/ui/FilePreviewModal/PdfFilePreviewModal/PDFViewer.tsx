@@ -43,6 +43,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         const isDrawingRef = useRef(false);
         const lastPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
+        // Загружаем PDF только один раз
         useEffect(() => {
             const loadPdf = async () => {
                 const loadedPdf = await pdfjsLib.getDocument(url).promise;
@@ -50,9 +51,9 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 if (originalDimensions.length === 0) {
                     const dims: Array<{ width: number; height: number }> = [];
                     for (let i = 1; i <= loadedPdf.numPages; i++) {
-                        const vp = await loadedPdf
-                            .getPage(i)
-                            .then((page) => page.getViewport({ scale: 1 }));
+                        const vp = await loadedPdf.getPage(i).then((page) =>
+                            page.getViewport({ scale: 1 })
+                        );
                         dims.push({ width: vp.width, height: vp.height });
                     }
                     setOriginalDimensions(dims);
@@ -84,15 +85,20 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             const { width: originalWidth, height: originalHeight } =
                 originalDimensions[pageIndex];
 
-            const scaleFactor = Math.min(fixedWidth / originalWidth, fixedHeight / originalHeight);
+            const scaleFactor = Math.min(
+                fixedWidth / originalWidth,
+                fixedHeight / originalHeight
+            );
 
-            const x_pdf = (x_screen / rect.width) * (originalWidth * scaleFactor);
-            const y_pdf = (y_screen / rect.height) * (originalHeight * scaleFactor);
+            const x_pdf =
+                (x_screen / rect.width) * (originalWidth * scaleFactor);
+            const y_pdf =
+                (y_screen / rect.height) * (originalHeight * scaleFactor);
             return { x: x_pdf, y: y_pdf };
         };
 
         const startDrawing = (e: MouseEvent | TouchEvent, pageIndex: number) => {
-            if (!isDrawingEnabled) return;
+
             const canvas = canvasRefs.current[pageIndex];
             if (!canvas) return;
             const { x, y } = getCanvasCoordinates(e, canvas, pageIndex);
@@ -101,7 +107,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         };
 
         const draw = (e: MouseEvent | TouchEvent, pageIndex: number) => {
-            if (!isDrawingRef.current || !isDrawingEnabled) return;
+            if (!isDrawingRef.current) return;
             const canvas = canvasRefs.current[pageIndex];
             if (!canvas) return;
             const ctx = canvas.getContext("2d");
@@ -109,7 +115,10 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             const { x, y } = getCanvasCoordinates(e, canvas, pageIndex);
             const pixelRatio = window.devicePixelRatio || 1;
             ctx.beginPath();
-            ctx.moveTo(lastPointRef.current.x * pixelRatio, lastPointRef.current.y * pixelRatio);
+            ctx.moveTo(
+                lastPointRef.current.x * pixelRatio,
+                lastPointRef.current.y * pixelRatio
+            );
             ctx.lineTo(x * pixelRatio, y * pixelRatio);
             ctx.strokeStyle = drawingColorRef.current;
             ctx.lineWidth = 5 * pixelRatio;
@@ -132,7 +141,10 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 for (let i = 1; i <= pdf.numPages; i++) {
                     const page = await pdf.getPage(i);
                     const originalViewport = page.getViewport({ scale: 1 });
-                    const scaleFactor = Math.min(fixedWidth / originalViewport.width, fixedHeight / originalViewport.height);
+                    const scaleFactor = Math.min(
+                        fixedWidth / originalViewport.width,
+                        fixedHeight / originalViewport.height
+                    );
                     const viewport = page.getViewport({ scale: scaleFactor });
 
                     const pageContainer = document.createElement("div");
@@ -160,7 +172,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                     drawCanvas.style.top = "0";
                     drawCanvas.style.left = "0";
                     drawCanvas.style.zIndex = "10";
-                    drawCanvas.style.pointerEvents = "auto";
+                    drawCanvas.style.pointerEvents = isDrawingEnabled ? "auto" : "none";
                     drawCanvas.style.touchAction = "none";
                     pageContainer.appendChild(drawCanvas);
 
@@ -182,9 +194,18 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                     drawCanvas.ontouchstart = (e: TouchEvent) => startDrawing(e, index);
                     drawCanvas.ontouchmove = (e: TouchEvent) => draw(e, index);
                     drawCanvas.ontouchend = () => endDrawing(index);
+
                 }
             })();
-        }, [pdf, isDrawingEnabled, fixedWidth, fixedHeight]);
+        }, [pdf, fixedWidth, fixedHeight]);
+
+        useEffect(() => {
+            canvasRefs.current.forEach((canvas) => {
+                if (canvas) {
+                    canvas.style.pointerEvents = isDrawingEnabled ? "auto" : "none";
+                }
+            });
+        }, [isDrawingEnabled]);
 
         const saveAnnotations = async () => {
             if (!pdf || originalDimensions.length === 0) return;
@@ -224,10 +245,14 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             const container = containerRef.current;
             if (!container) return;
             const onScroll = () => {
-                const pageContainers = Array.from(container.getElementsByClassName("pageContainer"));
+                const pageContainers = Array.from(
+                    container.getElementsByClassName("pageContainer")
+                );
                 const closest = pageContainers.reduce<{ index: number; dist: number }>(
                     (best, el, idx) => {
-                        const dist = Math.abs((el as HTMLElement).offsetTop - container.scrollTop);
+                        const dist = Math.abs(
+                            (el as HTMLElement).offsetTop - container.scrollTop
+                        );
                         return dist < best.dist ? { index: idx, dist } : best;
                     },
                     { index: 0, dist: Infinity }
@@ -246,24 +271,45 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 e.preventDefault();
             };
             container.addEventListener("wheel", onWheel, { passive: false });
-            return () => container.removeEventListener("wheel", onWheel);
+            return () =>
+                container.removeEventListener("wheel", onWheel);
         }, []);
 
         const scrollToPage = (page: number) => {
-            const el = containerRef.current?.getElementsByClassName("pageContainer")[page - 1] as HTMLElement;
-            if (el) el.scrollIntoView({ behavior: "smooth" });
+            const el = containerRef.current?.getElementsByClassName("pageContainer")[
+            page - 1
+                ] as HTMLElement;
+            if (el)
+                el.scrollIntoView({ behavior: "smooth" });
         };
 
         return (
             <div className={css.modalPdfContainer}>
                 <div className={css.modalPdf} ref={containerRef}></div>
                 <div className={css.modalPdfPageSlideWrapper}>
-                    <button onClick={() => currentPage > 1 && scrollToPage(currentPage - 1)}>
+                    <button
+                        onClick={() =>
+                            currentPage > 1 && scrollToPage(currentPage - 1)
+                        }
+                    >
                         <ArrowLeftIcon opacity={currentPage <= 1 ? 0.3 : 1} />
                     </button>
-                    <span>{currentPage}{pdf ? ` / ${pdf.numPages}` : ""}</span>
-                    <button onClick={() => pdf && currentPage < pdf.numPages && scrollToPage(currentPage + 1)}>
-                        <ArrowRightIcon opacity={pdf && currentPage >= pdf.numPages ? 0.3 : 1} />
+                    <span>
+            {currentPage}
+                        {pdf ? ` / ${pdf.numPages}` : ""}
+          </span>
+                    <button
+                        onClick={() =>
+                            pdf &&
+                            currentPage < pdf.numPages &&
+                            scrollToPage(currentPage + 1)
+                        }
+                    >
+                        <ArrowRightIcon
+                            opacity={
+                                pdf && currentPage >= pdf.numPages ? 0.3 : 1
+                            }
+                        />
                     </button>
                 </div>
             </div>
