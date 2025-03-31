@@ -13,10 +13,6 @@ declare global {
     interface HTMLVideoElement {
         captureStream(): MediaStream;
     }
-    class MediaStreamTrackProcessor {
-        constructor(options: { track: MediaStreamTrack });
-        readonly readable: ReadableStream<VideoFrame>;
-    }
 }
 
 interface VideoModalProps {
@@ -33,11 +29,6 @@ interface EncodedSample {
     timestamp: number;
     is_sync: boolean;
 }
-
-const formatMapping: Record<string, { codec: string; mimeType: string }> = {
-    mp4: { codec: "avc1.42001f", mimeType: "video/mp4" },
-    webm: { codec: "avc1.42001f", mimeType: "video/mp4" },
-};
 
 function getUint32BE(data: Uint8Array, offset: number): number {
     return (data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3];
@@ -59,7 +50,7 @@ function isAnnexB(data: Uint8Array): boolean {
 function parseAvcC(config: Uint8Array): { sps: Uint8Array | null; pps: Uint8Array | null } {
     let offset = 0;
     if (config.length < 7) return { sps: null, pps: null };
-    offset += 5; // Skip version, profile, compatibility, level, reserved
+    offset += 5;
     const numSPS = config[offset] & 0x1F;
     offset += 1;
 
@@ -199,16 +190,16 @@ function convertAnnexBToAvcC(data: Uint8Array, sps?: Uint8Array, pps?: Uint8Arra
 
 function createAvcCBox(sps: Uint8Array, pps: Uint8Array): Uint8Array {
     return new Uint8Array([
-        0x01,          // Version
-        sps[1],        // Profile
-        sps[2],        // Profile compatibility
-        sps[3],        // Level
-        0xFC | 3,      // LengthSizeMinusOne (4 bytes)
-        0xE0 | 1,      // Num of SPS (1)
+        0x01,
+        sps[1],
+        sps[2],
+        sps[3],
+        0xFC | 3,
+        0xE0 | 1,
         (sps.length >> 8) & 0xFF,
         sps.length & 0xFF,
         ...sps,
-        1,             // Num of PPS (1)
+        1,
         (pps.length >> 8) & 0xFF,
         pps.length & 0xFF,
         ...pps
@@ -326,7 +317,6 @@ async function muxWithMP4Box(
         throw new Error(`MP4Box error: ${e}`);
     };
 
-    // Добавление сэмплов с проверками
     let lastDts = -Infinity;
     for (let i = 0; i < samples.length; i++) {
         const sample = samples[i];
@@ -338,7 +328,6 @@ async function muxWithMP4Box(
         const dts = Math.round((sample.timestamp / 1_000_000) * timescale);
         const duration = Math.round((sample.duration / 1_000_000) * timescale);
 
-        // Проверка временной последовательности
         if (dts <= lastDts) {
             log(`Non-monotonic DTS at index ${i}: ${dts} <= ${lastDts}`);
             throw new Error(`Non-monotonic DTS at index ${i}`);
@@ -353,7 +342,7 @@ async function muxWithMP4Box(
         mp4boxFile.addSample(trackId, sample.data, {
             duration,
             dts,
-            cts: dts, // CTS может отличаться при B-frames, но здесь упрощенно
+            cts: dts,
             is_sync: sample.is_sync,
         });
     }
@@ -598,7 +587,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
         console.log("[CUT] Starting cut from", cutStart, "to", cutEnd);
 
         try {
-            // Extract metadata
             setCutStage("Extracting metadata");
             const { width, height, frameRate, duration } = await getVideoMetadata(url);
             console.log("[CUT] Metadata extracted: width=", width, "height=", height, "frameRate=", frameRate, "duration=", duration);
@@ -725,7 +713,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
             setCurrentBlobUrl(fragmentUrl);
             setUrl(fragmentUrl);
 
-            // Download the cut video
             const downloadLink = document.createElement("a");
             downloadLink.href = fragmentUrl;
             downloadLink.download = `${fileName}_cut_${cutStart}-${cutEnd}.mp4`;
