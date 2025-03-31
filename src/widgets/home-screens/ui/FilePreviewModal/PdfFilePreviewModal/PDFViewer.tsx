@@ -43,7 +43,6 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         const isDrawingRef = useRef(false);
         const lastPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
-        // Загружаем PDF только один раз
         useEffect(() => {
             const loadPdf = async () => {
                 const loadedPdf = await pdfjsLib.getDocument(url).promise;
