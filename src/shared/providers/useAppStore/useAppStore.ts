@@ -34,7 +34,7 @@ export interface AppState {
     setIsSideBarOpen: (isSideBarOpen: boolean) => void;
 
     isUploadFileChatMode: boolean;
-    setIsUploadFileChatMode: (isCreateBranchChatMode: boolean) => void;
+    setIsUploadFileChatMode: (IsUploadFileChatMode: boolean) => void;
 
     isHyperlinkInputOpen: boolean;
     setIsHyperlinkInputOpen: (isHyperlinkInput: boolean) => void;
@@ -56,7 +56,7 @@ export interface AppState {
 
 
 
-export const useAppStore = create<AppState>()((set, get) => {
+export const useAppStore = create<AppState>()((set) => {
 
     return {
         editor: null,
@@ -64,7 +64,6 @@ export const useAppStore = create<AppState>()((set, get) => {
         gaiaActive: false,
         gaiaSidebarActive: false,
         talkModeActive: false,
-        theme: "light",
         playground: {
             type: null,
             open: false,

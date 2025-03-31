@@ -248,13 +248,13 @@ export const Sidebar: React.FC = () => {
                         Delete All Messages
                     </div>
                 </div>
-
             </div>
 
 
             <div
                 className={css.sidebar_resize_handler}
                 onClick={handleOpenSideBar}
+
             />
         </aside>
     );

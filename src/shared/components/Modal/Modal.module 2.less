@@ -1,0 +1,48 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: #d4d4d4;
+    border: 1px solid #fff;
+    padding: 24px;
+    border-radius: 16px;
+    position: relative;
+    z-index: 1001;
+    max-width: 35vw;
+    max-height: 80vh;
+    overflow: hidden;
+}
+
+.showScroll::-webkit-scrollbar {
+    width: 4px;
+    height: 23px;
+}
+
+.showScroll::-webkit-scrollbar-track {
+    background: #cacaca;
+    border-radius: 16px;
+}
+
+.showScroll::-webkit-scrollbar-thumb {
+    background-color: #fff;
+    border-radius: 16px;
+}
+
+.showScroll::-webkit-scrollbar-corner {
+    background-color: #cacaca;
+}
+
+.showScroll {
+    overflow-x: auto;
+    overflow-y: auto;
+}

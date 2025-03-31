@@ -15,7 +15,7 @@ interface IProps {
     setIsActive: (value: boolean) => void;
 }
 
-export const SidebarGaia: React.FC<IProps> = ({ isActive, setIsActive }) => {
+export const SidebarGaia: React.FC<IProps> = ({ isActive }) => {
     const { gaiaActive, setGaiaActive } = useAppStore();
     const nodeRef = React.useRef<HTMLDivElement>(null);
 
@@ -31,7 +31,6 @@ export const SidebarGaia: React.FC<IProps> = ({ isActive, setIsActive }) => {
 
         return () => {
             setShowGaia(false);
-            setIsActive(false);
         };
     }, [isActive]);
     return (
@@ -43,8 +42,8 @@ export const SidebarGaia: React.FC<IProps> = ({ isActive, setIsActive }) => {
                 <CSSTransition
                     classNames={css}
                     timeout={1000}
-                    in={!gaiaActive}
-                    // in={showGaia}
+                    // in={!gaiaActive}
+                    in={showGaia}
                     nodeRef={nodeRef}
                     mountOnEnter
                 >

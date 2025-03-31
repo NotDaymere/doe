@@ -687,15 +687,15 @@ export const ChatPanel: React.FC = () => {
                     <button className={css.panel_button}>
                         <MicrophoneIcon />
                     </button>
-                    {!prompt.active ? (
-                        <button className={css.panel_submitBtn} onClick={() => onSendMessage(text)}>
-                            Send <ArrowUpIcon />
-                        </button>
-                    ) : (
-                        <button className={css.panel_callBtn}>
-                            <CallVoiceIcon />
-                        </button>
-                    )}
+                    {/*{!prompt.active ? (*/}
+                    {/*    <button className={css.panel_submitBtn} onClick={() => onSendMessage(text)}>*/}
+                    {/*        Send <ArrowUpIcon />*/}
+                    {/*    </button>*/}
+                    {/*) : (*/}
+                    {/*    <button className={css.panel_callBtn}>*/}
+                    {/*        <CallVoiceIcon />*/}
+                    {/*    </button>*/}
+                    {/*)}*/}
                     <CSSTransition
                         in={showLinkInput && isHyperlinkInputOpen}
                         timeout={300}
@@ -782,12 +782,12 @@ export const ChatPanel: React.FC = () => {
                                 unmountOnExit
                             >
                                 <>
-                                    <button className={css.panel_button} disabled>
-                                        <ScreenShareIcon />
-                                    </button>
-                                    <button className={css.panel_button}>
-                                        <MicrophoneIcon />
-                                    </button>
+                                    {/*<button className={css.panel_button} disabled>*/}
+                                    {/*    <ScreenShareIcon />*/}
+                                    {/*</button>*/}
+                                    {/*<button className={css.panel_button}>*/}
+                                    {/*    <MicrophoneIcon />*/}
+                                    {/*</button>*/}
 
                                     {isTablePromptVisible ? (
                                         <button className={css.panel_send_table_data_btn}>
@@ -972,28 +972,28 @@ export const ChatPanel: React.FC = () => {
         {/*    </CSSTransition>*/}
         {/*    )*/}
         {/*</SwitchTransition>*/}
-                {/*    <button className={css.panel_button} disabled>*/}
-                {/*        <ScreenShareIcon />*/}
-                {/*    </button>*/}
-                {/*    <button className={css.panel_button}>*/}
-                {/*        <MicrophoneIcon />*/}
-                {/*    </button>*/}
-                {/*    {!prompt.active ? (*/}
-                {/*        !questionCodeMessage ? (*/}
-                {/*        <button className={css.panel_submitBtn} onClick={handleSend}>*/}
-                {/*            Send <ArrowUpIcon />*/}
-                {/*        </button>*/}
-                {/*        ) : (*/}
-                {/*            <button className={css.panel_hammerBtn}>*/}
-                {/*                <HammerIcon />*/}
-                {/*            </button>*/}
-                {/*        )*/}
-                {/*    ) : (*/}
-                {/*        <button className={css.panel_callBtn}>*/}
-                {/*            <CallVoiceIcon />*/}
-                {/*        </button>*/}
-                {/*    )}*/}
-                {/*</div>*/}
+        {/*            <button className={css.panel_button} disabled>*/}
+        {/*                <ScreenShareIcon />*/}
+        {/*            </button>*/}
+        {/*            <button className={css.panel_button}>*/}
+        {/*                <MicrophoneIcon />*/}
+        {/*            </button>*/}
+        {/*            {!prompt.active ? (*/}
+        {/*                !questionCodeMessage ? (*/}
+        {/*                <button className={css.panel_submitBtn} onClick={handleSend}>*/}
+        {/*                    Send <ArrowUpIcon />*/}
+        {/*                </button>*/}
+        {/*                ) : (*/}
+        {/*                    <button className={css.panel_hammerBtn}>*/}
+        {/*                        <HammerIcon />*/}
+        {/*                    </button>*/}
+        {/*                )*/}
+        {/*            ) : (*/}
+        {/*                <button className={css.panel_callBtn}>*/}
+        {/*                    <CallVoiceIcon />*/}
+        {/*                </button>*/}
+        {/*            )}*/}
+                </div>
                 {messagesCount === 0 && (
                     <div className={css.hintsWrapper}>
                         {showHints.typingHints && messagesCount === 0 && (
@@ -1009,7 +1009,6 @@ export const ChatPanel: React.FC = () => {
                     </div>
                 )}
             </div>
-        </div>
         </div>
     );
 };

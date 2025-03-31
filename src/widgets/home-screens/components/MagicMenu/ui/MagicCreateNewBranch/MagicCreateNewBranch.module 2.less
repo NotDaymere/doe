@@ -1,0 +1,37 @@
+.apps {
+  position: relative;
+}
+
+.apps_btn {
+
+  &._active {
+
+    [data-has-menu] {
+      opacity: 1;
+      &::before {
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  &:hover,
+  &._active {
+    > span > svg {
+      fill: black;
+    }
+  }
+
+  [data-has-menu] {
+    border: 1px solid #9747FF !important;
+    color: #9747FF !important;
+    &::before{
+      background: #9747FF !important;
+    }
+    &::after{
+      background: #9747FF !important;
+    }
+    .svg{
+      fill: #9747FF !important;
+    }
+  }
+}

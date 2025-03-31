@@ -11,7 +11,7 @@ import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAnd
 import Comments from "src/components/Comments/Comments";
 import ChartWidgetsWindow from "src/components/widgetAndChart/Window/ChartWidgetsWindow";
 import { useAppStore, useChatStore } from "src/shared/providers";
-import Sharing from "src/widgets/home-screens/ui/LiveTools/Sharing";
+import Sharing from "src/widgets/home-screens/ui/LiveTools/Sharing/SharingLink"
 import { SidebarGaia } from "src/widgets/Sidebar/ui";
 
 const Home = () => {

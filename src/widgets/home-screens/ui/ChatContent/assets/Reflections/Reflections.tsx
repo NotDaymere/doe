@@ -271,6 +271,7 @@ export default function Reflections() {
             e.preventDefault();
             e.stopPropagation();
             cancelCollapseTimer();
+        };
             const handleSmallMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
                 setStartY(e.clientY);
                 setStartProgress(progress);
@@ -380,7 +381,7 @@ export default function Reflections() {
                                     opacity: isCursorNearTop ? 1 : 0,
                                     transition: "opacity 300ms ease",
                                 }}
-                                onMouseDown={handleSmallMouseDown}
+                                onMouseDown={handleDragBarMouseDown}
                                 onMouseEnter={handleDragBarMouseEnter}
                                 onMouseLeave={handleDragBarMouseLeave}
                                 // onMouseDown={handleSmallMouseDown}
@@ -580,4 +581,3 @@ export default function Reflections() {
             );
         }
     }
-}

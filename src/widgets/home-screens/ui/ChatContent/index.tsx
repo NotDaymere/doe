@@ -210,26 +210,26 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         dialogRefs={dialogRefs}
                     />
                 )}
-                {!isCurrentBranchOpen && (
-                    <div className={getOpenSavedPlaygrounds().length <= 0
-                        ? !isSideBarOpen
-                            ? css.logoWrapper
-                            : css.logoWrapperSideBarOpen
-                        : !isSideBarOpen
-                            ? css.logoWrapperPlaygroundOpen
-                            : css.logoWrapperPlaygroundAndSideBarOpen}>
-                        {!playgroundFullscreen && (
-                            <div className={css.logoPopup}>
-                                <div className={css.allPlaygroundsWrapper}>
-                                    <AllPlaygrounds />
-                                </div>
-                                <div className={css.allBranchesContainer}>
-                                    <AllBranches />
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                )}
+                {/*{!isCurrentBranchOpen && (*/}
+                {/*    <div className={getOpenSavedPlaygrounds().length <= 0*/}
+                {/*        ? !isSideBarOpen*/}
+                {/*            ? css.logoWrapper*/}
+                {/*            : css.logoWrapperSideBarOpen*/}
+                {/*        : !isSideBarOpen*/}
+                {/*            ? css.logoWrapperPlaygroundOpen*/}
+                {/*            : css.logoWrapperPlaygroundAndSideBarOpen}>*/}
+                {/*        {!playgroundFullscreen && (*/}
+                {/*            <div className={css.logoPopup}>*/}
+                {/*                <div className={css.allPlaygroundsWrapper}>*/}
+                {/*                    <AllPlaygrounds />*/}
+                {/*                </div>*/}
+                {/*                <div className={css.allBranchesContainer}>*/}
+                {/*                    <AllBranches />*/}
+                {/*                </div>*/}
+                {/*            </div>*/}
+                {/*        )}*/}
+                {/*    </div>*/}
+                {/*)}*/}
 
                 {!talkModeActive && !playgroundFullscreen && !isCurrentBranchOpen &&
                     <Reflections/>
