@@ -250,7 +250,12 @@ export const Sidebar: React.FC = () => {
                 </div>
             </div>
 
-
+            <button
+                className={css.sidebar_controls_btn}
+                onClick={() => setIsSharingActive(true)}
+            >
+                {isSharingActive ? <SharedWithYouActiveIcon /> : <SharedWithYouIcon />}
+            </button>
             <div
                 className={css.sidebar_resize_handler}
                 onClick={handleOpenSideBar}

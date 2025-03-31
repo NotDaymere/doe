@@ -10,12 +10,8 @@ import WindIcon from "src/shared/icons/Wind.icon";
 import { useAppStore } from "src/shared/providers";
 import css from "./SidebarGaia.module.less";
 
-interface IProps {
-    isActive: boolean;
-    setIsActive: (value: boolean) => void;
-}
 
-export const SidebarGaia: React.FC<IProps> = ({ isActive }) => {
+export const SidebarGaia = () => {
     const { gaiaActive, setGaiaActive } = useAppStore();
     const nodeRef = React.useRef<HTMLDivElement>(null);
 
@@ -23,16 +19,11 @@ export const SidebarGaia: React.FC<IProps> = ({ isActive }) => {
     const [showGaia, setShowGaia] = useState(false);
 
     useEffect(() => {
-        if (isActive) {
-            setShowGaia(true);
-        } else {
-            setShowGaia(false);
-        }
-
+        setShowGaia(true);
         return () => {
             setShowGaia(false);
         };
-    }, [isActive]);
+    }, []);
     return (
         <div className={clsx(css.gaia, gaiaActive && css._active)}>
             <div className={css.gaia_btn_wrapper}>
