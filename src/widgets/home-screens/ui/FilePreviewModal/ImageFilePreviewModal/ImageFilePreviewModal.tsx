@@ -279,6 +279,17 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                 >
                     <ModalContentPanelPencilIcon fill="currentColor" />
                 </div>
+                {isDrawingEnabled && (
+                    <div className={css.drawContainer}>
+                        <input
+                            type="color"
+                            className={css.colorInput}
+                            value={drawingColor}
+                            onChange={(e) => setDrawingColor(e.target.value)}
+                            style={{ marginLeft: "8px" }}
+                        />
+                    </div>
+                )}
                 <div className={css.separator}></div>
                 <div className={css.modalContentEditPanelItem}>
                     <ModalContentPanelEditIcon fill="currentColor" />
@@ -295,17 +306,7 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                 >
                     <ModalContentPanelAddTextIcon fill="currentColor" />
                 </div>
-                {isDrawingEnabled && (
-                    <div className={css.drawContainer}>
-                        <input
-                            type="color"
-                            className={css.colorInput}
-                            value={drawingColor}
-                            onChange={(e) => setDrawingColor(e.target.value)}
-                            style={{ marginLeft: "8px" }}
-                        />
-                    </div>
-                )}
+
                 {isAddingText && (
                     <div
                         className={css.addTextContainer}
