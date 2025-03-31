@@ -35,8 +35,8 @@ interface EncodedSample {
 }
 
 const formatMapping: Record<string, { codec: string; mimeType: string }> = {
-    mp4: { codec: "avc1.640028", mimeType: "video/mp4" },
-    webm: { codec: "avc1.640028", mimeType: "video/mp4" },
+    mp4: { codec: "avc1.42001f", mimeType: "video/mp4" },
+    webm: { codec: "avc1.42001f", mimeType: "video/mp4" },
 };
 
 function getUint32BE(data: Uint8Array, offset: number): number {
@@ -58,15 +58,8 @@ function isAnnexB(data: Uint8Array): boolean {
 
 function parseAvcC(config: Uint8Array): { sps: Uint8Array | null; pps: Uint8Array | null } {
     let offset = 0;
-    if (config.length < 7) {
-        return { sps: null, pps: null };
-    }
-
-    offset += 1;
-    offset += 1;
-    offset += 1;
-    offset += 1;
-    offset += 1;
+    if (config.length < 7) return { sps: null, pps: null };
+    offset += 5; // Skip version, profile, compatibility, level, reserved
     const numSPS = config[offset] & 0x1F;
     offset += 1;
 
@@ -80,9 +73,7 @@ function parseAvcC(config: Uint8Array): { sps: Uint8Array | null; pps: Uint8Arra
         offset += spsLength;
     }
 
-    if (offset >= config.length) {
-        return { sps, pps: null };
-    }
+    if (offset >= config.length) return { sps, pps: null };
 
     const numPPS = config[offset];
     offset += 1;
@@ -104,49 +95,38 @@ function extractSpsPps(samples: EncodedSample[], metadata?: VideoDecoderConfig):
     if (metadata?.description) {
         try {
             const bufferSource = metadata.description;
-            if (!bufferSource) {
-                return { sps: null, pps: null };
-            }
-            let buffer;
+            if (!bufferSource) return { sps: null, pps: null };
+            let buffer: ArrayBuffer;
             if (bufferSource instanceof ArrayBuffer || bufferSource instanceof SharedArrayBuffer) {
                 buffer = bufferSource;
-            } else if (bufferSource && typeof bufferSource === 'object' && 'buffer' in bufferSource) {
+            } else if ('buffer' in bufferSource) {
                 buffer = bufferSource.buffer;
             } else {
                 throw new Error('Unsupported bufferSource type');
             }
             const config = new Uint8Array(buffer);
             const { sps, pps } = parseAvcC(config);
-            if (sps && pps) {
-                return { sps, pps };
-            }
+            if (sps && pps) return { sps, pps };
         } catch (e) {
-            //
+            console.log("[EXTRACT SPS/PPS] Error parsing metadata:", e);
         }
     }
 
     for (const sample of samples.filter(s => s.is_sync)) {
         const data = sample.data;
         let offset = 0;
-
         while (offset + 4 < data.length) {
             const size = getUint32BE(data, offset);
-            if (size <= 0 || offset + 4 + size > data.length) {
-                break;
-            }
+            if (size <= 0 || offset + 4 + size > data.length) break;
             const nalType = data[offset + 4] & 0x1F;
-
             if (nalType === 7) {
                 const sps = data.subarray(offset + 4, offset + 4 + size);
                 const pps = findPps(data, offset + 4 + size);
-                if (sps && pps) {
-                    return { sps, pps };
-                }
+                if (sps && pps) return { sps, pps };
             }
             offset += 4 + size;
         }
     }
-
     return { sps: null, pps: null };
 }
 
@@ -156,7 +136,6 @@ function findPps(data: Uint8Array, start: number): Uint8Array | null {
         const size = getUint32BE(data, offset);
         if (size <= 0 || offset + 4 + size > data.length) break;
         const nalType = data[offset + 4] & 0x1F;
-
         if (nalType === 8) {
             return data.subarray(offset + 4, offset + 4 + size);
         }
@@ -195,17 +174,14 @@ function convertAnnexBToAvcC(data: Uint8Array, sps?: Uint8Array, pps?: Uint8Arra
         if (i + 3 < data.length && data[i] === 0x00 && data[i + 1] === 0x00 && data[i + 2] === 0x00 && data[i + 3] === 0x01) {
             const start = i + 4;
             let end = start;
-
             while (end < data.length - 3) {
                 if (data[end] === 0x00 && data[end + 1] === 0x00 && data[end + 2] === 0x00 && data[end + 3] === 0x01) {
                     break;
                 }
                 end++;
             }
-
             const nalUnit = data.subarray(start, end);
             const size = nalUnit.length;
-
             result.push(
                 (size >> 24) & 0xFF,
                 (size >> 16) & 0xFF,
@@ -213,29 +189,27 @@ function convertAnnexBToAvcC(data: Uint8Array, sps?: Uint8Array, pps?: Uint8Arra
                 size & 0xFF
             );
             result.push(...Array.from(nalUnit));
-
             i = end;
         } else {
             i++;
         }
     }
-
     return new Uint8Array(result);
 }
 
 function createAvcCBox(sps: Uint8Array, pps: Uint8Array): Uint8Array {
     return new Uint8Array([
-        0x01,
-        sps[1],
-        sps[2],
-        sps[3],
-        3,
-        0x01,
-        (sps.length >>> 8) & 0xFF,
+        0x01,          // Version
+        sps[1],        // Profile
+        sps[2],        // Profile compatibility
+        sps[3],        // Level
+        0xFC | 3,      // LengthSizeMinusOne (4 bytes)
+        0xE0 | 1,      // Num of SPS (1)
+        (sps.length >> 8) & 0xFF,
         sps.length & 0xFF,
         ...sps,
-        0x01,
-        (pps.length >>> 8) & 0xFF,
+        1,             // Num of PPS (1)
+        (pps.length >> 8) & 0xFF,
         pps.length & 0xFF,
         ...pps
     ]);
@@ -244,93 +218,112 @@ function createAvcCBox(sps: Uint8Array, pps: Uint8Array): Uint8Array {
 function validateSample(data: Uint8Array): boolean {
     let offset = 0;
     while (offset < data.length) {
-        if (offset + 4 > data.length) {
-            return false;
-        }
+        if (offset + 4 > data.length) return false;
         const size = getUint32BE(data, offset);
-        if (size <= 0) {
-            return false;
-        }
+        if (size <= 0) return false;
         const end = offset + 4 + size;
-        if (end > data.length) {
-            return false;
-        }
+        if (end > data.length) return false;
         offset = end;
     }
     return true;
 }
 
+async function getVideoMetadata(videoUrl: string): Promise<{ width: number; height: number; frameRate: number; duration: number }> {
+    return new Promise((resolve, reject) => {
+        const tempVideo = document.createElement("video");
+        tempVideo.src = videoUrl;
+        tempVideo.muted = true;
+        tempVideo.preload = "metadata";
+        tempVideo.style.display = "none";
+        document.body.appendChild(tempVideo);
+
+        tempVideo.addEventListener("loadedmetadata", () => {
+            const width = tempVideo.videoWidth;
+            const height = tempVideo.videoHeight;
+            const duration = tempVideo.duration;
+
+            const stream = tempVideo.captureStream();
+            const [videoTrack] = stream.getVideoTracks();
+            const settings = videoTrack?.getSettings();
+            const frameRate = settings?.frameRate || 30;
+            videoTrack?.stop();
+
+            document.body.removeChild(tempVideo);
+            console.log("[METADATA] Extracted: width=", width, "height=", height, "frameRate=", frameRate, "duration=", duration);
+            resolve({ width, height, frameRate, duration });
+        });
+
+        tempVideo.addEventListener("error", () => {
+            document.body.removeChild(tempVideo);
+            reject(new Error("Failed to load video metadata"));
+        });
+    });
+}
+
 async function muxWithMP4Box(samples: EncodedSample[], encoderConfig: VideoEncoderConfig, metadata?: VideoDecoderConfig): Promise<Blob> {
     return new Promise((resolve, reject) => {
         if (samples.length === 0) {
+            console.log("[MUX] No samples provided for multiplexing");
             reject(new Error("No samples to multiplex"));
             return;
         }
+        console.log("[MUX] Starting multiplexing with", samples.length, "samples");
 
         const mp4boxFile = MP4Box.createFile();
+
         const { sps, pps } = extractSpsPps(samples, metadata);
         if (!sps || !pps) {
+            console.log("[MUX] Failed to extract SPS or PPS");
             reject(new Error("Failed to extract SPS or PPS for avcC creation"));
             return;
         }
 
         const avcProfile = sps[1].toString(16).padStart(2, '0');
         const avcLevel = sps[3].toString(16).padStart(2, '0');
-
         const avcCArray = createAvcCBox(sps, pps);
         const avcCBuffer = avcCArray.buffer.slice(
             avcCArray.byteOffset,
             avcCArray.byteOffset + avcCArray.byteLength
         );
 
+        const timescale = 90000;
         const totalDurationMicroseconds = samples[samples.length - 1].timestamp + samples[samples.length - 1].duration - samples[0].timestamp;
-        const totalDurationTimescale = Math.round((totalDurationMicroseconds / 1000000) * 90000);
+        const totalDurationTimescale = Math.round((totalDurationMicroseconds / 1000000) * timescale);
+        console.log("[MUX] Total duration (microseconds):", totalDurationMicroseconds, "timescale:", totalDurationTimescale);
 
         const trackOptions = {
-            type: "avc1",
-            timescale: 90000,
+            timescale: timescale,
             width: encoderConfig.width,
             height: encoderConfig.height,
             codec: `avc1.${avcProfile}00${avcLevel}`,
             duration: totalDurationTimescale,
-            media_duration: totalDurationTimescale,
             avcDecoderConfigRecord: avcCBuffer
         };
 
         let trackId;
         try {
             trackId = mp4boxFile.addTrack(trackOptions);
-            if (!trackId || typeof trackId !== 'number') {
-                throw new Error("Track not created, invalid ID returned: " + trackId);
-            }
+            console.log("[MUX] Track added with ID:", trackId);
         } catch (e) {
+            console.log("[MUX] Error adding track:", e);
             reject(new Error("Track creation error: " + (e.message || "unknown error")));
             return;
         }
 
-        mp4boxFile.onReady = (info) => {
-            try {
-                const buffer = mp4boxFile.getBuffer();
-                const blob = new Blob([buffer], { type: "video/mp4" });
-                resolve(blob);
-            } catch (e) {
-                reject(new Error(`Buffer retrieval error: ${e.message}`));
-            }
-        };
-
         mp4boxFile.onError = (e) => {
+            console.log("[MUX] MP4Box error:", e);
             reject(new Error(`MP4Box error: ${e}`));
         };
 
-        mp4boxFile.start();
-
         samples.forEach((sample, i) => {
             if (!validateSample(sample.data)) {
+                console.log("[MUX] Invalid sample at index:", i);
                 reject(new Error(`Invalid sample at index ${i}`));
                 return;
             }
-            const dts = Math.round((sample.timestamp / 1000000) * 90000);
-            const duration = Math.round((sample.duration / 1000000) * 90000);
+            const dts = Math.round((sample.timestamp / 1000000) * timescale);
+            const duration = Math.round((sample.duration / 1000000) * timescale);
+            console.log(`[MUX] Adding sample ${i}: dts=${dts}, duration=${duration}, is_sync=${sample.is_sync}, data length=${sample.data.length}`);
             mp4boxFile.addSample(trackId, sample.data, {
                 duration: duration,
                 dts: dts,
@@ -338,41 +331,41 @@ async function muxWithMP4Box(samples: EncodedSample[], encoderConfig: VideoEncod
                 is_sync: sample.is_sync,
             });
         });
+        console.log("[MUX] All samples added");
 
         try {
             mp4boxFile.flush();
+            console.log("[MUX] MP4Box flushed");
             const buffer = mp4boxFile.getBuffer();
+            console.log("[MUX] Buffer retrieved, size:", buffer.byteLength);
+            if (buffer.byteLength === 0) {
+                throw new Error("Generated buffer is empty");
+            }
             const blob = new Blob([buffer], { type: "video/mp4" });
+            console.log("[MUX] Blob created, size:", blob.size);
             resolve(blob);
         } catch (e) {
+            console.log("[MUX] Error during flush or buffer retrieval:", e);
             reject(new Error(`Completion error: ${e.message}`));
         }
     });
 }
 
-async function fallbackExtractFrames(startTime: number, endTime: number, videoUrl: string): Promise<VideoFrame[]> {
-    const abortController = new AbortController();
+async function fallbackExtractFrames(startTime: number, endTime: number, videoUrl: string, frameRate: number): Promise<VideoFrame[]> {
     const frames: VideoFrame[] = [];
+    const tempVideo = document.createElement("video");
+    tempVideo.src = videoUrl;
+    tempVideo.muted = true;
+    tempVideo.playsInline = true;
+    tempVideo.crossOrigin = "anonymous";
+    tempVideo.style.display = "none";
+    document.body.appendChild(tempVideo);
 
     return new Promise((resolve, reject) => {
-        const tempVideo = document.createElement("video");
-        tempVideo.src = videoUrl;
-        tempVideo.muted = true;
-        tempVideo.playsInline = true;
-        tempVideo.crossOrigin = "anonymous";
-        tempVideo.style.display = "none";
-        document.body.appendChild(tempVideo);
-
-        tempVideo.addEventListener("abort", () => {
-            frames.forEach(frame => frame.close());
-            document.body.removeChild(tempVideo);
-            reject(new Error("Extraction aborted"));
-        }, { signal: abortController.signal });
-
-        let frameRate = 30;
         let baseTimestamp = 0;
 
         tempVideo.addEventListener("loadedmetadata", async () => {
+            console.log("[EXTRACT] Metadata loaded, duration:", tempVideo.duration);
             tempVideo.currentTime = startTime;
             await new Promise<void>((res) => (tempVideo.onseeked = () => res()));
         });
@@ -381,14 +374,9 @@ async function fallbackExtractFrames(startTime: number, endTime: number, videoUr
             try {
                 const stream = tempVideo.captureStream();
                 const [videoTrack] = stream.getVideoTracks();
-                if (!videoTrack) {
-                    document.body.removeChild(tempVideo);
-                    frames.forEach(frame => frame.close());
-                    return reject(new Error("No video track"));
-                }
+                if (!videoTrack) throw new Error("No video track");
 
-                const settings = videoTrack.getSettings();
-                frameRate = settings.frameRate || 30;
+                console.log("[EXTRACT] Using frame rate:", frameRate);
 
                 const processor = new MediaStreamTrackProcessor({ track: videoTrack });
                 const reader = processor.readable.getReader();
@@ -397,9 +385,7 @@ async function fallbackExtractFrames(startTime: number, endTime: number, videoUr
 
                 while (true) {
                     const { value, done } = await reader.read();
-                    if (done) {
-                        break;
-                    }
+                    if (done) break;
                     if (!value) continue;
 
                     const frameTime = (value.timestamp + baseTimestamp) / 1e6;
@@ -407,22 +393,20 @@ async function fallbackExtractFrames(startTime: number, endTime: number, videoUr
                         frames.push(value);
                     } else {
                         value.close();
-                        if (frameTime > endTime) {
-                            break;
-                        }
+                        if (frameTime > endTime) break;
                     }
 
-                    if (tempVideo.currentTime > endTime) {
-                        break;
-                    }
+                    if (tempVideo.currentTime > endTime) break;
                 }
 
                 reader.releaseLock();
                 videoTrack.stop();
                 tempVideo.pause();
                 document.body.removeChild(tempVideo);
+                console.log("[EXTRACT] Extraction completed, total frames:", frames.length);
                 resolve(frames);
             } catch (e) {
+                console.log("[EXTRACT] Error:", e);
                 frames.forEach(frame => frame.close());
                 document.body.removeChild(tempVideo);
                 reject(e);
@@ -430,6 +414,7 @@ async function fallbackExtractFrames(startTime: number, endTime: number, videoUr
         });
 
         tempVideo.addEventListener("error", () => {
+            console.log("[EXTRACT] Video loading error");
             frames.forEach(frame => frame.close());
             document.body.removeChild(tempVideo);
             reject(new Error("Video loading error"));
@@ -463,14 +448,14 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
     const [url, setUrl] = useState(initialUrl);
 
     useEffect(() => {
+        console.log("VideoEncoder supported:", 'VideoEncoder' in window);
         return () => {
-            if (currentBlobUrl) {
-                URL.revokeObjectURL(currentBlobUrl);
-            }
+            if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
             if (encoderRef.current) {
                 encoderRef.current.close();
                 encoderRef.current = null;
             }
+            console.log("[CLEANUP] Component unmounted, resources cleaned");
         };
     }, [currentBlobUrl]);
 
@@ -494,9 +479,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
     const handleTimeUpdate = () => {
         if (!videoRef.current) return;
         const { currentTime, duration } = videoRef.current;
-        if (!isNaN(duration)) {
-            setProgress((currentTime / duration) * 100);
-        }
+        if (!isNaN(duration)) setProgress((currentTime / duration) * 100);
     };
 
     const updateVideoTime = (clientX: number) => {
@@ -525,11 +508,8 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
             } else {
                 const diffStart = Math.abs(time - cutStart!);
                 const diffEnd = Math.abs(time - cutEnd!);
-                if (diffStart < diffEnd) {
-                    setCutStart(time);
-                } else {
-                    setCutEnd(time);
-                }
+                if (diffStart < diffEnd) setCutStart(time);
+                else setCutEnd(time);
             }
             return;
         }
@@ -543,9 +523,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
             updateVideoTime((e as unknown as MouseEvent).clientX);
         };
         const handleMouseUp = () => {
-            if (isDraggingProgress) {
-                setIsDraggingProgress(false);
-            }
+            if (isDraggingProgress) setIsDraggingProgress(false);
         };
         window.addEventListener("mousemove", handleMouseMove);
         window.addEventListener("mouseup", handleMouseUp);
@@ -590,17 +568,13 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
     }, [videoDimensions]);
 
     const updatePlaybackRate = (rate: number) => {
-        if (videoRef.current) {
-            videoRef.current.playbackRate = rate;
-        }
+        if (videoRef.current) videoRef.current.playbackRate = rate;
         setShowSpeedPopup(false);
     };
 
-    const lowerExt = fileExt.toLowerCase();
-    const mapping = formatMapping[lowerExt] || formatMapping["mp4"];
-
     const handleCutVideo = async () => {
         if (cutStart === null || cutEnd === null || cutEnd <= cutStart) {
+            console.log("[CUT] Invalid cut times: cutStart=", cutStart, "cutEnd=", cutEnd);
             alert("Please set valid start and end times for cutting.");
             return;
         }
@@ -613,27 +587,34 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
         setCutProgress(0);
         setCutError(null);
         setCutStage("Starting cut");
+        console.log("[CUT] Starting cut from", cutStart, "to", cutEnd);
 
         try {
+            // Получение метаданных видео
+            setCutStage("Extracting metadata");
+            const { width, height, frameRate, duration } = await getVideoMetadata(url);
+            console.log("[CUT] Metadata extracted: width=", width, "height=", height, "frameRate=", frameRate, "duration=", duration);
+
             setCutStage("Extracting frames");
-            frames = await fallbackExtractFrames(cutStart, cutEnd, url);
+            console.log("[CUT] Calling fallbackExtractFrames with frameRate:", frameRate);
+            frames = await fallbackExtractFrames(cutStart, cutEnd, url, frameRate);
             if (frames.length === 0) {
+                console.log("[CUT] No frames extracted");
                 throw new Error("No frames found in the selected range.");
             }
+            console.log("[CUT] Frames extracted:", frames.length);
             validateVideoParameters(frames[0].codedWidth, frames[0].codedHeight);
             setCutProgress(30);
 
-            const frameRate = frames.length > 1
-                ? Math.round(1e6 / ((frames[1].timestamp - frames[0].timestamp) || 1e6 / 30))
-                : 30;
             const frameDuration = 1e6 / frameRate;
+            console.log("[CUT] Calculated frame duration:", frameDuration);
 
             setCutStage("Encoding");
             const encodedSamplesOut: EncodedSample[] = [];
             let encoderMetadata: VideoDecoderConfig & { sps?: Uint8Array; pps?: Uint8Array } | undefined;
 
             const encoderConfig: VideoEncoderConfig = {
-                codec: "avc1.640028",
+                codec: "avc1.42001f", // Используем кодек из formatMapping
                 width: frames[0].codedWidth,
                 height: frames[0].codedHeight,
                 bitrate: 2_000_000,
@@ -644,6 +625,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
             };
 
             const support = await VideoEncoder.isConfigSupported(encoderConfig);
+            console.log("[CUT] Encoder support:", support.supported);
             if (!support.supported) {
                 throw new Error("H.264 encoding not supported");
             }
@@ -654,11 +636,11 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                         if (metadata?.decoderConfig) {
                             const { sps, pps } = extractSpsPps([], metadata.decoderConfig);
                             encoderMetadata = { ...metadata.decoderConfig, sps, pps };
+                            console.log("[ENCODE] Metadata received:", encoderMetadata);
                         }
 
                         const data = new Uint8Array(chunk.byteLength);
                         chunk.copyTo(data);
-
                         const convertedData = convertAnnexBToAvcC(data, encoderMetadata?.sps, encoderMetadata?.pps);
 
                         const frameIndex = encodedSamplesOut.length;
@@ -671,46 +653,56 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                             timestamp: timestamp,
                             is_sync: chunk.type === "key",
                         });
+                        console.log(`[ENCODE] Sample encoded ${frameIndex}: timestamp=${timestamp}, duration=${duration}, is_sync=${chunk.type === "key"}, data length=${convertedData.length}`);
                     },
                     error: (e) => {
+                        console.log("[ENCODE] Encoder error:", e);
                         reject(e);
                     },
                 });
 
                 encoderRef.current = encoder;
                 encoder.configure(encoderConfig);
+                console.log("[ENCODE] Encoder configured:", encoderConfig);
 
                 (async () => {
                     let processedFrames = 0;
                     try {
                         for (let i = 0; i < frames.length; i++) {
                             if (!isProcessingRef.current) {
+                                console.log("[ENCODE] Encoding aborted");
                                 throw new Error("Encoding aborted");
                             }
                             const frame = frames[i];
-                            const keyFrame = i % 15 === 0;
-                            encoder.encode(frame, { keyFrame });
+                            encoder.encode(frame);
                             frame.close();
                             processedFrames = i + 1;
+                            console.log(`[ENCODE] Frame ${i} encoded, total processed: ${processedFrames}`);
                             setCutProgress(30 + Math.round((i / frames.length) * 70));
                             await new Promise((res) => setTimeout(res, 5));
                         }
+                        await encoder.flush();
+                        console.log("[ENCODE] Encoder flushed");
                     } catch (e) {
+                        console.log("[ENCODE] Error during encoding loop:", e);
                         frames.slice(processedFrames).forEach(f => f.close());
                         throw e;
                     } finally {
                         if (encoder) {
-                            await encoder.flush();
                             encoder.close();
                             encoderRef.current = null;
+                            console.log("[ENCODE] Encoder closed");
                         }
                     }
+                    console.log("[ENCODE] Encoding completed, total samples:", encodedSamplesOut.length);
                     resolve();
                 })();
             });
 
             setCutStage("Multiplexing");
+            console.log("[CUT] Starting multiplexing with", encodedSamplesOut.length, "samples");
             const outputBlob = await muxWithMP4Box(encodedSamplesOut, encoderConfig, encoderMetadata);
+            console.log("[CUT] Multiplexing completed, Blob size:", outputBlob.size);
             const fragmentUrl = URL.createObjectURL(outputBlob);
             if (currentBlobUrl) {
                 URL.revokeObjectURL(currentBlobUrl);
@@ -727,7 +719,10 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                 source.type = "video/mp4";
                 videoRef.current.appendChild(source);
                 await new Promise<void>((resolve) => {
-                    videoRef.current!.onloadedmetadata = () => resolve();
+                    videoRef.current!.onloadedmetadata = () => {
+                        console.log("[CUT] Cut video metadata loaded");
+                        resolve();
+                    };
                     videoRef.current!.load();
                 });
                 videoRef.current.currentTime = 0;
@@ -735,7 +730,9 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                 try {
                     await videoRef.current.play();
                     setIsPlaying(true);
+                    console.log("[CUT] Cut video playing");
                 } catch (err) {
+                    console.log("[CUT] Error playing cut video:", err);
                     setIsPlaying(false);
                 }
             }
@@ -745,7 +742,9 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
             setIsCutting(false);
             setCutStart(null);
             setCutEnd(null);
+            console.log("[CUT] Cutting completed successfully");
         } catch (error: any) {
+            console.log("[CUT] Cutting error:", error);
             setCutError(error.message || "Unknown error");
             alert("An error occurred: " + (error.message || "Unknown error"));
             setTimeout(() => {
@@ -759,6 +758,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
             }
             isProcessingRef.current = false;
             setIsProcessingCut(false);
+            console.log("[CUT] Cleanup completed");
         }
     };
 
@@ -770,6 +770,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
         setCutProgress(0);
         setCutStage("");
         setCutError(null);
+        console.log("[CUT] Cutting cancelled");
     };
 
     return createPortal(
@@ -836,9 +837,8 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                 <div
                     className={css.modalContentEditPanelItem}
                     onClick={() => {
-                        if (isCutting) {
-                            cancelCutting();
-                        } else {
+                        if (isCutting) cancelCutting();
+                        else {
                             if (videoRef.current) {
                                 setCutStart(0);
                                 setCutEnd(videoRef.current.duration);
