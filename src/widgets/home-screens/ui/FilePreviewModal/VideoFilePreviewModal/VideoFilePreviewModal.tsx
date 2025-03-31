@@ -260,95 +260,120 @@ async function getVideoMetadata(videoUrl: string): Promise<{ width: number; heig
     });
 }
 
-async function muxWithMP4Box(samples: EncodedSample[], encoderConfig: VideoEncoderConfig, metadata?: VideoDecoderConfig): Promise<Blob> {
-    return new Promise((resolve, reject) => {
-        if (samples.length === 0) {
-            console.log("[MUX] No samples provided for multiplexing");
-            reject(new Error("No samples to multiplex"));
-            return;
+async function muxWithMP4Box(
+    samples: EncodedSample[],
+    encoderConfig: VideoEncoderConfig,
+    metadata?: VideoDecoderConfig,
+    options: { log?: (message: string) => void } = {}
+): Promise<Blob> {
+    const log = options.log || ((msg: string) => console.log(`[MUX] ${msg}`));
+
+    if (!samples?.length) {
+        log("No samples provided for multiplexing");
+        throw new Error("No samples to multiplex");
+    }
+    log(`Starting multiplexing with ${samples.length} samples`);
+
+    const mp4boxFile = MP4Box.createFile();
+
+    const { sps, pps } = extractSpsPps(samples, metadata);
+    if (!sps || !pps) {
+        log("Failed to extract SPS or PPS");
+        throw new Error("Failed to extract SPS or PPS for avcC creation");
+    }
+
+    const avcProfile = sps[1].toString(16).padStart(2, "0");
+    const avcLevel = sps[3].toString(16).padStart(2, "0");
+    const avcCArray = createAvcCBox(sps, pps);
+    const avcCBuffer = avcCArray.buffer.slice(
+        avcCArray.byteOffset,
+        avcCArray.byteOffset + avcCArray.byteLength
+    );
+
+    const timescale = 90000;
+    const totalDurationMicroseconds =
+        samples[samples.length - 1].timestamp +
+        samples[samples.length - 1].duration -
+        samples[0].timestamp;
+    if (totalDurationMicroseconds < 0) {
+        throw new Error("Invalid total duration: negative value");
+    }
+    const totalDurationTimescale = Math.round(
+        (totalDurationMicroseconds / 1_000_000) * timescale
+    );
+    log(`Total duration (microseconds): ${totalDurationMicroseconds}, timescale: ${totalDurationTimescale}`);
+
+    const trackOptions = {
+        timescale,
+        width: encoderConfig.width,
+        height: encoderConfig.height,
+        codec: `avc1.${avcProfile}00${avcLevel}`,
+        duration: totalDurationTimescale,
+        avcDecoderConfigRecord: avcCBuffer,
+    };
+
+    let trackId: number;
+    try {
+        trackId = mp4boxFile.addTrack(trackOptions);
+        log(`Track added with ID: ${trackId}`);
+    } catch (e) {
+        log(`Error adding track: ${e instanceof Error ? e.message : String(e)}`);
+        throw new Error(`Track creation error: ${e instanceof Error ? e.message : "unknown error"}`);
+    }
+
+    mp4boxFile.onError = (e: string) => {
+        log(`MP4Box error: ${e}`);
+        throw new Error(`MP4Box error: ${e}`);
+    };
+
+    // Добавление сэмплов с проверками
+    let lastDts = -Infinity;
+    for (let i = 0; i < samples.length; i++) {
+        const sample = samples[i];
+        if (!validateSample(sample.data)) {
+            log(`Invalid sample at index: ${i}`);
+            throw new Error(`Invalid sample at index ${i}`);
         }
-        console.log("[MUX] Starting multiplexing with", samples.length, "samples");
 
-        const mp4boxFile = MP4Box.createFile();
+        const dts = Math.round((sample.timestamp / 1_000_000) * timescale);
+        const duration = Math.round((sample.duration / 1_000_000) * timescale);
 
-        const { sps, pps } = extractSpsPps(samples, metadata);
-        if (!sps || !pps) {
-            console.log("[MUX] Failed to extract SPS or PPS");
-            reject(new Error("Failed to extract SPS or PPS for avcC creation"));
-            return;
+        // Проверка временной последовательности
+        if (dts <= lastDts) {
+            log(`Non-monotonic DTS at index ${i}: ${dts} <= ${lastDts}`);
+            throw new Error(`Non-monotonic DTS at index ${i}`);
+        }
+        if (duration <= 0) {
+            log(`Invalid duration at index ${i}: ${duration}`);
+            throw new Error(`Invalid duration at index ${i}`);
         }
 
-        const avcProfile = sps[1].toString(16).padStart(2, '0');
-        const avcLevel = sps[3].toString(16).padStart(2, '0');
-        const avcCArray = createAvcCBox(sps, pps);
-        const avcCBuffer = avcCArray.buffer.slice(
-            avcCArray.byteOffset,
-            avcCArray.byteOffset + avcCArray.byteLength
-        );
-
-        const timescale = 90000;
-        const totalDurationMicroseconds = samples[samples.length - 1].timestamp + samples[samples.length - 1].duration - samples[0].timestamp;
-        const totalDurationTimescale = Math.round((totalDurationMicroseconds / 1000000) * timescale);
-        console.log("[MUX] Total duration (microseconds):", totalDurationMicroseconds, "timescale:", totalDurationTimescale);
-
-        const trackOptions = {
-            timescale: timescale,
-            width: encoderConfig.width,
-            height: encoderConfig.height,
-            codec: `avc1.${avcProfile}00${avcLevel}`,
-            duration: totalDurationTimescale,
-            avcDecoderConfigRecord: avcCBuffer
-        };
-
-        let trackId;
-        try {
-            trackId = mp4boxFile.addTrack(trackOptions);
-            console.log("[MUX] Track added with ID:", trackId);
-        } catch (e) {
-            console.log("[MUX] Error adding track:", e);
-            reject(new Error("Track creation error: " + (e.message || "unknown error")));
-            return;
-        }
-
-        mp4boxFile.onError = (e) => {
-            console.log("[MUX] MP4Box error:", e);
-            reject(new Error(`MP4Box error: ${e}`));
-        };
-
-        samples.forEach((sample, i) => {
-            if (!validateSample(sample.data)) {
-                console.log("[MUX] Invalid sample at index:", i);
-                reject(new Error(`Invalid sample at index ${i}`));
-                return;
-            }
-            const dts = Math.round((sample.timestamp / 1000000) * timescale);
-            const duration = Math.round((sample.duration / 1000000) * timescale);
-            console.log(`[MUX] Adding sample ${i}: dts=${dts}, duration=${duration}, is_sync=${sample.is_sync}, data length=${sample.data.length}`);
-            mp4boxFile.addSample(trackId, sample.data, {
-                duration: duration,
-                dts: dts,
-                cts: dts,
-                is_sync: sample.is_sync,
-            });
+        lastDts = dts;
+        log(`Adding sample ${i}: dts=${dts}, duration=${duration}, is_sync=${sample.is_sync}, data length=${sample.data.length}`);
+        mp4boxFile.addSample(trackId, sample.data, {
+            duration,
+            dts,
+            cts: dts, // CTS может отличаться при B-frames, но здесь упрощенно
+            is_sync: sample.is_sync,
         });
-        console.log("[MUX] All samples added");
+    }
+    log("All samples added");
 
-        try {
-            mp4boxFile.flush();
-            console.log("[MUX] MP4Box flushed");
-            const buffer = mp4boxFile.getBuffer();
-            console.log("[MUX] Buffer retrieved, size:", buffer.byteLength);
-            if (buffer.byteLength === 0) {
-                throw new Error("Generated buffer is empty");
-            }
-            const blob = new Blob([buffer], { type: "video/mp4" });
-            console.log("[MUX] Blob created, size:", blob.size);
-            resolve(blob);
-        } catch (e) {
-            console.log("[MUX] Error during flush or buffer retrieval:", e);
-            reject(new Error(`Completion error: ${e.message}`));
+    try {
+        mp4boxFile.flush();
+        log("MP4Box flushed");
+        const buffer = mp4boxFile.getBuffer();
+        log(`Buffer retrieved, size: ${buffer.byteLength}`);
+        if (buffer.byteLength === 0) {
+            throw new Error("Generated buffer is empty");
         }
-    });
+        const blob = new Blob([buffer], { type: "video/mp4" });
+        log(`Blob created, size: ${blob.size}`);
+        return blob;
+    } catch (e) {
+        log(`Error during flush or buffer retrieval: ${e instanceof Error ? e.message : String(e)}`);
+        throw new Error(`Completion error: ${e instanceof Error ? e.message : "unknown error"}`);
+    }
 }
 
 async function fallbackExtractFrames(startTime: number, endTime: number, videoUrl: string, frameRate: number): Promise<VideoFrame[]> {
@@ -361,56 +386,39 @@ async function fallbackExtractFrames(startTime: number, endTime: number, videoUr
     tempVideo.style.display = "none";
     document.body.appendChild(tempVideo);
 
-    return new Promise((resolve, reject) => {
-        let baseTimestamp = 0;
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Failed to get canvas context");
 
+    return new Promise((resolve, reject) => {
         tempVideo.addEventListener("loadedmetadata", async () => {
             console.log("[EXTRACT] Metadata loaded, duration:", tempVideo.duration);
-            tempVideo.currentTime = startTime;
-            await new Promise<void>((res) => (tempVideo.onseeked = () => res()));
-        });
+            canvas.width = tempVideo.videoWidth;
+            canvas.height = tempVideo.videoHeight;
 
-        tempVideo.addEventListener("seeked", async () => {
-            try {
-                const stream = tempVideo.captureStream();
-                const [videoTrack] = stream.getVideoTracks();
-                if (!videoTrack) throw new Error("No video track");
+            const frameInterval = 1 / frameRate; // e.g., 1/30 = 0.03333s
+            let currentTime = startTime;
+            let timestamp = 0;
 
-                console.log("[EXTRACT] Using frame rate:", frameRate);
+            while (currentTime <= endTime) {
+                tempVideo.currentTime = currentTime;
+                await new Promise<void>((res) => (tempVideo.onseeked = () => res()));
 
-                const processor = new MediaStreamTrackProcessor({ track: videoTrack });
-                const reader = processor.readable.getReader();
-                baseTimestamp = startTime * 1e6;
-                await tempVideo.play();
+                ctx.drawImage(tempVideo, 0, 0, canvas.width, canvas.height);
+                const frame = new VideoFrame(canvas, {
+                    timestamp: timestamp * 1e6, // Convert to microseconds
+                    duration: frameInterval * 1e6,
+                });
 
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) break;
-                    if (!value) continue;
-
-                    const frameTime = (value.timestamp + baseTimestamp) / 1e6;
-                    if (frameTime >= startTime && frameTime <= endTime) {
-                        frames.push(value);
-                    } else {
-                        value.close();
-                        if (frameTime > endTime) break;
-                    }
-
-                    if (tempVideo.currentTime > endTime) break;
-                }
-
-                reader.releaseLock();
-                videoTrack.stop();
-                tempVideo.pause();
-                document.body.removeChild(tempVideo);
-                console.log("[EXTRACT] Extraction completed, total frames:", frames.length);
-                resolve(frames);
-            } catch (e) {
-                console.log("[EXTRACT] Error:", e);
-                frames.forEach(frame => frame.close());
-                document.body.removeChild(tempVideo);
-                reject(e);
+                frames.push(frame);
+                console.log(`[EXTRACT] Frame added: timestamp=${frame.timestamp}, time=${currentTime}`);
+                currentTime += frameInterval;
+                timestamp += frameInterval;
             }
+
+            document.body.removeChild(tempVideo);
+            console.log("[EXTRACT] Extraction completed, total frames:", frames.length);
+            resolve(frames);
         });
 
         tempVideo.addEventListener("error", () => {
@@ -590,7 +598,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
         console.log("[CUT] Starting cut from", cutStart, "to", cutEnd);
 
         try {
-            // Получение метаданных видео
+            // Extract metadata
             setCutStage("Extracting metadata");
             const { width, height, frameRate, duration } = await getVideoMetadata(url);
             console.log("[CUT] Metadata extracted: width=", width, "height=", height, "frameRate=", frameRate, "duration=", duration);
@@ -614,13 +622,13 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
             let encoderMetadata: VideoDecoderConfig & { sps?: Uint8Array; pps?: Uint8Array } | undefined;
 
             const encoderConfig: VideoEncoderConfig = {
-                codec: "avc1.42001f", // Используем кодек из formatMapping
+                codec: "avc1.42001f",
                 width: frames[0].codedWidth,
                 height: frames[0].codedHeight,
-                bitrate: 2_000_000,
+                bitrate: 5_000_000,
                 framerate: frameRate,
                 latencyMode: "quality",
-                hardwareAcceleration: "prefer-hardware",
+                hardwareAcceleration: "no-preference",
                 avc: { format: "avc" },
             };
 
@@ -646,6 +654,12 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                         const frameIndex = encodedSamplesOut.length;
                         const timestamp = frameIndex === 0 ? 0 : encodedSamplesOut[frameIndex - 1].timestamp + encodedSamplesOut[frameIndex - 1].duration;
                         const duration = frames[frameIndex]?.duration || frameDuration;
+
+                        // Логирование первых байт для диагностики
+                        const dataPreview = Array.from(convertedData.slice(0, Math.min(10, convertedData.length)))
+                            .map(b => b.toString(16).padStart(2, "0"))
+                            .join(" ");
+                        console.log(`[ENCODE] Sample ${frameIndex} data preview: ${dataPreview}`);
 
                         encodedSamplesOut.push({
                             data: convertedData,
@@ -674,10 +688,11 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                                 throw new Error("Encoding aborted");
                             }
                             const frame = frames[i];
-                            encoder.encode(frame);
+                            const isKeyFrame = i % 30 === 0; // Ключевой кадр каждые 30 кадров
+                            console.log(`[ENCODE] Encoding frame ${i}: timestamp=${frame.timestamp}, isKeyFrame=${isKeyFrame}`);
+                            encoder.encode(frame, { keyFrame: isKeyFrame });
                             frame.close();
                             processedFrames = i + 1;
-                            console.log(`[ENCODE] Frame ${i} encoded, total processed: ${processedFrames}`);
                             setCutProgress(30 + Math.round((i / frames.length) * 70));
                             await new Promise((res) => setTimeout(res, 5));
                         }
@@ -709,6 +724,15 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
             }
             setCurrentBlobUrl(fragmentUrl);
             setUrl(fragmentUrl);
+
+            // Download the cut video
+            const downloadLink = document.createElement("a");
+            downloadLink.href = fragmentUrl;
+            downloadLink.download = `${fileName}_cut_${cutStart}-${cutEnd}.mp4`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            console.log("[DOWNLOAD] Cut video downloaded as", downloadLink.download);
 
             if (videoRef.current) {
                 while (videoRef.current.firstChild) {
