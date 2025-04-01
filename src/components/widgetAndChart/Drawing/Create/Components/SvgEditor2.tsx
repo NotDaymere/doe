@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
 import "./Editor.less";
@@ -20,6 +22,11 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     const [strokeWidth, setStrokeWidth] = useState(1);
     const [opacityValue, setOpacityValue] = useState(100);
     const [showMoreTools, setShowMoreTools] = useState(false);
+    const [drawingcolor, setDrawingColor] = useState("#000000");
+    const [activeTool, setActiveTool] = useState("");
+    const isLassoDrawing = useRef(false);
+    const lassoPoints = useRef([]);
+    const lassoPath = useRef(null);
 
     useEffect(() => {
         // Initialize Fabric.js canvas
@@ -97,31 +104,47 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         addText();
     };
 
-    const enableDrawingMode = () => {
+    const enableDrawingMode = (color = drawingcolor, width = strokeWidth) => {
         setIsDrawingMode(true);
         fabricCanvas.current.isDrawingMode = true;
         fabricCanvas.current.freeDrawingBrush = new fabric.PencilBrush(fabricCanvas.current);
-        fabricCanvas.current.freeDrawingBrush.color = "red";
-        fabricCanvas.current.freeDrawingBrush.width = 3;
+        fabricCanvas.current.freeDrawingBrush.color = color;
+        fabricCanvas.current.freeDrawingBrush.width = width;
+        fabricCanvas.current.renderAll();
     };
 
     const disableDrawingMode = () => {
         setIsDrawingMode(false);
         fabricCanvas.current.isDrawingMode = false;
     };
-    const toggleSelectionMode = () => {
+    const toggleSelectionMode = (toolName) => {
+        setActiveTool(toolName);
         disableDrawingMode();
+        setIsEraserMode(false);
         fabricCanvas.current.selection = true;
         fabricCanvas.current.forEachObject((obj) => (obj.selectable = true));
     };
 
-    const toggleLassoSelection = () => {
+    const toggleLassoSelection = (toolName) => {
+        setActiveTool(toolName);
         disableDrawingMode();
-        fabricCanvas.current.selection = true;
-        fabricCanvas.current.forEachObject((obj) => (obj.selectable = true));
+        setIsEraserMode(false);
+
+        // Disable the default selection behavior
+        if (fabricCanvas.current) {
+            fabricCanvas.current.selection = false;
+            fabricCanvas.current.defaultCursor = "default";
+            fabricCanvas.current.hoverCursor = "default";
+
+            // Make sure all objects are selectable
+            fabricCanvas.current.forEachObject((obj) => {
+                obj.selectable = true;
+            });
+        }
     };
 
-    const toggleEraserMode = () => {
+    const toggleEraserMode = (toolName) => {
+        setActiveTool(toolName);
         setIsEraserMode((prev) => !prev);
     };
 
@@ -142,7 +165,9 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         };
     }, [isEraserMode]);
 
-    const addShape = (shape) => {
+    const addShape = (shape, toolName) => {
+        disableDrawingMode();
+        setActiveTool(toolName);
         let shapeObject;
         switch (shape) {
             case "circle":
@@ -287,11 +312,14 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     };
 
     const changeColorDrawing = (color) => {
+        setDrawingColor(color);
+
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject) {
             activeObject.set("fill", color);
             fabricCanvas.current.renderAll();
         }
+        enableDrawingMode(color);
     };
 
     // Function to add a quotation to the canvas
@@ -308,21 +336,28 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         fabricCanvas.current.setActiveObject(quote);
         fabricCanvas.current.renderAll();
     };
-    const toggleTexformating = () => {
+    const toggleTexformating = (toolName) => {
+        setActiveTool(toolName);
+        setIsEraserMode(false);
         setIsTextFormat(!isTextFormat);
         setIsDrawingFormat(false);
         setShowMoreTools(false); // reset
+        addText();
         disableDrawingMode();
     };
 
-    const toggleDrawingformating = () => {
+    const toggleDrawingformating = (toolName) => {
+        setActiveTool(toolName);
         setIsTextFormat(false);
         setIsDrawingFormat(!isDrawingFormat);
         setShowMoreTools(false); // reset
         enableDrawingMode();
+        setIsEraserMode(false);
     };
 
     const changeStrokeWidth = (width) => {
+        setStrokeWidth(width);
+        enableDrawingMode();
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject) {
             activeObject.set("strokeWidth", width);
@@ -338,6 +373,187 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             fabricCanvas.current.renderAll();
         }
     };
+
+    // Set up lasso selection
+    useEffect(() => {
+        if (!fabricCanvas.current) return;
+
+        const canvas = fabricCanvas.current;
+
+        // Remove any existing event handlers to avoid duplicates
+        canvas.off("mouse:down");
+        canvas.off("mouse:move");
+        canvas.off("mouse:up");
+
+        // Handle mouse down for lasso selection
+        const handleMouseDown = (opt) => {
+            // Only proceed if lasso tool is active
+            if (activeTool !== "lasso") {
+                if (isEraserMode && opt.target) {
+                    canvas.remove(opt.target);
+                    canvas.renderAll();
+                }
+                return;
+            }
+
+            // Start lasso drawing
+            isLassoDrawing.current = true;
+            lassoPoints.current = [];
+
+            const pointer = canvas.getPointer(opt.e);
+
+            // Store the first point
+            lassoPoints.current.push({ x: pointer.x, y: pointer.y });
+
+            // Create a new path for the lasso
+            lassoPath.current = new fabric.Path(`M ${pointer.x} ${pointer.y}`, {
+                strokeWidth: 2,
+                stroke: "black",
+                strokeDashArray: [5, 5], // This creates a dotted line effect
+                fill: "rgba(0, 0, 0, 0.05)", // Lighter fill
+                selectable: false,
+                evented: false,
+                objectCaching: false,
+            });
+
+            canvas.add(lassoPath.current);
+            canvas.renderAll();
+        };
+
+        // Handle mouse move for lasso selection
+        const handleMouseMove = (opt) => {
+            if (!isLassoDrawing.current || activeTool !== "lasso") return;
+
+            const pointer = canvas.getPointer(opt.e);
+
+            // Add the point to our collection
+            lassoPoints.current.push({ x: pointer.x, y: pointer.y });
+
+            // Update the path
+            if (lassoPath.current) {
+                lassoPath.current.path.push(["L", pointer.x, pointer.y]);
+                lassoPath.current.setCoords();
+                canvas.renderAll();
+            }
+        };
+
+        // Handle mouse up for lasso selection
+        const handleMouseUp = () => {
+            if (!isLassoDrawing.current || activeTool !== "lasso") return;
+
+            isLassoDrawing.current = false;
+
+            // Close the path
+            if (lassoPoints.current.length > 2 && lassoPath.current) {
+                const firstPoint = lassoPoints.current[0];
+                lassoPath.current.path.push(["L", firstPoint.x, firstPoint.y]);
+                lassoPath.current.path.push(["z"]);
+                lassoPath.current.setCoords();
+                canvas.renderAll();
+
+                // Select objects inside the lasso
+                selectObjectsInLasso();
+            }
+
+            // Remove the lasso path
+            if (lassoPath.current) {
+                canvas.remove(lassoPath.current);
+                canvas.renderAll();
+            }
+
+            lassoPath.current = null;
+        };
+
+        const selectObjectsInLasso = () => {
+            // Deselect all objects
+            canvas.discardActiveObject();
+
+            // Check each object if it's inside the lasso
+            const selectedObjects = [];
+            canvas.forEachObject((obj) => {
+                // Skip the lasso path itself
+                if (obj === lassoPath.current) return;
+
+                if (isObjectInLasso(obj)) {
+                    selectedObjects.push(obj);
+                }
+            });
+
+            if (selectedObjects.length > 0) {
+                // Create a selection of multiple objects
+                const selection = new fabric.ActiveSelection(selectedObjects, {
+                    canvas: canvas,
+                });
+                canvas.setActiveObject(selection);
+            }
+
+            canvas.requestRenderAll();
+        };
+
+        const isObjectInLasso = (obj) => {
+            // Get object bounds
+            const objBounds = obj.getBoundingRect();
+
+            // Check multiple points of the object (center and corners)
+            const points = [
+                // Center
+                {
+                    x: objBounds.left + objBounds.width / 2,
+                    y: objBounds.top + objBounds.height / 2,
+                },
+                // Corners
+                { x: objBounds.left, y: objBounds.top },
+                { x: objBounds.left + objBounds.width, y: objBounds.top },
+                { x: objBounds.left, y: objBounds.top + objBounds.height },
+                { x: objBounds.left + objBounds.width, y: objBounds.top + objBounds.height },
+            ];
+
+            // If any point is inside the polygon, consider the object selected
+            for (const point of points) {
+                if (isPointInPolygon(point)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        const isPointInPolygon = (point) => {
+            const polygon = lassoPoints.current;
+            if (!polygon || polygon.length < 3) return false;
+
+            // Ray casting algorithm
+            let inside = false;
+
+            for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+                const xi = polygon[i].x;
+                const yi = polygon[i].y;
+                const xj = polygon[j].x;
+                const yj = polygon[j].y;
+
+                const intersect =
+                    yi > point.y !== yj > point.y &&
+                    point.x < ((xj - xi) * (point.y - yi)) / (yj - yi) + xi;
+
+                if (intersect) inside = !inside;
+            }
+
+            return inside;
+        };
+
+        // Add event listeners
+        canvas.on("mouse:down", handleMouseDown);
+        canvas.on("mouse:move", handleMouseMove);
+        canvas.on("mouse:up", handleMouseUp);
+
+        // Clean up
+        return () => {
+            canvas.off("mouse:down", handleMouseDown);
+            canvas.off("mouse:move", handleMouseMove);
+            canvas.off("mouse:up", handleMouseUp);
+        };
+    }, [activeTool, isEraserMode]);
+
     return (
         <>
             <div>
@@ -359,16 +575,16 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
                 <DrawingToolButton
                     icon="/img/drawingEditorIcons/moveArrow.svg"
-                    onClick={toggleSelectionMode}
+                    onClick={() => toggleSelectionMode("moveArrow")}
+                    isActive={activeTool === "moveArrow"}
                 />
                 <hr />
 
-                {!isTextFormat && (
+                {(!showMoreTools || !isTextFormat) && (
                     <DrawingToolButton
                         icon="img/drawingEditorIcons/textformating.svg"
-                        onClick={() => {
-                            toggleTexformating();
-                        }}
+                        onClick={() => toggleTexformating("textformat")}
+                        isActive={activeTool === "textformat"}
                     />
                 )}
                 {isTextFormat && showMoreTools && (
@@ -471,10 +687,11 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                 )}
 
                 <div>
-                    {!isDrawingFormat && (
+                    {(!showMoreTools || !isDrawingFormat) && (
                         <DrawingToolButton
                             icon="/img/drawingEditorIcons/drawing.svg"
-                            onClick={toggleDrawingformating}
+                            onClick={() => toggleDrawingformating("drawingFormat")}
+                            isActive={activeTool === "drawingFormat"}
                         />
                     )}
 
@@ -527,7 +744,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                             type="number"
                                             maxLength={2}
                                             onChange={(e) => {
-                                                const val = parseInt(e.target.value, 10);
+                                                const val = Number.parseInt(e.target.value, 10);
                                                 setStrokeWidth(val);
                                                 changeStrokeWidth(val);
                                             }}
@@ -554,7 +771,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                             maxLength={3}
                                             max={100}
                                             onChange={(e) => {
-                                                const val = parseInt(e.target.value, 10);
+                                                const val = Number.parseInt(e.target.value, 10);
                                                 setOpacityValue(val);
                                                 changeOpacity(val);
                                             }}
@@ -571,21 +788,24 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                     <div>
                         <DrawingToolButton
                             icon="/img/drawingEditorIcons/shape.svg"
-                            onClick={() => addShape("rectangle")}
+                            onClick={() => addShape("rectangle", "shape")}
+                            isActive={activeTool === "shape"}
                         />
                     </div>
                     <hr />
                     <div>
                         <DrawingToolButton
                             icon="/img/drawingEditorIcons/lasso.svg"
-                            onClick={toggleLassoSelection}
+                            onClick={() => toggleLassoSelection("lasso")}
+                            isActive={activeTool === "lasso"}
                         />
                     </div>
                     <hr />
                     <div>
                         <DrawingToolButton
                             icon="/img/drawingEditorIcons/eraser.svg"
-                            onClick={toggleEraserMode}
+                            onClick={() => toggleEraserMode("eraser")}
+                            isActive={activeTool === "eraser"}
                         />
                     </div>
                     <hr />
