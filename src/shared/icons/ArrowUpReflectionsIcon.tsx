@@ -8,12 +8,12 @@ interface ArrowUpReflectionsIconProps extends SVGProps<SVGSVGElement> {
 }
 
 const ArrowUpReflectionsIcon: FC<ArrowUpReflectionsIconProps> = ({
-                                                             fill = "#FF8B12",
-                                                             width = 9,
-                                                             height = 10,
-                                                             opacity = 1,
-                                                             ...props
-                                                         }) => (
+                                                                     fill = "#FF8B12",
+                                                                     width = 9,
+                                                                     height = 10,
+                                                                     opacity = 1,
+                                                                     ...props
+                                                                 }) => (
     <svg
         width={width}
         height={height}
