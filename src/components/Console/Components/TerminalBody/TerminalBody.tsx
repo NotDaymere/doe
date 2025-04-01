@@ -88,10 +88,10 @@ function TerminalBody() {
     const calculatePosition = (x: number, y: number) => {
         if (!terminalRef.current || !termInstance.current) return { top: 19.5, left: 0 };
 
-        const charHeight = 19.5; // Directly using the known row height
+        const charHeight = 19.3; // Directly using the known row height
 
         return {
-            top: y * charHeight + 13.5,
+            top: y * charHeight + 13.8,
             left: 20, // Align dots to the left margin
         };
     };
