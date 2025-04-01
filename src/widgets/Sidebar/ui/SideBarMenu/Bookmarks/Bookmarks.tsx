@@ -48,7 +48,7 @@ export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) =>
     ) => {
         event.stopPropagation();
         setActiveBookmarkMessage(msg);
-        setBookmarksActionsPosition({ top: event.clientY, right: event.clientX - 330 });
+        setBookmarksActionsPosition({ top: event.clientY, right: event.clientX + 1520 });
         setIsBookmarksActionsOpen(prev => !prev);
     };
 
@@ -209,10 +209,14 @@ export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) =>
             )}
 
             {isBookmarksActionsOpen && (
-                <BookmarksActions position={bookmarksActionsPosition}
-                                  onRename={handleRename}
-                                  onDelete={handleDelete}/>
+                <BookmarksActions
+                    position={bookmarksActionsPosition}
+                    onRename={handleRename}
+                    onDelete={handleDelete}
+                    onClose={() => setIsBookmarksActionsOpen(false)}
+                />
             )}
+
         </>
     )
 }

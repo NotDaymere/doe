@@ -5,16 +5,14 @@ import SearchIcon from "../../../../../shared/icons/SearchIcon";
 import CloseIcon from "../../../../../shared/icons/CloseIcon";
 import { ChatTagsEnum } from "../../../../../shared/enums/ChatTagsEnum";
 import ThreeDotsIcon from "../../../../../shared/icons/ThreeDotsIcon";
-import TagsIcon from "../../../../../shared/icons/TagsIcon";
-import PenIcon from "../../../../../shared/icons/Pen.icon";
 import BranchIcon from "../../../../../shared/icons/Branch.icon";
 import { CSSTransition } from "react-transition-group";
 import AllBranchesMenu from "../../../../home-screens/ui/ChatContent/assets/AllBranchesMenu/AllBranchesMenu";
 import { IndividualChatsActions } from "./IndividualChatsActions/IndividualChatsActions";
-import { TAG_META } from "../SideBarMenu";
 import { useChatStore } from "../../../../../shared/providers";
 import {ChatTagsPanel} from "./ChatTagsPanel/ChatTagsPanel";
 import {ChatItem} from "./ChatItem/ChatItem";
+import ReactDOM from "react-dom";
 
 interface IndividualChatsProps {
     isSideBarOpen: boolean;
@@ -39,8 +37,6 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
     const [activeTagPanel, setActiveTagPanel] = useState<string | null>(null);
     const [isBranchMenuOpen, setIsBranchMenuOpen] = React.useState(false);
     const [menuPosition, setMenuPosition] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
-    const [individualChatsActionsPosition, setIndividualChatsActionsPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
-    const [isIndividualChatsActionsOpen, setIsIndividualChatsActionsOpen] = useState<boolean>(false);
     const [activeChatForActions, setActiveChatForActions] = useState<{
         id: string;
         name: string;
@@ -55,7 +51,6 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
     const [selectedTags, setSelectedTags] = React.useState<ChatTagsEnum[]>([]);
 
     const [inputValue, setInputValue] = useState("");
-    const inputRef = React.useRef<HTMLInputElement>(null);
     const panelRef = React.useRef<HTMLDivElement>(null);
 
     const handleOpenIndividualChat = () => {
@@ -68,7 +63,7 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
 
     const handleOpenBranchMenu = (event: React.MouseEvent) => {
         event.stopPropagation();
-        setMenuPosition({ top: event.clientY, right: event.clientX - 350 });
+        setMenuPosition({ top: event.clientY, right: event.clientX + 1500 });
         setIsBranchMenuOpen(!isBranchMenuOpen);
     };
 
@@ -233,18 +228,21 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                                                         <ThreeDotsIcon />
                                                     </div>
 
-                                                    <CSSTransition
-                                                        in={isBranchMenuOpen && branch.id !== null}
-                                                        timeout={200}
-                                                        classNames="branchMenu"
-                                                        unmountOnExit
-                                                    >
-                                                        <AllBranchesMenu
-                                                            position={menuPosition}
-                                                            branchId={branch.id!}
-                                                            setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
-                                                        />
-                                                    </CSSTransition>
+                                                    {isBranchMenuOpen && branch.id !== null && ReactDOM.createPortal(
+                                                        <CSSTransition
+                                                            in={isBranchMenuOpen && branch.id !== null}
+                                                            timeout={200}
+                                                            classNames="branchMenu"
+                                                            unmountOnExit
+                                                        >
+                                                            <AllBranchesMenu
+                                                                position={menuPosition}
+                                                                branchId={branch.id!}
+                                                                setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
+                                                            />
+                                                        </CSSTransition>,
+                                                        document.body
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>

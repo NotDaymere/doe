@@ -42,6 +42,7 @@
     overflow-y: scroll;
     background: #f8f8f8;
     padding-top: 20px;
+    scroll-behavior: smooth;
 }
 .content_inner::before {
   content: "";
@@ -73,32 +74,35 @@
     backdrop-filter: blur(15px)
   }
 
-  .logoWrapper {
-    position: fixed;
-    top: 45px;
-    left: 95px;
-  }
+.logoWrapper {
+  position: fixed;
+  top: 45px;
+  left: 95px;
+  transition: left 0.3s ease;
+}
 
-  .logoWrapperSideBarOpen {
-    position: fixed;
-    top: 45px;
-    left: 295px;
+.logoWrapperSideBarOpen {
+  position: fixed;
+  top: 45px;
+  left: 295px;
+  transition: left 0.3s ease;
+}
 
-  }
+.logoWrapperPlaygroundOpen {
+  position: fixed;
+  top: 90px;
+  left: 90px;
+  z-index: 10000;
+  transition: left 0.3s ease;
+}
 
-  .logoWrapperPlaygroundOpen {
-    position: fixed;
-    top: 90px;
-    left: 90px;
-    z-index: 10000;
-  }
-
-  .logoWrapperPlaygroundAndSideBarOpen {
-    position: fixed;
-    top: 90px;
-    left: 295px;
-    z-index: 10000;
-  }
+.logoWrapperPlaygroundAndSideBarOpen {
+  position: fixed;
+  top: 90px;
+  left: 295px;
+  z-index: 10000;
+  transition: left 0.3s ease;
+}
 
   .logoPopup {
     width: 55px;
