@@ -2,13 +2,12 @@ import { SourceType } from "src/shared/types/Playground";
 import { useState, useEffect, FC, useRef } from "react";
 import PdfDocument from "../PdfDocument";
 import classNames from "classnames";
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import "@react-pdf-viewer/core/lib/styles/index.css";
 import Pagination from "../Pagination";
 import ZoomButton from "../ZoomButton";
 import Title from "../Title";
 import DocxDocument from "../DocxDocument";
 import DocxDocumentWithPagination from "../DocxDocument/DocxDocumentWithPagination";
+import "@react-pdf-viewer/core/lib/styles/index.css";
 import css from "./Preview.module.less";
 
 interface IProps {
