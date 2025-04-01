@@ -29,6 +29,7 @@ import AddProfileIcon from "../../shared/icons/AddProfileIcon";
 import {CSSTransition} from "react-transition-group";
 import GlobalIcon from "src/shared/icons/Global.icon";
 import clsx from "clsx";
+import {SharingTools} from "./ui/SharingTools/SharingTools";
 
 export const Sidebar: React.FC = () => {
     const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
@@ -234,6 +235,14 @@ export const Sidebar: React.FC = () => {
                 </div>
                 <div className={css.margin_bottom}>
                     <LiveTools />
+                </div>
+                <div className={css.sidebar_separator}>
+                    <div className={css.inner_sidebar_separator}></div>
+                </div>
+
+
+                <div className={css.margin_bottom}>
+                    <SharingTools />
                 </div>
                 <div className={css.delete_all_messages_btn_container}>
                     <button

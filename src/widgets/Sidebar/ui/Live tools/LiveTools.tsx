@@ -67,18 +67,6 @@ export const LiveTools = () => {
                         </div>
                     </div>
 
-                    <div className={css.sidebar_live_tools_action_container}>
-                        <button
-                            className={css.sidebar_controls_btn}
-                            onClick={() => setIsSharingActive(true)}
-                        >
-                            {isSharingActive ? <SharedWithYouActiveIcon /> : <SharedWithYouIcon />}
-                        </button>
-                        <div className={css.sidebar_live_tools_action_btn_tooltip}>
-                            Sharing Content
-                        </div>
-                    </div>
-
                 </div>
             )}
         </div>
