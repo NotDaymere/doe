@@ -235,8 +235,6 @@ export const Sidebar: React.FC = () => {
                 <div className={css.margin_bottom}>
                     <LiveTools />
                 </div>
-
-
                 <div className={css.delete_all_messages_btn_container}>
                     <button
                         className={css.delete_all_messages_btn}
@@ -249,17 +247,9 @@ export const Sidebar: React.FC = () => {
                     </div>
                 </div>
             </div>
-
-            <button
-                className={css.sidebar_controls_btn}
-                onClick={() => setIsSharingActive(true)}
-            >
-                {isSharingActive ? <SharedWithYouActiveIcon /> : <SharedWithYouIcon />}
-            </button>
             <div
                 className={css.sidebar_resize_handler}
                 onClick={handleOpenSideBar}
-
             />
         </aside>
     );
