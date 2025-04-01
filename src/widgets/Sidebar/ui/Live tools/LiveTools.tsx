@@ -42,7 +42,7 @@ export const LiveTools = () => {
                             onClick={() => setMode(MODE.TRANSLATION)}
                         >
                             {mode === MODE.TRANSLATION ? (
-                                <TranslationIcon />
+                                <TranslationIcon fill={'#FFD632'} />
                             ) : (
                                 <TranslationIcon />
                             )}
@@ -57,9 +57,9 @@ export const LiveTools = () => {
                             onClick={() => setMode(MODE.RECORDING)}
                         >
                             {mode === MODE.RECORDING ? (
-                                <RecordIcon className={css.activeTapeIcon} />
+                                <RecordIcon fill={'#FF4646'} />
                             ) : (
-                                <RecordIcon className={css.activeTapeIcon} />
+                                <RecordIcon  />
                             )}
                         </button>
                         <div className={css.sidebar_live_tools_action_btn_tooltip}>

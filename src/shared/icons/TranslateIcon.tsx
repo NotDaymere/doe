@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 
 interface TranslateIconProps extends React.SVGProps<SVGSVGElement> {
     fill?: string;
+    fill1?: string;
+    fill2?: string;
     width?: string | number;
     height?: string | number;
     opacity?: number;
@@ -12,6 +14,8 @@ const TranslateIcon: FC<TranslateIconProps> = ({
                                                    width = 24,
                                                    height = 18,
                                                    opacity = 1,
+                                                   fill1 = "#B5B5B5",
+                                                   fill2 = "#AC7CFF",
                                                    ...props
                                                }) => (
     <svg
