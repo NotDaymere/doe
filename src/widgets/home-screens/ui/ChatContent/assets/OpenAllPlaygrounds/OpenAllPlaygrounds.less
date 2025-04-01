@@ -8,36 +8,46 @@
   transition: opacity 300ms ease, transform 300ms ease;
 }
 
+.fade-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
 @keyframes fadeOut {
   from {
     opacity: 1;
-    transform: scale(1); /* Начальный размер */
+    transform: scale(1);
   }
   to {
     opacity: 0;
-    transform: scale(0.95); /* Конечный размер */
+    transform: scale(0.95);
   }
-}
 
-.open-all-playgrounds-container {
-  position: absolute;
-  top: 225px;
-  left: 95px;
-  width: 277px;
-  height: 165px;
-  padding: 10px;
-  border-radius: 16px;
-  background: #F0F0F0;
-  border: 1px solid #DDDDDD;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 8px;
-  transition: width 500ms;
-  animation: fadeIn 0.45s ease-out forwards;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 1000;
+  .open-all-playgrounds-container {
+    position: absolute;
+    top: 225px;
+    left: 95px;
+    width: 277px;
+    height: 165px;
+    padding: 10px;
+    border-radius: 16px;
+    background: #F0F0F0;
+    border: 1px solid #DDDDDD;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 8px;
+    transition: width 500ms;
+    animation: fadeIn 0.45s ease-out forwards;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1000;
+  }
 }
 
 .open-all-playgrounds-container.close {
@@ -47,6 +57,10 @@
 .open-all-playgrounds-container-without-playground {
   top: 175px;
   left: 95px;
+}
+
+.playgrounds-sidebar-open {
+  left: 295px !important;
 }
 
 .open-all-playgrounds-header {

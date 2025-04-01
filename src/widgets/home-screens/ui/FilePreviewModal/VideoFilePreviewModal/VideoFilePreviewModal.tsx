@@ -18,7 +18,10 @@ interface VideoModalProps {
 }
 
 const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
-                                                              url, onClose, fileName, fileExt
+                                                              url,
+                                                              onClose,
+                                                              fileName,
+                                                              fileExt,
                                                           }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -27,6 +30,9 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
     const progressBarRef = useRef<HTMLDivElement>(null);
     const [isDraggingProgress, setIsDraggingProgress] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
+
+    const [videoDimensions, setVideoDimensions] = useState<{ width: number; height: number } | null>(null);
+    const [scaledDimensions, setScaledDimensions] = useState<{ width: number; height: number } | null>(null);
 
     const togglePlayPause = () => {
         if (!videoRef.current) return;
@@ -91,14 +97,40 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
         const video = videoRef.current;
         if (!video) return;
 
+        const handleLoadedMetadata = () => {
+            setVideoDimensions({
+                width: video.videoWidth,
+                height: video.videoHeight,
+            });
+        };
+
+        video.addEventListener("loadedmetadata", handleLoadedMetadata);
         video.addEventListener("timeupdate", handleTimeUpdate);
         video.addEventListener("ended", () => setIsPlaying(false));
 
         return () => {
+            video.removeEventListener("loadedmetadata", handleLoadedMetadata);
             video.removeEventListener("timeupdate", handleTimeUpdate);
             video.removeEventListener("ended", () => setIsPlaying(false));
         };
     }, []);
+
+    useEffect(() => {
+        if (videoDimensions) {
+
+            const maxWidth = window.innerWidth * 0.5;
+            const maxHeight = window.innerHeight * 0.7;
+
+            const widthScale = maxWidth / videoDimensions.width;
+            const heightScale = maxHeight / videoDimensions.height;
+            const scale = Math.min(widthScale, heightScale, 1);
+
+            setScaledDimensions({
+                width: videoDimensions.width * scale,
+                height: videoDimensions.height * scale,
+            });
+        }
+    }, [videoDimensions]);
 
     return createPortal(
         <FilePreviewModalOverlay
@@ -108,7 +140,17 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
             fileNameContainerClass={css.modalFileNameVideoContainer}
             modalContentClass={css.modalContentVideo}
         >
-            <div className={css.videoWrapper}>
+            <div
+                className={css.videoWrapper}
+                style={
+                    scaledDimensions
+                        ? {
+                            width: `${scaledDimensions.width}px`,
+                            height: `${scaledDimensions.height}px`,
+                        }
+                        : {}
+                }
+            >
                 <video className={css.modalVideo} ref={videoRef}>
                     <source src={url} />
                     Your browser does not support the video tag.

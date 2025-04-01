@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import './MessageFrame.less';
 import NotionLogoIcon from "../../../../../../shared/icons/NotionLogo.icon";
 import MessageFrameModal  from "./MessageFrameModal/MessageFrameModal"
-import { useChatStore } from "../../../../../../shared/providers";
+import { useAppStore, useChatStore } from "../../../../../../shared/providers";
 import ExpandWidgetIcon from "../../../../../../shared/icons/ExpandWidget.icon";
 import CollapseWidgetIntoStringIcon from "../../../../../../shared/icons/CollapseWidgetIntoString.icon";
 import EnterFullscreenIcon from "../../../../../../shared/icons/EnterFullscreen.icon";
@@ -29,6 +29,7 @@ const MessageFrame: FC<MessageFrameProps> = ({ data }) => {
     } = data;
     const [isMinimized, setIsMinimized] = useState(false);
     const { isMaximized, setIsMaximized } = useChatStore();
+    // const { isMaximized, setIsMaximized } = useAppStore();
 
     const handleMinimize = () => setIsMinimized(!isMinimized);
     const handleMaximize = () => {

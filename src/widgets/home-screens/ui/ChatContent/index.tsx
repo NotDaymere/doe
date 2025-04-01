@@ -18,18 +18,23 @@ import {
     Formula,
     createHandleTab,
 } from "src/components/tiptap-editor/extensions/index";
+
 import { useChatController } from "../..";
-import { ChatMessage } from "../ChatMessage";
-import classNames from "classnames";
-import MagicIcon from "src/shared/icons/Magic.icon";
-import QuickSearch from "../QuickSearch";
-import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
 import { TalkMode } from "../TalkMode";
 import css from "./ChatContent.module.less";
 import { ScrollDownButton } from "./assets/ScrollDownButton/ScrollDownButton";
 import { ChatRegularView } from "./assets/ContentChatRegularView/ContentChatRegularView";
 import { ChatBranchView } from "./assets/ChatBranchView/ChatBranchView";
 import Reflections from "./assets/Reflections/Reflections";
+import GeneralLogo from "../GeneralLogo/GeneralLogo";
+import AllBranches from "./assets/AllBranches/AllBranches";
+import AllPlaygrounds from "./assets/AllPlaygrounds/AllPlaygrounds";
+import { CSSTransition } from "react-transition-group";
+import FavoriteIcon from "../../../../shared/icons/Favorite.icon";
+import { ChatMessage } from "../ChatMessage";
+import classNames from "classnames";
+import MagicIcon from "src/shared/icons/Magic.icon";
+import QuickSearch from "../QuickSearch";
 
 interface Props {
     editMsgMode: {
@@ -47,19 +52,23 @@ interface Props {
 export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) => {
     const { chatRef } = useChatController();
     const {
+        playground,
+        setPlayground,
         playgroundFullscreen,
-        getOpenSavedPlaygrounds,
-        currentBranch,
         messages,
+        currentBranch,
         isCurrentBranchOpen,
         currentBranchDialog,
         setCurrentBranchDialog,
+        getOpenSavedPlaygrounds,
         showQuickSearch,
         setShowQuickSearch,
     } = useChatStore();
-    const { talkModeActive, setPlayground, playground} = useAppStore();
+    const { talkModeActive} = useAppStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+    const [isShowLogoPopup, setIsShowLogoPopup] = React.useState(false);
+    const {isSideBarOpen} = useAppStore();
 
     const editor = useEditor({
         extensions: [
@@ -201,8 +210,28 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         dialogRefs={dialogRefs}
                     />
                 )}
+                {/*{!isCurrentBranchOpen && (*/}
+                {/*    <div className={getOpenSavedPlaygrounds().length <= 0*/}
+                {/*        ? !isSideBarOpen*/}
+                {/*            ? css.logoWrapper*/}
+                {/*            : css.logoWrapperSideBarOpen*/}
+                {/*        : !isSideBarOpen*/}
+                {/*            ? css.logoWrapperPlaygroundOpen*/}
+                {/*            : css.logoWrapperPlaygroundAndSideBarOpen}>*/}
+                {/*        {!playgroundFullscreen && (*/}
+                {/*            <div className={css.logoPopup}>*/}
+                {/*                <div className={css.allPlaygroundsWrapper}>*/}
+                {/*                    <AllPlaygrounds />*/}
+                {/*                </div>*/}
+                {/*                <div className={css.allBranchesContainer}>*/}
+                {/*                    <AllBranches />*/}
+                {/*                </div>*/}
+                {/*            </div>*/}
+                {/*        )}*/}
+                {/*    </div>*/}
+                {/*)}*/}
 
-                {!talkModeActive &&
+                {!talkModeActive && !playgroundFullscreen && !isCurrentBranchOpen &&
                     <Reflections/>
                 }
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}

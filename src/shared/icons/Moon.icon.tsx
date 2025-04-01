@@ -1,11 +1,19 @@
 import React, { SVGProps } from "react";
 
-const MoonIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
+interface MoonIconProps extends SVGProps<SVGSVGElement> {
+    fill?: string;
+}
+
+const MoonIcon: React.FC<MoonIconProps> = ({
+                                               fill = "currentColor",
+                                               ...props
+                                           }) => {
     return (
         <svg
             {...props}
             viewBox="0 0 16 16"
             stroke="none"
+            fill={fill}
             xmlns="http://www.w3.org/2000/svg"
         >
             <path

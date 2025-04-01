@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
+import BranchIcon from "src/shared/icons/Branch.icon";
 import CallIcon from "src/shared/icons/Call.icon";
 import StarsIcon from "src/shared/icons/Stars.icon";
 import TalkIcon from "src/shared/icons/Talk.icon";
+import UploadIcon from "src/shared/icons/Upload.icon";
 import { MagicApplications, MagicMenuButton, MagicUploadApps } from "./ui";
 import { useClickOut } from "src/shared/hooks/useClickOut";
 import css from "./MagicMenu.module.less";
@@ -30,6 +32,18 @@ export const MagicMenu: React.FC<Props> = ({
     const {setTalkModeActive } = useAppStore();
     const toggleMenu = () => setActiveMenu(!activeMenu);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+    const upload = () => {
+        const input = document.createElement("input") as HTMLInputElement;
+        input.type = "file";
+        input.multiple = true;
+        input.onchange = (ev: any) => {
+            const files = Array.from(ev.target.files) as File[];
+            onUploadFiles?.(files);
+            input.remove();
+        }
+        input.click();
+    };
 
     useEffect(() => {
         if(isUploadFileChatMode){

@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React, { useEffect, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import EnergyIcon from "src/shared/icons/Energy.icon";
+import GlobalIcon from "src/shared/icons/Global.icon";
 import LeafIcon from "src/shared/icons/Leaf.icon";
 import TreeIcon from "src/shared/icons/Tree.icon";
 import WaterIcon from "src/shared/icons/Water.icon";
@@ -9,43 +10,38 @@ import WindIcon from "src/shared/icons/Wind.icon";
 import { useAppStore } from "src/shared/providers";
 import css from "./SidebarGaia.module.less";
 
-interface IProps {
-    isActive: boolean;
-    setIsActive: (value: boolean) => void;
-}
 
-export const SidebarGaia: React.FC<IProps> = ({ isActive, setIsActive }) => {
-    const { gaiaActive } = useAppStore();
+export const SidebarGaia = () => {
+    const { gaiaActive, setGaiaActive } = useAppStore();
     const nodeRef = React.useRef<HTMLDivElement>(null);
 
+    const toggleGaia = () => setGaiaActive(!gaiaActive);
     const [showGaia, setShowGaia] = useState(false);
 
     useEffect(() => {
-        if (isActive) {
-            setShowGaia(true);
-        } else {
-            setShowGaia(false);
-        }
-
+        setShowGaia(true);
         return () => {
             setShowGaia(false);
-            setIsActive(false);
         };
-    }, [isActive]);
-
+    }, []);
     return (
         <div className={clsx(css.gaia, gaiaActive && css._active)}>
             <div className={css.gaia_btn_wrapper}>
+                <button className={css.gaia_btn} onClick={toggleGaia}>
+                    <GlobalIcon />
+                </button>
                 <CSSTransition
                     classNames={css}
                     timeout={1000}
+                    // in={!gaiaActive}
                     in={showGaia}
                     nodeRef={nodeRef}
                     mountOnEnter
                 >
-                    <p className={css.gaia_hint} ref={nodeRef}>
-                        Environmental savings per (calculated per token) by using our models
-                        compared to existing SOTA models.
+                    <p className={css.gaia_hint}
+                       ref={nodeRef}>
+                        Environmental savings per (calculated per token) by using our models compared to
+                        existing SOTA models.
                         <br />
                         <br />
                         For each token you generate, we calculate tree mass{" "}

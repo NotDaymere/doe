@@ -5,13 +5,15 @@ import ThreeVerticalDots from "../../../../../../shared/icons/ThreeVerticalDots"
 import BranchIcon from "../../../../../../shared/icons/Branch.icon";
 import BranchQuickView from "../BranchQuickView/BranchQuickView";
 import OpenBranchMenu from "../OpenBranchMenu/OpenBranchMenu";
+import { IBranch } from "../../../../../../shared/types/Branch";
 
 interface ChatMessageDateProps {
     messageId?: number;
+    branch?: IBranch;
     isOpenBrunch?: boolean;
 }
 
-const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ messageId, isOpenBrunch = false }) => {
+const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch, messageId,  isOpenBrunch = false }) => {
     const {
         currentBranch,
         savedBranches,
@@ -23,7 +25,8 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ messageId, isOpenBr
 
     const branchToDisplay = isOpenBrunch
         ? currentBranch
-        : savedBranches.find(b => b.mainMessageId === messageId);
+        : branch;
+// : savedBranches.find(b => b.mainMessageId === messageId);
 
     if (!branchToDisplay) return null;
 
@@ -56,13 +59,15 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ messageId, isOpenBr
     return (
         <div className="chat-branch-section-container">
             <div
-                className={`chat-branch-section ${isActiveBranchMenu ? 'active' : ''}`}
+                className="chat-branch-section"
+                // className={`chat-branch-section ${isActiveBranchMenu ? 'active' : ''}`}
                 onClick={handleContainerClick}
             >
                 <BranchIcon width={16} height={16} fill="currentColor" />
                 <span className="chat-text">
-                    <span className="normal-text">{text}</span>
-                    <span className="gradient-text">{text}</span>
+                    <span>{text}</span>
+                    {/*<span className="normal-text">{text}</span>*/}
+                    {/*<span className="gradient-text">{text}</span>*/}
                 </span>
                 <button className="branch-options-button" onClick={handleButtonClick}>
                     <ThreeVerticalDots fill="currentColor" />
