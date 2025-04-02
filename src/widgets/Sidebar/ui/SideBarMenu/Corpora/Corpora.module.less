@@ -44,6 +44,8 @@
     font-weight: 500;
     flex-wrap: nowrap;
     gap: 3px;
+    opacity: 0;
+    transition: opacity 0.4s ease-in;
 
     .show_more_btn {
       display: none;
@@ -94,6 +96,7 @@
   }
 
   .sidebar_menu_action_btn_tooltip {
+    opacity: 1;
     width: 100%;
     display: flex;
     align-items: center;
