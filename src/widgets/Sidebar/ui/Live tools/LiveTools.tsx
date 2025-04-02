@@ -36,13 +36,13 @@ export const LiveTools = () => {
             {isSideBarLiveToolsOpen && (
                 <div className={css.live_tools_actions_section_container}>
 
-                    <div className={css.sidebar_live_tools_action_container}>
+                    <div className={css.sidebar_live_tools_action_container}
+                         onClick={() => setMode(MODE.TRANSLATION)}>
                         <button
                             className={css.sidebar_controls_btn}
-                            onClick={() => setMode(MODE.TRANSLATION)}
                         >
                             {mode === MODE.TRANSLATION ? (
-                                <TranslationIcon fill={'#FFD632'} />
+                                <TranslationIcon fill1={'#FFD632'} fill2={'#AC7CFF'} />
                             ) : (
                                 <TranslationIcon />
                             )}
@@ -51,10 +51,10 @@ export const LiveTools = () => {
                             Translate Content
                         </div>
                     </div>
-                    <div className={css.sidebar_live_tools_action_container}>
+                    <div className={css.sidebar_live_tools_action_container}
+                         onClick={() => setMode(MODE.RECORDING)}>
                         <button
                             className={css.sidebar_controls_btn}
-                            onClick={() => setMode(MODE.RECORDING)}
                         >
                             {mode === MODE.RECORDING ? (
                                 <RecordIcon fill={'#FF4646'} />

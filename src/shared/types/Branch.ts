@@ -7,4 +7,5 @@ export interface IBranch {
     messages: IMessage[];
     dialogsMessages: IBranchDialog[];
     mainMessageId?: number | string;
+    isMain?: boolean;
 }

@@ -240,21 +240,24 @@ export const Sidebar: React.FC = () => {
                     <div className={css.inner_sidebar_separator}></div>
                 </div>
 
-
                 <div className={css.margin_bottom}>
                     <SharingTools />
                 </div>
-                <div className={css.delete_all_messages_btn_container}>
-                    <button
-                        className={css.delete_all_messages_btn}
-                        onClick={handleDeleteAllMessages}
-                    >
-                        <TrashIcon />
-                    </button>
-                    <div className={css.delete_all_messages_btn_tooltip}>
-                        Delete All Messages
+                <div className={css.delete_all_messages}>
+                    <div className={css.delete_all_messages_btn_container}>
+                        <button
+                            className={css.delete_all_messages_btn}
+                            onClick={handleDeleteAllMessages}
+                        >
+                            <TrashIcon />
+                        </button>
+                        <div className={css.delete_all_messages_btn_tooltip}>
+                            Delete All Messages
+                        </div>
                     </div>
                 </div>
+
+
             </div>
             <div
                 className={css.sidebar_resize_handler}

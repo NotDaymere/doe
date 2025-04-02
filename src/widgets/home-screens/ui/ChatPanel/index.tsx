@@ -914,10 +914,11 @@ export const ChatPanel: React.FC = () => {
                                 unmountOnExit
                             >
                                 <button className={css.panel_loadingBtn}>
-                                    <div className={css.chat_response_stop_icon}>
+                                    <div
+                                        className={css.chat_response_stop_icon}
+                                        onClick={handleStopReply}>
                                         <ChatResponseStopIcon
                                             fill="currentColor"
-                                            onClick={handleStopReply}
                                         />
                                     </div>
                                 </button>

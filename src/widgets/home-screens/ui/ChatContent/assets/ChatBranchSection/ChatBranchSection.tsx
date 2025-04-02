@@ -59,15 +59,13 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch, messageId,  
     return (
         <div className="chat-branch-section-container">
             <div
-                className="chat-branch-section"
-                // className={`chat-branch-section ${isActiveBranchMenu ? 'active' : ''}`}
+                className={`chat-branch-section ${isActiveBranchMenu ? 'active' : ''}`}
                 onClick={handleContainerClick}
             >
                 <BranchIcon width={16} height={16} fill="currentColor" />
                 <span className="chat-text">
-                    <span>{text}</span>
-                    {/*<span className="normal-text">{text}</span>*/}
-                    {/*<span className="gradient-text">{text}</span>*/}
+                    <span className="normal-text">{text}</span>
+                    <span className="gradient-text">{text}</span>
                 </span>
                 <button className="branch-options-button" onClick={handleButtonClick}>
                     <ThreeVerticalDots fill="currentColor" />

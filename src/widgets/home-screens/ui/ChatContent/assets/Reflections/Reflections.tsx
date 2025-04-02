@@ -56,7 +56,8 @@ export default function Reflections() {
 
     const smallHeight = 80;
     const expandedHeight = 430;
-
+    const smallWidth = 200;
+    const expandedWidth = 460;
 
     useEffect(() => {
         const updateWidth = () => {
@@ -169,7 +170,6 @@ export default function Reflections() {
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-                // При клике вне контейнера всегда переходим в режим "closed"
                 setProgress(0);
                 setPersistSmall(false);
                 setMode(ViewModes.CLOSED);
@@ -272,93 +272,95 @@ export default function Reflections() {
             e.stopPropagation();
             cancelCollapseTimer();
         };
-            const handleSmallMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-                setStartY(e.clientY);
-                setStartProgress(progress);
-                setIsDragging(true);
-            };
+        const handleSmallMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+            setStartY(e.clientY);
+            setStartProgress(progress);
+            setIsDragging(true);
+        };
 
-            const handleMouseMove = (e: MouseEvent) => {
-                if (!isDragging || startY === null) return;
-                const distance = startY - e.clientY;
-                if (distance > 50) {
-                    setMode(ViewModes.EXPANDED);
-                    setIsDragging(false);
-                }
-                const delta = startY - e.clientY;
-                let newProgress = startProgress + delta / maxDragDistance;
-                newProgress = Math.max(0, Math.min(newProgress, 1));
-                setProgress(newProgress);
-            };
-
-            const handleMouseUpOrLeave = () => {
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!isDragging || startY === null) return;
+            const distance = startY - e.clientY;
+            if (distance > 50) {
+                setMode(ViewModes.EXPANDED);
                 setIsDragging(false);
-                setStartY(null);
+            }
+            const delta = startY - e.clientY;
+            let newProgress = startProgress + delta / maxDragDistance;
+            newProgress = Math.max(0, Math.min(newProgress, 1));
+            setProgress(newProgress);
+        };
+
+        const handleMouseUpOrLeave = () => {
+            setIsDragging(false);
+            setStartY(null);
+        };
+
+        const handlePinClick = () => {
+            setIsPinned((prev) => !prev);
+        };
+
+        const handleExpandByPlus = () => {
+            if (mode === ViewModes.SMALL) {
+                setMode(ViewModes.EXPANDED);
+            }
+        };
+
+        const handleCollapse = () => {
+            if (mode === ViewModes.EXPANDED) {
+                setMode(ViewModes.SMALL);
+            }
+        };
+
+        useEffect(() => {
+            if (isDragging) {
+                window.addEventListener("mousemove", handleMouseMove);
+                window.addEventListener("mouseup", handleMouseUpOrLeave);
+                window.addEventListener("mouseleave", handleMouseUpOrLeave);
+            } else {
+                window.removeEventListener("mousemove", handleMouseMove);
+                window.removeEventListener("mouseup", handleMouseUpOrLeave);
+                window.removeEventListener("mouseleave", handleMouseUpOrLeave);
+            }
+            return () => {
+                window.removeEventListener("mousemove", handleMouseMove);
+                window.removeEventListener("mouseup", handleMouseUpOrLeave);
+                window.removeEventListener("mouseleave", handleMouseUpOrLeave);
             };
+        }, [isDragging, startY, startProgress]);
 
-            const handlePinClick = () => {
-                setIsPinned((prev) => !prev);
-            };
+        const computedHeight = smallHeight + (expandedHeight - smallHeight) * progress;
+        const containerMode =
+            progress < threshold
+                ? (isHoveringIcon || isHoveringContainer || persistSmall ? ViewModes.SMALL : ViewModes.CLOSED)
+                : ViewModes.EXPANDED;
+        const finalHeight = containerMode === ViewModes.CLOSED ? 40 : computedHeight;
+        const finalWidth = containerMode === ViewModes.CLOSED ? 40 : containerMode === ViewModes.SMALL ? 200 : 360;
 
-            const handleExpandByPlus = () => {
-                if (mode === ViewModes.SMALL) {
-                    setMode(ViewModes.EXPANDED);
-                }
-            };
+        const handleToggleFilter = (filter: "user" | "code") => {
+            setMessageFilter(filter);
+        };
 
-            const handleCollapse = () => {
-                if (mode === ViewModes.EXPANDED) {
-                    setMode(ViewModes.SMALL);
-                }
-            };
+        const allRead = messagesData.every(message => message.isRead);
 
-            useEffect(() => {
-                if (isDragging) {
-                    window.addEventListener("mousemove", handleMouseMove);
-                    window.addEventListener("mouseup", handleMouseUpOrLeave);
-                    window.addEventListener("mouseleave", handleMouseUpOrLeave);
-                } else {
-                    window.removeEventListener("mousemove", handleMouseMove);
-                    window.removeEventListener("mouseup", handleMouseUpOrLeave);
-                    window.removeEventListener("mouseleave", handleMouseUpOrLeave);
-                }
-                return () => {
-                    window.removeEventListener("mousemove", handleMouseMove);
-                    window.removeEventListener("mouseup", handleMouseUpOrLeave);
-                    window.removeEventListener("mouseleave", handleMouseUpOrLeave);
-                };
-            }, [isDragging, startY, startProgress]);
-
-            const computedHeight = smallHeight + (expandedHeight - smallHeight) * progress;
-            const containerMode =
-                progress < threshold
-                    ? (isHoveringIcon || isHoveringContainer || persistSmall ? ViewModes.SMALL : ViewModes.CLOSED)
-                    : ViewModes.EXPANDED;
-            const finalHeight = containerMode === ViewModes.CLOSED ? 40 : computedHeight;
-
-            const handleSmallClick = () => {
-                if (progress === 0) setProgress(1);
-            };
-
-            const handleToggleFilter = (filter: "user" | "code") => {
-                setMessageFilter(filter);
-            };
-
-            const allRead = messagesData.every(message => message.isRead);
-
-            return (
+        return (
+            <div className={clsx(
+                "reflections-wrapper",
+                { "sidebar-open": isSideBarOpen }
+            )}>
                 <div
                     ref={containerRef}
-                    className={clsx(
-                        "reflections-container",
-                        containerMode,
-                        { "sidebar-open": isSideBarOpen }
-                    )}
+                    className={clsx("reflections-container", containerMode)}
                     style={{
                         userSelect: "none",
                         height: finalHeight,
-                        transition: "none",
+                        width: finalWidth,
+                        transition: isDragging
+                            ? "height 0s ease, width 300ms ease"
+                            : "height 300ms ease, width 300ms ease"
+
                     }}
+
                     onMouseEnter={handleContainerMouseEnter}
                     onMouseLeave={handleContainerMouseLeave}
                     onMouseMove={handleContainerMouseMove}
@@ -372,35 +374,31 @@ export default function Reflections() {
                     </div>
 
                     {containerMode !== ViewModes.CLOSED && (
-
-                        <div className="small-content" onClick={handleExpandByPlus}>
-                            <div
-                                className="small-drag-bar"
-                                style={{
-                                    cursor: isDragging ? "grabbing" : "grab",
-                                    opacity: isCursorNearTop ? 1 : 0,
-                                    transition: "opacity 300ms ease",
-                                }}
-                                onMouseDown={handleDragBarMouseDown}
-                                onMouseEnter={handleDragBarMouseEnter}
-                                onMouseLeave={handleDragBarMouseLeave}
-                                // onMouseDown={handleSmallMouseDown}
-                                // onMouseEnter={handleDragBarMouseEnter}
-                                // onMouseLeave={handleDragBarMouseLeave}
-                                // style={{ opacity: showDragBar ? 1 : 0 }}
-                            />
-                        </div>
+                        <div
+                            className="small-drag-bar"
+                            style={{
+                                cursor: isDragging ? "grabbing" : "grab",
+                                opacity: isCursorNearTop ? 1 : 0,
+                                transition: "opacity 300ms ease",
+                            }}
+                            onMouseDown={handleDragBarMouseDown}
+                        />
                     )}
                     <div
                         className="content-wrapper"
                         style={{
-                            overflowY: containerWidth < 460 ? "auto" : "hidden",
+                            overflowY:
+                                containerMode === ViewModes.EXPANDED && containerWidth < expandedWidth
+                                    ? "auto"
+                                    : "hidden",
+                            opacity: containerMode === ViewModes.CLOSED ? 0 : 1,
+                            transition: "opacity 0.3s ease-in-out 0.1s",
                             overflowX: "hidden",
                             height: containerMode === ViewModes.CLOSED ? 0 : computedHeight - 15,
                         }}
                     >
                         {containerMode === ViewModes.SMALL && progress < threshold && (
-                            <div className="small-content" onClick={handleSmallClick}>
+                            <div className="small-content">
                                 <div className="small-header">
                             <span className="small-time">
                                 <LatestMessageInfo messages={messagesData} />
@@ -578,7 +576,7 @@ export default function Reflections() {
                         )}
                     </div>
                 </div>
-            );
-        }
-        return<></>
+            </div>
+        );
     }
+}

@@ -1,12 +1,17 @@
 import { configureReact } from "@bn-digital/vite";
+import * as path from "node:path";
 
 export default configureReact(
     {
+        optimizeDeps: {
+
+            exclude: ['@ffmpeg/ffmpeg']
+        },
         server: {
             hmr: {
-                overlay: true,
-            },
-        },
+                overlay: true 
+            } 
+        }, 
         css: {
             preprocessorOptions: {
                 less: {
@@ -19,9 +24,10 @@ export default configureReact(
         },
         resolve: {
             alias: {
-                "@": "/src",
-            },
-        },
+                '@ffmpeg/ffmpeg': '@ffmpeg/ffmpeg/dist/ffmpeg.min.js',
+                '@': "/src",
+            }
+        }
     },
     {
         openGraph: {
