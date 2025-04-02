@@ -9,10 +9,23 @@ export const LiveTools = () => {
 
     const { isSideBarOpen } = useAppStore();
     const [isSideBarLiveToolsOpen, setIsSideBarLiveToolsOpen] = React.useState(true);
+    const [showTooltips, setShowTooltips] = React.useState(false);
+
 
     const handleOpenSideBarLiveTools = () => {
         setIsSideBarLiveToolsOpen(!isSideBarLiveToolsOpen);
     }
+
+    React.useEffect(() => {
+        if (isSideBarOpen) {
+            setShowTooltips(true);
+            return () => {};
+        } else {
+            const timer = setTimeout(() => setShowTooltips(false), 100);
+            return () => clearTimeout(timer);
+        }
+    }, [isSideBarOpen]);
+
 
     return (
         <div className={isSideBarOpen ? css.sidebar_open_live_tools : css.sidebar_live_tools}>
@@ -34,7 +47,7 @@ export const LiveTools = () => {
                             <TranslateIcon fill="currentColor" width={23} height={17} />
                         </button>
                         <div className={css.sidebar_live_tools_action_btn_tooltip}>
-                            Translate Content
+                            <span>Translate</span> <span>Content</span>
                         </div>
                     </div>
 
@@ -42,18 +55,18 @@ export const LiveTools = () => {
                         <button className={css.live_tools_menu_action_btn}>
                             <RecordIcon fill="currentColor" width={20} height={10} />
                         </button>
-                        <div className={css.sidebar_live_tools_action_btn_tooltip}>
-                            Listen and Transcribe
-                        </div>
+                            <div className={css.sidebar_live_tools_action_btn_tooltip}>
+                                <span>Listen</span><span>and</span><span>Transcribe</span>
+                            </div>
                     </div>
 
                     <div className={css.sidebar_live_tools_action_container}>
                         <button className={css.live_tools_menu_action_btn}>
                             <ShareIcon fill="currentColor" width={25} height={19} />
                         </button>
-                        <div className={css.sidebar_live_tools_action_btn_tooltip}>
-                            Sharing Content
-                        </div>
+                            <div className={css.sidebar_live_tools_action_btn_tooltip}>
+                                <span>Sharing</span><span>Content</span>
+                            </div>
                     </div>
 
                 </div>
