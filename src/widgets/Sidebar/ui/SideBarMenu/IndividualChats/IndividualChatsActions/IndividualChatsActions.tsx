@@ -17,6 +17,7 @@ interface IndividualChatsActionsProps {
 }
 
 export const IndividualChatsActions = ({ position, onClose, onRename, onDelete, onOpen }: IndividualChatsActionsProps) => {
+
     const containerRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {

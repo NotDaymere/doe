@@ -37,6 +37,7 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
     const [activeTagPanel, setActiveTagPanel] = useState<string | null>(null);
     const [isBranchMenuOpen, setIsBranchMenuOpen] = React.useState(false);
     const [menuPosition, setMenuPosition] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
+    const [isShowActions, setIsShowActions ] = React.useState(false);
     const [activeChatForActions, setActiveChatForActions] = useState<{
         id: string;
         name: string;
@@ -137,7 +138,9 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                     </div>
                 ) : (
                     <div className={css.sidebar_menu_action_btn_tooltip}>
-                        <div>Individual Chats</div>
+                        <div className={css.section_name}>
+                            <span>Individual</span><span>Chats</span>
+                        </div>
                         <div
                             className={css.show_more_btn}
 
@@ -171,8 +174,10 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                                     onToggleExpand={setExpandedChatId}
                                     onOpenActions={e => {
                                         e.stopPropagation();
+                                        setIsShowActions(!isShowActions);
                                         setActiveChatForActions({ id: chat.id, name: chat.name, position: { top: e.clientY, left: e.clientX + 30 } });
                                     }}
+
                                     onTagsClick={e => {
                                         e.stopPropagation();
                                         setActiveTagPanel(prev => (prev === chat.id ? null : chat.id));
@@ -254,34 +259,27 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                 </div>
             )}
 
-            {activeChatForActions && (() => {
+            {activeChatForActions && isShowActions && (() => {
                 const { id, name, position } = activeChatForActions;
 
                 return (
-                    <CSSTransition
-                        in={Boolean(activeChatForActions)}
-                        timeout={200}
-                        classNames="branchMenu"
-                        unmountOnExit
-                    >
-                        <IndividualChatsActions
-                            position={position}
-                            onClose={() => setActiveChatForActions(null)}
-                            onRename={() => {
-                                setEditingChatId(id);
-                                setEditingChatValue(name);
-                                setActiveChatForActions(null);
-                            }}
-                            onDelete={() => {
-                                removeChat(id);
-                                setActiveChatForActions(null);
-                            }}
-                            onOpen={() => {
-                                switchChat(id);
-                                setActiveChatForActions(null);
-                            }}
-                        />
-                    </CSSTransition>
+                    <IndividualChatsActions
+                        position={position}
+                        onClose={() => setActiveChatForActions(null)}
+                        onRename={() => {
+                            setEditingChatId(id);
+                            setEditingChatValue(name);
+                            setActiveChatForActions(null);
+                        }}
+                        onDelete={() => {
+                            removeChat(id);
+                            setActiveChatForActions(null);
+                        }}
+                        onOpen={() => {
+                            switchChat(id);
+                            setActiveChatForActions(null);
+                        }}
+                    />
                 );
             })()}
         </>

@@ -85,8 +85,9 @@ export const Sidebar: React.FC = () => {
         ? { left: theme === "Light" ? "6px" : "37px" }
         : { top: theme === "Light" ? "6px" : "37px" };
 
-    const handleOpenChangeProfilePanel = () => {
-        setIsChangeProfilePanelOpen(!isChangeProfilePanelOpen)
+    const handleOpenChangeProfilePanel = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsChangeProfilePanelOpen(prev => !prev);
     };
 
     const currentProfile = profiles.find(p => p.isCurrent);
@@ -215,7 +216,7 @@ export const Sidebar: React.FC = () => {
                 </div>
                 {isSideBarOpen && (
                     <div className={css.theme_name}>
-                        {theme} Theme
+                        <span>{theme}</span><span>Theme</span>
                     </div>
                 )}
             </div>
