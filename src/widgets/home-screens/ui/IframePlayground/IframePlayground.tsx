@@ -1,10 +1,10 @@
 import React, { FC,  useRef} from "react";
 import "./IframePlayground.less";
-import { useChatStore } from "src/shared/providers";
+import { useAppStore } from "src/shared/providers";
 import { App } from "src/types";
 
 const IframePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
-    const { citationPlaygroundRef } = useChatStore();
+    const { citationPlaygroundRef } = useAppStore();
     const divRef = useRef<HTMLDivElement>(null);
 
     return (

@@ -11,7 +11,6 @@ interface Props {
 }
 
 const Layout: FC<Props> = ({ children }) => {
-    console.log(111111111);
   const { playground } = useApp().app
 
   return (

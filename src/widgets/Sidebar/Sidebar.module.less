@@ -151,7 +151,7 @@
       bottom: 0px;
       left: 15px;
       height: 60px;
-      background: #f3f3f3;
+      //background: #f3f3f3;
       .delete_all_messages_btn_container {
 
         background-color: #f4f4f4;
@@ -331,6 +331,10 @@
       font-weight: 500;
       font-size: 14px;
       color: #B5B5B5;
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row !important;
+      gap: 3px;
     }
 
     .theme_toggle {
@@ -488,7 +492,7 @@
   position: absolute;
   left: 97%;
   top: 50%;
-  cursor: pointer;
+  cursor: pointer !important;
   opacity: 0;
   transition: opacity 0.3s ease;
 }

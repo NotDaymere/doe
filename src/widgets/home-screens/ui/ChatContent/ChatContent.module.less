@@ -1,48 +1,48 @@
 .content {
-    height: 0;
-    flex: 1 1 auto;
-    padding-right: 76px;
-    overflow: auto;
-    position: relative;
+  height: 0;
+  flex: 1 1 auto;
+  padding-right: 76px;
+  overflow: auto;
+  position: relative;
 }
 
 .content_playground {
-    height: 0;
-    flex: 1 1 auto;
-    padding-right: 22px;
-    padding-left: 22px;
-    overflow: auto;
-    background-color: #F8F8F8;
-    border-radius: 16px;
+  height: 0;
+  flex: 1 1 auto;
+  padding-right: 22px;
+  padding-left: 22px;
+  overflow: auto;
+  background-color: #F8F8F8;
+  border-radius: 16px;
 }
 .content_playground_fullscreen {
-    height: 0;
-    flex: 1 1;
-    overflow: auto;
-    background-color: #F8F8F8;
-    border-radius: 16px;
+  height: 0;
+  flex: 1 1;
+  overflow: auto;
+  background-color: #F8F8F8;
+  border-radius: 16px;
 }
 .content::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: calc(100% - 76px);
-    height: 20px;
-    border-radius: 16px;
-    background: linear-gradient(to bottom, rgba(248, 248, 248, 1), rgba(248, 248, 248, 0));
-    pointer-events: none;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 76px);
+  height: 20px;
+  border-radius: 16px;
+  background: linear-gradient(to bottom, rgba(248, 248, 248, 1), rgba(248, 248, 248, 0));
+  pointer-events: none;
 }
 .content_inner {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    height: 100%;
-    border-radius: 16px;
-    overflow-y: scroll;
-    background: #f8f8f8;
-    padding-top: 20px;
-    scroll-behavior: smooth;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 100%;
+  border-radius: 16px;
+  overflow-y: scroll;
+  background: #f8f8f8;
+  padding-top: 20px;
+  scroll-behavior: smooth;
 }
 .content_inner::before {
   content: "";
@@ -54,7 +54,6 @@
   background: linear-gradient(to top, rgba(248, 248, 248, 1), rgba(248, 248, 248, 0));
   pointer-events: none;
   border-radius: 16px;
-  padding: 20px;
 }
 
 .content_chat {
@@ -69,10 +68,11 @@
   background-color: #ffffff;
   border-radius: 16px;
   overflow: auto;
+}
 
-  .content_chat_branch_wrapper {
-    backdrop-filter: blur(15px)
-  }
+.content_chat_branch_wrapper{
+  backdrop-filter: blur(15px)
+}
 
 .logoWrapper {
   position: fixed;
@@ -92,7 +92,6 @@
   position: fixed;
   top: 90px;
   left: 90px;
-  z-index: 10000;
   transition: left 0.3s ease;
 }
 
@@ -100,66 +99,65 @@
   position: fixed;
   top: 90px;
   left: 295px;
-  z-index: 10000;
   transition: left 0.3s ease;
 }
 
-  .logoPopup {
-    width: 55px;
-    height: 105px;
-  }
+.logoPopup {
+  width: 55px;
+  height: 105px;
+}
 
-  .allBranchesContainer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform-origin: center center;
-    transition: transform 0.3s ease, top 0.3s ease;
-  }
+.allBranchesContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  transition: transform 0.3s ease, top 0.3s ease;
+}
 
-  .allPlaygroundsWrapper {
-    position: absolute;
-    top: 8px;
-    left: 5px;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform-origin: center center;
-    transition: transform 0.3s ease, top 0.3s ease;
-  }
+.allPlaygroundsWrapper {
+  position: absolute;
+  top: 8px;
+  left: 5px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  transition: transform 0.3s ease, top 0.3s ease;
+}
 
-  .allBranchesContainer {
-    transform: rotate(-20deg);
-    z-index: 2;
-  }
+.allBranchesContainer {
+  transform: rotate(-20deg);
+  z-index: 2;
+}
 
-  .allPlaygroundsWrapper {
-    transform: rotate(20deg);
-    z-index: 10;
-  }
+.allPlaygroundsWrapper {
+  transform: rotate(20deg);
+  z-index: 10;
+}
 
-  .logoPopup:hover .allBranchesContainer {
-    transform: rotate(0deg);
-  }
+.logoPopup:hover .allBranchesContainer {
+  transform: rotate(0deg);
+}
 
-  .logoPopup:hover .allPlaygroundsWrapper {
-    transform: rotate(0deg);
-    top: 58px;
-    left: 0;
-  }
+.logoPopup:hover .allPlaygroundsWrapper {
+  transform: rotate(0deg);
+  top: 58px;
+  left: 0;
+}
 
 
-  .logoPopup:hover .allPlaygroundsWrapper {
-    top: 58px;
-    transform: rotate(0deg);
-  }
+.logoPopup:hover .allPlaygroundsWrapper {
+  top: 58px;
+  transform: rotate(0deg);
+}
 
 
   .actions {
@@ -232,4 +230,4 @@
       z-index: 999;
     }
   }
-}
+

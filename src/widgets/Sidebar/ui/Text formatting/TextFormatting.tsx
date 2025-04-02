@@ -54,7 +54,7 @@ export const TextFormatting = () => {
                             <BoldIcon fill="currentColor" width={20} height={20} />
                         </button>
                         <div className={css.sidebar_text_formatting_action_btn_tooltip}>
-                            Bold Text
+                            <span>Bold</span><span>Text</span>
                         </div>
                     </div>
 
@@ -68,7 +68,7 @@ export const TextFormatting = () => {
                             <UnderlineIcon fill="currentColor" width={20} height={20} />
                         </button>
                         <div className={css.sidebar_text_formatting_action_btn_tooltip}>
-                            Underlined text
+                            <span>Underlined</span><span>text</span>
                         </div>
                     </div>
 
@@ -82,7 +82,7 @@ export const TextFormatting = () => {
                             <ItalicIcon fill="currentColor" width={20} height={20} />
                         </button>
                         <div className={css.sidebar_text_formatting_action_btn_tooltip}>
-                            Italic text
+                            <span>Italic</span><span>text</span>
                         </div>
                     </div>
 
@@ -94,7 +94,7 @@ export const TextFormatting = () => {
                             <FunctionIcon fill="currentColor" width={20} height={20} />
                         </button>
                         <div className={css.sidebar_text_formatting_action_btn_tooltip}>
-                            Math Mode
+                            <span>Math</span><span>Mode</span>
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@ export const TextFormatting = () => {
                             <CodeIcon fill="currentColor" width={20} height={20} />
                         </button>
                         <div className={css.sidebar_text_formatting_action_btn_tooltip}>
-                            Code Mode
+                            <span>Code</span><span>Mode</span>
                         </div>
                     </div>
 
@@ -122,7 +122,7 @@ export const TextFormatting = () => {
                             <LinkIcon fill="currentColor" width={20} height={20} />
                         </button>
                         <div className={css.sidebar_text_formatting_action_btn_tooltip}>
-                            Insert Link
+                            <span>Insert</span><span>Link</span>
                         </div>
                     </div>
 

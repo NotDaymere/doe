@@ -3,8 +3,6 @@ import { Sidebar } from "src/widgets/Sidebar";
 import { ChatContent } from "../ChatContent";
 import { ChatPanel } from "../ChatPanel";
 import { useAppStore, useChatStore } from "src/shared/providers";
-import PlaygroundRenderer from "../Playground";
-import classNames from "classnames";
 import LimitScreen from "../LimitScreen";
 import WelcomeScreen from "../WelcomeScreen";
 import { MODE } from "src/shared/types/Chat";
@@ -87,14 +85,6 @@ export const ChatLayout: React.FC = () => {
                         )}
                     </div>
                 </div>
-                {playground.open && (
-                    <div
-                        className={css.playground}
-                        style={{ width: styles.playgroundWidth, opacity: styles.opacity }}
-                    >
-                        <PlaygroundRenderer type={playground.type} />
-                    </div>
-                )}
             </ChatProvider>
         </>
 

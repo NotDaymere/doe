@@ -30,6 +30,8 @@ import type { MouseEventHandler } from "react";
 import { FavButton } from "../FavButton/FavButton";
 import jsPDF from "jspdf";
 import { useClickOut } from "../../../../../../shared/hooks/useClickOut";
+import PlayButtonIcon from "../../../../../../shared/icons/PlayButton.icon";
+import CopyButtonIcon from "../../../../../../shared/icons/CopyButton.icon";
 
 
 interface CodeChatMessageProps {
@@ -239,7 +241,7 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                                     >
                                         <span className={css.tooltip}>Listen answer</span>
                                         <div className={css.button_container}>
-                                            <PlayIcon fill="currentColor" />
+                                            <PlayButtonIcon fill="currentColor" />
                                         </div>
                                     </button>
 
@@ -271,7 +273,7 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                                     </div>
                                     <button onClick={handleCopy} className={css.button_steps_green}>
                                         <span className={css.tooltip}>Copy chat text</span>
-                                        <CopyIcon />
+                                        <CopyButtonIcon />
                                     </button>
 
                                 </Flex>
