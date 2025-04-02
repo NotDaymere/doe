@@ -93,7 +93,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         ],
     });
 
-    const messageNodeMap = useChatStore((state) => state.messageNodeMap);
+    const messageNodeMap = useChatStore((state) => state.currentChat.messageNodeMap|| {});
 
     const messageQueue = React.useMemo(() => {
         return useChatStore.getState().getMessageQueueFromNode();
@@ -222,22 +222,22 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                 )}
                 {!isCurrentBranchOpen && (
                     <div className={getOpenSavedPlaygrounds().length <= 0
-                                    ? !isSideBarOpen
-                                        ? css.logoWrapper
-                                        : css.logoWrapperSideBarOpen
-                                    : !isSideBarOpen
-                                        ? css.logoWrapperPlaygroundOpen
-                                        : css.logoWrapperPlaygroundAndSideBarOpen}>
-                            {!playgroundFullscreen && (
-                                <div className={css.logoPopup}>
-                                    <div className={css.allPlaygroundsWrapper}>
-                                        <AllPlaygrounds />
-                                    </div>
-                                    <div className={css.allBranchesContainer}>
-                                        <AllBranches />
-                                    </div>
+                        ? !isSideBarOpen
+                            ? css.logoWrapper
+                            : css.logoWrapperSideBarOpen
+                        : !isSideBarOpen
+                            ? css.logoWrapperPlaygroundOpen
+                            : css.logoWrapperPlaygroundAndSideBarOpen}>
+                        {!playgroundFullscreen && (
+                            <div className={css.logoPopup}>
+                                <div className={css.allPlaygroundsWrapper}>
+                                    <AllPlaygrounds />
                                 </div>
-                            )}
+                                <div className={css.allBranchesContainer}>
+                                    <AllBranches />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
