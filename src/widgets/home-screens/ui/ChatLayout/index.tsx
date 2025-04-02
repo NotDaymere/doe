@@ -87,14 +87,6 @@ export const ChatLayout: React.FC = () => {
                         )}
                     </div>
                 </div>
-                {playground.open && (
-                    <div
-                        className={css.playground}
-                        style={{ width: styles.playgroundWidth, opacity: styles.opacity }}
-                    >
-                        <PlaygroundRenderer type={playground.type} />
-                    </div>
-                )}
             </ChatProvider>
         </>
 

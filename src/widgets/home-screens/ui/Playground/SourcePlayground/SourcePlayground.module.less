@@ -3,18 +3,28 @@
     flex-direction: column;
     align-items: center;
     border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 3px 20px rgba(#000, 0.04);
+    //padding: 24px;
+    //box-shadow: 0 3px 20px rgba(#000, 0.04);
     background-image: url("../assets/steps.png");
+    width: 100%;
+    height: 100%;
 }
 
 .sourcePlayground {
-    display: grid;
-    grid-template-rows: repeat(2, calc((100vh - 65px - 24px - 10px) / 2));
+    //display: grid;
+    //grid-template-rows: repeat(2, calc((100vh - 65px - 24px - 10px) / 2));
     gap: 10px;
-    height: calc((100vh - 65px));
-    background-color: #fff;
-    transition: transform 0.3 ease, opacity 0.3 ease;
+    ////height: calc((100vh - 65px));
+    //background-color: #fff;
+    //transition: transform 0.3 ease, opacity 0.3 ease;
+    background-color: #F1F1F1;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
 }
 
 .enter {
