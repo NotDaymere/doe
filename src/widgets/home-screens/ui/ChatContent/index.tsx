@@ -241,9 +241,11 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     </div>
                 )}
 
+
                 {!talkModeActive && !playgroundFullscreen && !isCurrentBranchOpen &&
-                    <Reflections/>
+                    <Reflections />
                 }
+
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
                 <TalkMode targetRef={chatRef} />
                 {/*<div className={css.actions}>*/}
