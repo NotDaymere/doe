@@ -42,6 +42,7 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
     const silenceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const speechStartTimeRef = useRef<number | null>(null);
+    const { isSideBarOpen } = useAppStore();
 
     useEffect(() => {
         if (talkModeActive) {
@@ -254,7 +255,7 @@ export const TalkMode: React.FC<TalkModeProps> = ({ targetRef }) => {
 
     return (
         <div
-            className={clsx(css.talkMode, { [css._active]: containerActive })}
+            className={clsx(css.talkMode, { [css.sidebar_open]: isSideBarOpen }, { [css._active]: containerActive })}
             onMouseLeave={() => setIsNeedToShowActionsPanel(false)}
         >
             <TalkModeMessages
