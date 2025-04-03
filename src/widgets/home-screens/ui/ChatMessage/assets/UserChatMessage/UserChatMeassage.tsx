@@ -44,7 +44,7 @@ export const UserChatMessage: React.FC<UserChatMessageProps> = ({
 
     if (editMsgMode.isEditMsgMode && editMsgMode.msgId === data.id) {
         return (
-            <div className={css.message_with_button_container}>
+            <div className={css.message_edit_container}>
                 <div className={css.edit}>
                     <Editor
                         value={content}
