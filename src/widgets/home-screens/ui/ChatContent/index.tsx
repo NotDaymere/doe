@@ -1,4 +1,4 @@
-import React, { Dispatch, useCallback, useMemo } from "react";
+import React, { Dispatch, useCallback } from "react";
 import { useEditor } from "@tiptap/react";
 import Bold from "@tiptap/extension-bold";
 import Document from "@tiptap/extension-document";
@@ -56,6 +56,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     const { talkModeActive, isSideBarOpen } = useAppStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+    const isInitialRender = React.useRef(true);
     const editor = useEditor({
         extensions: [
             Div,
@@ -131,7 +132,29 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         };
     }, [chatRef]);
 
+    React.useLayoutEffect(() => {
+        const container = chatRef.current;
+        if (container && isInitialRender.current && !isCurrentBranchOpen) {
+            container.style.scrollBehavior = "auto";
+            container.scrollTop = container.scrollHeight;
+            container.style.scrollBehavior = "smooth";
+            isInitialRender.current = false;
+        }
+    }, [isCurrentBranchOpen]);
+
     React.useEffect(() => {
+        if (isCurrentBranchOpen) {
+            const container = chatRef.current;
+            if (container) {
+                container.style.scrollBehavior = "auto";
+                container.scrollTop = 0;
+                container.style.scrollBehavior = "smooth";
+            }
+        }
+    }, [isCurrentBranchOpen]);
+
+    React.useEffect(() => {
+        if (isCurrentBranchOpen) return;
         if (!chatRef.current) return;
         const container = chatRef.current;
         let prevScrollHeight = container.scrollHeight;
@@ -154,7 +177,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         }, 900);
 
         return () => clearInterval(intervalId);
-    }, [messageQueue.length]);
+    }, [messageQueue.length, isCurrentBranchOpen]);
 
     return (
         <div
