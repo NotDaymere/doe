@@ -8,6 +8,7 @@ import ModalContentPanelVideoPlayIcon from "../../../../../shared/icons/ModalCon
 import ModalContentPanelScissorsIcon from "../../../../../shared/icons/ModalContentPanelScissors.icon";
 import VideoPlayIcon from "../../../../../shared/icons/VideoPlay.icon";
 import { videoCuttingService } from "./VideoCuttingService";
+import ModalContentPanelCutIcon from "../../../../../shared/icons/ModalContentPanelCut.icon";
 
 interface VideoModalProps {
     url: string;
@@ -274,6 +275,14 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                     <ModalContentPanelVideoPlayIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
+
+                <div
+                    className={css.modalContentEditPanelItem}
+                >
+                    <ModalContentPanelCutIcon fill="currentColor" />
+                </div>
+                <div className={css.separator}></div>
+
                 <div
                     className={css.modalContentEditPanelItem}
                     onClick={() => {
@@ -290,10 +299,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                 >
                     <ModalContentPanelScissorsIcon fill="currentColor" />
                 </div>
-                <div className={css.separator}></div>
-                <div className={css.modalContentEditPanelItem} onClick={() => setShowSpeedPopup(!showSpeedPopup)}>
-                    <ModalContentPanelEditIcon fill="currentColor" />
-                </div>
             </div>
             {showSpeedPopup && (
                 <div className={css.speedPopup}>
@@ -306,7 +311,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
             )}
             {isCutting && (
                 <div className={css.cutControls}>
-                    <button
+                <button
                         className={css.cutButton}
                         onClick={(e) => {
                             e.stopPropagation();

@@ -268,7 +268,9 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                         <div
                             onClick={() => setIsCropping(false)}
                             className={css.modalContentEditPanelItem}
-                        ><CloseSearchInputIcon width={30} height={30}/></div>
+                        >
+                            <CloseSearchInputIcon width={30} height={30}/>
+                        </div>
                     )}
 
                 <div className={css.separator}></div>
@@ -290,14 +292,7 @@ const ImageFilePreviewModal: React.FC<ImageModalProps> = ({
                         />
                     </div>
                 )}
-                <div className={css.separator}></div>
-                <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelEditIcon fill="currentColor" />
-                </div>
-                <div className={css.separator}></div>
-                <div className={css.modalContentEditPanelItem}>
-                    <ModalContentPanelColorsIcon fill="currentColor" />
-                </div>
+
                 <div className={css.separator}></div>
                 <div
                     className={css.modalContentEditPanelItem}
