@@ -20,6 +20,7 @@ export const Sidebar: React.FC = () => {
     const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
     const { editor } = useAppStore();
     const editorState = useEditorContext(editor);
+    const {getOpenSavedPlaygrounds} = useChatStore();
     const { playground , clearCurrentChatMessages} = useChatStore();
     const [theme, setTheme] = React.useState<"Light" | "Dark">("Light")
     const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false)
@@ -200,7 +201,10 @@ export const Sidebar: React.FC = () => {
                     <LiveTools />
                 </div>
 
-                <div className={css.delete_all_messages}>
+
+                <div className={ getOpenSavedPlaygrounds().length > 0
+                                    ? css.delete_all_messages_open_playgrounds
+                                    : css.delete_all_messages}>
                     <div className={css.delete_all_messages_btn_container}>
                         <button
                             className={css.delete_all_messages_btn}
