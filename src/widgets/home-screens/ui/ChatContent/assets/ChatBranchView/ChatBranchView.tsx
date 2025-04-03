@@ -60,11 +60,14 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                 ))}
             </div>
             <div className={css.content_chat_branch_dialogs}>
+
                 {currentBranch.dialogsMessages.map((dialog, index) => (
                     <React.Fragment key={index}>
                         <div className={css.content_chat_branch}>
                             {currentBranch && (
-                                <ChatBranchSection isOpenBrunch={true} />
+                                <div className={css.branch_section}>
+                                    <ChatBranchSection isOpenBrunch={true} />
+                                </div>
                                 )
                             }
                             <div className={css.content_chat_branch_dialog}>
