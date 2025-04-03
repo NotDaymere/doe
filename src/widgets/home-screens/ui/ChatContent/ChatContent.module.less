@@ -91,6 +91,18 @@
 .logoPopup {
   width: 55px;
   height: 105px;
+
+  &[data-active="true"] {
+    .allBranchesContainer {
+      transform: rotate(0deg);
+    }
+
+    .allPlaygroundsWrapper {
+      transform: rotate(0deg);
+      top: 58px;
+      left: 0;
+    }
+  }
 }
 
 .allBranchesContainer {
@@ -139,10 +151,5 @@
   left: 0;
 }
 
-
-.logoPopup:hover .allPlaygroundsWrapper {
-  top: 58px;
-  transform: rotate(0deg);
-}
 
 

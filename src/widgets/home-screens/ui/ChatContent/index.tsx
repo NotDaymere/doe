@@ -1,4 +1,4 @@
-import React, { Dispatch, useCallback } from "react";
+import React, { Dispatch, useCallback, useState } from "react";
 import { useEditor } from "@tiptap/react";
 import Bold from "@tiptap/extension-bold";
 import Document from "@tiptap/extension-document";
@@ -80,6 +80,21 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
             createHandleTab(),
         ],
     });
+    const [activeAllPlaygrounds, setActiveAllPlaygrounds] = useState<boolean>(false);
+    const changeActiveAllPlaygrounds = () => {
+        if (!activeAllPlaygrounds) {
+            setActiveAllPlaygrounds(true);
+            return;
+        }
+        setTimeout(
+            () => setActiveAllPlaygrounds(!activeAllPlaygrounds),
+            450
+        )
+    }
+
+    const [activeAllBranches, setActiveAllBranches] = useState<boolean>(false);
+    const changeActiveAllBranches = () => setActiveAllBranches(!activeAllBranches)
+
 
     const messageNodeMap = useChatStore((state) => state.currentChat.messageNodeMap|| {});
 
@@ -216,12 +231,19 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                                         ? css.logoWrapperPlaygroundOpen
                                         : css.logoWrapperPlaygroundAndSideBarOpen}>
                             {!playgroundFullscreen && (
-                                <div className={css.logoPopup}>
+                                <div className={css.logoPopup}
+                                    data-active={activeAllPlaygrounds || activeAllBranches}>
                                     <div className={css.allPlaygroundsWrapper}>
-                                        <AllPlaygrounds />
+                                        <AllPlaygrounds
+                                            activeAllPlaygrounds={activeAllPlaygrounds}
+                                            changeActiveAllPlaygrounds={changeActiveAllPlaygrounds}
+                                        />
                                     </div>
                                     <div className={css.allBranchesContainer}>
-                                        <AllBranches />
+                                        <AllBranches
+                                            activeAllBranches={activeAllBranches}
+                                            changeActiveAllBranches={changeActiveAllBranches}
+                                        />
                                     </div>
                                 </div>
                             )}
