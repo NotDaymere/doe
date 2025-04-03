@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react"; // Добавляем useEffect
 import css from "./ChatTagsPanel.module.less";
 import { ChatTagsEnum } from "../../../../../../shared/enums/ChatTagsEnum";
 import { TAG_META } from "../../SideBarMenu";
@@ -20,15 +20,34 @@ interface ChatTagsPanelProps {
     onRenameTag: (tag: ChatTagsEnum, name: string) => void;
     onInputChange: (val: string) => void;
     onKeyPressInput: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    onStartEditTag: (tag: ChatTagsEnum) => void;
+    setEditValue: (val: string) => void;
 }
 
 export const ChatTagsPanel: React.FC<ChatTagsPanelProps> = ({
-                                                              currentTags, customTagNames, selectedTags, showAllTags,
-                                                              inputValue, editValue, editingTag,
-                                                              onToggleShowAll, onSelectTag, onRenameTag,
-                                                              onInputChange, onKeyPressInput,
-                                                          }) => {
+                                                                currentTags,
+                                                                customTagNames,
+                                                                selectedTags,
+                                                                showAllTags,
+                                                                inputValue,
+                                                                editValue,
+                                                                editingTag,
+                                                                onToggleShowAll,
+                                                                onSelectTag,
+                                                                onRenameTag,
+                                                                onInputChange,
+                                                                onKeyPressInput,
+                                                                onStartEditTag,
+                                                                setEditValue,
+                                                            }) => {
     const inputRef = useRef<HTMLInputElement>(null);
+    const editInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (editingTag && editInputRef.current) {
+            editInputRef.current.focus();
+        }
+    }, [editingTag]);
 
     return showAllTags ? (
         <div className={css.all_tags_panel}>
@@ -62,17 +81,25 @@ export const ChatTagsPanel: React.FC<ChatTagsPanelProps> = ({
                              style={{ backgroundColor: color }} />
                         {isEditing ? (
                             <input
+                                ref={editInputRef}
                                 className={css.edit_tag_input}
                                 value={editValue}
-                                autoFocus
+                                onChange={e => setEditValue(e.target.value)}
                                 onBlur={() => onRenameTag(tag, editValue.trim() || defaultName)}
-                                onKeyDown={e => e.key === "Enter" && onRenameTag(tag, editValue.trim() || defaultName)}
+                                onKeyDown={e => {
+                                    if (e.key === "Enter") {
+                                        onRenameTag(tag, editValue.trim() || defaultName);
+                                    }
+                                }}
                             />
                         ) : (
                             <div>{customName}</div>
                         )}
                         {!isEditing && (
-                            <div className={css.edit_tag_name_btn} onClick={e => { e.stopPropagation(); }}>
+                            <div className={css.edit_tag_name_btn} onClick={e => {
+                                e.stopPropagation();
+                                onStartEditTag(tag);
+                            }}>
                                 <PenIcon width={11} height={11} />
                             </div>
                         )}
@@ -104,6 +131,5 @@ export const ChatTagsPanel: React.FC<ChatTagsPanelProps> = ({
                 <ThreeDotsIcon />
             </div>
         </div>
-
     );
 };

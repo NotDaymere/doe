@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import css from "./IndividualChats.module.less";
 import IndividualChatsIcon from "../../../../../shared/icons/IndividualChatsIcon";
 import SearchIcon from "../../../../../shared/icons/SearchIcon";
@@ -10,20 +10,21 @@ import { CSSTransition } from "react-transition-group";
 import AllBranchesMenu from "../../../../home-screens/ui/ChatContent/assets/AllBranchesMenu/AllBranchesMenu";
 import { IndividualChatsActions } from "./IndividualChatsActions/IndividualChatsActions";
 import { useChatStore } from "../../../../../shared/providers";
-import {ChatTagsPanel} from "./ChatTagsPanel/ChatTagsPanel";
-import {ChatItem} from "./ChatItem/ChatItem";
+import { ChatTagsPanel } from "./ChatTagsPanel/ChatTagsPanel";
+import { ChatItem } from "./ChatItem/ChatItem";
 import ReactDOM from "react-dom";
+import { TAG_META } from "../SideBarMenu";
 
 interface IndividualChatsProps {
     isSideBarOpen: boolean;
     isSideBarMenuOpen: boolean;
 }
 
-export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualChatsProps) => {
+export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: IndividualChatsProps) => {
     const {
         chats,
         currentChat,
-        customTagNames ,
+        customTagNames,
         setChatTags,
         renameTag,
         switchChat,
@@ -31,13 +32,13 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
         removeChat,
     } = useChatStore();
 
-    const [isIndividualChatsSearchInputOpen, setIsIndividualChatsSearchInputOpen] = React.useState(false);
-    const [isIndividualChatOpen, setIsIndividualChatOpen] = React.useState(false);
-    const [expandedChatId, setExpandedChatId] = React.useState<string | null>(null);
+    const [isIndividualChatsSearchInputOpen, setIsIndividualChatsSearchInputOpen] = useState(false);
+    const [isIndividualChatOpen, setIsIndividualChatOpen] = useState(false);
+    const [expandedChatId, setExpandedChatId] = useState<string | null>(null);
     const [activeTagPanel, setActiveTagPanel] = useState<string | null>(null);
-    const [isBranchMenuOpen, setIsBranchMenuOpen] = React.useState(false);
+    const [isBranchMenuOpen, setIsBranchMenuOpen] = useState(false);
     const [menuPosition, setMenuPosition] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
-    const [isShowActions, setIsShowActions ] = React.useState(false);
+    const [isShowActions, setIsShowActions] = useState(false);
     const [activeChatForActions, setActiveChatForActions] = useState<{
         id: string;
         name: string;
@@ -49,10 +50,9 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
     const [showAllTags, setShowAllTags] = useState<string | null>(null);
     const [editingTag, setEditingTag] = useState<ChatTagsEnum | null>(null);
     const [editValue, setEditValue] = useState("");
-    const [selectedTags, setSelectedTags] = React.useState<ChatTagsEnum[]>([]);
-
+    const [selectedTags, setSelectedTags] = useState<ChatTagsEnum[]>([]);
     const [inputValue, setInputValue] = useState("");
-    const panelRef = React.useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
 
     const handleOpenIndividualChat = () => {
         setIsIndividualChatOpen(!isIndividualChatOpen);
@@ -92,7 +92,6 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
         setInputValue("");
     }, [activeTagPanel, chats]);
 
-
     return isSideBarMenuOpen && (
         <>
             <div
@@ -100,7 +99,7 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                     ? !isIndividualChatsSearchInputOpen
                         ? css.open_sidebar_menu_action_container
                         : css.sidebar_search_input_container
-                    :  css.sidebar_menu_action_container
+                    : css.sidebar_menu_action_container
                 }
                 data-active={isIndividualChatOpen}
                 onClick={handleOpenIndividualChat}
@@ -123,7 +122,6 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                     )}
                 </div>
 
-
                 {isIndividualChatOpen && isIndividualChatsSearchInputOpen && isSideBarOpen ? (
                     <div className={css.sidebar_search_input}>
                         <input
@@ -141,10 +139,7 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                         <div className={css.section_name}>
                             <span>Individual</span><span>Chats</span>
                         </div>
-                        <div
-                            className={css.show_more_btn}
-
-                        >
+                        <div className={css.show_more_btn}>
                             {!isIndividualChatOpen ? "+" : "-"}
                         </div>
                     </div>
@@ -177,7 +172,6 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                                         setIsShowActions(!isShowActions);
                                         setActiveChatForActions({ id: chat.id, name: chat.name, position: { top: e.clientY, left: e.clientX + 30 } });
                                     }}
-
                                     onTagsClick={e => {
                                         e.stopPropagation();
                                         setActiveTagPanel(prev => (prev === chat.id ? null : chat.id));
@@ -206,11 +200,36 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                                             }}
                                             onRenameTag={(tag, name) => { renameTag(tag, name); setEditingTag(null); }}
                                             onInputChange={val => setInputValue(val)}
-                                            onKeyPressInput={e => { if(e.key === " ") {/* logic from parent */} }}
+                                            onKeyPressInput={e => {
+                                                if (e.key === " " && inputValue.trim()) {
+                                                    const query = inputValue.trim().toLowerCase();
+                                                    const matchEntry = Object.entries(TAG_META).find(([key, meta]) => {
+                                                        const tagEnum = key as ChatTagsEnum;
+                                                        const defaultName = meta.defaultName.toLowerCase();
+                                                        const customName = customTagNames.get(tagEnum)?.toLowerCase();
+                                                        return defaultName === query || customName === query;
+                                                    });
+
+                                                    if (matchEntry) {
+                                                        const tagEnum = matchEntry[0] as ChatTagsEnum;
+                                                        if (!selectedTags.includes(tagEnum)) {
+                                                            const updated = [...selectedTags, tagEnum];
+                                                            setChatTags(chat.id, updated);
+                                                            setSelectedTags(updated);
+                                                        }
+                                                    }
+                                                    setInputValue("");
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            onStartEditTag={tag => {
+                                                setEditingTag(tag);
+                                                setEditValue(customTagNames.get(tag) ?? TAG_META[tag].defaultName);
+                                            }}
+                                            setEditValue={setEditValue}
                                         />
                                     </div>
                                 )}
-
 
                                 {isOpen && branches.length > 0 && (
                                     <div className={css.branches_list_container}>
@@ -220,16 +239,13 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                                                 <div key={branch.id} className={css.branch_item}>
                                                     <div className={css.branch_icon_and_name}>
                                                         <div>
-                                                            <BranchIcon fill="currentColor" width={16}
-                                                                        height={16} />
+                                                            <BranchIcon fill="currentColor" width={16} height={16} />
                                                         </div>
                                                         <div className={css.branch_name}>
                                                             {branch.name}
                                                         </div>
                                                     </div>
-                                                    <div
-                                                        className={css.branch_three_dots}
-                                                        onClick={handleOpenBranchMenu}>
+                                                    <div className={css.branch_three_dots} onClick={handleOpenBranchMenu}>
                                                         <ThreeDotsIcon />
                                                     </div>
 
@@ -283,5 +299,5 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                 );
             })()}
         </>
-    )
-}
+    );
+};
