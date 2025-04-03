@@ -5,7 +5,6 @@ import FilePreviewModalOverlay from "../FilePreviewModalOverplay/FilePreviewModa
 import ModalContentPanelEditIcon from "../../../../../shared/icons/ModalContentPanelEdit.icon";
 import ModalContentPanelVolumeIcon from "../../../../../shared/icons/ModalContentPanelVolume.icon";
 import ModalContentPanelVideoPlayIcon from "../../../../../shared/icons/ModalContentPanelVideoPlay.icon";
-import ModalContentPanelCutIcon from "../../../../../shared/icons/ModalContentPanelCut.icon";
 import ModalContentPanelScissorsIcon from "../../../../../shared/icons/ModalContentPanelScissors.icon";
 import VideoPlayIcon from "../../../../../shared/icons/VideoPlay.icon";
 import { videoCuttingService } from "./VideoCuttingService";

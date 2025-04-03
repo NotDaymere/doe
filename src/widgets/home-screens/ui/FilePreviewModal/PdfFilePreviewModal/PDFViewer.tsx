@@ -145,33 +145,32 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 for (let i = 1; i <= pdf.numPages; i++) {
                     const page = await pdf.getPage(i);
                     const viewport = page.getViewport({ scale: hasZoomed ? scale : 1 });
-                    // for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                    //     const page = await pdf.getPage(pageNum);
-                    //     const viewport = page.getViewport({ scale });
+                    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                        const page = await pdf.getPage(pageNum);
 
-                    const canvas = document.createElement("canvas");
-                    canvas.className = "pdfCanvas";
-                    canvas.classList.add("pdfCanvas");
+                        const canvas = document.createElement("canvas");
+                        canvas.className = "pdfCanvas";
+                        canvas.classList.add("pdfCanvas");
 
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
-                    if(containerRef?.current) {
-                        containerRef.current.appendChild(canvas);
-                    }
-                    if (!hasZoomed) {
-                        canvas.style.width = "100%";
-                        canvas.style.height = "auto";
-                    }
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+                        if (containerRef?.current) {
+                            containerRef.current.appendChild(canvas);
+                        }
+                        if (!hasZoomed) {
+                            canvas.style.width = "100%";
+                            canvas.style.height = "auto";
+                        }
 
-                    containerRef.current!.appendChild(canvas);
-                    const context = canvas.getContext("2d");
-                    if (context) page.render({ canvasContext: context, viewport });
-                    if (context) {
-                        const renderContext = {
-                            canvasContext: context,
-                            viewport: viewport,
-                        };
-                        page.render(renderContext);
+                        const context = canvas.getContext("2d");
+                        if (context) page.render({ canvasContext: context, viewport });
+                        if (context) {
+                            const renderContext = {
+                                canvasContext: context,
+                                viewport: viewport,
+                            };
+                            page.render(renderContext);
+                        }
                     }
                 }
             })();

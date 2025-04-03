@@ -52,7 +52,8 @@ export function useEditorContext(editor: Editor | null) {
                 editor.off("update", handleUpdate);
                 editor.off("selectionUpdate", handleUpdate);
             };
-        }
+        } else
+        return () => {}
     }, [editor]);
 
     return {

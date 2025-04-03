@@ -642,15 +642,15 @@ export const ChatPanel: React.FC = () => {
                         value={text}
                         onChange={handleChangeEditor}
                         handleKeyDown={handleKeyPress}
-                        // onFocus={setEditor}
-                        // onBlur={() => setEditor(null)}
+                        onFocus={setEditor}
+                        onBlur={() => setEditor(null)}
                         // onChange={setText}
-                        onFocus={handleFocusEditor}
-                        onBlur={handleBlurEditor}
+                        // onFocus={handleFocusEditor}
+                        // onBlur={handleBlurEditor}
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
                         clearContent={clearContent}
-                        placeholder="Ask Doe anything you’d like about the world..."
+                        placeholder={placeholder}
                         onMouseUp={handleTextSelection}
                     />
                     <ScreenShareMenu
@@ -759,10 +759,10 @@ export const ChatPanel: React.FC = () => {
                                 unmountOnExit
                             >
                                 <button className={css.panel_loadingBtn}>
-                                    <div className={css.chat_response_stop_icon}>
+                                    <div className={css.chat_response_stop_icon}
+                                         onClick={handleStopReply}>
                                         <ChatResponseStopIcon
                                             fill="currentColor"
-                                            onClick={handleStopReply}
                                         />
                                     </div>
                                 </button>
