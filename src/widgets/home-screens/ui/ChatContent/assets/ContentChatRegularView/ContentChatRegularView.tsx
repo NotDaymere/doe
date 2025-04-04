@@ -47,7 +47,7 @@ export const ChatRegularView: React.FC<ChatRegularViewProps> = ({
             {messageQueue.map((item, index) => {
                 const branch = savedBranches.find(b => b.mainMessageId === item.id);
                 const hasBranch = !!(branch && branch.mainMessageId === item.id);
-
+                console.log(hasBranch, branch, branch);
                 return (
                     <div key={item.id} id={`chat-msg-${item.id}`}>
                         <ChatMessageDate id={index} />

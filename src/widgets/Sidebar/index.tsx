@@ -234,7 +234,7 @@ export const Sidebar: React.FC = () => {
                 <div className={css.sidebar_separator}>
                     <div className={css.inner_sidebar_separator}></div>
                 </div>
-                <div className={css.margin_bottom}>
+                <div>
                     <LiveTools />
                 </div>
                 <div className={css.sidebar_separator}>

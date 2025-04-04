@@ -55,9 +55,9 @@ export const LiveTools = () => {
                             className={css.sidebar_controls_btn}
                         >
                             {mode === MODE.TRANSLATION ? (
-                                <TranslationIcon fill1={'#FFD632'} fill2={'#AC7CFF'} />
+                                <TranslationIcon fill1={'#FFD632'} fill2={'#AC7CFF'} isFill={true} />
                             ) : (
-                                <TranslationIcon />
+                                <TranslationIcon fill="currentColor" isFill={false} />
                             )}
                         </button>
                         <div className={css.sidebar_live_tools_action_btn_tooltip}>
@@ -72,7 +72,7 @@ export const LiveTools = () => {
                             {mode === MODE.RECORDING ? (
                                 <RecordIcon fill={'#FF4646'} />
                             ) : (
-                                <RecordIcon  />
+                                <RecordIcon fill="currentColor" />
                             )}
                         </button>
                             <div className={css.sidebar_live_tools_action_btn_tooltip}>

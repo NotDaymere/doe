@@ -35,7 +35,7 @@ export const SharingTools = () => {
                             <button
                                 className={css.sidebar_controls_btn}
                             >
-                                {!isSharingActive ? <SharedWithYouActiveIcon /> : <SharedWithYouIcon />}
+                                {!isSharingActive ? <SharedWithYouActiveIcon /> : <SharedWithYouIcon  />}
                             </button>
                             <div className={css.sidebar_live_tools_action_btn_tooltip}>
                                 Sharing Content
