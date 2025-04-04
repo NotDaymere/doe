@@ -103,8 +103,6 @@ export const ChatPanel: React.FC = () => {
         setIsCurrentBranchOpen,
 
         getMessageQueueFromNode,
-        isHyperlinkInputOpen,
-        setIsHyperlinkInputOpen,
         setMessagesCount,
         messagesCount,
         disableButtons,
@@ -113,14 +111,15 @@ export const ChatPanel: React.FC = () => {
 
     const [loadingFile, setLoadingFile] = React.useState<string | undefined>(undefined);
 
-    const { isTablePromptVisible, setIsTablePromptVisible } = useAppStore();
+    const { isTablePromptVisible, setIsTablePromptVisible, isHyperlinkInputOpen,
+        setIsHyperlinkInputOpen } = useAppStore();
     const {
         selectedArea
     } = useAppStore();
     const panelRef = React.useRef<HTMLDivElement>(null);
 
 
-    const { 
+    const {
         drag,
         dragTarget,
         handleDragDropTarget,
@@ -687,15 +686,7 @@ export const ChatPanel: React.FC = () => {
                     <button className={css.panel_button}>
                         <MicrophoneIcon />
                     </button>
-                    {/*{!prompt.active ? (*/}
-                    {/*    <button className={css.panel_submitBtn} onClick={() => onSendMessage(text)}>*/}
-                    {/*        Send <ArrowUpIcon />*/}
-                    {/*    </button>*/}
-                    {/*) : (*/}
-                    {/*    <button className={css.panel_callBtn}>*/}
-                    {/*        <CallVoiceIcon />*/}
-                    {/*    </button>*/}
-                    {/*)}*/}
+
                     <CSSTransition
                         in={showLinkInput && isHyperlinkInputOpen}
                         timeout={300}
@@ -807,188 +798,6 @@ export const ChatPanel: React.FC = () => {
                             </CSSTransition>
                         )}
                     </SwitchTransition>
-                    {/*<ScreenShareMenu
-                        isActive={shareScreenConfig.expandedButtons}
-                        type={shareScreenConfig.shareType}
-                        onConfig={(type) =>
-                            setShareScreenConfig({ ...shareScreenConfig, shareType: type })
-                        }
-                        onClickOutside={onShareScreenClickOutside}
-                    />
-                    {!shareScreenConfig.expandedButtons && (
-                        <button
-                            className={css.screenShareButton}
-                            disabled={disableButtons}
-                            onMouseEnter={(event) => {
-                                if (!event.currentTarget.disabled) {
-                                    setShareScreenConfig({
-                                        ...shareScreenConfig,
-                                        expandedButtons: true,
-                                    });
-                                }
-                            }}
-                        >
-                            <ScreenShareIcon width={16} height={16} />
-                        </button>
-                    )}
-                    {shareScreenConfig.shareType && (
-                        <ShareScreenInfo
-                            isActive={!!shareScreenConfig.shareType}
-                            onClickOutside={onShareScreenClickOutside}
-                            {...SCREEN_SHARE_CONFIG[shareScreenConfig.shareType]}
-                        />
-                    )}
-                    <button className={css.panel_button}>
-                        <MicrophoneIcon />
-                    </button>
-                    {!prompt.active ? (
-                        <button className={css.panel_submitBtn} onClick={() => onSendMessage(text)}>
-                            Send <ArrowUpIcon />
-                        </button>
-                    ) : (
-                        <button className={css.panel_callBtn}>
-                            <CallVoiceIcon />
-                        </button>
-                    )}
-
-                    <CSSTransition
-                        in={showLinkInput && isHyperlinkInputOpen}
-                        timeout={300}
-                        classNames={{
-                            enter: css.linkEnter,
-                            enterActive: css.linkEnterActive,
-                            exit: css.linkExit,
-                            exitActive: css.linkExitActive,
-                        }}
-                        unmountOnExit
-                    >
-                        <div
-                            className={css.hyperlink_form}
-                            style={{
-                                position: "fixed",
-                                top: linkInputPosition.top,
-                                left: linkInputPosition.left,
-                                zIndex: 1000,
-                            }}
-                        >
-                            <input
-                                value={linkUrl}
-                                onChange={(e) => setLinkUrl(e.target.value)}
-                                placeholder="Enter URL"
-                                onFocus={() => {
-                                    window.getSelection()?.removeAllRanges();
-                                }}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        e.preventDefault();
-                                        (e.currentTarget as HTMLInputElement).blur();
-                                        handleApplyLink();
-                                        setTimeout(() => {
-                                            window.getSelection()?.removeAllRanges();
-                                            if (
-                                                document.activeElement &&
-                                                typeof (document.activeElement as HTMLElement).blur === "function"
-                                            ) {
-                                                (document.activeElement as HTMLElement).blur();
-                                            }
-                                        }, 100);
-                                    }
-                                }}
-                            />
-                        </div>
-                    </CSSTransition>
-
-                    <SwitchTransition>
-                        {isReplyLoading ? (
-                            <CSSTransition
-                                in={isReplyLoading}
-                                key="loading"
-                                timeout={{ enter: 300, exit: 300 }}
-                                classNames={{
-                                    enter: css.fadeEnter,
-                                    enterActive: css.fadeEnterActive,
-                                    exit: css.fadeExit,
-                                    exitActive: css.fadeExitActive,
-                                }}
-                                mountOnEnter
-                                unmountOnExit
-                            >
-                                <button className={css.panel_loadingBtn}>
-                                    <div
-                                        className={css.chat_response_stop_icon}
-                                        onClick={handleStopReply}>
-                                        <ChatResponseStopIcon
-                                            fill="currentColor"
-                                        />
-                                    </div>
-                                </button>
-                            </CSSTransition>
-                        ) : (
-                            <CSSTransition
-                                in={!isReplyLoading}
-                                key="ready"
-                                timeout={{ enter: 300, exit: 300 }}
-                                classNames={{
-                                    enter: css.fadeEnter,
-                                    enterActive: css.fadeEnterActive,
-                                    exit: css.fadeExit,
-                                    exitActive: css.fadeExitActive,
-                                }}
-                                mountOnEnter
-                                unmountOnExit
-                            >
-                                <>
-                                    {/*<button className={css.panel_button} disabled>*/}
-                    {/*    <ScreenShareIcon />*/}
-                    {/*</button>*/}
-                    {/*<button className={css.panel_button}>*/}
-                    {/*    <MicrophoneIcon />*/}
-                    {/*</button>*/}
-
-                    {/*{isTablePromptVisible ? (*/}
-                    {/*    <button className={css.panel_send_table_data_btn}>*/}
-                    {/*        <SendTableDataIcon fill="currentColor" />*/}
-                    {/*    </button>*/}
-                    {/*) : !prompt.active ? (*/}
-                    {/*    !questionCodeMessage ? (*/}
-                    {/*        <button className={css.panel_submitBtn} onClick={handleSend}>*/}
-                    {/*            Send <ArrowUpIcon />*/}
-                    {/*        </button>*/}
-                    {/*    ) : (*/}
-                    {/*        <button className={css.panel_hammerBtn}>*/}
-                    {/*            <HammerIcon />*/}
-                    {/*        </button>*/}
-                    {/*    )*/}
-                    {/*) : (*/}
-                    {/*    <button className={css.panel_callBtn}>*/}
-                    {/*        <CallVoiceIcon />*/}
-                    {/*    </button>*/}
-                    {/*)}*/}
-        {/*        </>*/}
-        {/*    </CSSTransition>*/}
-        {/*    )*/}
-        {/*</SwitchTransition>*/}
-        {/*            <button className={css.panel_button} disabled>*/}
-        {/*                <ScreenShareIcon />*/}
-        {/*            </button>*/}
-        {/*            <button className={css.panel_button}>*/}
-        {/*                <MicrophoneIcon />*/}
-        {/*            </button>*/}
-        {/*            {!prompt.active ? (*/}
-        {/*                !questionCodeMessage ? (*/}
-        {/*                <button className={css.panel_submitBtn} onClick={handleSend}>*/}
-        {/*                    Send <ArrowUpIcon />*/}
-        {/*                </button>*/}
-        {/*                ) : (*/}
-        {/*                    <button className={css.panel_hammerBtn}>*/}
-        {/*                        <HammerIcon />*/}
-        {/*                    </button>*/}
-        {/*                )*/}
-        {/*            ) : (*/}
-        {/*                <button className={css.panel_callBtn}>*/}
-        {/*                    <CallVoiceIcon />*/}
-        {/*                </button>*/}
-        {/*            )}*/}
 
                 </div>
                 {messagesCount === 0 && (
