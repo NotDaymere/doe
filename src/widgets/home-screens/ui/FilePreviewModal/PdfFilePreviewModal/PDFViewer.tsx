@@ -8,8 +8,10 @@ import React, {
 import * as pdfjsLib from "pdfjs-dist";
 import { PDFDocument } from "pdf-lib";
 import css from "./PdfFilePreviewModal.module.less";
-import ArrowLeftButtonIcon from "../../../../../shared/icons/ArrowLeftButton.icon";
+import ArrowLeftIcon from "../../../../../shared/icons/ArrowLeft.icon";
+import ArrowRightIcon from "../../../../../shared/icons/ArrowRight.icon";
 import ArrowRightButtonIcon from "../../../../../shared/icons/ArrowRightButton.icon";
+import ArrowLeftButtonIcon from "../../../../../shared/icons/ArrowLeftButton.icon";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
@@ -30,8 +32,6 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         const containerRef = useRef<HTMLDivElement>(null);
         const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
         const [pdf, setPdf] = useState<pdfjsLib.PDFDocumentProxy | null>(null);
-        const [scale, setScale] = useState(1);
-        const [hasZoomed, setHasZoomed] = useState(false);
         const [originalDimensions, setOriginalDimensions] = useState<
             Array<{ width: number; height: number }>
         >([]);
@@ -137,75 +137,12 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             if (!isDrawingRef.current) return;
             isDrawingRef.current = false;
         };
-        useEffect(() => {
-            if (!pdf || !containerRef.current) return;
-            containerRef.current.innerHTML = "";
 
-            (async () => {
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    const page = await pdf.getPage(i);
-                    const viewport = page.getViewport({ scale: hasZoomed ? scale : 1 });
-                    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                        const page = await pdf.getPage(pageNum);
-
-                        const canvas = document.createElement("canvas");
-                        canvas.className = "pdfCanvas";
-                        canvas.classList.add("pdfCanvas");
-
-                        canvas.width = viewport.width;
-                        canvas.height = viewport.height;
-                        if (containerRef?.current) {
-                            containerRef.current.appendChild(canvas);
-                        }
-                        if (!hasZoomed) {
-                            canvas.style.width = "100%";
-                            canvas.style.height = "auto";
-                        }
-
-                        const context = canvas.getContext("2d");
-                        if (context) page.render({ canvasContext: context, viewport });
-                        if (context) {
-                            const renderContext = {
-                                canvasContext: context,
-                                viewport: viewport,
-                            };
-                            page.render(renderContext);
-                        }
-                    }
-                }
-            })();
-        }, [pdf, scale, hasZoomed]);
-
-        useEffect(() => {
-            if (!pdf || !containerRef.current) return;
-
-            (async () => {
-                if(containerRef?.current?.clientWidth && containerRef?.current?.clientHeight) {
-                    const containerWidth = containerRef.current.clientWidth;
-                    const containerHeight = containerRef.current.clientHeight;
-
-                    if (!containerWidth || !containerHeight) {
-                        console.warn("Container has zero size, using scale=1 by default");
-                        setScale(1);
-                        return;
-                    }
-
-                    const page = await pdf.getPage(1);
-                    const viewport = page.getViewport({ scale: 1 });
-
-                    const widthRatio = containerWidth / viewport.width;
-                    const heightRatio = containerHeight / viewport.height;
-
-                    const bestScale = Math.min(widthRatio, heightRatio);
-
-                    setScale(bestScale);
-                }
-            })();
-        }, [pdf]);
         useEffect(() => {
             if (!pdf || !containerRef.current) return;
             containerRef.current.innerHTML = "";
             canvasRefs.current = [];
+
             (async () => {
                 const pixelRatio = window.devicePixelRatio || 1;
                 for (let i = 1; i <= pdf.numPages; i++) {
@@ -253,6 +190,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                         pdfContext.scale(pixelRatio, pixelRatio);
                         page.render({ canvasContext: pdfContext, viewport });
                     }
+
                     canvasRefs.current[i - 1] = drawCanvas;
 
                     const index = i - 1;
@@ -376,12 +314,13 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 ] as HTMLElement;
             if (el)
                 el.scrollIntoView({ behavior: "smooth" });
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-        if (!containerRef.current) return;
-        const canvasElements = containerRef.current.getElementsByClassName("pdfCanvas");
-        if (!canvasElements[page - 1]) return;
-        (canvasElements[page - 1] as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start" });
-    };
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+            if (!containerRef.current) return;
+            const canvasElements = containerRef.current.getElementsByClassName("pdfCanvas");
+            if (!canvasElements[page - 1]) return;
+            (canvasElements[page - 1] as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start" });
+        };
+
 
         return (
             <div className={css.modalPdfContainer}>
