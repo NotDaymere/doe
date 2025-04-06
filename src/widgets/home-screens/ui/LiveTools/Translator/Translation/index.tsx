@@ -145,7 +145,7 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
                                     <>
                                         <span
                                             className={classNames(css.panel_drag_text, {
-                                                [css.hidden]: dragTarget,
+                                                [css.hidden]: dragTarget || !drag,
                                             })}
                                         >
                                             Upload files, folders, text content, or code here.
@@ -156,7 +156,7 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
                                     magicMenuItems={MAGIC_MENU_ITEMS}
                                     isDisabledUpload={isUploadingFile}
                                     alignEnd={isVoiceMode}
-                                    blurButton={true}
+                                    blurButton={isUploadingFile}
                                     isDragging={drag}
                                 />
                             </>

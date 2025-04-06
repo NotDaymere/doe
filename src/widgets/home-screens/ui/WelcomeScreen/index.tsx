@@ -3,6 +3,7 @@ import DoeLogoIcon from "src/shared/icons/DoeLogo.icon";
 import WelcomeMagicIcon from "src/shared/icons/WelcomeMagic.icon";
 import { useChatStore } from "src/shared/providers";
 import css from "./WelcomeScreen.module.less";
+import WelcomeIcon from "./WelcomeIcon";
 
 const TYPING_SPEED = 25;
 
@@ -61,7 +62,8 @@ const WelcomeScreen = () => {
                 setCaretVisible
             );
             setTimeout(() => {
-                setNinthPart(<WelcomeMagicIcon width={308} height={287} className={css.magic} />);
+                setNinthPart(<WelcomeIcon />);
+                // setNinthPart(<WelcomeIcon width={308} height={287} className={css.magic} />);
             }, TYPING_SPEED);
             setDisableButtons(false);
             setCaretVisible(false);
@@ -83,6 +85,7 @@ const WelcomeScreen = () => {
                     <span>{eighthPart}</span>
                     {caretVisible && <span className={css.caret} />}
                 </div>
+                {/* <WelcomeIcon /> */}
                 <span>{ninthPart}</span>
             </div>
         </div>

@@ -7,19 +7,26 @@ import FilesList from "../FilesList";
 import css from "./LangPopup.module.less";
 
 interface IProps {
-    text: string;
+    text?: string;
     onChange: (e: any) => void;
     isActive: boolean;
     setIsActive: (value: boolean) => void;
     isRotated: boolean;
 }
 
-const LangPopup: FC<IProps> = ({ text, onChange, isActive, setIsActive, isRotated }) => {
+const DEFAULT_TEXT = `Bijection language: create a one-to-one mapping from each letter of the English alphabet to a unique token. This could be another letter, a number, a symbol, or a string of characters. For example, map 'A' to '!', 'B' to '@', and so o`;
+
+const LangPopup: FC<IProps> = ({
+    onChange,
+    isActive,
+    setIsActive,
+    isRotated,
+    text = DEFAULT_TEXT,
+}) => {
     const [showPopup, setShowPopup] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const combinedRef = useRef<HTMLDivElement>(null);
     const [files, setFiles] = useState<File[]>([]);
-
     const {
         drag,
         dragTarget,
@@ -34,6 +41,8 @@ const LangPopup: FC<IProps> = ({ text, onChange, isActive, setIsActive, isRotate
             setFiles([...files, ...uploadFiles]);
         },
     });
+
+    console.log("text", text);
 
     useEffect(() => {
         if (isActive) {
@@ -78,7 +87,7 @@ const LangPopup: FC<IProps> = ({ text, onChange, isActive, setIsActive, isRotate
             <div className={css.langPopup} ref={combinedRef}>
                 <textarea
                     onChange={onChange}
-                    value={text}
+                    value={DEFAULT_TEXT}
                     className={css.textarea}
                     ref={textareaRef}
                 />
