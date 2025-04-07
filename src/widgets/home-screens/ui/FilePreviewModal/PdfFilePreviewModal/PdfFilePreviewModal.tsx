@@ -8,6 +8,7 @@ import ModalContentPanelRedactIcon from "../../../../../shared/icons/ModalConten
 import ModalContentPanelPencilIcon from "../../../../../shared/icons/ModalContentPanelPencil.icon";
 import ModalContentPanelAddTextIcon from "../../../../../shared/icons/ModalContentPanelAddText.icon";
 import { PDFViewer, PDFViewerHandle } from "./PDFViewer";
+import { CustomDropdownSelect } from "../ImageFilePreviewModal/CustomDropdownSelect/CustomDropdownSelect";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
@@ -32,31 +33,46 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
     const [isEditing, setIsEditing] = useState(false);
     const [tempName, setTempName] = useState(fileName);
     const [isDrawingEnabled, setIsDrawingEnabled] = useState(false);
+    const [isTextMode, setIsTextMode] = useState(false);
     const [currentUrl, setCurrentUrl] = useState(url);
-    const [drawingColor, setDrawingColor] = useState("black");
+    const [drawingColor, setDrawingColor] = useState("#000000");
     const pdfViewerRef = useRef<PDFViewerHandle>(null);
+    const [fontWeight, setFontWeight] = useState<"400" | "700">("400");
+    const [fontSize, setFontSize] = useState<number>(18);
+    const [fontColor, setFontColor] = useState<string>("#000000");
+    const [textSettingsOpen, setTextSettingsOpen] = useState(false);
+
+    const toggleTextSettings = () => {
+        setTextSettingsOpen((v) => !v);
+    };
+
+    const confirmTextSettings = () => {
+        setIsTextMode(true);
+        setTextSettingsOpen(false);
+    };
 
     useEffect(() => {
         setTempName(fileName);
     }, [fileName]);
 
-    const handleSaveDrawing = (newUrl: string) => {
-        setCurrentUrl(newUrl);
-        onSaveDrawing(newUrl);
-    };
-
     const handleClose = async () => {
-        if (pdfViewerRef.current) {
-            await pdfViewerRef.current.saveAnnotations();
+        try {
+            if (pdfViewerRef.current) {
+                const newUrl = await pdfViewerRef.current.saveAnnotations();
+                setCurrentUrl(newUrl);
+                onSaveDrawing(newUrl);
+            }
+        } catch (error) {
+            console.error("Error during saveAnnotations:", error);
+        } finally {
+            onClose();
         }
-        onClose();
     };
 
-    const toggleDrawing = async () => {
-        if (isDrawingEnabled && pdfViewerRef.current) {
-            await pdfViewerRef.current.saveAnnotations();
-        }
+    const toggleDrawing = () => {
         setIsDrawingEnabled((prev) => !prev);
+        setIsTextMode(false);
+        setTextSettingsOpen(false);
     };
 
     return createPortal(
@@ -78,9 +94,12 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
                 ref={pdfViewerRef}
                 url={currentUrl}
                 isDrawingEnabled={isDrawingEnabled}
-                onSaveDrawing={handleSaveDrawing}
-                initialPaths={undefined}
+                isTextMode={isTextMode}
                 drawingColor={drawingColor}
+                fontWeight={fontWeight}
+                fontSize={fontSize}
+                fontColor={fontColor}
+                setIsTextMode={setIsTextMode}
             />
 
             <div className={css.modalContentEditPanel}>
@@ -91,7 +110,7 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
                 >
                     <ModalContentPanelRedactIcon fill="currentColor" />
                 </div>
-                <div className={css.separator}></div>
+                <div className={css.separator} />
                 <div
                     className={css.modalContentEditPanelItem}
                     data-active={isDrawingEnabled}
@@ -109,11 +128,50 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
                         />
                     </div>
                 )}
-                <div className={css.separator}></div>
-                <div className={css.modalContentEditPanelItem}>
+                <div className={css.separator} />
+                <div
+                    className={css.modalContentEditPanelItem}
+                    data-active={isTextMode || textSettingsOpen}
+                    onClick={toggleTextSettings}
+                >
                     <ModalContentPanelAddTextIcon fill="currentColor" />
                 </div>
             </div>
+            {textSettingsOpen && (
+                <div className={css.textSettingsMenu}>
+                    <CustomDropdownSelect
+                        name="Weight"
+                        value={fontWeight}
+                        options={[
+                            { value: "400", label: "Normal" },
+                            { value: "700", label: "Bold" },
+                        ]}
+                        onChange={(v) => setFontWeight(v as "400" | "700")}
+                        dropdownClass={css.selectWeightInput}
+                    />
+                    <CustomDropdownSelect
+                        name="Size"
+                        value={fontSize}
+                        options={[
+                            { value: 18, label: "18px" },
+                            { value: 24, label: "24px" },
+                            { value: 30, label: "30px" },
+                        ]}
+                        onChange={(v) => setFontSize(Number(v))}
+                        dropdownClass={css.selectTextSize}
+                    />
+                    <div className={css.colorInputContainer}>
+                        Color
+                        <input
+                            type="color"
+                            className={css.colorInput}
+                            value={fontColor}
+                            onChange={(e) => setFontColor(e.target.value)}
+                        />
+                    </div>
+                    <button onClick={confirmTextSettings}>OK</button>
+                </div>
+            )}
         </FilePreviewModalOverlay>,
         document.body
     );
