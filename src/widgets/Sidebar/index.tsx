@@ -35,6 +35,7 @@ export const Sidebar: React.FC = () => {
     const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
     const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
     const editorState = useEditorContext(editor);
+    const {getOpenSavedPlaygrounds} = useChatStore();
     const { playground , clearCurrentChatMessages} = useChatStore();
     const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
     const { gaiaActive, setGaiaActive, setGaiaSidebarActive } = useAppStore();
@@ -244,7 +245,11 @@ export const Sidebar: React.FC = () => {
                 <div className={css.margin_bottom}>
                     <SharingTools />
                 </div>
-                <div className={css.delete_all_messages}>
+
+
+                <div className={ getOpenSavedPlaygrounds().length > 0
+                                    ? css.delete_all_messages_open_playgrounds
+                                    : css.delete_all_messages}>
                     <div className={css.delete_all_messages_btn_container}>
                         <button
                             className={css.delete_all_messages_btn}

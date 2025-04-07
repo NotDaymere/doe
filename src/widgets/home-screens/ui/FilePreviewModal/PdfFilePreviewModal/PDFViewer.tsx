@@ -8,8 +8,6 @@ import React, {
 import * as pdfjsLib from "pdfjs-dist";
 import { PDFDocument } from "pdf-lib";
 import css from "./PdfFilePreviewModal.module.less";
-import ArrowLeftIcon from "../../../../../shared/icons/ArrowLeft.icon";
-import ArrowRightIcon from "../../../../../shared/icons/ArrowRight.icon";
 import ArrowRightButtonIcon from "../../../../../shared/icons/ArrowRightButton.icon";
 import ArrowLeftButtonIcon from "../../../../../shared/icons/ArrowLeftButton.icon";
 
@@ -44,13 +42,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
 
         const isDrawingRef = useRef(false);
         const lastPointRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-        useEffect(() => {
-            const loadingTask = pdfjsLib.getDocument(url);
-            loadingTask.promise.then((loadedPdf: pdfjsLib.PDFDocumentProxy) => {
-                setPdf(loadedPdf);
-            });
-            pdfjsLib.getDocument(url).promise.then(setPdf);
-        }, [url]);
+
         useEffect(() => {
             const loadPdf = async () => {
                 const loadedPdf = await pdfjsLib.getDocument(url).promise;
@@ -281,32 +273,6 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             return () =>
                 container.removeEventListener("wheel", onWheel);
         }, []);
-        useEffect(() => {
-            const container = containerRef.current;
-            if (!container) return;
-
-            const handleScroll = () => {
-                const canvases = container.getElementsByClassName("pdfCanvas");
-                if (canvases.length === 0) return;
-
-                let closestIndex = 0;
-                let minDistance = Infinity;
-                for (let i = 0; i < canvases.length; i++) {
-                    const canvas = canvases[i] as HTMLElement;
-                    const distance = Math.abs(canvas.offsetTop - container.scrollTop);
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestIndex = i;
-                    }
-                }
-                setCurrentPage(closestIndex + 1);
-            };
-
-            container.addEventListener("scroll", handleScroll);
-            return () => {
-                container.removeEventListener("scroll", handleScroll);
-            };
-        }, [pdf]);
 
         const scrollToPage = (page: number) => {
             const el = containerRef.current?.getElementsByClassName("pageContainer")[
@@ -314,13 +280,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 ] as HTMLElement;
             if (el)
                 el.scrollIntoView({ behavior: "smooth" });
-            if (el) el.scrollIntoView({ behavior: "smooth" });
-            if (!containerRef.current) return;
-            const canvasElements = containerRef.current.getElementsByClassName("pdfCanvas");
-            if (!canvasElements[page - 1]) return;
-            (canvasElements[page - 1] as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start" });
         };
-
 
         return (
             <div className={css.modalPdfContainer}>
