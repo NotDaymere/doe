@@ -109,6 +109,8 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         savedPlaygrounds,
         deleteSavedPlaygrounds,
         updateSavedPlaygrounds,
+        getOpenSavedPlaygrounds,
+        getSavedPlaygroundLastByType,
         setMessageLike,
         // editor,
         // isHyperlinkInputOpen,
@@ -231,7 +233,15 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                     data: citationUrl,
                     open: true,
                 };
-
+                const oldPlayground = getSavedPlaygroundLastByType('iframe');
+                if (getOpenSavedPlaygrounds().length >= 2) {
+                    const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
+                    console.log(lastPlayground);
+                    if (lastPlayground && lastPlayground.type != 'iframe') {
+                        lastPlayground.open = false;
+                        updateSavedPlaygrounds(lastPlayground);
+                    }
+                }
                 const existingIframe = savedPlaygrounds.find(p => p.type === "iframe");
                 if (existingIframe) {
                     const updatedPlayground = { ...existingIframe, ...newPlayground };
@@ -304,8 +314,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     };
 
     const openSourcePlayground = (sourceData: string) => {
+        if (getOpenSavedPlaygrounds().length >= 2) {
+            const oldPlayground = getSavedPlaygroundLastByType('source');
+            const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
+            console.log(lastPlayground);
+            if (lastPlayground && lastPlayground.type != 'source') {
+                lastPlayground.open = false;
+                updateSavedPlaygrounds(lastPlayground);
+            }
+        }
         if (isAllStepOpen) {
-
             const existingAllStep = savedPlaygrounds.find(p => p.type === "source");
             if (existingAllStep) {
                 deleteSavedPlaygrounds(existingAllStep.id);

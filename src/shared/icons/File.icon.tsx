@@ -5,6 +5,8 @@ const FileIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
         <svg
             {...props}
             viewBox="0 0 20 20"
+            width={18}
+            height={18}
             stroke="none"
             xmlns="http://www.w3.org/2000/svg"
         >
