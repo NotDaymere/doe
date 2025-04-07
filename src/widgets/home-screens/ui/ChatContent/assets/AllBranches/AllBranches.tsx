@@ -3,9 +3,12 @@ import './AllBranches.less';
 import { useState } from "react";
 import OpenAllBranches from "../OpenAllBranches/OpenAllBranches";
 
-export default function AllBranches() {
-    const [activeAllBranches, setActiveAllBranches] = useState<boolean>(false);
-    const changeActiveAllBranches = () => setActiveAllBranches(!activeAllBranches)
+interface AllBranchesProps {
+    activeAllBranches: boolean;
+    changeActiveAllBranches: () => void;
+}
+
+export default function AllBranches( { activeAllBranches, changeActiveAllBranches}: AllBranchesProps ) {
     return (
         <div className={'all-branches-container'}>
             <button className={'all-branches-button'}

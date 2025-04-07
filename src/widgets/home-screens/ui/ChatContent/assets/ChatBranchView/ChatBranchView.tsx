@@ -30,7 +30,7 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                                                   setEditMsgMode,
                                                                   dialogRefs,
                                                               }) => {
-    const { activeMessage, setActiveMessage } = useChatStore();
+    const { activeMessage, setActiveMessage, getOpenSavedPlaygrounds } = useChatStore();
 
     useEffect(() => {
         if (activeMessage) {
@@ -59,12 +59,17 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                     </React.Fragment>
                 ))}
             </div>
-            <div className={css.content_chat_branch_dialogs}>
+            <div className={getOpenSavedPlaygrounds().length < 1
+                            ? css.content_chat_branch_dialogs
+                            : css.content_chat_branch_dialogs_open_playground}>
+
                 {currentBranch.dialogsMessages.map((dialog, index) => (
                     <React.Fragment key={index}>
                         <div className={css.content_chat_branch}>
                             {currentBranch && (
-                                <ChatBranchSection isOpenBrunch={true} />
+                                <div className={css.branch_section}>
+                                    <ChatBranchSection isOpenBrunch={true} />
+                                </div>
                                 )
                             }
                             <div className={css.content_chat_branch_dialog}>

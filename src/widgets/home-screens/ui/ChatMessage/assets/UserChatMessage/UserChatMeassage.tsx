@@ -28,23 +28,23 @@ interface UserChatMessageProps {
 }
 
 export const UserChatMessage: React.FC<UserChatMessageProps> = ({
-                                                     data,
-                                                     content,
-                                                     updatedContent,
-                                                     isCurrentBranchOpen,
-                                                     cancelEdit,
-                                                     editMsgMode,
-                                                     setContent,
-                                                     handleEdit,
-                                                     toggleEdit
-                                                 }) => {
+                                                                    data,
+                                                                    content,
+                                                                    updatedContent,
+                                                                    isCurrentBranchOpen,
+                                                                    cancelEdit,
+                                                                    editMsgMode,
+                                                                    setContent,
+                                                                    handleEdit,
+                                                                    toggleEdit
+                                                                }) => {
 
     const { setEditor } = useChatStore();
     const { setFiles } = usePanel();
 
     if (editMsgMode.isEditMsgMode && editMsgMode.msgId === data.id) {
         return (
-            <div className={css.message_with_button_container}>
+            <div className={css.message_edit_container}>
                 <div className={css.edit}>
                     <Editor
                         value={content}
@@ -129,8 +129,8 @@ export const UserChatMessage: React.FC<UserChatMessageProps> = ({
                 }
             </div>
             {!isCurrentBranchOpen && <FavButton
-                                        data={data}
-                                        className={css.custom_fav_button}/>
+                data={data}
+                className={css.custom_fav_button}/>
             }
         </div>
     );

@@ -4,18 +4,12 @@ import { useState } from "react";
 import OpenAllPlaygrounds from "../OpenAllPlaygrounds/OpenAllPlaygrounds";
 import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 
-export default function AllPlaygrounds() {
-    const [activeAllPlaygrounds, setActiveAllPlaygrounds] = useState<boolean>(false);
-    const changeActiveAllPlaygrounds = () => {
-        if (!activeAllPlaygrounds) {
-            setActiveAllPlaygrounds(true);
-            return;
-        }
-        setTimeout(
-            () => setActiveAllPlaygrounds(!activeAllPlaygrounds),
-            450
-        )
-    }
+interface AllPlaygroundsProps {
+    activeAllPlaygrounds: boolean;
+    changeActiveAllPlaygrounds: () => void;
+}
+
+export default function AllPlaygrounds( { activeAllPlaygrounds, changeActiveAllPlaygrounds}: AllPlaygroundsProps) {
 
     return (
         <div className={'position-fixed'}>
