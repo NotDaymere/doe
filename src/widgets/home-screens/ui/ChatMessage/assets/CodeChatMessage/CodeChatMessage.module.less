@@ -143,39 +143,54 @@
   background-color: rgba(241, 231, 255, 1);
 }
 
-.button_steps {
-  border-radius: 1000px;
-  padding: 8px 14px;
-  box-shadow: 0px 2px 15px 0px #0000000d;
+.buttons {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  gap: 5px;
-  font-weight: 1000;
+  gap: 4px;
+  border: 1px solid #ffffff;
+  padding: 8px;
+  border-radius: 24px;
+  box-shadow: 0 2px 15px rgba(#000, 0.05);
+  cursor: pointer;
 }
 
-.button_steps.steps_open {
-  border: 2px solid #9747FF;
-  color: #9747FF !important;
-}
-
-.button_steps_open_label {
-  color: #9747FF;
-  font-weight: 500;
-  font-size: 16px;
-}
-
-.button_steps_label {
-  background: linear-gradient(90.09deg, #9747ff -24.88%, #1f1f1f 72.4%);
+.steps_button {
+  .buttons;
+  background-color: #ffffff;
+  background-image: linear-gradient(to right, #9747ff, #1f1f1f);
+  color: transparent;
   background-clip: text;
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-  font-size: 16px;
-  font-weight: 500;
+
+  transition: background 0.3s ease,
+  border 0.3s ease,
+  border-radius 0.3s ease,
+  color 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(#1f1f1f, #5b2b99) padding-box,
+    linear-gradient(to bottom, #f1e7ff, #9747ff) border-box;
+    border-radius: 24px;
+    border: 1px solid transparent;
+    color: #fff;
+
+    svg {
+      path {
+        fill: #fff;
+      }
+    }
+  }
+}
+
+.active_steps_button {
+  .buttons;
+  border-color: #9747ff;
+  background: #fff;
+  color: #9747ff;
+
+  svg {
+    path {
+      fill: #9747ff;
+    }
+  }
 }
 
 .glowing_border {

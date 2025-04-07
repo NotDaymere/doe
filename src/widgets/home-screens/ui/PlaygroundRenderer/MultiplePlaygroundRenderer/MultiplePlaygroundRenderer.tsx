@@ -51,7 +51,7 @@ export default function MultiplePlaygroundRenderer() {
                 )
             }
 
-           <Flex className={`playground-render ${playgroundFullscreen?'flex-direction-row':'flex-direction-column'} ${savedPlaygrounds.length > 1 && 'padding-top-20'}`}>
+           <Flex className={`playground-render ${playgroundFullscreen?'flex-direction-row':'flex-direction-column'} ${savedPlaygrounds.length > 1 && 'padding-top-20 playground-render-with-saved-playgrounds'}`}>
                {
                 getOpenSavedPlaygrounds().map((savedPlayground) => {
                     return (

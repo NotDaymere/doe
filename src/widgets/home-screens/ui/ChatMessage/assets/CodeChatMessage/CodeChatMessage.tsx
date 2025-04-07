@@ -222,7 +222,7 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                             <Flex justify={"space-between"} className={"message-actions"}>
                                 <button
                                     onClick={() => openSourcePlayground(data.id.toString())}
-                                    className={clsx(css.button_steps, { [css.steps_open]: isAllStepOpen })}
+                                    className={clsx(css.steps_button, { [css.active_steps_button]: isAllStepOpen })}
                                 >
                                     <SeeAllStepsIcon />
                                     <span
