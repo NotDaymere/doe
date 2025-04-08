@@ -10,8 +10,12 @@ import { PDFDocument, rgb } from "pdf-lib";
 import css from "./PdfFilePreviewModal.module.less";
 import ArrowLeftIcon from "../../../../../shared/icons/ArrowLeft.icon";
 import ArrowRightIcon from "../../../../../shared/icons/ArrowRight.icon";
+import fontkit from "@pdf-lib/fontkit";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
+const regularFont = "/fonts/Roboto_Condensed-Regular.ttf";
+const boldFont = "/fonts/Roboto_Condensed-ExtraBold.ttf";
 
 export interface PDFViewerHandle {
     saveAnnotations: () => Promise<string>;
@@ -23,10 +27,9 @@ interface TextAnnotation {
     y: number;
     text: string;
     maxWidth: number;
-    height: number;
     fontColor: string;
     fontSize: number;
-    fontWeight: "400" | "700";
+    fontWeight: "regular" | "bold";
 }
 
 interface PDFViewerProps {
@@ -34,14 +37,26 @@ interface PDFViewerProps {
     isDrawingEnabled: boolean;
     isTextMode: boolean;
     drawingColor: string;
-    fontWeight: "400" | "700";
+    fontWeight: "regular" | "bold";
     fontSize: number;
     fontColor: string;
     setIsTextMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
-    ({ url, isDrawingEnabled, isTextMode, setIsTextMode, drawingColor, fontWeight, fontSize, fontColor }, ref) => {
+    (
+        {
+            url,
+            isDrawingEnabled,
+            isTextMode,
+            setIsTextMode,
+            drawingColor,
+            fontWeight,
+            fontSize,
+            fontColor,
+        },
+        ref
+    ) => {
         const containerRef = useRef<HTMLDivElement>(null);
         const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
         const [pdf, setPdf] = useState<pdfjsLib.PDFDocumentProxy | null>(null);
@@ -55,6 +70,10 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             x: number;
             y: number;
         } | null>(null);
+
+        const [activeDraggableAnnotation, setActiveDraggableAnnotation] = useState<TextAnnotation | null>(null);
+        const [dragOffset, setDragOffset] = useState<{ offsetX: number; offsetY: number } | null>(null);
+        const draggingRef = useRef(false);
         const drawingColorRef = useRef(drawingColor);
 
         useEffect(() => {
@@ -67,8 +86,9 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 setPdf(loadedPdf);
                 const dims: Array<{ width: number; height: number }> = [];
                 for (let i = 1; i <= loadedPdf.numPages; i++) {
-                    const vp = await (await loadedPdf.getPage(i)).getViewport({ scale: 1 });
-                    dims.push({ width: vp.width, height: vp.height });
+                    const page = await loadedPdf.getPage(i);
+                    const viewport = page.getViewport({ scale: 1 });
+                    dims.push({ width: viewport.width, height: viewport.height });
                 }
                 setOriginalDimensions(dims);
             })();
@@ -79,19 +99,14 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
 
         const getCanvasCoordinates = (
             e: MouseEvent | TouchEvent | React.MouseEvent,
-            canvas: HTMLCanvasElement,
-            pageIndex: number
+            canvas: HTMLCanvasElement
         ) => {
             const rect = canvas.getBoundingClientRect();
             const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
             const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
-            const x_screen = clientX - rect.left;
-            const y_screen = clientY - rect.top;
-            const { width: ow, height: oh } = originalDimensions[pageIndex];
-            const scale = Math.min(fixedWidth / ow, fixedHeight / oh);
             return {
-                x: (x_screen / fixedWidth) * (ow * scale),
-                y: (y_screen / fixedHeight) * (oh * scale),
+                x: clientX - rect.left,
+                y: clientY - rect.top,
             };
         };
 
@@ -101,17 +116,18 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         const startDrawing = (e: MouseEvent | TouchEvent, page: number) => {
             const canvas = canvasRefs.current[page * 2 + 1];
             if (!canvas) return;
-            const { x, y } = getCanvasCoordinates(e, canvas, page);
+            const { x, y } = getCanvasCoordinates(e, canvas);
             isDrawingRef.current = true;
             lastPointRef.current = { x, y };
         };
+
         const draw = (e: MouseEvent | TouchEvent, page: number) => {
             if (!isDrawingRef.current) return;
             const canvas = canvasRefs.current[page * 2 + 1];
             if (!canvas) return;
             const ctx = canvas.getContext("2d");
             if (!ctx) return;
-            const { x, y } = getCanvasCoordinates(e, canvas, page);
+            const { x, y } = getCanvasCoordinates(e, canvas);
             const pr = window.devicePixelRatio || 1;
             ctx.beginPath();
             ctx.moveTo(lastPointRef.current.x * pr, lastPointRef.current.y * pr);
@@ -121,6 +137,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             ctx.stroke();
             lastPointRef.current = { x, y };
         };
+
         const endDrawing = () => {
             isDrawingRef.current = false;
         };
@@ -134,37 +151,73 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             if (e.key === "Enter") {
                 const text = e.currentTarget.value.trim();
                 if (text) {
-                    const safeFontColor = fontColor && /^#[0-9A-F]{6}$/i.test(fontColor) ? fontColor : "#000000";
+                    const safeFontColor =
+                        fontColor && /^#[0-9A-F]{6}$/i.test(fontColor)
+                            ? fontColor
+                            : "#000000";
                     const safeFontSize = fontSize || 18;
-                    const safeFontWeight = fontWeight || "400";
-                    setTextAnnotations((t) => [
-                        ...t,
-                        {
-                            page,
-                            x,
-                            y,
-                            text,
-                            maxWidth: 200,
-                            height: 100,
-                            fontColor: safeFontColor,
-                            fontSize: safeFontSize,
-                            fontWeight: safeFontWeight,
-                        },
-                    ]);
+                    const safeFontWeight = fontWeight || "regular";
+
+                    const canvas = canvasRefs.current[page * 2 + 1];
+                    const canvasRect = canvas ? canvas.getBoundingClientRect() : { width: fixedWidth };
+                    const availableWidth = canvasRect.width - x;
+                    setActiveDraggableAnnotation({
+                        page,
+                        x,
+                        y,
+                        text,
+                        maxWidth: Math.min(availableWidth, 600),
+                        fontColor: safeFontColor,
+                        fontSize: safeFontSize,
+                        fontWeight: safeFontWeight,
+                    });
                 }
                 setActiveTextInput(null);
                 setIsTextMode(false);
             }
         };
 
-        const handleCanvasClick = (
-            e: React.MouseEvent,
-            pageIndex: number
-        ) => {
+        const onDraggableMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+            draggingRef.current = true;
+            const rect = (e.target as HTMLDivElement).getBoundingClientRect();
+            setDragOffset({ offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top });
+        };
+
+        const onDraggableMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+            if (!draggingRef.current || !activeDraggableAnnotation || !dragOffset) return;
+
+            const pageContainers = containerRef.current?.getElementsByClassName("pageContainer");
+            if (!pageContainers) return;
+
+            const pageContainer = pageContainers[activeDraggableAnnotation.page] as HTMLElement;
+            if (!pageContainer) return;
+
+            const pageContainerRect = pageContainer.getBoundingClientRect();
+
+            const newX = e.clientX - pageContainerRect.left - dragOffset.offsetX;
+            const newY = e.clientY - pageContainerRect.top - dragOffset.offsetY;
+
+            setActiveDraggableAnnotation({
+                ...activeDraggableAnnotation,
+                x: newX,
+                y: newY,
+            });
+        };
+
+        const onDraggableMouseUp = () => {
+            if (activeDraggableAnnotation) {
+                setTextAnnotations((prev) => [...prev, activeDraggableAnnotation]);
+                setActiveDraggableAnnotation(null);
+            }
+            draggingRef.current = false;
+            setDragOffset(null);
+        };
+
+        const handleCanvasClick = (e: React.MouseEvent, pageIndex: number) => {
             if (!isTextMode || isDrawingEnabled) return;
             const canvas = canvasRefs.current[pageIndex * 2 + 1];
             if (!canvas) return;
-            const { x, y } = getCanvasCoordinates(e, canvas, pageIndex);
+            const { x, y } = getCanvasCoordinates(e, canvas);
             setActiveTextInput({ page: pageIndex, x, y });
         };
 
@@ -174,8 +227,8 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 const pr = window.devicePixelRatio || 1;
                 for (let i = 0; i < pdf.numPages; i++) {
                     const page = await pdf.getPage(i + 1);
-                    const vp1 = page.getViewport({ scale: 1 });
-                    const scale = Math.min(fixedWidth / vp1.width, fixedHeight / vp1.height);
+                    const { width: ow, height: oh } = originalDimensions[i];
+                    const scale = Math.min(fixedWidth / ow, fixedHeight / oh);
                     const viewport = page.getViewport({ scale });
                     const pdfCanvas = canvasRefs.current[i * 2]!;
                     const drawCanvas = canvasRefs.current[i * 2 + 1]!;
@@ -193,12 +246,20 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         useEffect(() => {
             canvasRefs.current.forEach((c, idx) => {
                 if (idx % 2 === 1 && c) {
-                    c.onmousedown = isDrawingEnabled ? (e) => startDrawing(e, Math.floor(idx / 2)) : null;
-                    c.onmousemove = isDrawingEnabled ? (e) => draw(e, Math.floor(idx / 2)) : null;
+                    c.onmousedown = isDrawingEnabled
+                        ? (e) => startDrawing(e, Math.floor(idx / 2))
+                        : null;
+                    c.onmousemove = isDrawingEnabled
+                        ? (e) => draw(e, Math.floor(idx / 2))
+                        : null;
                     c.onmouseup = isDrawingEnabled ? endDrawing : null;
                     c.onmouseleave = isDrawingEnabled ? endDrawing : null;
-                    c.ontouchstart = isDrawingEnabled ? (e) => startDrawing(e, Math.floor(idx / 2)) : null;
-                    c.ontouchmove = isDrawingEnabled ? (e) => draw(e, Math.floor(idx / 2)) : null;
+                    c.ontouchstart = isDrawingEnabled
+                        ? (e) => startDrawing(e, Math.floor(idx / 2))
+                        : null;
+                    c.ontouchmove = isDrawingEnabled
+                        ? (e) => draw(e, Math.floor(idx / 2))
+                        : null;
                     c.ontouchend = isDrawingEnabled ? endDrawing : null;
                     c.style.pointerEvents = isDrawingEnabled ? "auto" : "none";
                 }
@@ -243,8 +304,12 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             const pdfData = new Uint8Array(arrayBuffer);
             const pdfDoc = await PDFDocument.load(pdfData);
 
-            const fontNormal = await (pdfDoc as any).embedFont("Helvetica");
-            const fontBold = await (pdfDoc as any).embedFont("Helvetica-Bold");
+            (pdfDoc as any).registerFontkit(fontkit);
+
+            const fontRegularBytes = await fetch(regularFont).then((res) => res.arrayBuffer());
+            const fontBoldBytes = await fetch(boldFont).then((res) => res.arrayBuffer());
+            const customFontRegular = await (pdfDoc as any).embedFont(fontRegularBytes);
+            const customFontBold = await (pdfDoc as any).embedFont(fontBoldBytes);
 
             for (let i = 0; i < pdf.numPages; i++) {
                 const drawCanvas = canvasRefs.current[i * 2 + 1];
@@ -253,27 +318,36 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 if (!dataUrl.includes("data:image/png")) continue;
                 const img = await pdfDoc.embedPng(dataUrl);
                 const page = (pdfDoc as any).getPage(i);
+                const dims = originalDimensions[i];
                 page.drawImage(img, {
                     x: 0,
                     y: 0,
-                    width: fixedWidth,
-                    height: fixedHeight,
+                    width: dims.width,
+                    height: dims.height,
                 });
             }
 
             for (const ann of textAnnotations) {
                 const page = (pdfDoc as any).getPage(ann.page);
-                const font = ann.fontWeight === "700" ? fontBold : fontNormal;
-                const [r, g, b] = hexToRgb(ann.fontColor);
+                const dims = originalDimensions[ann.page];
+                const drawCanvas = canvasRefs.current[ann.page * 2 + 1];
+                if (!drawCanvas) continue;
+                const { width: canvasWidth } = drawCanvas.getBoundingClientRect();
+                const renderScale = canvasWidth / dims.width;
+                const pdfX = ann.x / renderScale;
+                const pdfFontSize = ann.fontSize / renderScale;
 
+                const pdfY = dims.height - (ann.y / renderScale) - pdfFontSize;
+                const font = ann.fontWeight === "bold" ? customFontBold : customFontRegular;
+                const [r, g, b] = hexToRgb(ann.fontColor);
                 try {
                     page.drawText(ann.text, {
-                        x: ann.x,
-                        y: page.getHeight() - ann.y - ann.height,
-                        size: ann.fontSize,
+                        x: pdfX,
+                        y: pdfY,
+                        size: pdfFontSize,
                         font,
                         color: rgb(r, g, b),
-                        maxWidth: ann.maxWidth,
+                        maxWidth: ann.maxWidth / renderScale,
                     });
                 } catch (error) {
                     console.error("Error drawing text annotation:", error, ann);
@@ -289,6 +363,26 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             saveAnnotations,
         }));
 
+        useEffect(() => {
+            if (isTextMode && !activeTextInput) {
+                let x = fixedWidth / 3;
+                let y = fixedHeight / 2.5;
+
+                const firstCanvas = canvasRefs.current[1];
+                if (firstCanvas) {
+                    const { width } = firstCanvas.getBoundingClientRect();
+
+                    x = width / 3;
+                    y = fixedHeight / 2.5;
+                }
+                setActiveTextInput({
+                    page: currentPage - 1,
+                    x,
+                    y,
+                });
+            }
+        }, [isTextMode, activeTextInput, currentPage, fixedWidth, fixedHeight]);
+
         return (
             <div className={css.modalPdfContainer}>
                 <div className={css.modalPdf} ref={containerRef}>
@@ -302,6 +396,8 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                     position: "relative",
                                     width: `${fixedWidth}px`,
                                     height: `${fixedHeight}px`,
+                                    maxHeight: "100%",
+                                    maxWidth: "100%",
                                     marginBottom: 10,
                                     overflow: "hidden",
                                 }}
@@ -314,8 +410,10 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                         position: "absolute",
                                         top: 0,
                                         left: 0,
-                                        width: `${fixedWidth}px`,
-                                        height: `${fixedHeight}px`,
+                                        width: "100%",
+                                        height: "100%",
+                                        maxHeight: "100%",
+                                        maxWidth: "100%",
                                     }}
                                 />
                                 <canvas
@@ -325,8 +423,10 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                         position: "absolute",
                                         top: 0,
                                         left: 0,
-                                        width: `${fixedWidth}px`,
-                                        height: `${fixedHeight}px`,
+                                        width: "100%",
+                                        height: "100%",
+                                        maxHeight: "100%",
+                                        maxWidth: "100%",
                                         zIndex: 10,
                                         touchAction: "none",
                                     }}
@@ -334,25 +434,46 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                 {activeTextInput && activeTextInput.page === i && (
                                     <input
                                         type="text"
-                                        className={css.textAnnotation}
+                                        className={css.textAnnotationInput}
                                         style={{
                                             position: "absolute",
-                                            left: activeTextInput.x,
-                                            top: activeTextInput.y,
-                                            maxWidth: 200,
+                                            transform: `translate(${activeTextInput.x}px, ${activeTextInput.y}px)`,
+                                            maxWidth: "150px",
                                             fontWeight,
                                             fontSize: `${fontSize}px`,
                                             color: fontColor,
                                             border: "none",
-                                            background: "transparent",
-                                            whiteSpace: "nowrap",
                                             overflow: "hidden",
-                                            textOverflow: "ellipsis",
                                             zIndex: 20,
+                                            whiteSpace: "nowrap",
                                         }}
                                         autoFocus
-                                        onKeyDown={(e) => handleTextInput(e, i, activeTextInput.x, activeTextInput.y)}
+                                        onKeyDown={(e) =>
+                                            handleTextInput(e, i, activeTextInput.x, activeTextInput.y)
+                                        }
                                     />
+                                )}
+                                {activeDraggableAnnotation && activeDraggableAnnotation.page === i && (
+                                    <div
+                                        className={css.textAnnotation}
+                                        style={{
+                                            position: "absolute",
+                                            transform: `translate(${activeDraggableAnnotation.x}px, ${activeDraggableAnnotation.y}px)`,
+                                            maxWidth: "1000px",
+                                            fontSize: `${activeDraggableAnnotation.fontSize}px`,
+                                            color: activeDraggableAnnotation.fontColor,
+                                            fontWeight: activeDraggableAnnotation.fontWeight === "bold" ? "bold" : "normal",
+                                            cursor: "grabbing",
+                                            zIndex: 20,
+                                            overflow: "hidden",
+                                            whiteSpace: "nowrap",
+                                        }}
+                                        onMouseDown={onDraggableMouseDown}
+                                        onMouseMove={onDraggableMouseMove}
+                                        onMouseUp={onDraggableMouseUp}
+                                    >
+                                        {activeDraggableAnnotation.text}
+                                    </div>
                                 )}
                                 {textAnnotations
                                     .filter((t) => t.page === i)
@@ -362,18 +483,15 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                             className={css.textAnnotation}
                                             style={{
                                                 position: "absolute",
-                                                left: t.x,
-                                                top: t.y,
-                                                maxWidth: t.maxWidth,
-                                                height: t.height,
+                                                transform: `translate(${t.x}px, ${t.y}px)`,
+                                                maxWidth: "1000px",
                                                 fontSize: `${t.fontSize}px`,
                                                 color: t.fontColor,
-                                                fontWeight: t.fontWeight,
+                                                fontWeight: t.fontWeight === "bold" ? "bold" : "normal",
                                                 cursor: "auto",
-                                                zIndex: 15,
-                                                whiteSpace: "nowrap",
+                                                zIndex: 20,
                                                 overflow: "hidden",
-                                                textOverflow: "ellipsis",
+                                                whiteSpace: "nowrap",
                                             }}
                                         >
                                             {t.text}
@@ -390,7 +508,9 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                         {currentPage} {pdf ? `/ ${pdf.numPages}` : ""}
                     </span>
                     <button
-                        onClick={() => pdf && currentPage < pdf.numPages && scrollToPage(currentPage + 1)}
+                        onClick={() =>
+                            pdf && currentPage < pdf.numPages && scrollToPage(currentPage + 1)
+                        }
                     >
                         <ArrowRightIcon opacity={pdf && currentPage >= pdf.numPages ? 0.3 : 1} />
                     </button>

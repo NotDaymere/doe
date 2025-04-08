@@ -37,16 +37,18 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
     const [currentUrl, setCurrentUrl] = useState(url);
     const [drawingColor, setDrawingColor] = useState("#000000");
     const pdfViewerRef = useRef<PDFViewerHandle>(null);
-    const [fontWeight, setFontWeight] = useState<"400" | "700">("400");
+    const [fontWeight, setFontWeight] = useState<"regular" | "bold">("regular");
     const [fontSize, setFontSize] = useState<number>(18);
     const [fontColor, setFontColor] = useState<string>("#000000");
     const [textSettingsOpen, setTextSettingsOpen] = useState(false);
 
     const toggleTextSettings = () => {
         setTextSettingsOpen((v) => !v);
+        setIsDrawingEnabled(false);
     };
 
     const confirmTextSettings = () => {
+
         setIsTextMode(true);
         setTextSettingsOpen(false);
     };
@@ -143,10 +145,10 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
                         name="Weight"
                         value={fontWeight}
                         options={[
-                            { value: "400", label: "Normal" },
-                            { value: "700", label: "Bold" },
+                            { value: "regular", label: "Regular" },
+                            { value: "bold", label: "Bold" },
                         ]}
-                        onChange={(v) => setFontWeight(v as "400" | "700")}
+                        onChange={(v) => setFontWeight(v as "regular" | "bold")}
                         dropdownClass={css.selectWeightInput}
                     />
                     <CustomDropdownSelect
