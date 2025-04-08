@@ -23,11 +23,13 @@ interface IProps {
     onRotate: (value: boolean) => void;
 }
 
+const DEFAULT_TEXT = `Bijection language: create a one-to-one mapping from each letter of the English alphabet to a unique token. This could be another letter, a number, a symbol, or a string of characters. For example, map 'A' to '!', 'B' to '@', and so o`;
+
 const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
     const { activeTranslationOption: mode } = useAppStore();
     const isVoiceMode = mode === TRANSLATION_MENU_OPTIONS.VOICE_MODE;
     const [showLangPopup, setShowLangPopup] = useState(false);
-    const [langText, setLangText] = useState("");
+    const [langText, setLangText] = useState(DEFAULT_TEXT);
     const [translateFromImage, setTranslateFromImage] = useState(false);
 
     const {
