@@ -41,6 +41,7 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
     const [fontSize, setFontSize] = useState<number>(18);
     const [fontColor, setFontColor] = useState<string>("#000000");
     const [textSettingsOpen, setTextSettingsOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     const toggleTextSettings = () => {
         setTextSettingsOpen((v) => !v);
@@ -48,7 +49,6 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
     };
 
     const confirmTextSettings = () => {
-
         setIsTextMode(true);
         setTextSettingsOpen(false);
     };
@@ -60,13 +60,16 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
     const handleClose = async () => {
         try {
             if (pdfViewerRef.current) {
+                setIsSaving(true);
                 const newUrl = await pdfViewerRef.current.saveAnnotations();
                 setCurrentUrl(newUrl);
                 onSaveDrawing(newUrl);
+
             }
         } catch (error) {
             console.error("Error during saveAnnotations:", error);
         } finally {
+            setIsSaving(false);
             onClose();
         }
     };
@@ -103,6 +106,11 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
                 fontColor={fontColor}
                 setIsTextMode={setIsTextMode}
             />
+            {isSaving && (
+                <div className={css.savingOverlay}>
+                    <span>Saving...</span>
+                </div>
+            )}
 
             <div className={css.modalContentEditPanel}>
                 <div

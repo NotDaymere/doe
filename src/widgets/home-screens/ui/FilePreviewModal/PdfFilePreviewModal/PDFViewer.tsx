@@ -6,7 +6,6 @@ import React, {
     useImperativeHandle,
 } from "react";
 import * as pdfjsLib from "pdfjs-dist";
-import { PDFDocument, rgb } from "pdf-lib";
 import css from "./PdfFilePreviewModal.module.less";
 import fontkit from "@pdf-lib/fontkit";
 import ArrowRightButtonIcon from "../../../../../shared/icons/ArrowRightButton.icon";
@@ -16,6 +15,8 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.j
 
 const regularFont = "/fonts/Roboto_Condensed-Regular.ttf";
 const boldFont = "/fonts/Roboto_Condensed-ExtraBold.ttf";
+
+const pdfUrlCache: { [key: string]: string } = {};
 
 export interface PDFViewerHandle {
     saveAnnotations: () => Promise<string>;
@@ -30,6 +31,9 @@ interface TextAnnotation {
     fontColor: string;
     fontSize: number;
     fontWeight: "regular" | "bold";
+    pdfX?: number;
+    pdfY?: number;
+    pdfFontSize?: number;
 }
 
 interface PDFViewerProps {
@@ -70,15 +74,28 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             x: number;
             y: number;
         } | null>(null);
-
-        const [activeDraggableAnnotation, setActiveDraggableAnnotation] = useState<TextAnnotation | null>(null);
+        const [activeDraggableAnnotation, setActiveDraggableAnnotation] =
+            useState<TextAnnotation | null>(null);
         const [dragOffset, setDragOffset] = useState<{ offsetX: number; offsetY: number } | null>(null);
         const draggingRef = useRef(false);
         const drawingColorRef = useRef(drawingColor);
 
+        const [hasAnnotationsChanged, setHasAnnotationsChanged] = useState(false);
+        const workerRef = useRef<Worker | null>(null);
+
         useEffect(() => {
             drawingColorRef.current = drawingColor;
         }, [drawingColor]);
+
+        useEffect(() => {
+            workerRef.current = new Worker(new URL("./pdfWorker.ts", import.meta.url), { type: "module" });
+            workerRef.current.onerror = (err) => {
+                console.error("Worker error:", err);
+            };
+            return () => {
+                workerRef.current?.terminate();
+            };
+        }, []);
 
         useEffect(() => {
             (async () => {
@@ -91,6 +108,11 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                     dims.push({ width: viewport.width, height: viewport.height });
                 }
                 setOriginalDimensions(dims);
+
+                if (!pdfUrlCache[url]) {
+                    pdfUrlCache[url] = url;
+                    console.log("Initialized cache with original URL:", url);
+                }
             })();
         }, [url]);
 
@@ -135,6 +157,10 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             ctx.strokeStyle = drawingColorRef.current;
             ctx.lineWidth = 5 * pr;
             ctx.stroke();
+            if (lastPointRef.current.x !== x || lastPointRef.current.y !== y) {
+                setHasAnnotationsChanged(true);
+                console.log("Annotations changed due to drawing");
+            }
             lastPointRef.current = { x, y };
         };
 
@@ -152,16 +178,14 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 const text = e.currentTarget.value.trim();
                 if (text) {
                     const safeFontColor =
-                        fontColor && /^#[0-9A-F]{6}$/i.test(fontColor)
-                            ? fontColor
-                            : "#000000";
+                        fontColor && /^#[0-9A-F]{6}$/i.test(fontColor) ? fontColor : "#000000";
                     const safeFontSize = fontSize || 18;
                     const safeFontWeight = fontWeight || "regular";
 
                     const canvas = canvasRefs.current[page * 2 + 1];
                     const canvasRect = canvas ? canvas.getBoundingClientRect() : { width: fixedWidth };
                     const availableWidth = canvasRect.width - x;
-                    setActiveDraggableAnnotation({
+                    const newAnnotation: TextAnnotation = {
                         page,
                         x,
                         y,
@@ -170,7 +194,13 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                         fontColor: safeFontColor,
                         fontSize: safeFontSize,
                         fontWeight: safeFontWeight,
-                    });
+                        pdfX: x,
+                        pdfY: fixedHeight - y - safeFontSize,
+                        pdfFontSize: safeFontSize,
+                    };
+                    setActiveDraggableAnnotation(newAnnotation);
+                    setHasAnnotationsChanged(true);
+                    console.log("Annotations changed due to text input");
                 }
                 setActiveTextInput(null);
                 setIsTextMode(false);
@@ -185,23 +215,20 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
 
         const onDraggableMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
             if (!draggingRef.current || !activeDraggableAnnotation || !dragOffset) return;
-
             const pageContainers = containerRef.current?.getElementsByClassName("pageContainer");
             if (!pageContainers) return;
-
             const pageContainer = pageContainers[activeDraggableAnnotation.page] as HTMLElement;
             if (!pageContainer) return;
-
             const pageContainerRect = pageContainer.getBoundingClientRect();
-
             const newX = e.clientX - pageContainerRect.left - dragOffset.offsetX;
             const newY = e.clientY - pageContainerRect.top - dragOffset.offsetY;
-
             setActiveDraggableAnnotation({
                 ...activeDraggableAnnotation,
                 x: newX,
                 y: newY,
             });
+            setHasAnnotationsChanged(true);
+            console.log("Annotations changed due to dragging");
         };
 
         const onDraggableMouseUp = () => {
@@ -289,74 +316,53 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             el?.scrollIntoView({ behavior: "smooth" });
         };
 
-        const hexToRgb = (hex: string): [number, number, number] => {
-            const validHex = hex && /^#[0-9A-F]{6}$/i.test(hex) ? hex : "#000000";
-            return [
-                parseInt(validHex.slice(1, 3), 16) / 255,
-                parseInt(validHex.slice(3, 5), 16) / 255,
-                parseInt(validHex.slice(5, 7), 16) / 255,
-            ];
-        };
-
         const saveAnnotations = async (): Promise<string> => {
+            if (!hasAnnotationsChanged && pdfUrlCache[url]) {
+                return Promise.resolve(pdfUrlCache[url]);
+            }
+
             if (!pdf) throw new Error("PDF not loaded");
             const arrayBuffer = await fetch(url).then((r) => r.arrayBuffer());
-            const pdfData = new Uint8Array(arrayBuffer);
-            const pdfDoc = await PDFDocument.load(pdfData);
-
-            (pdfDoc as any).registerFontkit(fontkit);
-
-            const fontRegularBytes = await fetch(regularFont).then((res) => res.arrayBuffer());
-            const fontBoldBytes = await fetch(boldFont).then((res) => res.arrayBuffer());
-            const customFontRegular = await (pdfDoc as any).embedFont(fontRegularBytes);
-            const customFontBold = await (pdfDoc as any).embedFont(fontBoldBytes);
-
+            const drawCanvasesData: string[] = [];
             for (let i = 0; i < pdf.numPages; i++) {
-                const drawCanvas = canvasRefs.current[i * 2 + 1];
-                if (!drawCanvas) continue;
-                const dataUrl = drawCanvas.toDataURL("image/png");
-                if (!dataUrl.includes("data:image/png")) continue;
-                const img = await pdfDoc.embedPng(dataUrl);
-                const page = (pdfDoc as any).getPage(i);
-                const dims = originalDimensions[i];
-                page.drawImage(img, {
-                    x: 0,
-                    y: 0,
-                    width: dims.width,
-                    height: dims.height,
-                });
+                const canvas = canvasRefs.current[i * 2 + 1];
+                drawCanvasesData.push(canvas ? canvas.toDataURL("image/png") : "");
             }
 
-            for (const ann of textAnnotations) {
-                const page = (pdfDoc as any).getPage(ann.page);
-                const dims = originalDimensions[ann.page];
-                const drawCanvas = canvasRefs.current[ann.page * 2 + 1];
-                if (!drawCanvas) continue;
-                const { width: canvasWidth } = drawCanvas.getBoundingClientRect();
-                const renderScale = canvasWidth / dims.width;
-                const pdfX = ann.x / renderScale;
-                const pdfFontSize = ann.fontSize / renderScale;
+            const payload = {
+                pdfArrayBuffer: arrayBuffer,
+                drawCanvasesData,
+                textAnnotations,
+                originalDimensions,
+                regularFontUrl: regularFont,
+                boldFontUrl: boldFont,
+            };
 
-                const pdfY = dims.height - (ann.y / renderScale) - pdfFontSize;
-                const font = ann.fontWeight === "bold" ? customFontBold : customFontRegular;
-                const [r, g, b] = hexToRgb(ann.fontColor);
-                try {
-                    page.drawText(ann.text, {
-                        x: pdfX,
-                        y: pdfY,
-                        size: pdfFontSize,
-                        font,
-                        color: rgb(r, g, b),
-                        maxWidth: ann.maxWidth / renderScale,
-                    });
-                } catch (error) {
-                    console.error("Error drawing text annotation:", error, ann);
+            return new Promise((resolve, reject) => {
+                if (!workerRef.current) {
+                    reject(new Error("Worker is not initialized"));
+                    return;
                 }
-            }
-
-            const bytes = await pdfDoc.save();
-            const blob = new Blob([bytes], { type: "application/pdf" });
-            return URL.createObjectURL(blob);
+                workerRef.current.onmessage = (event: MessageEvent<any>) => {
+                    const { status, pdfBlob, error } = event.data;
+                    if (status === "success") {
+                        const blob = new Blob([pdfBlob], { type: "application/pdf" });
+                        const newUrl = URL.createObjectURL(blob);
+                        console.log("New PDF URL generated:", newUrl);
+                        pdfUrlCache[url] = newUrl;
+                        setHasAnnotationsChanged(false);
+                        resolve(newUrl);
+                    } else {
+                        console.error("Worker error:", error);
+                        reject(new Error(error));
+                    }
+                };
+                workerRef.current.onerror = (err) => {
+                    console.error("Worker error:", err);
+                    reject(err);
+                };
+                workerRef.current.postMessage({ type: "saveAnnotations", payload });
+            });
         };
 
         useImperativeHandle(ref, () => ({
@@ -367,11 +373,9 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             if (isTextMode && !activeTextInput) {
                 let x = fixedWidth / 3;
                 let y = fixedHeight / 2.5;
-
                 const firstCanvas = canvasRefs.current[1];
                 if (firstCanvas) {
                     const { width } = firstCanvas.getBoundingClientRect();
-
                     x = width / 3;
                     y = fixedHeight / 2.5;
                 }
@@ -467,6 +471,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                             zIndex: 20,
                                             overflow: "hidden",
                                             whiteSpace: "nowrap",
+                                            userSelect: "none",
                                         }}
                                         onMouseDown={onDraggableMouseDown}
                                         onMouseMove={onDraggableMouseMove}
