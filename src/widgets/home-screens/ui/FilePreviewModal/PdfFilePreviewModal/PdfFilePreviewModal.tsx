@@ -65,7 +65,6 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
                 setCurrentUrl(newUrl);
                 onSaveDrawing(newUrl);
 
-                console.log(isSaving)
             }
         } catch (error) {
             console.error("Error during saveAnnotations:", error);

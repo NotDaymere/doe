@@ -468,6 +468,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                             zIndex: 20,
                                             overflow: "hidden",
                                             whiteSpace: "nowrap",
+                                            userSelect: "none",
                                         }}
                                         onMouseDown={onDraggableMouseDown}
                                         onMouseMove={onDraggableMouseMove}
