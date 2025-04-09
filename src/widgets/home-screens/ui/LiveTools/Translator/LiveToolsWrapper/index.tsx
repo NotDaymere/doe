@@ -1,10 +1,10 @@
 import DoeIcon from "src/shared/icons/Doe.icon";
-import { FC, ReactElement, ReactNode, useState } from "react";
+import { FC, ReactElement, ReactNode, useEffect, useState } from "react";
 import { MagicMenu } from "../../MagicMenu";
 import classNames from "classnames";
 import Bookmarks from "../Bookmarks";
 import TranslationIcon from "src/shared/icons/Translation.icon";
-import { useChatStore } from "src/shared/providers";
+import { useAppStore, useChatStore } from "src/shared/providers";
 import { MODE, ModeType } from "src/shared/types/Chat";
 import RecordsIcon from "src/shared/icons/Records.icon";
 import css from "./LiveToolsWrapper.module.less";
@@ -26,8 +26,17 @@ const LiveToolsWrapper: FC<IProps> = ({
     isRotated,
     children,
 }) => {
-    const { mode } = useChatStore();
+    const { mode, getOpenSavedPlaygrounds, updateSavedPlaygrounds } = useChatStore();
+
+    useEffect(() => {
+        getOpenSavedPlaygrounds().map((savedPlayground) => {
+            savedPlayground.open = false;
+            updateSavedPlaygrounds(savedPlayground)
+        })
+    }, []);
+
     const [showBookmarks, setShowBookmarks] = useState(false);
+    const {isSideBarOpen} = useAppStore();
 
     const renderBookmarkContent = (mode: ModeType) => {
         switch (mode) {
@@ -48,7 +57,7 @@ const LiveToolsWrapper: FC<IProps> = ({
     };
 
     return (
-        <div className={css.translator}>
+        <div className={!isSideBarOpen ? css.translator : css.sidebar_open_translator}>
             <div className={css.translationWrapper}>
                 <div className={css.translation}>
                     {bookmarkIcon && (

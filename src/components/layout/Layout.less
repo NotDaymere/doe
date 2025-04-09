@@ -24,13 +24,14 @@
   padding: 0;
 }
 .playground-sider {
-  transition: width 500ms ease, transform 500ms ease !important;
   padding-left: 17px;
   padding-bottom: 48px;
   padding-top: 75px;
   border-radius: 16px;
   background: #fff;
   z-index: 10;
+  transition: all 0.5s ease;
+  overflow: hidden;
 }
 .width-80{
   width: 80% !important;
@@ -50,11 +51,9 @@
 .main-layout-playground {
   position: relative;
   height: 100vh;
-  margin-right: 15px;
   border-radius: 16px;
   overflow: hidden;
   background-color: #ffffff;
-  padding: 2px;
 
   .ant-layout-sider {
     background-color: #ffffff;
@@ -72,4 +71,25 @@
 
 .padding-left-0 {
   padding-left: 0;
+}
+
+.history-panel {
+  min-width: 0;
+  max-width: 20%;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.history-visible {
+  opacity: 1;
+  width: 20%;
+  min-width: 20%;
+  padding-left: 0;
+}
+
+.history-hidden {
+  opacity: 0;
+  width: 0;
+  min-width: 0;
+  pointer-events: none;
 }
