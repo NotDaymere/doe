@@ -2,19 +2,13 @@ import React from "react";
 import css from "./LiveTools.module.less";
 import TranslationIcon from "../../../../shared/icons/TranslateIcon";
 import RecordIcon from "../../../../shared/icons/RecordIcon";
-import ShareIcon from "../../../../shared/icons/ShareIcon";
 import { useAppStore, useChatStore } from "../../../../shared/providers";
 import { MODE } from "src/shared/types/Chat";
-import TranslationActiveIcon from "src/shared/icons/TranslationActive.icon";
-import TapeIcon from "../../../../shared/icons/Tape.icon";
-import SharedWithYouActiveIcon from "../../../../shared/icons/SharedWithYouActive.icon";
-import SharedWithYouIcon from "../../../../shared/icons/SharedWithYou.icon";
-
 
 export const LiveTools = () => {
 
     const { isSideBarOpen } = useAppStore();
-    const {mode, setMode, isSharingActive, setIsSharingActive} = useChatStore();
+    const {mode, setMode} = useChatStore();
     const [isSideBarLiveToolsOpen, setIsSideBarLiveToolsOpen] = React.useState(true);
     const [showTooltips, setShowTooltips] = React.useState(false);
 

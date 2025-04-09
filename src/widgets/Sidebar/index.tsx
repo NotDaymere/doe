@@ -247,7 +247,7 @@ export const Sidebar: React.FC = () => {
                 </div>
 
 
-                <div className={ getOpenSavedPlaygrounds().length > 0
+                <div className={ (getOpenSavedPlaygrounds().length > 0 || mode)
                                     ? css.delete_all_messages_open_playgrounds
                                     : css.delete_all_messages}>
                     <div className={css.delete_all_messages_btn_container}>
