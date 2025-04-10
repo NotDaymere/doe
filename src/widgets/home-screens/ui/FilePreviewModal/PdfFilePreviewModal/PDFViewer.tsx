@@ -9,6 +9,7 @@ import * as pdfjsLib from "pdfjs-dist";
 import css from "./PdfFilePreviewModal.module.less";
 import ArrowLeftIcon from "../../../../../shared/icons/ArrowLeft.icon";
 import ArrowRightIcon from "../../../../../shared/icons/ArrowRight.icon";
+import {TextAnnotation} from "./pdfWorker";
 
 const regularFont = "/fonts/Roboto_Condensed-Regular.ttf";
 const boldFont = "/fonts/Roboto_Condensed-ExtraBold.ttf";
@@ -17,20 +18,6 @@ const pdfUrlCache: { [key: string]: string } = {};
 
 export interface PDFViewerHandle {
     saveAnnotations: () => Promise<string>;
-}
-
-interface TextAnnotation {
-    page: number;
-    x: number;
-    y: number;
-    text: string;
-    maxWidth: number;
-    fontColor: string;
-    fontSize: number;
-    fontWeight: "regular" | "bold";
-    pdfX?: number;
-    pdfY?: number;
-    pdfFontSize?: number;
 }
 
 interface PDFViewerProps {
@@ -108,12 +95,11 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
 
                 if (!pdfUrlCache[url]) {
                     pdfUrlCache[url] = url;
-                    console.log("Initialized cache with original URL:", url);
                 }
             })();
         }, [url]);
 
-        const fixedWidth = window.innerWidth * 0.3;
+        const fixedWidth = window.innerWidth * 0.25;
         const fixedHeight = window.innerHeight * 0.8;
 
         const getCanvasCoordinates = (
@@ -156,7 +142,6 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             ctx.stroke();
             if (lastPointRef.current.x !== x || lastPointRef.current.y !== y) {
                 setHasAnnotationsChanged(true);
-                console.log("Annotations changed due to drawing");
             }
             lastPointRef.current = { x, y };
         };
@@ -197,7 +182,6 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                     };
                     setActiveDraggableAnnotation(newAnnotation);
                     setHasAnnotationsChanged(true);
-                    console.log("Annotations changed due to text input");
                 }
                 setActiveTextInput(null);
                 setIsTextMode(false);
@@ -225,7 +209,6 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 y: newY,
             });
             setHasAnnotationsChanged(true);
-            console.log("Annotations changed due to dragging");
         };
 
         const onDraggableMouseUp = () => {
@@ -317,7 +300,6 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             if (!hasAnnotationsChanged && pdfUrlCache[url]) {
                 return Promise.resolve(pdfUrlCache[url]);
             }
-
             if (!pdf) throw new Error("PDF not loaded");
             const arrayBuffer = await fetch(url).then((r) => r.arrayBuffer());
             const drawCanvasesData: string[] = [];
@@ -334,7 +316,6 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 regularFontUrl: regularFont,
                 boldFontUrl: boldFont,
             };
-
             return new Promise((resolve, reject) => {
                 if (!workerRef.current) {
                     reject(new Error("Worker is not initialized"));
@@ -345,7 +326,6 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                     if (status === "success") {
                         const blob = new Blob([pdfBlob], { type: "application/pdf" });
                         const newUrl = URL.createObjectURL(blob);
-                        console.log("New PDF URL generated:", newUrl);
                         pdfUrlCache[url] = newUrl;
                         setHasAnnotationsChanged(false);
                         resolve(newUrl);
