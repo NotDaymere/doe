@@ -47,7 +47,7 @@ export const ChatLayout: React.FC = () => {
     if (mode === MODE.TRANSLATION || mode === MODE.RECORDING)
         return (
             <div className={css.chatLayout}>
-                <div className={css.layout}>
+                <div className={css.layout_mode}>
                     <div className={css.layout_sidebar}>
                         <Sidebar />
                     </div>
