@@ -337,7 +337,18 @@ export const ChatPanel: React.FC = () => {
         }, 300);
     }, [savedRange, linkUrl, files, setFiles, setIsHyperlinkInputOpen]);
 
+    const hasTextContent = (html: string): boolean => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        return tempDiv.textContent!.trim() !== '';
+    };
+
     const handleSend = async () => {
+
+        if (text.trim() === "") {
+            return;
+        }
+
         const userMessage: IMessage = {
             id: Date.now(),
             isUser: true,
@@ -496,7 +507,9 @@ export const ChatPanel: React.FC = () => {
         }
         if (e.code === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            await handleSend();
+            if (hasTextContent(text)) {
+                await handleSend();
+            }
         }
     };
 
@@ -780,7 +793,14 @@ export const ChatPanel: React.FC = () => {
                                         </button>
                                     ) : !prompt.active ? (
                                         !questionCodeMessage ? (
-                                            <button className={css.panel_submitBtn} onClick={handleSend}>
+                                            <button
+                                                className={css.panel_submitBtn}
+                                                onClick={() => {
+                                                    if (hasTextContent(text)) {
+                                                        handleSend();
+                                                    }
+                                                }}
+                                            >
                                                 Send <ArrowUpIcon />
                                             </button>
                                         ) : (
