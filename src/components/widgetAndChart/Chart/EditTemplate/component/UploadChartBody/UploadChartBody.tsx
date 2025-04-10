@@ -2,18 +2,68 @@ import Papa from "papaparse";
 import Databox from "../Databox/Databox";
 import CustomChartBar from "./components/CustomBarChart";
 import "./UploadChartBody.less";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 function UploadChartBody() {
     const fileInputRef = useRef(null);
     const [data, setData] = useState([]);
     const [chartData, setChartData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Load default data on component mount
+    useEffect(() => {
+        loadDefaultData();
+    }, []);
+
+    // Function to load default data from public directory
+    const loadDefaultData = async () => {
+        try {
+            setIsLoading(true);
+            const response = await fetch("/temp/data.csv");
+
+            if (!response.ok) {
+                throw new Error(
+                    `Failed to load default data: ${response.status} ${response.statusText}`
+                );
+            }
+
+            const csvText = await response.text();
+
+            Papa.parse(csvText, {
+                header: true,
+                dynamicTyping: true,
+                complete: (result) => {
+                    console.log("Default CSV Data:", result.data);
+                    if (result.data && result.data.length > 0) {
+                        const firstRow = result.data[0];
+                        const formattedData = Object.keys(firstRow).map((key, index) => ({
+                            group: key,
+                            value: firstRow[key] || 0,
+                            label: String(firstRow[key] || 0),
+                            color: generateColor(index),
+                        }));
+                        setData(formattedData);
+                        setChartData(formattedData);
+                        console.log("Default Formatted Chart Data:", formattedData);
+                    }
+                    setIsLoading(false);
+                },
+                error: (error) => {
+                    console.error("Error parsing default CSV file:", error);
+                    setIsLoading(false);
+                },
+            });
+        } catch (error) {
+            console.error("Error loading default data:", error);
+            setIsLoading(false);
+        }
+    };
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
-    const handleFileChange = (event:any) => {
+    const handleFileChange = (event: any) => {
         const file = event.target.files[0];
         if (file) {
             Papa.parse(file, {
@@ -50,14 +100,18 @@ function UploadChartBody() {
         <div className="edit_contanier">
             <div className="left">
                 <p>Edit Data</p>
-                {data.map((item, index) => (
-                    <Databox
-                        key={index}
-                        title={item.group}
-                        color={item.color}
-                        valueNumber={item.value}
-                    />
-                ))}
+                {isLoading ? (
+                    <p>Loading default data...</p>
+                ) : (
+                    data.map((item, index) => (
+                        <Databox
+                            key={index}
+                            title={item.group}
+                            color={item.color}
+                            valueNumber={item.value}
+                        />
+                    ))
+                )}
                 <div className="scalebox">
                     <p>Scale</p>
                     <div className="numbers">
@@ -80,7 +134,7 @@ function UploadChartBody() {
             </div>
             <div className="right">
                 <div className="right-inner">
-                    <CustomChartBar data={chartData} />
+                    {isLoading ? <p>Loading chart...</p> : <CustomChartBar data={chartData} />}
                 </div>
             </div>
         </div>

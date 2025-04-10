@@ -13,6 +13,7 @@ import { useAppStore, useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "src/widgets/Sidebar/ui";
 import Sharing from "../../widgets/home-screens/ui/LiveTools/Sharing/Sharing";
 
+
 const Home = () => {
     const { isSharingActive, setIsSharingActive } = useChatStore();
     const { gaiaSidebarActive, setGaiaSidebarActive } = useAppStore();

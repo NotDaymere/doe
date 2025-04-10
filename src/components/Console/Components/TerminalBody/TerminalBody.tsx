@@ -11,9 +11,13 @@ function TerminalBody() {
     const terminalRef = useRef<HTMLDivElement>(null);
     const termInstance = useRef<Terminal | null>(null);
     const [hoveredBug, setHoveredBug] = useState<number | null>(null);
+    const [currentLineIndex, setCurrentLineIndex] = useState(0);
 
     const [bugs, setBugs] = useState<Array<{ id: number; type: string; x: number; y: number }>>([]);
     const { numberOfConsole } = useConsole();
+
+    // Add this state to explicitly track if we should show the white dot
+    const [showWhiteDot, setShowWhiteDot] = useState(false);
 
     useEffect(() => {
         if (!termInstance.current && terminalRef.current) {
@@ -33,7 +37,7 @@ function TerminalBody() {
             const red = "\x1b[31m";
             const reset = "\x1b[0m";
 
-            let currentLineIndex = 0;
+            let lineIndex = 0;
 
             const originalWriteln = term.writeln.bind(term);
             term.writeln = (text: string) => {
@@ -43,15 +47,16 @@ function TerminalBody() {
                 const lineCount = Math.ceil(text.length / maxCols) || 1;
 
                 const newBug = {
-                    id: currentLineIndex,
-                    type: currentLineIndex % 2 === 0 ? "red-bug" : "blue-bug",
+                    id: lineIndex,
+                    type: lineIndex % 2 === 0 ? "red-bug" : "blue-bug",
                     x: 0,
-                    y: currentLineIndex,
+                    y: lineIndex,
                 };
 
                 setBugs((prevBugs) => [...prevBugs, newBug]);
 
-                currentLineIndex += lineCount;
+                lineIndex += lineCount;
+                setCurrentLineIndex(lineIndex);
             };
 
             term.open(terminalRef.current);
@@ -70,8 +75,34 @@ function TerminalBody() {
                 );
                 term.writeln(`${red}23.1.2 ${reset}->${red}24.3.1${reset}`);
                 term.writeln("(venv) okezuebell@MacBook-Air Desktop % python3 chessgame.py");
+
+                // Set showWhiteDot to true to display the white dot for the last line
+                setShowWhiteDot(true);
+
+                term.onData((data) => {
+                    const code = data.charCodeAt(0);
+
+                    if (code === 127) {
+                        term.write("\b \b");
+                    } else {
+                        term.write(data);
+                    }
+                });
             } else {
                 term.writeln("");
+
+                // Set showWhiteDot to true to display the white dot for the last line
+                setShowWhiteDot(true);
+
+                term.onData((data) => {
+                    const code = data.charCodeAt(0);
+
+                    if (code === 127) {
+                        term.write("\b \b");
+                    } else {
+                        term.write(data);
+                    }
+                });
             }
             termInstance.current = term;
         }
@@ -127,6 +158,37 @@ function TerminalBody() {
                         </div>
                     );
                 })}
+
+                {/* White dot for the input line - always visible */}
+                {showWhiteDot && (
+                    <div
+                        key="white-dot"
+                        style={{
+                            position: "absolute",
+                            top: `${calculatePosition(0, currentLineIndex).top}px`,
+                            left: `${calculatePosition(0, currentLineIndex).left}px`,
+                            width: "8px",
+                            height: "8px",
+                            borderRadius: "50%",
+                            backgroundColor: "white",
+                            zIndex: 10,
+                        }}
+                        className="white-bug"
+                        onMouseEnter={() => setHoveredBug(999999)} // Use a unique ID
+                        onMouseLeave={() => setHoveredBug(null)}
+                    >
+                        {hoveredBug === 999999 && (
+                            <div
+                                className="bug-modal"
+                                onMouseEnter={() => setHoveredBug(999999)}
+                                onMouseLeave={() => setHoveredBug(null)}
+                            >
+                                <div className="bug-modal-arrow"></div>
+                                <BugCatchModal />
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             <div className="terminal-container">
@@ -149,6 +211,22 @@ function TerminalBody() {
                         ></div>
                     );
                 })}
+
+                {/* White line for the input line */}
+                {showWhiteDot && (
+                    <div
+                        key="white-line"
+                        style={{
+                            position: "absolute",
+                            top: `${calculatePosition(0, currentLineIndex).top}px`,
+                            height: `${19.5}px`,
+                            zIndex: 10,
+                            width: "100%",
+                            backgroundColor: "rgba(255, 255, 255, 0.1)",
+                        }}
+                        className="white-line"
+                    ></div>
+                )}
             </div>
         </>
     );
