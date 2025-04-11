@@ -71,6 +71,7 @@ self.addEventListener("message", async (e: MessageEvent<WorkerMessage>) => {
                 const img = await pdfDoc.embedPng(dataUrl);
                 const page = (pdfDoc as any).getPage(i);
                 const dims = originalDimensions[i];
+
                 page.drawImage(img, {
                     x: 0,
                     y: 0,
@@ -92,13 +93,15 @@ self.addEventListener("message", async (e: MessageEvent<WorkerMessage>) => {
                 const page = (pdfDoc as any).getPage(ann.page);
                 const { r, g, b } = hexToRgb(ann.fontColor);
                 const font = ann.fontWeight === "bold" ? customFontBold : customFontRegular;
+
                 page.drawText(ann.text, {
                     x: ann.pdfX,
-                    y: ann.pdfY,
-                    size: ann.pdfFontSize,
-                    font,
+                    y: ann.pdfY - 25,
+                    size: ann.fontSize + 5,
                     color: rgb(r, g, b),
+                    font: font,
                     maxWidth: ann.maxWidth,
+                    fontWeight: ann.fontWeight,
                 });
             }
 
