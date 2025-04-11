@@ -150,22 +150,15 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
             {textSettingsOpen && (
                 <div className={css.textSettingsMenu}>
                     <CustomDropdownSelect
-                        name="Weight"
-                        value={fontWeight}
-                        options={[
-                            { value: "regular", label: "Regular" },
-                            { value: "bold", label: "Bold" },
-                        ]}
-                        onChange={(v) => setFontWeight(v as "regular" | "bold")}
-                        dropdownClass={css.selectWeightInput}
-                    />
-                    <CustomDropdownSelect
                         name="Size"
                         value={fontSize}
                         options={[
+                            { value: 8, label: "8px" },
+                            { value: 12, label: "12px" },
                             { value: 18, label: "18px" },
                             { value: 24, label: "24px" },
                             { value: 30, label: "30px" },
+                            { value: 34, label: "34px" }
                         ]}
                         onChange={(v) => setFontSize(Number(v))}
                         dropdownClass={css.selectTextSize}
