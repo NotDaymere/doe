@@ -46,6 +46,60 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
     const [cutError, setCutError] = useState<string | null>(null);
     const [url, setUrl] = useState(initialUrl);
     const [expectedDuration, setExpectedDuration] = useState<number | null>(null);
+    // После остальных useState объявлений:
+    const [draggingMarker, setDraggingMarker] = useState<"start" | "end" | null>(null);
+
+    const handleMarkerMouseDown = (marker: "start" | "end", e: MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        e.preventDefault();
+        setDraggingMarker(marker);
+    };
+
+    useEffect(() => {
+        if (!draggingMarker) return;
+
+        const handleMarkerMouseMove = (e: Event) => {
+            const mouseEvent = e as unknown as MouseEvent;
+            // Приводим Event к MouseEvent
+            if (!videoRef.current || !progressBarRef.current) return;
+            const rect = progressBarRef.current.getBoundingClientRect();
+            let pos = (mouseEvent.clientX - rect.left) / rect.width;
+            pos = Math.max(0, Math.min(pos, 1));
+            const duration = videoRef.current && isFinite(videoRef.current.duration)
+                ? videoRef.current.duration
+                : (expectedDuration || 0);
+            if (!duration) return;
+            const newTime = pos * duration;
+
+            if (draggingMarker === "start") {
+                if (cutEnd !== null && newTime > cutEnd) {
+                    setCutStart(cutEnd);
+                } else {
+                    setCutStart(newTime);
+                }
+            } else if (draggingMarker === "end") {
+                if (cutStart !== null && newTime < cutStart) {
+                    setCutEnd(cutStart);
+                } else {
+                    setCutEnd(newTime);
+                }
+            }
+        };
+
+        const handleMarkerMouseUp = () => {
+            setDraggingMarker(null);
+        };
+
+        window.addEventListener("mousemove", handleMarkerMouseMove);
+        window.addEventListener("mouseup", handleMarkerMouseUp);
+        return () => {
+            window.removeEventListener("mousemove", handleMarkerMouseMove);
+            window.removeEventListener("mouseup", handleMarkerMouseUp);
+        };
+    }, [draggingMarker, cutStart, cutEnd, expectedDuration]);
+
+
+
 
     const togglePlayPause = () => {
         if (!videoRef.current || isProcessingCut) return;
@@ -79,8 +133,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
             }
         }
 
-        console.log("[TimeUpdate] currentTime:", currentTime, "duration:", duration, "calculated progress:", (currentTime / duration) * 100);
-
         if (!isNaN(duration) && duration > 0) {
             const newProgress = Math.min((currentTime / duration) * 100, 100);
             setProgress(newProgress);
@@ -100,7 +152,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
             videoRef.current.currentTime = pos * duration;
             const newProgress = pos * 100;
             setProgress(newProgress);
-            console.log("[UpdateVideoTime] Set currentTime:", pos * duration, "progress:", newProgress, "duration:", duration);
         } else {
             console.warn("[UpdateVideoTime] Invalid duration:", duration);
         }
@@ -111,20 +162,30 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
         if (isCutting) {
             const rect = progressBarRef.current.getBoundingClientRect();
             const pos = (e.clientX - rect.left) / rect.width;
-            const time = pos * videoRef.current.duration;
+            const duration = isFinite(videoRef.current.duration)
+                ? videoRef.current.duration
+                : expectedDuration !== null && expectedDuration > 0
+                    ? expectedDuration
+                    : 0;
+            if (!duration) {
+                console.warn("[CUT] Invalid duration for marker placement:", videoRef.current.duration, expectedDuration);
+                return;
+            }
+            const time = pos * duration;
             if (cutStart === null || cutEnd === null) {
                 setCutStart(0);
-                setCutEnd(videoRef.current.duration);
-            }
-            if (time < cutStart!) {
-                setCutStart(time);
-            } else if (time > cutEnd!) {
-                setCutEnd(time);
+                setCutEnd(duration);
             } else {
-                const diffStart = Math.abs(time - cutStart!);
-                const diffEnd = Math.abs(time - cutEnd!);
-                if (diffStart < diffEnd) setCutStart(time);
-                else setCutEnd(time);
+                if (time < cutStart) {
+                    setCutStart(time);
+                } else if (time > cutEnd) {
+                    setCutEnd(time);
+                } else {
+                    const diffStart = Math.abs(time - cutStart);
+                    const diffEnd = Math.abs(time - cutEnd);
+                    if (diffStart < diffEnd) setCutStart(time);
+                    else setCutEnd(time);
+                }
             }
             return;
         }
@@ -153,17 +214,22 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
         if (!video) return;
 
         const handleLoadedMetadata = () => {
-            console.log("[LoadedMetadata] Video duration:", video.duration, "width:", video.videoWidth, "height:", video.videoHeight);
             setVideoDimensions({ width: video.videoWidth, height: video.videoHeight });
             if (isFinite(video.duration)) {
                 setExpectedDuration(video.duration);
                 localStorage.setItem("expectedDuration-" + fileName, video.duration.toString());
+                if (isCutting) {
+                    setCutStart(0);
+                    setCutEnd(video.duration);
+                }
             } else {
                 console.warn("[LoadedMetadata] Invalid duration:", video.duration);
-            }
-            if (isCutting) {
-                setCutStart(0);
-                setCutEnd(video.duration);
+                if (expectedDuration !== null && expectedDuration > 0) {
+                    if (isCutting) {
+                        setCutStart(0);
+                        setCutEnd(expectedDuration);
+                    }
+                }
             }
             setProgress(0);
         };
@@ -181,7 +247,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
             video.removeEventListener("ended", () => setIsPlaying(false));
             video.removeEventListener("error", () => {});
         };
-    }, [isCutting, fileName]);
+    }, [isCutting, fileName, expectedDuration]);
 
     useEffect(() => {
         if (videoDimensions) {
@@ -201,8 +267,9 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
         const savedDuration = localStorage.getItem("expectedDuration-" + fileName);
         if (savedDuration !== null) {
             const parsedDuration = Number(savedDuration);
-            console.log("[Storage] Loaded expectedDuration:", parsedDuration, "for file:", fileName);
-            setExpectedDuration(parsedDuration);
+            if (isFinite(parsedDuration) && parsedDuration > 0) {
+                setExpectedDuration(parsedDuration);
+            }
         }
     }, [fileName]);
 
@@ -211,18 +278,15 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
             videoRef.current.src = url;
             videoRef.current.load();
             setProgress(0);
-            console.log("[URL Change] Initialized video with url:", url);
         }
     }, [url]);
 
     useEffect(() => {
-        if (isPlaying && videoRef.current) {
-            const interval = setInterval(() => {
-                handleTimeUpdate();
-            }, 100);
-            return () => clearInterval(interval);
-        }
-        return undefined;
+        if (!isPlaying || !videoRef.current) return;
+        const interval = setInterval(() => {
+            handleTimeUpdate();
+        }, 100);
+        return () => clearInterval(interval);
     }, [isPlaying]);
 
     const updatePlaybackRate = (rate: number) => {
@@ -232,8 +296,19 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
 
     const handleCutVideo = async () => {
         if (cutStart === null || cutEnd === null || cutEnd <= cutStart) {
-            console.log("[CUT] Invalid cut times: cutStart=", cutStart, "cutEnd=", cutEnd);
             alert("Please set valid start and end times for cutting.");
+            return;
+        }
+
+        let duration: number;
+        if (videoRef.current && isFinite(videoRef.current.duration)) {
+            duration = videoRef.current.duration;
+        } else if (expectedDuration !== null && expectedDuration > 0) {
+            duration = expectedDuration;
+            console.warn("[CUT] Using expectedDuration:", expectedDuration);
+        } else {
+            console.warn("[CUT] Cannot cut video: duration unavailable");
+            alert("Video duration is not available. Please try again.");
             return;
         }
 
@@ -257,7 +332,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
                 cutEnd,
                 fileName,
                 (progress, stage) => {
-                    console.log("[CUT] Progress update:", progress, stage);
                     setCutProgress(Math.round(progress));
                     setCutStage(stage);
                 },
@@ -268,13 +342,10 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
                     setTimeout(() => cancelCutting(), 3000);
                 },
                 (newUrl) => {
-                    console.log("[CUT] Cut completed, new URL:", newUrl);
                     setUrl(newUrl);
-                    if (cutStart !== null && cutEnd !== null) {
-                        const newExpected = cutEnd - cutStart;
-                        setExpectedDuration(newExpected);
-                        localStorage.setItem("expectedDuration-" + fileName, newExpected.toString());
-                    }
+                    const newExpected = cutEnd - cutStart;
+                    setExpectedDuration(newExpected);
+                    localStorage.setItem("expectedDuration-" + fileName, newExpected.toString());
                     if (onUpdateUrl) onUpdateUrl(newUrl);
                     setIsCutting(false);
                     setCutStart(null);
@@ -287,7 +358,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
                         videoRef.current.load();
 
                         const metadataHandler = () => {
-                            console.log("[CUT] Loaded metadata, duration:", videoRef.current?.duration);
                             if (videoRef.current && isFinite(videoRef.current.duration)) {
                                 setExpectedDuration(videoRef.current.duration);
                                 localStorage.setItem("expectedDuration-" + fileName, videoRef.current.duration.toString());
@@ -323,7 +393,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
             const elapsed = Date.now() - startTime;
             const remaining = minOverlayTime - elapsed;
             if (remaining > 0) {
-                console.log("[CUT] Adding delay for overlay:", remaining, "ms");
                 await new Promise((resolve) => setTimeout(resolve, remaining));
             }
             setIsProcessingCut(false);
@@ -339,7 +408,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
         setCutStage("");
         setCutError(null);
         setIsProcessingCut(false);
-        console.log("[CUT] Cutting cancelled");
     };
 
     return createPortal(
@@ -376,22 +444,41 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
                     <div className={css.progressBar} style={{ width: `${progress}%` }}>
                         <div className={css.progressBarHandle}></div>
                     </div>
-                    {isCutting && videoRef.current && videoRef.current.duration && (
+                    {isCutting && (
                         <>
                             {cutStart !== null && (
                                 <div
                                     className={css.cutMarker}
-                                    style={{ left: `${(cutStart / videoRef.current.duration) * 100}%` }}
+                                    style={{
+                                        left: `${
+                                            (cutStart /
+                                                (videoRef.current && typeof videoRef.current.duration === "number" && isFinite(videoRef.current.duration)
+                                                    ? videoRef.current.duration
+                                                    : expectedDuration || 1)) *
+                                            100
+                                        }%`,
+                                    }}
+                                    onMouseDown={(e) => handleMarkerMouseDown("start", e)}
                                 />
                             )}
                             {cutEnd !== null && (
                                 <div
                                     className={css.cutMarker}
-                                    style={{ left: `${(cutEnd / videoRef.current.duration) * 100}%` }}
+                                    style={{
+                                        left: `${
+                                            (cutEnd /
+                                                (videoRef.current && typeof videoRef.current.duration === "number" && isFinite(videoRef.current.duration)
+                                                    ? videoRef.current.duration
+                                                    : (expectedDuration && expectedDuration > 0 ? expectedDuration : 1))) *
+                                            100
+                                        }%`,
+                                    }}
+                                    onMouseDown={(e) => handleMarkerMouseDown("end", e)}
                                 />
                             )}
                         </>
                     )}
+
                 </div>
             </div>
             <div className={css.modalContentEditPanel}>
@@ -410,17 +497,31 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
                 <div
                     className={css.modalContentEditPanelItem}
                     onClick={() => {
-                        if (isCutting) cancelCutting();
-                        else {
-                            if (videoRef.current) {
-                                setCutStart(0);
-                                setCutEnd(videoRef.current.duration);
+                        if (isCutting) {
+                            cancelCutting();
+                        } else {
+                            let duration: number | null = null;
+                            if (videoRef.current && isFinite(videoRef.current.duration)) {
+                                duration = videoRef.current.duration;
+                            } else if (expectedDuration !== null && expectedDuration > 0) {
+                                duration = expectedDuration;
+                                console.warn("[CUT] Using expectedDuration for cutting:", expectedDuration);
+                            } else {
+                                console.warn("[CUT] Cannot start cutting: no duration available");
+                                return;
                             }
+                            setCutStart(0);
+                            setCutEnd(duration);
                             setIsCutting(true);
                         }
                     }}
                     title="Cut video"
                     data-active={isCutting}
+                    style={
+                        !videoRef.current || (!isFinite(videoRef.current.duration) && expectedDuration === null)
+                            ? { opacity: 0.5, cursor: "not-allowed" }
+                            : {}
+                    }
                 >
                     <ModalContentPanelScissorsIcon fill="currentColor" />
                 </div>

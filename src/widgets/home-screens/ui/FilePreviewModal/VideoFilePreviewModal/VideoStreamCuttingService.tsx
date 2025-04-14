@@ -15,14 +15,12 @@ export class VideoStreamCuttingService {
         onComplete: (newUrl: string) => void
     ): Promise<void> {
         if (cutEnd <= cutStart) {
-            console.log("[CUT] Invalid cut times: cutStart=", cutStart, "cutEnd=", cutEnd);
             throw new Error("Invalid cut times: end must be greater than start");
         }
 
         this.isProcessing = true;
         this.onComplete = onComplete;
         onProgress(0, "Starting cut");
-        console.log("[CUT] Starting MediaRecorder cut from", cutStart, "to", cutEnd);
 
         try {
             this.backgroundVideo = document.createElement("video");
@@ -32,10 +30,8 @@ export class VideoStreamCuttingService {
             this.backgroundVideo.style.left = "-9999px";
             document.body.appendChild(this.backgroundVideo);
 
-            console.log("[CUT] Loading video metadata...");
             await new Promise<void>((resolve, reject) => {
                 this.backgroundVideo!.onloadedmetadata = () => {
-                    console.log("[CUT] Background video metadata loaded, duration:", this.backgroundVideo!.duration);
                     resolve();
                 };
                 this.backgroundVideo!.onerror = () => {
@@ -49,16 +45,13 @@ export class VideoStreamCuttingService {
                 throw new Error("Cut times exceed video duration");
             }
 
-            console.log("[CUT] Setting currentTime to", cutStart);
             this.backgroundVideo.currentTime = cutStart;
 
-            console.log("[CUT] Creating AudioContext...");
             this.audioContext = new AudioContext();
             const source = this.audioContext.createMediaElementSource(this.backgroundVideo);
             const destination = this.audioContext.createMediaStreamDestination();
             source.connect(destination);
 
-            console.log("[CUT] Capturing stream...");
             const videoStream = this.backgroundVideo.captureStream();
             const stream = new MediaStream([
                 ...videoStream.getVideoTracks(),
@@ -79,28 +72,16 @@ export class VideoStreamCuttingService {
 
             const recordingPromise = new Promise<void>((resolve, reject) => {
                 this.recorder!.onstop = async () => {
-                    console.log("[CUT] Recording stopped");
                     if (!this.isProcessing) {
-                        console.log("[CUT] Recording was cancelled, skipping onComplete");
                         resolve();
                         return;
                     }
 
                     const outputBlob = new Blob(chunks, { type: "video/webm" });
                     const fragmentUrl = URL.createObjectURL(outputBlob);
-                    console.log("[CUT] Output Blob created, size:", outputBlob.size);
-
-                    const downloadLink = document.createElement("a");
-                    downloadLink.href = fragmentUrl;
-                    downloadLink.download = `${fileName}_cut_${cutStart}-${cutEnd}.webm`;
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
-                    console.log("[DOWNLOAD] Cut video downloaded as", downloadLink.download);
 
                     onProgress(100, "Completed");
                     onComplete(fragmentUrl);
-                    console.log("[CUT] Cutting completed successfully");
 
                     stream.getTracks().forEach((track) => track.stop());
                     resolve();
@@ -117,21 +98,16 @@ export class VideoStreamCuttingService {
             this.recorder.ondataavailable = (e) => {
                 if (e.data.size > 0) {
                     chunks.push(e.data);
-                    console.log("[CUT] Recorded chunk, size:", e.data.size);
                 }
             };
 
-            console.log("[CUT] Starting playback...");
             await this.backgroundVideo.play().catch((err) => {
                 console.error("[CUT] Playback error:", err);
                 throw new Error("Failed to start playback: " + err.message);
             });
-            console.log("[CUT] Starting MediaRecorder...");
             this.recorder.start();
-            console.log("[CUT] Recording started");
 
             const duration = cutEnd - cutStart;
-            console.log("[CUT] Cut duration:", duration, "seconds");
             const startTime = Date.now();
             const updateProgress = () => {
                 if (!this.isProcessing) return;
@@ -146,7 +122,6 @@ export class VideoStreamCuttingService {
 
             setTimeout(() => {
                 if (this.recorder && this.recorder.state !== "inactive") {
-                    console.log("[CUT] Stopping recording...");
                     this.recorder.stop();
                     this.backgroundVideo?.pause();
                 }
@@ -181,7 +156,6 @@ export class VideoStreamCuttingService {
         this.recorder = null;
         this.onComplete = null;
         this.isProcessing = false;
-        console.log("[CUT] Cleanup completed");
     }
 
     cancel(): void {
@@ -190,7 +164,6 @@ export class VideoStreamCuttingService {
             this.recorder.onstop = null;
             this.recorder.onerror = null;
             this.recorder.stop();
-            console.log("[CUT] Recording cancelled");
         }
         if (this.backgroundVideo) {
             this.backgroundVideo.pause();
