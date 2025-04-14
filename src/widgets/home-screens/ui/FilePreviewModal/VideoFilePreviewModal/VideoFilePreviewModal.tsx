@@ -18,12 +18,13 @@ interface VideoModalProps {
     onUpdateUrl?: (newUrl: string) => void;
 }
 
-const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl,
+const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
+                                                              url: initialUrl,
                                                               onClose,
                                                               fileName,
                                                               fileExt,
-                                                              onUpdateUrl
-}) => {
+                                                              onUpdateUrl,
+                                                          }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const progressBarRef = useRef<HTMLDivElement>(null);
 
@@ -44,6 +45,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl,
     const [cutStage, setCutStage] = useState<string>("");
     const [cutError, setCutError] = useState<string | null>(null);
     const [url, setUrl] = useState(initialUrl);
+    const [expectedDuration, setExpectedDuration] = useState<number | null>(null);
 
     const togglePlayPause = () => {
         if (!videoRef.current || isProcessingCut) return;
@@ -64,8 +66,28 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl,
 
     const handleTimeUpdate = () => {
         if (!videoRef.current) return;
-        const { currentTime, duration } = videoRef.current;
-        if (!isNaN(duration)) setProgress((currentTime / duration) * 100);
+        const currentTime = videoRef.current.currentTime;
+        let duration = videoRef.current.duration;
+
+        if (!isFinite(duration)) {
+            if (expectedDuration !== null && expectedDuration > 0) {
+                duration = expectedDuration;
+                console.warn("[TimeUpdate] Using expectedDuration:", duration);
+            } else {
+                console.warn("[TimeUpdate] No valid duration available, skipping update");
+                return;
+            }
+        }
+
+        console.log("[TimeUpdate] currentTime:", currentTime, "duration:", duration, "calculated progress:", (currentTime / duration) * 100);
+
+        if (!isNaN(duration) && duration > 0) {
+            const newProgress = Math.min((currentTime / duration) * 100, 100);
+            setProgress(newProgress);
+        } else {
+            console.error("[TimeUpdate] Invalid duration:", duration);
+            setProgress(0);
+        }
     };
 
     const updateVideoTime = (clientX: number) => {
@@ -73,8 +95,15 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl,
         const rect = progressBarRef.current.getBoundingClientRect();
         let pos = (clientX - rect.left) / rect.width;
         pos = Math.max(0, Math.min(pos, 1));
-        videoRef.current.currentTime = pos * videoRef.current.duration;
-        setProgress(pos * 100);
+        const duration = isFinite(videoRef.current.duration) ? videoRef.current.duration : (expectedDuration || 0);
+        if (duration) {
+            videoRef.current.currentTime = pos * duration;
+            const newProgress = pos * 100;
+            setProgress(newProgress);
+            console.log("[UpdateVideoTime] Set currentTime:", pos * duration, "progress:", newProgress, "duration:", duration);
+        } else {
+            console.warn("[UpdateVideoTime] Invalid duration:", duration);
+        }
     };
 
     const handleProgressMouseDown = (e: MouseEvent<HTMLDivElement>) => {
@@ -122,22 +151,37 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl,
     useEffect(() => {
         const video = videoRef.current;
         if (!video) return;
+
         const handleLoadedMetadata = () => {
+            console.log("[LoadedMetadata] Video duration:", video.duration, "width:", video.videoWidth, "height:", video.videoHeight);
             setVideoDimensions({ width: video.videoWidth, height: video.videoHeight });
+            if (isFinite(video.duration)) {
+                setExpectedDuration(video.duration);
+                localStorage.setItem("expectedDuration-" + fileName, video.duration.toString());
+            } else {
+                console.warn("[LoadedMetadata] Invalid duration:", video.duration);
+            }
             if (isCutting) {
                 setCutStart(0);
                 setCutEnd(video.duration);
             }
+            setProgress(0);
         };
+
         video.addEventListener("loadedmetadata", handleLoadedMetadata);
         video.addEventListener("timeupdate", handleTimeUpdate);
         video.addEventListener("ended", () => setIsPlaying(false));
+        video.addEventListener("error", () => {
+            console.error("[Video] Error loading video:", video.error);
+        });
+
         return () => {
             video.removeEventListener("loadedmetadata", handleLoadedMetadata);
             video.removeEventListener("timeupdate", handleTimeUpdate);
             video.removeEventListener("ended", () => setIsPlaying(false));
+            video.removeEventListener("error", () => {});
         };
-    }, [isCutting]);
+    }, [isCutting, fileName]);
 
     useEffect(() => {
         if (videoDimensions) {
@@ -152,6 +196,34 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl,
             });
         }
     }, [videoDimensions]);
+
+    useEffect(() => {
+        const savedDuration = localStorage.getItem("expectedDuration-" + fileName);
+        if (savedDuration !== null) {
+            const parsedDuration = Number(savedDuration);
+            console.log("[Storage] Loaded expectedDuration:", parsedDuration, "for file:", fileName);
+            setExpectedDuration(parsedDuration);
+        }
+    }, [fileName]);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.src = url;
+            videoRef.current.load();
+            setProgress(0);
+            console.log("[URL Change] Initialized video with url:", url);
+        }
+    }, [url]);
+
+    useEffect(() => {
+        if (isPlaying && videoRef.current) {
+            const interval = setInterval(() => {
+                handleTimeUpdate();
+            }, 100);
+            return () => clearInterval(interval);
+        }
+        return undefined;
+    }, [isPlaying]);
 
     const updatePlaybackRate = (rate: number) => {
         if (videoRef.current) videoRef.current.playbackRate = rate;
@@ -198,24 +270,48 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl,
                 (newUrl) => {
                     console.log("[CUT] Cut completed, new URL:", newUrl);
                     setUrl(newUrl);
+                    if (cutStart !== null && cutEnd !== null) {
+                        const newExpected = cutEnd - cutStart;
+                        setExpectedDuration(newExpected);
+                        localStorage.setItem("expectedDuration-" + fileName, newExpected.toString());
+                    }
                     if (onUpdateUrl) onUpdateUrl(newUrl);
                     setIsCutting(false);
                     setCutStart(null);
                     setCutEnd(null);
                     setProgress(0);
                     if (videoRef.current) {
-                        while (videoRef.current.firstChild) {
-                            videoRef.current.removeChild(videoRef.current.firstChild);
-                        }
-                        const source = document.createElement("source");
-                        source.src = newUrl;
-                        source.type = "video/webm";
-                        videoRef.current.appendChild(source);
+                        videoRef.current.src = newUrl;
+                        videoRef.current.preload = "auto";
+                        videoRef.current.currentTime = 0;
                         videoRef.current.load();
-                        videoRef.current.play().then(() => setIsPlaying(true)).catch((err) => {
-                            console.log("[CUT] Error playing cut video:", err);
-                            setIsPlaying(false);
-                        });
+
+                        const metadataHandler = () => {
+                            console.log("[CUT] Loaded metadata, duration:", videoRef.current?.duration);
+                            if (videoRef.current && isFinite(videoRef.current.duration)) {
+                                setExpectedDuration(videoRef.current.duration);
+                                localStorage.setItem("expectedDuration-" + fileName, videoRef.current.duration.toString());
+                                setProgress(0);
+                            } else {
+                                console.warn("[CUT] Invalid duration after load:", videoRef.current?.duration);
+                            }
+                            videoRef.current?.play()
+                                .then(() => setIsPlaying(true))
+                                .catch((err) => {
+                                    console.error("[CUT] Error playing cut video:", err);
+                                    setIsPlaying(false);
+                                });
+                        };
+
+                        videoRef.current.addEventListener("loadedmetadata", metadataHandler, { once: true });
+
+                        videoRef.current.addEventListener(
+                            "error",
+                            () => {
+                                console.error("[CUT] Video load error:", videoRef.current?.error);
+                            },
+                            { once: true }
+                        );
                     }
                 }
             );
@@ -299,28 +395,18 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl,
                 </div>
             </div>
             <div className={css.modalContentEditPanel}>
-                <div
-                    className={css.modalContentEditPanelItem}
-                    onClick={toggleMute}
-                    data-active={!isMuted}>
-                    <ModalContentPanelVolumeIcon fill="currentColor"/>
+                <div className={css.modalContentEditPanelItem} onClick={toggleMute} data-active={!isMuted}>
+                    <ModalContentPanelVolumeIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
-                <div
-                    className={css.modalContentEditPanelItem}
-                    onClick={togglePlayPause}
-                    data-active={isPlaying}>
+                <div className={css.modalContentEditPanelItem} onClick={togglePlayPause} data-active={isPlaying}>
                     <ModalContentPanelVideoPlayIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
-
-                <div
-                    className={css.modalContentEditPanelItem}
-                >
+                <div className={css.modalContentEditPanelItem}>
                     <ModalContentPanelCutIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
-
                 <div
                     className={css.modalContentEditPanelItem}
                     onClick={() => {
