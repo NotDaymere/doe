@@ -4,7 +4,8 @@
     flex-direction: column;
     justify-content: space-between;
     padding-bottom: 30px;
-    gap: 1px;
+    gap: 30px;
+    //gap: 1px;
     overflow: auto;
     transition: padding-left 0.3s ease-in-out;
 }
@@ -50,11 +51,13 @@
     padding: 20px;
     background-color: #f8f8f8;
     border-radius: 16px;
-    min-height: calc(100vh - 186px);
+    height: calc(100vh - 186px);
+    overflow: auto;
 }
 
 .bookmarksButton {
     height: fit-content;
+    position: fixed;
 }
 
 .bookmarks {
@@ -68,7 +71,7 @@
     width: calc(100% - 68px);
     display: flex;
     justify-content: center;
-    padding: 44px 116px 44px 0;
+    padding: 44px;
 }
 
 .translationArea {
