@@ -14,12 +14,11 @@ interface IProps {
     isRotated: boolean;
 }
 
-const LangPopup: FC<IProps> = ({ text, onChange, isActive, setIsActive, isRotated }) => {
+const LangPopup: FC<IProps> = ({ onChange, isActive, setIsActive, isRotated, text }) => {
     const [showPopup, setShowPopup] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const combinedRef = useRef<HTMLDivElement>(null);
     const [files, setFiles] = useState<File[]>([]);
-
     const {
         drag,
         dragTarget,

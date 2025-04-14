@@ -23,11 +23,13 @@ interface IProps {
     onRotate: (value: boolean) => void;
 }
 
+const DEFAULT_TEXT = `Bijection language: create a one-to-one mapping from each letter of the English alphabet to a unique token. This could be another letter, a number, a symbol, or a string of characters. For example, map 'A' to '!', 'B' to '@', and so o`;
+
 const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
     const { activeTranslationOption: mode } = useAppStore();
     const isVoiceMode = mode === TRANSLATION_MENU_OPTIONS.VOICE_MODE;
     const [showLangPopup, setShowLangPopup] = useState(false);
-    const [langText, setLangText] = useState("");
+    const [langText, setLangText] = useState(DEFAULT_TEXT);
     const [translateFromImage, setTranslateFromImage] = useState(false);
 
     const {
@@ -145,7 +147,7 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
                                     <>
                                         <span
                                             className={classNames(css.panel_drag_text, {
-                                                [css.hidden]: dragTarget,
+                                                [css.hidden]: dragTarget || !drag,
                                             })}
                                         >
                                             Upload files, folders, text content, or code here.
@@ -156,7 +158,7 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
                                     magicMenuItems={MAGIC_MENU_ITEMS}
                                     isDisabledUpload={isUploadingFile}
                                     alignEnd={isVoiceMode}
-                                    blurButton={true}
+                                    blurButton={isUploadingFile}
                                     isDragging={drag}
                                 />
                             </>

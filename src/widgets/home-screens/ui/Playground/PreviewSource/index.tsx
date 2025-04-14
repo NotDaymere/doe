@@ -7,6 +7,7 @@ import Preview from "./Preview";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import css from "./PreviewSource.module.less";
+import classNames from "classnames";
 
 const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
     const fileType = data?.split(".").pop() || "";
@@ -58,7 +59,10 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     showScroll={fileType === "txt"}
-                    classes={fileType === "docx" ? `${css.flex}` : ""}
+                    classes={classNames(
+                        fileType === "docx" ? `${css.flex}` : "",
+                        fileType === "pdf" ? `${css.pdf}` : `${css.content}`
+                    )}
                 >
                     <Preview type={type} url={data} isModalView={true} title={title} />
                 </Modal>
