@@ -15,9 +15,15 @@ interface VideoModalProps {
     fileName: string;
     fileExt: string;
     isLoading?: boolean;
+    onUpdateUrl?: (newUrl: string) => void;
 }
 
-const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onClose, fileName, fileExt }) => {
+const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl,
+                                                              onClose,
+                                                              fileName,
+                                                              fileExt,
+                                                              onUpdateUrl
+}) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const progressBarRef = useRef<HTMLDivElement>(null);
 
@@ -192,6 +198,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                 (newUrl) => {
                     console.log("[CUT] Cut completed, new URL:", newUrl);
                     setUrl(newUrl);
+                    if (onUpdateUrl) onUpdateUrl(newUrl);
                     setIsCutting(false);
                     setCutStart(null);
                     setCutEnd(null);
@@ -235,6 +242,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
         setCutProgress(0);
         setCutStage("");
         setCutError(null);
+        setIsProcessingCut(false);
         console.log("[CUT] Cutting cancelled");
     };
 
@@ -291,11 +299,17 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                 </div>
             </div>
             <div className={css.modalContentEditPanel}>
-                <div className={css.modalContentEditPanelItem} onClick={toggleMute}>
-                    <ModalContentPanelVolumeIcon fill={isMuted ? "#B5B5B5" : "#3D3D3D"} />
+                <div
+                    className={css.modalContentEditPanelItem}
+                    onClick={toggleMute}
+                    data-active={!isMuted}>
+                    <ModalContentPanelVolumeIcon fill="currentColor"/>
                 </div>
                 <div className={css.separator}></div>
-                <div className={css.modalContentEditPanelItem} onClick={togglePlayPause}>
+                <div
+                    className={css.modalContentEditPanelItem}
+                    onClick={togglePlayPause}
+                    data-active={isPlaying}>
                     <ModalContentPanelVideoPlayIcon fill="currentColor" />
                 </div>
                 <div className={css.separator}></div>
@@ -320,6 +334,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                         }
                     }}
                     title="Cut video"
+                    data-active={isCutting}
                 >
                     <ModalContentPanelScissorsIcon fill="currentColor" />
                 </div>
@@ -333,9 +348,9 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                     ))}
                 </div>
             )}
-            {isCutting && (
+            {isCutting && !isProcessingCut && (
                 <div className={css.cutControls}>
-                <button
+                    <button
                         className={css.cutButton}
                         onClick={(e) => {
                             e.stopPropagation();
@@ -344,7 +359,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                         }}
                         disabled={isProcessingCut || cutStart === null || cutEnd === null}
                     >
-                        {isProcessingCut ? "Processing..." : "Apply"}
+                        Apply
                     </button>
                     <button
                         className={css.cutButton}
@@ -353,7 +368,7 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                             e.preventDefault();
                             cancelCutting();
                         }}
-                        disabled={isProcessingCut}
+                        disabled={false}
                     >
                         Cancel
                     </button>

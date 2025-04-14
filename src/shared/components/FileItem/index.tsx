@@ -25,6 +25,7 @@ export const FileItem: React.FC<FileItemProps> = ({
     const [currentIconIndex, setCurrentIconIndex] = useState(0);
     const [savedImage, setSavedImage] = useState<string | undefined>(undefined);
     const [savedPdf, setSavedPdf] = useState<string | undefined>(url);
+    const [savedVideoUrl, setSavedVideoUrl] = useState<string | undefined>(url);
 
     const info = useMemo(() => {
         if (name.startsWith("http://") || name.startsWith("https://")) {
@@ -88,6 +89,10 @@ export const FileItem: React.FC<FileItemProps> = ({
 
     const shortenFileName = fileName.length > 10 ? `${fileName.slice(0, 10)}...` : fileName;
 
+    const handleUpdateVideoUrl = (newUrl: string) => {
+        setSavedVideoUrl(newUrl);
+    };
+
     return (
         <>
             <div className={clsx(css.file, className)} onClick={handleClick}>
@@ -149,13 +154,13 @@ export const FileItem: React.FC<FileItemProps> = ({
                 ["mp4", "webm", "ogg"].includes(extLower) &&
                 url && (
                     <VideoFilePreviewModal
-                        url={url}
+                        url={savedVideoUrl || url}
                         onClose={() => setIsModalOpen(false)}
                         fileName={shortenFileName}
                         fileExt={info.ext}
+                        onUpdateUrl={handleUpdateVideoUrl}
                     />
-                )
-            }
+                )}
         </>
     );
 };
