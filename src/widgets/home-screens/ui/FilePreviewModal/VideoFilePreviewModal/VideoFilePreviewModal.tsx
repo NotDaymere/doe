@@ -2,13 +2,12 @@ import React, { useRef, useState, useEffect, MouseEvent } from "react";
 import { createPortal } from "react-dom";
 import css from "./VideoFilePreviewModal.module.less";
 import FilePreviewModalOverlay from "../FilePreviewModalOverplay/FilePreviewModalOverplay";
-import ModalContentPanelEditIcon from "../../../../../shared/icons/ModalContentPanelEdit.icon";
 import ModalContentPanelVolumeIcon from "../../../../../shared/icons/ModalContentPanelVolume.icon";
 import ModalContentPanelVideoPlayIcon from "../../../../../shared/icons/ModalContentPanelVideoPlay.icon";
 import ModalContentPanelScissorsIcon from "../../../../../shared/icons/ModalContentPanelScissors.icon";
 import VideoPlayIcon from "../../../../../shared/icons/VideoPlay.icon";
-import { videoCuttingService } from "./VideoCuttingService";
 import ModalContentPanelCutIcon from "../../../../../shared/icons/ModalContentPanelCut.icon";
+import { videoStreamCuttingService } from "./VideoStreamCuttingService";
 
 interface VideoModalProps {
     url: string;
@@ -165,29 +164,47 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
         setCutStage("Starting cut");
         setCutError(null);
 
+        if (videoRef.current) {
+            videoRef.current.pause();
+            setIsPlaying(false);
+        }
+
+        const minOverlayTime = 2000;
+        const startTime = Date.now();
+
         try {
-            await videoCuttingService.cutVideo(
+            await videoStreamCuttingService.cutVideo(
                 url,
                 cutStart,
                 cutEnd,
                 fileName,
-                videoRef,
                 (progress, stage) => {
-                    setCutProgress(progress);
+                    console.log("[CUT] Progress update:", progress, stage);
+                    setCutProgress(Math.round(progress));
                     setCutStage(stage);
                 },
                 (error) => {
+                    console.error("[CUT] Error from service:", error);
                     setCutError(error);
                     alert("An error occurred: " + error);
                     setTimeout(() => cancelCutting(), 3000);
                 },
                 (newUrl) => {
+                    console.log("[CUT] Cut completed, new URL:", newUrl);
                     setUrl(newUrl);
                     setIsCutting(false);
                     setCutStart(null);
                     setCutEnd(null);
                     setProgress(0);
                     if (videoRef.current) {
+                        while (videoRef.current.firstChild) {
+                            videoRef.current.removeChild(videoRef.current.firstChild);
+                        }
+                        const source = document.createElement("source");
+                        source.src = newUrl;
+                        source.type = "video/webm";
+                        videoRef.current.appendChild(source);
+                        videoRef.current.load();
                         videoRef.current.play().then(() => setIsPlaying(true)).catch((err) => {
                             console.log("[CUT] Error playing cut video:", err);
                             setIsPlaying(false);
@@ -196,15 +213,22 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({ url: initialUrl, onC
                 }
             );
         } catch (error: any) {
-            console.log("[CUT] Service error:", error);
+            console.error("[CUT] Service error:", error);
             setCutError(error.message || "Unknown error");
+            alert("An error occurred: " + error.message);
         } finally {
+            const elapsed = Date.now() - startTime;
+            const remaining = minOverlayTime - elapsed;
+            if (remaining > 0) {
+                console.log("[CUT] Adding delay for overlay:", remaining, "ms");
+                await new Promise((resolve) => setTimeout(resolve, remaining));
+            }
             setIsProcessingCut(false);
         }
     };
 
     const cancelCutting = () => {
-        videoCuttingService.cancel();
+        videoStreamCuttingService.cancel();
         setIsCutting(false);
         setCutStart(null);
         setCutEnd(null);
