@@ -3,6 +3,7 @@ export class VideoStreamCuttingService {
     private recorder: MediaRecorder | null = null;
     private backgroundVideo: HTMLVideoElement | null = null;
     private audioContext: AudioContext | null = null;
+    private onComplete: ((url: string) => void) | null = null;
 
     async cutVideo(
         url: string,
@@ -19,11 +20,11 @@ export class VideoStreamCuttingService {
         }
 
         this.isProcessing = true;
+        this.onComplete = onComplete;
         onProgress(0, "Starting cut");
         console.log("[CUT] Starting MediaRecorder cut from", cutStart, "to", cutEnd);
 
         try {
-
             this.backgroundVideo = document.createElement("video");
             this.backgroundVideo.src = url;
             this.backgroundVideo.style.display = "none";
@@ -79,6 +80,12 @@ export class VideoStreamCuttingService {
             const recordingPromise = new Promise<void>((resolve, reject) => {
                 this.recorder!.onstop = async () => {
                     console.log("[CUT] Recording stopped");
+                    if (!this.isProcessing) {
+                        console.log("[CUT] Recording was cancelled, skipping onComplete");
+                        resolve();
+                        return;
+                    }
+
                     const outputBlob = new Blob(chunks, { type: "video/webm" });
                     const fragmentUrl = URL.createObjectURL(outputBlob);
                     console.log("[CUT] Output Blob created, size:", outputBlob.size);
@@ -130,7 +137,7 @@ export class VideoStreamCuttingService {
                 if (!this.isProcessing) return;
                 const elapsed = (Date.now() - startTime) / 1000;
                 const progress = Math.min((elapsed / duration) * 80 + 10, 90);
-                onProgress(progress, "Applying ");
+                onProgress(progress, "Applying");
                 if (elapsed < duration) {
                     requestAnimationFrame(updateProgress);
                 }
@@ -172,6 +179,7 @@ export class VideoStreamCuttingService {
             this.audioContext = null;
         }
         this.recorder = null;
+        this.onComplete = null;
         this.isProcessing = false;
         console.log("[CUT] Cleanup completed");
     }
@@ -179,6 +187,8 @@ export class VideoStreamCuttingService {
     cancel(): void {
         this.isProcessing = false;
         if (this.recorder && this.recorder.state !== "inactive") {
+            this.recorder.onstop = null;
+            this.recorder.onerror = null;
             this.recorder.stop();
             console.log("[CUT] Recording cancelled");
         }
