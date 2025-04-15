@@ -73,6 +73,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     };
 
     const applyStrikeThrough = () => {
+     
         if (!editor) return;
         editor.chain().focus().toggleStrike().run();
     };
@@ -82,8 +83,9 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
         const { from, to } = editor.state.selection;
         if (from === to) return;
         const selectedText = editor.state.doc.textBetween(from, to, "");
-        const newText =
-            selectedText === selectedText.toUpperCase()
+       
+        const newText = 
+        selectedText === selectedText.toUpperCase()
                 ? selectedText.toLowerCase()
                 : selectedText.toUpperCase();
         editor.chain().focus().deleteRange({ from, to }).insertContent(newText).run();
@@ -91,6 +93,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
 
     const applyPencilUnderline = () => {
         if (!editor) return;
+       
         editor.chain().focus().toggleUnderline().run();
     };
 
@@ -153,28 +156,34 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
                 .focus()
                 .deleteRange({ from, to })
                 .insertContent([
+                   
                     { type: 'text', text: selectedText },
                     {
                         type: 'text',
                         text: '¹',
                         marks: [{ type: 'subscript' }],
                     },
+              
                 ])
                 .run();
         }
+   
+
     };
 
     const applyLink = () => {
         if (!editor) return;
+       
         const { from, to } = editor.state.selection;
+        
         if (from === to) return;
-
         const selectedText = editor.state.doc.textBetween(from, to, "");
         const url = prompt("Enter URL:", "https://");
 
         if (url) {
             editor.chain().focus()
                 .deleteRange({ from, to })
+                
                 .insertContent(selectedText)
                 .setTextSelection({ from, to: from + selectedText.length })
                 .toggleLink({ href: url, target: '_blank' })
@@ -223,6 +232,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
                 </Button>
 
                 <Button className={"button"} onClick={applyItalic}>
+                   
                     <Indian />
                 </Button>
 
@@ -271,17 +281,19 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
                 <Button className={"button"} onClick={applyLink}>
                     <LinkOther />
                 </Button>
-
+             
                 {isPen && (
-                    <>
+                 
+                 <>
                         <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
                             <Button
                                 className={activeMenu ? "button-active" : "button"}
                                 onClick={handleMenuClick}
                             >
-                                {!activeMenu ? <Menu /> : <ActiveMenuIcon />}
+                                {activeMenu ? <Menu /> : <ActiveMenuIcon />}
                             </Button>
                             {activeMenu && <ActiveMenu />}
+                     
                         </div>
 
                         <Button className={"button"} onClick={handleCardPlus}>
@@ -291,7 +303,9 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
                 )}
             </Flex>
         </>
-    );
+  
+);
+
 }
 
 export default TipTapTextFormatMenu;
