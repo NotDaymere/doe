@@ -11,7 +11,7 @@ import StarsIcon from "src/shared/icons/Stars.icon";
 import LiveToolsWrapper from "./LiveToolsWrapper";
 import DictionaryIcon from "src/shared/icons/Dictionary.icon";
 import ScreenIcon from "src/shared/icons/Screen.icon";
-import css from "./Translation/Translation.module.less";
+import css from "./Translator.module.less";
 
 const Translator = () => {
     const { activeTranslationOption, setActiveTranslationOption } = useAppStore();
