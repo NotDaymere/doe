@@ -37,7 +37,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
     const [expandedChatId, setExpandedChatId] = useState<string | null>(null);
     const [activeTagPanel, setActiveTagPanel] = useState<string | null>(null);
     const [isBranchMenuOpen, setIsBranchMenuOpen] = useState(false);
-    const [menuPosition, setMenuPosition] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
+    const [menuPosition, setMenuPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
     const [isShowActions, setIsShowActions] = useState(false);
     const [activeChatForActions, setActiveChatForActions] = useState<{
         id: string;
@@ -64,7 +64,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
 
     const handleOpenBranchMenu = (event: React.MouseEvent) => {
         event.stopPropagation();
-        setMenuPosition({ top: event.clientY, right: event.clientX + 1500 });
+        setMenuPosition({ top: event.clientY, left: event.clientX + 30 });
         setIsBranchMenuOpen(!isBranchMenuOpen);
     };
 
