@@ -1,0 +1,57 @@
+.magic_button_container {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  width: 100%;
+  gap: 6px;
+  font: 500 14px / 1.1 var(--font-sohne);
+  letter-spacing: normal;
+  color: #8D8D8D;
+  transition: 200ms ease;
+  transition-property: border, background, color;
+  cursor: pointer;
+
+  &:hover {
+    background: darken(#FFF, 5%);
+    border-color: darken(#FFF, 10%);
+    color: #1F1F1F;
+  }
+
+  &:hover svg {
+    fill: #8BCF16;
+  }
+
+  &:hover .upload_icon {
+    opacity: 1;
+  }
+
+  .magic_button_and_text {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    gap: 6px;
+
+    svg {
+      transition: fill 0.3s ease-in-out;
+    }
+  }
+
+  .upload_icon {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    color: #1F1F1F;
+    padding-right: 5px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+}
