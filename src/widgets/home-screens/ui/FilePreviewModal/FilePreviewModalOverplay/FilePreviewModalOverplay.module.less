@@ -34,8 +34,19 @@
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
+.modalFileNameWrapper {
+  display: inline-block;
+  max-width: 10ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: -2px;
+}
+
 .modalFileName {
-  width: fit-content;
+  display: inline;
+  margin: 0;
+  padding: 0;
 }
 
 .modalContent:hover .modalCloseBtn {
@@ -49,7 +60,17 @@
 }
 
 .modalFileExt {
-  text-align: start;
+  display: inline;
+  margin: 0;
+  padding: 0;
+  margin-left: -5px;
+}
+
+.modalFileExtShorten {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  margin-left: 2px;
 }
 
 .fileNameInput {
@@ -61,6 +82,10 @@
   width: 100%;
   max-width: 100%;
   height: 100%;
+}
+
+.fileNameInput input {
+  text-align: center;
 }
 
 

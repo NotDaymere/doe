@@ -50,7 +50,7 @@ export const FileItem: React.FC<FileItemProps> = ({
     const [fileName, setFileName] = useState(info.filename);
 
     useEffect(() => {
-        setFileName(info.filename);
+        setFileName(shortenFileName);
     }, [info.filename]);
 
     const extLower = info.ext.toLowerCase();
@@ -132,7 +132,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                 <PdfFilePreviewModal
                     url={savedPdf || url}
                     onClose={() => setIsModalOpen(false)}
-                    fileName={shortenFileName}
+                    fileName={fileName}
                     fileExt={info.ext}
                     onRename={setFileName}
                     onSaveDrawing={setSavedPdf}
