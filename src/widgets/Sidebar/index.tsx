@@ -53,7 +53,7 @@ export const Sidebar: React.FC = () => {
                 changeProfileRef.current &&
                 !changeProfileRef.current.contains(event.target as Node) &&
                 changeProfileBtnRef.current &&
-                !changeProfileBtnRef.current.contains(event.target as Node) // Игнорировать клики по кнопке
+                !changeProfileBtnRef.current.contains(event.target as Node)
             ) {
                 setIsChangeProfilePanelOpen(false);
             }
