@@ -107,14 +107,6 @@ export const Sidebar: React.FC = () => {
         <aside className={isSideBarOpen ? css.sidebar_open : css.sidebar}>
 
             <SidebarGaia />
-            {/*<button*/}
-            {/*    className={css.gaia_btn}*/}
-            {/*    onClick={toggleGaia}*/}
-            {/*    onMouseEnter={handleGaiaButtonHover}*/}
-            {/*    onMouseLeave={() => setGaiaSidebarActive(false)}*/}
-            {/*>*/}
-            {/*    <GlobalIcon />*/}
-            {/*</button>*/}
 
             <div className={css.sidebar_separator}>
                 <div className={css.inner_sidebar_separator}></div>
@@ -272,43 +264,3 @@ export const Sidebar: React.FC = () => {
         </aside>
     );
 };
-// <button
-//                         className={clsx(css.sidebar_controls_btn, {
-//                             [css.active]: isHyperlinkInputOpen,
-//                         })}
-//                         onPointerDown={pointerDown}
-//                         onClick={() => setIsHyperlinkInputOpen(!isHyperlinkInputOpen)}
-//                     >
-//                         <LinkIcon />
-//                     </button>
-//                 </div>
-//                 <div className={css.sidebar_controls_group}>
-//                     <button
-//                         className={css.sidebar_controls_btn}
-//                         onClick={() => setMode(MODE.TRANSLATION)}
-//                     >
-//                         {mode === MODE.TRANSLATION ? (
-//                             <TranslationActiveIcon />
-//                         ) : (
-//                             <TranslationIcon />
-//                         )}
-//                     </button>
-//                     <button
-//                         className={css.sidebar_controls_btn}
-//                         onClick={() => setMode(MODE.RECORDING)}
-//                     >
-//                         {mode === MODE.RECORDING ? (
-//                             <TapeIcon className={css.activeTapeIcon} />
-//                         ) : (
-//                             <TapeIcon />
-//                         )}
-//                     </button>
-//                 </div>
-//                 <div className={css.sidebar_controls_group}>
-//                     <button
-//                         className={css.sidebar_controls_btn}
-//                         onClick={() => setIsSharingActive(true)}
-//                     >
-//                         {isSharingActive ? <SharedWithYouActiveIcon /> : <SharedWithYouIcon />}
-//                     </button>
-//                 </div>
