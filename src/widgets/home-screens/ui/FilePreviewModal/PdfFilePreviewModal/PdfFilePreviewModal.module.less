@@ -55,9 +55,19 @@
   display: flex;
   justify-content: center;
   z-index: 1500;
-  //max-width: 30%;
+  min-width: 500px;
   max-height: 85%;
   height: 100%;
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
 }
 
 .modalPdfPageSlideWrapper {

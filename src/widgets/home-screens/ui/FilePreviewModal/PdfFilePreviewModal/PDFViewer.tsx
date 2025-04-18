@@ -31,6 +31,7 @@ interface PDFViewerProps {
     fontSize: number;
     fontColor: string;
     setIsTextMode: React.Dispatch<React.SetStateAction<boolean>>;
+    onLoad?: () => void;
 }
 
 export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
@@ -44,6 +45,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             fontWeight,
             fontSize,
             fontColor,
+            onLoad,
         },
         ref
     ) => {
