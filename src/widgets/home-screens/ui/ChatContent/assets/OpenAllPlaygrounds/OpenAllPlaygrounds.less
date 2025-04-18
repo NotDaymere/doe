@@ -1,161 +1,165 @@
 .fade-enter {
-  opacity: 0;
-  transform: translateY(-10px);
+    opacity: 0;
+    transform: translateY(-10px);
 }
 .fade-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 300ms ease, transform 300ms ease;
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+        opacity 300ms ease,
+        transform 300ms ease;
 }
 
 @keyframes fadeOut {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.95);
-  }
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
 }
 
 .open-all-playgrounds-container {
-  position: absolute;
-  top: 225px;
-  left: 95px;
-  width: 277px;
-  height: 165px;
-  padding: 10px;
-  border-radius: 16px;
-  background: #F0F0F0;
-  border: 1px solid #DDDDDD;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 8px;
-  transition: width 500ms;
-  animation: fadeIn 0.45s ease-out forwards;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 1000;
+    position: absolute;
+    top: 225px;
+    left: 95px;
+    width: 277px;
+    height: 165px;
+    padding: 10px;
+    border-radius: 16px;
+    background: #f0f0f0;
+    border: 1px solid #dddddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 8px;
+    transition: width 500ms;
+    animation: fadeIn 0.45s ease-out forwards;
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+    z-index: 1000;
 }
 
 .open-all-playgrounds-container.close {
-  animation: fadeOut 0.45s ease-out forwards;
+    animation: fadeOut 0.45s ease-out forwards;
 }
 
 .open-all-playgrounds-container-without-playground {
-  top: 175px;
-  left: 95px;
+    top: 175px;
+    left: 95px;
 }
 
 .playgrounds-sidebar-open {
-  left: 295px !important;
+    left: 295px !important;
 }
 
 .playgrounds-sidebar-and-playground-open {
-  left: 295px !important;
+    left: 295px !important;
 }
 
 .open-all-playgrounds-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  font-family: Sohne;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 18.56px;
-  color: #5B5B5B;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Sohne;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18.56px;
+    color: #5b5b5b;
 }
 .open-all-playgrounds-header-text {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  svg {
-    fill: #5B5B5B;
-    width: 16px;
-    height: 16px;
-  }
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    svg {
+        fill: #5b5b5b;
+        width: 16px;
+        height: 16px;
+    }
 }
 .open-all-playgrounds-header-button {
-  width: 20px;
-  height: 20px;
-  top: 10px;
-  left: 247px;
-  border-radius: 3px;
-  background: #F8F8F8;
-  padding: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  svg {
-    width: 12px;
-    height: 12px;
-    fill: #5B5B5B;
-  }
+    width: 20px;
+    height: 20px;
+    top: 10px;
+    left: 247px;
+    border-radius: 3px;
+    background: #f8f8f8;
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+        width: 12px;
+        height: 12px;
+        fill: #5b5b5b;
+    }
 }
 .open-all-playgrounds-content {
-  width: 257px;
-  height: 117px;
-  padding: 4px;
-  border-radius: 12px;
-  background: #FFFFFFCC;
-  box-shadow: 0px 8px 12px 0px #0000000A;
-  backdrop-filter: blur(100px);
-  overflow-y: auto;
-  scrollbar-width: none;
+    width: 257px;
+    height: 117px;
+    padding: 4px;
+    border-radius: 12px;
+    background: #ffffffcc;
+    box-shadow: 0px 8px 12px 0px #0000000a;
+    backdrop-filter: blur(100px);
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .open-all-playgrounds-example-span {
-  width: 12px;
-  height: 2px;
-  background: #DBD8D8;
+    width: 12px;
+    height: 2px;
+    background: #dbd8d8;
 }
 .open-all-playgrounds-content-example {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 11px;
-  width: 249px;
-  height: 35px;
-  border-radius: 8px;
-  font-family: Sohne;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 18.56px;
-  color: #CFCFCF;
-  cursor: pointer;
-  span {
-    display: none;
-  }
-  svg {
-    fill: #B5B5B5;
-  }
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 11px;
+    width: 249px;
+    height: 35px;
+    border-radius: 8px;
+    font-family: Sohne;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18.56px;
+    color: #cfcfcf;
+    cursor: pointer;
+    span {
+        display: none;
+    }
+    svg {
+        fill: #b5b5b5;
+    }
 }
 .open-all-playgrounds-content-example-hover {
-  background: #F8F8F8;
-  color: #1F1F1F;
-  span {
-    display: block;
-  }
-  svg {
-    fill: #5B5B5B;
-  }
+    background: #f8f8f8;
+    color: #1f1f1f;
+    span {
+        display: block;
+    }
+    svg {
+        fill: #5b5b5b;
+    }
 }
 .open-all-playgrounds-content-example-button {
-  height: 12px;
-  width: 12px;
+    height: 12px;
+    width: 12px;
 }
 .open-all-playgrounds-content-name {
-  max-width: 100%;
-  display: flex;
-  gap: 5px;
-  p {
-    max-width: 190px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+    max-width: 100%;
+    display: flex;
+    gap: 5px;
+    p {
+        max-width: 190px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }

@@ -5,22 +5,22 @@ import OpenAllPlaygrounds from "../OpenAllPlaygrounds/OpenAllPlaygrounds";
 import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
 
 interface AllPlaygroundsProps {
-    activeAllPlaygrounds: boolean;
-    changeActiveAllPlaygrounds: () => void;
+	activeAllPlaygrounds: boolean;
+	changeActiveAllPlaygrounds: () => void;
 }
 
-export default function AllPlaygrounds( { activeAllPlaygrounds, changeActiveAllPlaygrounds}: AllPlaygroundsProps) {
+export default function AllPlaygrounds({ activeAllPlaygrounds, changeActiveAllPlaygrounds }: AllPlaygroundsProps) {
 
-    return (
-        <div className={'position-fixed'}>
-            <button className={'all-playgrounds-button'}
-                    onClick={changeActiveAllPlaygrounds}
-            >
-                <div className={'all-playgrounds-icon-container'}>
-                     <DoePlaygroundStars />
-                </div>
-            </button>
-            {activeAllPlaygrounds && <OpenAllPlaygrounds changeActiveAllPlaygrounds = {changeActiveAllPlaygrounds} activeAllPlaygrounds ={activeAllPlaygrounds} />}
-        </div>
-    )
+	return (
+		<div className={'position-fixed'}>
+			<button className={'all-playgrounds-button'}
+				onClick={changeActiveAllPlaygrounds}
+			>
+				<div className={'all-playgrounds-icon-container'}>
+					<DoePlaygroundStars />
+				</div>
+			</button>
+			{activeAllPlaygrounds && <OpenAllPlaygrounds changeActiveAllPlaygrounds={changeActiveAllPlaygrounds} activeAllPlaygrounds={activeAllPlaygrounds} />}
+		</div>
+	)
 }
