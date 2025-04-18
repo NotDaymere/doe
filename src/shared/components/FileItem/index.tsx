@@ -50,7 +50,7 @@ export const FileItem: React.FC<FileItemProps> = ({
     const [fileName, setFileName] = useState(info.filename);
 
     useEffect(() => {
-        setFileName(shortenFileName);
+        setFileName(fileName);
     }, [info.filename]);
 
     const extLower = info.ext.toLowerCase();
@@ -87,7 +87,7 @@ export const FileItem: React.FC<FileItemProps> = ({
         }
     };
 
-    const shortenFileName = fileName.length > 10 ? `${fileName.slice(0, 10)}...` : fileName;
+    // const shortenFileName = fileName.length > 10 ? `${fileName.slice(0, 10)}...` : fileName;
 
     const handleUpdateVideoUrl = (newUrl: string) => {
         setSavedVideoUrl(newUrl);
@@ -144,7 +144,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                     <ImageFilePreviewModal
                         url={url}
                         onClose={() => setIsModalOpen(false)}
-                        fileName={shortenFileName}
+                        fileName={fileName}
                         fileExt={info.ext}
                         savedImage={savedImage}
                         onSaveDrawing={setSavedImage}
@@ -156,7 +156,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                     <VideoFilePreviewModal
                         url={savedVideoUrl || url}
                         onClose={() => setIsModalOpen(false)}
-                        fileName={shortenFileName}
+                        fileName={fileName}
                         fileExt={info.ext}
                         onUpdateUrl={handleUpdateVideoUrl}
                     />
