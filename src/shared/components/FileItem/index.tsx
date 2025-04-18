@@ -14,6 +14,12 @@ interface FileItemProps {
     onDelete?: () => void;
 }
 
+function isUrl(input: string): boolean {
+    const trimmedInput = input.trim();
+    const urlRegex = /^(?:(?:https?:\/\/)?(?:www\.)?[\w.-]+\.[a-zA-Z]{2,}(?:\/[\w-./?%&=]*)?$)|(?:localhost(?::\d+)?(?:\/[\w-./?%&=]*)?$)/i;
+    return urlRegex.test(trimmedInput);
+}
+
 export const FileItem: React.FC<FileItemProps> = ({
                                                       name,
                                                       mimetype,
@@ -76,8 +82,9 @@ export const FileItem: React.FC<FileItemProps> = ({
     }, [candidateIconURLs]);
 
     const handleClick = () => {
-        if (name.startsWith("http://") || name.startsWith("https://")) {
-            window.open(name, "_blank");
+        if (isUrl(name)) {
+            const normalizedUrl = /^https?:\/\//i.test(name) ? name : `https://${name}`;
+            window.open(normalizedUrl, "_blank");
         } else if (
             ["png", "jpg", "jpeg", "gif", "bmp", "svg", "webp"].includes(extLower) ||
             ["mp4", "webm", "ogg"].includes(extLower) ||
@@ -86,8 +93,6 @@ export const FileItem: React.FC<FileItemProps> = ({
             setIsModalOpen(true);
         }
     };
-
-    // const shortenFileName = fileName.length > 10 ? `${fileName.slice(0, 10)}...` : fileName;
 
     const handleUpdateVideoUrl = (newUrl: string) => {
         setSavedVideoUrl(newUrl);
