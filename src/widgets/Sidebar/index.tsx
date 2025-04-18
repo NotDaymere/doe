@@ -31,7 +31,7 @@ export const Sidebar: React.FC = () => {
     const [profiles, setProfiles] = React.useState<Profile[]>(ProfileMockData);
 
     const changeProfileRef = React.useRef<HTMLDivElement>(null);
-    const changeProfileBtnRef = React.useRef<HTMLDivElement>(null); // Добавить после changeProfileRef
+    const changeProfileBtnRef = React.useRef<HTMLDivElement>(null);
 
     const pointerDown = (event: React.PointerEvent) => {
         event.preventDefault()
