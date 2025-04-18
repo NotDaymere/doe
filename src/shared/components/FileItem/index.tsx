@@ -39,7 +39,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                 const urlObj = new URL(name);
                 let fileName = urlObj.pathname;
                 if (fileName.startsWith("/")) fileName = fileName.slice(1);
-                if (!fileName) fileName = "index";
+                if (!fileName) fileName = urlObj.hostname;
                 return { filename: fileName, mimetype, ext: urlObj.hostname, isUrl: true };
             } catch {
                 return { filename: name, mimetype, ext: "", isUrl: false };
