@@ -5,7 +5,7 @@ import { IPlayground } from "src/shared/types/Playground";
 import './PythonTaskManager.less'
 
 function PythonTaskManager() {
-    const { playground, setPlayground, setSavedPlaygrounds,
+    const { setPlayground, setSavedPlaygrounds,
         updateSavedPlaygrounds,
         getSavedPlaygroundLastByType,
         getOpenSavedPlaygroundsByType,
@@ -54,7 +54,7 @@ function PythonTaskManager() {
     };
     return (
         <button onClick={openCodePlayground}
-                className={`table-playground-button ${playground.type == 'code' && 'table-playground-button-active'}`}
+                className={`table-playground-button ${getOpenSavedPlaygroundsByType('code').length > 0 && 'table-playground-button-active'}`}
         >
             <CodeIcon /> Python Task Manager
         </button>

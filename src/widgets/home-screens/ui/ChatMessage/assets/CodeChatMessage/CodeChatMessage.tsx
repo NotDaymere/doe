@@ -32,6 +32,7 @@ import jsPDF from "jspdf";
 import { useClickOut } from "../../../../../../shared/hooks/useClickOut";
 import PlayButtonIcon from "../../../../../../shared/icons/PlayButton.icon";
 import CopyButtonIcon from "../../../../../../shared/icons/CopyButton.icon";
+import { useChatStore } from "../../../../../../shared/providers";
 
 
 interface CodeChatMessageProps {
@@ -59,6 +60,7 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                                                                     openSourcePlayground,
                                                                     isAllStepOpen,
                                                         }) => {
+    const {getOpenSavedPlaygrounds, updateSavedPlaygrounds, savedPlaygrounds, setSavedPlaygrounds } = useChatStore();
     const [isPaused, setIsPaused] = React.useState(true);
     const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
     const [activeMenu, setActiveMenu] = React.useState(false);
@@ -160,52 +162,62 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                 <div
                     className={`${isCurrentBranchOpen ? css.chat_message_branch : css.chat_message}  ${data.isUser ? css.user_message : css.bot_message}`}
                 >
-                    {!isHyperlinkInputOpen && ReactDOM.createPortal(
-                        <ReferenceButton
-                            isVisible={referenceButtonVisible}
-                            position={referenceButtonPosition}
-                            onClose={handleClose}
-                            onReferenceClick={handleReferenceClick}
-                        />,
-                        document.body
-                    )}
+                    {!isHyperlinkInputOpen &&
+                        ReactDOM.createPortal(
+                            <ReferenceButton
+                                isVisible={referenceButtonVisible}
+                                position={referenceButtonPosition}
+                                onClose={handleClose}
+                                onReferenceClick={handleReferenceClick}
+                            />,
+                            document.body
+                        )}
                     <div className={css.sub_bot_message_info_container}>
                         <div className={css.logoWrapper}>
-
                             {isCurrentBranchOpen ? (
                                 <div
-                                    className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                                    className={`${css.bot_logo_background} ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}
+                                >
                                     <div
-                                        className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}>
+                                        className={`${css.bot_logo}  ${isCurrentBranchOpen ? css.bot_logo_background_open : ""}`}
+                                    >
                                         <MessageLogoIcon fillPath={"currentColor"} />
                                     </div>
                                 </div>
-                            ) : <GeneralLogo/>}
+                            ) : (
+                                <GeneralLogo />
+                            )}
                         </div>
                         <MessageNodeVersionSelector message={data} />
                     </div>
                     <div className={css.message_content}>
-
                         <div ref={messageRef}>
-                            <ChatMessageContent messageData={data}/>
+                            <ChatMessageContent messageData={data} />
 
                             <text>Now I’ll plot the output inline instead of using code:</text>
                             <MessageLineChart data={mockLineChartMessageData} />
                             <text>Now I’ll plot the output inline instead of using code:</text>
                             <MessageColumnsChart data={mockColumnsChartMessageData} />
                             <text className={"message-text"}>
-                                Here's a simple project idea: a manager platform in Notion,
-                                focusing on task management, milestones, and clear goals for the Microsoft Imagine Cup.
-                                I've
-                                chosen a project to create a simple to-do list application as an example.
+                                Here's a simple project idea: a manager platform in Notion, focusing
+                                on task management, milestones, and clear goals for the Microsoft
+                                Imagine Cup. I've chosen a project to create a simple to-do list
+                                application as an example.
                             </text>
-                            <p><br className="ProseMirror-trailingBreak" /></p>
+                            <p>
+                                <br className="ProseMirror-trailingBreak" />
+                            </p>
                             <text className={"message-text"}>
-                                Give me a moment to access your Notion, then you should be able to view the document.
+                                Give me a moment to access your Notion, then you should be able to
+                                view the document.
                             </text>
-                            <p><br className="ProseMirror-trailingBreak" /></p>
+                            <p>
+                                <br className="ProseMirror-trailingBreak" />
+                            </p>
                             <MessageFrame data={mockMessageFrameData} />
-                            <text className={"message-text"}>Now Ill show the output in the table:</text>
+                            <text className={"message-text"}>
+                                Now Ill show the output in the table:
+                            </text>
                             <MessageTable tableData={mockTableData} />
                             <Flex justify={"flex-start"} className={"message-actions"} vertical>
                                 <Flex>
@@ -214,6 +226,7 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                                 </Flex>
                                 <Flex>
                                     <PythonTaskManager />
+                                    <DownloadCSV />
                                 </Flex>
                             </Flex>
                         </div>
@@ -221,8 +234,33 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                         {!data.isUser && (
                             <Flex justify={"space-between"} className={"message-actions"}>
                                 <button
-                                    onClick={() => openSourcePlayground(data.id.toString())}
-                                    className={clsx(css.steps_button, { [css.active_steps_button]: isAllStepOpen })}
+                                    onClick={() => {
+                                        getOpenSavedPlaygrounds()
+                                            .filter(playground => playground.type !== 'source')
+                                            .map((playground) => {
+                                                playground.open = false;
+                                                updateSavedPlaygrounds(playground);
+                                            })
+                                        ;
+                                        const savedPlaygroundsSource = savedPlaygrounds.filter(playground => playground.type === 'source');
+                                        if (savedPlaygroundsSource.length > 0) {
+                                            savedPlaygroundsSource.map((playground) => {
+                                                playground.open = true;
+                                                updateSavedPlaygrounds(playground);
+                                            });
+                                        } else {
+                                            setSavedPlaygrounds({
+                                                id: null,
+                                                name: 'See all steps',
+                                                type: "source",
+                                                data: null,
+                                                open: true ,
+                                            })
+                                        }
+                                    }}
+                                    className={clsx(css.steps_button, {
+                                        [css.active_steps_button]: isAllStepOpen,
+                                    })}
                                 >
                                     <SeeAllStepsIcon />
                                     <span
@@ -231,8 +269,8 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                                             [css.button_steps_label]: !isAllStepOpen,
                                         })}
                                     >
-                                    See all steps
-                                </span>
+                                        See all steps
+                                    </span>
                                 </button>
                                 <Flex gap={10}>
                                     <button
@@ -262,11 +300,20 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                                             mountOnEnter
                                             unmountOnExit
                                         >
-                                            <div className={css.download_menu} ref={downloadMenuRef}>
+                                            <div
+                                                className={css.download_menu}
+                                                ref={downloadMenuRef}
+                                            >
                                                 <ul>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.png</li>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.txt</li>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.pdf</li>
+                                                    <li onClick={setCloseHandler(downloadPDF)}>
+                                                        .png
+                                                    </li>
+                                                    <li onClick={setCloseHandler(downloadPDF)}>
+                                                        .txt
+                                                    </li>
+                                                    <li onClick={setCloseHandler(downloadPDF)}>
+                                                        .pdf
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </CSSTransition>
@@ -275,17 +322,13 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                                         <span className={css.tooltip}>Copy chat text</span>
                                         <CopyButtonIcon />
                                     </button>
-
                                 </Flex>
                             </Flex>
                         )}
                     </div>
                 </div>
             </MathJaxContext>
-            {!isCurrentBranchOpen && <FavButton
-                data={data}
-                className={css.custom_fav_button}/>
-            }
+            {!isCurrentBranchOpen && <FavButton data={data} className={css.custom_fav_button} />}
         </div>
     );
 }

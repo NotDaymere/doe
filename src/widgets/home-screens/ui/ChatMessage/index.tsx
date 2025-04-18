@@ -122,6 +122,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         playgroundFullscreen,
         setMessagesCount,
         messagesCount,
+        getOpenSavedPlaygroundsByType,
     } = useChatStore();
     const {
         editor,
@@ -158,7 +159,9 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setSelectedText(text);
         setIsShowReferencePanel(true);
     });
-
+    React.useEffect(()=> {
+        setIsAllStepOpen(getOpenSavedPlaygroundsByType('source').length >= 1);
+    }, [getOpenSavedPlaygrounds()])
 
     React.useEffect(() => {
         const handleCitationClick = (event: Event) => {
@@ -328,7 +331,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             if (existingAllStep) {
                 deleteSavedPlaygrounds(existingAllStep.id);
             }
-            setIsAllStepOpen(false);
+            // setIsAllStepOpen(false);
         } else {
 
             const newPlayground: IPlayground = {
@@ -349,7 +352,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 setPlayground(newPlayground);
             }
 
-            setIsAllStepOpen(true);
+            // setIsAllStepOpen(true);
         }
     };
 
