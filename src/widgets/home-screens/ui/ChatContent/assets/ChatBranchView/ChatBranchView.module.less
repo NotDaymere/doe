@@ -13,47 +13,86 @@
   transition: filter 0.3s ease;
 }
 
-.content_chat_branch {
-  width: 100% !important;
-  margin: 0 auto;
-  height: 100%;
-  max-width: 80vw;
-  min-width: 80vw;
-
-
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .content_chat_branch_dialogs {
   display: flex;
   flex-direction: row;
   position: absolute;
   left: 200px;
+
+  .content_chat_branch {
+    width: 100% !important;
+    margin: 0 auto;
+    height: 100%;
+    max-width: 75vw;
+    min-width: 75vw;
+
+
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+
+    .branch_section {
+      width: 100%;
+      padding-right: 250px;
+    }
+
+    .content_chat_branch_dialog {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-end;
+      gap: 22px;
+
+      width: 100%;
+    }
+  }
 }
+
 
 .content_chat_branch_dialogs_open_playground {
   display: flex;
   flex-direction: row;
   position: absolute;
-  left: -50px;
+  left: 30px;
+
+  .content_chat_branch {
+    width: 100% !important;
+    margin: 0 auto;
+    height: 100%;
+    max-width: 60vw;
+    min-width: 60vw;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+
+    .branch_section {
+      width: 100%;
+      padding-right: 100px;
+    }
+
+    .content_chat_branch_dialog {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-end;
+      gap: 22px;
+      width: 100%;
+      margin-left: -100px;
+
+      .branch_message {
+        max-width: 650px !important;
+      }
+    }
+  }
 }
 
-.content_chat_branch_dialog {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-end;
-  gap: 22px;
 
-  width: 100%;
-}
 
-.branch_section {
-  width: 100%;
-  padding-right: 250px;
-}
+
+

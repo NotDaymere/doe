@@ -30,14 +30,8 @@ export const SidebarGaia = () => {
                 <button className={css.gaia_btn} onClick={toggleGaia}>
                     <GlobalIcon />
                 </button>
-                <CSSTransition
-                    classNames={css}
-                    timeout={1000}
-                    // in={!gaiaActive}
-                    in={showGaia}
-                    nodeRef={nodeRef}
-                    mountOnEnter
-                >
+
+                {showGaia && (
                     <p className={css.gaia_hint}
                        ref={nodeRef}>
                         Environmental savings per (calculated per token) by using our models compared to
@@ -50,7 +44,8 @@ export const SidebarGaia = () => {
                         <EnergyIcon fill="#FF8B12" />, and size of land <LeafIcon fill="#8BCF16" />{" "}
                         conserved with the Bilateral Cortex Model (BCM).
                     </p>
-                </CSSTransition>
+                )}
+
             </div>
         </div>
     );

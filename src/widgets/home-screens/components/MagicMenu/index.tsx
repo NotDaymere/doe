@@ -12,6 +12,8 @@ import { useAppStore, useChatStore } from "../../../../shared/providers";
 import { MagicCreateNewBranch } from "./ui/MagicCreateNewBranch/MagicCreateNewBranch";
 import { MagicUploadFromDesktop } from "./ui/MagicUploadFromDesktop/MagicUploadFromDesktop";
 import { FileWithId } from "../../lib/hooks/useDragFile";
+import MagicMenuUploadIcon from "../../../../shared/icons/MagicMenuUploadIcon";
+import MagicMenuArrowRightIcon from "../../../../shared/icons/MagicMenuArrowRightIcon";
 
 
 interface Props {
@@ -81,20 +83,35 @@ export const MagicMenu: React.FC<Props> = ({
                 >
                     <div className={css.menu} ref={nodeRef}>
                         <MagicApplications />
-                        <MagicUploadFromDesktop setActiveMenu={setActiveMenu}
-                                                onUploadFiles={onUploadFiles}
-                                                fileInputRef={fileInputRef} />
+                        <MagicUploadFromDesktop
+                            setActiveMenu={setActiveMenu}
+                            onUploadFiles={onUploadFiles}
+                            fileInputRef={fileInputRef}
+                        />
                         <MagicUploadApps />
-                        <MagicMenuButton
-                            icon={<CallIcon />}
-                            text="Dispatch Doe"
-                            onClick={setCloseHandler(onDispatchDoe)}
-                        />
-                        <MagicMenuButton
-                            icon={<TalkIcon />}
-                            text="Talk mode"
-                            onClick={setCloseHandler(() => setTalkModeActive(true))}
-                        />
+
+                        <div className={css.magic_button_call_container}
+                             onClick={setCloseHandler(onDispatchDoe)}>
+                            <div className={css.magic_button_and_text}>
+                                <CallIcon fill="currentColor" height={18} width={18} />
+                                <span>Dispatch Doe</span>
+                            </div>
+                            <div className={css.call_icon}>
+                                <MagicMenuArrowRightIcon fill="currentColor" height={9} width={6} />
+                            </div>
+                        </div>
+
+                        <div className={css.magic_button_talkmode_container}
+                             onClick={setCloseHandler(() => setTalkModeActive(true))}>
+                            <div className={css.magic_button_and_text}>
+                                <TalkIcon fill="currentColor" height={18} width={18} />
+                                <span>Talk mode</span>
+                            </div>
+                            <div className={css.talkmode_icon}>
+                                <div className={css.talkmode_icon_inner}></div>
+                            </div>
+                        </div>
+
                         <MagicCreateNewBranch setActiveMenu={setActiveMenu} />
                     </div>
                 </CSSTransition>
@@ -112,7 +129,7 @@ export const MagicMenu: React.FC<Props> = ({
                     const filesArray = Array.from(files).map((file) =>
                         Object.assign(file, {
                             id: `${Date.now()}-${Math.random()}`,
-                        }) as FileWithId
+                        }) as FileWithId,
                     );
                     if (onUploadFiles) {
                         onUploadFiles(filesArray);

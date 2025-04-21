@@ -277,6 +277,38 @@ export const ChatPanel: React.FC = () => {
         setEditor(editor);
         setShowHints({ hints: false, typingHints: true });
     };
+
+    const isValidUrl = (url: string): { isValid: boolean; normalizedUrl: string } => {
+        const trimmedUrl = url.trim();
+
+        try {
+            const urlObj = new URL(trimmedUrl);
+            if (['http:', 'https:'].includes(urlObj.protocol)) {
+                return { isValid: true, normalizedUrl: trimmedUrl };
+            }
+            return { isValid: false, normalizedUrl: trimmedUrl };
+        } catch {}
+
+        const withHttps = `https://${trimmedUrl}`;
+        try {
+            const urlObj = new URL(withHttps);
+            if (/^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(trimmedUrl)) {
+                return { isValid: true, normalizedUrl: withHttps };
+            }
+            return { isValid: false, normalizedUrl: trimmedUrl };
+        } catch {}
+
+        const withHttp = `http://${trimmedUrl}`;
+        try {
+            const urlObj = new URL(withHttp);
+            if (/^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(trimmedUrl)) {
+                return { isValid: true, normalizedUrl: withHttp };
+            }
+        } catch {}
+
+        return { isValid: false, normalizedUrl: trimmedUrl };
+    };
+
     const handleApplyLink = React.useCallback(async () => {
         if (!savedRange || linkUrl.trim().length === 0) {
             setShowLinkInput(false);
@@ -290,7 +322,23 @@ export const ChatPanel: React.FC = () => {
             selection.removeAllRanges();
             selection.addRange(savedRange);
         }
-        document.execCommand("createLink", false, linkUrl);
+
+        const { isValid, normalizedUrl } = isValidUrl(linkUrl);
+        if (!isValid) {
+
+            alert("Please enter a valid URL (e.g., example.com or https://example.com)");
+            setShowLinkInput(false);
+            setIsHyperlinkInputOpen(false);
+            setLinkUrl("");
+            setSavedRange(null);
+            window.getSelection()?.removeAllRanges();
+            setTimeout(() => {
+                skipPositionUpdate.current = false;
+            }, 300);
+            return;
+        }
+
+        document.execCommand("createLink", false, normalizedUrl);
 
         setTimeout(() => {
             window.getSelection()?.removeAllRanges();
@@ -305,20 +353,20 @@ export const ChatPanel: React.FC = () => {
 
         let fileName = "unknown";
         try {
-            const urlObj = new URL(linkUrl);
+            const urlObj = new URL(normalizedUrl);
             fileName = urlObj.href || fileName;
         } catch {}
 
         let blob;
         try {
-            const response = await fetch(linkUrl);
+            const response = await fetch(normalizedUrl);
             if (!response.ok) {
                 throw new Error(`Non-200 status: ${response.status}`);
             }
             blob = await response.blob();
         } catch (error) {
             console.error("Failed to fetch content from the link (possibly a CORS issue).", error);
-            blob = new Blob([`Failed to fetch actual content from the link:\n${linkUrl}`], { type: "text/plain" });
+            blob = new Blob([`Failed to fetch actual content from the link:\n${normalizedUrl}`], { type: "text/plain" });
         }
 
         const fileWithId = Object.assign(new File([blob], fileName, { type: blob.type }), {
@@ -327,8 +375,8 @@ export const ChatPanel: React.FC = () => {
 
         setFiles([...files, fileWithId]);
 
-        setIsHyperlinkInputOpen(false);
         setShowLinkInput(false);
+        setIsHyperlinkInputOpen(false);
         setLinkUrl("");
         setSavedRange(null);
 
@@ -737,18 +785,16 @@ export const ChatPanel: React.FC = () => {
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
                                         e.preventDefault();
-                                        (e.currentTarget as HTMLInputElement).blur();
-                                        handleApplyLink();
-                                        setTimeout(() => {
+                                        const { isValid } = isValidUrl(linkUrl);
+                                        if (isValid) {
+                                            handleApplyLink();
+                                        } else {
+                                            alert("Please enter a valid URL (e.g., example.com or https://example.com)");
+                                            setShowLinkInput(false);
+                                            setLinkUrl("");
+                                            setSavedRange(null);
                                             window.getSelection()?.removeAllRanges();
-                                            if (
-                                                document.activeElement &&
-                                                typeof (document.activeElement as HTMLElement)
-                                                    .blur === "function"
-                                            ) {
-                                                (document.activeElement as HTMLElement).blur();
-                                            }
-                                        }, 100);
+                                        }
                                     }
                                 }}
                             />

@@ -9,7 +9,7 @@ import * as pdfjsLib from "pdfjs-dist";
 import css from "./PdfFilePreviewModal.module.less";
 import ArrowRightButtonIcon from "../../../../../shared/icons/ArrowRightButton.icon";
 import ArrowLeftButtonIcon from "../../../../../shared/icons/ArrowLeftButton.icon";
-import {TextAnnotation} from "./pdfWorker";
+import { TextAnnotation } from "./pdfWorker";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
@@ -31,6 +31,7 @@ interface PDFViewerProps {
     fontSize: number;
     fontColor: string;
     setIsTextMode: React.Dispatch<React.SetStateAction<boolean>>;
+    onLoad?: () => void;
 }
 
 export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
@@ -44,6 +45,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             fontWeight,
             fontSize,
             fontColor,
+            onLoad,
         },
         ref
     ) => {
@@ -101,8 +103,15 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             })();
         }, [url]);
 
-        const fixedWidth = window.innerWidth * 0.25;
-        const fixedHeight = window.innerHeight * 0.8;
+        const computePageDimensions = (pageIndex: number) => {
+            const { width: ow, height: oh } = originalDimensions[pageIndex];
+            const maxWidth = window.innerWidth * 0.8;
+            const maxHeight = window.innerHeight * 0.8;
+            const scaleFactor = Math.min(maxWidth / ow, maxHeight / oh, 1);
+            const pageWidth = ow * scaleFactor;
+            const pageHeight = oh * scaleFactor;
+            return { pageWidth, pageHeight, scaleFactor };
+        };
 
         const getCanvasCoordinates = (
             e: MouseEvent | TouchEvent | React.MouseEvent,
@@ -167,20 +176,31 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                     const safeFontWeight = fontWeight || "regular";
 
                     const canvas = canvasRefs.current[page * 2 + 1];
-                    const canvasRect = canvas ? canvas.getBoundingClientRect() : { width: fixedWidth };
+                    const canvasRect = canvas
+                        ? canvas.getBoundingClientRect()
+                        : { width: 100 };
                     const availableWidth = canvasRect.width - x;
+
+                    const { width: ow, height: oh } = originalDimensions[page];
+                    const { pageWidth, pageHeight, scaleFactor } = computePageDimensions(page);
+
+                    const pdfX = (x / pageWidth) * ow;
+                    const pdfY = oh - (y / pageHeight) * oh - (safeFontSize * scaleFactor);
+                    const pdfFontSize = safeFontSize * scaleFactor;
+                    const pdfMaxWidth = (availableWidth / pageWidth) * ow;
+
                     const newAnnotation: TextAnnotation = {
                         page,
                         x,
                         y,
                         text,
-                        maxWidth: Math.min(availableWidth, 600),
+                        maxWidth: pdfMaxWidth,
                         fontColor: safeFontColor,
                         fontSize: safeFontSize,
                         fontWeight: safeFontWeight,
-                        pdfX: x,
-                        pdfY: fixedHeight - y - safeFontSize,
-                        pdfFontSize: safeFontSize,
+                        pdfX,
+                        pdfY,
+                        pdfFontSize,
                     };
                     setActiveDraggableAnnotation(newAnnotation);
                     setHasAnnotationsChanged(true);
@@ -203,12 +223,22 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             const pageContainer = pageContainers[activeDraggableAnnotation.page] as HTMLElement;
             if (!pageContainer) return;
             const pageContainerRect = pageContainer.getBoundingClientRect();
+
             const newX = e.clientX - pageContainerRect.left - dragOffset.offsetX;
             const newY = e.clientY - pageContainerRect.top - dragOffset.offsetY;
+
+            const { width: ow, height: oh } = originalDimensions[activeDraggableAnnotation.page];
+            const { pageWidth, pageHeight, scaleFactor } = computePageDimensions(activeDraggableAnnotation.page);
+
+            const pdfX = (newX / pageWidth) * ow;
+            const pdfY = oh - (newY / pageHeight) * oh - (activeDraggableAnnotation.fontSize * scaleFactor);
+
             setActiveDraggableAnnotation({
                 ...activeDraggableAnnotation,
                 x: newX,
                 y: newY,
+                pdfX,
+                pdfY,
             });
             setHasAnnotationsChanged(true);
         };
@@ -237,14 +267,14 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 for (let i = 0; i < pdf.numPages; i++) {
                     const page = await pdf.getPage(i + 1);
                     const { width: ow, height: oh } = originalDimensions[i];
-                    const scale = Math.min(fixedWidth / ow, fixedHeight / oh);
-                    const viewport = page.getViewport({ scale });
+                    const { pageWidth, pageHeight, scaleFactor } = computePageDimensions(i);
+                    const viewport = page.getViewport({ scale: scaleFactor });
                     const pdfCanvas = canvasRefs.current[i * 2]!;
                     const drawCanvas = canvasRefs.current[i * 2 + 1]!;
-                    pdfCanvas.width = fixedWidth * pr;
-                    pdfCanvas.height = fixedHeight * pr;
-                    drawCanvas.width = fixedWidth * pr;
-                    drawCanvas.height = fixedHeight * pr;
+                    pdfCanvas.width = pageWidth * pr;
+                    pdfCanvas.height = pageHeight * pr;
+                    drawCanvas.width = pageWidth * pr;
+                    drawCanvas.height = pageHeight * pr;
                     const ctx = pdfCanvas.getContext("2d")!;
                     ctx.scale(pr, pr);
                     await page.render({ canvasContext: ctx, viewport }).promise;
@@ -349,140 +379,138 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         }));
 
         useEffect(() => {
-            if (isTextMode && !activeTextInput) {
-                let x = fixedWidth / 3;
-                let y = fixedHeight / 2.5;
-                const firstCanvas = canvasRefs.current[1];
-                if (firstCanvas) {
-                    const { width } = firstCanvas.getBoundingClientRect();
-                    x = width / 3;
-                    y = fixedHeight / 2.5;
-                }
+            if (isTextMode && !activeTextInput && originalDimensions[currentPage - 1]) {
+                const { width: ow, height: oh } = originalDimensions[currentPage - 1];
+                const maxWidth = window.innerWidth * 0.8;
+                const maxHeight = window.innerHeight * 0.8;
+                const scale = Math.min(maxWidth / ow, maxHeight / oh, 1);
+                const pageWidth = ow * scale;
                 setActiveTextInput({
                     page: currentPage - 1,
-                    x,
-                    y,
+                    x: pageWidth / 3,
+                    y: (oh * scale) / 2.5,
                 });
             }
-        }, [isTextMode, activeTextInput, currentPage, fixedWidth, fixedHeight]);
+        }, [isTextMode, activeTextInput, currentPage, originalDimensions]);
 
         return (
             <div className={css.modalPdfContainer}>
                 <div className={css.modalPdf} ref={containerRef}>
                     {pdf &&
                         originalDimensions.length > 0 &&
-                        Array.from({ length: pdf.numPages }, (_, i) => (
-                            <div
-                                key={i}
-                                className="pageContainer"
-                                style={{
-                                    position: "relative",
-                                    width: `${fixedWidth}px`,
-                                    height: `${fixedHeight}px`,
-                                    maxHeight: "100%",
-                                    maxWidth: "100%",
-                                    marginBottom: 10,
-                                    overflow: "hidden",
-                                }}
-                                onClick={(e) => handleCanvasClick(e, i)}
-                            >
-                                <canvas
-                                    ref={(el) => (canvasRefs.current[i * 2] = el)}
-                                    className={css.pdfCanvas}
+                        Array.from({ length: pdf.numPages }, (_, i) => {
+                            const { pageWidth, pageHeight } = computePageDimensions(i);
+                            return (
+                                <div
+                                    key={i}
+                                    className="pageContainer"
                                     style={{
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        width: "100%",
-                                        height: "100%",
-                                        maxHeight: "100%",
-                                        maxWidth: "100%",
+                                        position: "relative",
+                                        width: `${pageWidth}px`,
+                                        height: `${pageHeight}px`,
+                                        marginBottom: 10,
+                                        overflow: "hidden",
                                     }}
-                                />
-                                <canvas
-                                    ref={(el) => (canvasRefs.current[i * 2 + 1] = el)}
-                                    className={css.drawCanvas}
-                                    style={{
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        width: "100%",
-                                        height: "100%",
-                                        maxHeight: "100%",
-                                        maxWidth: "100%",
-                                        zIndex: 10,
-                                        touchAction: "none",
-                                    }}
-                                />
-                                {activeTextInput && activeTextInput.page === i && (
-                                    <input
-                                        type="text"
-                                        className={css.textAnnotationInput}
+                                    onClick={(e) => handleCanvasClick(e, i)}
+                                >
+                                    <canvas
+                                        ref={(el) => (canvasRefs.current[i * 2] = el)}
+                                        className={css.pdfCanvas}
                                         style={{
                                             position: "absolute",
-                                            transform: `translate(${activeTextInput.x}px, ${activeTextInput.y}px)`,
-                                            maxWidth: "150px",
-                                            fontWeight,
-                                            fontSize: `${fontSize}px`,
-                                            color: fontColor,
-                                            border: "none",
-                                            overflow: "hidden",
-                                            zIndex: 20,
-                                            whiteSpace: "nowrap",
+                                            top: 0,
+                                            left: 0,
+                                            width: "100%",
+                                            height: "100%",
+                                            maxHeight: "100%",
+                                            maxWidth: "100%",
                                         }}
-                                        autoFocus
-                                        onKeyDown={(e) =>
-                                            handleTextInput(e, i, activeTextInput.x, activeTextInput.y)
-                                        }
                                     />
-                                )}
-                                {activeDraggableAnnotation && activeDraggableAnnotation.page === i && (
-                                    <div
-                                        className={css.textAnnotation}
+                                    <canvas
+                                        ref={(el) => (canvasRefs.current[i * 2 + 1] = el)}
+                                        className={css.drawCanvas}
                                         style={{
                                             position: "absolute",
-                                            transform: `translate(${activeDraggableAnnotation.x}px, ${activeDraggableAnnotation.y}px)`,
-                                            maxWidth: "1000px",
-                                            fontSize: `${activeDraggableAnnotation.fontSize}px`,
-                                            color: activeDraggableAnnotation.fontColor,
-                                            fontWeight: activeDraggableAnnotation.fontWeight === "bold" ? "bold" : "normal",
-                                            cursor: "grabbing",
-                                            zIndex: 20,
-                                            overflow: "hidden",
-                                            whiteSpace: "nowrap",
-                                            userSelect: "none",
+                                            top: 0,
+                                            left: 0,
+                                            width: "100%",
+                                            height: "100%",
+                                            maxHeight: "100%",
+                                            maxWidth: "100%",
+                                            zIndex: 10,
+                                            touchAction: "none",
                                         }}
-                                        onMouseDown={onDraggableMouseDown}
-                                        onMouseMove={onDraggableMouseMove}
-                                        onMouseUp={onDraggableMouseUp}
-                                    >
-                                        {activeDraggableAnnotation.text}
-                                    </div>
-                                )}
-                                {textAnnotations
-                                    .filter((t) => t.page === i)
-                                    .map((t, idx) => (
+                                    />
+                                    {activeTextInput && activeTextInput.page === i && (
+                                        <input
+                                            type="text"
+                                            className={css.textAnnotationInput}
+                                            style={{
+                                                position: "absolute",
+                                                transform: `translate(${activeTextInput.x}px, ${activeTextInput.y}px)`,
+                                                maxWidth: "150px",
+                                                fontWeight,
+                                                fontSize: `${fontSize}px`,
+                                                color: fontColor,
+                                                border: "none",
+                                                overflow: "hidden",
+                                                zIndex: 20,
+                                                whiteSpace: "nowrap",
+                                            }}
+                                            autoFocus
+                                            onKeyDown={(e) =>
+                                                handleTextInput(e, i, activeTextInput.x, activeTextInput.y)
+                                            }
+                                        />
+                                    )}
+                                    {activeDraggableAnnotation && activeDraggableAnnotation.page === i && (
                                         <div
-                                            key={idx}
                                             className={css.textAnnotation}
                                             style={{
                                                 position: "absolute",
-                                                transform: `translate(${t.x}px, ${t.y}px)`,
+                                                transform: `translate(${activeDraggableAnnotation.x}px, ${activeDraggableAnnotation.y}px)`,
                                                 maxWidth: "1000px",
-                                                fontSize: `${t.fontSize}px`,
-                                                color: t.fontColor,
-                                                fontWeight: t.fontWeight === "bold" ? "bold" : "normal",
-                                                cursor: "auto",
+                                                fontSize: `${activeDraggableAnnotation.fontSize}px`,
+                                                color: activeDraggableAnnotation.fontColor,
+                                                fontWeight: activeDraggableAnnotation.fontWeight === "bold" ? "bold" : "normal",
+                                                cursor: "grabbing",
                                                 zIndex: 20,
                                                 overflow: "hidden",
                                                 whiteSpace: "nowrap",
+                                                userSelect: "none",
                                             }}
+                                            onMouseDown={onDraggableMouseDown}
+                                            onMouseMove={onDraggableMouseMove}
+                                            onMouseUp={onDraggableMouseUp}
                                         >
-                                            {t.text}
+                                            {activeDraggableAnnotation.text}
                                         </div>
-                                    ))}
-                            </div>
-                        ))}
+                                    )}
+                                    {textAnnotations
+                                        .filter((t) => t.page === i)
+                                        .map((t, idx) => (
+                                            <div
+                                                key={idx}
+                                                className={css.textAnnotation}
+                                                style={{
+                                                    position: "absolute",
+                                                    transform: `translate(${t.x}px, ${t.y}px)`,
+                                                    maxWidth: "1000px",
+                                                    fontSize: `${t.fontSize}px`,
+                                                    color: t.fontColor,
+                                                    fontWeight: t.fontWeight === "bold" ? "bold" : "normal",
+                                                    cursor: "auto",
+                                                    zIndex: 20,
+                                                    overflow: "hidden",
+                                                    whiteSpace: "nowrap",
+                                                }}
+                                            >
+                                                {t.text}
+                                            </div>
+                                        ))}
+                                </div>
+                            );
+                        })}
                 </div>
                 <div className={css.modalPdfPageSlideWrapper}>
                     <button onClick={() => currentPage > 1 && scrollToPage(currentPage - 1)}>
