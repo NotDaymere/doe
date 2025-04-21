@@ -46,7 +46,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
     const [cutError, setCutError] = useState<string | null>(null);
     const [url, setUrl] = useState(initialUrl);
     const [expectedDuration, setExpectedDuration] = useState<number | null>(null);
-    // После остальных useState объявлений:
     const [draggingMarker, setDraggingMarker] = useState<"start" | "end" | null>(null);
 
     const handleMarkerMouseDown = (marker: "start" | "end", e: MouseEvent<HTMLDivElement>) => {
@@ -60,7 +59,6 @@ const VideoFilePreviewModal: React.FC<VideoModalProps> = ({
 
         const handleMarkerMouseMove = (e: Event) => {
             const mouseEvent = e as unknown as MouseEvent;
-            // Приводим Event к MouseEvent
             if (!videoRef.current || !progressBarRef.current) return;
             const rect = progressBarRef.current.getBoundingClientRect();
             let pos = (mouseEvent.clientX - rect.left) / rect.width;
