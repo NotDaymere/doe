@@ -61,13 +61,12 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
     useEffect(() => {
         const loadPdf = async () => {
             try {
-                // Загружаем PDF для проверки готовности
                 const pdf = await pdfjsLib.getDocument(url).promise;
-                await pdf.getPage(1); // Проверяем, что хотя бы одна страница загрузилась
-                setIsContentLoaded(true); // Контент готов
+                await pdf.getPage(1);
+                setIsContentLoaded(true);
             } catch (error) {
                 console.error("Error loading PDF:", error);
-                setIsContentLoaded(true); // Показываем модалку даже при ошибке, чтобы не блокировать UI
+                setIsContentLoaded(true);
             }
         };
         loadPdf();
