@@ -2,10 +2,9 @@
     display: flex;
     align-items: center;
     gap: 20px;
-    padding-top: 6px;
     max-width: 766px;
     width: 100%;
-    height: 100%;
+    padding-top: 6px;
 
     svg {
         margin-bottom: 6px;
@@ -37,6 +36,17 @@
     max-width: 250px;
 }
 
+.progressText {
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+
+.progressWrapper {
+    position: relative;
+    width: 100%;
+    height: 1px;
+}
+
 .progressBar {
     height: 1px;
     border-bottom: 1px solid #e7f5d1;
@@ -44,24 +54,11 @@
 }
 
 .progress {
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 1px;
     border-bottom: 1px solid #8bcf16;
-    transition: width 1s linear;
+    transition: width 0.1s linear;
     border-radius: 12px;
-}
-
-.enter {
-    opacity: 0;
-}
-.enterActive {
-    opacity: 1;
-    transition: opacity 300ms;
-}
-
-.exit {
-    opacity: 1;
-}
-.exitActive {
-    opacity: 0;
-    transition: opacity 300ms;
 }

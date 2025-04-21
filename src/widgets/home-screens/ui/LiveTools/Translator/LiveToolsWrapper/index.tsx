@@ -60,23 +60,25 @@ const LiveToolsWrapper: FC<IProps> = ({
         <div className={!isSideBarOpen ? css.translator : css.sidebar_open_translator}>
             <div className={css.translationWrapper}>
                 <div className={css.translation}>
-                    {bookmarkIcon && (
-                        <button
-                            className={css.bookmarksButton}
-                            onClick={() => setShowBookmarks(true)}
-                        >
-                            {bookmarkIcon}
-                        </button>
-                    )}
-                    {showBookmarks && (
-                        <div className={css.bookmarks}>
-                            <Bookmarks
-                                isActive={showBookmarks}
-                                setIsActive={setShowBookmarks}
-                                {...renderBookmarkContent(mode)}
-                            />
-                        </div>
-                    )}
+                    <div className={css.bookmarksButtonContainer}>
+                        {bookmarkIcon && (
+                            <button
+                                className={css.bookmarksButton}
+                                onClick={() => setShowBookmarks(true)}
+                            >
+                                {bookmarkIcon}
+                            </button>
+                        )}
+                        {showBookmarks && (
+                            <div className={css.bookmarks}>
+                                <Bookmarks
+                                    isActive={showBookmarks}
+                                    setIsActive={setShowBookmarks}
+                                    {...renderBookmarkContent(mode)}
+                                />
+                            </div>
+                        )}
+                    </div>
                     <div className={css.translationAreaWrapper}>
                         <div className={css.logo}>
                             <DoeIcon width={26} height={26} />

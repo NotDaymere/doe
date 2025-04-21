@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const LOADING_FILE_DURATION = 1000;
+const LOADING_FILE_DURATION = 20000;
 
 export const useFileLoading = (
     translateFromImage: boolean,
@@ -39,16 +39,21 @@ export const useFileLoading = (
     const simulateFileUpload = (duration: number) => {
         return new Promise<void>((resolve) => {
             let currentProgress = 0;
-            const step = 100 / (duration / 10);
+            const updateInterval = 100; // раз в 100 мс
+            const totalSteps = duration / updateInterval;
+            const step = 100 / totalSteps;
 
             const interval = setInterval(() => {
                 currentProgress += step;
-                setProgress(currentProgress);
                 if (currentProgress >= 100) {
+                    currentProgress = 100;
+                    setProgress(100);
                     clearInterval(interval);
                     resolve();
+                } else {
+                    setProgress(Math.round(currentProgress));
                 }
-            }, 100);
+            }, updateInterval);
         });
     };
 

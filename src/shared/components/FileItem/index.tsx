@@ -91,6 +91,10 @@ export const FileItem: React.FC<FileItemProps> = ({
         setSavedVideoUrl(newUrl);
     };
 
+    const handleUpdateVideoUrl = (newUrl: string) => {
+        setSavedVideoUrl(newUrl);
+    };
+
     return (
         <>
             <div className={clsx(css.file, className)} onClick={handleClick}>

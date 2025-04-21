@@ -579,7 +579,9 @@ export const ChatPanel: React.FC = () => {
             onDragOver={handleDragOver}
             onDragLeave={handleDragCancel}
         >
-            {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
+            {questionCodeMessage && (
+                <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />
+            )}
             <div
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
@@ -649,7 +651,9 @@ export const ChatPanel: React.FC = () => {
                                         <UploadFilesProgressIcon />
                                     </div>
                                     <div className={css.panel_uploading_files_name_and_progressbar}>
-                                        <div className={css.panel_uploading_files_name_and_progress}>
+                                        <div
+                                            className={css.panel_uploading_files_name_and_progress}
+                                        >
                                             <span>{fileName}</span>
                                             <span>{progress}%</span>
                                         </div>
@@ -702,11 +706,14 @@ export const ChatPanel: React.FC = () => {
                         value={text}
                         onChange={handleChangeEditor}
                         handleKeyDown={handleKeyPress}
-                        onFocus={setEditor}
-                        onBlur={() => setEditor(null)}
-                        // onChange={setText}
-                        // onFocus={handleFocusEditor}
-                        // onBlur={handleBlurEditor}
+                        onFocus={(editor: IEditor | null) => {
+                            setEditor(editor);
+                            handleFocusEditor(editor);
+                        }}
+                        onBlur={() => {
+                            setEditor(null);
+                            handleBlurEditor();
+                        }}
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
                         clearContent={clearContent}
@@ -810,11 +817,11 @@ export const ChatPanel: React.FC = () => {
                                 unmountOnExit
                             >
                                 <button className={css.panel_loadingBtn}>
-                                    <div className={css.chat_response_stop_icon}
-                                         onClick={handleStopReply}>
-                                        <ChatResponseStopIcon
-                                            fill="currentColor"
-                                        />
+                                    <div
+                                        className={css.chat_response_stop_icon}
+                                        onClick={handleStopReply}
+                                    >
+                                        <ChatResponseStopIcon fill="currentColor" />
                                     </div>
                                 </button>
                             </CSSTransition>
@@ -833,7 +840,6 @@ export const ChatPanel: React.FC = () => {
                                 unmountOnExit
                             >
                                 <>
-
                                     {isTablePromptVisible ? (
                                         <button className={css.panel_send_table_data_btn}>
                                             <SendTableDataIcon fill="currentColor" />
@@ -861,11 +867,9 @@ export const ChatPanel: React.FC = () => {
                                         </button>
                                     )}
                                 </>
-
                             </CSSTransition>
                         )}
                     </SwitchTransition>
-
                 </div>
                 {messagesCount === 0 && (
                     <div className={css.hintsWrapper}>
