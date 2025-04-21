@@ -33,7 +33,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                 const urlObj = new URL(name);
                 let fileName = urlObj.pathname;
                 if (fileName.startsWith("/")) fileName = fileName.slice(1);
-                if (!fileName) fileName = "index";
+                if (!fileName) fileName = urlObj.hostname;
                 return { filename: fileName, mimetype, ext: urlObj.hostname, isUrl: true };
             } catch {
                 return { filename: name, mimetype, ext: "", isUrl: false };
@@ -50,7 +50,7 @@ export const FileItem: React.FC<FileItemProps> = ({
     const [fileName, setFileName] = useState(info.filename);
 
     useEffect(() => {
-        setFileName(info.filename);
+        setFileName(fileName);
     }, [info.filename]);
 
     const extLower = info.ext.toLowerCase();
@@ -86,8 +86,6 @@ export const FileItem: React.FC<FileItemProps> = ({
             setIsModalOpen(true);
         }
     };
-
-    const shortenFileName = fileName.length > 10 ? `${fileName.slice(0, 10)}...` : fileName;
 
     const handleUpdateVideoUrl = (newUrl: string) => {
         setSavedVideoUrl(newUrl);
@@ -132,7 +130,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                 <PdfFilePreviewModal
                     url={savedPdf || url}
                     onClose={() => setIsModalOpen(false)}
-                    fileName={shortenFileName}
+                    fileName={fileName}
                     fileExt={info.ext}
                     onRename={setFileName}
                     onSaveDrawing={setSavedPdf}
@@ -144,7 +142,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                     <ImageFilePreviewModal
                         url={url}
                         onClose={() => setIsModalOpen(false)}
-                        fileName={shortenFileName}
+                        fileName={fileName}
                         fileExt={info.ext}
                         savedImage={savedImage}
                         onSaveDrawing={setSavedImage}
@@ -156,7 +154,7 @@ export const FileItem: React.FC<FileItemProps> = ({
                     <VideoFilePreviewModal
                         url={savedVideoUrl || url}
                         onClose={() => setIsModalOpen(false)}
-                        fileName={shortenFileName}
+                        fileName={fileName}
                         fileExt={info.ext}
                         onUpdateUrl={handleUpdateVideoUrl}
                     />

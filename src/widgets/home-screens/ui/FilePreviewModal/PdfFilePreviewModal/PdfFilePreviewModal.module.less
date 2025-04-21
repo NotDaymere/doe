@@ -55,9 +55,21 @@
   display: flex;
   justify-content: center;
   z-index: 1500;
+  min-width: 400px;
   //max-width: 30%;
   max-height: 85%;
   height: 100%;
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0s linear 0.1s;
+  }
+
+  &.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
 }
 
 .modalPdfPageSlideWrapper {
@@ -103,6 +115,7 @@
   height: 36px;
   background: radial-gradient(92.63% 98.61% at 50% 50%, rgba(0, 0, 0, 0.35) 0%, #CB6484 100%);
   font-size: 16px;
+  gap: 0;
   font-weight: 400;
   font-family: "Sohne";
   color: #F8F8F8;
@@ -110,7 +123,7 @@
   top: 1%;
   box-shadow: 0px 4px 20px 0px #0000000F;
   backdrop-filter: blur(20px);
-  opacity: 0;
+  opacity: 1;
   visibility: hidden;
   transform: translateY(-10px);
   transition:
@@ -357,7 +370,7 @@
 }
 
 .textAnnotationInput {
-  background-color: rgba(177, 177, 177, 0.39);
+  background-color: transparent;
   padding: 5px;
   border-radius: 8px;
 }

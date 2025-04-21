@@ -262,13 +262,13 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                                             mountOnEnter
                                             unmountOnExit
                                         >
-                                            <div className={css.download_menu} ref={downloadMenuRef}>
-                                                <ul>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.png</li>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.txt</li>
-                                                    <li onClick={setCloseHandler(downloadPDF)}>.pdf</li>
-                                                </ul>
-                                            </div>
+                                            {/*<div className={css.download_menu} ref={downloadMenuRef}>*/}
+                                            {/*    <ul>*/}
+                                            {/*        <li onClick={setCloseHandler(downloadPDF)}>.png</li>*/}
+                                            {/*        <li onClick={setCloseHandler(downloadPDF)}>.txt</li>*/}
+                                            {/*        <li onClick={setCloseHandler(downloadPDF)}>.pdf</li>*/}
+                                            {/*    </ul>*/}
+                                            {/*</div>*/}
                                         </CSSTransition>
                                     </div>
                                     <button onClick={handleCopy} className={css.button_steps_green}>

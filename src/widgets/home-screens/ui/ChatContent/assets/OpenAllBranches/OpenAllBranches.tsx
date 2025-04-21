@@ -21,7 +21,7 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
     const [activeOpenAllBranchesMenu, setActiveOpenAllBranchesMenu] = useState<number | null>(null);
     const [contentIdHover, setContentIdHover] = useState<number | null>(null);
     const [animationState, setAnimationState] = useState<AnimationState>("enter");
-    const menuPosition = { top: 36, right: -150 };
+    const menuPosition = { top: 36, left: 300 };
 
     useEffect(() => {
         setAnimationState("visible");

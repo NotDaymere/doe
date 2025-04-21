@@ -42,6 +42,7 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
     const [fontColor, setFontColor] = useState<string>("#000000");
     const [textSettingsOpen, setTextSettingsOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [isContentLoaded, setIsContentLoaded] = useState(false);
 
     const toggleTextSettings = () => {
         setTextSettingsOpen((v) => !v);
@@ -56,6 +57,20 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
     useEffect(() => {
         setTempName(fileName);
     }, [fileName]);
+
+    useEffect(() => {
+        const loadPdf = async () => {
+            try {
+                const pdf = await pdfjsLib.getDocument(url).promise;
+                await pdf.getPage(1);
+                setIsContentLoaded(true);
+            } catch (error) {
+                console.error("Error loading PDF:", error);
+                setIsContentLoaded(true);
+            }
+        };
+        loadPdf();
+    }, [url]);
 
     const handleClose = async () => {
         try {
@@ -83,7 +98,7 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
     return createPortal(
         <FilePreviewModalOverlay
             onClose={handleClose}
-            modalContentClass={css.modalContentPdf}
+            modalContentClass={`${css.modalContentPdf} ${isContentLoaded ? css.visible : css.hidden}`}
             fileName={fileName}
             fileExt={fileExt}
             fileNameContainerClass={css.modalFileNamePdfContainer}

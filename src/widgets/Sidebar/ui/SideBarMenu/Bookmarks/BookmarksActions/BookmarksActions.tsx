@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 interface BookmarksActionsProps {
     position: {
         top: number;
-        right: number;
+        left: number;
     };
     onRename: () => void;
     onDelete: () => void;
@@ -36,7 +36,7 @@ export const BookmarksActions = ({
         <div
             ref={containerRef}
             className={css.bookmarks_actions_container}
-            style={{ top: position.top, right: position.right }}
+            style={{ top: position.top, left: position.left }}
         >
             <div className={css.bookmarks_action} onClick={onRename}>
                 <div className={css.pen_icon}>
