@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styles from '../tabs/ProfileTab/ProfileTab.module.less'
+import modalStyles from '../SettingsModal.module.less'
 import { UploadButton } from './UploadButton';
+import { AddProfilePhotoIcon } from 'src/shared/icons/AddProfilePhotoIcon';
 
 const placeholderImage = '/temp/profile2.jpg'
 type ChangeProfilePhotoProps = {
@@ -20,10 +22,10 @@ export const ChangeProfilePhoto = ({ currentPhoto, onImageChange }: ChangeProfil
 				const url = URL.createObjectURL(file);
 				setPreviewUrl(url);
 				onImageChange(url);
-			}} />
-			<button className={styles['profileTab__user-info-delete-photo']} onClick={() => {
+			}} ><AddProfilePhotoIcon />Change Photo</UploadButton>
+			<button className={modalStyles['settingsModal__delete-btn']} onClick={() => {
 				setPreviewUrl(null);
-				onImageChange(null)
+				onImageChange(null);
 			}}>Delete</button>
 		</div>
 	</div>

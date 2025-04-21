@@ -1,10 +1,11 @@
 import { useRef } from "react";
-import { AddProfilePhotoIcon } from "src/shared/icons/AddProfilePhotoIcon";
 type UploadButtonProps = {
 	className?: string;
+	children: React.ReactNode;
+	fileType?: string;
 	onFileChange?: (file: File) => void;
-}
-export const UploadButton = ({ className = '', onFileChange }: UploadButtonProps) => {
+} & React.HTMLProps<HTMLButtonElement>;
+export const UploadButton = ({ className = '', children, fileType = 'image/*', onFileChange }: UploadButtonProps) => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleButtonClick = () => {
@@ -21,11 +22,11 @@ export const UploadButton = ({ className = '', onFileChange }: UploadButtonProps
 	return (
 		<div>
 			<button className={className} onClick={handleButtonClick}>
-				<AddProfilePhotoIcon />Change Photo
+				{children}
 			</button>
 			<input
 				type="file"
-				accept="image/*"
+				accept={fileType}
 				ref={fileInputRef}
 				style={{ display: "none" }}
 				onChange={handleFileChange}

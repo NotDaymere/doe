@@ -1,0 +1,180 @@
+.generalTab {
+    &__container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    &__content {
+        padding: 0 18px;
+        flex: 1;
+        overflow-y: auto;
+    }
+    &__setting-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+        border-bottom: 1px solid rgba(181, 181, 181, 0.2);
+        padding: 12px 0 11px;
+        & label {
+            color: rgb(181, 181, 181) !important;
+            line-height: 1.19rem;
+        }
+        &:last-child {
+            border-top: 1px solid rgba(181, 181, 181, 0.2);
+            margin-top: 21px;
+            border-bottom: none;
+        }
+    }
+    &__setting-title {
+        flex: 1;
+        color: rgb(91, 91, 91);
+        font-family: "Sohne", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.19rem;
+    }
+    &__setting-control {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    &__knowledge-btn {
+        padding: 7px 11px;
+        border: 1px solid rgb(221, 221, 221);
+        border-radius: 8px;
+        color: rgb(91, 91, 91);
+        font-family: "Sohne", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.19rem;
+        transition: all 0.3s ease;
+        &:hover {
+            border-color: rgb(141, 141, 141);
+            color: rgb(31, 31, 31);
+        }
+    }
+    &__upload-btn {
+        display: flex;
+        gap: 9px;
+        align-items: center;
+        padding: 7px 11px 7px 9px;
+        border: 1px solid rgb(221, 221, 221);
+        border-radius: 8px;
+        color: rgb(91, 91, 91);
+        font-family: "Sohne", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.19rem;
+        transition: all 0.3s ease;
+        svg path {
+            fill: rgb(139, 207, 22);
+        }
+        &:hover {
+            border-color: rgb(139, 207, 22);
+            background-color: rgba(139, 207, 22, 0.2);
+            color: rgb(139, 207, 22);
+        }
+    }
+    &__subtitle {
+        margin-top: 12px;
+        color: rgb(31, 31, 31);
+        font-family: "Sohne", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.19rem;
+    }
+    &__accounts-container {
+        margin-top: 12px;
+        border: 1px solid rgb(238, 238, 238);
+        border-radius: 12px;
+    }
+    &__account {
+        &-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 15px 12px 11px;
+            border-bottom: 1px solid rgb(238, 238, 238);
+            background-color: rgb(248, 248, 248);
+        }
+        &-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        &-info {
+            font-family: "Sohne", sans-serif;
+            font-size: 0.875rem;
+            line-height: 1.19rem;
+        }
+        &-name {
+            color: rgb(91, 91, 91);
+            font-weight: 500;
+        }
+        &-email {
+            color: rgb(181, 181, 181);
+            font-weight: 400;
+        }
+        &-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-left: auto;
+        }
+        &-logout {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            padding: 4px 11px 5px;
+            border: 1px solid rgb(221, 221, 221);
+            border-radius: 8px;
+            font-family: "Sohne", sans-serif;
+            font-size: 0.875rem;
+            line-height: 1.19rem;
+            color: rgb(101, 101, 101);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            svg {
+                fill: rgb(91, 91, 91);
+                transition: all 0.3s ease;
+            }
+            &:hover {
+                border-color: rgb(31, 31, 31);
+                background: rgb(31, 31, 31);
+                color: rgb(255, 255, 255);
+                svg {
+                    fill: rgb(255, 255, 255);
+                }
+            }
+        }
+        &-delete {
+            padding: 4px 11px 5px;
+        }
+        &-add-container {
+            display: flex;
+            align-items: center;
+            padding: 16px 15px 15px;
+        }
+        &-add-btn {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            padding: 7px 11px 6px 9px;
+            border: 1px solid rgb(221, 221, 221);
+            border-radius: 8px;
+            color: rgb(31, 31, 31);
+            font-family: "Sohne", sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1.19rem;
+            svg {
+                fill: rgb(151, 71, 255);
+            }
+        }
+    }
+    &__contact-btn {
+        gap: 2px;
+        padding: 7px 11px 6px 8px;
+    }
+}

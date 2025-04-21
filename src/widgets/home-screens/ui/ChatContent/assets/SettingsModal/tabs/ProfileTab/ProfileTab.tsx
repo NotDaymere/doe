@@ -1,9 +1,11 @@
 import styles from './ProfileTab.module.less'
+import modalStyles from '../../SettingsModal.module.less'
 import { ChangeProfilePhoto } from '../../components/ChangeProfilePhoto';
 import { Profile } from 'src/widgets/Sidebar/ui/Profile';
 import { CrossIcon } from 'src/shared/icons/CrossIcon';
 import { useEffect, useRef, useState } from 'react';
 import { GeneralSettingsIcon } from 'src/shared/icons/GeneralSettingsIcon';
+import { ContentHeader } from '../../components/ContentHeader/ContentHeader';
 type ProfileTabProps = {
 	currentProfile: Profile
 	onClose: () => void
@@ -50,15 +52,13 @@ export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
 	}, [formData]);
 	const onSaveChanges = () => {
 		if (isDirty) {
-			console.log('Save changes', formData);
+			console.log('Saved changes', formData);
 			onClose();
 		}
 	}
 	return (
 		<div className={styles.profileTab__container}>
-			<div className={styles.profileTab__header}>
-				<h2 className={styles['profileTab__header-title']}>Edit profile info</h2>
-			</div >
+			<ContentHeader>Edit profile info</ContentHeader>
 			<div className={styles.profileTab__content}>
 				<div className={styles['profileTab__user-info-container']}>
 					<p className={styles['profileTab__user-info-title']}>Profile photo</p>
@@ -82,7 +82,7 @@ export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
 			<div className={styles['profileTab__footer']}>
 
 				<div className={styles['profileTab__footer-content']}>
-					<button className={styles['profileTab__cancel-btn']} onClick={onClose} >Cancel</button>
+					<button className={modalStyles['settingsModal__cancel-btn']} onClick={onClose} >Cancel</button>
 					<button className={styles['profileTab__save-btn']} disabled={!isDirty} onClick={onSaveChanges} >
 						<GeneralSettingsIcon />
 						<span>Save changes</span>

@@ -129,7 +129,7 @@ export const Sidebar: React.FC = () => {
 						src={currentProfile ? currentProfile.imgSrc : ""}
 					/>
 				</button>
-				{isSettingsOpen && <SettingsModal currentProfile={currentProfile} isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />}
+				{isSettingsOpen && <SettingsModal currentProfile={currentProfile} isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} profiles={profiles} />}
 
 				{isSideBarOpen && (
 					<div className={css.profile_user_info_container}>

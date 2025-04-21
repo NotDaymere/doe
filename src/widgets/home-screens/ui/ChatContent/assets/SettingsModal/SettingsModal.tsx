@@ -14,15 +14,16 @@ type SettingsModalProps = {
 	onClose: () => void
 	isOpen?: boolean
 	currentProfile: Profile
+	profiles: Profile[]
 }
 
-export const SettingsModal = ({ onClose, isOpen = false, currentProfile }: SettingsModalProps) => {
+export const SettingsModal = ({ onClose, isOpen = false, currentProfile, profiles }: SettingsModalProps) => {
 	const settingsTabsList = useMemo(() => [
 		{
 			name: 'Profile', icon: <ProfileIcon />, component: <ProfileTab currentProfile={currentProfile} onClose={onClose} />
 		},
 		{
-			name: 'General', icon: <GeneralSettingsIcon />, component: <GeneralTab />
+			name: 'General', icon: <GeneralSettingsIcon />, component: <GeneralTab currentProfile={currentProfile} profiles={profiles} />
 		},
 		{
 			name: 'Model Settings', icon: <ModelSettingsIcon />, component: <ModelSettingsTab />
@@ -30,7 +31,7 @@ export const SettingsModal = ({ onClose, isOpen = false, currentProfile }: Setti
 		{
 			name: 'Apps Integration ', icon: <AppsIntegrationSettingsIcon />, component: <AppsIntegrationTab />
 		}
-	] as const, [currentProfile, onClose])
+	] as const, [currentProfile, onClose, profiles])
 	const [activeTab, setActiveTab] = useState<(typeof settingsTabsList)[number]['name']>(settingsTabsList[0].name);
 
 	return ReactDOM.createPortal(
@@ -43,7 +44,7 @@ export const SettingsModal = ({ onClose, isOpen = false, currentProfile }: Setti
 						settingsTabsList.map(({ name, icon }, index) => {
 							return <button key={name} className={classNames(styles.settingsModal__tab, activeTab === name && styles['settingsModal__tab--active'])} onClick={() => setActiveTab(name)}>{icon}<span>{name}</span></button>
 						})}</div>
-					<div className={styles.settingsModal__tabContent}>{settingsTabsList.find(tab => tab.name === activeTab)!.component}</div>
+					<div className={styles.settingsModal__tabContent}>{settingsTabsList.find(tab => tab.name === activeTab)?.component}</div>
 				</div>
 			</div>
 		</>, document.body)
