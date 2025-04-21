@@ -5,7 +5,7 @@ import { useChatStore } from "src/shared/providers";
 import { IPlayground } from "src/shared/types/Playground";
 
 function TableRandomValues() {
-    const { playground,
+    const {
         setPlayground,
         setSavedPlaygrounds,
         updateSavedPlaygrounds, getOpenSavedPlaygrounds,
@@ -54,10 +54,10 @@ function TableRandomValues() {
     };
     return (
         <button onClick={openTablePlayground}
-                className={`table-playground-button ${playground.type == 'table' && 'table-playground-button-active'}`}
+                className={`table-playground-button ${getOpenSavedPlaygroundsByType('table').length > 0 && 'table-playground-button-active'}`}
 
         >
-            <TableIcon /> Tabular random values
+            <TableIcon /> Tabular Random Values
         </button>
 
     )
