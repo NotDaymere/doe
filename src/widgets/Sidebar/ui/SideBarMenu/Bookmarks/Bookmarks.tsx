@@ -27,7 +27,7 @@ export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) =>
     const [isBookmarksOpen, setIsBookmarksOpen] = React.useState(false);
     const [isBookmarksSearchInputOpen, setIsBookmarksSearchInputOpen] = React.useState(false);
 
-    const [bookmarksActionsPosition, setBookmarksActionsPosition] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
+    const [bookmarksActionsPosition, setBookmarksActionsPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
     const [isBookmarksActionsOpen, setIsBookmarksActionsOpen] = useState<boolean>(false);
 
     const [activeBookmarkMessage, setActiveBookmarkMessage] = useState<any>(null);
@@ -48,7 +48,7 @@ export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) =>
     ) => {
         event.stopPropagation();
         setActiveBookmarkMessage(msg);
-        setBookmarksActionsPosition({ top: event.clientY, right: event.clientX + 1520 });
+        setBookmarksActionsPosition({ top: event.clientY, left: event.clientX + 30 });
         setIsBookmarksActionsOpen(prev => !prev);
     };
 

@@ -81,7 +81,7 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
                 </button>
             </div>
             <div className={'open-all-playgrounds-content'}>
-                {savedPlaygrounds.map((savedPlayground, index) => (
+                {savedPlaygrounds.filter(p => p.type !== "source").map((savedPlayground, index) => (
                     <div
                         key={savedPlayground.id}
                         className={`open-all-playgrounds-content-example ${

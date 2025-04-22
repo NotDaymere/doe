@@ -53,8 +53,14 @@ const FilePreviewModalOverlay: React.FC<ModalOverlayProps> = ({
                             </div>
                         ) : (
                             <div className={fileNameContainerClass}>
-                                <span className={css.modalFileName}>{fileName}</span>
-                                {fileExt && <span className={css.modalFileExt}>.{fileExt}</span>}
+                                <span className={css.modalFileNameWrapper}>
+                                    <span className={css.modalFileName}>{fileName}</span>
+                                </span>
+                                {fileExt && (
+                                    <span className={fileName.length < 10 ? css.modalFileExtShorten  : css.modalFileExt}>
+                                        {fileName.length < 10 ? `.${fileExt}` : fileExt}
+                                    </span>
+                                )}
                             </div>
                         )}
                     </>

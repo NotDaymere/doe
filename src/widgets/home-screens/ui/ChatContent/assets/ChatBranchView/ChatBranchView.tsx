@@ -73,7 +73,8 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                 )
                             }
                             <div className={css.content_chat_branch_dialog}>
-                                <div id={`chat-msg-${dialog.userRequest.id}`}>
+                                <div id={`chat-msg-${dialog.userRequest.id}`}
+                                    className={css.branch_message}>
                                     <ChatMessage
                                         data={dialog.userRequest}
                                         editor={editor}
@@ -82,7 +83,8 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                     />
                                 </div>
                                 {dialog.botMessages &&
-                                    <div id={`chat-msg-${dialog.botMessages.id}`}>
+                                    <div id={`chat-msg-${dialog.botMessages.id}`}
+                                         className={css.branch_message}>
                                         <ChatMessage
                                             data={dialog.botMessages}
                                             editor={editor}

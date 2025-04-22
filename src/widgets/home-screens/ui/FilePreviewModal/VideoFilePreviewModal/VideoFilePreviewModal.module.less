@@ -46,6 +46,17 @@
   display: flex;
   justify-content: center;
   z-index: 1500;
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0s linear 0.1s;
+  }
+
+  &.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
 }
 
 .modalContentVideo:hover .modalFileNameVideoContainer {
@@ -126,7 +137,7 @@
 .progressBarContainer {
   position: absolute;
   z-index: 10000;
-  bottom: 40px;
+  bottom: 25px;
   width: 85%;
   height: 7px;
   background-color: #FFFFFF33;
