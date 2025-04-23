@@ -1,11 +1,13 @@
-import { useRef } from "react";
+import { HTMLProps, useRef } from "react";
+export type FileWithId = File & { id: string };
 type UploadButtonProps = {
 	className?: string;
 	children: React.ReactNode;
 	fileType?: string;
-	onFileChange?: (file: File) => void;
-} & React.HTMLProps<HTMLButtonElement>;
-export const UploadButton = ({ className = '', children, fileType = 'image/*', onFileChange }: UploadButtonProps) => {
+	onFileChange?: (file: FileWithId) => void;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+export const UploadButton = ({ className = '', children, fileType = 'image/*', onFileChange, ...props }: UploadButtonProps) => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleButtonClick = () => {
@@ -15,13 +17,13 @@ export const UploadButton = ({ className = '', children, fileType = 'image/*', o
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
 		if (file) {
-			onFileChange?.(file);
+			onFileChange?.(Object.assign(file, { id: crypto.randomUUID() }));
 		}
 	};
 
 	return (
-		<div>
-			<button className={className} onClick={handleButtonClick}>
+		<>
+			<button {...props} className={className} onClick={handleButtonClick}>
 				{children}
 			</button>
 			<input
@@ -31,6 +33,6 @@ export const UploadButton = ({ className = '', children, fileType = 'image/*', o
 				style={{ display: "none" }}
 				onChange={handleFileChange}
 			/>
-		</div>
+		</>
 	);
 }

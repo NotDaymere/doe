@@ -10,7 +10,8 @@ import classNames from "classnames";
 import { AddProfilePhotoIcon } from "src/shared/icons/AddProfilePhotoIcon";
 import { EmailIcon } from "src/shared/icons/EmailIcon";
 import { UploadButton } from "../../components/UploadButton";
-import { KnowledgeView } from "./views/KnowledgeView";
+import { KnowledgeView } from "./views/KnowledgeView/KnowledgeView";
+
 type GeneralTabProps = {
 	currentProfile: Profile
 	profiles: Profile[]

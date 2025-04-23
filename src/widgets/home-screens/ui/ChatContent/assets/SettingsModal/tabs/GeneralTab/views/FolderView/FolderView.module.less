@@ -1,0 +1,40 @@
+.folderView {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    overflow-y: auto;
+    &__header {
+        &-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(181, 181, 181, 0.2);
+            padding: 14px 18px 11px;
+            svg {
+                flex: 0 0 20px;
+                fill: rgb(91, 91, 91);
+            }
+        }
+        &-title {
+            color: rgb(31, 31, 31);
+            font-family: "Sohne";
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 21px;
+            margin-right: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+    &__content-container {
+        padding: 12px 18px;
+        flex: 1;
+        overflow-y: auto;
+    }
+    &__content {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+}
