@@ -50,7 +50,7 @@ export const SCREEN_SHARE_CONFIG: IScreenSharePopup = {
         description: `<span>Start broadcasting your desktop device screen. You can continue working with Doe with full functionality while the screen is being broadcast and Doe is interacting with the screen content.</span>`,
         label: "Share computer screen",
         icon: <ScreenIcon width={14} height={12} className={css.screenShareIcon} />,
-        videoUrl: "",
+        videoUrl: "/screen-share/shere_screen_onboarding_3_1.mp4",
     },
     shareViaBluetooth: {
         title: "Share your mobile screen",
@@ -65,7 +65,7 @@ export const SCREEN_SHARE_CONFIG: IScreenSharePopup = {
         description: `<span>To switch to sharing mode, connect your mobile device to your computer <strong>via a cable.</strong></span><span>You can also connect your device <strong>via Bluetooth</strong> if a cable connection is not available. <span/>`,
         label: "Share Mobile screen via a cable",
         icon: <CableIcon width={21} height={5} className={css.screenShareIcon} />,
-        videoUrl: "",
+        videoUrl: "/screen-share/usb_connection_success.MP4",
     },
     connectionFailed: {
         title: "Connection failed",
@@ -83,8 +83,8 @@ export const SCREEN_SHARE_CONFIG: IScreenSharePopup = {
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
     const messages = useChatStore((state) => state.messages);
-    const [clearContent, setClearContent] = React.useState(false)
-    const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
+    const [clearContent, setClearContent] = React.useState(false);
+    const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore();
     const {
         setEditor,
         setMessages,
@@ -103,8 +103,6 @@ export const ChatPanel: React.FC = () => {
         setIsCurrentBranchOpen,
 
         getMessageQueueFromNode,
-        isHyperlinkInputOpen,
-        setIsHyperlinkInputOpen,
         setMessagesCount,
         messagesCount,
         disableButtons,
@@ -113,14 +111,16 @@ export const ChatPanel: React.FC = () => {
 
     const [loadingFile, setLoadingFile] = React.useState<string | undefined>(undefined);
 
-    const { isTablePromptVisible, setIsTablePromptVisible } = useAppStore();
     const {
-        selectedArea
+        isTablePromptVisible,
+        setIsTablePromptVisible,
+        isHyperlinkInputOpen,
+        setIsHyperlinkInputOpen,
     } = useAppStore();
+    const { selectedArea } = useAppStore();
     const panelRef = React.useRef<HTMLDivElement>(null);
 
-
-    const { 
+    const {
         drag,
         dragTarget,
         handleDragDropTarget,
@@ -217,7 +217,10 @@ export const ChatPanel: React.FC = () => {
                         : candidateTop;
                 setLinkInputPosition({ top: clampedTop + offsetY, left: candidateLeft + offsetX });
             } else {
-                setLinkInputPosition({ top: selectionTop + offsetY, left: selectionLeft + offsetX });
+                setLinkInputPosition({
+                    top: selectionTop + offsetY,
+                    left: selectionLeft + offsetX,
+                });
             }
         }
 
@@ -278,6 +281,38 @@ export const ChatPanel: React.FC = () => {
         setEditor(editor);
         setShowHints({ hints: false, typingHints: true });
     };
+
+    const isValidUrl = (url: string): { isValid: boolean; normalizedUrl: string } => {
+        const trimmedUrl = url.trim();
+
+        try {
+            const urlObj = new URL(trimmedUrl);
+            if (["http:", "https:"].includes(urlObj.protocol)) {
+                return { isValid: true, normalizedUrl: trimmedUrl };
+            }
+            return { isValid: false, normalizedUrl: trimmedUrl };
+        } catch {}
+
+        const withHttps = `https://${trimmedUrl}`;
+        try {
+            const urlObj = new URL(withHttps);
+            if (/^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(trimmedUrl)) {
+                return { isValid: true, normalizedUrl: withHttps };
+            }
+            return { isValid: false, normalizedUrl: trimmedUrl };
+        } catch {}
+
+        const withHttp = `http://${trimmedUrl}`;
+        try {
+            const urlObj = new URL(withHttp);
+            if (/^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/.test(trimmedUrl)) {
+                return { isValid: true, normalizedUrl: withHttp };
+            }
+        } catch {}
+
+        return { isValid: false, normalizedUrl: trimmedUrl };
+    };
+
     const handleApplyLink = React.useCallback(async () => {
         if (!savedRange || linkUrl.trim().length === 0) {
             setShowLinkInput(false);
@@ -291,14 +326,35 @@ export const ChatPanel: React.FC = () => {
             selection.removeAllRanges();
             selection.addRange(savedRange);
         }
-        document.execCommand("createLink", false, linkUrl);
+
+        const { isValid, normalizedUrl } = isValidUrl(linkUrl);
+        if (!isValid) {
+            alert("Please enter a valid URL (e.g., example.com or https://example.com)");
+            setShowLinkInput(false);
+            setIsHyperlinkInputOpen(false);
+            setLinkUrl("");
+            setSavedRange(null);
+            window.getSelection()?.removeAllRanges();
+            setTimeout(() => {
+                skipPositionUpdate.current = false;
+            }, 300);
+            return;
+        }
+
+        document.execCommand("createLink", false, normalizedUrl);
 
         setTimeout(() => {
             window.getSelection()?.removeAllRanges();
-            if (editorRef.current && typeof (editorRef.current as HTMLDivElement).blur === "function") {
+            if (
+                editorRef.current &&
+                typeof (editorRef.current as HTMLDivElement).blur === "function"
+            ) {
                 (editorRef.current as HTMLDivElement).blur();
             } else {
-                if (document.activeElement && typeof (document.activeElement as HTMLElement).blur === "function") {
+                if (
+                    document.activeElement &&
+                    typeof (document.activeElement as HTMLElement).blur === "function"
+                ) {
                     (document.activeElement as HTMLElement).blur();
                 }
             }
@@ -306,20 +362,22 @@ export const ChatPanel: React.FC = () => {
 
         let fileName = "unknown";
         try {
-            const urlObj = new URL(linkUrl);
+            const urlObj = new URL(normalizedUrl);
             fileName = urlObj.href || fileName;
         } catch {}
 
         let blob;
         try {
-            const response = await fetch(linkUrl);
+            const response = await fetch(normalizedUrl);
             if (!response.ok) {
                 throw new Error(`Non-200 status: ${response.status}`);
             }
             blob = await response.blob();
         } catch (error) {
             console.error("Failed to fetch content from the link (possibly a CORS issue).", error);
-            blob = new Blob([`Failed to fetch actual content from the link:\n${linkUrl}`], { type: "text/plain" });
+            blob = new Blob([`Failed to fetch actual content from the link:\n${normalizedUrl}`], {
+                type: "text/plain",
+            });
         }
 
         const fileWithId = Object.assign(new File([blob], fileName, { type: blob.type }), {
@@ -328,8 +386,8 @@ export const ChatPanel: React.FC = () => {
 
         setFiles([...files, fileWithId]);
 
-        setIsHyperlinkInputOpen(false);
         setShowLinkInput(false);
+        setIsHyperlinkInputOpen(false);
         setLinkUrl("");
         setSavedRange(null);
 
@@ -338,7 +396,17 @@ export const ChatPanel: React.FC = () => {
         }, 300);
     }, [savedRange, linkUrl, files, setFiles, setIsHyperlinkInputOpen]);
 
+    const hasTextContent = (html: string): boolean => {
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = html;
+        return tempDiv.textContent!.trim() !== "";
+    };
+
     const handleSend = async () => {
+        if (text.trim() === "") {
+            return;
+        }
+
         const userMessage: IMessage = {
             id: Date.now(),
             isUser: true,
@@ -443,10 +511,9 @@ export const ChatPanel: React.FC = () => {
                 });
             }
 
-            const fileWithId = Object.assign(
-                new File([blob], link, { type: blob.type }),
-                { id: `${Date.now()}-${Math.random()}` }
-            ) as FileWithId;
+            const fileWithId = Object.assign(new File([blob], link, { type: blob.type }), {
+                id: `${Date.now()}-${Math.random()}`,
+            }) as FileWithId;
 
             newFiles.push(fileWithId);
         }
@@ -454,10 +521,9 @@ export const ChatPanel: React.FC = () => {
         const urlRegex = /(https?:\/\/[^\s'"]+)/gi;
         const plainLinks = text.match(urlRegex) || [];
 
-        const uniquePlainLinks = new Set(plainLinks.map(link => cleanUrl(link)));
+        const uniquePlainLinks = new Set(plainLinks.map((link) => cleanUrl(link)));
 
         for (const link of uniquePlainLinks) {
-
             if (files.some((file) => file.name === link) || anchorLinks.has(link)) {
                 continue;
             }
@@ -476,10 +542,9 @@ export const ChatPanel: React.FC = () => {
                 });
             }
 
-            const fileWithId = Object.assign(
-                new File([blob], link, { type: blob.type }),
-                { id: `${Date.now()}-${Math.random()}` }
-            ) as FileWithId;
+            const fileWithId = Object.assign(new File([blob], link, { type: blob.type }), {
+                id: `${Date.now()}-${Math.random()}`,
+            }) as FileWithId;
 
             newFiles.push(fileWithId);
         }
@@ -497,7 +562,9 @@ export const ChatPanel: React.FC = () => {
         }
         if (e.code === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            await handleSend();
+            if (hasTextContent(text)) {
+                await handleSend();
+            }
         }
     };
 
@@ -519,7 +586,9 @@ export const ChatPanel: React.FC = () => {
             onDragOver={handleDragOver}
             onDragLeave={handleDragCancel}
         >
-            {questionCodeMessage && <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />}
+            {questionCodeMessage && (
+                <QuestionCodeMessage questionCodeMessage={questionCodeMessage} />
+            )}
             <div
                 className={clsx(css.panel_wrapper, dragTarget && css._over)}
                 onDragOver={handleDragOverTarget}
@@ -589,7 +658,9 @@ export const ChatPanel: React.FC = () => {
                                         <UploadFilesProgressIcon />
                                     </div>
                                     <div className={css.panel_uploading_files_name_and_progressbar}>
-                                        <div className={css.panel_uploading_files_name_and_progress}>
+                                        <div
+                                            className={css.panel_uploading_files_name_and_progress}
+                                        >
                                             <span>{fileName}</span>
                                             <span>{progress}%</span>
                                         </div>
@@ -642,15 +713,18 @@ export const ChatPanel: React.FC = () => {
                         value={text}
                         onChange={handleChangeEditor}
                         handleKeyDown={handleKeyPress}
-                        // onFocus={setEditor}
-                        // onBlur={() => setEditor(null)}
-                        // onChange={setText}
-                        onFocus={handleFocusEditor}
-                        onBlur={handleBlurEditor}
+                        onFocus={(editor: IEditor | null) => {
+                            setEditor(editor);
+                            handleFocusEditor(editor);
+                        }}
+                        onBlur={() => {
+                            setEditor(null);
+                            handleBlurEditor();
+                        }}
                         className={css.panel_editor}
                         classNameEditor={css.panel_editor_editor}
                         clearContent={clearContent}
-                        placeholder="Ask Doe anything you’d like about the world..."
+                        placeholder={placeholder}
                         onMouseUp={handleTextSelection}
                     />
                     <ScreenShareMenu
@@ -687,15 +761,7 @@ export const ChatPanel: React.FC = () => {
                     <button className={css.panel_button}>
                         <MicrophoneIcon />
                     </button>
-                    {/*{!prompt.active ? (*/}
-                    {/*    <button className={css.panel_submitBtn} onClick={() => onSendMessage(text)}>*/}
-                    {/*        Send <ArrowUpIcon />*/}
-                    {/*    </button>*/}
-                    {/*) : (*/}
-                    {/*    <button className={css.panel_callBtn}>*/}
-                    {/*        <CallVoiceIcon />*/}
-                    {/*    </button>*/}
-                    {/*)}*/}
+
                     <CSSTransition
                         in={showLinkInput && isHyperlinkInputOpen}
                         timeout={300}
@@ -726,17 +792,18 @@ export const ChatPanel: React.FC = () => {
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
                                         e.preventDefault();
-                                        (e.currentTarget as HTMLInputElement).blur();
-                                        handleApplyLink();
-                                        setTimeout(() => {
+                                        const { isValid } = isValidUrl(linkUrl);
+                                        if (isValid) {
+                                            handleApplyLink();
+                                        } else {
+                                            alert(
+                                                "Please enter a valid URL (e.g., example.com or https://example.com)"
+                                            );
+                                            setShowLinkInput(false);
+                                            setLinkUrl("");
+                                            setSavedRange(null);
                                             window.getSelection()?.removeAllRanges();
-                                            if (
-                                                document.activeElement &&
-                                                typeof (document.activeElement as HTMLElement).blur === "function"
-                                            ) {
-                                                (document.activeElement as HTMLElement).blur();
-                                            }
-                                        }, 100);
+                                        }
                                     }
                                 }}
                             />
@@ -759,11 +826,11 @@ export const ChatPanel: React.FC = () => {
                                 unmountOnExit
                             >
                                 <button className={css.panel_loadingBtn}>
-                                    <div className={css.chat_response_stop_icon}>
-                                        <ChatResponseStopIcon
-                                            fill="currentColor"
-                                            onClick={handleStopReply}
-                                        />
+                                    <div
+                                        className={css.chat_response_stop_icon}
+                                        onClick={handleStopReply}
+                                    >
+                                        <ChatResponseStopIcon fill="currentColor" />
                                     </div>
                                 </button>
                             </CSSTransition>
@@ -782,14 +849,20 @@ export const ChatPanel: React.FC = () => {
                                 unmountOnExit
                             >
                                 <>
-
                                     {isTablePromptVisible ? (
                                         <button className={css.panel_send_table_data_btn}>
                                             <SendTableDataIcon fill="currentColor" />
                                         </button>
                                     ) : !prompt.active ? (
                                         !questionCodeMessage ? (
-                                            <button className={css.panel_submitBtn} onClick={handleSend}>
+                                            <button
+                                                className={css.panel_submitBtn}
+                                                onClick={() => {
+                                                    if (hasTextContent(text)) {
+                                                        handleSend();
+                                                    }
+                                                }}
+                                            >
                                                 Send <ArrowUpIcon />
                                             </button>
                                         ) : (
@@ -803,192 +876,9 @@ export const ChatPanel: React.FC = () => {
                                         </button>
                                     )}
                                 </>
-
                             </CSSTransition>
                         )}
                     </SwitchTransition>
-                    {/*<ScreenShareMenu
-                        isActive={shareScreenConfig.expandedButtons}
-                        type={shareScreenConfig.shareType}
-                        onConfig={(type) =>
-                            setShareScreenConfig({ ...shareScreenConfig, shareType: type })
-                        }
-                        onClickOutside={onShareScreenClickOutside}
-                    />
-                    {!shareScreenConfig.expandedButtons && (
-                        <button
-                            className={css.screenShareButton}
-                            disabled={disableButtons}
-                            onMouseEnter={(event) => {
-                                if (!event.currentTarget.disabled) {
-                                    setShareScreenConfig({
-                                        ...shareScreenConfig,
-                                        expandedButtons: true,
-                                    });
-                                }
-                            }}
-                        >
-                            <ScreenShareIcon width={16} height={16} />
-                        </button>
-                    )}
-                    {shareScreenConfig.shareType && (
-                        <ShareScreenInfo
-                            isActive={!!shareScreenConfig.shareType}
-                            onClickOutside={onShareScreenClickOutside}
-                            {...SCREEN_SHARE_CONFIG[shareScreenConfig.shareType]}
-                        />
-                    )}
-                    <button className={css.panel_button}>
-                        <MicrophoneIcon />
-                    </button>
-                    {!prompt.active ? (
-                        <button className={css.panel_submitBtn} onClick={() => onSendMessage(text)}>
-                            Send <ArrowUpIcon />
-                        </button>
-                    ) : (
-                        <button className={css.panel_callBtn}>
-                            <CallVoiceIcon />
-                        </button>
-                    )}
-
-                    <CSSTransition
-                        in={showLinkInput && isHyperlinkInputOpen}
-                        timeout={300}
-                        classNames={{
-                            enter: css.linkEnter,
-                            enterActive: css.linkEnterActive,
-                            exit: css.linkExit,
-                            exitActive: css.linkExitActive,
-                        }}
-                        unmountOnExit
-                    >
-                        <div
-                            className={css.hyperlink_form}
-                            style={{
-                                position: "fixed",
-                                top: linkInputPosition.top,
-                                left: linkInputPosition.left,
-                                zIndex: 1000,
-                            }}
-                        >
-                            <input
-                                value={linkUrl}
-                                onChange={(e) => setLinkUrl(e.target.value)}
-                                placeholder="Enter URL"
-                                onFocus={() => {
-                                    window.getSelection()?.removeAllRanges();
-                                }}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                        e.preventDefault();
-                                        (e.currentTarget as HTMLInputElement).blur();
-                                        handleApplyLink();
-                                        setTimeout(() => {
-                                            window.getSelection()?.removeAllRanges();
-                                            if (
-                                                document.activeElement &&
-                                                typeof (document.activeElement as HTMLElement).blur === "function"
-                                            ) {
-                                                (document.activeElement as HTMLElement).blur();
-                                            }
-                                        }, 100);
-                                    }
-                                }}
-                            />
-                        </div>
-                    </CSSTransition>
-
-                    <SwitchTransition>
-                        {isReplyLoading ? (
-                            <CSSTransition
-                                in={isReplyLoading}
-                                key="loading"
-                                timeout={{ enter: 300, exit: 300 }}
-                                classNames={{
-                                    enter: css.fadeEnter,
-                                    enterActive: css.fadeEnterActive,
-                                    exit: css.fadeExit,
-                                    exitActive: css.fadeExitActive,
-                                }}
-                                mountOnEnter
-                                unmountOnExit
-                            >
-                                <button className={css.panel_loadingBtn}>
-                                    <div className={css.chat_response_stop_icon}>
-                                        <ChatResponseStopIcon
-                                            fill="currentColor"
-                                            onClick={handleStopReply}
-                                        />
-                                    </div>
-                                </button>
-                            </CSSTransition>
-                        ) : (
-                            <CSSTransition
-                                in={!isReplyLoading}
-                                key="ready"
-                                timeout={{ enter: 300, exit: 300 }}
-                                classNames={{
-                                    enter: css.fadeEnter,
-                                    enterActive: css.fadeEnterActive,
-                                    exit: css.fadeExit,
-                                    exitActive: css.fadeExitActive,
-                                }}
-                                mountOnEnter
-                                unmountOnExit
-                            >
-                                <>
-                                    {/*<button className={css.panel_button} disabled>*/}
-                    {/*    <ScreenShareIcon />*/}
-                    {/*</button>*/}
-                    {/*<button className={css.panel_button}>*/}
-                    {/*    <MicrophoneIcon />*/}
-                    {/*</button>*/}
-
-                    {/*{isTablePromptVisible ? (*/}
-                    {/*    <button className={css.panel_send_table_data_btn}>*/}
-                    {/*        <SendTableDataIcon fill="currentColor" />*/}
-                    {/*    </button>*/}
-                    {/*) : !prompt.active ? (*/}
-                    {/*    !questionCodeMessage ? (*/}
-                    {/*        <button className={css.panel_submitBtn} onClick={handleSend}>*/}
-                    {/*            Send <ArrowUpIcon />*/}
-                    {/*        </button>*/}
-                    {/*    ) : (*/}
-                    {/*        <button className={css.panel_hammerBtn}>*/}
-                    {/*            <HammerIcon />*/}
-                    {/*        </button>*/}
-                    {/*    )*/}
-                    {/*) : (*/}
-                    {/*    <button className={css.panel_callBtn}>*/}
-                    {/*        <CallVoiceIcon />*/}
-                    {/*    </button>*/}
-                    {/*)}*/}
-        {/*        </>*/}
-        {/*    </CSSTransition>*/}
-        {/*    )*/}
-        {/*</SwitchTransition>*/}
-        {/*            <button className={css.panel_button} disabled>*/}
-        {/*                <ScreenShareIcon />*/}
-        {/*            </button>*/}
-        {/*            <button className={css.panel_button}>*/}
-        {/*                <MicrophoneIcon />*/}
-        {/*            </button>*/}
-        {/*            {!prompt.active ? (*/}
-        {/*                !questionCodeMessage ? (*/}
-        {/*                <button className={css.panel_submitBtn} onClick={handleSend}>*/}
-        {/*                    Send <ArrowUpIcon />*/}
-        {/*                </button>*/}
-        {/*                ) : (*/}
-        {/*                    <button className={css.panel_hammerBtn}>*/}
-        {/*                        <HammerIcon />*/}
-        {/*                    </button>*/}
-        {/*                )*/}
-        {/*            ) : (*/}
-        {/*                <button className={css.panel_callBtn}>*/}
-        {/*                    <CallVoiceIcon />*/}
-        {/*                </button>*/}
-        {/*            )}*/}
-
                 </div>
                 {messagesCount === 0 && (
                     <div className={css.hintsWrapper}>

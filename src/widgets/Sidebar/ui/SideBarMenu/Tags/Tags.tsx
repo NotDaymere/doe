@@ -8,6 +8,7 @@ import { CSSTransition } from "react-transition-group";
 import AllBranchesMenu from "../../../../home-screens/ui/ChatContent/assets/AllBranchesMenu/AllBranchesMenu";
 import { useChatStore } from "../../../../../shared/providers";
 import {TAG_META} from "../SideBarMenu";
+import ReactDOM from "react-dom";
 
 interface TagsProps {
     isSideBarOpen: boolean;
@@ -28,7 +29,7 @@ export const Tags = ({ isSideBarOpen, isSideBarMenuOpen }: TagsProps) => {
 
 
     const [isBranchMenuOpen, setIsBranchMenuOpen] = React.useState(false);
-    const [menuPosition, setMenuPosition] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
+    const [menuPosition, setMenuPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
     const [activeOpenAllBranchesMenu, setActiveOpenAllBranchesMenu] = useState<number | null>(null);
 
     const handleToggleChatBranches = (chatId: string) => {
@@ -37,7 +38,7 @@ export const Tags = ({ isSideBarOpen, isSideBarMenuOpen }: TagsProps) => {
 
     const handleOpenBranchMenu = (event: React.MouseEvent) => {
         event.stopPropagation();
-        setMenuPosition({ top: event.clientY, right: event.clientX - 350 });
+        setMenuPosition({ top: event.clientY, left: event.clientX + 30 });
         setIsBranchMenuOpen(!isBranchMenuOpen);
     };
 
@@ -84,7 +85,7 @@ export const Tags = ({ isSideBarOpen, isSideBarMenuOpen }: TagsProps) => {
                                                 className={`${css.chat_tag} ${isOpen ? css.current_chat_tag : ""}`}
                                                 style={{ backgroundColor: color }}
                                             />
-                                            <div>{customName}&nbsp;</div>
+                                            <div className={css.chat_name}>{customName}&nbsp;</div>
                                         </div>
                                         <div className={css.show_more_btn}>{isOpen ? "–" : "+"}</div>
                                     </div>
@@ -146,18 +147,21 @@ export const Tags = ({ isSideBarOpen, isSideBarMenuOpen }: TagsProps) => {
                                                                                 <ThreeDotsIcon />
                                                                             </div>
 
-                                                                            <CSSTransition
-                                                                                in={isBranchMenuOpen && branch.id !== null}
-                                                                                timeout={200}
-                                                                                classNames="branchMenu"
-                                                                                unmountOnExit
-                                                                            >
-                                                                                <AllBranchesMenu
-                                                                                    position={menuPosition}
-                                                                                    branchId={branch.id!}
-                                                                                    setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
-                                                                                />
-                                                                            </CSSTransition>
+                                                                            {isBranchMenuOpen && branch.id !== null && ReactDOM.createPortal(
+                                                                                <CSSTransition
+                                                                                    in={isBranchMenuOpen && branch.id !== null}
+                                                                                    timeout={200}
+                                                                                    classNames="branchMenu"
+                                                                                    unmountOnExit
+                                                                                >
+                                                                                    <AllBranchesMenu
+                                                                                        position={menuPosition}
+                                                                                        branchId={branch.id!}
+                                                                                        setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
+                                                                                    />
+                                                                                </CSSTransition>,
+                                                                                document.body
+                                                                            )}
                                                                         </div>
                                                                     ))}
                                                                 </div>

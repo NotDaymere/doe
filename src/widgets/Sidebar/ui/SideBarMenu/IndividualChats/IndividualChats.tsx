@@ -1,31 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import css from "./IndividualChats.module.less";
 import IndividualChatsIcon from "../../../../../shared/icons/IndividualChatsIcon";
 import SearchIcon from "../../../../../shared/icons/SearchIcon";
 import CloseIcon from "../../../../../shared/icons/CloseIcon";
 import { ChatTagsEnum } from "../../../../../shared/enums/ChatTagsEnum";
 import ThreeDotsIcon from "../../../../../shared/icons/ThreeDotsIcon";
-import TagsIcon from "../../../../../shared/icons/TagsIcon";
-import PenIcon from "../../../../../shared/icons/Pen.icon";
 import BranchIcon from "../../../../../shared/icons/Branch.icon";
 import { CSSTransition } from "react-transition-group";
 import AllBranchesMenu from "../../../../home-screens/ui/ChatContent/assets/AllBranchesMenu/AllBranchesMenu";
 import { IndividualChatsActions } from "./IndividualChatsActions/IndividualChatsActions";
-import { TAG_META } from "../SideBarMenu";
 import { useChatStore } from "../../../../../shared/providers";
-import {ChatTagsPanel} from "./ChatTagsPanel/ChatTagsPanel";
-import {ChatItem} from "./ChatItem/ChatItem";
+import { ChatTagsPanel } from "./ChatTagsPanel/ChatTagsPanel";
+import { ChatItem } from "./ChatItem/ChatItem";
+import ReactDOM from "react-dom";
+import { TAG_META } from "../SideBarMenu";
 
 interface IndividualChatsProps {
     isSideBarOpen: boolean;
     isSideBarMenuOpen: boolean;
 }
 
-export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualChatsProps) => {
+export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: IndividualChatsProps) => {
     const {
         chats,
         currentChat,
-        customTagNames ,
+        customTagNames,
         setChatTags,
         renameTag,
         switchChat,
@@ -33,14 +32,13 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
         removeChat,
     } = useChatStore();
 
-    const [isIndividualChatsSearchInputOpen, setIsIndividualChatsSearchInputOpen] = React.useState(false);
-    const [isIndividualChatOpen, setIsIndividualChatOpen] = React.useState(false);
-    const [expandedChatId, setExpandedChatId] = React.useState<string | null>(null);
+    const [isIndividualChatsSearchInputOpen, setIsIndividualChatsSearchInputOpen] = useState(false);
+    const [isIndividualChatOpen, setIsIndividualChatOpen] = useState(false);
+    const [expandedChatId, setExpandedChatId] = useState<string | null>(null);
     const [activeTagPanel, setActiveTagPanel] = useState<string | null>(null);
-    const [isBranchMenuOpen, setIsBranchMenuOpen] = React.useState(false);
-    const [menuPosition, setMenuPosition] = useState<{ top: number; right: number }>({ top: 0, right: 0 });
-    const [individualChatsActionsPosition, setIndividualChatsActionsPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
-    const [isIndividualChatsActionsOpen, setIsIndividualChatsActionsOpen] = useState<boolean>(false);
+    const [isBranchMenuOpen, setIsBranchMenuOpen] = useState(false);
+    const [menuPosition, setMenuPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+    const [isShowActions, setIsShowActions] = useState(false);
     const [activeChatForActions, setActiveChatForActions] = useState<{
         id: string;
         name: string;
@@ -52,11 +50,9 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
     const [showAllTags, setShowAllTags] = useState<string | null>(null);
     const [editingTag, setEditingTag] = useState<ChatTagsEnum | null>(null);
     const [editValue, setEditValue] = useState("");
-    const [selectedTags, setSelectedTags] = React.useState<ChatTagsEnum[]>([]);
-
+    const [selectedTags, setSelectedTags] = useState<ChatTagsEnum[]>([]);
     const [inputValue, setInputValue] = useState("");
-    const inputRef = React.useRef<HTMLInputElement>(null);
-    const panelRef = React.useRef<HTMLDivElement>(null);
+    const panelRef = useRef<HTMLDivElement>(null);
 
     const handleOpenIndividualChat = () => {
         setIsIndividualChatOpen(!isIndividualChatOpen);
@@ -68,7 +64,7 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
 
     const handleOpenBranchMenu = (event: React.MouseEvent) => {
         event.stopPropagation();
-        setMenuPosition({ top: event.clientY, right: event.clientX - 350 });
+        setMenuPosition({ top: event.clientY, left: event.clientX + 30 });
         setIsBranchMenuOpen(!isBranchMenuOpen);
     };
 
@@ -96,7 +92,6 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
         setInputValue("");
     }, [activeTagPanel, chats]);
 
-
     return isSideBarMenuOpen && (
         <>
             <div
@@ -104,7 +99,7 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                     ? !isIndividualChatsSearchInputOpen
                         ? css.open_sidebar_menu_action_container
                         : css.sidebar_search_input_container
-                    :  css.sidebar_menu_action_container
+                    : css.sidebar_menu_action_container
                 }
                 data-active={isIndividualChatOpen}
                 onClick={handleOpenIndividualChat}
@@ -127,7 +122,6 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                     )}
                 </div>
 
-
                 {isIndividualChatOpen && isIndividualChatsSearchInputOpen && isSideBarOpen ? (
                     <div className={css.sidebar_search_input}>
                         <input
@@ -142,11 +136,10 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                     </div>
                 ) : (
                     <div className={css.sidebar_menu_action_btn_tooltip}>
-                        <div>Individual Chats</div>
-                        <div
-                            className={css.show_more_btn}
-
-                        >
+                        <div className={css.section_name}>
+                            <span>Individual</span><span>Chats</span>
+                        </div>
+                        <div className={css.show_more_btn}>
                             {!isIndividualChatOpen ? "+" : "-"}
                         </div>
                     </div>
@@ -173,9 +166,10 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                                     onStartEdit={(id, name) => { setEditingChatId(id); setEditingChatValue(name); }}
                                     onChangeEdit={(id, value) => setEditingChatValue(value)}
                                     onFinishEdit={(id, newName) => { renameChat(id, newName); setEditingChatId(null); }}
-                                    onToggleExpand={setExpandedChatId}
+                                    onToggleExpand={(id) => setExpandedChatId(prev => prev === id ? null : id)}
                                     onOpenActions={e => {
                                         e.stopPropagation();
+                                        setIsShowActions(!isShowActions);
                                         setActiveChatForActions({ id: chat.id, name: chat.name, position: { top: e.clientY, left: e.clientX + 30 } });
                                     }}
                                     onTagsClick={e => {
@@ -206,11 +200,36 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                                             }}
                                             onRenameTag={(tag, name) => { renameTag(tag, name); setEditingTag(null); }}
                                             onInputChange={val => setInputValue(val)}
-                                            onKeyPressInput={e => { if(e.key === " ") {/* logic from parent */} }}
+                                            onKeyPressInput={e => {
+                                                if (e.key === " " && inputValue.trim()) {
+                                                    const query = inputValue.trim().toLowerCase();
+                                                    const matchEntry = Object.entries(TAG_META).find(([key, meta]) => {
+                                                        const tagEnum = key as ChatTagsEnum;
+                                                        const defaultName = meta.defaultName.toLowerCase();
+                                                        const customName = customTagNames.get(tagEnum)?.toLowerCase();
+                                                        return defaultName === query || customName === query;
+                                                    });
+
+                                                    if (matchEntry) {
+                                                        const tagEnum = matchEntry[0] as ChatTagsEnum;
+                                                        if (!selectedTags.includes(tagEnum)) {
+                                                            const updated = [...selectedTags, tagEnum];
+                                                            setChatTags(chat.id, updated);
+                                                            setSelectedTags(updated);
+                                                        }
+                                                    }
+                                                    setInputValue("");
+                                                    e.preventDefault();
+                                                }
+                                            }}
+                                            onStartEditTag={tag => {
+                                                setEditingTag(tag);
+                                                setEditValue(customTagNames.get(tag) ?? TAG_META[tag].defaultName);
+                                            }}
+                                            setEditValue={setEditValue}
                                         />
                                     </div>
                                 )}
-
 
                                 {isOpen && branches.length > 0 && (
                                     <div className={css.branches_list_container}>
@@ -220,31 +239,31 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                                                 <div key={branch.id} className={css.branch_item}>
                                                     <div className={css.branch_icon_and_name}>
                                                         <div>
-                                                            <BranchIcon fill="currentColor" width={16}
-                                                                        height={16} />
+                                                            <BranchIcon fill="currentColor" width={16} height={16} />
                                                         </div>
                                                         <div className={css.branch_name}>
                                                             {branch.name}
                                                         </div>
                                                     </div>
-                                                    <div
-                                                        className={css.branch_three_dots}
-                                                        onClick={handleOpenBranchMenu}>
+                                                    <div className={css.branch_three_dots} onClick={handleOpenBranchMenu}>
                                                         <ThreeDotsIcon />
                                                     </div>
 
-                                                    <CSSTransition
-                                                        in={isBranchMenuOpen && branch.id !== null}
-                                                        timeout={200}
-                                                        classNames="branchMenu"
-                                                        unmountOnExit
-                                                    >
-                                                        <AllBranchesMenu
-                                                            position={menuPosition}
-                                                            branchId={branch.id!}
-                                                            setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
-                                                        />
-                                                    </CSSTransition>
+                                                    {isBranchMenuOpen && branch.id !== null && ReactDOM.createPortal(
+                                                        <CSSTransition
+                                                            in={isBranchMenuOpen && branch.id !== null}
+                                                            timeout={200}
+                                                            classNames="branchMenu"
+                                                            unmountOnExit
+                                                        >
+                                                            <AllBranchesMenu
+                                                                position={menuPosition}
+                                                                branchId={branch.id!}
+                                                                setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
+                                                            />
+                                                        </CSSTransition>,
+                                                        document.body
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>
@@ -256,36 +275,29 @@ export const IndividualChats = ({isSideBarOpen, isSideBarMenuOpen}: IndividualCh
                 </div>
             )}
 
-            {activeChatForActions && (() => {
+            {activeChatForActions && isShowActions && (() => {
                 const { id, name, position } = activeChatForActions;
 
                 return (
-                    <CSSTransition
-                        in={Boolean(activeChatForActions)}
-                        timeout={200}
-                        classNames="branchMenu"
-                        unmountOnExit
-                    >
-                        <IndividualChatsActions
-                            position={position}
-                            onClose={() => setActiveChatForActions(null)}
-                            onRename={() => {
-                                setEditingChatId(id);
-                                setEditingChatValue(name);
-                                setActiveChatForActions(null);
-                            }}
-                            onDelete={() => {
-                                removeChat(id);
-                                setActiveChatForActions(null);
-                            }}
-                            onOpen={() => {
-                                switchChat(id);
-                                setActiveChatForActions(null);
-                            }}
-                        />
-                    </CSSTransition>
+                    <IndividualChatsActions
+                        position={position}
+                        onClose={() => setActiveChatForActions(null)}
+                        onRename={() => {
+                            setEditingChatId(id);
+                            setEditingChatValue(name);
+                            setActiveChatForActions(null);
+                        }}
+                        onDelete={() => {
+                            removeChat(id);
+                            setActiveChatForActions(null);
+                        }}
+                        onOpen={() => {
+                            switchChat(id);
+                            setActiveChatForActions(null);
+                        }}
+                    />
                 );
             })()}
         </>
-    )
-}
+    );
+};

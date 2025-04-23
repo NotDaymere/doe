@@ -2,21 +2,9 @@ import React from "react";
 import LightThemeIcon from "src/shared/icons/LightTheme.icon";
 import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
-import BoldIcon from "src/shared/icons/Bold.icon";
-import UnderlineIcon from "src/shared/icons/Underline.icon";
-import ItalicIcon from "src/shared/icons/Italic.icon";
-import FunctionIcon from "src/shared/icons/Function.icon";
-import CodeIcon from "src/shared/icons/Code.icon";
-import LinkIcon from "src/shared/icons/Link.icon";
 import { useEditorContext } from "src/shared/components/Editor";
 import { useAppStore, useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "./ui/";
-import TranslationIcon from "src/shared/icons/Translation.icon";
-import TapeIcon from "src/shared/icons/Tape.icon";
-import SharedWithYouIcon from "src/shared/icons/SharedWithYou.icon";
-import { MODE } from "src/shared/types/Chat";
-import TranslationActiveIcon from "src/shared/icons/TranslationActive.icon";
-import SharedWithYouActiveIcon from "src/shared/icons/SharedWithYouActive.icon";
 import css from "./Sidebar.module.less";
 import { Theme } from "@monaco-editor/react";
 import { SideBarMenu } from "./ui/SideBarMenu/SideBarMenu";
@@ -35,14 +23,15 @@ export const Sidebar: React.FC = () => {
     const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
     const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
     const editorState = useEditorContext(editor);
+    const {getOpenSavedPlaygrounds} = useChatStore();
     const { playground , clearCurrentChatMessages} = useChatStore();
-    const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
     const { gaiaActive, setGaiaActive, setGaiaSidebarActive } = useAppStore();
     const [theme, setTheme] = React.useState<"Light" | "Dark">("Light")
     const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false)
     const [profiles, setProfiles] = React.useState<Profile[]>(ProfileMockData);
 
     const changeProfileRef = React.useRef<HTMLDivElement>(null);
+    const changeProfileBtnRef = React.useRef<HTMLDivElement>(null);
 
     const pointerDown = (event: React.PointerEvent) => {
         event.preventDefault()
@@ -62,7 +51,9 @@ export const Sidebar: React.FC = () => {
             if (
                 isChangeProfilePanelOpen &&
                 changeProfileRef.current &&
-                !changeProfileRef.current.contains(event.target as Node)
+                !changeProfileRef.current.contains(event.target as Node) &&
+                changeProfileBtnRef.current &&
+                !changeProfileBtnRef.current.contains(event.target as Node)
             ) {
                 setIsChangeProfilePanelOpen(false);
             }
@@ -85,8 +76,12 @@ export const Sidebar: React.FC = () => {
         ? { left: theme === "Light" ? "6px" : "37px" }
         : { top: theme === "Light" ? "6px" : "37px" };
 
-    const handleOpenChangeProfilePanel = () => {
-        setIsChangeProfilePanelOpen(!isChangeProfilePanelOpen)
+    const handleOpenChangeProfilePanel = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsChangeProfilePanelOpen(prev => {
+            console.log("New state:", !prev); // Отладочный лог
+            return !prev;
+        });
     };
 
     const currentProfile = profiles.find(p => p.isCurrent);
@@ -105,14 +100,6 @@ export const Sidebar: React.FC = () => {
         <aside className={isSideBarOpen ? css.sidebar_open : css.sidebar}>
 
             <SidebarGaia />
-            {/*<button*/}
-            {/*    className={css.gaia_btn}*/}
-            {/*    onClick={toggleGaia}*/}
-            {/*    onMouseEnter={handleGaiaButtonHover}*/}
-            {/*    onMouseLeave={() => setGaiaSidebarActive(false)}*/}
-            {/*>*/}
-            {/*    <GlobalIcon />*/}
-            {/*</button>*/}
 
             <div className={css.sidebar_separator}>
                 <div className={css.inner_sidebar_separator}></div>
@@ -134,7 +121,9 @@ export const Sidebar: React.FC = () => {
                         <div
                             className={css.change_profile_btn}
                             onClick={handleOpenChangeProfilePanel}
-                            data-active={isChangeProfilePanelOpen}>
+                            data-active={isChangeProfilePanelOpen}
+                            ref={changeProfileBtnRef}
+                        >
                             <ChangeProfileIcon fill="currentColor" width={11} height={15}/>
                         </div>
                     </div>
@@ -215,7 +204,7 @@ export const Sidebar: React.FC = () => {
                 </div>
                 {isSideBarOpen && (
                     <div className={css.theme_name}>
-                        {theme} Theme
+                        <span>{theme}</span><span>Theme</span>
                     </div>
                 )}
             </div>
@@ -233,28 +222,38 @@ export const Sidebar: React.FC = () => {
                 <div className={css.sidebar_separator}>
                     <div className={css.inner_sidebar_separator}></div>
                 </div>
-                <div className={css.margin_bottom}>
+                <div>
                     <LiveTools />
                 </div>
                 <div className={css.sidebar_separator}>
                     <div className={css.inner_sidebar_separator}></div>
                 </div>
 
-
                 <div className={css.margin_bottom}>
                     <SharingTools />
                 </div>
-                <div className={css.delete_all_messages_btn_container}>
-                    <button
-                        className={css.delete_all_messages_btn}
+
+
+                <div className={ (getOpenSavedPlaygrounds().length > 0 || mode)
+                                    ? css.delete_all_messages_open_playgrounds
+                                    : css.delete_all_messages}>
+                    <div
+                        className={css.delete_all_messages_btn_container}
                         onClick={handleDeleteAllMessages}
-                    >
-                        <TrashIcon />
-                    </button>
-                    <div className={css.delete_all_messages_btn_tooltip}>
-                        Delete All Messages
+                        >
+                        <button
+                            className={css.delete_all_messages_btn}
+
+                        >
+                            <TrashIcon />
+                        </button>
+                        <div className={css.delete_all_messages_btn_tooltip}>
+                            Delete All Messages
+                        </div>
                     </div>
                 </div>
+
+
             </div>
             <div
                 className={css.sidebar_resize_handler}
@@ -263,43 +262,3 @@ export const Sidebar: React.FC = () => {
         </aside>
     );
 };
-// <button
-//                         className={clsx(css.sidebar_controls_btn, {
-//                             [css.active]: isHyperlinkInputOpen,
-//                         })}
-//                         onPointerDown={pointerDown}
-//                         onClick={() => setIsHyperlinkInputOpen(!isHyperlinkInputOpen)}
-//                     >
-//                         <LinkIcon />
-//                     </button>
-//                 </div>
-//                 <div className={css.sidebar_controls_group}>
-//                     <button
-//                         className={css.sidebar_controls_btn}
-//                         onClick={() => setMode(MODE.TRANSLATION)}
-//                     >
-//                         {mode === MODE.TRANSLATION ? (
-//                             <TranslationActiveIcon />
-//                         ) : (
-//                             <TranslationIcon />
-//                         )}
-//                     </button>
-//                     <button
-//                         className={css.sidebar_controls_btn}
-//                         onClick={() => setMode(MODE.RECORDING)}
-//                     >
-//                         {mode === MODE.RECORDING ? (
-//                             <TapeIcon className={css.activeTapeIcon} />
-//                         ) : (
-//                             <TapeIcon />
-//                         )}
-//                     </button>
-//                 </div>
-//                 <div className={css.sidebar_controls_group}>
-//                     <button
-//                         className={css.sidebar_controls_btn}
-//                         onClick={() => setIsSharingActive(true)}
-//                     >
-//                         {isSharingActive ? <SharedWithYouActiveIcon /> : <SharedWithYouIcon />}
-//                     </button>
-//                 </div>

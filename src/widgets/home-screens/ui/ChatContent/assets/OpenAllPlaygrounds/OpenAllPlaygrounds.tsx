@@ -66,7 +66,8 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
     return ReactDOM.createPortal(
             <div ref={containerRef} className={`open-all-playgrounds-container
     ${getOpenSavedPlaygrounds().length < 1 ? 'open-all-playgrounds-container-without-playground' : ''}
-    ${getOpenSavedPlaygrounds().length < 1 && isSideBarOpen ? 'playgrounds-sidebar-open' : ''}
+    ${getOpenSavedPlaygrounds().length < 1 && isSideBarOpen ? 'playgrounds-sidebar-open' : getOpenSavedPlaygrounds().length >= 1 && isSideBarOpen ? 'playgrounds-sidebar-and-playground-open' : ''}
+    
     ${!activeAllPlaygrounds ? 'close' : ''}`}>
             <div className={'open-all-playgrounds-header'}>
                 <div className={'open-all-playgrounds-header-text'}>
@@ -80,7 +81,7 @@ export default function OpenAllPlaygrounds({ changeActiveAllPlaygrounds }: OpenA
                 </button>
             </div>
             <div className={'open-all-playgrounds-content'}>
-                {savedPlaygrounds.map((savedPlayground, index) => (
+                {savedPlaygrounds.filter(p => p.type !== "source").map((savedPlayground, index) => (
                     <div
                         key={savedPlayground.id}
                         className={`open-all-playgrounds-content-example ${

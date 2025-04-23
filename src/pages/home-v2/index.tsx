@@ -16,7 +16,7 @@ import Sharing from "../../widgets/home-screens/ui/LiveTools/Sharing/Sharing";
 
 const Home = () => {
     const { isSharingActive, setIsSharingActive } = useChatStore();
-    const { gaiaSidebarActive, setGaiaSidebarActive } = useAppStore();
+    const { gaiaSidebarActive } = useAppStore();
 
     return (
         <MainLayout>
@@ -25,13 +25,13 @@ const Home = () => {
             </Helmet>
              <AddChartsAndWidgets/>
 
-                           <Comments/>
-                           <ChartWidgetsWindow/>
-                <Console/>
+               <Comments/>
+               <ChartWidgetsWindow/>
+            <Console/>
 
             <ChatLayout />
             {gaiaSidebarActive && (
-                <SidebarGaia isActive={gaiaSidebarActive} setIsActive={setGaiaSidebarActive} />
+                <SidebarGaia />
             )}
             {isSharingActive && (
                 <Sharing isActive={isSharingActive} setIsActive={setIsSharingActive} />

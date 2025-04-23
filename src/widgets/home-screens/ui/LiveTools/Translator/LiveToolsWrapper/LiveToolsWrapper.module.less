@@ -4,12 +4,23 @@
     flex-direction: column;
     justify-content: space-between;
     padding-bottom: 30px;
-    gap: 1px;
+    gap: 15px;
     overflow: auto;
+    transition: padding-left 0.3s ease-in-out;
+}
+.sidebar_open_translator {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 15px;
+  padding-left: 200px;
+  transition: padding-left 0.3s ease-in-out;
 }
 
 .magicMenu {
     position: relative;
+    display: flex;
+    justify-content: center;
 }
 
 .magicButton {
@@ -40,17 +51,23 @@
     padding: 20px;
     background-color: #f8f8f8;
     border-radius: 16px;
-    min-height: calc(100vh - 186px);
+    height: calc(100vh - 186px);
+    overflow: auto;
 }
 
+.bookmarksButtonContainer {
+    height: fit-content;
+    position: relative;
+}
 .bookmarksButton {
     height: fit-content;
+    position: fixed;
 }
 
 .bookmarks {
-    position: fixed;
-    top: 95px;
-    left: 95px;
+    position: absolute;
+    top: 0;
+    left: 0;
     z-index: 10;
 }
 
@@ -58,7 +75,7 @@
     width: calc(100% - 68px);
     display: flex;
     justify-content: center;
-    padding: 44px 116px 44px 0;
+    padding: 44px;
 }
 
 .translationArea {

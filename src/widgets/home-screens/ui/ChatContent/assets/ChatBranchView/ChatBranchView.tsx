@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import css from "./ChatBranchView.module.less";
-import { ChatMessageDate } from "../ChatMessageData/ChatMessageDate";
+import { ChatMessageDate } from "../ChatMessageDate/ChatMessageDate";
 import { ChatMessage } from "../../../ChatMessage";
 import ChatBranchSection from "../ChatBranchSection/ChatBranchSection";
 import { IBranch } from "../../../../../../shared/types/Branch";
 import { useChatStore } from "../../../../../../shared/providers";
+import ChatMainBranchSection from "../ChatMainBranchSection/ChatMainBranchSection";
 
 interface ChatBranchViewProps {
     currentBranch: IBranch;
@@ -29,7 +30,7 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                                                   setEditMsgMode,
                                                                   dialogRefs,
                                                               }) => {
-    const { activeMessage, setActiveMessage } = useChatStore();
+    const { activeMessage, setActiveMessage, getOpenSavedPlaygrounds } = useChatStore();
 
     useEffect(() => {
         if (activeMessage) {
@@ -58,13 +59,22 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                     </React.Fragment>
                 ))}
             </div>
-            <div className={css.content_chat_branch_dialogs}>
+            <div className={getOpenSavedPlaygrounds().length < 1
+                            ? css.content_chat_branch_dialogs
+                            : css.content_chat_branch_dialogs_open_playground}>
+
                 {currentBranch.dialogsMessages.map((dialog, index) => (
                     <React.Fragment key={index}>
                         <div className={css.content_chat_branch}>
-                            <ChatBranchSection isOpenBrunch={true} />
+                            {currentBranch && (
+                                <div className={css.branch_section}>
+                                    <ChatBranchSection isOpenBrunch={true} />
+                                </div>
+                                )
+                            }
                             <div className={css.content_chat_branch_dialog}>
-                                <div id={`chat-msg-${dialog.userRequest.id}`}>
+                                <div id={`chat-msg-${dialog.userRequest.id}`}
+                                    className={css.branch_message}>
                                     <ChatMessage
                                         data={dialog.userRequest}
                                         editor={editor}
@@ -72,14 +82,17 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                         setEditMsgMode={setEditMsgMode}
                                     />
                                 </div>
-                                <div id={`chat-msg-${dialog.botMessages.id}`}>
-                                    <ChatMessage
-                                        data={dialog.botMessages}
-                                        editor={editor}
-                                        editMsgMode={editMsgMode}
-                                        setEditMsgMode={setEditMsgMode}
-                                    />
-                                </div>
+                                {dialog.botMessages &&
+                                    <div id={`chat-msg-${dialog.botMessages.id}`}
+                                         className={css.branch_message}>
+                                        <ChatMessage
+                                            data={dialog.botMessages}
+                                            editor={editor}
+                                            editMsgMode={editMsgMode}
+                                            setEditMsgMode={setEditMsgMode}
+                                        />
+                                    </div>
+                                }
                             </div>
                         </div>
                     </React.Fragment>

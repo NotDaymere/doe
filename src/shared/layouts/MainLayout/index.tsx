@@ -6,6 +6,7 @@ import { Layout as BaseLayout } from "antd";
 import { Sider } from "src/components/layout";
 import MultiplePlaygroundRenderer from "src/widgets/home-screens/ui/PlaygroundRenderer/MultiplePlaygroundRenderer/MultiplePlaygroundRenderer";
 import HistoryPlayground from "../../../widgets/home-screens/ui/TablePlayground/assets/HistoryPlayground/HistoryPlayground";
+import { CSSTransition } from "react-transition-group";
 
 interface Props {
     children: React.ReactNode;
@@ -27,16 +28,30 @@ export const MainLayout: React.FC<Props> = ({
                 <div className={`children-main-layout ${((!playgroundFullscreen) || getOpenSavedPlaygrounds().length == 0) && 'children-main-layout-active'}`}>
                     {children}
                 </div>
-            {getOpenSavedPlaygrounds().length > 0 && (
-                <>
-                    <div className={`playground-sider ${playgroundFullscreen ? (openHistory? 'width-80' : 'width-100') : "width-550px"}`}>
-                        <MultiplePlaygroundRenderer />
+                {getOpenSavedPlaygrounds().length > 0 &&
+                    < >
+                    < div
+                    className={`playground-sider ${
+                    playgroundFullscreen
+                    ? openHistory
+                    ? "width-80"
+                    : "width-100"
+                    : "width-550px"
+                }`}
+                    >
+                    <MultiplePlaygroundRenderer />
                     </div>
-                    <div style={{ minWidth : "20%" }} className={`padding-left-0 ${openHistory ? "playground-sider" : "display-none"}`}>
-                        <HistoryPlayground />
-                    </div>
-                </>
-            )}
+
+                    <div
+                    className={`history-panel playground-sider ${
+                    openHistory ? "history-visible" : "history-hidden"
+                }`}
+            >
+                <HistoryPlayground />
+            </div>
+        </>
+}
+
             </BaseLayout>
         </React.Fragment>
     );

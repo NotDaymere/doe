@@ -3,6 +3,7 @@ import PenIcon from "../../../../../../shared/icons/Pen.icon";
 import TrashIcon from "../../../../../../shared/icons/Trash.icon";
 import css from "./IndividalChatsActions.module.less"
 import IndividualChatsIcon from "../../../../../../shared/icons/IndividualChatsIcon";
+import ReactDOM from "react-dom";
 
 interface IndividualChatsActionsProps {
     position: {
@@ -16,6 +17,7 @@ interface IndividualChatsActionsProps {
 }
 
 export const IndividualChatsActions = ({ position, onClose, onRename, onDelete, onOpen }: IndividualChatsActionsProps) => {
+
     const containerRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
@@ -29,7 +31,7 @@ export const IndividualChatsActions = ({ position, onClose, onRename, onDelete, 
     }, [onClose]);
 
 
-    return (
+    return ReactDOM.createPortal (
         <div
             className={css.individual_chats_actions_container}
             style={{ top: position.top, left: position.left }}
@@ -62,6 +64,7 @@ export const IndividualChatsActions = ({ position, onClose, onRename, onDelete, 
                 </div>
                 <div>Delete</div>
             </div>
-        </div>
+        </div>,
+        document.body
     )
 }

@@ -1,11 +1,11 @@
 import EyeIcon from "src/shared/icons/Eye.icon";
 import { FC, useState } from "react";
-import RotateButton from "../RotateButton";
 import PracticeIcon from "src/shared/icons/Practice.icon";
 import OctagonIcon from "src/shared/icons/Octagon.icon";
 import classNames from "classnames";
 import ArrowRightIcon from "src/shared/icons/ArrowRight.icon";
 import css from "./PracticeMode.module.less";
+import TalkingAnimation from "./TalkingAnimation";
 
 interface IProps {
     onTranslationBack: () => void;
@@ -94,12 +94,13 @@ const PracticeMode: FC<IProps> = ({ onTranslationBack, qualityLevel = 6 }) => {
                                 <EyeIcon width={22} height={14} />
                             </button>
                         </div>
-                        {/* <RotateButton onClick={() => onRotate(!isRotated)} /> */}
                     </div>
                 )}
                 {!isPracticeStopped && (
                     <div className={css.practiceInfo}>
-                        <PracticeIcon width={100} height={114} />
+                        <div className={css.talkingAnimation}>
+                            <TalkingAnimation />
+                        </div>
                         <div className={css.volumeInfo}>
                             <OctagonIcon
                                 width={28}

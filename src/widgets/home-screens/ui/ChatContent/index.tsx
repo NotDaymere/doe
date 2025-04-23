@@ -1,4 +1,5 @@
-import React, { Dispatch, useEffect } from "react";
+import React, { Dispatch, useCallback, useMemo, useEffect, useState } from "react";
+import { useEditor } from "@tiptap/react";
 import Bold from "@tiptap/extension-bold";
 import Document from "@tiptap/extension-document";
 import History from "@tiptap/extension-history";
@@ -9,7 +10,6 @@ import Text from "@tiptap/extension-text";
 import Underline from "@tiptap/extension-underline";
 
 import { useAppStore, useChatStore } from "src/shared/providers";
-import { useEditor } from "@tiptap/react";
 import {
     CustomCodeBlock,
     CustomInlineCode,
@@ -64,12 +64,12 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         showQuickSearch,
         setShowQuickSearch,
     } = useChatStore();
-    const { talkModeActive} = useAppStore();
+    const { talkModeActive, isSideBarOpen } = useAppStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
     const [isShowLogoPopup, setIsShowLogoPopup] = React.useState(false);
-    const {isSideBarOpen} = useAppStore();
 
+    const isInitialRender = React.useRef(true);
     const editor = useEditor({
         extensions: [
             Div,
@@ -93,8 +93,23 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
             createHandleTab(),
         ],
     });
+    const [activeAllPlaygrounds, setActiveAllPlaygrounds] = useState<boolean>(false);
+    const changeActiveAllPlaygrounds = () => {
+        if (!activeAllPlaygrounds) {
+            setActiveAllPlaygrounds(true);
+            return;
+        }
+        setTimeout(
+            () => setActiveAllPlaygrounds(!activeAllPlaygrounds),
+            450
+        )
+    }
 
-    const messageNodeMap = useChatStore((state) => state.messageNodeMap);
+    const [activeAllBranches, setActiveAllBranches] = useState<boolean>(false);
+    const changeActiveAllBranches = () => setActiveAllBranches(!activeAllBranches)
+
+
+    const messageNodeMap = useChatStore((state) => state.currentChat.messageNodeMap|| {});
 
     const messageQueue = React.useMemo(() => {
         return useChatStore.getState().getMessageQueueFromNode();
@@ -121,21 +136,17 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         }
     }, [isCurrentBranchOpen, currentBranchDialog, setCurrentBranchDialog]);
 
-    const scrollToBottom = () => {
+    const scrollToBottom = useCallback(() => {
         if (chatRef.current) {
-            chatRef.current.scrollTo({
-                top: chatRef.current.scrollHeight,
-                behavior: "smooth",
-            });
+            chatRef.current.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" });
         }
-    };
+    }, [chatRef]);
 
-    const handleScroll = () => {
-        if (chatRef.current) {
-            const { scrollTop, clientHeight, scrollHeight } = chatRef.current;
-            setShowScrollDownBtn(scrollTop + clientHeight < scrollHeight - 50);
-        }
-    };
+    const handleScroll = useCallback(() => {
+        if (!chatRef.current) return;
+        const { scrollTop, clientHeight, scrollHeight } = chatRef.current;
+        setShowScrollDownBtn(scrollTop + clientHeight < scrollHeight - 50);
+    }, [chatRef]);
 
     React.useEffect(() => {
         const currentChat = chatRef.current;
@@ -149,15 +160,52 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         };
     }, [chatRef]);
 
+    React.useLayoutEffect(() => {
+        const container = chatRef.current;
+        if (container && isInitialRender.current && !isCurrentBranchOpen) {
+            container.style.scrollBehavior = "auto";
+            container.scrollTop = container.scrollHeight;
+            container.style.scrollBehavior = "smooth";
+            isInitialRender.current = false;
+        }
+    }, [isCurrentBranchOpen]);
+
     React.useEffect(() => {
-        const currentChat = chatRef.current;
-        if (currentChat) {
-            const { scrollTop, clientHeight, scrollHeight } = currentChat;
-            if (scrollTop + clientHeight >= scrollHeight - 50) {
-                scrollToBottom();
+        if (isCurrentBranchOpen) {
+            const container = chatRef.current;
+            if (container) {
+                container.style.scrollBehavior = "auto";
+                container.scrollTop = 0;
+                container.style.scrollBehavior = "smooth";
             }
         }
-    }, [messageQueue]);
+    }, [isCurrentBranchOpen]);
+
+    React.useEffect(() => {
+        if (isCurrentBranchOpen) return;
+        if (!chatRef.current) return;
+        const container = chatRef.current;
+        let prevScrollHeight = container.scrollHeight;
+        let stableCount = 0;
+        const maxStableCount = 1;
+
+        const intervalId = setInterval(() => {
+            const currentScrollHeight = container.scrollHeight;
+            if (currentScrollHeight === prevScrollHeight) {
+                stableCount++;
+                if (stableCount >= maxStableCount) {
+                    container.scrollTop = currentScrollHeight;
+                    clearInterval(intervalId);
+                }
+            } else {
+                stableCount = 0;
+                prevScrollHeight = currentScrollHeight;
+                container.scrollTop = currentScrollHeight;
+            }
+        }, 900);
+
+        return () => clearInterval(intervalId);
+    }, [messageQueue.length, isCurrentBranchOpen]);
 
     useEffect(() => {
         const handleKeyDown = (event: any) => {
@@ -210,31 +258,41 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         dialogRefs={dialogRefs}
                     />
                 )}
-                {/*{!isCurrentBranchOpen && (*/}
-                {/*    <div className={getOpenSavedPlaygrounds().length <= 0*/}
-                {/*        ? !isSideBarOpen*/}
-                {/*            ? css.logoWrapper*/}
-                {/*            : css.logoWrapperSideBarOpen*/}
-                {/*        : !isSideBarOpen*/}
-                {/*            ? css.logoWrapperPlaygroundOpen*/}
-                {/*            : css.logoWrapperPlaygroundAndSideBarOpen}>*/}
-                {/*        {!playgroundFullscreen && (*/}
-                {/*            <div className={css.logoPopup}>*/}
-                {/*                <div className={css.allPlaygroundsWrapper}>*/}
-                {/*                    <AllPlaygrounds />*/}
-                {/*                </div>*/}
-                {/*                <div className={css.allBranchesContainer}>*/}
-                {/*                    <AllBranches />*/}
-                {/*                </div>*/}
-                {/*            </div>*/}
-                {/*        )}*/}
-                {/*    </div>*/}
-                {/*)}*/}
+                {!isCurrentBranchOpen && (
+                    <div className={getOpenSavedPlaygrounds().length <= 0
+                                    ? !isSideBarOpen
+                                        ? css.logoWrapper
+                                        : css.logoWrapperSideBarOpen
+                                    : !isSideBarOpen
+                                        ? css.logoWrapperPlaygroundOpen
+                                        : css.logoWrapperPlaygroundAndSideBarOpen}>
+                            {!playgroundFullscreen && (
+                                <div className={css.logoPopup}
+                                    data-active={activeAllPlaygrounds || activeAllBranches}>
+                                    <div className={css.allPlaygroundsWrapper}>
+                                        <AllPlaygrounds
+                                            activeAllPlaygrounds={activeAllPlaygrounds}
+                                            changeActiveAllPlaygrounds={changeActiveAllPlaygrounds}
+                                        />
+                                    </div>
+                                    <div className={css.allBranchesContainer}>
+                                        <AllBranches
+                                            activeAllBranches={activeAllBranches}
+                                            changeActiveAllBranches={changeActiveAllBranches}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                    </div>
+                )}
+
 
                 {!talkModeActive && !playgroundFullscreen && !isCurrentBranchOpen &&
-                    <Reflections/>
+                    <Reflections />
                 }
+
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
+
 
                 <TalkMode targetRef={chatRef} />
                 {/*<div className={css.actions}>*/}
