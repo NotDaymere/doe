@@ -1,6 +1,4 @@
-"use client";
-
-import { createContext, useState, useContext, useRef, useEffect } from "react";
+import React, { createContext, useState, useContext, useRef } from "react";
 import CodingLanguageMenu from "./Components/CodingLanguageMenu/CodingLanguageMenu";
 import ConsoleWindow from "./Components/Consolewindow/ConsoleWindow";
 import Draggable from "react-draggable";
@@ -27,9 +25,6 @@ function Console() {
     const [numberOfConsole, setNumberOfConsole] = useState(1);
     const [consoleIcon, setConsoleIcon] = useState("");
     const nodeRef = useRef<HTMLDivElement>(null);
-    const menuButtonRef = useRef<HTMLButtonElement>(null);
-    const menuRef = useRef<HTMLDivElement>(null);
-
     const toggleMenu = () => setShowMenu((prev) => !prev);
     const hideConsole = () => setIsVisible(false);
     const splitConsole = () => {
@@ -44,32 +39,6 @@ function Console() {
 
     const isResizing = useRef(false);
     const resizeDirection = useRef("");
-
-    // Add click outside listener to close the menu
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            // If menu is shown and click is outside menu and not on the toggle button
-            if (
-                showMenu &&
-                menuRef.current &&
-                !menuRef.current.contains(event.target as Node) &&
-                menuButtonRef.current &&
-                !menuButtonRef.current.contains(event.target as Node)
-            ) {
-                setShowMenu(false);
-            }
-        };
-
-        // Add event listener when menu is shown
-        if (showMenu) {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
-
-        // Clean up event listener
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [showMenu]);
 
     const handleMouseDown = (e: any, direction: any) => {
         e.preventDefault();
@@ -133,7 +102,7 @@ function Console() {
                                 <p className="">Console</p>
                             </div>
                             <div className="right_buttons">
-                                <button ref={menuButtonRef} onClick={toggleMenu}>
+                                <button onClick={toggleMenu}>
                                     <img src="/img/console/code.svg" />
                                 </button>
                                 <button onClick={splitConsole}>
@@ -146,18 +115,16 @@ function Console() {
                                     <img src="/img/console/hide.svg" />
                                 </button>
                             </div>
-                            {showMenu && (
-                                <CodingLanguageMenu
-                                    ref={menuRef}
-                                    onSelectLanguage={() => setShowMenu(false)}
-                                />
-                            )}
+                            {showMenu && <CodingLanguageMenu />}
                         </div>
                         <div
                             ref={consoleRef}
                             style={{ width: dimensions.width, height: dimensions.height }}
                         >
                             <div className="consoleWidowTabContainer">
+                                {/* <ConsoleWindow />
+                            <ConsoleWindow /> */}
+
                                 {[...Array(numberOfConsole)].map((_, i) => {
                                     return (
                                         <ConsoleWindow
