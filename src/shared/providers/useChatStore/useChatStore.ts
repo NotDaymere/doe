@@ -112,7 +112,7 @@ const initialMessagesChat2: IMessage[] = [
         id: 102,
         content: "<p>This is a mock reply in Chat 02. Enjoy your conversation!</p>",
         files: [],
-        isCode: false,
+        isCode: true,
         isUser: false,
     },
 ];

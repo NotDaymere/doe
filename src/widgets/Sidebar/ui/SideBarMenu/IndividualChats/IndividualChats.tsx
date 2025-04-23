@@ -14,6 +14,7 @@ import { ChatTagsPanel } from "./ChatTagsPanel/ChatTagsPanel";
 import { ChatItem } from "./ChatItem/ChatItem";
 import ReactDOM from "react-dom";
 import { TAG_META } from "../SideBarMenu";
+import { IChat } from "../../../../../shared/types/Chat";
 
 interface IndividualChatsProps {
     isSideBarOpen: boolean;
@@ -30,6 +31,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         switchChat,
         renameChat,
         removeChat,
+        addChat,
     } = useChatStore();
 
     const [isIndividualChatsSearchInputOpen, setIsIndividualChatsSearchInputOpen] = useState(false);
@@ -91,6 +93,43 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         }
         setInputValue("");
     }, [activeTagPanel, chats]);
+
+    const handleRenameChat = (id: string, name: string) => {
+        setEditingChatId(id);
+        setEditingChatValue(name);
+        setActiveChatForActions(null);
+    };
+
+    const handleDeleteChat = (id: string) => {
+        let newChat: IChat;
+        if (chats[chats.length - 1].id !== id) {
+            newChat = chats[chats.length - 1];
+            switchChat(newChat.id);
+        } else if (chats.length > 2) {
+            newChat = chats[chats.length - 2];
+            switchChat(newChat.id);
+        } else if (chats.length <= 1) {
+            newChat = {
+                id: `chat-${Date.now()}`,
+                name: "New Chat",
+                messageNodeMap: {
+                    root: { id: "root", isRootNode: true, children: [] },
+                },
+                tags: [],
+                notificationsCount: 0,
+                branches: [],
+            };
+            addChat(newChat);
+            switchChat(newChat.id);
+        }
+        removeChat(id);
+        setActiveChatForActions(null);
+    };
+
+    const handleOpenChat = (id: string) => {
+        switchChat(id);
+        setActiveChatForActions(null);
+    };
 
     return isSideBarMenuOpen && (
         <>
@@ -282,19 +321,9 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                     <IndividualChatsActions
                         position={position}
                         onClose={() => setActiveChatForActions(null)}
-                        onRename={() => {
-                            setEditingChatId(id);
-                            setEditingChatValue(name);
-                            setActiveChatForActions(null);
-                        }}
-                        onDelete={() => {
-                            removeChat(id);
-                            setActiveChatForActions(null);
-                        }}
-                        onOpen={() => {
-                            switchChat(id);
-                            setActiveChatForActions(null);
-                        }}
+                        onRename={() => handleRenameChat(id, name)}
+                        onDelete={() => handleDeleteChat(id)}
+                        onOpen={() => handleOpenChat(id)}
                     />
                 );
             })()}
