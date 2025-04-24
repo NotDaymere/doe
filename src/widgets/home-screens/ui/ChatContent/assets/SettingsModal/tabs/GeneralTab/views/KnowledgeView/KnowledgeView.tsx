@@ -112,9 +112,8 @@ export const KnowledgeView = ({ back }: KnowledgeViewProps) => {
 			</div >
 			<div className={styles['knowledge__content-container']}>
 				<UploadArea onCompleteUpload={file => {
-					console.log(' KnowledgeView ~ file:', file)
 
-					setData(prev => ({ ...prev, recentFiles: [Object.assign(file, { folderId: null }), ...data.recentFiles] }))
+					setData(prev => ({ ...prev, recentFiles: [Object.assign(file, { folderId: null }), ...prev.recentFiles] }))
 				}} />
 				<div className={classNames(styles.knowledge__section, styles['knowledge__section-folders'])}>
 					<h3 className={styles['knowledge__section-title']}>Folders</h3>

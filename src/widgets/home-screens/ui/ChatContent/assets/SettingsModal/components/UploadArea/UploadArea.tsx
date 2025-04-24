@@ -13,7 +13,7 @@ type UploadAreaProps = {
 }
 
 export const UploadArea = ({ onCompleteUpload }: UploadAreaProps) => {
-	const [file, setFile] = useState<FileWithId | null>(null);
+	const [files, setFiles] = useState<FileWithId[] | null>(null);
 	const {
 		drag,
 		handleDragDropTarget,
@@ -22,7 +22,10 @@ export const UploadArea = ({ onCompleteUpload }: UploadAreaProps) => {
 		handleDragStart,
 	} = useDragFile({
 		onUploadFiles(uploadFiles) {
-			setFile(uploadFiles[0]);
+			setFiles(uploadFiles.filter(file => {
+				const fileExtension = file.name.split('.').pop()?.toLowerCase();
+				return fileExtension === 'pdf' || fileExtension === 'doc' || fileExtension === 'txt' || fileExtension === 'docx';
+			}));
 			console.log(uploadFiles);
 		},
 	});
@@ -34,7 +37,9 @@ export const UploadArea = ({ onCompleteUpload }: UploadAreaProps) => {
 				onDragOver={handleDragOverTarget}
 				onDrop={handleDragDropTarget}
 				onDragLeave={handleDragLeaveTarget}
-				onFileChange={(file) => setFile(file)}
+				fileType=".pdf,.doc,.txt, .docx"
+				multiple
+				onMultipleFilesChange={(files) => { console.log('files', files); setFiles(files) }}
 			>
 				<div className={styles['upload-area-icon']}><FileFilledIcon /></div>
 				<div className={clsx(styles['upload-area-drag'], drag && styles['upload-area-drag--dragging'])}>
@@ -45,7 +50,8 @@ export const UploadArea = ({ onCompleteUpload }: UploadAreaProps) => {
 				<p className={styles['upload-area-description']}>
 					<span className={styles['upload-area-description-strong']}>Click to upload</span> or drag and drop PDF,<br /> DOC or TXT (1GB max file size)</p>
 			</UploadButton>
-			<UploadProgress file={file} onClear={() => setFile(null)} onCompleteUpload={onCompleteUpload} />
+			{files && files.map((file) => (<UploadProgress key={file.id} file={file} onClear={() => setFiles(null)} onCompleteUpload={onCompleteUpload} />))}
+
 		</>
 	)
 }
