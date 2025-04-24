@@ -60,30 +60,30 @@ export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
 		<div className={styles.profileTab__container}>
 			<ContentHeader>Edit profile info</ContentHeader>
 			<div className={styles.profileTab__content}>
-				<div className={styles['profileTab__user-info-container']}>
-					<p className={styles['profileTab__user-info-title']}>Profile photo</p>
+				<div className={styles.profileTab__userInfo__container}>
+					<p className={styles.profileTab__userInfo__title}>Profile photo</p>
 					<ChangeProfilePhoto currentPhoto={formData.imgSrc} onImageChange={handleImageChange} />
 				</div>
-				<div className={styles['profileTab__user-info-container']}>
-					<p className={styles['profileTab__user-info-title']}>Profile Name </p>
-					<div className={styles['profileTab__user-info-content']}>
-						<input name='username' value={formData.username} className={styles['profileTab__user-info-input']} type="text" placeholder='Type Profile Name' onChange={handleChange} ref={inputRefs.current.username} />
-						<button tabIndex={1} className={styles['profileTab__user-info-input-reset']} onMouseDown={e => e.preventDefault()} onClick={() => handleClearField('username')}><CrossIcon /></button>
+				<div className={styles.profileTab__userInfo__container}>
+					<p className={styles.profileTab__userInfo__title}>Profile Name </p>
+					<div className={styles.profileTab__userInfo__content}>
+						<input name='username' value={formData.username} className={styles.profileTab__userInfo__input} type="text" placeholder='Type Profile Name' onChange={handleChange} ref={inputRefs.current.username} />
+						<button tabIndex={1} className={styles.profileTab__userInfo__inputReset} onMouseDown={e => e.preventDefault()} onClick={() => handleClearField('username')}><CrossIcon /></button>
 					</div>
 				</div>
-				<div className={styles['profileTab__user-info-container']}>
-					<p className={styles['profileTab__user-info-title']}>Email address</p>
-					<div className={styles['profileTab__user-info-content']}>
-						<input name='email' value={formData.email} className={styles['profileTab__user-info-input']} type="text" placeholder='Type Email address' onChange={handleChange} ref={inputRefs.current.email} />
-						<button tabIndex={0} className={styles['profileTab__user-info-input-reset']} onMouseDown={e => e.preventDefault()} onClick={() => handleClearField('email')}><CrossIcon /></button>
+				<div className={styles.profileTab__userInfo__container}>
+					<p className={styles.profileTab__userInfo__title}>Email address</p>
+					<div className={styles.profileTab__userInfo__content}>
+						<input name='email' value={formData.email} className={styles.profileTab__userInfo__input} type="text" placeholder='Type Email address' onChange={handleChange} ref={inputRefs.current.email} />
+						<button tabIndex={0} className={styles.profileTab__userInfo__inputReset} onMouseDown={e => e.preventDefault()} onClick={() => handleClearField('email')}><CrossIcon /></button>
 					</div>
 				</div>
 			</div>
-			<div className={styles['profileTab__footer']}>
+			<div className={styles.profileTab__footer}>
 
-				<div className={styles['profileTab__footer-content']}>
-					<button className={modalStyles['settingsModal__cancel-btn']} onClick={onClose} >Cancel</button>
-					<button className={styles['profileTab__save-btn']} disabled={!isDirty} onClick={onSaveChanges} >
+				<div className={styles.profileTab__footer__content}>
+					<button className={modalStyles.settingsModal__cancelBtn} onClick={onClose} >Cancel</button>
+					<button className={styles.profileTab__saveBtn} disabled={!isDirty} onClick={onSaveChanges} >
 						<GeneralSettingsIcon />
 						<span>Save changes</span>
 					</button>

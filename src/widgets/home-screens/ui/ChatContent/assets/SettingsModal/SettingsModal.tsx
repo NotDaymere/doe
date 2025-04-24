@@ -38,7 +38,12 @@ export const SettingsModal = ({ onClose, isOpen = false, currentProfile, profile
 		<>
 			<div className={styles.settingsModal__backdrop} onClick={onClose} />
 			<div className={styles.settingsModal__container}>
-				<div className={styles.settingsModal__header}><h2 className={styles.settingsModal__title}>Settings</h2><button className={styles.settingsModal__closeButton} onClick={onClose}><CrossIcon /></button></div>
+				<div className={styles.settingsModal__header}>
+					<h2 className={styles.settingsModal__title}>Settings</h2>
+					<button className={styles.settingsModal__closeButton} onClick={onClose}>
+						<CrossIcon />
+					</button>
+				</div>
 				<div className={styles.settingsModal__content} >
 					<div className={styles.settingsModal__tabsContainer}>{
 						settingsTabsList.map(({ name, icon }, index) => {

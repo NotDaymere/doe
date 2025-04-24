@@ -3,14 +3,14 @@
     flex-direction: column;
     height: 100%;
     &__header {
-        &-container {
+        &__container {
             display: flex;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid rgba(181, 181, 181, 0.2);
             padding: 14px 18px 11px;
         }
-        &-title {
+        &__title {
             color: rgb(31, 31, 31);
             font-family: "Sohne";
             font-size: 16px;
@@ -18,7 +18,7 @@
             line-height: 21px;
         }
     }
-    &__content-container {
+    &__content__container {
         display: flex;
         flex-direction: column;
         padding: 12px 18px;
@@ -26,24 +26,26 @@
         overflow-y: auto;
         gap: 12px;
     }
+    &__section {
+        &__folders:hover div > button:last-child {
+            opacity: 1;
+        }
+        &__title {
+            color: rgb(91, 91, 91);
+            font-family: "Sohne", sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1.19rem;
+            margin-bottom: 8px;
+        }
+    }
 
-    &__section-folders:hover div > button:last-child {
-        opacity: 1;
-    }
-    &__section-title {
-        color: rgb(91, 91, 91);
-        font-family: "Sohne", sans-serif;
-        font-size: 0.875rem;
-        font-weight: 600;
-        line-height: 1.19rem;
-        margin-bottom: 8px;
-    }
-    &__folder-section {
+    &__folder__section {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 8px;
     }
-    &__files-section {
+    &__files__section {
         max-width: 100%;
         display: grid;
         grid-template-columns: repeat(4, 1fr);

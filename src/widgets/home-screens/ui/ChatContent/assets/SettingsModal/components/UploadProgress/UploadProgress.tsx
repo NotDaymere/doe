@@ -57,14 +57,14 @@ export const UploadProgress = ({ file, onClear, onCompleteUpload }: UploadProgre
 
 	return (
 		<div className={clsx(styles.uploadProgress__container, complete && styles['uploadProgress__container--complete'])}>
-			<div className={styles['uploadProgress__file-icon-wrapper']}><FileFilledIcon /></div>
+			<div className={styles.uploadProgress__file__iconWrapper}><FileFilledIcon /></div>
 			<div className={styles.uploadProgress__info}>
-				<div className={styles['uploadProgress__file-info']}>
-					<p className={styles['uploadProgress__file-name']}>{file.name} </p>
+				<div className={styles.uploadProgress__file__info}>
+					<p className={styles.uploadProgress__file__name}>{file.name} </p>
 					{complete && <FileUploadSuccessIcon />}
 				</div>
 				<div className={styles.uploadProgress__progress}>
-					<p className={styles['uploadProgress__file-size']}>{calculateSize(file.size)}mb</p>
+					<p className={styles.uploadProgress__file__size}>{calculateSize(file.size)}mb</p>
 					{status === 'uploading' && <p className={styles.uploadProgress__percentage}>{progress}%</p>}
 				</div>
 				<div className={clsx(styles.uploadProgress__progressBar, status === 'uploading' && styles['uploadProgress__progressBar--uploading'])}>

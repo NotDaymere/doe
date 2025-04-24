@@ -12,10 +12,10 @@ type AppIntegrationItemProps = {
 export const AppIntegrationItem = ({ icon, title, description, onDisconnectClick }: AppIntegrationItemProps) => {
 	return (
 		<div>
-			<div className={styles.appIntegrationItem__headerContainer}>
-				<div className={styles.appIntegrationItem__headerIcon}>{icon}</div>
-				<p className={styles.appIntegrationItem__headerTitle}>{title}</p>
-				<button className={clsx(modalStyles['settingsModal__delete-btn'], styles.appIntegrationItem__headerDisconnect)}>Disconnect</button>
+			<div className={styles.appIntegrationItem__header__container}>
+				<div className={styles.appIntegrationItem__header__icon}>{icon}</div>
+				<p className={styles.appIntegrationItem__header__title}>{title}</p>
+				<button className={clsx(modalStyles.settingsModal__deleteBtn, styles.appIntegrationItem__header__disconnect)}>Disconnect</button>
 			</div>
 			<p className={styles.appIntegrationItem__description}>{description}</p>
 		</div>

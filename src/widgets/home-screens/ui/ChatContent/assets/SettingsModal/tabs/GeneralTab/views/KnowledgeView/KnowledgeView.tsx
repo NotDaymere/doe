@@ -106,18 +106,18 @@ export const KnowledgeView = ({ back }: KnowledgeViewProps) => {
 		onMoveToFolder={moveFileToFolder} />
 	return (
 		<div className={styles.knowledge}>
-			<div className={styles['knowledge__header-container']}>
-				<h2 className={styles['knowledge__header-title']}>Knowledge</h2>
-				<button className={modalStyles['settingsModal__cancel-btn']} onClick={back}>Back to general settings</button>
+			<div className={styles.knowledge__header__container}>
+				<h2 className={styles.knowledge__header__title}>Knowledge</h2>
+				<button className={modalStyles.settingsModal__cancelBtn} onClick={back}>Back to general settings</button>
 			</div >
-			<div className={styles['knowledge__content-container']}>
+			<div className={styles.knowledge__content__container}>
 				<UploadArea onCompleteUpload={file => {
 
 					setData(prev => ({ ...prev, recentFiles: [Object.assign(file, { folderId: null }), ...prev.recentFiles] }))
 				}} />
-				<div className={classNames(styles.knowledge__section, styles['knowledge__section-folders'])}>
-					<h3 className={styles['knowledge__section-title']}>Folders</h3>
-					<div className={styles['knowledge__folder-section']}>
+				<div className={classNames(styles.knowledge__section, styles.knowledge__section__folders)}>
+					<h3 className={styles.knowledge__section__title}>Folders</h3>
+					<div className={styles.knowledge__folder__section}>
 						{data.folders.map(folder => (
 							<Folder
 								key={folder.id}
@@ -133,8 +133,8 @@ export const KnowledgeView = ({ back }: KnowledgeViewProps) => {
 					</div>
 				</div>
 				<div className={styles.knowledge__section}>
-					<h3 className={styles['knowledge__section-title']}>Recent Files</h3>
-					<div className={styles['knowledge__files-section']}>
+					<h3 className={styles.knowledge__section__title}>Recent Files</h3>
+					<div className={styles.knowledge__files__section}>
 						{data.recentFiles.map(file => (
 							<File
 								key={file.id}

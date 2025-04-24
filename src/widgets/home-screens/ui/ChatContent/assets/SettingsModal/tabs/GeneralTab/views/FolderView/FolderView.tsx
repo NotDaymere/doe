@@ -15,13 +15,13 @@ type FolderViewProps = {
 
 export const FolderView = ({ folder, back, folders, onDelete, onMoveToFolder }: FolderViewProps) => {
 	return <div className={styles.folderView}>
-		<div className={styles['folderView__header-container']}>
+		<div className={styles.folderView__header__container}>
 			<FolderIcon />
-			<h2 className={styles['folderView__header-title']}>{folder.name}</h2>
-			<button className={modalStyles['settingsModal__cancel-btn']} onClick={back}>Back</button>
+			<h2 className={styles.folderView__header__title}>{folder.name}</h2>
+			<button className={modalStyles.settingsModal__cancelBtn} onClick={back}>Back</button>
 		</div >
-		<div className={styles['folderView__content-container']}>
-			<div className={styles['folderView__content']}>
+		<div className={styles.folderView__content__container}>
+			<div className={styles.folderView__content}>
 				{folder.files.map(file => {
 					return <File key={file.id} folders={folders} file={file} onDelete={() => onDelete(file.id)} onMoveToFolder={(folderId) => onMoveToFolder(file.id, folderId)} />
 				})}

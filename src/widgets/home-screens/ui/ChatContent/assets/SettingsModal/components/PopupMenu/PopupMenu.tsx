@@ -1,5 +1,5 @@
-import { forwardRef, useEffect, useRef, useState } from 'react';
-import styles from './File.module.less';
+import { useEffect, useRef, useState } from 'react';
+import styles from './PopupMenu.module.less';
 import { MoveToFolderIcon } from 'src/shared/icons/MoveToFolderIcon';
 import { PenIcon } from 'src/shared/icons/PenIcon';
 import TrashIcon from 'src/shared/icons/Trash.icon';
@@ -7,7 +7,7 @@ import { FolderType } from '../../tabs/GeneralTab/views/KnowledgeView/KnowledgeV
 import { createPortal } from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 
-type FileMenuProps = {
+type PopupMenuProps = {
 	children: React.ReactNode;
 	className?: string;
 	folders: FolderType[]
@@ -23,7 +23,7 @@ type MenuState = {
 
 const ANIMATION_DURATION = 300
 
-export const FileMenu = ({ children, className, folders, onDelete, onMoveToFolder }: FileMenuProps) => {
+export const PopupMenu = ({ children, className, folders, onDelete, onMoveToFolder }: PopupMenuProps) => {
 	const [menuState, setMenuState] = useState<MenuState>({ active: false, position: null, anchorRect: null });
 
 	const menuRef = useRef<HTMLDivElement>(null);
@@ -46,7 +46,6 @@ export const FileMenu = ({ children, className, folders, onDelete, onMoveToFolde
 		}, ANIMATION_DURATION);
 	};
 	useEffect(() => {
-
 		const handleClickOutside = (e: MouseEvent) => {
 			const target = e.target as Node;
 			if (menuRef.current && !menuRef.current.contains(target) &&
@@ -101,7 +100,6 @@ export const FileMenu = ({ children, className, folders, onDelete, onMoveToFolde
 				mountOnEnter
 				unmountOnExit
 			>
-
 				<div ref={menuRef} style={{
 					top: menuState.position?.top,
 					left: menuState.position?.left,
@@ -115,7 +113,7 @@ export const FileMenu = ({ children, className, folders, onDelete, onMoveToFolde
 						<p>Move</p>
 						{!!folders.length && <div className={styles.menu__submenu}>
 							{folders.map((folder) => (
-								<button key={folder.id} className={styles['menu__submenu-item']} onClick={() => handleMoveToFolder(folder.id)}><span>{folder.name}</span></button>
+								<button key={folder.id} className={styles.menu__submenu__item} onClick={() => handleMoveToFolder(folder.id)}><span>{folder.name}</span></button>
 							))}
 						</div>
 						}

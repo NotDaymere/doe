@@ -1,19 +1,10 @@
-import { CSSTransition } from 'react-transition-group'
 import { calculateSize } from '../../utils/calculateFileSize'
 import { FileWithId } from '../UploadButton'
 import styles from './File.module.less'
 import FileFilledIcon from 'src/shared/icons/FileFilled.icon'
-import { useEffect, useRef, useState } from 'react'
 import { MenuDotsIcon } from 'src/shared/icons/MenuDotsIcon'
-import { FileMenu } from './FileMenu'
-import { createPortal } from 'react-dom'
 import { FolderType } from '../../tabs/GeneralTab/views/KnowledgeView/KnowledgeView'
-const ANIMATION_DURATION = 300
-type MenuState = {
-	active: boolean;
-	position: { top: number; left: number } | null;
-	anchorRect: DOMRect | null;
-}
+import { PopupMenu } from '../PopupMenu/PopupMenu'
 
 export type FileProps = {
 	file: FileWithId
@@ -29,19 +20,19 @@ export const File = ({ file, onDelete, folders, onMoveToFolder }: FileProps) => 
 
 	return <div className={styles.file}>
 
-		<FileMenu
+		<PopupMenu
 			folders={folders}
-			className={styles['file__menu-btn']}
+			className={styles.file__menuBtn}
 			onDelete={() => onDelete()}
 			onMoveToFolder={(folderId) => {
 				onMoveToFolder(folderId)
 			}}
 		>
 			<MenuDotsIcon />
-		</FileMenu>
+		</PopupMenu>
 
-		<div className={styles['file__icon-container']}><FileFilledIcon /></div>
-		<div className={styles['file__name-container']}><p className={styles.file__name}>{fileName}</p>.<p>{fileExtension}</p></div>
+		<div className={styles.file__iconContainer}><FileFilledIcon /></div>
+		<div className={styles.file__nameContainer}><p className={styles.file__name}>{fileName}</p>.<p>{fileExtension}</p></div>
 		<p className={styles.file__size}>{calculateSize(file.size)}mb</p>
 	</div>
 }

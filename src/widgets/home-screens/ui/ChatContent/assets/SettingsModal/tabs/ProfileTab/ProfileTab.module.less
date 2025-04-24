@@ -9,8 +9,8 @@
         padding: 0 18px;
         height: 100%;
     }
-    &__user-info {
-        &-container {
+    &__userInfo {
+        &__container {
             display: flex;
             gap: 8px;
             align-items: center;
@@ -20,7 +20,7 @@
                 border-bottom: none;
             }
         }
-        &-title {
+        &__title {
             flex: 1;
             color: rgb(91, 91, 91);
             font-family: "Sohne";
@@ -28,7 +28,7 @@
             font-weight: 600;
             line-height: 1.2rem;
         }
-        &-content {
+        &__content {
             position: relative;
             display: flex;
             align-items: center;
@@ -36,7 +36,7 @@
             flex: 0;
             min-width: 308px;
         }
-        &-photo {
+        &__photo {
             flex: 0 0 72px;
             height: 72px;
             img {
@@ -45,11 +45,11 @@
                 border-radius: 50%;
             }
         }
-        &-control {
+        &__control {
             display: flex;
             gap: 8px;
         }
-        &-add-photo {
+        &__addPhoto {
             display: flex;
             align-items: center;
             gap: 4px;
@@ -71,7 +71,7 @@
             }
         }
 
-        &-input {
+        &__input {
             border: 1px solid rgba(181, 181, 181, 0.2);
             border-radius: 8px;
             padding: 10px 10px 10px 12px;
@@ -96,7 +96,7 @@
             &:focus ~ &-reset {
                 display: flex;
             }
-            &-reset {
+            &Reset {
                 position: absolute;
                 display: none;
                 right: 12px;
@@ -116,7 +116,7 @@
     &__footer {
         padding: 18.5px 18px 18px;
         border-top: 1px solid rgba(181, 181, 181, 0.2);
-        &-content {
+        &__content {
             display: flex;
             gap: 8px;
             justify-content: flex-end;
@@ -124,7 +124,7 @@
         }
     }
 
-    &__save-btn {
+    &__saveBtn {
         display: flex;
         align-items: start;
         gap: 3px;

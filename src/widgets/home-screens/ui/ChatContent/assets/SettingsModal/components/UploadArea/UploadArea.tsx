@@ -32,7 +32,7 @@ export const UploadArea = ({ onCompleteUpload }: UploadAreaProps) => {
 	return (
 		<>
 			<UploadButton
-				className={clsx(styles['upload-area'], drag && styles['upload-area--dragging'])}
+				className={clsx(styles.uploadArea, drag && styles['uploadArea--dragging'])}
 				onDragStart={handleDragStart}
 				onDragOver={handleDragOverTarget}
 				onDrop={handleDragDropTarget}
@@ -41,14 +41,14 @@ export const UploadArea = ({ onCompleteUpload }: UploadAreaProps) => {
 				multiple
 				onMultipleFilesChange={(files) => { console.log('files', files); setFiles(files) }}
 			>
-				<div className={styles['upload-area-icon']}><FileFilledIcon /></div>
-				<div className={clsx(styles['upload-area-drag'], drag && styles['upload-area-drag--dragging'])}>
-					<div className={clsx(styles['upload-area-drag-icon'])} ><FileIcon /><HandCursorIcon className={styles['upload-area-hand-icon']} /></div>
-					<div className={clsx(styles['upload-area-drag-glow'])} />
+				<div className={styles.uploadArea__icon}><FileFilledIcon /></div>
+				<div className={clsx(styles.uploadArea__drag, drag && styles['uploadArea__drag--dragging'])}>
+					<div className={clsx(styles.uploadArea__dragIcon)} ><FileIcon /><HandCursorIcon className={styles.uploadArea__handIcon} /></div>
+					<div className={clsx(styles.uploadArea__dragGlow)} />
 				</div>
 
-				<p className={styles['upload-area-description']}>
-					<span className={styles['upload-area-description-strong']}>Click to upload</span> or drag and drop PDF,<br /> DOC or TXT (1GB max file size)</p>
+				<p className={styles.uploadArea__description}>
+					<span className={styles.uploadArea__description__strong}>Click to upload</span> or drag and drop PDF,<br /> DOC or TXT (1GB max file size)</p>
 			</UploadButton>
 			{files && files.map((file) => (<UploadProgress key={file.id} file={file} onClear={() => setFiles(null)} onCompleteUpload={onCompleteUpload} />))}
 
