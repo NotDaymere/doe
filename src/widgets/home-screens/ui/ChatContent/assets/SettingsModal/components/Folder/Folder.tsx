@@ -42,8 +42,8 @@ export const Folder = ({ name, size, color, onClick, onDelete, onRename }: Folde
 			<button className={styles.folder__delete} onClick={onDelete}><TrashIcon /></button>
 		</div>
 		<div className={styles.folder__info}>
-			<input ref={inputRef} readOnly={!edit} defaultValue={name} onBlur={e => onRename(e.currentTarget.value || name)} style={{ color: increaseSaturation(color, 20) }} className={styles.folder__name} />
-			<p style={{ color: applyAlphaToHsl(increaseSaturation(color, 10), 0.65) }} className={styles.folder__size}>{calculateSize(size)}mb</p>
+			<input ref={inputRef} readOnly={!edit} defaultValue={name} onBlur={e => onRename(e.currentTarget.value || name)} style={{ color: increaseSaturation(color, 25) }} className={styles.folder__name} />
+			<p style={{ color: applyAlphaToHsl(increaseSaturation(color, 15), 0.7) }} className={styles.folder__size}>{calculateSize(size)}mb</p>
 		</div>
 	</div>
 }
