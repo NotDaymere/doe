@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import css from "./IndividualChats.module.less";
 import IndividualChatsIcon from "../../../../../shared/icons/IndividualChatsIcon";
 import SearchIcon from "../../../../../shared/icons/SearchIcon";
@@ -32,14 +32,14 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         renameChat,
         removeChat,
         addChat,
+        deleteSavedBranch,
     } = useChatStore();
 
     const [isIndividualChatsSearchInputOpen, setIsIndividualChatsSearchInputOpen] = useState(false);
     const [isIndividualChatOpen, setIsIndividualChatOpen] = useState(false);
     const [expandedChatId, setExpandedChatId] = useState<string | null>(null);
     const [activeTagPanel, setActiveTagPanel] = useState<string | null>(null);
-    const [isBranchMenuOpen, setIsBranchMenuOpen] = useState(false);
-    const [menuPosition, setMenuPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+    const [branchMenuState, setBranchMenuState] = useState<{ [key: number]: { isOpen: boolean; position: { top: number; left: number } } }>({});
     const [isShowActions, setIsShowActions] = useState(false);
     const [activeChatForActions, setActiveChatForActions] = useState<{
         id: string;
@@ -64,13 +64,22 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         setIsIndividualChatsSearchInputOpen(!isIndividualChatsSearchInputOpen);
     };
 
-    const handleOpenBranchMenu = (event: React.MouseEvent) => {
+    const handleOpenBranchMenu = (event: React.MouseEvent, branchId: number | null) => {
         event.stopPropagation();
-        setMenuPosition({ top: event.clientY, left: event.clientX + 30 });
-        setIsBranchMenuOpen(!isBranchMenuOpen);
+        if (branchId === null) {
+            console.warn("Branch ID is null, cannot open menu");
+            return;
+        }
+        setBranchMenuState(prev => ({
+            ...prev,
+            [branchId]: {
+                isOpen: !prev[branchId]?.isOpen,
+                position: { top: event.clientY, left: event.clientX + 30 },
+            },
+        }));
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
                 setShowAllTags(null);
@@ -84,7 +93,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [showAllTags, activeTagPanel]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (activeTagPanel) {
             const panelChat = chats.find(c => c.id === activeTagPanel);
             setSelectedTags(panelChat?.tags ?? []);
@@ -191,9 +200,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
 
                     {chats.map(chat => {
                         const isOpen = expandedChatId === chat.id;
-                        const branches = chat.id === currentChat.id
-                            ? currentChat.branches
-                            : chat.branches ?? [];
+                        const branches = chat.branches ?? [];
 
                         return (
                             <div key={chat.id}>
@@ -284,22 +291,36 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                                                             {branch.name}
                                                         </div>
                                                     </div>
-                                                    <div className={css.branch_three_dots} onClick={handleOpenBranchMenu} onMouseDown={e => e.stopPropagation()}>
+                                                    <div
+                                                        className={css.branch_three_dots}
+                                                        onClick={(e) => {
+                                                            handleOpenBranchMenu(e, branch.id);
+                                                        }}
+                                                        onMouseDown={e => e.stopPropagation()}
+                                                    >
                                                         <ThreeDotsIcon />
                                                     </div>
 
-                                                    {isBranchMenuOpen && branch.id !== null && ReactDOM.createPortal(
+                                                    {branchMenuState[branch.id!]?.isOpen && ReactDOM.createPortal(
                                                         <CSSTransition
-                                                            in={isBranchMenuOpen && branch.id !== null}
+                                                            in={branchMenuState[branch.id!]?.isOpen}
                                                             timeout={200}
                                                             classNames="branchMenu"
                                                             unmountOnExit
                                                         >
                                                             <AllBranchesMenu
-                                                                position={menuPosition}
+                                                                position={branchMenuState[branch.id!].position}
                                                                 branchId={branch.id!}
                                                                 setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
-                                                                onClose={() => setIsBranchMenuOpen(false)}
+                                                                onClose={() => {
+                                                                    setBranchMenuState(prev => ({
+                                                                        ...prev,
+                                                                        [branch.id!]: { ...prev[branch.id!], isOpen: false },
+                                                                    }));
+                                                                }}
+                                                                onDelete={() => {
+                                                                    deleteSavedBranch(branch.id!);
+                                                                }}
                                                             />
                                                         </CSSTransition>,
                                                         document.body

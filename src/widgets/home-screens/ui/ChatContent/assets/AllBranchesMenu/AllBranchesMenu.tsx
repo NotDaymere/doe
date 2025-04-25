@@ -14,16 +14,22 @@ interface AllBranchesMenuProps {
     };
     setActiveOpenAllBranchesMenu: (id: number | null) => void;
     onClose: () => void;
+    onDelete?: () => void;
 }
 
-export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBranchesMenu, onClose, }: AllBranchesMenuProps) {
-    const deleteSavedBranch = useChatStore(state => state.deleteSavedBranch);
-    const [isActiveBranchQuickView, setIsActiveBranchQuickView] = useState<boolean>(false);
+export default function AllBranchesMenu({
+                                            branchId,
+                                            position,
+                                            setActiveOpenAllBranchesMenu,
+                                            onClose,
+                                            onDelete,
+                                        }: AllBranchesMenuProps) {
     const { setIsCurrentBranchOpen, setCurrentBranch } = useChatStore();
+    const [isActiveBranchQuickView, setIsActiveBranchQuickView] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const handleQuickViewClick = () => {
-        setIsActiveBranchQuickView(true)
+        setIsActiveBranchQuickView(true);
     };
 
     const handleOpenBranchClick = () => {
@@ -34,7 +40,12 @@ export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBr
     };
 
     const handleDeleteBranchClick = () => {
-        deleteSavedBranch(branchId);
+        if (onDelete) {
+            onDelete();
+        } else {
+            const deleteSavedBranch = useChatStore.getState().deleteSavedBranch;
+            deleteSavedBranch(branchId);
+        }
         setActiveOpenAllBranchesMenu(null);
         setCurrentBranch(null);
         onClose();
@@ -54,7 +65,8 @@ export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBr
         <div
             className="all-branches-menu-container"
             style={{ top: position.top, left: position.left }}
-            ref={containerRef}>
+            ref={containerRef}
+        >
             <button className="all-branches-menu-button" onClick={handleQuickViewClick}>
                 <QuickViewIcon fill={"currentColor"} />
                 <span>Quick</span><span>View</span>
