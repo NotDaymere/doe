@@ -3,7 +3,7 @@ import "./AllBranchesMenu.less";
 import QuickViewIcon from "../../../../../../shared/icons/QuickView.icon";
 import DialogIcon from "../../../../../../shared/icons/Dialog.icon";
 import { useChatStore } from "../../../../../../shared/providers";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import BranchQuickView from "../BranchQuickView/BranchQuickView";
 
 interface AllBranchesMenuProps {
@@ -13,12 +13,14 @@ interface AllBranchesMenuProps {
         left: number;
     };
     setActiveOpenAllBranchesMenu: (id: number | null) => void;
+    onClose: () => void;
 }
 
-export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBranchesMenu }: AllBranchesMenuProps) {
+export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBranchesMenu, onClose, }: AllBranchesMenuProps) {
     const deleteSavedBranch = useChatStore(state => state.deleteSavedBranch);
     const [isActiveBranchQuickView, setIsActiveBranchQuickView] = useState<boolean>(false);
     const { setIsCurrentBranchOpen, setCurrentBranch } = useChatStore();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const handleQuickViewClick = () => {
         setIsActiveBranchQuickView(true)
@@ -28,17 +30,31 @@ export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBr
         setCurrentBranch(branchId);
         setIsCurrentBranchOpen(true);
         setActiveOpenAllBranchesMenu(null);
-
+        onClose();
     };
 
     const handleDeleteBranchClick = () => {
         deleteSavedBranch(branchId);
         setActiveOpenAllBranchesMenu(null);
         setCurrentBranch(null);
+        onClose();
     };
 
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                onClose();
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [onClose]);
+
     return (
-        <div className="all-branches-menu-container" style={{ top: position.top, left: position.left }}>
+        <div
+            className="all-branches-menu-container"
+            style={{ top: position.top, left: position.left }}
+            ref={containerRef}>
             <button className="all-branches-menu-button" onClick={handleQuickViewClick}>
                 <QuickViewIcon fill={"currentColor"} />
                 <span>Quick</span><span>View</span>

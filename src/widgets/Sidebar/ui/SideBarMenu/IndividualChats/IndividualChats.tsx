@@ -284,7 +284,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                                                             {branch.name}
                                                         </div>
                                                     </div>
-                                                    <div className={css.branch_three_dots} onClick={handleOpenBranchMenu}>
+                                                    <div className={css.branch_three_dots} onClick={handleOpenBranchMenu} onMouseDown={e => e.stopPropagation()}>
                                                         <ThreeDotsIcon />
                                                     </div>
 
@@ -299,6 +299,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                                                                 position={menuPosition}
                                                                 branchId={branch.id!}
                                                                 setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
+                                                                onClose={() => setIsBranchMenuOpen(false)}
                                                             />
                                                         </CSSTransition>,
                                                         document.body
