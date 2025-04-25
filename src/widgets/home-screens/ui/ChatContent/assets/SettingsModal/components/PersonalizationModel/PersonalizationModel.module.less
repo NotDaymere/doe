@@ -1,0 +1,161 @@
+.personalization {
+    &__container {
+        flex: 1 0 0%;
+        border: 1px solid rgb(238, 238, 238);
+        border-radius: 12px;
+        max-width: 50%;
+        align-self: start;
+    }
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        padding: 11px 11px 6px;
+        background-color: rgba(221, 221, 221, 0.2);
+        border-bottom: 1px solid rgb(238, 238, 238);
+        &__title {
+            color: rgb(31, 31, 31);
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1.19rem;
+        }
+    }
+    &__content {
+        padding: 7px 11px 11px;
+        &__title {
+            font-size: 0.75rem;
+            color: rgb(207, 207, 207);
+            font-weight: 600;
+            line-height: 1rem;
+        }
+    }
+    &__list {
+        &__wrapper {
+            display: flex;
+            margin-top: 6px;
+            max-height: 122px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgb(238, 238, 238);
+        }
+        &__container {
+            overflow-y: auto;
+            width: 100%;
+        }
+        &__item {
+            --margin-left: 16px;
+            position: relative;
+            display: flex;
+            width: 100%;
+            max-width: calc(100% - var(--margin-left));
+            padding: 3px 3px 3px 7px;
+            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            margin-left: var(--margin-left);
+            transition: 0.3s;
+            &:hover {
+                border-color: rgb(221, 221, 221);
+                background-color: rgb(248, 248, 248);
+            }
+            &:hover &__name {
+                font-weight: 600;
+            }
+            &:hover &__controls {
+                display: flex;
+            }
+            &:first-child::before {
+                height: 22px;
+            }
+            &::before {
+                content: "";
+                position: absolute;
+                left: -16px;
+                bottom: 8px;
+                width: 12px;
+                height: 35px;
+                display: block;
+                border: 1px solid rgb(240, 240, 240);
+                border-right: none;
+                border-top: none;
+                border-bottom-left-radius: 6px;
+            }
+            &__name {
+                font-size: 0.875rem;
+                color: rgb(91, 91, 91);
+                font-weight: 500;
+                line-height: 1.19rem;
+                transition: 0.1s;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            &__controls {
+                display: none;
+                gap: 2px;
+            }
+            &__controlBtn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 3px;
+                background-color: rgba(181, 181, 181, 0.2);
+                border-radius: 4px;
+                width: 20px;
+                height: 20px;
+                &:hover path {
+                    fill: rgb(91, 91, 91);
+                }
+                svg {
+                    width: 14px;
+                    height: 14px;
+
+                    path {
+                        fill: rgb(141, 141, 141);
+                        transition: 0.3s;
+                    }
+                }
+            }
+        }
+    }
+    &__createBtn {
+        display: flex;
+        gap: 4px;
+        width: 100%;
+        margin-top: 13px;
+        padding: 6px 11px 7px 8px;
+        border: 1px solid rgba(255, 139, 18, 0.2);
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.25rem;
+        outline: 1px solid;
+        &--persona {
+            background-color: rgba(255, 139, 18, 0.05);
+            border-color: rgba(255, 139, 18, 0.2);
+            outline-color: rgba(255, 139, 18, 0.2);
+            color: rgb(185, 69, 0);
+            svg path {
+                fill: rgb(255, 139, 18);
+            }
+        }
+        &--style {
+            background-color: rgba(151, 71, 255, 0.05);
+            border-color: rgba(151, 71, 255, 0.3);
+            outline-color: rgba(151, 71, 255, 0.3);
+            color: rgb(91, 43, 153);
+            svg path {
+                fill: rgb(151, 71, 255);
+            }
+        }
+        &__plusIconContainer {
+            margin-left: auto;
+            svg {
+                rotate: 45deg;
+                stroke: currentColor;
+                width: 10px;
+                height: 10px;
+            }
+        }
+    }
+}

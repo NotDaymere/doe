@@ -11,9 +11,10 @@ type UploadProgressProps = {
 	file: FileWithId | null
 	onClear: () => void;
 	onCompleteUpload: (uploadedFile: FileWithId) => void;
+	disappearAfterUpload?: boolean
 }
 
-export const UploadProgress = ({ file, onClear, onCompleteUpload }: UploadProgressProps) => {
+export const UploadProgress = ({ file, onClear, onCompleteUpload, disappearAfterUpload = true }: UploadProgressProps) => {
 	const [progress, setProgress] = useState(0);
 	const [status, setStatus] = useState<'idle' | 'uploading' | 'success'>('idle');
 	const complete = status === 'success';
@@ -43,14 +44,14 @@ export const UploadProgress = ({ file, onClear, onCompleteUpload }: UploadProgre
 	}, [file]);
 
 	useEffect(() => {
-		if (status === 'success') {
+		if (status === 'success' && disappearAfterUpload) {
 			const timeout = setTimeout(() => {
 				onClear();
 			}, 1000);
 
 			return () => clearTimeout(timeout);
 		}
-	}, [status, onClear]);
+	}, [status, onClear, disappearAfterUpload]);
 
 
 	if (!file) return null;

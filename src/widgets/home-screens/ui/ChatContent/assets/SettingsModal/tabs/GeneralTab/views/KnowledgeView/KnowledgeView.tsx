@@ -8,6 +8,7 @@ import classNames from "classnames"
 import { UploadArea } from "../../../../components/UploadArea/UploadArea"
 import { FileWithId } from "../../../../components/UploadButton"
 import { FolderView } from "../FolderView/FolderView"
+import { UploadProgress } from "../../../../components/UploadProgress/UploadProgress"
 type KnowledgeViewProps = {
 	back: () => void
 }
@@ -27,10 +28,10 @@ export const KnowledgeView = ({ back }: KnowledgeViewProps) => {
 	const [openFolder, setOpenFolder] = useState<string | null>(null);
 	const [data, setData] = useState<DataType>({
 		folders: [
-
 		],
 		recentFiles: []
 	});
+	const [uploadedFiles, setUploadedFiles] = useState<FileWithId[]>([])
 	const createNewFolder = (color: string) => {
 		let folderNumber = 1;
 		while (data.folders.some(folder => folder.name === `Folder ${folderNumber}`)) {
@@ -111,10 +112,14 @@ export const KnowledgeView = ({ back }: KnowledgeViewProps) => {
 				<button className={modalStyles.settingsModal__cancelBtn} onClick={back}>Back to general settings</button>
 			</div >
 			<div className={styles.knowledge__content__container}>
-				<UploadArea onCompleteUpload={file => {
-
-					setData(prev => ({ ...prev, recentFiles: [Object.assign(file, { folderId: null }), ...prev.recentFiles] }))
+				<UploadArea onCompleteUpload={files => {
+					setUploadedFiles(files)
 				}} />
+				{!!uploadedFiles.length && uploadedFiles.map((file) => (<UploadProgress key={file.id} file={file} onClear={() => {
+					setUploadedFiles(prev => prev.filter(item => item.id !== file.id))
+				}} onCompleteUpload={file => {
+					setData(prev => ({ ...prev, recentFiles: [Object.assign(file, { folderId: null }), ...prev.recentFiles] }))
+				}} />))}
 				<div className={classNames(styles.knowledge__section, styles.knowledge__section__folders)}>
 					<h3 className={styles.knowledge__section__title}>Folders</h3>
 					<div className={styles.knowledge__folder__section}>
