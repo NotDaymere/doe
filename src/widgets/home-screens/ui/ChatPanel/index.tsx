@@ -171,6 +171,7 @@ export const ChatPanel: React.FC = () => {
 
     const [showLinkInput, setShowLinkInput] = React.useState(false);
     const [linkUrl, setLinkUrl] = React.useState("");
+    const linkInputRef = React.useRef<HTMLInputElement | null>(null);
     const [savedRange, setSavedRange] = React.useState<Range | null>(null);
 
     const [linkInputPosition, setLinkInputPosition] = React.useState({ top: 0, left: 0 });
@@ -185,7 +186,20 @@ export const ChatPanel: React.FC = () => {
         };
 
         const handleSelectionChange = () => {
-            updateLinkInputPosition();
+            const selection = window.getSelection();
+            const isLinkInputFocused = document.activeElement === linkInputRef.current;
+
+            if (!selection || (selection.toString().trim() === "" && !isLinkInputFocused)) {
+                setShowLinkInput(false);
+                setIsHyperlinkInputOpen(false);
+                setSavedRange(null);
+                setLinkUrl("");
+                return;
+            }
+
+            if (selection && selection.toString().trim() !== "") {
+                updateLinkInputPosition();
+            }
         };
 
         function updateLinkInputPosition() {
@@ -776,6 +790,7 @@ export const ChatPanel: React.FC = () => {
                             }}
                         >
                             <input
+                                ref={linkInputRef}
                                 value={linkUrl}
                                 onChange={(e) => setLinkUrl(e.target.value)}
                                 placeholder="Enter URL"
