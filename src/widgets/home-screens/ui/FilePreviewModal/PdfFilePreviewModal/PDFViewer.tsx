@@ -176,9 +176,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                     const safeFontWeight = fontWeight || "regular";
 
                     const canvas = canvasRefs.current[page * 2 + 1];
-                    const canvasRect = canvas
-                        ? canvas.getBoundingClientRect()
-                        : { width: 100 };
+                    const canvasRect = canvas ? canvas.getBoundingClientRect() : { width: 100 };
                     const availableWidth = canvasRect.width - x;
 
                     const { width: ow, height: oh } = originalDimensions[page];
@@ -210,37 +208,57 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             }
         };
 
-        const onDraggableMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+        const onDraggableMouseDown = (
+            e: React.MouseEvent<HTMLDivElement>,
+            type: "input" | "annotation"
+        ) => {
+            e.stopPropagation();
             draggingRef.current = true;
             const rect = (e.target as HTMLDivElement).getBoundingClientRect();
             setDragOffset({ offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top });
         };
 
         const onDraggableMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-            if (!draggingRef.current || !activeDraggableAnnotation || !dragOffset) return;
+            if (!draggingRef.current || !dragOffset) return;
+
             const pageContainers = containerRef.current?.getElementsByClassName("pageContainer");
             if (!pageContainers) return;
-            const pageContainer = pageContainers[activeDraggableAnnotation.page] as HTMLElement;
-            if (!pageContainer) return;
-            const pageContainerRect = pageContainer.getBoundingClientRect();
 
-            const newX = e.clientX - pageContainerRect.left - dragOffset.offsetX;
-            const newY = e.clientY - pageContainerRect.top - dragOffset.offsetY;
+            if (activeDraggableAnnotation) {
+                const pageContainer = pageContainers[activeDraggableAnnotation.page] as HTMLElement;
+                if (!pageContainer) return;
+                const pageContainerRect = pageContainer.getBoundingClientRect();
+                const newX = e.clientX - pageContainerRect.left - dragOffset.offsetX;
+                const newY = e.clientY - pageContainerRect.top - dragOffset.offsetY;
 
-            const { width: ow, height: oh } = originalDimensions[activeDraggableAnnotation.page];
-            const { pageWidth, pageHeight, scaleFactor } = computePageDimensions(activeDraggableAnnotation.page);
+                const { width: ow, height: oh } = originalDimensions[activeDraggableAnnotation.page];
+                const { pageWidth, pageHeight, scaleFactor } = computePageDimensions(activeDraggableAnnotation.page);
+                const pdfX = (newX / pageWidth) * ow;
+                const pdfY = oh - (newY / pageHeight) * oh - (activeDraggableAnnotation.fontSize * scaleFactor);
 
-            const pdfX = (newX / pageWidth) * ow;
-            const pdfY = oh - (newY / pageHeight) * oh - (activeDraggableAnnotation.fontSize * scaleFactor);
+                if (newX !== activeDraggableAnnotation.x || newY !== activeDraggableAnnotation.y) {
+                    setActiveDraggableAnnotation({
+                        ...activeDraggableAnnotation,
+                        x: newX,
+                        y: newY,
+                        pdfX,
+                        pdfY,
+                    });
+                    setHasAnnotationsChanged(true);
+                }
+            } else if (activeTextInput) {
+                const pageContainer = pageContainers[activeTextInput.page] as HTMLElement;
+                if (!pageContainer) return;
+                const pageContainerRect = pageContainer.getBoundingClientRect();
+                const newX = e.clientX - pageContainerRect.left - dragOffset.offsetX;
+                const newY = e.clientY - pageContainerRect.top - dragOffset.offsetY;
 
-            setActiveDraggableAnnotation({
-                ...activeDraggableAnnotation,
-                x: newX,
-                y: newY,
-                pdfX,
-                pdfY,
-            });
-            setHasAnnotationsChanged(true);
+                setActiveTextInput({
+                    ...activeTextInput,
+                    x: newX,
+                    y: newY,
+                });
+            }
         };
 
         const onDraggableMouseUp = () => {
@@ -253,7 +271,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         };
 
         const handleCanvasClick = (e: React.MouseEvent, pageIndex: number) => {
-            if (!isTextMode || isDrawingEnabled) return;
+            if (!isTextMode || isDrawingEnabled || activeTextInput) return;
             const canvas = canvasRefs.current[pageIndex * 2 + 1];
             if (!canvas) return;
             const { x, y } = getCanvasCoordinates(e, canvas);
@@ -442,26 +460,66 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                         }}
                                     />
                                     {activeTextInput && activeTextInput.page === i && (
-                                        <input
-                                            type="text"
-                                            className={css.textAnnotationInput}
+                                        <div
+                                            className={css.annotationContainer}
                                             style={{
                                                 position: "absolute",
                                                 transform: `translate(${activeTextInput.x}px, ${activeTextInput.y}px)`,
-                                                maxWidth: "150px",
-                                                fontWeight,
-                                                fontSize: `${fontSize}px`,
-                                                color: fontColor,
-                                                border: "none",
-                                                overflow: "hidden",
+                                                cursor: draggingRef.current ? "grabbing" : "grab",
                                                 zIndex: 20,
-                                                whiteSpace: "nowrap",
                                             }}
-                                            autoFocus
-                                            onKeyDown={(e) =>
-                                                handleTextInput(e, i, activeTextInput.x, activeTextInput.y)
-                                            }
-                                        />
+                                            onMouseDown={(e) => onDraggableMouseDown(e, "input")}
+                                            onMouseMove={onDraggableMouseMove}
+                                            onMouseUp={onDraggableMouseUp}
+                                        >
+                                            <input
+                                                type="text"
+                                                className={css.textAnnotationInput}
+                                                style={{
+                                                    maxWidth: "150px",
+                                                    fontWeight,
+                                                    fontSize: `${fontSize}px`,
+                                                    color: fontColor,
+                                                    border: "none",
+                                                    overflow: "hidden",
+                                                    whiteSpace: "nowrap",
+                                                }}
+                                                autoFocus
+                                                onKeyDown={(e) => handleTextInput(e, i, activeTextInput.x, activeTextInput.y)}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        </div>
+                                    )}
+                                    {activeTextInput && activeTextInput.page === i && (
+                                        <div
+                                            className={css.annotationContainer}
+                                            style={{
+                                                position: "absolute",
+                                                transform: `translate(${activeTextInput.x}px, ${activeTextInput.y}px)`,
+                                                cursor: draggingRef.current ? "grabbing" : "grab",
+                                                zIndex: 20,
+                                            }}
+                                            onMouseDown={(e) => onDraggableMouseDown(e, "input")}
+                                            onMouseMove={onDraggableMouseMove}
+                                            onMouseUp={onDraggableMouseUp}
+                                        >
+                                            <input
+                                                type="text"
+                                                className={css.textAnnotationInput}
+                                                style={{
+                                                    maxWidth: "150px",
+                                                    fontWeight,
+                                                    fontSize: `${fontSize}px`,
+                                                    color: fontColor,
+                                                    border: "none",
+                                                    overflow: "hidden",
+                                                    whiteSpace: "nowrap",
+                                                }}
+                                                autoFocus
+                                                onKeyDown={(e) => handleTextInput(e, i, activeTextInput.x, activeTextInput.y)}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        </div>
                                     )}
                                     {activeDraggableAnnotation && activeDraggableAnnotation.page === i && (
                                         <div
@@ -473,13 +531,13 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                                 fontSize: `${activeDraggableAnnotation.fontSize}px`,
                                                 color: activeDraggableAnnotation.fontColor,
                                                 fontWeight: activeDraggableAnnotation.fontWeight === "bold" ? "bold" : "normal",
-                                                cursor: "grabbing",
+                                                cursor: draggingRef.current ? "grabbing" : "grab",
                                                 zIndex: 20,
                                                 overflow: "hidden",
                                                 whiteSpace: "nowrap",
                                                 userSelect: "none",
                                             }}
-                                            onMouseDown={onDraggableMouseDown}
+                                            onMouseDown={(e) => onDraggableMouseDown(e, "annotation")}
                                             onMouseMove={onDraggableMouseMove}
                                             onMouseUp={onDraggableMouseUp}
                                         >

@@ -73,7 +73,7 @@ export const Sidebar: React.FC = () => {
     };
 
     const ballPositionStyle = isSideBarOpen
-        ? { left: theme === "Light" ? "6px" : "37px" }
+        ? { top: theme === "Light" ? "6px" : "37px" }
         : { top: theme === "Light" ? "6px" : "37px" };
 
     const handleOpenChangeProfilePanel = (e: React.MouseEvent) => {
@@ -112,7 +112,7 @@ export const Sidebar: React.FC = () => {
                         src={currentProfile ? currentProfile.imgSrc : ""}
                     />
                 </div>
-                {isSideBarOpen && (
+
                     <div className={css.profile_user_info_container}>
                         <div className={css.profile_user_info}>
                             <div className={css.profile_username}>{currentProfile ? currentProfile.username : ""}</div>
@@ -127,7 +127,7 @@ export const Sidebar: React.FC = () => {
                             <ChangeProfileIcon fill="currentColor" width={11} height={15}/>
                         </div>
                     </div>
-                )}
+
             </div>
             <CSSTransition
                 in={isChangeProfilePanelOpen}
@@ -202,11 +202,11 @@ export const Sidebar: React.FC = () => {
                         <MoonIcon width={20} height={20} />
                     </div>
                 </div>
-                {isSideBarOpen && (
+
                     <div className={css.theme_name}>
                         <span>{theme}</span><span>Theme</span>
                     </div>
-                )}
+
             </div>
 
             <div className={css.sidebar_separator}>
