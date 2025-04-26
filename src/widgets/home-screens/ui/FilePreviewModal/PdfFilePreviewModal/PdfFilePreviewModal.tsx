@@ -46,11 +46,12 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
 
     const toggleTextSettings = () => {
         setTextSettingsOpen((v) => !v);
+        setIsTextMode(true);
         setIsDrawingEnabled(false);
+        setIsEditing(false);
     };
 
     const confirmTextSettings = () => {
-        setIsTextMode(true);
         setTextSettingsOpen(false);
     };
 
