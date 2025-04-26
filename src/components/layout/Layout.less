@@ -1,76 +1,77 @@
-@import url('/src/styles/variables.less');
+@import url("/src/styles/variables.less");
 
-
-.main-layout, .main-layout .content {
-  height: 100%;
+.main-layout,
+.main-layout .content {
+    height: 100%;
 }
 
 .main-layout {
-  border-radius: 1rem;
-  overflow: hidden;
+    border-radius: 1rem;
+    overflow: hidden;
 
-  .ant-layout-sider {
-    padding: 40px 28px;
-    background: var(--bg-color-sidebar);
-  }
+    .ant-layout-sider {
+        padding: 40px 28px;
+        background: var(--bg-general);
+    }
 
-  .content {
-    background: var(--bg-color-main);
-  }
-
+    .content {
+        background: var(--bg-color-main);
+    }
 }
 .playground-sider {
-  background: var(--bg-color-sidebar);
-  padding: 0;
+    background: var(--bg-general);
+    padding: 0;
 }
 .playground-sider {
-  padding-left: 17px;
-  padding-bottom: 48px;
-  padding-top: 75px;
-  border-radius: 16px;
-  background: #fff;
-  z-index: 10;
-  transition: all 0.5s ease;
-  overflow: hidden;
+    transition:
+        width 500ms ease,
+        transform 500ms ease !important;
+    padding-left: 17px;
+    padding-bottom: 48px;
+    padding-top: 75px;
+    border-radius: 16px;
+    background: var(--bg-general);
+
+    z-index: 10;
 }
-.width-80{
-  width: 80% !important;
+.width-80 {
+    width: 80% !important;
 }
-.width-100{
-  width: 100% !important;
+.width-100 {
+    width: 100% !important;
 }
-.width-550px{
-  min-width: 550px !important;
-  width: 550px !important;
+.width-550px {
+    min-width: 550px !important;
+    width: 550px !important;
 }
 @media (max-width: 1300px) {
-  .playground-sider {
-    flex: unset !important;
-  }
+    .playground-sider {
+        flex: unset !important;
+    }
 }
 .main-layout-playground {
-  position: relative;
-  height: 100vh;
-  border-radius: 16px;
-  overflow: hidden;
-  background-color: #ffffff;
+    position: relative;
+    height: 100vh;
+    //margin-right: 15px;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: var(--bg-general);
+    padding: 2px;
 
-  .ant-layout-sider {
-    background-color: #ffffff;
-  }
+    .ant-layout-sider {
+        background-color: #ffffff;
+    }
 
-  .content {
-    background-color: #ffffff;
-  }
-
-
+    .content {
+        background-color: #ffffff;
+    }
 }
 .display-none {
-  display: none;
+    display: none;
 }
 
 .padding-left-0 {
-  padding-left: 0;
+    padding-left: 0;
 }
 
 .history-panel {

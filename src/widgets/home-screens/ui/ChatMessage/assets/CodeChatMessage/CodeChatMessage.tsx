@@ -292,22 +292,6 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
 
                                             <DownloadIcon />
                                         </button>
-                                        <CSSTransition
-                                            classNames={css}
-                                            timeout={150}
-                                            in={activeMenu}
-                                            downloadMenuRef={downloadMenuRef}
-                                            mountOnEnter
-                                            unmountOnExit
-                                        >
-                                            {/*<div className={css.download_menu} ref={downloadMenuRef}>*/}
-                                            {/*    <ul>*/}
-                                            {/*        <li onClick={setCloseHandler(downloadPDF)}>.png</li>*/}
-                                            {/*        <li onClick={setCloseHandler(downloadPDF)}>.txt</li>*/}
-                                            {/*        <li onClick={setCloseHandler(downloadPDF)}>.pdf</li>*/}
-                                            {/*    </ul>*/}
-                                            {/*</div>*/}
-                                        </CSSTransition>
                                     </div>
                                     <button onClick={handleCopy} className={css.button_steps_green}>
                                         <span className={css.tooltip}>Copy chat text</span>

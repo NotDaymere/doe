@@ -18,6 +18,7 @@ import {CSSTransition} from "react-transition-group";
 import GlobalIcon from "src/shared/icons/Global.icon";
 import clsx from "clsx";
 import {SharingTools} from "./ui/SharingTools/SharingTools";
+import ThemeToggleSwitch from "../../shared/components/ThemeToggler";
 
 export const Sidebar: React.FC = () => {
     const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
@@ -174,41 +175,7 @@ export const Sidebar: React.FC = () => {
                     </div>
                 </div>
             </CSSTransition>
-
-            <div className={css.sidebar_theme_container}>
-                <div className={css.theme_toggle}>
-                    <div
-                        className={css.theme_toggle_ball}
-                        style={ballPositionStyle}
-                    />
-                    <div
-                        className={
-                            theme === "Light"
-                                ? css.toggle_light_theme_active_icon
-                                : css.toggle_light_theme_icon
-                        }
-                        onClick={() => handleToggleTheme("Light")}
-                    >
-                        <LightThemeIcon width={20} height={20} />
-                    </div>
-                    <div
-                        className={
-                            theme === "Dark"
-                                ? css.toggle_dark_theme_active_icon
-                                : css.toggle_dark_theme_icon
-                        }
-                        onClick={() => handleToggleTheme("Dark")}
-                    >
-                        <MoonIcon width={20} height={20} />
-                    </div>
-                </div>
-                {isSideBarOpen && (
-                    <div className={css.theme_name}>
-                        <span>{theme}</span><span>Theme</span>
-                    </div>
-                )}
-            </div>
-
+            <ThemeToggleSwitch className={css.sidebar_theme_container} />
             <div className={css.sidebar_separator}>
                 <div className={css.inner_sidebar_separator}></div>
             </div>
@@ -235,12 +202,12 @@ export const Sidebar: React.FC = () => {
 
 
                 <div className={ (getOpenSavedPlaygrounds().length > 0 || mode)
-                                    ? css.delete_all_messages_open_playgrounds
-                                    : css.delete_all_messages}>
+                    ? css.delete_all_messages_open_playgrounds
+                    : css.delete_all_messages}>
                     <div
                         className={css.delete_all_messages_btn_container}
                         onClick={handleDeleteAllMessages}
-                        >
+                    >
                         <button
                             className={css.delete_all_messages_btn}
 

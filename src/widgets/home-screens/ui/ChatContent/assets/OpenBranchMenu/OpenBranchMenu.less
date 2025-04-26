@@ -3,75 +3,84 @@
   @leading: 1.25,
   @letterSpacing: normal
 ) {
-  font: 500 @fontSize/@leading var(--font-sohne);
-  letter-spacing: @letterSpacing;
+    font: 500 @fontSize / @leading var(--font-sohne);
+    letter-spacing: @letterSpacing;
 }
 .open-menu-branches-container {
-  position: absolute;
-  top: calc(100% + 16px);
-  right: 0;
-  width: fit-content;
-  height: fit-content;
-  padding: 10px;
-  border-radius: 16px;
-  box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.04);
-  backdrop-filter: blur(100px);
-  display: flex;
-  flex-direction: column;
-  background: rgba(255, 255, 255, 0.8);
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 8px;
-  z-index: 1000;
-  transition: opacity 300ms ease, transform 300ms ease;
+    position: absolute;
+    top: calc(100% + 16px);
+    right: 0;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    border-radius: 16px;
+    box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(100px);
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-general);
+    border: 1px solid var(--var-1);
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 8px;
+    z-index: 1000;
+    transition:
+        opacity 300ms ease,
+        transform 300ms ease;
 }
 
 .open-menu-branches-container.enter {
-  opacity: 0;
-  transform: translateY(10px);
+    opacity: 0;
+    transform: translateY(10px);
 }
 
 .open-menu-branches-container.visible {
-  opacity: 1;
-  transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .open-menu-branches-container.exit {
-  opacity: 0;
-  transform: translateY(-10px);
+    opacity: 0;
+    transform: translateY(-10px);
 }
 
 .open-menu-branches-menu-button {
-  width: 100%;
-  height: 40px;
-  padding-left: 6px;
-  padding-right: 6px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  flex-direction: row;
-  box-sizing: border-box;
-  font-weight: 500;
-  gap: 5px;
-  .setFontSohneBuch(16px, 1.4, normal);
-  color: rgba(181, 181, 181, 1);
-  border: 1px solid transparent;
-  transition: background-color 0.3s ease, color 0.3s ease, fill 0.3s ease, border 0.3s ease;
-  svg {
-    transition: background-color 0.3s ease,  fill 0.3s ease, border 0.3s ease;
-    fill: rgba(181, 181, 181, 1);
-  }
-  .text-margin-bottom{
-    margin-bottom: -4px;
-  }
+    width: 100%;
+    height: 40px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: row;
+    box-sizing: border-box;
+    font-weight: 500;
+    gap: 5px;
+    .setFontSohneBuch(16px, 1.4, normal);
+    color: var(--var-119);
+    border: 1px solid transparent;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        fill 0.3s ease,
+        border 0.3s ease;
+    svg {
+        transition:
+            background-color 0.3s ease,
+            fill 0.3s ease,
+            border 0.3s ease;
+        fill: var(--var-96);
+    }
+    .text-margin-bottom {
+        margin-bottom: -4px;
+    }
 }
 .open-menu-branches-menu-button:hover {
-  background: #F8F8F8;
-  border: 1px solid #DDDDDD;
-  color: #1F1F1F;
-  svg {
-    fill: #5B5B5B;
-  }
+    background: var(--var-2);
+    border: 1px solid var(--var-74);
+    color: var(--var-7);
+    svg {
+        fill: var(--var-95);
+    }
 }
-

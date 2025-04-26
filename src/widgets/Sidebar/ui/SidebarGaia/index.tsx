@@ -30,22 +30,30 @@ export const SidebarGaia = () => {
                 <button className={css.gaia_btn} onClick={toggleGaia}>
                     <GlobalIcon />
                 </button>
-
-                {showGaia && (
-                    <p className={css.gaia_hint}
-                       ref={nodeRef}>
-                        Environmental savings per (calculated per token) by using our models compared to
-                        existing SOTA models.
-                        <br />
-                        <br />
-                        For each token you generate, we calculate tree mass{" "}
-                        <TreeIcon fill="#5B5B5B" />, volume of water <WaterIcon fill="#268AFF" />,
-                        mass of carbon dioxide (CO2) <WindIcon fill="#FF4848" />, joules of energy{" "}
-                        <EnergyIcon fill="#FF8B12" />, and size of land <LeafIcon fill="#8BCF16" />{" "}
-                        conserved with the Bilateral Cortex Model (BCM).
-                    </p>
-                )}
-
+                <CSSTransition
+                    classNames={css}
+                    timeout={1000}
+                    in={!gaiaActive}
+                    nodeRef={nodeRef}
+                    // unmountOnExit
+                    mountOnEnter
+                >
+                    <>
+                        {showGaia && (
+                        <p className={css.gaia_hint} ref={nodeRef}>
+                            Environmental savings per (calculated per token) by using our models
+                            compared to existing SOTA models.
+                            <br />
+                            <br />
+                            For each token you generate, we calculate tree mass{" "}
+                            <TreeIcon fill="#5B5B5B" />, volume of water <WaterIcon fill="#268AFF" />,
+                            mass of carbon dioxide (CO2) <WindIcon fill="#FF4848" />, joules of energy{" "}
+                            <EnergyIcon fill="#FF8B12" />, and size of land <LeafIcon fill="#8BCF16" />{" "}
+                            conserved with the Bilateral Cortex Model (BCM).
+                        </p>
+                        )}
+                    </>
+                </CSSTransition>
             </div>
         </div>
     );

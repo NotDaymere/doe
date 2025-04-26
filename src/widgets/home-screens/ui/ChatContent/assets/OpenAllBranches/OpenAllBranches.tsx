@@ -1,6 +1,6 @@
-import './OpenAllBranches.less';
+import "./OpenAllBranches.less";
 import { useEffect, useRef, useState } from "react";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg";
 import { useAppStore, useChatStore } from "src/shared/providers";
 import ThreeVerticalDots from "../../../../../../shared/icons/ThreeVerticalDots";
@@ -63,7 +63,7 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
     }, []);
 
     const stripHTML = (html: string): string => {
-        const element = document.createElement('div');
+        const element = document.createElement("div");
         element.innerHTML = html;
         return element.textContent || element.innerText || "";
     };
@@ -78,10 +78,7 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
                     <BranchIcon />
                     <span>All Branches</span>
                 </div>
-                <button
-                    className="open-all-branches-header-button"
-                    onClick={handleClose}
-                >
+                <button className="open-all-branches-header-button" onClick={handleClose}>
                     <DecreasePlaygroundIcon />
                 </button>
             </div>
@@ -90,11 +87,12 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
                     <div
                         key={savedBranch.id}
                         className={`open-all-branches-content-item 
-                            ${(
-                            (contentIdHover === savedBranch.id) ||
-                            (activeOpenAllBranchesMenu === savedBranch.id)
-                        ) ? 'open-all-branches-content-example-hover' : ''
-                        }
+                            ${
+                                contentIdHover === savedBranch.id ||
+                                activeOpenAllBranchesMenu === savedBranch.id
+                                    ? "open-all-branches-content-example-hover"
+                                    : ""
+                            }
                         `}
                         onMouseMove={() => contentMouseUp(savedBranch.id)}
                         onMouseOut={contentMouseDown}
@@ -103,7 +101,8 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
                             <BranchIcon width={16} height={16} fill={"currentColor"} />
                             <p>{stripHTML(savedBranch.name)}</p>
                         </div>
-                        {((contentIdHover === savedBranch.id) || (activeOpenAllBranchesMenu === savedBranch.id)) &&
+                        {(contentIdHover === savedBranch.id ||
+                            activeOpenAllBranchesMenu === savedBranch.id) && (
                             <button
                                 className="open-all-branches-content-example-button"
                                 onClick={(event) => {
@@ -111,13 +110,15 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
                                     changeActiveOpenAllBranchesMenu(savedBranch.id);
                                 }}
                             >
-                                <span className={`
-                                    ${activeOpenAllBranchesMenu === savedBranch.id ? 'active-branch-menu' : 'unactive-branch-menu'}
-                                `}>
-                                  <ThreeVerticalDots fill={"currentColor"} />
+                                <span
+                                    className={`
+                                    ${activeOpenAllBranchesMenu === savedBranch.id ? "active-branch-menu" : ""}
+                                `}
+                                >
+                                    <ThreeVerticalDots fill={"currentColor"} />
                                 </span>
                             </button>
-                        }
+                        )}
                     </div>
                 ))}
             </div>

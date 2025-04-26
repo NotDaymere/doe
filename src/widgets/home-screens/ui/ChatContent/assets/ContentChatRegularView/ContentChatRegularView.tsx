@@ -54,15 +54,15 @@ export const ChatRegularView: React.FC<ChatRegularViewProps> = ({
 
 
                         {hasBranch && branch && !branch.isMain ? (
-                                <>
-                                    <ChatBranchSection branch={branch} />
-                                    <ChatMessage
-                                        data={item}
-                                        editor={editor}
-                                        editMsgMode={editMsgMode}
-                                        setEditMsgMode={setEditMsgMode}
-                                    />
-                                </>
+                            <>
+                                <ChatBranchSection branch={branch} />
+                                <ChatMessage
+                                    data={item}
+                                    editor={editor}
+                                    editMsgMode={editMsgMode}
+                                    setEditMsgMode={setEditMsgMode}
+                                />
+                            </>
 
                         ) : (
                             <>

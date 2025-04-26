@@ -14,9 +14,7 @@ interface Props {
     className?: string;
 }
 
-export const Gaia = React.forwardRef<HTMLDivElement, Props>(({ 
-    className 
-}, ref) => {
+export const Gaia = React.forwardRef<HTMLDivElement, Props>(({ className }, ref) => {
     const statsRef = React.useRef<HTMLDivElement>(null);
     const { gaiaActive, setGaiaActive } = useAppStore();
 
@@ -24,17 +22,13 @@ export const Gaia = React.forwardRef<HTMLDivElement, Props>(({
 
     React.useEffect(() => {
         const element = statsRef.current;
-        if(element) {
+        if (element) {
             element.style.height = `${gaiaActive ? element.scrollHeight : 0}px`;
         }
     }, [gaiaActive]);
 
     return (
-        <div className={clsx(
-            css.gaia,
-            gaiaActive && css._active, 
-            className
-        )} ref={ref}>
+        <div className={clsx(css.gaia, gaiaActive && css._active, className)} ref={ref}>
             <button className={css.gaia_closeBtn} onClick={closeGaia}>
                 <CrossIcon />
             </button>
@@ -89,7 +83,9 @@ export const Gaia = React.forwardRef<HTMLDivElement, Props>(({
                             <li className={css.gaia_stats_item}>
                                 <p>
                                     <span>200</span>
-                                    <span>pm<sup>2</sup></span>
+                                    <span>
+                                        pm<sup>2</sup>
+                                    </span>
                                 </p>
                             </li>
                         </ul>

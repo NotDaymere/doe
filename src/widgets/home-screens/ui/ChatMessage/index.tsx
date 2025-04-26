@@ -13,7 +13,7 @@ import { useAppStore, useChatStore } from "src/shared/providers";
 import { Editor } from "src/shared/components/Editor";
 import { useApp } from "src/components/app";
 import ExampleTableMassage from "./assets/ExampleTabelMassage/ExampleTableMassage";
-import {FileListForDisplay} from "../../../../shared/components/FileList/FileListForDisplay";
+import { FileListForDisplay } from "../../../../shared/components/FileList/FileListForDisplay";
 
 // Icons
 import CrossIcon from "src/shared/icons/Cross.icon";
@@ -162,6 +162,62 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     React.useEffect(()=> {
         setIsAllStepOpen(getOpenSavedPlaygroundsByType('source').length >= 1);
     }, [getOpenSavedPlaygrounds()])
+    // React.useEffect(() => {
+    //     const lastMouseEvent = { current: null as MouseEvent | null };
+    //
+    //     const handleMouseUp = (e: MouseEvent) => {
+    //         lastMouseEvent.current = e;
+    //         handleSelectionChange();
+    //     };
+    //
+    //     const handleSelectionChange = () => {
+    //         if (!messageRef.current) return;
+    //         const selection = window.getSelection();
+    //         const selectionText = selection ? selection.toString().trim() : "";
+    //
+    //         if (selection && selectionText) {
+    //             const range = selection.getRangeAt(0);
+    //             const rects = range.getClientRects();
+    //             if (rects.length === 0) return;
+    //
+    //             const lastRect = rects[rects.length - 1];
+    //             const selectionTop = lastRect.bottom + window.scrollY;
+    //             const selectionLeft = lastRect.right + window.scrollX;
+    //             const maxDistance = 30;
+    //             const offsetY = -50;
+    //             const offsetX = -20;
+    //
+    //             if (lastMouseEvent.current) {
+    //                 const candidateTop = lastMouseEvent.current.pageY;
+    //                 const candidateLeft = lastMouseEvent.current.pageX;
+    //                 const topDiff = candidateTop - selectionTop;
+    //
+    //                 const clampedTop =
+    //                     Math.abs(topDiff) > maxDistance
+    //                         ? selectionTop + (topDiff > 0 ? maxDistance : -maxDistance)
+    //                         : candidateTop;
+    //
+    //                 setReferenceButtonPosition({
+    //                     top: clampedTop + offsetY,
+    //                     left: candidateLeft + offsetX,
+    //                 });
+    //             } else {
+    //                 setReferenceButtonPosition({ top: selectionTop, left: selectionLeft });
+    //             }
+    //             setReferenceButtonVisible(true);
+    //         } else {
+    //             handleClose();
+    //         }
+    //     };
+    //
+    //     document.addEventListener("mouseup", handleMouseUp);
+    //     document.addEventListener("selectionchange", handleSelectionChange);
+    //
+    //     return () => {
+    //         document.removeEventListener("mouseup", handleMouseUp);
+    //         document.removeEventListener("selectionchange", handleSelectionChange);
+    //     };
+    // }, []);
 
     React.useEffect(() => {
         const handleCitationClick = (event: Event) => {
@@ -198,7 +254,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             });
 
             if (citationPlaygroundRef === citationUrl) {
-                const existingIframe = savedPlaygrounds.find(p => p.type === "iframe");
+                const existingIframe = savedPlaygrounds.find((p) => p.type === "iframe");
                 if (existingIframe) {
                     deleteSavedPlaygrounds(existingIframe.id);
                 }
@@ -215,12 +271,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             } else {
                 citationContainer.classList.add("citation-active");
 
-                const citedText = citationContainer.querySelector(".cited-text") as HTMLElement | null;
+                const citedText = citationContainer.querySelector(
+                    ".cited-text"
+                ) as HTMLElement | null;
                 if (citedText) {
                     citedText.style.textDecoration = "underline dashed #9747FF";
                 }
 
-                const citationElement = citationContainer.querySelector(".citation") as HTMLElement | null;
+                const citationElement = citationContainer.querySelector(
+                    ".citation"
+                ) as HTMLElement | null;
                 if (citationElement) {
                     citationElement.style.border = "1px solid #9747ff";
                     citationElement.style.backgroundColor = "#9747ff";
@@ -296,7 +356,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             content: content,
         };
 
-
         addMessageNodeVersion(data.id, newMessage);
 
         setUpdatedContent(content);
@@ -305,7 +364,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         const reply = await doMessageReply();
         const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
         addMessageNode(lastNodeForUserMessage, reply);
-
     };
 
     const cancelEdit = (id: number) => {
@@ -333,7 +391,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             }
             // setIsAllStepOpen(false);
         } else {
-
             const newPlayground: IPlayground = {
                 id: "see_all_steps",
                 name: "See All Steps",
@@ -342,7 +399,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 open: true,
             };
 
-            const existingAllStep = savedPlaygrounds.find(p => p.type === "source");
+            const existingAllStep = savedPlaygrounds.find((p) => p.type === "source");
             if (existingAllStep) {
                 const updatedPlayground = { ...existingAllStep, ...newPlayground };
                 updateSavedPlaygrounds(updatedPlayground);
@@ -357,9 +414,9 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     };
 
 
-    const toggleEditUnauthorized = () => {
-        setEdit(!isEdit);
-    };
+        const toggleEditUnauthorized = () => {
+            setEdit(!isEdit);
+        };
     if (data.isUser) {
         return <UserChatMessage
             data={data}

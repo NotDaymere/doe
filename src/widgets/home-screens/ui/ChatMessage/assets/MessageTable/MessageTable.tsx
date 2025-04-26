@@ -5,11 +5,11 @@ import { IPlayground } from "../../../../../../shared/types/Playground";
 import "./MessageTable.less";
 import DownloadTableIcon from "../../../../../../shared/icons/DownloadTable.icon";
 import ExpandTableIcon from "../../../../../../shared/icons/ExpandTable.icon";
-import {TableSelectedAreaType} from "../../../../lib/enums/TableSelectedAreaTypeEnum";
+import { TableSelectedAreaType } from "../../../../lib/enums/TableSelectedAreaTypeEnum";
 import css from "../../ChatMessage.module.less";
 import { CSSTransition } from "react-transition-group";
-import {useClickOut} from "../../../../../../shared/hooks/useClickOut";
-import * as XLSX from 'xlsx';
+import { useClickOut } from "../../../../../../shared/hooks/useClickOut";
+import * as XLSX from "xlsx";
 
 interface TableColumn {
     title: string;
@@ -110,8 +110,8 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
                     selectedColumn === col.title
                         ? "selected-column"
                         : selectedCell === `${col.title}${(rowIndex || 0) + 1}`
-                            ? "message_table_selected-cell"
-                            : "",
+                          ? "message_table_selected-cell"
+                          : "",
             }),
             onHeaderCell: () => ({
                 onClick: () => {
@@ -213,9 +213,7 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
     const downloadXLSX = () => {
         const wsData = [
             tableData.columns.map((col) => col.title),
-            ...tableData.data.map((row) =>
-                tableData.columns.map((col) => row[col.dataIndex])
-            ),
+            ...tableData.data.map((row) => tableData.columns.map((col) => row[col.dataIndex])),
         ];
         const worksheet = XLSX.utils.aoa_to_sheet(wsData);
         const workbook = XLSX.utils.book_new();
@@ -228,58 +226,62 @@ const MessageTable: FC<MessageTableProps> = ({ tableData }) => {
             <div className="message-table">
                 <div className="message-table-header">
                     <span>Table example</span>
-                        <div className="message-action-buttons">
-                                <button
-                                    className={`message-action-button ${activeMenu ? css.active : ""}`}
-                                    onClick={toggleMenu}>
-                                    <DownloadTableIcon />
-                                </button>
-                                <CSSTransition
-                                    timeout={150}
-                                    in={activeMenu}
-                                    downloadMenuRef={downloadMenuRef}
-                                    mountOnEnter
-                                    unmountOnExit
-                                    classNames={{
-                                        enter: "fadeEnter",
-                                        enterActive: "fadeEnterActive",
-                                        exit: "fadeExit",
-                                        exitActive: "fadeExitActive",
-                                    }}
-                                >
-                                    <div className="table_download_menu" ref={downloadMenuRef}>
-                                        <ul className="table_download_menu_list">
-                                            <li
-                                                onClick={setCloseHandler(downloadCSV)}
-                                                className="table_download_menu_list_item"
-                                            >
-                                                .csv
-                                            </li>
-                                            <li
-                                                onClick={setCloseHandler(downloadTXT)}
-                                                className="table_download_menu_list_item"
-                                            >
-                                                .txt
-                                            </li>
-                                            <li
-                                                onClick={setCloseHandler(downloadXLSX)}
-                                                className="table_download_menu_list_item"
-                                            >
-                                                .xlsx
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </CSSTransition>
-                            <button className="message-action-expand-button" onClick={openTablePlayground}>
-                                <ExpandTableIcon />
-                            </button>
-                        </div>
+                    <div className="message-action-buttons">
+                        <button
+                            className={`message-action-button ${activeMenu ? css.active : ""}`}
+                            onClick={toggleMenu}
+                        >
+                            <DownloadTableIcon />
+                        </button>
+                        <CSSTransition
+                            timeout={150}
+                            in={activeMenu}
+                            downloadMenuRef={downloadMenuRef}
+                            mountOnEnter
+                            unmountOnExit
+                            classNames={{
+                                enter: "fadeEnter",
+                                enterActive: "fadeEnterActive",
+                                exit: "fadeExit",
+                                exitActive: "fadeExitActive",
+                            }}
+                        >
+                            <div className="table_download_menu" ref={downloadMenuRef}>
+                                <ul className="table_download_menu_list">
+                                    <li
+                                        onClick={setCloseHandler(downloadCSV)}
+                                        className="table_download_menu_list_item"
+                                    >
+                                        .csv
+                                    </li>
+                                    <li
+                                        onClick={setCloseHandler(downloadTXT)}
+                                        className="table_download_menu_list_item"
+                                    >
+                                        .txt
+                                    </li>
+                                    <li
+                                        onClick={setCloseHandler(downloadXLSX)}
+                                        className="table_download_menu_list_item"
+                                    >
+                                        .xlsx
+                                    </li>
+                                </ul>
+                            </div>
+                        </CSSTransition>
+                        <button
+                            className="message-action-expand-button"
+                            onClick={openTablePlayground}
+                        >
+                            <ExpandTableIcon />
+                        </button>
                     </div>
+                </div>
                 <Table
                     dataSource={tableData.data}
                     columns={columns}
                     pagination={false}
-                    bordered
+                    bordered={false}
                     rowKey={(_, rowIndex) => rowIndex!.toString()}
                     rowClassName={rowClassName}
                 />

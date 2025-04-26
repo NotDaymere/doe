@@ -5,6 +5,12 @@
     z-index: 100;
 
     &._active {
+        .gaia_wrapper {
+            background-color: var(--var-5);
+            border: 1px solid var(--var-64);
+            transition: 0.2s;
+            transition-delay: 0.5s;
+        }
         .gaia_box {
             transition-delay: 0s;
             width: 240px;
@@ -12,11 +18,21 @@
         .gaia_items_item {
             opacity: 1;
 
-            &:nth-child(1) { transition-delay: 0ms; }
-            &:nth-child(2) { transition-delay: 70ms; }
-            &:nth-child(3) { transition-delay: 140ms; }
-            &:nth-child(4) { transition-delay: 210ms; }
-            &:nth-child(5) { transition-delay: 280ms; }
+            &:nth-child(1) {
+                transition-delay: 0ms;
+            }
+            &:nth-child(2) {
+                transition-delay: 70ms;
+            }
+            &:nth-child(3) {
+                transition-delay: 140ms;
+            }
+            &:nth-child(4) {
+                transition-delay: 210ms;
+            }
+            &:nth-child(5) {
+                transition-delay: 280ms;
+            }
         }
         .gaia_stats {
             opacity: 1;
@@ -47,7 +63,8 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: rgba(#1f1f1f, 0.35);
+    border: 1px solid var(--border-gaia-widget);
+    background: var(--var-5);
 
     transition: 300ms ease;
     transition-property: opacity, visibility, transform;
@@ -59,7 +76,7 @@
     svg {
         width: 8px;
         height: 8px;
-        fill: #FFFFFF;
+        fill: #ffffff;
 
         position: absolute;
         left: 50%;
@@ -75,15 +92,15 @@
 
     padding: 8px;
     border-radius: 1000px;
-    background: rgba(#1F1F1F, 0.35);
+    background-color: var(--var-5);
+    border: 1px solid var(--var-64);
     backdrop-filter: blur(20px);
 
     display: flex;
     align-items: center;
     gap: 4px;
-
     .setFontSohneBuch(16px, 1.2, normal);
-    color: #F8F8F8;
+    color: #f8f8f8;
 
     white-space: nowrap;
 
@@ -98,7 +115,7 @@
         width: 18px;
         height: 18px;
         flex-shrink: 0;
-        fill: #F8F8F8;
+        fill: #f8f8f8;
     }
 
     span {
@@ -109,10 +126,13 @@
 .gaia_wrapper {
     width: 240px;
     padding: 8px;
+    border: 1px solid var(--var-63);
     border-radius: 22px;
-    background: rgba(#1f1f1f, 0.35);
+    background-color: var(--var-4);
     backdrop-filter: blur(20px);
-    box-sizing: 0 4px 20px rgba(#000, 0.06);
+    box-shadow: 0 4px 20px rgba(#000, 0.06);
+    transition: 0.2s;
+    transition-delay: 0s;
 }
 
 .gaia_box {
@@ -127,7 +147,7 @@
     justify-content: space-between;
     padding: 6px 8px;
     border-radius: 1000px;
-    background: rgba(#fff, 0.8);
+    background: var(--var-6);
     backdrop-filter: blur(40px);
 }
 .gaia_items_item {
@@ -143,11 +163,21 @@
     opacity: 0;
     transition: opacity 500ms ease;
 
-    &:nth-child(5) { transition-delay: 0ms; }
-    &:nth-child(4) { transition-delay: 70ms; }
-    &:nth-child(3) { transition-delay: 140ms; }
-    &:nth-child(2) { transition-delay: 210ms; }
-    &:nth-child(1) { transition-delay: 280ms; }
+    &:nth-child(5) {
+        transition-delay: 0ms;
+    }
+    &:nth-child(4) {
+        transition-delay: 70ms;
+    }
+    &:nth-child(3) {
+        transition-delay: 140ms;
+    }
+    &:nth-child(2) {
+        transition-delay: 210ms;
+    }
+    &:nth-child(1) {
+        transition-delay: 280ms;
+    }
 
     svg {
         width: 18px;
@@ -182,7 +212,7 @@
 
     + .gaia_stats_item {
         position: relative;
-        border-left: 1px solid rgba(#000, 0.05);
+        border-left: 1px solid var(--var-83);
     }
 }
 .gaia_stats_item p {
@@ -193,15 +223,15 @@
     > span {
         .setFontSohneBuch(16px, 1, normal);
         &:nth-child(1) {
-            color: #fff;
+            color: var(--color-white-100);
         }
 
         &:nth-child(2) {
-            color: #eeeeee;
+            color: var(--var-124);
         }
 
         sup {
-            color: #eeeeee;
+            color: var(--var-124);
             font-size: 0.6em;
         }
     }

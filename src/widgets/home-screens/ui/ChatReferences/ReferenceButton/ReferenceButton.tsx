@@ -10,11 +10,11 @@ interface ReferenceButtonProps {
 }
 
 const ReferenceButton: React.FC<ReferenceButtonProps> = ({
-                                                             position = { top: 0, left: 0 },
-                                                             isVisible,
-                                                             onClose,
-                                                             onReferenceClick,
-                                                         }) => {
+    position = { top: 0, left: 0 },
+    isVisible,
+    onClose,
+    onReferenceClick,
+}) => {
     const handleClick = () => {
         onClose();
         onReferenceClick();
