@@ -209,8 +209,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         };
 
         const onDraggableMouseDown = (
-            e: React.MouseEvent<HTMLDivElement>,
-            type: "input" | "annotation"
+            e: React.MouseEvent<HTMLDivElement>, type: "input" | "annotation"
         ) => {
             e.stopPropagation();
             draggingRef.current = true;
