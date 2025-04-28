@@ -10,12 +10,10 @@ function UploadChartBody() {
     const [chartData, setChartData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Load default data on component mount
     useEffect(() => {
         loadDefaultData();
     }, []);
 
-    // Function to load default data from public directory
     const loadDefaultData = async () => {
         try {
             setIsLoading(true);

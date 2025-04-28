@@ -6,7 +6,6 @@ import ConsoleWindow from "./Components/Consolewindow/ConsoleWindow";
 import Draggable from "react-draggable";
 import "./Console.less";
 
-// Define the context for managing console state with a default value
 const ConsoleContext = createContext({
     showMenu: false,
     toggleMenu: () => {},
@@ -45,10 +44,8 @@ function Console() {
     const isResizing = useRef(false);
     const resizeDirection = useRef("");
 
-    // Add click outside listener to close the menu
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            // If menu is shown and click is outside menu and not on the toggle button
             if (
                 showMenu &&
                 menuRef.current &&
@@ -60,12 +57,10 @@ function Console() {
             }
         };
 
-        // Add event listener when menu is shown
         if (showMenu) {
             document.addEventListener("mousedown", handleClickOutside);
         }
 
-        // Clean up event listener
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -169,7 +164,6 @@ function Console() {
                                 })}
                             </div>
 
-                            {/* Resizer Handles */}
                             <div
                                 className="resizer top-left"
                                 onMouseDown={(e) => handleMouseDown(e, "top-left")}

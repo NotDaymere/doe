@@ -51,7 +51,6 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
         changePage(pageName);
         setParameter(parameterName || "");
         setLink(linkName || "");
-        // console.log("par"+parameterName);
     };
 
     const openWindow = () => setIsVisible(true);
@@ -61,7 +60,6 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
         openWindow,
     }));
 
-    // 🔹 Listen for the event to open the window
     useEffect(() => {
         const openWindowHandler = (event: CustomEvent) => {
             setPage(event.detail?.page || Page.NEW_CHART, event.detail?.parameter || "test");

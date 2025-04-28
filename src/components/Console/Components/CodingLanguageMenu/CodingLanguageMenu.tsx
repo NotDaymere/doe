@@ -1,13 +1,10 @@
 import "./CodingLanguageMenu.less";
 import { forwardRef } from "react";
 
-// Add onSelectLanguage prop to the component
 const CodingLanguageMenu = forwardRef((props: { onSelectLanguage?: () => void }, ref) => {
     const { onSelectLanguage } = props;
 
-    // Function to handle button click
     const handleButtonClick = () => {
-        // Call the onSelectLanguage function if it exists
         if (onSelectLanguage) {
             onSelectLanguage();
         }
@@ -33,7 +30,5 @@ const CodingLanguageMenu = forwardRef((props: { onSelectLanguage?: () => void },
         </div>
     );
 });
-
-//CodingLanguageMenu.displayName = "CodingLanguageMenu";
 
 export default CodingLanguageMenu;

@@ -16,10 +16,8 @@ function TerminalBody() {
     const [bugs, setBugs] = useState<Array<{ id: number; type: string; x: number; y: number }>>([]);
     const { numberOfConsole } = useConsole();
 
-    // Replace the single showWhiteDot state with an array to track all lines with white dots
     const [showWhiteDot, setShowWhiteDot] = useState(false);
 
-    // Add this new state to track all lines that should have white dots
     const [whiteDotLines, setWhiteDotLines] = useState<number[]>([]);
 
     useEffect(() => {
@@ -79,25 +77,19 @@ function TerminalBody() {
                 term.writeln(`${red}23.1.2 ${reset}->${red}24.3.1${reset}`);
                 term.writeln("(venv) okezuebell@MacBook-Air Desktop % python3 chessgame.py");
 
-                // In the useEffect where the terminal is initialized, update the initialization of white dots
-                // Find where it sets setShowWhiteDot(true) and replace with:
                 setWhiteDotLines((prev) => [...prev, lineIndex]);
 
                 term.onData((data) => {
                     const code = data.charCodeAt(0);
 
                     if (code === 127) {
-                        // Backspace
                         term.write("\b \b");
                     } else if (code === 13) {
-                        // Enter key
-                        term.write("\r\n"); // Move to next line
+                        term.write("\r\n");
 
-                        // Increment line index for the new line
                         lineIndex += 1;
                         setCurrentLineIndex(lineIndex);
 
-                        // Add this line to the list of lines with white dots
                         setWhiteDotLines((prev) => [...prev, lineIndex]);
                     } else {
                         term.write(data);
@@ -106,25 +98,19 @@ function TerminalBody() {
             } else {
                 term.writeln("");
 
-                // In the useEffect where the terminal is initialized, update the initialization of white dots
-                // Find where it sets setShowWhiteDot(true) and replace with:
                 setWhiteDotLines((prev) => [...prev, lineIndex]);
 
                 term.onData((data) => {
                     const code = data.charCodeAt(0);
 
                     if (code === 127) {
-                        // Backspace
                         term.write("\b \b");
                     } else if (code === 13) {
-                        // Enter key
-                        term.write("\r\n"); // Move to next line
+                        term.write("\r\n");
 
-                        // Increment line index for the new line
                         lineIndex += 1;
                         setCurrentLineIndex(lineIndex);
 
-                        // Add this line to the list of lines with white dots
                         setWhiteDotLines((prev) => [...prev, lineIndex]);
                     } else {
                         term.write(data);
@@ -142,15 +128,14 @@ function TerminalBody() {
         };
     }, []);
 
-    // Fixed row height for perfect alignment
     const calculatePosition = (x: number, y: number) => {
         if (!terminalRef.current || !termInstance.current) return { top: 19.5, left: 0 };
 
-        const charHeight = 19.3; // Directly using the known row height
+        const charHeight = 19.3;
 
         return {
             top: y * charHeight + 13.8,
-            left: 20, // Align dots to the left margin
+            left: 20,
         };
     };
 
@@ -186,7 +171,6 @@ function TerminalBody() {
                     );
                 })}
 
-                {/* White dots for all marked lines */}
                 {whiteDotLines.map((lineIdx) => (
                     <div
                         key={`white-dot-${lineIdx}`}
@@ -201,7 +185,7 @@ function TerminalBody() {
                             zIndex: 10,
                         }}
                         className="white-bug"
-                        onMouseEnter={() => setHoveredBug(999999 + lineIdx)} // Use a unique ID for each line
+                        onMouseEnter={() => setHoveredBug(999999 + lineIdx)}
                         onMouseLeave={() => setHoveredBug(null)}
                     >
                         {hoveredBug === 999999 + lineIdx && (
@@ -239,7 +223,6 @@ function TerminalBody() {
                     );
                 })}
 
-                {/* White lines for all marked lines */}
                 {whiteDotLines.map((lineIdx) => (
                     <div
                         key={`white-line-${lineIdx}`}
