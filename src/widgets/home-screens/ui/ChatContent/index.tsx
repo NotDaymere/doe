@@ -258,6 +258,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         editMsgMode={editMsgMode}
                         setEditMsgMode={setEditMsgMode}
                         dialogRefs={dialogRefs}
+                        chatRef={chatRef}
                     />
                 )}
                 {!isCurrentBranchOpen && (
