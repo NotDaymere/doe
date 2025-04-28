@@ -12,8 +12,11 @@
   height: 100%;
 
   .profile_container {
+    position: relative;
     padding-left: 8px;
     margin-top: 10px;
+    height: 40px;
+    width: 40px;
 
     .sidebar_profile {
       .sidebar_profile_img {
@@ -25,7 +28,41 @@
       }
     }
     .profile_user_info_container {
-      display: none;
+      position: absolute;
+      left: 53px;
+      bottom: 3px;
+      overflow: hidden;
+
+      display: flex;
+      align-items: center;
+      flex-direction: row !important;
+      font-size: 14px;
+      font-weight: 500;
+      flex-wrap: nowrap;
+      gap: 3px;
+      opacity: 0;
+      transition: opacity 0.4s ease-in, width 0.3s ease-in-out;
+      width: 20px;
+
+
+      .profile_user_info {
+        display: flex;
+        flex-direction: column;
+        .profile_username {
+          color: #5B5B5B;
+          font-size: 14px;
+          font-weight: 500;
+        }
+        .profile_email {
+          color: #B5B5B5;
+          font-weight: 400;
+          font-size: 14px;
+        }
+      }
+
+      .change_profile_btn {
+        display: none;
+      }
     }
   }
 
@@ -50,6 +87,8 @@
       height: 72px;
       border-radius: 1000px;
       box-sizing: border-box;
+      transform: rotate(0deg);
+      transition: transform 0.3s ease-in-out;
 
       .theme_toggle_ball {
         position: absolute;
@@ -129,7 +168,20 @@
     }
 
     .theme_name {
-      display: none;
+      position: absolute;
+      left: 52px;
+      width: 100%;
+      align-items: center;
+      flex-wrap: nowrap;
+      gap: 3px;
+      opacity: 0;
+
+      font-weight: 500;
+      font-size: 14px;
+      color: #B5B5B5;
+      display: flex;
+      flex-direction: row !important;
+
     }
   }
 
@@ -239,10 +291,10 @@
   height: 100%;
 
   .profile_container {
+    margin-bottom: 20px;
     padding: 10px 0;
     width: 100%;
-    max-width: 100%;
-    transition: max-width 0.3s ease-in-out;
+
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -268,9 +320,12 @@
       align-items: center;
       width: 100%;
       max-width: 100%;
-      transition: max-width 0.3s ease-in-out;
       justify-content: space-between;
       padding-right: 40px;
+      opacity: 1;
+      font-size: 14px;
+      font-weight: 500;
+      transition: opacity 0.4s ease-in;
 
       .profile_user_info {
         display: flex;
@@ -363,9 +418,11 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    margin-top: 10px;
+    margin-top: -10px;
     align-items: center;
     gap: 15px;
+    transition: margin-top 0.3s ease;
+    position: relative;
 
     .theme_name {
       font-weight: 500;
@@ -375,6 +432,12 @@
       flex-wrap: nowrap;
       flex-direction: row !important;
       gap: 3px;
+      position: absolute;
+      left: 75px;
+      width: 100%;
+      align-items: center;
+      opacity: 1;
+      transition: opacity 0.3s ease-in ;
     }
 
     .theme_toggle {
@@ -382,14 +445,19 @@
       position: relative;
       gap: 10px;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       align-content: center;
-      width: 72px;
-      height: 40px;
+      width: 40px;
+      height: 72px;
       border-radius: 1000px;
       box-sizing: border-box;
+      transform: rotate(-90deg);
+      transition: transform 0.3s ease-in-out;
+      margin-right: 10px;
+      margin-left: 10px;
+
 
       .theme_toggle_ball {
         position: absolute;
@@ -397,7 +465,7 @@
         height: 30px;
         border-radius: 50%;
         background-color: rgba(255, 255, 255, 0.43);
-        transition: left 0.3s ease;
+        transition: top 0.3s ease;
         z-index: 1;
       }
 

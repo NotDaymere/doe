@@ -145,7 +145,9 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     const handleScroll = useCallback(() => {
         if (!chatRef.current) return;
         const { scrollTop, clientHeight, scrollHeight } = chatRef.current;
-        setShowScrollDownBtn(scrollTop + clientHeight < scrollHeight - 50);
+        const canScroll = scrollHeight > clientHeight;
+        const isNotAtBottom = scrollTop + clientHeight < scrollHeight - 50;
+        setShowScrollDownBtn(canScroll && isNotAtBottom);
     }, [chatRef]);
 
     React.useEffect(() => {
@@ -256,6 +258,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         editMsgMode={editMsgMode}
                         setEditMsgMode={setEditMsgMode}
                         dialogRefs={dialogRefs}
+                        chatRef={chatRef}
                     />
                 )}
                 {!isCurrentBranchOpen && (
