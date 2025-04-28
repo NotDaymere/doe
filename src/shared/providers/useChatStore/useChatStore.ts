@@ -100,6 +100,7 @@ print(result)  # Output: [1, 2, 4, 5]
     },
 ];
 
+
 const initialMessagesChat2: IMessage[] = [
     {
         id: 101,
@@ -109,6 +110,7 @@ const initialMessagesChat2: IMessage[] = [
         isUser: true,
     },
     {
+      
         id: 102,
         content: "<p>This is a mock reply in Chat 02. Enjoy your conversation!</p>",
         files: [],
