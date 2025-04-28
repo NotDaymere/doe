@@ -32,7 +32,7 @@
         &__wrapper {
             display: flex;
             margin-top: 6px;
-            max-height: 122px;
+            max-height: 95px;
             padding-bottom: 10px;
             border-bottom: 1px solid rgb(238, 238, 238);
         }
@@ -62,7 +62,7 @@
                 font-weight: 600;
             }
             &:hover &__controls {
-                display: flex;
+                opacity: 1;
             }
             &:first-child::before {
                 height: 22px;
@@ -91,8 +91,10 @@
                 white-space: nowrap;
             }
             &__controls {
-                display: none;
+                display: flex;
+                opacity: 0;
                 gap: 2px;
+                transition: 0.3s;
             }
             &__controlBtn {
                 display: flex;

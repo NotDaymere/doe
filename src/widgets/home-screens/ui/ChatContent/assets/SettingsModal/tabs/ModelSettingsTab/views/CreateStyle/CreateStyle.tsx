@@ -1,7 +1,7 @@
 import { MagicIcon } from "src/shared/icons/MagicIcon";
 import styles from "../Personalization.module.less";
+import styleCSS from "./CreateStyle.module.less";
 import modalStyles from "../../../../SettingsModal.module.less";
-import personCSS from "./CreatePersona.module.less";
 import { GeneralSettingsIcon } from "src/shared/icons/GeneralSettingsIcon";
 import { SettingsUploadIcon } from "src/shared/icons/SettingsUploadIcon";
 import { useState } from "react";
@@ -10,29 +10,30 @@ import { TextBlock } from "../tabs/TextBlock/TextBlock";
 import { UploadFiles } from "../tabs/UploadFiles/UploadFiles";
 import { FileWithId } from "../../../../components/UploadButton";
 import { useNavigate } from "react-router";
-type PersonaDataType = {
+type StyleDataType = {
     text: string;
     files: FileWithId[];
 };
-type SavePersonaDataType = PersonaDataType & { id: string; name: string };
-type CreatePersonaProps = {
-    onSave: (data: SavePersonaDataType) => void;
+type SaveStyleDataType = StyleDataType & { id: string; name: string };
+type CreateStyleProps = {
+    onSave: (data: SaveStyleDataType) => void;
 };
 
-export const CreatePersona = ({ onSave }: CreatePersonaProps) => {
+export const CreateStyle = ({ onSave }: CreateStyleProps) => {
     const [activeTab, setActiveTab] = useState<1 | 2>(1);
-    const [personaData, setPersonaData] = useState<PersonaDataType>({
+    const [styleData, setStyleData] = useState<StyleDataType>({
         text: "",
         files: [],
     });
+    console.log(" CreateStyle ~ styleData:", styleData);
     const navigate = useNavigate();
     const handleSave = () => {
-        const persona: SavePersonaDataType = {
-            ...personaData,
+        const style: SaveStyleDataType = {
+            ...styleData,
             id: crypto.randomUUID(),
-            name: "New persona",
+            name: "New style",
         };
-        onSave(persona);
+        onSave(style);
         navigate(-1);
     };
     return (
@@ -41,17 +42,17 @@ export const CreatePersona = ({ onSave }: CreatePersonaProps) => {
                 <div
                     className={clsx(
                         styles.personalization__header__info,
-                        personCSS.createPerson__header__info
+                        styleCSS.createStyle__header__info
                     )}
                 >
                     <MagicIcon />
                     <p
                         className={clsx(
                             styles.personalization__header__title,
-                            personCSS.createPerson__header__title
+                            styleCSS.createStyle__header__title
                         )}
                     >
-                        Creating Persona
+                        Creating Writing Style
                     </p>
                 </div>
                 <div className={styles.personalization__header__controls}>
@@ -63,7 +64,7 @@ export const CreatePersona = ({ onSave }: CreatePersonaProps) => {
                     </button>
                     <button
                         className={styles.personalization__saveBtn}
-                        disabled={!personaData.text && !personaData.files.length}
+                        disabled={!styleData.text && !styleData.files.length}
                         onClick={() => handleSave()}
                     >
                         <GeneralSettingsIcon />
@@ -101,15 +102,14 @@ export const CreatePersona = ({ onSave }: CreatePersonaProps) => {
                         <div className={styles.personalization__tabs__content}>
                             {activeTab === 1 && (
                                 <TextBlock
-                                    onChange={(text) =>
-                                        setPersonaData((prev) => ({ ...prev, text }))
-                                    }
+                                    // onChange={(text) => console.log(text)}
+                                    onChange={(text) => setStyleData((prev) => ({ ...prev, text }))}
                                 />
                             )}
                             {activeTab === 2 && (
                                 <UploadFiles
                                     setFile={(file) =>
-                                        setPersonaData((prev) => ({
+                                        setStyleData((prev) => ({
                                             ...prev,
                                             files: [file, ...prev.files],
                                         }))

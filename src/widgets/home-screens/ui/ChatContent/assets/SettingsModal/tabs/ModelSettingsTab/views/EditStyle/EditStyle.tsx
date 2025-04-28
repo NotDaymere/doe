@@ -1,7 +1,6 @@
-import { MagicIcon } from "src/shared/icons/MagicIcon";
 import styles from "../Personalization.module.less";
 import modalStyles from "../../../../SettingsModal.module.less";
-import personCSS from "./CreatePersona.module.less";
+import styleCSS from "./EditStyle.module.less";
 import { GeneralSettingsIcon } from "src/shared/icons/GeneralSettingsIcon";
 import { SettingsUploadIcon } from "src/shared/icons/SettingsUploadIcon";
 import { useState } from "react";
@@ -10,50 +9,44 @@ import { TextBlock } from "../tabs/TextBlock/TextBlock";
 import { UploadFiles } from "../tabs/UploadFiles/UploadFiles";
 import { FileWithId } from "../../../../components/UploadButton";
 import { useNavigate } from "react-router";
-type PersonaDataType = {
+import { UploadProgress } from "../../../../components/UploadProgress/UploadProgress";
+type StyleDataType = {
+    id: string;
+    name: string;
     text: string;
     files: FileWithId[];
 };
-type SavePersonaDataType = PersonaDataType & { id: string; name: string };
-type CreatePersonaProps = {
-    onSave: (data: SavePersonaDataType) => void;
+type EditStyleProps = {
+    onSave: (data: StyleDataType) => void;
+    style: StyleDataType;
 };
 
-export const CreatePersona = ({ onSave }: CreatePersonaProps) => {
+export const EditStyle = ({ onSave, style }: EditStyleProps) => {
     const [activeTab, setActiveTab] = useState<1 | 2>(1);
-    const [personaData, setPersonaData] = useState<PersonaDataType>({
-        text: "",
-        files: [],
-    });
+    const [styleData, setStyleData] = useState<StyleDataType>(style);
     const navigate = useNavigate();
     const handleSave = () => {
-        const persona: SavePersonaDataType = {
-            ...personaData,
-            id: crypto.randomUUID(),
-            name: "New persona",
-        };
-        onSave(persona);
+        onSave(styleData);
         navigate(-1);
+    };
+    const onFileDelete = (fileId: string) => {
+        setStyleData((prev) => ({
+            ...prev,
+            files: prev.files.filter(({ id }) => id !== fileId),
+        }));
     };
     return (
         <div className={styles.personalization}>
             <div className={styles.personalization__header}>
-                <div
+                <p
                     className={clsx(
-                        styles.personalization__header__info,
-                        personCSS.createPerson__header__info
+                        styles.personalization__header__title,
+                        styleCSS.editPerson__header__title
                     )}
                 >
-                    <MagicIcon />
-                    <p
-                        className={clsx(
-                            styles.personalization__header__title,
-                            personCSS.createPerson__header__title
-                        )}
-                    >
-                        Creating Persona
-                    </p>
-                </div>
+                    {styleData.name}
+                </p>
+
                 <div className={styles.personalization__header__controls}>
                     <button
                         className={modalStyles.settingsModal__cancelBtn}
@@ -63,7 +56,7 @@ export const CreatePersona = ({ onSave }: CreatePersonaProps) => {
                     </button>
                     <button
                         className={styles.personalization__saveBtn}
-                        disabled={!personaData.text && !personaData.files.length}
+                        disabled={!styleData.text && !styleData.files.length}
                         onClick={() => handleSave()}
                     >
                         <GeneralSettingsIcon />
@@ -101,20 +94,37 @@ export const CreatePersona = ({ onSave }: CreatePersonaProps) => {
                         <div className={styles.personalization__tabs__content}>
                             {activeTab === 1 && (
                                 <TextBlock
-                                    onChange={(text) =>
-                                        setPersonaData((prev) => ({ ...prev, text }))
-                                    }
+                                    value={styleData.text}
+                                    onChange={(text) => setStyleData((prev) => ({ ...prev, text }))}
                                 />
                             )}
                             {activeTab === 2 && (
-                                <UploadFiles
-                                    setFile={(file) =>
-                                        setPersonaData((prev) => ({
-                                            ...prev,
-                                            files: [file, ...prev.files],
-                                        }))
-                                    }
-                                />
+                                <>
+                                    <UploadFiles
+                                        files={styleData.files}
+                                        setFile={(file) =>
+                                            setStyleData((prev) => ({
+                                                ...prev,
+                                                files: [file, ...prev.files],
+                                            }))
+                                        }
+                                    >
+                                        <>
+                                            {!!styleData.files.length &&
+                                                styleData.files.map((file) => (
+                                                    <UploadProgress
+                                                        file={file}
+                                                        onClear={() => onFileDelete(file.id)}
+                                                        onCompleteUpload={(file) =>
+                                                            console.log(file)
+                                                        }
+                                                        disappearAfterUpload={false}
+                                                        showAsUploaded
+                                                    />
+                                                ))}
+                                        </>
+                                    </UploadFiles>
+                                </>
                             )}
                         </div>
                     </div>
