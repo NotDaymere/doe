@@ -50,7 +50,7 @@ export const SCREEN_SHARE_CONFIG: IScreenSharePopup = {
         description: `<span>Start broadcasting your desktop device screen. You can continue working with Doe with full functionality while the screen is being broadcast and Doe is interacting with the screen content.</span>`,
         label: "Share computer screen",
         icon: <ScreenIcon width={14} height={12} className={css.screenShareIcon} />,
-        videoUrl: "",
+        videoUrl: "/screen-share/shere_screen_onboarding_3_1.mp4",
     },
     shareViaBluetooth: {
         title: "Share your mobile screen",
@@ -65,7 +65,7 @@ export const SCREEN_SHARE_CONFIG: IScreenSharePopup = {
         description: `<span>To switch to sharing mode, connect your mobile device to your computer <strong>via a cable.</strong></span><span>You can also connect your device <strong>via Bluetooth</strong> if a cable connection is not available. <span/>`,
         label: "Share Mobile screen via a cable",
         icon: <CableIcon width={21} height={5} className={css.screenShareIcon} />,
-        videoUrl: "",
+        videoUrl: "/screen-share/usb_connection_success.MP4",
     },
     connectionFailed: {
         title: "Connection failed",
@@ -83,8 +83,8 @@ export const SCREEN_SHARE_CONFIG: IScreenSharePopup = {
 export const ChatPanel: React.FC = () => {
     const { text, files, setText, setFiles, reset } = usePanel();
     const messages = useChatStore((state) => state.messages);
-    const [clearContent, setClearContent] = React.useState(false)
-    const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore()
+    const [clearContent, setClearContent] = React.useState(false);
+    const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore();
     const {
         setEditor,
         setMessages,
@@ -111,13 +111,14 @@ export const ChatPanel: React.FC = () => {
 
     const [loadingFile, setLoadingFile] = React.useState<string | undefined>(undefined);
 
-    const { isTablePromptVisible, setIsTablePromptVisible, isHyperlinkInputOpen,
-        setIsHyperlinkInputOpen } = useAppStore();
     const {
-        selectedArea
+        isTablePromptVisible,
+        setIsTablePromptVisible,
+        isHyperlinkInputOpen,
+        setIsHyperlinkInputOpen,
     } = useAppStore();
+    const { selectedArea } = useAppStore();
     const panelRef = React.useRef<HTMLDivElement>(null);
-
 
     const {
         drag,
@@ -171,6 +172,7 @@ export const ChatPanel: React.FC = () => {
 
     const [showLinkInput, setShowLinkInput] = React.useState(false);
     const [linkUrl, setLinkUrl] = React.useState("");
+    const linkInputRef = React.useRef<HTMLInputElement | null>(null);
     const [savedRange, setSavedRange] = React.useState<Range | null>(null);
 
     const [linkInputPosition, setLinkInputPosition] = React.useState({ top: 0, left: 0 });
@@ -185,7 +187,20 @@ export const ChatPanel: React.FC = () => {
         };
 
         const handleSelectionChange = () => {
-            updateLinkInputPosition();
+            const selection = window.getSelection();
+            const isLinkInputFocused = document.activeElement === linkInputRef.current;
+
+            if (!selection || (selection.toString().trim() === "" && !isLinkInputFocused)) {
+                setShowLinkInput(false);
+                setIsHyperlinkInputOpen(false);
+                setSavedRange(null);
+                setLinkUrl("");
+                return;
+            }
+
+            if (selection && selection.toString().trim() !== "") {
+                updateLinkInputPosition();
+            }
         };
 
         function updateLinkInputPosition() {
@@ -216,7 +231,10 @@ export const ChatPanel: React.FC = () => {
                         : candidateTop;
                 setLinkInputPosition({ top: clampedTop + offsetY, left: candidateLeft + offsetX });
             } else {
-                setLinkInputPosition({ top: selectionTop + offsetY, left: selectionLeft + offsetX });
+                setLinkInputPosition({
+                    top: selectionTop + offsetY,
+                    left: selectionLeft + offsetX,
+                });
             }
         }
 
@@ -283,7 +301,7 @@ export const ChatPanel: React.FC = () => {
 
         try {
             const urlObj = new URL(trimmedUrl);
-            if (['http:', 'https:'].includes(urlObj.protocol)) {
+            if (["http:", "https:"].includes(urlObj.protocol)) {
                 return { isValid: true, normalizedUrl: trimmedUrl };
             }
             return { isValid: false, normalizedUrl: trimmedUrl };
@@ -325,7 +343,6 @@ export const ChatPanel: React.FC = () => {
 
         const { isValid, normalizedUrl } = isValidUrl(linkUrl);
         if (!isValid) {
-
             alert("Please enter a valid URL (e.g., example.com or https://example.com)");
             setShowLinkInput(false);
             setIsHyperlinkInputOpen(false);
@@ -342,10 +359,16 @@ export const ChatPanel: React.FC = () => {
 
         setTimeout(() => {
             window.getSelection()?.removeAllRanges();
-            if (editorRef.current && typeof (editorRef.current as HTMLDivElement).blur === "function") {
+            if (
+                editorRef.current &&
+                typeof (editorRef.current as HTMLDivElement).blur === "function"
+            ) {
                 (editorRef.current as HTMLDivElement).blur();
             } else {
-                if (document.activeElement && typeof (document.activeElement as HTMLElement).blur === "function") {
+                if (
+                    document.activeElement &&
+                    typeof (document.activeElement as HTMLElement).blur === "function"
+                ) {
                     (document.activeElement as HTMLElement).blur();
                 }
             }
@@ -366,7 +389,9 @@ export const ChatPanel: React.FC = () => {
             blob = await response.blob();
         } catch (error) {
             console.error("Failed to fetch content from the link (possibly a CORS issue).", error);
-            blob = new Blob([`Failed to fetch actual content from the link:\n${normalizedUrl}`], { type: "text/plain" });
+            blob = new Blob([`Failed to fetch actual content from the link:\n${normalizedUrl}`], {
+                type: "text/plain",
+            });
         }
 
         const fileWithId = Object.assign(new File([blob], fileName, { type: blob.type }), {
@@ -386,13 +411,12 @@ export const ChatPanel: React.FC = () => {
     }, [savedRange, linkUrl, files, setFiles, setIsHyperlinkInputOpen]);
 
     const hasTextContent = (html: string): boolean => {
-        const tempDiv = document.createElement('div');
+        const tempDiv = document.createElement("div");
         tempDiv.innerHTML = html;
-        return tempDiv.textContent!.trim() !== '';
+        return tempDiv.textContent!.trim() !== "";
     };
 
     const handleSend = async () => {
-
         if (text.trim() === "") {
             return;
         }
@@ -444,6 +468,7 @@ export const ChatPanel: React.FC = () => {
     const handleChangeEditor = (value: string) => {
         setClearContent(false);
         setText(value);
+        processLinksFromText(value);
     };
 
     const normalizeUrl = (url: string): string => {
@@ -467,90 +492,67 @@ export const ChatPanel: React.FC = () => {
         }
     };
 
-    const processLinksFromText = async () => {
+    const processLinksFromText = async (inputText: string) => {
         const parser = new DOMParser();
-        const doc = parser.parseFromString(text, "text/html");
+        const doc = parser.parseFromString(inputText, "text/html");
         const anchors = doc.querySelectorAll("a");
-        let newFiles: FileWithId[] = [];
-
-        const anchorLinks = new Set<string>();
+        const currentLinks = new Set<string>();
 
         for (const anchor of Array.from(anchors)) {
-            let link = anchor.getAttribute("href");
-            if (!link) continue;
-
-            link = cleanUrl(link);
-
-            if (files.some((file) => file.name === link) || anchorLinks.has(link)) {
-                continue;
+            const link = anchor.getAttribute("href");
+            if (link) {
+                currentLinks.add(cleanUrl(link));
             }
-
-            anchorLinks.add(link);
-
-            let blob;
-            try {
-                const response = await fetch(link);
-                if (!response.ok) {
-                    throw new Error(`Non-200 status: ${response.status}`);
-                }
-                blob = await response.blob();
-            } catch (error) {
-                console.error("Failed to fetch content from link (possibly due to CORS).", error);
-                blob = new Blob([`Failed to fetch content from link:\n${link}`], {
-                    type: "text/plain",
-                });
-            }
-
-            const fileWithId = Object.assign(
-                new File([blob], link, { type: blob.type }),
-                { id: `${Date.now()}-${Math.random()}` }
-            ) as FileWithId;
-
-            newFiles.push(fileWithId);
         }
 
         const urlRegex = /(https?:\/\/[^\s'"]+)/gi;
-        const plainLinks = text.match(urlRegex) || [];
+        const plainLinks = inputText.match(urlRegex) || [];
+        plainLinks.forEach((link) => currentLinks.add(cleanUrl(link)));
 
-        const uniquePlainLinks = new Set(plainLinks.map(link => cleanUrl(link)));
-
-        for (const link of uniquePlainLinks) {
-
-            if (files.some((file) => file.name === link) || anchorLinks.has(link)) {
-                continue;
+        const updatedFiles = files.filter((file) => {
+            if (!file.name.startsWith("http://") && !file.name.startsWith("https://")) {
+                return true;
             }
+            return currentLinks.has(file.name);
+        });
 
-            let blob;
-            try {
-                const response = await fetch(link);
-                if (!response.ok) {
-                    throw new Error(`Non-200 status: ${response.status}`);
+        const newLinks = Array.from(currentLinks).filter(
+            (link) => !files.some((file) => file.name === link)
+        );
+
+        const newFiles = await Promise.all(
+            newLinks.map(async (link) => {
+                let blob;
+                try {
+                    const response = await fetch(link);
+                    if (!response.ok) {
+                        throw new Error(`Non-200 status: ${response.status}`);
+                    }
+                    blob = await response.blob();
+                } catch (error) {
+                    console.error("Failed to fetch content from link (possibly due to CORS).", error);
+                    blob = new Blob([`Failed to fetch content from link:\n${link}`], {
+                        type: "text/plain",
+                    });
                 }
-                blob = await response.blob();
-            } catch (error) {
-                console.error("Failed to fetch content from link (possibly due to CORS).", error);
-                blob = new Blob([`Failed to fetch content from link:\n${link}`], {
-                    type: "text/plain",
-                });
-            }
 
-            const fileWithId = Object.assign(
-                new File([blob], link, { type: blob.type }),
-                { id: `${Date.now()}-${Math.random()}` }
-            ) as FileWithId;
+                const fileWithId = Object.assign(new File([blob], link, { type: blob.type }), {
+                    id: `${Date.now()}-${Math.random()}`,
+                }) as FileWithId;
 
-            newFiles.push(fileWithId);
-        }
+                return fileWithId;
+            })
+        );
 
-        if (newFiles.length > 0) {
-            setFiles([...files, ...newFiles]);
+        if (newFiles.length > 0 || updatedFiles.length < files.length) {
+            setFiles([...updatedFiles, ...newFiles]);
         }
     };
 
     const handleKeyPress = async (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === "Tab") {
             e.preventDefault();
-            await processLinksFromText();
+            await processLinksFromText(text);
             return;
         }
         if (e.code === "Enter" && !e.shiftKey) {
@@ -776,6 +778,7 @@ export const ChatPanel: React.FC = () => {
                             }}
                         >
                             <input
+                                ref={linkInputRef}
                                 value={linkUrl}
                                 onChange={(e) => setLinkUrl(e.target.value)}
                                 placeholder="Enter URL"
@@ -789,7 +792,9 @@ export const ChatPanel: React.FC = () => {
                                         if (isValid) {
                                             handleApplyLink();
                                         } else {
-                                            alert("Please enter a valid URL (e.g., example.com or https://example.com)");
+                                            alert(
+                                                "Please enter a valid URL (e.g., example.com or https://example.com)"
+                                            );
                                             setShowLinkInput(false);
                                             setLinkUrl("");
                                             setSavedRange(null);

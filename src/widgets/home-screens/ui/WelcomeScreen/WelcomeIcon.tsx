@@ -151,7 +151,7 @@ const WelcomeIcon: React.FC = () => {
                     setCurrentIcon((prev) => prev + 1);
                     setCurrentPathIndex(0);
                 }
-            }, 300);
+            }, 200);
         }
     }, [currentIcon, currentPathIndex]);
 
@@ -174,7 +174,7 @@ const WelcomeIcon: React.FC = () => {
 
             setTimeout(() => {
                 setCurrentPathIndex((prev) => prev + 1);
-            }, 60);
+            }, 30);
         });
     }
 

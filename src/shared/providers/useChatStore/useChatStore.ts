@@ -112,7 +112,7 @@ const initialMessagesChat2: IMessage[] = [
         id: 102,
         content: "<p>This is a mock reply in Chat 02. Enjoy your conversation!</p>",
         files: [],
-        isCode: false,
+        isCode: true,
         isUser: false,
     },
 ];
@@ -587,23 +587,34 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 currentBranch: updatedCurrentBranch,
             };
         }),
-    deleteSavedBranch: (id) =>
+    deleteSavedBranch: (branchId: number) =>
         set((state) => {
-            const isCurrentBranchDeleted =
-                state.currentBranch && String(state.currentBranch.id) === String(id);
-
-            const updatedBranches = state.currentChat.branches.filter(
-                (branch) => String(branch.id) !== String(id)
+            const chatWithBranch = state.chats.find(chat =>
+                chat.branches.some(branch => branch.id === branchId)
             );
 
+            if (!chatWithBranch) {
+                console.warn(`Chat with branch id ${branchId} not found.`);
+                return state;
+            }
+
+            const updatedBranches = chatWithBranch.branches.filter(branch => branch.id !== branchId);
+
+            const updatedChats = state.chats.map(chat =>
+                chat.id === chatWithBranch.id ? { ...chat, branches: updatedBranches } : chat
+            );
+
+            const updatedSavedBranches = state.savedBranches.filter(branch => branch.id !== branchId);
+
+            const isCurrentBranchDeleted = state.currentBranch && state.currentBranch.id === branchId;
+            const newCurrentBranch = isCurrentBranchDeleted ? null : state.currentBranch;
+            const newIsCurrentBranchOpen = isCurrentBranchDeleted ? false : state.isCurrentBranchOpen;
+
             return {
-                currentChat: {
-                    ...state.currentChat,
-                    branches: updatedBranches,
-                },
-                savedBranches: state.currentChat.branches,
-                currentBranch: isCurrentBranchDeleted ? null : state.currentBranch,
-                currentBranchDialog: isCurrentBranchDeleted ? null : state.currentBranchDialog,
+                chats: updatedChats,
+                savedBranches: updatedSavedBranches,
+                currentBranch: newCurrentBranch,
+                isCurrentBranchOpen: newIsCurrentBranchOpen,
             };
         }),
     setCurrentBranch: (branch: IBranch | string | number | null) => {

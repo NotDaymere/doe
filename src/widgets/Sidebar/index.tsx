@@ -21,255 +21,233 @@ import { SharingTools } from "./ui/SharingTools/SharingTools";
 import { SettingsModal } from "../home-screens/ui/ChatContent/assets/SettingsModal/SettingsModal";
 
 export const Sidebar: React.FC = () => {
-	const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
-	const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
-	const editorState = useEditorContext(editor);
-	const { getOpenSavedPlaygrounds } = useChatStore();
-	const { playground, clearCurrentChatMessages } = useChatStore();
-	const { isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
-	const { gaiaActive, setGaiaActive, setGaiaSidebarActive } = useAppStore();
-	const [theme, setTheme] = React.useState<"Light" | "Dark">("Light")
-	const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false)
-	const [isSettingsOpen, setIsSettingsOpen] = React.useState<boolean>(false)
+    const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
+    const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
+    const editorState = useEditorContext(editor);
+    const { getOpenSavedPlaygrounds } = useChatStore();
+    const { playground, clearCurrentChatMessages } = useChatStore();
+    const { isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
+    const { gaiaActive, setGaiaActive, setGaiaSidebarActive } = useAppStore();
+    const [theme, setTheme] = React.useState<"Light" | "Dark">("Light");
+    const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false);
+    const [isSettingsOpen, setIsSettingsOpen] = React.useState<boolean>(false);
 
-	const [profiles, setProfiles] = React.useState<Profile[]>(ProfileMockData);
+    const [profiles, setProfiles] = React.useState<Profile[]>(ProfileMockData);
 
-	const changeProfileRef = React.useRef<HTMLDivElement>(null);
-	const changeProfileBtnRef = React.useRef<HTMLDivElement>(null);
+    const changeProfileRef = React.useRef<HTMLDivElement>(null);
+    const changeProfileBtnRef = React.useRef<HTMLDivElement>(null);
 
-	const pointerDown = (event: React.PointerEvent) => {
-		event.preventDefault()
-	};
-	const toggleGaia = () => {
-		setGaiaActive(!gaiaActive);
-		setGaiaSidebarActive(false);
-	};
+    const pointerDown = (event: React.PointerEvent) => {
+        event.preventDefault();
+    };
+    const toggleGaia = () => {
+        setGaiaActive(!gaiaActive);
+        setGaiaSidebarActive(false);
+    };
 
-	const handleGaiaButtonHover = () => {
-		if (gaiaActive) return;
-		setGaiaSidebarActive(true);
-	};
+    const handleGaiaButtonHover = () => {
+        if (gaiaActive) return;
+        setGaiaSidebarActive(true);
+    };
 
+    React.useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (
+                isChangeProfilePanelOpen &&
+                changeProfileRef.current &&
+                !changeProfileRef.current.contains(event.target as Node) &&
+                changeProfileBtnRef.current &&
+                !changeProfileBtnRef.current.contains(event.target as Node)
+            ) {
+                setIsChangeProfilePanelOpen(false);
+            }
+        }
 
-	React.useEffect(() => {
-		function handleClickOutside(event: MouseEvent) {
-			if (
-				isChangeProfilePanelOpen &&
-				changeProfileRef.current &&
-				!changeProfileRef.current.contains(event.target as Node) &&
-				changeProfileBtnRef.current &&
-				!changeProfileBtnRef.current.contains(event.target as Node)
-			) {
-				setIsChangeProfilePanelOpen(false);
-			}
-		}
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isChangeProfilePanelOpen]);
 
-		document.addEventListener("mousedown", handleClickOutside);
-		return () => document.removeEventListener("mousedown", handleClickOutside);
-	}, [isChangeProfilePanelOpen]);
+    const handleOpenSideBar = () => {
+        setIsSideBarOpen(!isSideBarOpen);
+    };
 
+    const handleToggleTheme = (theme: "Light" | "Dark") => {
+        setTheme(theme);
+    };
 
-	const handleOpenSideBar = () => {
-		setIsSideBarOpen(!isSideBarOpen);
-	};
+    const ballPositionStyle = isSideBarOpen
+        ? { top: theme === "Light" ? "6px" : "37px" }
+        : { top: theme === "Light" ? "6px" : "37px" };
 
-	const handleToggleTheme = (theme: "Light" | "Dark") => {
-		setTheme(theme);
-	};
+    const handleOpenChangeProfilePanel = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsChangeProfilePanelOpen((prev) => {
+            console.log("New state:", !prev); // Отладочный лог
+            return !prev;
+        });
+    };
 
-	const ballPositionStyle = isSideBarOpen
-		? { left: theme === "Light" ? "6px" : "37px" }
-		: { top: theme === "Light" ? "6px" : "37px" };
+    const currentProfile = profiles.find((p) => p.isCurrent) as Profile;
 
+    const handleSelectProfile = (id: number) => {
+        setProfiles((prev) => prev.map((p) => ({ ...p, isCurrent: p.id === id })));
+    };
 
-	const handleOpenChangeProfilePanel = (e: React.MouseEvent) => {
-		e.stopPropagation();
-		setIsChangeProfilePanelOpen(prev => {
-			console.log("New state:", !prev); // Отладочный лог
-			return !prev;
-		});
-	};
+    const handleDeleteAllMessages = () => {
+        clearCurrentChatMessages();
+    };
 
-	const currentProfile = profiles.find(p => p.isCurrent) as Profile;
+    return (
+        <aside className={isSideBarOpen ? css.sidebar_open : css.sidebar}>
+            <SidebarGaia />
 
-	const handleSelectProfile = (id: number) => {
-		setProfiles(prev =>
-			prev.map(p => ({ ...p, isCurrent: p.id === id }))
-		);
-	};
+            <div className={css.sidebar_separator}>
+                <div className={css.inner_sidebar_separator}></div>
+            </div>
 
-	const handleDeleteAllMessages = () => {
-		clearCurrentChatMessages();
-	}
+            <div className={css.profile_container}>
+                <div className={css.sidebar_profile}>
+                    <img
+                        className={css.sidebar_profile_img}
+                        src={currentProfile ? currentProfile.imgSrc : ""}
+                    />
+                </div>
+                {isSideBarOpen && (
+                    <div className={css.profile_user_info_container}>
+                        <div className={css.profile_user_info}>
+                            <div className={css.profile_username}>
+                                {currentProfile ? currentProfile.username : ""}
+                            </div>
+                            <div className={css.profile_email}>
+                                {currentProfile ? currentProfile.email : ""}
+                            </div>
+                        </div>
+                        <div
+                            className={css.change_profile_btn}
+                            onClick={handleOpenChangeProfilePanel}
+                            data-active={isChangeProfilePanelOpen}
+                            ref={changeProfileBtnRef}
+                        >
+                            <ChangeProfileIcon fill="currentColor" width={11} height={15} />
+                        </div>
+                    </div>
+                )}
+            </div>
+            <CSSTransition
+                in={isChangeProfilePanelOpen}
+                timeout={300}
+                classNames={{
+                    enter: css["changeProfile-enter"],
+                    enterActive: css["changeProfile-enter-active"],
+                    exit: css["changeProfile-exit"],
+                    exitActive: css["changeProfile-exit-active"],
+                }}
+                unmountOnExit
+            >
+                <div className={css.change_profile_list} ref={changeProfileRef}>
+                    {ProfileMockData.map((profile) => (
+                        <div
+                            key={profile.id}
+                            className={css.profile_container}
+                            onClick={() => handleSelectProfile(profile.id)}
+                        >
+                            <div className={css.sidebar_profile}>
+                                <img className={css.sidebar_profile_img} src={profile.imgSrc} />
+                            </div>
+                            <div className={css.profile_user_info_container}>
+                                <div className={css.profile_user_info}>
+                                    <div className={css.profile_username}>{profile.username}</div>
+                                    <div className={css.profile_email}>{profile.email}</div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
 
-	return (
-		<aside className={isSideBarOpen ? css.sidebar_open : css.sidebar}>
+                    <div className={css.add_profile_btn}>
+                        <div className={css.add_profile_btn_icon}>
+                            <AddProfileIcon />
+                        </div>
+                        <div>Add account</div>
+                    </div>
+                </div>
+            </CSSTransition>
 
-			<SidebarGaia />
+            <div className={css.sidebar_theme_container}>
+                <div className={css.theme_toggle}>
+                    <div className={css.theme_toggle_ball} style={ballPositionStyle} />
+                    <div
+                        className={
+                            theme === "Light"
+                                ? css.toggle_light_theme_active_icon
+                                : css.toggle_light_theme_icon
+                        }
+                        onClick={() => handleToggleTheme("Light")}
+                    >
+                        <LightThemeIcon width={20} height={20} />
+                    </div>
+                    <div
+                        className={
+                            theme === "Dark"
+                                ? css.toggle_dark_theme_active_icon
+                                : css.toggle_dark_theme_icon
+                        }
+                        onClick={() => handleToggleTheme("Dark")}
+                    >
+                        <MoonIcon width={20} height={20} />
+                    </div>
+                </div>
+                {isSideBarOpen && (
+                    <div className={css.theme_name}>
+                        <span>{theme}</span>
+                        <span>Theme</span>
+                    </div>
+                )}
+            </div>
 
-			<div className={css.sidebar_separator}>
-				<div className={css.inner_sidebar_separator}></div>
-			</div>
+            <div className={css.sidebar_separator}>
+                <div className={css.inner_sidebar_separator}></div>
+            </div>
+            <div className={css.sidebar_controls}>
+                <SideBarMenu />
+                <div className={css.sidebar_separator}>
+                    <div className={css.inner_sidebar_separator}></div>
+                </div>
+                <TextFormatting />
+                <div className={css.sidebar_separator}>
+                    <div className={css.inner_sidebar_separator}></div>
+                </div>
+                <div>
+                    <LiveTools />
+                </div>
+                <div className={css.sidebar_separator}>
+                    <div className={css.inner_sidebar_separator}></div>
+                </div>
 
-			<div className={css.profile_container}>
-				<button className={css.sidebar_profile} onClick={() => setIsSettingsOpen(true)}>
-					<img
-						className={css.sidebar_profile_img}
-						src={currentProfile ? currentProfile.imgSrc : ""}
-					/>
-				</button>
-				{
-					isSettingsOpen &&
-					<SettingsModal
-						currentProfile={currentProfile}
-						isOpen={isSettingsOpen}
-						onClose={() => setIsSettingsOpen(false)}
-						profiles={profiles}
-					/>
-				}
-				{isSideBarOpen && (
-					<div className={css.profile_user_info_container}>
-						<div className={css.profile_user_info}>
-							<div className={css.profile_username}>{currentProfile ? currentProfile.username : ""}</div>
-							<div className={css.profile_email}>{currentProfile ? currentProfile.email : ""}</div>
-						</div>
-						<div
-							className={css.change_profile_btn}
-							onClick={handleOpenChangeProfilePanel}
-							data-active={isChangeProfilePanelOpen}
-							ref={changeProfileBtnRef}>
-							<ChangeProfileIcon fill="currentColor" width={11} height={15} />
-						</div>
-					</div>
-				)}
-			</div>
-			<CSSTransition
-				in={isChangeProfilePanelOpen}
-				timeout={300}
-				classNames={{
-					enter: css['changeProfile-enter'],
-					enterActive: css['changeProfile-enter-active'],
-					exit: css['changeProfile-exit'],
-					exitActive: css['changeProfile-exit-active']
-				}}
-				unmountOnExit
-			>
-				<div
-					className={css.change_profile_list}
-					ref={changeProfileRef}
-				>
-					{ProfileMockData.map(profile => (
-						<div
-							key={profile.id}
-							className={css.profile_container}
-							onClick={() => handleSelectProfile(profile.id)}>
-							<div className={css.sidebar_profile}>
-								<img
-									className={css.sidebar_profile_img}
-									src={profile.imgSrc}
-								/>
-							</div>
-							<div className={css.profile_user_info_container}>
-								<div className={css.profile_user_info}>
-									<div className={css.profile_username}>{profile.username}</div>
-									<div className={css.profile_email}>{profile.email}</div>
-								</div>
-							</div>
-						</div>
-					))}
+                <div className={css.margin_bottom}>
+                    <SharingTools />
+                </div>
 
-					<div className={css.add_profile_btn}>
-						<div className={css.add_profile_btn_icon}>
-							<AddProfileIcon />
-						</div>
-						<div>
-							Add account
-						</div>
-					</div>
-				</div>
-			</CSSTransition>
-
-			<div className={css.sidebar_theme_container}>
-				<div className={css.theme_toggle}>
-					<div
-						className={css.theme_toggle_ball}
-						style={ballPositionStyle}
-					/>
-					<div
-						className={
-							theme === "Light"
-								? css.toggle_light_theme_active_icon
-								: css.toggle_light_theme_icon
-						}
-						onClick={() => handleToggleTheme("Light")}
-					>
-						<LightThemeIcon width={20} height={20} />
-					</div>
-					<div
-						className={
-							theme === "Dark"
-								? css.toggle_dark_theme_active_icon
-								: css.toggle_dark_theme_icon
-						}
-						onClick={() => handleToggleTheme("Dark")}
-					>
-						<MoonIcon width={20} height={20} />
-					</div>
-				</div>
-				{isSideBarOpen && (
-					<div className={css.theme_name}>
-						<span>{theme}</span><span>Theme</span>
-					</div>
-				)}
-			</div>
-
-			<div className={css.sidebar_separator}>
-				<div className={css.inner_sidebar_separator}></div>
-			</div>
-			<div className={css.sidebar_controls}>
-
-				<SideBarMenu />
-				<div className={css.sidebar_separator}>
-					<div className={css.inner_sidebar_separator}></div>
-				</div>
-				<TextFormatting />
-				<div className={css.sidebar_separator}>
-					<div className={css.inner_sidebar_separator}></div>
-				</div>
-				<div>
-					<LiveTools />
-				</div>
-				<div className={css.sidebar_separator}>
-					<div className={css.inner_sidebar_separator}></div>
-				</div>
-
-				<div className={css.margin_bottom}>
-					<SharingTools />
-				</div>
-
-
-				<div className={(getOpenSavedPlaygrounds().length > 0 || mode)
-					? css.delete_all_messages_open_playgrounds
-					: css.delete_all_messages}>
-					<div className={css.delete_all_messages_btn_container} onClick={handleDeleteAllMessages}>
-						<button
-							className={css.delete_all_messages_btn}
-
-						>
-							<TrashIcon />
-						</button>
-						<div className={css.delete_all_messages_btn_tooltip}>
-							Delete All Messages
-						</div>
-					</div>
-				</div>
-
-
-			</div>
-			<div
-				className={css.sidebar_resize_handler}
-				onClick={handleOpenSideBar}
-			/>
-		</aside>
-	);
+                <div
+                    className={
+                        getOpenSavedPlaygrounds().length > 0 || mode
+                            ? css.delete_all_messages_open_playgrounds
+                            : css.delete_all_messages
+                    }
+                >
+                    <div
+                        className={css.delete_all_messages_btn_container}
+                        onClick={handleDeleteAllMessages}
+                    >
+                        <button className={css.delete_all_messages_btn}>
+                            <TrashIcon />
+                        </button>
+                        <div className={css.delete_all_messages_btn_tooltip}>
+                            Delete All Messages
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className={css.sidebar_resize_handler} onClick={handleOpenSideBar} />
+        </aside>
+    );
 };

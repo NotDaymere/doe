@@ -48,9 +48,15 @@ export const ChatItem: React.FC<ChatItemProps> = ({
             </div>
         ) : (
             <div className={css.chat_item_tag_and_name}>
-                <div className={css.tags_wrapper} data-count={Math.min(chat.tags?.length ?? 0, 3)} onClick={onTagsClick}>
+                <div
+                    className={css.tags_wrapper}
+                    data-count={Math.min(chat.tags?.length ?? 0, 3)}
+                    onMouseDown={e => e.stopPropagation()}
+                    onClick={onTagsClick}
+                >
                     {chat.tags?.slice(0, 3).map(tag => (
-                        <div key={tag} className={css.chat_tag} style={{ backgroundColor: TAG_META[tag].color }} title={chat.name} />
+                        <div key={tag} className={css.chat_tag} style={{ backgroundColor: TAG_META[tag].color }}
+                             title={chat.name} />
                     ))}
                 </div>
                 <div className={css.chat_name}>{chat.name}</div>
@@ -63,7 +69,7 @@ export const ChatItem: React.FC<ChatItemProps> = ({
                     onClick={onOpenActions}
                     className={css.three_dots}
                 >
-                    <ThreeDotsIcon />
+                <ThreeDotsIcon />
                 </div>
                 <div className={css.show_more_btn} data-active={isOpen}>{!isOpen ? "+" : "-"}</div>
             </div>
