@@ -1,7 +1,7 @@
 fragment Tab on ComponentUiTab {
-  id
-  name
-  pane {
-    ...Card
-  }
+    id
+    name
+    pane {
+        ...Card
+    }
 }

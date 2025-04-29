@@ -14,29 +14,28 @@ interface ChatState {
     setTyping: (isTyping: boolean) => void;
 }
 
-export const useChatStore = create<ChatState>()(
-    (set) => ({
-        isTyping: false,
-        editor: null,
-        currentBranch: null,
-        messages: [
-            {
-                id: 1,
-                content: `<p>Here's a simple project idea: a Task Manager command-line application in Python. It will allow you to add, view, and delete tasks. In the structure, we'll be able to add and view all tasks, delete tasks by number, and mark tasks as completed.</p><p><br class="ProseMirror-trailingBreak"></p><p>We will write this code completely in Python.</p><p><br class="ProseMirror-trailingBreak"></p><p>The Python code for the deletion function is as follows:</p><p><br class="ProseMirror-trailingBreak"></p>`,
-                files: [],
-                isCode: true,
-                isUser: false
-            }, {
-                id: 2,
-                content: "<p>Create a simple project for me in any <strong>language</strong>.</p>",
-                files: [],
-                isCode: false,
-                isUser: true
-            }
-        ],
-        setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
-        setMessages: (messages) => set(() => ({ messages })),
-        setEditor: (editor) => set(() => ({ editor })),
-        setTyping: (isTyping) => set(() => ({ isTyping }))
-    })
-);
+export const useChatStore = create<ChatState>()((set) => ({
+    isTyping: false,
+    editor: null,
+    currentBranch: null,
+    messages: [
+        {
+            id: 1,
+            content: `<p>Here's a simple project idea: a Task Manager command-line application in Python. It will allow you to add, view, and delete tasks. In the structure, we'll be able to add and view all tasks, delete tasks by number, and mark tasks as completed.</p><p><br class="ProseMirror-trailingBreak"></p><p>We will write this code completely in Python.</p><p><br class="ProseMirror-trailingBreak"></p><p>The Python code for the deletion function is as follows:</p><p><br class="ProseMirror-trailingBreak"></p>`,
+            files: [],
+            isCode: true,
+            isUser: false,
+        },
+        {
+            id: 2,
+            content: "<p>Create a simple project for me in any <strong>language</strong>.</p>",
+            files: [],
+            isCode: false,
+            isUser: true,
+        },
+    ],
+    setCurrentBranch: (currentBranch) => set(() => ({ currentBranch })),
+    setMessages: (messages) => set(() => ({ messages })),
+    setEditor: (editor) => set(() => ({ editor })),
+    setTyping: (isTyping) => set(() => ({ isTyping })),
+}));

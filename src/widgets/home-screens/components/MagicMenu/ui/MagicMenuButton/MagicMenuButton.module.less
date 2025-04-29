@@ -9,18 +9,29 @@
     gap: 6px;
 
     .setFontSohneBuch(14px, 1.1, normal);
-    color: #8D8D8D;
+    color: #8d8d8d;
 
     transition: 200ms ease;
     transition-property: border, background;
 
     &:hover {
-        background: darken(#FFF, 5%);
-        border-color: darken(#FFF, 10%);
+        background: darken(#fff, 5%);
+        border-color: darken(#fff, 10%);
 
         .magicBtn_hasMenu {
             opacity: 1;
         }
+    }
+}
+
+.active {
+    border: 0px solid transparent;
+    animation: border-move 4s linear infinite;
+    color: #1f1f1f;
+    justify-content: space-between;
+
+    path {
+        fill: #4794ff;
     }
 }
 
@@ -37,14 +48,13 @@
     }
 }
 
-
 .magicBtn_hasMenu {
     margin-left: auto;
     width: 20px;
     height: 20px;
     border-radius: 4px;
-    background: #FFF;
-    
+    background: #fff;
+
     position: relative;
 
     opacity: 0;
@@ -57,7 +67,7 @@
         display: block;
         width: 10px;
         height: 1px;
-        background: #1F1F1F;
+        background: #1f1f1f;
 
         position: absolute;
         left: 50%;
@@ -70,5 +80,47 @@
 
     &::before {
         transform: translate(-50%, -50%) rotate(90deg);
+    }
+}
+
+.magicBtn_plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1px solid #4794ff;
+    color: #4794ff;
+    font-size: 18px;
+    line-height: 0px;
+    font-weight: 600;
+    animation: fade-in-with-slide 0.5s ease forwards;
+}
+
+@keyframes border-move {
+    0% {
+        box-shadow: inset 0px -1px 2px 1px #4794ff, 0px -2px 5px -1px #94a9c7;
+    }
+    25% {
+        box-shadow: inset 1px 0px 2px 1px #4794ff, 2px 0px 5px -1px #94a9c7;
+    }
+    50% {
+        box-shadow: inset 0px 1px 2px 1px #4794ff, 0px 2px 5px -1px #94a9c7;
+    }
+    75% {
+        box-shadow: inset -1px 0px 2px 1px #4794ff, -2px 0px 5px -1px #94a9c7;
+    }
+    100% {
+        box-shadow: inset 0px -1px 2px 1px #4794ff, 0px -2px 5px -1px #94a9c7;
+    }
+}
+
+@keyframes fade-in-with-slide {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }

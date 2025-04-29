@@ -1,10 +1,8 @@
-import { ThemeConfig } from "antd/es/config-provider"
+import { ThemeConfig } from "antd/es/config-provider";
 
 const theme: ThemeConfig = {
-  inherit: false,
-  components: {
+    inherit: false,
+    components: {},
+};
 
-  },
-}
-
-export default theme
+export default theme;

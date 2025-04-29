@@ -16,7 +16,7 @@ export function useEditorContext(editor: Editor | null) {
             isItalic,
             isStrike,
             isUnderline,
-            isCode
+            isCode,
         };
     }, [editor, _]);
 
@@ -45,7 +45,7 @@ export function useEditorContext(editor: Editor | null) {
         if (editor) {
             const handleUpdate = () => update((prev) => prev + 1);
             editor.on("update", handleUpdate);
-            editor.on("selectionUpdate", handleUpdate)
+            editor.on("selectionUpdate", handleUpdate);
             return () => {
                 editor.off("update", handleUpdate);
                 editor.off("selectionUpdate", handleUpdate);

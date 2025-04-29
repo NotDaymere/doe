@@ -1,27 +1,28 @@
+import clsx from "clsx";
 import React from "react";
 import { CSSTransition } from "react-transition-group";
+import { useCursor } from "src/contexts/CursorContext";
+import { useClickOut } from "src/shared/hooks/useClickOut";
 import BranchIcon from "src/shared/icons/Branch.icon";
 import CallIcon from "src/shared/icons/Call.icon";
 import StarsIcon from "src/shared/icons/Stars.icon";
 import TalkIcon from "src/shared/icons/Talk.icon";
 import UploadIcon from "src/shared/icons/Upload.icon";
-import { MagicApplications, MagicMenuButton, MagicUploadApps } from "./ui";
-import { useClickOut } from "src/shared/hooks/useClickOut";
 import css from "./MagicMenu.module.less";
+import { MagicApplications, MagicMenuButton, MagicUploadApps } from "./ui";
 
 interface Props {
     onUploadFiles?: (files: File[]) => void;
     onDispatchDoe?: () => void;
+    step?: number;
 }
 
-export const MagicMenu: React.FC<Props> = ({
-    onUploadFiles,
-    onDispatchDoe
-}) => {
+export const MagicMenu: React.FC<Props> = ({ onUploadFiles, onDispatchDoe, step }) => {
+    const { cursorMoving } = useCursor();
     const [activeMenu, setActiveMenu] = React.useState(false);
     const nodeRef = React.useRef<HTMLDivElement>(null);
     const ref = useClickOut({
-        handler: () => setActiveMenu(false)
+        handler: () => setActiveMenu(false),
     });
 
     const toggleMenu = () => setActiveMenu(!activeMenu);
@@ -34,7 +35,7 @@ export const MagicMenu: React.FC<Props> = ({
             const files = Array.from(ev.target.files) as File[];
             onUploadFiles?.(files);
             input.remove();
-        }
+        };
         input.click();
     };
 
@@ -42,16 +43,17 @@ export const MagicMenu: React.FC<Props> = ({
         return () => {
             fn?.();
             setActiveMenu(false);
-        }
-    }
+        };
+    };
 
     return (
-        <div 
-            className={css.magic} 
-            style={{ 
-                zIndex: activeMenu ? 100 : "" 
-            }} 
+        <div
+            className={clsx(css.magic, { [css.magic_active]: step === 37 && !cursorMoving })}
+            style={{
+                zIndex: activeMenu ? 100 : "",
+            }}
             ref={ref}
+            data-step="sparkle"
         >
             <button className={css.magic_btn} onClick={toggleMenu}>
                 <StarsIcon />
@@ -59,26 +61,38 @@ export const MagicMenu: React.FC<Props> = ({
             <CSSTransition
                 classNames={css}
                 timeout={300}
-                in={activeMenu}
+                in={activeMenu || step === 38 || step === 45}
                 nodeRef={nodeRef}
                 mountOnEnter
                 unmountOnExit
             >
                 <div className={css.menu} ref={nodeRef}>
                     <MagicApplications />
-                    <MagicMenuButton 
-                        icon={<UploadIcon />} 
-                        text="Upload from desktop" 
+                    <MagicMenuButton
+                        icon={<UploadIcon />}
+                        text="Upload from desktop"
                         onClick={setCloseHandler(upload)}
                     />
                     <MagicUploadApps />
-                    <MagicMenuButton 
-                        icon={<CallIcon />} 
-                        text="Dispatch Doe" 
+                    <MagicMenuButton
+                        icon={<CallIcon />}
+                        text="Dispatch Doe"
                         onClick={setCloseHandler(onDispatchDoe)}
                     />
-                    <MagicMenuButton icon={<TalkIcon />} text="Talk mode" />
-                    <MagicMenuButton icon={<BranchIcon />} text="Create new branch" />
+                    <MagicMenuButton
+                        icon={<TalkIcon />}
+                        text="Talk mode"
+                        step={step}
+                        triggerStep={45}
+                        dataStep="talk-mode"
+                    />
+                    <MagicMenuButton
+                        icon={<BranchIcon />}
+                        text="Create new branch"
+                        step={step}
+                        triggerStep={38}
+                        dataStep="branch"
+                    />
                 </div>
             </CSSTransition>
         </div>

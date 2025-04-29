@@ -1,7 +1,7 @@
-import React from "react";
-import css from "./FileList.module.less";
 import clsx from "clsx";
+import React from "react";
 import { FileItem } from "../FileItem";
+import css from "./FileList.module.less";
 
 interface Props {
     className?: string;
@@ -9,15 +9,11 @@ interface Props {
     onChange: (files: File[]) => void;
 }
 
-export const FileList: React.FC<Props> = ({
-    files,
-    onChange,
-    className
-}) => {
+export const FileList: React.FC<Props> = ({ files, onChange, className }) => {
     return (
         <div className={clsx(css.files, "scrollbar", className)}>
             {files.map((file, id) => (
-                <FileItem 
+                <FileItem
                     name={file.name}
                     mimetype={file.type}
                     onDelete={() => onChange(files.filter((item) => item !== file))}

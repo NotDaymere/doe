@@ -1,6 +1,5 @@
 import React from "react";
 import { useAppStore } from "src/shared/providers";
-import { CSSTransition } from "react-transition-group";
 import { Gaia } from "src/widgets/Gaia";
 import css from "./MainLayout.module.less";
 
@@ -8,9 +7,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export const MainLayout: React.FC<Props> = ({
-    children
-}) => {
+export const MainLayout: React.FC<Props> = ({ children }) => {
     const gaiaRef = React.useRef<HTMLDivElement>(null);
     const { gaiaActive } = useAppStore();
 
@@ -30,7 +27,7 @@ export const MainLayout: React.FC<Props> = ({
                 mountOnEnter
                 nodeRef={gaiaRef}
             > */}
-                <Gaia className={css.gaia} ref={gaiaRef} />
+            <Gaia className={css.gaia} ref={gaiaRef} />
             {/* </CSSTransition> */}
         </React.Fragment>
     );

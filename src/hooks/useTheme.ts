@@ -1,23 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-type Theme = 'light' | 'dark';
+type Theme = "light" | "dark";
 type UseThemeReturn = [Theme, (theme: Theme) => void];
 
 const useTheme = (): UseThemeReturn => {
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light';
-  });
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem("theme") || "light";
+    });
 
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    useEffect(() => {
+        document.body.className = theme;
+        localStorage.setItem("theme", theme);
+    }, [theme]);
 
-  const toggleTheme = (theme: Theme = 'light') => {
-    setTheme(theme);
-  };
+    const toggleTheme = (theme: Theme = "light") => {
+        setTheme(theme);
+    };
 
-  return [theme as Theme, toggleTheme];
+    return [theme as Theme, toggleTheme];
 };
 
 export default useTheme;

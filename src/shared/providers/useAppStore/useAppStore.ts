@@ -10,13 +10,11 @@ export interface AppState {
     setTheme: (value: "light" | "dark") => void;
 }
 
-export const useAppStore = create<AppState>()(
-    (set) => ({
-        editor: null,
-        gaiaActive: false,
-        theme: "light",
-        setGaiaActive: (gaiaActive) => set(() => ({ gaiaActive })),
-        setActiveEditor: (editor) => set(() => ({ editor })),
-        setTheme: (theme) => set(() => ({ theme })),
-    })
-);
+export const useAppStore = create<AppState>()((set) => ({
+    editor: null,
+    gaiaActive: false,
+    theme: "light",
+    setGaiaActive: (gaiaActive) => set(() => ({ gaiaActive })),
+    setActiveEditor: (editor) => set(() => ({ editor })),
+    setTheme: (theme) => set(() => ({ theme })),
+}));

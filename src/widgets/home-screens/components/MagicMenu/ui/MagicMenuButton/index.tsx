@@ -1,5 +1,6 @@
-import React from "react";
 import clsx from "clsx";
+import React from "react";
+import { useCursor } from "src/contexts/CursorContext";
 import css from "./MagicMenuButton.module.less";
 
 interface Props {
@@ -8,6 +9,9 @@ interface Props {
     onClick?: () => void;
     className?: string;
     hasMenu?: boolean;
+    dataStep?: string;
+    step?: number;
+    triggerStep?: number;
 }
 
 export const MagicMenuButton: React.FC<Props> = ({
@@ -15,19 +19,27 @@ export const MagicMenuButton: React.FC<Props> = ({
     text,
     onClick,
     className,
-    hasMenu
+    hasMenu,
+    dataStep,
+    step,
+    triggerStep,
 }) => {
+    const { cursorMoving } = useCursor();
+    const isActive = triggerStep && step === triggerStep && !cursorMoving;
+
     return (
-        <button 
-            className={clsx(css.magicBtn, className)}
+        <button
+            className={clsx(css.magicBtn, className, {
+                [css.active]: isActive,
+            })}
             onClick={onClick}
             aria-label={text}
+            data-step={dataStep}
         >
             <span className={css.magicBtn_icon}>{icon}</span>
             <span className={css.magicBtn_text}>{text}</span>
-            {hasMenu && (
-                <span className={css.magicBtn_hasMenu} data-has-menu />
-            )}
+            {hasMenu && <span className={css.magicBtn_hasMenu} data-has-menu />}
+            {isActive && <span className={css.magicBtn_plus}>+</span>}
         </button>
     );
 };

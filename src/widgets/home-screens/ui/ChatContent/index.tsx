@@ -1,8 +1,8 @@
 import React from "react";
-import { useChatController } from "../..";
 import { useChatStore } from "src/shared/providers";
-import css from "./ChatContent.module.less";
+import { useChatController } from "../..";
 import { ChatMessage } from "../ChatMessage";
+import css from "./ChatContent.module.less";
 
 export const ChatContent: React.FC = () => {
     const { chatRef } = useChatController();
@@ -13,10 +13,7 @@ export const ChatContent: React.FC = () => {
             <div className={css.content_inner}>
                 <div className={css.content_chat} ref={chatRef}>
                     {messages.map((item) => (
-                        <ChatMessage 
-                            data={item} 
-                            key={item.id} 
-                        />
+                        <ChatMessage data={item} key={item.id} />
                     ))}
                 </div>
             </div>

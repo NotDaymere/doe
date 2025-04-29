@@ -1,0 +1,137 @@
+.magicbox_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30%;
+    width: 100%;
+    flex-shrink: 0;
+    animation: fade-in 2s ease forwards;
+}
+
+.magicbox_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    position: relative;
+    border: 1px solid #b5b5b5;
+
+    svg {
+        width: 28px;
+        height: 28px;
+        path {
+            fill: #b5b5b5;
+        }
+    }
+}
+
+.magicbox_container_active {
+    animation: border-move 4s linear infinite;
+    border: 1px solid transparent;
+
+    svg path {
+        fill: #4794ff;
+    }
+}
+
+.magicbox_popup {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 6px;
+    position: absolute;
+    bottom: 100%;
+    margin-bottom: 8px;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 16px;
+    text-wrap: nowrap;
+    animation: slide-out 1s ease forwards, border-move 4s linear infinite;
+    overflow: hidden;
+}
+
+.magicbox_popup_item {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    color: #8d8d8d;
+    position: relative;
+    padding: 10px;
+    border-radius: 12px;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        path {
+            fill: #8d8d8d;
+        }
+    }
+}
+
+.magicbox_popup_item_active {
+    animation: border-move 4s linear infinite;
+
+    svg path {
+        fill: #4794ff;
+    }
+}
+
+.tooltip_content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    text-wrap: wrap;
+    width: 233px;
+    font-size: 16px;
+
+    b {
+        font-weight: 600;
+    }
+}
+
+.tooltip_icons {
+    display: flex;
+    flex-direction: row;
+    margin-top: 4px;
+
+    svg {
+        width: 20px;
+        height: 20px;
+
+        path {
+            fill: #ffffff;
+        }
+    }
+}
+
+@keyframes border-move {
+    0% {
+        box-shadow: inset 0px -2.5px 4px -1px #4794ff;
+    }
+    25% {
+        box-shadow: inset 2.5px 0px 4px -1px #4794ff;
+    }
+    50% {
+        box-shadow: inset 0px 2.5px 4px -1px #4794ff;
+    }
+    75% {
+        box-shadow: inset -2.5px 0px 4px -1px #4794ff;
+    }
+    100% {
+        box-shadow: inset 0px -2.5px 4px -1px #4794ff;
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        max-height: 0;
+        opacity: 0;
+    }
+    100% {
+        max-height: 200px;
+        opacity: 1;
+    }
+}

@@ -2,6 +2,12 @@
     position: relative;
 }
 
+.magic_active {
+    .magic_btn {
+        animation: border-move 4s linear infinite;
+    }
+}
+
 .magic_btn {
     width: 36px;
     height: 36px;
@@ -31,8 +37,8 @@
     bottom: 100%;
     transform: translateY(-20px);
 
-    background: rgba(#FFF, 0.8);
-    border: 1px solid #DDDDDD;
+    background: rgba(#fff, 0.8);
+    border: 1px solid #dddddd;
 
     backdrop-filter: blur(80px);
     box-shadow: 0 0 12px rgba(#000, 5%);
@@ -58,4 +64,22 @@
     transform: translateY(-50px);
     transition: 300ms ease;
     transition-property: transform, opacity;
+}
+
+@keyframes border-move {
+    0% {
+        box-shadow: inset 0px -1px 2px 1px #4794ff, 0px -2px 5px -1px #94a9c7;
+    }
+    25% {
+        box-shadow: inset 1px 0px 2px 1px #4794ff, 2px 0px 5px -1px #94a9c7;
+    }
+    50% {
+        box-shadow: inset 0px 1px 2px 1px #4794ff, 0px 2px 5px -1px #94a9c7;
+    }
+    75% {
+        box-shadow: inset -1px 0px 2px 1px #4794ff, -2px 0px 5px -1px #94a9c7;
+    }
+    100% {
+        box-shadow: inset 0px -1px 2px 1px #4794ff, 0px -2px 5px -1px #94a9c7;
+    }
 }

@@ -2,12 +2,7 @@ import React, { SVGProps } from "react";
 
 const UnderlineIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
     return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            stroke="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg {...props} viewBox="0 0 20 20" stroke="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M5.49085 19H14.193C14.4676 19 14.6922 18.7732 14.6922 18.4649C14.6922 18.1566 14.4676 17.9208 14.193 17.9208H5.49085C5.22463 17.9208 5 18.1566 5 18.4649C5 18.7732 5.22463 19 5.49085 19Z"
                 stroke="none"

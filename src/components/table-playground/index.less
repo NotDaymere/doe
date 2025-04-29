@@ -1,36 +1,36 @@
 .table-playground {
-  position: relative;
-  height: 100%;
+    position: relative;
+    height: 100%;
 
-  .table {
-    .selected-column {
-      &:is(th) {
-        background: #007AFF !important;
-      }
-  
-      &:is(td) {
-        background: #EFF5FD !important;
-      }
-    }
-  
-    .selected-cell {
-      background: #EFF5FD !important;
-      outline: 1px solid #007AFF;
-    }
-  }
+    .table {
+        .selected-column {
+            &:is(th) {
+                background: #007aff !important;
+            }
 
-  .action-buttons {
-    position: absolute;
-    display: flex;
-    gap: 8px;
-    bottom: 24px;
-    right: 24px;
+            &:is(td) {
+                background: #eff5fd !important;
+            }
+        }
 
-    .ant-btn {
-      padding: 2px;
-      margin: 0;
-      height: 36px;
-      width: 36px;
+        .selected-cell {
+            background: #eff5fd !important;
+            outline: 1px solid #007aff;
+        }
     }
-  }
+
+    .action-buttons {
+        position: absolute;
+        display: flex;
+        gap: 8px;
+        bottom: 24px;
+        right: 24px;
+
+        .ant-btn {
+            padding: 2px;
+            margin: 0;
+            height: 36px;
+            width: 36px;
+        }
+    }
 }

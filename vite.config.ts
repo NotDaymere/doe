@@ -1,12 +1,12 @@
 import { configureReact } from "@bn-digital/vite";
 
 export default configureReact(
-    { 
-        server: { 
-            hmr: { 
-                overlay: true 
-            } 
-        }, 
+    {
+        server: {
+            hmr: {
+                overlay: true,
+            },
+        },
         css: {
             preprocessorOptions: {
                 less: {
@@ -14,14 +14,14 @@ export default configureReact(
                         @import "@/styles/mixins.less";
                         @import "@/styles/build-variables.less";
                     `,
-                }
-            }
+                },
+            },
         },
         resolve: {
             alias: {
-                '@': "/src"
-            }
-        }
+                "@": "/src",
+            },
+        },
     },
     {
         openGraph: {

@@ -1,5 +1,5 @@
-import { Layout } from "./Layout"
-import { Loader } from "./Loader"
-import { Sider } from "./Sider"
+import { Layout } from "./Layout";
+import { Loader } from "./Loader";
+import { Sider } from "./Sider";
 
-export { Sider, Loader, Layout as default }
+export { Layout as default, Loader, Sider };

@@ -1,6 +1,6 @@
-import React from "react";
-import clsx from "clsx";
 import { EditorContent } from "@tiptap/react";
+import clsx from "clsx";
+import React from "react";
 import { EditorProps, useInitialEditor } from "../..";
 import css from "./Editor.module.less";
 
@@ -19,7 +19,7 @@ export const Editor: React.FC<Props> = ({
         ...editorProps,
         classNameEditor: clsx(css.editor_editor, classNameEditor),
         classNameFocus: clsx(css.editor_focused, classNameFocus),
-        classNamePlaceholder: clsx(css.editor_placeholder, classNamePlaceholder)
+        classNamePlaceholder: clsx(css.editor_placeholder, classNamePlaceholder),
     });
 
     return (

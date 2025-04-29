@@ -1,7 +1,7 @@
-import React from "react";
-import css from "./FileItem.module.less";
 import clsx from "clsx";
+import React from "react";
 import CrossIcon from "src/shared/icons/Cross.icon";
+import css from "./FileItem.module.less";
 
 interface Props {
     name: string;

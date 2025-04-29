@@ -8,11 +8,11 @@ interface PanelValue {
 export function usePanel() {
     const [value, setValue] = React.useState<PanelValue>({
         files: [],
-        text: ""
-    })
+        text: "",
+    });
 
-    const setText = (text: string) => setValue({ ...value, text  });
-    
+    const setText = (text: string) => setValue({ ...value, text });
+
     const setFiles = (files: File[]) => setValue({ ...value, files });
 
     const reset = () => setValue({ files: [], text: "" });
@@ -21,6 +21,6 @@ export function usePanel() {
         ...value,
         setFiles,
         setText,
-        reset
+        reset,
     };
 }

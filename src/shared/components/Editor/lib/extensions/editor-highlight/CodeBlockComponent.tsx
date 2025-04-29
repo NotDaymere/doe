@@ -1,6 +1,6 @@
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
-import { supportLanguages } from "./editor-highlight";
 import css from "./CodeBlockComponent.module.less";
+import { supportLanguages } from "./editor-highlight";
 
 export function CodeBlockComponent({
     node: { attrs },

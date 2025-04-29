@@ -22,7 +22,7 @@ export const MagicApplications: React.FC<Props> = (props) => {
                 onClick={toggleMenu}
                 hasMenu
             />
-            <CSSTransition 
+            <CSSTransition
                 classNames={css}
                 timeout={250}
                 in={menuActive}

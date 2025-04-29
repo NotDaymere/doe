@@ -1,0 +1,240 @@
+import { useCallback, useEffect, useState } from "react";
+import {
+    mathBlock,
+    pythonCode,
+    simpleProjectText,
+    transcribeText,
+    translation,
+    translationOrigin,
+    translationOriginTranscribed,
+} from "src/helpers/onboardingMessages";
+import { useAppStore } from "src/shared/providers";
+import { OnboardingMessage } from "src/shared/types/Message";
+import { useStepNavigation } from "./useStepNavigation";
+
+export function useOnboardingFlow(
+    setMessages?: React.Dispatch<React.SetStateAction<OnboardingMessage[]>>
+) {
+    // const { cursorMoving } = useCursor();
+    const [step, setStep] = useState(0);
+    const [logoSlide, setLogoSlide] = useState(false);
+    const [blockInput, setBlockInput] = useState(true);
+    const [showTooltip, setShowTooltip] = useState(false);
+    const [userClickedBold, setUserClickedBold] = useState(false);
+    const [userClickedUnderline, setUserClickedUnderline] = useState(false);
+    const [userClickedItalic, setUserClickedItalic] = useState(false);
+    const [blockSteps, setBlockSteps] = useState(false);
+    const { gaiaActive, setGaiaActive } = useAppStore();
+
+    // --- Step Navigation ---
+
+    const nextStep = useCallback(() => {
+        if (blockSteps) return;
+
+        setStep((prev) => Math.min(prev + 1, 60));
+    }, [blockSteps]);
+
+    const prevStep = useCallback(() => {
+        if (blockSteps) return;
+
+        setStep((prev) => Math.max(prev - 1, 5));
+    }, [blockSteps]);
+
+    // listener for arrow keys to navigate through the steps
+    useStepNavigation(step, nextStep, prevStep, setStep);
+
+    // ------ HANDLERS IN ORDER ------
+
+    // STEP 1 — show welcome text and prepare flow (starts automatically)
+    function startOnboardingFlow() {
+        if (step <= 1) setStep(1);
+    }
+
+    // STEP 2 — after welcome text typed out, slide logo
+    function handleWelcomeTextTypedOut() {
+        if (step <= 3) setStep(2);
+        setTimeout(() => {
+            setLogoSlide(true);
+        }, 1500);
+    }
+
+    // STEP 3 — after logo slide completes, wait for cursor acknowledgment
+    function handleLogoSlideComplete() {
+        if (step < 3) {
+            setTimeout(() => {
+                setStep(3);
+            }, 10);
+        }
+    }
+
+    // STEP 4 — input appearing and placeholder input text is being typed out
+    function handleCursorAcknowledged() {
+        nextStep();
+        setBlockSteps(true);
+    }
+
+    // #5 -> placeholder text is typed out, waiting for user input
+    function handleGreetingPlaceholderTypedOut() {
+        if (step < 5) setStep(4.5);
+        setTimeout(() => {
+            setShowTooltip(true);
+            setBlockInput(false);
+        }, 1200);
+    }
+
+    // #6 -> sidebar opening; navigation appearing next
+    function handleSidebarOpen() {
+        if (step < 4.7) {
+            setTimeout(() => {
+                setStep(4.6);
+                setMessages?.([]);
+                setBlockInput(true);
+            }, 1000);
+        }
+    }
+
+    // #7 -> navigation animation over; typing out text for demonstrating sidebar buttons
+    function handleNavigationAnimation() {
+        if (step < 4.7) {
+            setTimeout(() => {
+                setStep(4.7);
+            }, 3000);
+        }
+    }
+
+    // #8 -> text is typed out, cursor going to sidebar to show sidebar buttons functionality
+    function handleBoldPlaceholderTypedOut() {
+        setBlockSteps(false);
+        setTimeout(() => setStep(5), 100);
+    }
+
+    // ------ OTHER HANDLERS ------
+
+    function handleUserClickedSidebarButton(type: string) {
+        if (type === "bold") {
+            setUserClickedBold(true);
+        } else if (type === "italic") {
+            setUserClickedItalic(true);
+        } else if (type === "underline") {
+            setUserClickedUnderline(true);
+        }
+        setTimeout(() => nextStep(), 1000);
+    }
+
+    function handleSidebarClose() {
+        setStep(18);
+        setBlockInput(true);
+    }
+
+    function handleDeleteMessages() {
+        setMessages?.([]);
+    }
+
+    function handleAddGreetingMessages() {
+        setBlockInput(false);
+        setMessages?.([
+            { role: "user", content: `Hey Doe, I'm John Smith` },
+            { role: "ai", content: `Hey, John Smith, I'm Doe!` },
+            { role: "ai", content: `Let me introduce my main functionality.` },
+        ]);
+    }
+
+    // ------ STEP-SPECIFIC EFFECTS ------
+
+    useEffect(() => {
+        if (step === 7) {
+            handleDeleteMessages();
+        }
+        if (step === 8) {
+            setMessages?.([
+                {
+                    role: "ai",
+                    content: simpleProjectText,
+                    mathBlock: mathBlock,
+                },
+            ]);
+        }
+
+        if (step === 9) {
+            setMessages?.([
+                {
+                    role: "ai",
+                    content: pythonCode,
+                },
+            ]);
+        }
+        if (step === 10) {
+            handleDeleteMessages();
+        }
+        if (step === 18) {
+            handleDeleteMessages();
+        }
+        if (step === 19) {
+            setMessages?.([
+                {
+                    role: "ai",
+                    content: translation,
+                    origin: translationOrigin,
+                    originTranscribed: translationOriginTranscribed,
+                },
+            ]);
+        }
+        if (step === 21) {
+            setMessages?.([
+                {
+                    role: "ai",
+                    recording: true,
+                    content: transcribeText,
+                },
+            ]);
+        }
+        if (step === 25) {
+            handleDeleteMessages();
+        }
+        if (step === 26) {
+            setGaiaActive(false);
+            handleDeleteMessages();
+        }
+        if (step === 27 && !gaiaActive) {
+            setGaiaActive(true);
+            handleAddGreetingMessages();
+            setBlockInput(false);
+        }
+        if (step === 28) {
+            setGaiaActive(false);
+        }
+        if (step === 29) {
+            setBlockInput(true);
+        }
+    }, [step, setMessages]);
+
+    return {
+        // Step number, changing step
+        step,
+        nextStep,
+        setStep,
+
+        // Start onboarding
+        startOnboardingFlow, // #1
+        handleWelcomeTextTypedOut, // #2
+        handleLogoSlideComplete, // #3
+        handleCursorAcknowledged, // #4
+        handleGreetingPlaceholderTypedOut, // #5
+        handleSidebarOpen, // #6
+        handleNavigationAnimation, // #7
+        handleBoldPlaceholderTypedOut, // #8
+
+        handleSidebarClose,
+
+        logoSlide,
+        blockInput,
+        showTooltip,
+
+        // Sidebar button clicks (not necessary)
+        userClickedBold,
+        userClickedUnderline,
+        userClickedItalic,
+        handleUserClickedSidebarButton,
+        setBlockSteps,
+    };
+}
