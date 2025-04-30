@@ -118,7 +118,6 @@ export function useOnboardingFlow(
         } else if (type === "underline") {
             setUserClickedUnderline(true);
         }
-        setTimeout(() => nextStep(), 1000);
     }
 
     function handleSidebarClose() {

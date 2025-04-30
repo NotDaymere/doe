@@ -10,16 +10,6 @@ export function useStepNavigation(
     const { setCursorMoving } = useCursor();
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (step >= 5 && step <= 7) {
-                if (e.key === "ArrowRight") {
-                    setStep(8);
-                    return;
-                }
-                if (e.key === "ArrowLeft") {
-                    prevStep();
-                    return;
-                }
-            }
             if (step >= 1) {
                 if (e.key === "ArrowRight") {
                     setCursorMoving();
