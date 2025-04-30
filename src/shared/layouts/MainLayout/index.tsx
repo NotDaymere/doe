@@ -16,8 +16,8 @@ export const MainLayout: React.FC<Props> = ({
                                                 children
                                             }) => {
     const gaiaRef = React.useRef<HTMLDivElement>(null);
-    const { playgroundFullscreen, getOpenSavedPlaygrounds } = useChatStore()
-    const {openHistory} = useVersionHistoryStore();
+    const { playgroundFullscreen, getOpenSavedPlaygrounds } = useChatStore();
+    const { openHistory } = useVersionHistoryStore();
     return (
         <React.Fragment>
             <Gaia className={'gaia'} ref={gaiaRef} />
@@ -25,7 +25,9 @@ export const MainLayout: React.FC<Props> = ({
                 {/*    <BaseLayout.Sider width={"auto"} className={"sider-wrapper"}>*/}
                 <Sider />
                 {/*</BaseLayout.Sider>*/}
-                <div className={`children-main-layout ${((!playgroundFullscreen) || getOpenSavedPlaygrounds().length == 0) && 'children-main-layout-active'}`}>
+                <div
+                    className={`children-main-layout ${(!playgroundFullscreen || getOpenSavedPlaygrounds().length == 0) && "children-main-layout-active"}`}
+                >
                     {children}
                 </div>
                 {getOpenSavedPlaygrounds().length > 0 &&

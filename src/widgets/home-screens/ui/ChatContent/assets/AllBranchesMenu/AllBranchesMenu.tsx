@@ -16,13 +16,17 @@ interface AllBranchesMenuProps {
     setActiveOpenAllBranchesMenu: (id: number | null) => void;
 }
 
-export default function AllBranchesMenu({ branchId, position, setActiveOpenAllBranchesMenu }: AllBranchesMenuProps) {
-    const deleteSavedBranch = useChatStore(state => state.deleteSavedBranch);
+export default function AllBranchesMenu({
+    branchId,
+    position,
+    setActiveOpenAllBranchesMenu,
+}: AllBranchesMenuProps) {
+    const deleteSavedBranch = useChatStore((state) => state.deleteSavedBranch);
     const [isActiveBranchQuickView, setIsActiveBranchQuickView] = useState<boolean>(false);
     const { setIsCurrentBranchOpen, setCurrentBranch } = useChatStore();
 
     const handleQuickViewClick = () => {
-        setIsActiveBranchQuickView(true)
+        setIsActiveBranchQuickView(true);
     };
 
     const handleOpenBranchClick = () => {

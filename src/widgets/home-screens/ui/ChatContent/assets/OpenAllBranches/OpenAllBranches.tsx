@@ -122,13 +122,13 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
                     </div>
                 ))}
             </div>
-            {activeOpenAllBranchesMenu &&
+            {activeOpenAllBranchesMenu && (
                 <AllBranchesMenu
                     position={menuPosition}
                     branchId={activeOpenAllBranchesMenu}
                     setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
                 />
-            }
+            )}
         </div>,
         document.body
     );

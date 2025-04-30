@@ -9,6 +9,7 @@ import { MODE } from "src/shared/types/Chat";
 import LiveTools from "../LiveTools";
 import css from "./ChatLayout.module.less";
 import { ChatProvider } from "../../lib/hooks/ChatContext";
+import { Sidebar } from "src/widgets/Sidebar";
 interface EditModeState {
     isEditMsgMode: boolean;
     msgId: number | null;

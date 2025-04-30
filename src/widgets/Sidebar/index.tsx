@@ -1,6 +1,4 @@
 import React from "react";
-import LightThemeIcon from "src/shared/icons/LightTheme.icon";
-import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
 import { useEditorContext } from "src/shared/components/Editor";
 import { useAppStore, useChatStore } from "src/shared/providers";
