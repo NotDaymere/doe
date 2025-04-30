@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface UseTypewriterEffectOptions {
     text: string;
@@ -14,26 +14,31 @@ export function useTypewriterEffect({
     startTyping = true,
 }: UseTypewriterEffectOptions) {
     const [displayText, setDisplayText] = useState("");
-    const [index, setIndex] = useState(0);
+    const indexRef = useRef(0);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const previousTextRef = useRef<string | null>(null);
+
+    console.log("text: ", text);
 
     useEffect(() => {
-        if (!startTyping || text.length === 0) return;
+        if (!startTyping || text.length === 0 || previousTextRef.current === text) return;
 
         setDisplayText("");
-        setIndex(0);
+        indexRef.current = 0;
+        previousTextRef.current = text;
 
-        const typingInterval = setInterval(() => {
+        intervalRef.current = setInterval(() => {
+            indexRef.current += 1;
             setDisplayText((prev) => text.substring(0, prev.length + 1));
-            setIndex((prevIndex) => {
-                if (prevIndex + 1 >= text.length) {
-                    clearInterval(typingInterval);
-                    if (onComplete) onComplete();
-                }
-                return prevIndex + 1;
-            });
+            if (indexRef.current >= text.length) {
+                if (intervalRef.current) clearInterval(intervalRef.current);
+                if (onComplete) onComplete();
+            }
         }, speed);
 
-        return () => clearInterval(typingInterval);
+        return () => {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
     }, [text, speed, startTyping]);
 
     return displayText;
