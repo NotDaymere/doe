@@ -28,6 +28,17 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     const lassoPoints = useRef([]);
     const lassoPath = useRef(null);
 
+    const resetToolbar = () => {
+        setIsTextFormat(false);
+        setIsDrawingFormat(false);
+        setShowPaintBox(false);
+        setShowPaintDrawingBox(false);
+        setShowStrokeBox(false);
+        setShowOpacityBox(false);
+        setShowMoreTools(false);
+        setActiveTool("");
+    };
+
     useEffect(() => {
         // Initialize Fabric.js canvas
         fabricCanvas.current = new fabric.Canvas(canvasRef.current, {
@@ -62,11 +73,30 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             }
         };
 
+        // Add event listener for text deselection
+        const handleSelectionCleared = () => {
+            resetToolbar();
+        };
+
+        // Add event listener for clicks outside text
+        const handleMouseDown = (event) => {
+            const activeObject = fabricCanvas.current.getActiveObject();
+            if (!activeObject || activeObject.type !== "i-text") {
+                resetToolbar();
+            }
+        };
+
         window.addEventListener("keydown", handleKeyDown);
+        fabricCanvas.current.on("selection:cleared", handleSelectionCleared);
+        fabricCanvas.current.on("mouse:down", handleMouseDown);
 
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
-            fabricCanvas.current.dispose(); // Cleanup on unmount
+            if (fabricCanvas.current) {
+                fabricCanvas.current.off("selection:cleared", handleSelectionCleared);
+                fabricCanvas.current.off("mouse:down", handleMouseDown);
+                fabricCanvas.current.dispose(); // Cleanup on unmount
+            }
         };
     }, [drawingData]);
 
@@ -341,7 +371,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         setIsEraserMode(false);
         setIsTextFormat(!isTextFormat);
         setIsDrawingFormat(false);
-        setShowMoreTools(false); // reset
+
         addText();
         disableDrawingMode();
     };
@@ -350,7 +380,6 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         setActiveTool(toolName);
         setIsTextFormat(false);
         setIsDrawingFormat(!isDrawingFormat);
-        setShowMoreTools(false); // reset
         enableDrawingMode();
         setIsEraserMode(false);
     };
@@ -580,14 +609,14 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                 />
                 <hr />
 
-                {(!showMoreTools || !isTextFormat) && (
+                {!isTextFormat && (
                     <DrawingToolButton
                         icon="img/drawingEditorIcons/textformating.svg"
                         onClick={() => toggleTexformating("textformat")}
                         isActive={activeTool === "textformat"}
                     />
                 )}
-                {isTextFormat && showMoreTools && (
+                {isTextFormat && (
                     <>
                         <div className="style textformating">
                             <DrawingToolButton
@@ -687,7 +716,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                 )}
 
                 <div>
-                    {(!showMoreTools || !isDrawingFormat) && (
+                    {!isDrawingFormat && (
                         <DrawingToolButton
                             icon="/img/drawingEditorIcons/drawing.svg"
                             onClick={() => toggleDrawingformating("drawingFormat")}
@@ -695,7 +724,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                         />
                     )}
 
-                    {isDrawingFormat && showMoreTools && (
+                    {isDrawingFormat && (
                         <div className="drawingformating">
                             <div>
                                 <DrawingToolButton
@@ -809,12 +838,6 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                         />
                     </div>
                     <hr />
-                    <div>
-                        <DrawingToolButton
-                            icon="/img/drawingEditorIcons/moretools.svg"
-                            onClick={() => setShowMoreTools(!showMoreTools)}
-                        />
-                    </div>
                 </div>
             </div>
         </>
