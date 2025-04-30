@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ReactComponent as Grid } from "src/assets/icons/dot-grid.svg";
 import { useTypewriterEffect } from "src/hooks/useTypewriterEffect";
 import ArrowUpIcon from "src/shared/icons/ArrowUp.icon";
@@ -70,7 +70,7 @@ export function AnimatedInput({
 
     const typedMathPrompt = useTypewriterEffect({
         text: "Please put together a sample project that uses the equation ",
-        speed: 100,
+        speed: 50,
         onComplete: () => {
             if (step === 8) handleMathPromptTypedOut();
         },
@@ -79,7 +79,7 @@ export function AnimatedInput({
 
     const typedMathFormula = useTypewriterEffect({
         text: "$Nat(C(-, X), F) cong F(X)$",
-        speed: 10,
+        speed: 50,
         onComplete: () => {
             setIsMathBlock(true);
             if (step === 8.2) handleMathFormulaTypedOut();
@@ -121,6 +121,8 @@ export function AnimatedInput({
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, [safeStep, isMessageSent]);
+
+    const MemoizedGrid = useMemo(() => <Grid />, []);
 
     return (
         <div className={css.panel}>
@@ -207,9 +209,7 @@ export function AnimatedInput({
                     >
                         Send <ArrowUpIcon />
                     </button>
-                    <div className={css.panel_grid}>
-                        <Grid />
-                    </div>
+                    <div className={css.panel_grid}>{MemoizedGrid}</div>
                 </div>
             </div>
         </div>

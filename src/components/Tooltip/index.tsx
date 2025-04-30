@@ -9,7 +9,12 @@ interface TooltipProps {
     stressed?: boolean;
 }
 
-export function Tooltip({ children, position = "top", className, stressed }: TooltipProps) {
+export const Tooltip = React.memo(function Tooltip({
+    children,
+    position = "top",
+    className,
+    stressed,
+}: TooltipProps) {
     return (
         <div
             className={clsx(css.tooltip, css[`tooltip--${position}`], className, {
@@ -20,4 +25,4 @@ export function Tooltip({ children, position = "top", className, stressed }: Too
             <div className={css.tooltip__content}>{children}</div>
         </div>
     );
-}
+});
