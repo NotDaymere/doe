@@ -194,14 +194,19 @@ export interface ChatState {
     customTagNames: Map<ChatTagsEnum, string>;
 
     playground: IPlayground;
+    noPlayground: IPlayground;
     savedPlaygrounds: IPlayground[];
     playgroundFullscreen: boolean;
 
     setEditor: (editor: Editor | null) => void;
     setTyping: (isTyping: boolean) => void;
     setPlayground: (playground: IPlayground) => void;
+    getNoPlayground: () => IPlayground;
+    setNoPlayground: (noPlayground: IPlayground) => void;
+    closeNoPlayground: () => void;
     setSavedPlaygrounds: (playground: IPlayground) => void;
     updateSavedPlaygrounds: (playground: IPlayground) => void;
+    closeSavedPlaygrounds: () => void;
     saveHistory: (playground: IPlayground) => void;
     deleteSavedPlaygrounds: (id: string | null) => void;
     getSavedPlayground: (id: string | null) => IPlayground | null;
@@ -296,7 +301,14 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     customTagNames: defaultTagNames,
     isTyping: false,
     editor: null,
-
+    noPlayground: {
+        type: null,
+        name: "",
+        open: false,
+        data: null,
+        text: "",
+        id: null,
+    },
     playground: {
         type: null,
         name: "",
@@ -430,6 +442,19 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     setEditor: (editor) => set(() => ({ editor })),
     setTyping: (isTyping) => set(() => ({ isTyping })),
     setPlayground: (playground) => set(() => ({ playground })),
+    getNoPlayground: () => get().noPlayground,
+    setNoPlayground: (noPlayground) => set(() => ({ noPlayground })),
+    closeNoPlayground: () => set(() => ({
+            noPlayground: {
+                type: null,
+                name: "",
+                open: false,
+                data: null,
+                text: "",
+                id: null,
+            }
+        })
+    ),
     setPlaygroundFullscreen: (playgroundFullscreen) => set(() => ({ playgroundFullscreen })),
     setQuestionCodeMessage: (questionCodeMessage) => set(() => ({ questionCodeMessage })),
 
@@ -454,22 +479,9 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             return { savedPlaygrounds: [...state.savedPlaygrounds, newPlayground] };
         }),
 
-    updateSavedPlaygrounds: (playground) =>
-        set((state) =>  ({
-                savedPlaygrounds: state.savedPlaygrounds.map((p) => {
-                        if (playground.type === 'source' && playground.open) {
-                            return p.id === playground.id ? playground : {...p , open: false};
-                        } else {
-                            return p.id === playground.id ? playground
-                                : (
-                                    p.type === "source" ? {...p , open: false}
-                                        : p
-                                );
-                        }
-                    }
-                ),
-            })
-        ),
+    updateSavedPlaygrounds: (playground) => set((state) =>  ({ savedPlaygrounds: state.savedPlaygrounds.map((p) => p.id === playground.id ? playground : p) })),
+
+    closeSavedPlaygrounds: () => set((state) =>  ({ savedPlaygrounds: state.savedPlaygrounds.map((p) => ({ ...p, open: false, })) })),
 
     deleteSavedPlaygrounds: (id) =>
         set((state) => ({

@@ -20,7 +20,7 @@ import clsx from "clsx";
 import {SharingTools} from "./ui/SharingTools/SharingTools";
 
 export const Sidebar: React.FC = () => {
-    const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
+    const { editor, mode, setMode, isSharingActive, setIsSharingActive, getNoPlayground } = useChatStore();
     const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
     const editorState = useEditorContext(editor);
     const {getOpenSavedPlaygrounds} = useChatStore();
@@ -234,7 +234,7 @@ export const Sidebar: React.FC = () => {
                 </div>
 
 
-                <div className={ (getOpenSavedPlaygrounds().length > 0 || mode)
+                <div className={ (getOpenSavedPlaygrounds().length > 0 || mode || getNoPlayground().open)
                                     ? css.delete_all_messages_open_playgrounds
                                     : css.delete_all_messages}>
                     <div
