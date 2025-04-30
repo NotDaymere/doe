@@ -21,6 +21,8 @@ interface AnimatedInputProps {
     userClickedItalic: boolean;
     handleGreetingPlaceholderTypedOut: () => void;
     handleBoldPlaceholderTypedOut: () => void;
+    handleMathPromptTypedOut: () => void;
+    handleMathFormulaTypedOut: () => void;
     onSendMessage: (message: string, type: "greeting" | "project") => void;
 }
 
@@ -33,6 +35,8 @@ export function AnimatedInput({
     userClickedItalic,
     handleGreetingPlaceholderTypedOut,
     handleBoldPlaceholderTypedOut,
+    handleMathPromptTypedOut,
+    handleMathFormulaTypedOut,
     onSendMessage,
 }: AnimatedInputProps) {
     if (!step || step < 4 || (step > 18 && step < 28)) return null;
@@ -42,6 +46,7 @@ export function AnimatedInput({
     const [isMessageSent, setIsMessageSent] = useState(false);
     const [showSelectedText, setShowSelectedText] = useState(false);
     const [stressTooltip, setStressTooltip] = useState(false);
+    const [isMathBlock, setIsMathBlock] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const safeStep = step ?? 0;
@@ -61,6 +66,25 @@ export function AnimatedInput({
             if (step === 4.7) handleBoldPlaceholderTypedOut();
         },
         startTyping: step === 4.7,
+    });
+
+    const typedMathPrompt = useTypewriterEffect({
+        text: "Please put together a sample project that uses the equation ",
+        speed: 100,
+        onComplete: () => {
+            if (step === 8) handleMathPromptTypedOut();
+        },
+        startTyping: step === 8,
+    });
+
+    const typedMathFormula = useTypewriterEffect({
+        text: "$Nat(C(-, X), F) cong F(X)$",
+        speed: 10,
+        onComplete: () => {
+            setIsMathBlock(true);
+            if (step === 8.2) handleMathFormulaTypedOut();
+        },
+        startTyping: step === 8.2,
     });
 
     const linkText = useTypewriterEffect({
@@ -117,10 +141,13 @@ export function AnimatedInput({
                                 showSelectedText={showSelectedText}
                                 typedGreeting={typedGreeting}
                                 typedPrompt={typedPrompt}
+                                typedMathPrompt={typedMathPrompt}
+                                typedMathFormula={typedMathFormula}
                                 linkText={linkText}
                                 userClickedBold={userClickedBold}
                                 userClickedUnderline={userClickedUnderline}
                                 userClickedItalic={userClickedItalic}
+                                isMathBlock={isMathBlock}
                             />
                         </span>
                         {showTooltip && !isMessageSent && (
@@ -130,30 +157,31 @@ export function AnimatedInput({
                                     : "Ask Doe to write a small project for you!"}
                             </Tooltip>
                         )}
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            value={userInput}
-                            onChange={(e) => setUserInput(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" && !blockInput && userInput.trim()) {
-                                    handleSendMessage();
+                        {!blockInput && (
+                            <input
+                                ref={inputRef}
+                                type="text"
+                                value={userInput}
+                                onChange={(e) => setUserInput(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && !blockInput && userInput.trim()) {
+                                        handleSendMessage();
+                                    }
+                                }}
+                                onFocus={() => setIsActive(true)}
+                                onBlur={() => setIsActive(false)}
+                                className={clsx(css.input_field, {
+                                    [css.ghost]: !isMessageSent && blockInput,
+                                })}
+                                disabled={blockInput}
+                                placeholder={
+                                    blockInput && step >= 29
+                                        ? "Ask Doe anything you’d like about the world..."
+                                        : ""
                                 }
-                            }}
-                            onFocus={() => setIsActive(true)}
-                            onBlur={() => setIsActive(false)}
-                            className={clsx(css.input_field, {
-                                [css.ghost]: !isMessageSent && blockInput,
-                            })}
-                            disabled={blockInput}
-                            placeholder={
-                                blockInput && step >= 29
-                                    ? "Ask Doe anything you’d like about the world..."
-                                    : ""
-                            }
-                            autoFocus
-                            data-step="input"
-                        />
+                                autoFocus
+                            />
+                        )}
                     </div>
 
                     <button
@@ -163,7 +191,7 @@ export function AnimatedInput({
                         disabled={step < 51 || step > 53}
                         data-step="screen-share"
                     >
-                        <div className={css.panel_button_test}>
+                        <div className={css.panel_button_test} data-step="input">
                             <ScreenShareIcon className={css.panel_button_icon} />
                         </div>
                         {step === 52 && <ButtonAccordion />}
@@ -175,7 +203,7 @@ export function AnimatedInput({
                         className={css.panel_submitBtn}
                         onAnimationEnd={() => setAnimationDone(true)}
                         onClick={handleSendMessage}
-                        data-step="submit"
+                        data-step="send"
                     >
                         Send <ArrowUpIcon />
                     </button>

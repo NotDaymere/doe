@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useCursor } from "src/contexts/CursorContext";
 import {
     mathBlock,
     pythonCode,
@@ -15,7 +16,7 @@ import { useStepNavigation } from "./useStepNavigation";
 export function useOnboardingFlow(
     setMessages?: React.Dispatch<React.SetStateAction<OnboardingMessage[]>>
 ) {
-    // const { cursorMoving } = useCursor();
+    const { setCursorMoving } = useCursor();
     const [step, setStep] = useState(0);
     const [logoSlide, setLogoSlide] = useState(false);
     const [blockInput, setBlockInput] = useState(true);
@@ -34,14 +35,26 @@ export function useOnboardingFlow(
         setStep((prev) => Math.min(prev + 1, 60));
     }, [blockSteps]);
 
+    const nextSubStep = useCallback(() => {
+        if (blockSteps) return;
+
+        setStep((prev) => parseFloat((prev + 0.1).toFixed(1)));
+    }, [blockSteps]);
+
     const prevStep = useCallback(() => {
         if (blockSteps) return;
 
         setStep((prev) => Math.max(prev - 1, 5));
     }, [blockSteps]);
 
+    const prevSubStep = useCallback(() => {
+        if (blockSteps) return;
+
+        setStep((prev) => parseFloat((prev - 0.1).toFixed(1)));
+    }, [blockSteps]);
+
     // listener for arrow keys to navigate through the steps
-    useStepNavigation(step, nextStep, prevStep, setStep);
+    useStepNavigation(step, nextStep, prevStep, nextSubStep, prevSubStep, setStep);
 
     // ------ HANDLERS IN ORDER ------
 
@@ -105,7 +118,17 @@ export function useOnboardingFlow(
     // #8 -> text is typed out, cursor going to sidebar to show sidebar buttons functionality
     function handleBoldPlaceholderTypedOut() {
         setBlockSteps(false);
+        setBlockInput(true);
         setTimeout(() => setStep(5), 100);
+    }
+
+    function handleMathPromptTypedOut() {
+        setCursorMoving();
+        setStep(8.1);
+    }
+
+    function handleMathFormulaTypedOut() {
+        setStep(8.3);
     }
 
     // ------ OTHER HANDLERS ------
@@ -144,14 +167,18 @@ export function useOnboardingFlow(
         if (step === 7) {
             handleDeleteMessages();
         }
-        if (step === 8) {
-            setMessages?.([
-                {
-                    role: "ai",
-                    content: simpleProjectText,
-                    mathBlock: mathBlock,
-                },
-            ]);
+        if (step === 8.3) {
+            setTimeout(
+                () =>
+                    setMessages?.([
+                        {
+                            role: "ai",
+                            content: simpleProjectText,
+                            mathBlock: mathBlock,
+                        },
+                    ]),
+                1000
+            );
         }
 
         if (step === 9) {
@@ -222,6 +249,8 @@ export function useOnboardingFlow(
         handleSidebarOpen, // #6
         handleNavigationAnimation, // #7
         handleBoldPlaceholderTypedOut, // #8
+        handleMathPromptTypedOut,
+        handleMathFormulaTypedOut,
 
         handleSidebarClose,
 

@@ -1,5 +1,8 @@
+import { MathJax } from "better-react-mathjax";
 import clsx from "clsx";
+import { useMemo } from "react";
 import { useCursor } from "src/contexts/CursorContext";
+import { mathBlock2 } from "src/helpers/onboardingMessages";
 import css from "./InputStaticText.module.less";
 
 interface InputStaticTextProps {
@@ -9,10 +12,13 @@ interface InputStaticTextProps {
     showSelectedText: boolean;
     typedGreeting: string;
     typedPrompt: string;
+    typedMathPrompt: string;
+    typedMathFormula: string;
     linkText: string;
     userClickedBold: boolean;
     userClickedUnderline: boolean;
     userClickedItalic: boolean;
+    isMathBlock: boolean;
 }
 
 export const InputStaticText = ({
@@ -22,12 +28,26 @@ export const InputStaticText = ({
     showSelectedText,
     typedGreeting,
     typedPrompt,
+    typedMathPrompt,
+    typedMathFormula,
     linkText,
     userClickedBold,
     userClickedUnderline,
     userClickedItalic,
+    isMathBlock,
 }: InputStaticTextProps) => {
     const { cursorMoving } = useCursor();
+
+    const memoizedMathJax = useMemo(() => {
+        if (!isMathBlock) return null;
+
+        return (
+            <MathJax dynamic hideUntilTypeset="first">
+                <div className={css.mathWrapper}>{mathBlock2}</div>
+            </MathJax>
+        );
+    }, [isMathBlock]);
+
     return (
         <>
             {!isMessageSent ? (
@@ -98,7 +118,43 @@ export const InputStaticText = ({
                     </span>
                 </p>
             )}
-            {step === 8 && <p>Write a formula for Yoneda Lema</p>}
+            {step >= 8 && step < 9 && (
+                <>
+                    <p>
+                        {typedMathPrompt.split("").map((word, index) => {
+                            return (
+                                <span
+                                    key={index}
+                                    className={clsx(css.letter, {
+                                        [css.space]: word === " ",
+                                    })}
+                                    style={{ animationDelay: `${index * 0.005}s` }}
+                                    data-step={index + 1 === typedPrompt.length && "text"}
+                                >
+                                    {word}
+                                </span>
+                            );
+                        })}
+                        {!isMathBlock
+                            ? typedMathFormula.split("").map((word, index) => {
+                                  return (
+                                      <span
+                                          key={index}
+                                          className={clsx(css.letter, {
+                                              [css.space]: word === " ",
+                                          })}
+                                          style={{ animationDelay: `${index * 0.005}s` }}
+                                          data-step={index + 1 === typedPrompt.length && "text"}
+                                      >
+                                          {" "}
+                                          {word}
+                                      </span>
+                                  );
+                              })
+                            : memoizedMathJax}
+                    </p>
+                </>
+            )}
             {step === 9 && <p>Write me the deletion function in Python...</p>}
             {step === 10 && (
                 <>

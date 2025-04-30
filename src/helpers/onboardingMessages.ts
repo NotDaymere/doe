@@ -25,6 +25,8 @@ export const mathBlock = `$$
         \\end{CD}
     $$`;
 
+export const mathBlock2 = `$Nat(C(-, X), F) cong F(X)$`;
+
 export const transcribeText = `
         <p style="line-height: 1.4;"><strong>Team Strategy Session</strong>, December 11, 2024, Time: 10:00 AM - XX:XX XX<br/>
         <span style="margin-left: 8px;">• Sarah Johnson (Project Manager)</span><br/>

@@ -26,6 +26,8 @@ interface OnboardingBodyProps {
     handleWelcomeTextTypedOut: () => void;
     handleGreetingPlaceholderTypedOut: () => void;
     handleBoldPlaceholderTypedOut: () => void;
+    handleMathPromptTypedOut: () => void;
+    handleMathFormulaTypedOut: () => void;
     handleLogoSlideComplete: () => void;
 }
 
@@ -45,6 +47,8 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         handleWelcomeTextTypedOut,
         handleGreetingPlaceholderTypedOut,
         handleBoldPlaceholderTypedOut,
+        handleMathPromptTypedOut,
+        handleMathFormulaTypedOut,
         handleLogoSlideComplete,
     } = props;
 
@@ -89,6 +93,8 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                         userClickedItalic={userClickedItalic}
                         handleGreetingPlaceholderTypedOut={handleGreetingPlaceholderTypedOut}
                         handleBoldPlaceholderTypedOut={handleBoldPlaceholderTypedOut}
+                        handleMathPromptTypedOut={handleMathPromptTypedOut}
+                        handleMathFormulaTypedOut={handleMathFormulaTypedOut}
                         onSendMessage={onSendMessage}
                     />
                 </div>

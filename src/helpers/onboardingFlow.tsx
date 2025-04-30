@@ -109,7 +109,7 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 4.5,
-        location: '[data-step="submit"]',
+        location: '[data-step="send"]',
         cursorVisible: true,
         tooltip: false,
     },
@@ -221,8 +221,20 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 8,
+        location: '[data-step="input"]',
+        cursorVisible: true,
+        cursorPosition: {
+            top: 0,
+            left: 400,
+        },
+        tooltip: false,
+        blur: [""],
+    },
+    {
+        id: 8.1,
         location: '[data-step="function"]',
         cursorVisible: true,
+        cursorClick: true,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Math mode.</b>,
@@ -244,6 +256,25 @@ export const onboardingFlow: OnboardingStep[] = [
                 <FunctionIcon />
             </div>
         ),
+        blur: [""],
+    },
+    {
+        id: 8.2,
+        location: '[data-step="input"]',
+        cursorVisible: true,
+        cursorPosition: {
+            top: 0,
+            left: 400,
+        },
+        tooltip: false,
+        blur: [""],
+    },
+    {
+        id: 8.3,
+        location: '[data-step="send"]',
+        cursorVisible: true,
+        cursorClick: true,
+        tooltip: false,
         blur: [""],
     },
     {

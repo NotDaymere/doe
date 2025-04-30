@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useCursor } from "src/contexts/CursorContext";
 import BoldIcon from "src/shared/icons/Bold.icon";
 import CodeIcon from "src/shared/icons/Code.icon";
 import FunctionIcon from "src/shared/icons/Function.icon";
@@ -20,6 +21,8 @@ export const SidebarFormatting = ({
     editorState,
     handleUserClickedSidebarButton,
 }: SidebarFormattingProps) => {
+    const { cursorMoving } = useCursor();
+
     const formattingButtons = [
         {
             icon: <BoldIcon />,
@@ -57,7 +60,7 @@ export const SidebarFormatting = ({
         {
             icon: <FunctionIcon />,
             label: "Math mode",
-            step: 8,
+            step: [8.1, 8.2],
             dataStep: "function",
         },
         {
@@ -89,7 +92,12 @@ export const SidebarFormatting = ({
                         <button
                             key={dataStep}
                             className={clsx(css.sidebar_controls_btn, {
-                                [css.highlighted]: step === btnStep,
+                                [css.highlighted]:
+                                    !cursorMoving &&
+                                    step &&
+                                    (Array.isArray(btnStep)
+                                        ? btnStep.includes(step)
+                                        : step === btnStep),
                             })}
                             onPointerDown={pointerDown}
                             onClick={onClick}
