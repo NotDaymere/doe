@@ -30,13 +30,22 @@ export function useElementCursorPosition({
         const element = document.querySelector(location);
         if (element) {
             element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-            setTimeout(() => {
+
+            if (delay === 0) {
                 const rect = element.getBoundingClientRect();
                 setPosition({
                     top: rect.bottom - (cursorPosition?.top ?? 4),
                     left: rect.right - (cursorPosition?.left ?? 4),
                 });
-            }, delay || 0);
+            } else {
+                setTimeout(() => {
+                    const rect = element.getBoundingClientRect();
+                    setPosition({
+                        top: rect.bottom - (cursorPosition?.top ?? 4),
+                        left: rect.right - (cursorPosition?.left ?? 4),
+                    });
+                }, delay || 0);
+            }
         }
     }, [location, cursorPosition, cursorCentered]);
 

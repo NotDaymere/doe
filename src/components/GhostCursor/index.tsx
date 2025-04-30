@@ -36,12 +36,6 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
         return () => window.removeEventListener("keydown", handleKey);
     }, [currentStep, handleCursorAcknowledged]);
 
-    useEffect(() => {
-        if (currentStep?.cursorVisible) {
-            setCursorMoving();
-        }
-    }, [position.top, position.left]);
-
     const cursorSpeed = currentStep?.cursorSpeed ?? 1000; // fallback to 1000ms
 
     const cursorPositionAndSpeed = {

@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useCursor } from "src/contexts/CursorContext";
 
 export function useStepNavigation(
     step: number,
@@ -6,6 +7,7 @@ export function useStepNavigation(
     prevStep: () => void,
     setStep: (value: number) => void
 ) {
+    const { setCursorMoving } = useCursor();
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (step >= 5 && step <= 7) {
@@ -19,8 +21,14 @@ export function useStepNavigation(
                 }
             }
             if (step >= 1) {
-                if (e.key === "ArrowRight") nextStep();
-                if (e.key === "ArrowLeft") prevStep();
+                if (e.key === "ArrowRight") {
+                    setCursorMoving();
+                    nextStep();
+                }
+                if (e.key === "ArrowLeft") {
+                    setCursorMoving();
+                    prevStep();
+                }
             }
         };
 
