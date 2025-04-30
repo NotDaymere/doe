@@ -55,7 +55,6 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         playground,
         setPlayground,
         playgroundFullscreen,
-        messages,
         currentBranch,
         isCurrentBranchOpen,
         currentBranchDialog,
@@ -63,11 +62,11 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         getOpenSavedPlaygrounds,
         showQuickSearch,
         setShowQuickSearch,
+        getNoPlayground
     } = useChatStore();
     const { talkModeActive, isSideBarOpen } = useAppStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
-    const [isShowLogoPopup, setIsShowLogoPopup] = React.useState(false);
 
     const isInitialRender = React.useRef(true);
     const editor = useEditor({
@@ -235,7 +234,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     return (
         <div
             className={
-                getOpenSavedPlaygrounds().length > 0
+                (getOpenSavedPlaygrounds().length > 0 || getNoPlayground().open)
                     ? playgroundFullscreen
                         ? css.content_playground_fullscreen
                         : css.content_playground
@@ -262,7 +261,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     />
                 )}
                 {!isCurrentBranchOpen && (
-                    <div className={getOpenSavedPlaygrounds().length <= 0
+                    <div className={(getOpenSavedPlaygrounds().length <= 0 && !getNoPlayground().open)
                                     ? !isSideBarOpen
                                         ? css.logoWrapper
                                         : css.logoWrapperSideBarOpen
@@ -296,18 +295,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
 
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
 
-
                 <TalkMode targetRef={chatRef} />
-                {/*<div className={css.actions}>*/}
-                {/*    <button*/}
-                {/*        className={classNames(css.steps_button, {*/}
-                {/*            [css.active_steps_button]: playground.open,*/}
-                {/*        })}*/}
-                {/*        onClick={handleStepsButtonClick}*/}
-                {/*    >*/}
-                {/*        <MagicIcon /> See all steps*/}
-                {/*    </button>*/}
-                {/*</div>*/}
 
                 {showQuickSearch && (
                     <div className={css.quickSearch}>
