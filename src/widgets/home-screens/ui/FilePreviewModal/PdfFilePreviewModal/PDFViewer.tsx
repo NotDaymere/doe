@@ -5,25 +5,28 @@ import React, {
     forwardRef,
     useImperativeHandle,
 } from "react";
-import * as pdfjsLib from "pdfjs-dist";
 import css from "./PdfFilePreviewModal.module.less";
 import ArrowRightButtonIcon from "../../../../../shared/icons/ArrowRightButton.icon";
 import ArrowLeftButtonIcon from "../../../../../shared/icons/ArrowLeftButton.icon";
 import { TextAnnotation } from "./pdfWorker";
+import * as pdfjsLib from "pdfjs-dist";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+import pdfWorkerUrl from "pdfjs-dist/legacy/build/pdf.worker.entry.js?url";
 
+const pdfUrlCache = new Map<string, string>()
+
+export interface PDFViewerHandle {
+    saveAnnotations: () => Promise<string>;
+}
 const regularFont = "/fonts/Roboto_Condensed-Regular.ttf";
 const boldFont = "/fonts/Roboto_Condensed-ExtraBold.ttf";
-
-const pdfUrlCache: { [key: string]: string } = {};
 
 export interface PDFViewerHandle {
     saveAnnotations: () => Promise<string>;
 }
 
 interface PDFViewerProps {
-    url: string;
+    url: string | Blob;
     isDrawingEnabled: boolean;
     isTextMode: boolean;
     drawingColor: string;
@@ -33,6 +36,35 @@ interface PDFViewerProps {
     setIsTextMode: React.Dispatch<React.SetStateAction<boolean>>;
     onLoad?: () => void;
 }
+
+
+async function resolveWorkerSrc(): Promise<string | null> {
+    const cdnUrl = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+    const buildRoot = "/pdf.worker.min.js";
+    const buildStatic = "/static/pdf.worker.min.js";
+    const npmEntry = pdfWorkerUrl;
+    const candidates = [
+        { name: "CDN", url: cdnUrl },
+        { name: "BUILD_ROOT", url: buildRoot },
+        { name: "BUILD_STATIC", url: buildStatic },
+        { name: "NPM_ENTRY", url: npmEntry },
+    ];
+
+    for (const { name, url } of candidates) {
+        try {
+            const res = await fetch(url, { method: "HEAD" });
+            if (res.ok) return url;
+        } catch (err) {
+
+        }
+    }
+    pdfjsLib.GlobalWorkerOptions.disableWorker = true;
+    return null;
+}
+
+resolveWorkerSrc().then((src) => {
+    if (src) pdfjsLib.GlobalWorkerOptions.workerSrc = src;
+});
 
 export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
     (
@@ -65,10 +97,9 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         const [activeDraggableAnnotation, setActiveDraggableAnnotation] =
             useState<TextAnnotation | null>(null);
         const [dragOffset, setDragOffset] = useState<{ offsetX: number; offsetY: number } | null>(null);
+        const [hasAnnotationsChanged, setHasAnnotationsChanged] = useState(false);
         const draggingRef = useRef(false);
         const drawingColorRef = useRef(drawingColor);
-
-        const [hasAnnotationsChanged, setHasAnnotationsChanged] = useState(false);
         const workerRef = useRef<Worker | null>(null);
 
         useEffect(() => {
@@ -76,32 +107,76 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         }, [drawingColor]);
 
         useEffect(() => {
-            workerRef.current = new Worker(new URL("./pdfWorker.ts", import.meta.url), { type: "module" });
-            workerRef.current.onerror = (err) => {
-                console.error("Worker error:", err);
-            };
-            return () => {
-                workerRef.current?.terminate();
-            };
+            try {
+                workerRef.current = new Worker(new URL("./pdfWorker.ts", import.meta.url), { type: "module" });
+            } catch (err) {
+                console.error("[pdfWorker] Worker spawn failed", err);
+            }
+            return () => workerRef.current?.terminate();
         }, []);
 
         useEffect(() => {
             (async () => {
-                const loadedPdf = await pdfjsLib.getDocument(url).promise;
-                setPdf(loadedPdf);
-                const dims: Array<{ width: number; height: number }> = [];
-                for (let i = 1; i <= loadedPdf.numPages; i++) {
-                    const page = await loadedPdf.getPage(i);
-                    const viewport = page.getViewport({ scale: 1 });
-                    dims.push({ width: viewport.width, height: viewport.height });
+                let doc: pdfjsLib.PDFDocumentProxy | null = null;
+
+                if (typeof url === "string" && /^https?:\/\//.test(url)) {
+                    try {
+                        doc = await pdfjsLib.getDocument({ url }).promise;
+                    } catch (err1) {
+                        console.warn("[load] getDocument({url}) failed", err1);
+                    }
+                }
+
+                if (!doc && typeof url === "string") {
+                    try {
+                        const buf = await fetch(url).then(r => r.arrayBuffer());
+                        doc = await pdfjsLib.getDocument({ data: buf }).promise;
+                    } catch (err2) {
+                        console.warn("[load] fetch+data failed", err2);
+                    }
+                }
+
+                if (!doc && (typeof url === "string" && url.startsWith("blob:") || url instanceof Blob)) {
+                    try {
+                        const buf = typeof url === "string" ? await fetch(url).then(r => r.arrayBuffer()) : await url.arrayBuffer();
+                        doc = await pdfjsLib.getDocument({ data: buf }).promise;
+                    } catch (err3) {
+                        console.warn("[load] blob→data failed", err3);
+                    }
+                }
+
+                if (!doc && !pdfjsLib.GlobalWorkerOptions.disableWorker) {
+                    console.debug("[load] retry with disableWorker = true");
+                    pdfjsLib.GlobalWorkerOptions.disableWorker = true;
+                    try {
+                        const buf = typeof url === "string" ? await fetch(url).then(r => r.arrayBuffer()) : await (url as Blob).arrayBuffer();
+                        doc = await pdfjsLib.getDocument({ data: buf, disableWorker: true }).promise;
+                    } catch (err4) {
+                        console.error("[load] disableWorker fallback failed", err4);
+                    }
+                }
+
+                if (!doc) {
+                    console.error("[load] all PDF load strategies failed");
+                    return;
+                }
+
+                setPdf(doc);
+                const dims: { width: number; height: number }[] = [];
+                for (let i = 1; i <= doc.numPages; i++) {
+                    const p = await doc.getPage(i);
+                    const vp = p.getViewport({ scale: 1 });
+                    dims.push({ width: vp.width, height: vp.height });
                 }
                 setOriginalDimensions(dims);
 
-                if (!pdfUrlCache[url]) {
-                    pdfUrlCache[url] = url;
+                if (typeof url === "string" && !pdfUrlCache.has(url)) {
+                    pdfUrlCache.set(url, url);
                 }
+                onLoad?.();
             })();
-        }, [url]);
+        }, [url, onLoad]);
+
 
         const computePageDimensions = (pageIndex: number) => {
             const { width: ow, height: oh } = originalDimensions[pageIndex];
@@ -346,8 +421,8 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         };
 
         const saveAnnotations = async (): Promise<string> => {
-            if (!hasAnnotationsChanged && pdfUrlCache[url]) {
-                return Promise.resolve(pdfUrlCache[url]);
+            if (!hasAnnotationsChanged && pdfUrlCache.has(url)) {
+                return Promise.resolve(pdfUrlCache.get(url)!);
             }
             if (!pdf) throw new Error("PDF not loaded");
             const arrayBuffer = await fetch(url).then((r) => r.arrayBuffer());
@@ -375,7 +450,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                     if (status === "success") {
                         const blob = new Blob([pdfBlob], { type: "application/pdf" });
                         const newUrl = URL.createObjectURL(blob);
-                        pdfUrlCache[url] = newUrl;
+                        pdfUrlCache.set(url, newUrl);
                         setHasAnnotationsChanged(false);
                         resolve(newUrl);
                     } else {
