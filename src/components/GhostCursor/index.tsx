@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCursor } from "src/contexts/CursorContext";
 import { OnboardingStep } from "src/helpers/onboardingFlow";
 import { useElementCursorPosition } from "src/hooks/useElementCursorPosition";
@@ -13,8 +13,9 @@ interface GhostCursorProps {
 }
 
 export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCursorProps) {
-    const { setCursorMoving, setCursorStopped, cursorMoving } = useCursor();
+    const { setCursorStopped, cursorMoving } = useCursor();
     const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+    const [clicked, setClicked] = useState(false);
 
     const position = useElementCursorPosition({
         location: currentStep?.location,
@@ -49,12 +50,18 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
             className={clsx(css.cursor, {
                 [css.cursor_hidden]: !currentStep?.cursorVisible,
                 [css.cursor_highlighted]: currentStep?.id === 3,
+                [css.cursor_clicked]: clicked,
             })}
             style={cursorPositionAndSpeed}
             onTransitionEnd={() => {
                 clearTimeout(transitionTimeoutRef.current);
                 transitionTimeoutRef.current = setTimeout(() => {
                     setCursorStopped();
+
+                    if (currentStep?.cursorClick) {
+                        setClicked(true);
+                        setTimeout(() => setClicked(false), 300);
+                    }
                 }, 100);
             }}
         >

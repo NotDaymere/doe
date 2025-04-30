@@ -29,6 +29,7 @@ export interface OnboardingStep {
     id: number;
     location: string;
     cursorVisible: boolean;
+    cursorClick?: boolean;
     cursorPosition?: {
         top?: number;
         left?: number;
@@ -135,6 +136,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 5,
         location: '[data-step="bold"]',
         cursorVisible: true,
+        cursorClick: true,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Format buttons</b>,
@@ -163,6 +165,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 6,
         location: '[data-step="underline"]',
         cursorVisible: true,
+        cursorClick: true,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Format buttons</b>,
@@ -191,6 +194,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 7,
         location: '[data-step="italic"]',
         cursorVisible: true,
+        cursorClick: true,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Format buttons</b>,
