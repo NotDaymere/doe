@@ -79,6 +79,7 @@ export function AnimatedInput({
     const typedMathPrompt = useTypewriterEffect({
         text: "Please put together a sample project that uses the equation: ",
         speed: 50,
+        delay: 1200,
         onComplete: () => {
             if (step === 8) handleMathPromptTypedOut();
         },
@@ -88,6 +89,7 @@ export function AnimatedInput({
     const typedMathFormula = useTypewriterEffect({
         text: "$Nat(C(-, X), F) cong F(X)$",
         speed: 50,
+        delay: 1200,
         onComplete: () => {
             setIsMathBlock(true);
             if (step === 8.2) handleMathFormulaTypedOut();
@@ -98,6 +100,7 @@ export function AnimatedInput({
     const typedCodePrompt = useTypewriterEffect({
         text: "Write me the deletion function in Python that starts with: ",
         speed: 50,
+        delay: 1200,
         onComplete: () => {
             setIsMessageSent(false);
             if (step === 9) handleCodePromptTypedOut();
@@ -108,6 +111,7 @@ export function AnimatedInput({
     const typedPythonCode = useTypewriterEffect({
         text: pythonCodeSmall,
         speed: 50,
+        delay: 1200,
         onComplete: () => {
             if (step === 9.2) handlePythonCodeTypedOut();
         },
@@ -122,7 +126,6 @@ export function AnimatedInput({
 
     const handleSendMessage = () => {
         if (safeStep !== 4.5 && safeStep !== 8.3 && safeStep !== 28 && safeStep !== 9.3) return;
-        setUserInput("");
 
         let messageType: MessageType;
 
@@ -144,6 +147,7 @@ export function AnimatedInput({
         }
         onSendMessage(userInput, messageType);
         setIsMessageSent(true);
+        setUserInput("");
     };
 
     useEffect(() => {
@@ -182,7 +186,7 @@ export function AnimatedInput({
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [safeStep, isMessageSent]);
+    }, [safeStep, isMessageSent, userInput]);
 
     const MemoizedGrid = useMemo(() => <Grid />, []);
 

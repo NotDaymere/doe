@@ -23,9 +23,8 @@ export const useChat = (setShowSidebar: React.Dispatch<React.SetStateAction<bool
     };
 
     const handleUserMessage = (message: string, type: MessageType) => {
-        addMessage("user", type === "greeting" ? `Hey Doe, I'm ${message}` : message);
-
         if (type === "greeting") {
+            addMessage("user", `Hey Doe, I'm ${message}`, true);
             setTimeout(() => {
                 addMessage("ai", `Hey, ${message}, I'm Doe!`);
             }, 1000);
