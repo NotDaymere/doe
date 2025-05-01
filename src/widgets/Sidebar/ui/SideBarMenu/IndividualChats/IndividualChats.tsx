@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import css from "./IndividualChats.module.less";
 import IndividualChatsIcon from "../../../../../shared/icons/IndividualChatsIcon";
 import SearchIcon from "../../../../../shared/icons/SearchIcon";
@@ -14,6 +14,7 @@ import { ChatTagsPanel } from "./ChatTagsPanel/ChatTagsPanel";
 import { ChatItem } from "./ChatItem/ChatItem";
 import ReactDOM from "react-dom";
 import { TAG_META } from "../SideBarMenu";
+import { IChat } from "../../../../../shared/types/Chat";
 
 interface IndividualChatsProps {
     isSideBarOpen: boolean;
@@ -30,14 +31,15 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         switchChat,
         renameChat,
         removeChat,
+        addChat,
+        deleteSavedBranch,
     } = useChatStore();
 
     const [isIndividualChatsSearchInputOpen, setIsIndividualChatsSearchInputOpen] = useState(false);
     const [isIndividualChatOpen, setIsIndividualChatOpen] = useState(false);
     const [expandedChatId, setExpandedChatId] = useState<string | null>(null);
     const [activeTagPanel, setActiveTagPanel] = useState<string | null>(null);
-    const [isBranchMenuOpen, setIsBranchMenuOpen] = useState(false);
-    const [menuPosition, setMenuPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+    const [branchMenuState, setBranchMenuState] = useState<{ [key: number]: { isOpen: boolean; position: { top: number; left: number } } }>({});
     const [isShowActions, setIsShowActions] = useState(false);
     const [activeChatForActions, setActiveChatForActions] = useState<{
         id: string;
@@ -62,13 +64,22 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         setIsIndividualChatsSearchInputOpen(!isIndividualChatsSearchInputOpen);
     };
 
-    const handleOpenBranchMenu = (event: React.MouseEvent) => {
+    const handleOpenBranchMenu = (event: React.MouseEvent, branchId: number | null) => {
         event.stopPropagation();
-        setMenuPosition({ top: event.clientY, left: event.clientX + 30 });
-        setIsBranchMenuOpen(!isBranchMenuOpen);
+        if (branchId === null) {
+            console.warn("Branch ID is null, cannot open menu");
+            return;
+        }
+        setBranchMenuState(prev => ({
+            ...prev,
+            [branchId]: {
+                isOpen: !prev[branchId]?.isOpen,
+                position: { top: event.clientY, left: event.clientX + 30 },
+            },
+        }));
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
                 setShowAllTags(null);
@@ -82,7 +93,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [showAllTags, activeTagPanel]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (activeTagPanel) {
             const panelChat = chats.find(c => c.id === activeTagPanel);
             setSelectedTags(panelChat?.tags ?? []);
@@ -91,6 +102,43 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         }
         setInputValue("");
     }, [activeTagPanel, chats]);
+
+    const handleRenameChat = (id: string, name: string) => {
+        setEditingChatId(id);
+        setEditingChatValue(name);
+        setActiveChatForActions(null);
+    };
+
+    const handleDeleteChat = (id: string) => {
+        let newChat: IChat;
+        if (chats[chats.length - 1].id !== id) {
+            newChat = chats[chats.length - 1];
+            switchChat(newChat.id);
+        } else if (chats.length > 2) {
+            newChat = chats[chats.length - 2];
+            switchChat(newChat.id);
+        } else if (chats.length <= 1) {
+            newChat = {
+                id: `chat-${Date.now()}`,
+                name: "New Chat",
+                messageNodeMap: {
+                    root: { id: "root", isRootNode: true, children: [] },
+                },
+                tags: [],
+                notificationsCount: 0,
+                branches: [],
+            };
+            addChat(newChat);
+            switchChat(newChat.id);
+        }
+        removeChat(id);
+        setActiveChatForActions(null);
+    };
+
+    const handleOpenChat = (id: string) => {
+        switchChat(id);
+        setActiveChatForActions(null);
+    };
 
     return isSideBarMenuOpen && (
         <>
@@ -152,9 +200,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
 
                     {chats.map(chat => {
                         const isOpen = expandedChatId === chat.id;
-                        const branches = chat.id === currentChat.id
-                            ? currentChat.branches
-                            : chat.branches ?? [];
+                        const branches = chat.branches ?? [];
 
                         return (
                             <div key={chat.id}>
@@ -245,21 +291,36 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                                                             {branch.name}
                                                         </div>
                                                     </div>
-                                                    <div className={css.branch_three_dots} onClick={handleOpenBranchMenu}>
+                                                    <div
+                                                        className={css.branch_three_dots}
+                                                        onClick={(e) => {
+                                                            handleOpenBranchMenu(e, branch.id);
+                                                        }}
+                                                        onMouseDown={e => e.stopPropagation()}
+                                                    >
                                                         <ThreeDotsIcon />
                                                     </div>
 
-                                                    {isBranchMenuOpen && branch.id !== null && ReactDOM.createPortal(
+                                                    {branchMenuState[branch.id!]?.isOpen && ReactDOM.createPortal(
                                                         <CSSTransition
-                                                            in={isBranchMenuOpen && branch.id !== null}
+                                                            in={branchMenuState[branch.id!]?.isOpen}
                                                             timeout={200}
                                                             classNames="branchMenu"
                                                             unmountOnExit
                                                         >
                                                             <AllBranchesMenu
-                                                                position={menuPosition}
+                                                                position={branchMenuState[branch.id!].position}
                                                                 branchId={branch.id!}
                                                                 setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
+                                                                onClose={() => {
+                                                                    setBranchMenuState(prev => ({
+                                                                        ...prev,
+                                                                        [branch.id!]: { ...prev[branch.id!], isOpen: false },
+                                                                    }));
+                                                                }}
+                                                                onDelete={() => {
+                                                                    deleteSavedBranch(branch.id!);
+                                                                }}
                                                             />
                                                         </CSSTransition>,
                                                         document.body
@@ -282,19 +343,9 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                     <IndividualChatsActions
                         position={position}
                         onClose={() => setActiveChatForActions(null)}
-                        onRename={() => {
-                            setEditingChatId(id);
-                            setEditingChatValue(name);
-                            setActiveChatForActions(null);
-                        }}
-                        onDelete={() => {
-                            removeChat(id);
-                            setActiveChatForActions(null);
-                        }}
-                        onOpen={() => {
-                            switchChat(id);
-                            setActiveChatForActions(null);
-                        }}
+                        onRename={() => handleRenameChat(id, name)}
+                        onDelete={() => handleDeleteChat(id)}
+                        onOpen={() => handleOpenChat(id)}
                     />
                 );
             })()}

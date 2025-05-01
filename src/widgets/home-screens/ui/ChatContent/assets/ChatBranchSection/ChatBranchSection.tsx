@@ -12,7 +12,7 @@ interface ChatMessageDateProps {
     isOpenBrunch?: boolean;
 }
 
-const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunch = false }) => {
+const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ branch, isOpenBrunch = false }) => {
     const {
         currentBranch,
         savedBranches,
@@ -21,30 +21,29 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunc
         isCurrentBranchOpen
     } = useChatStore();
     const [isActiveBranchMenu, setIsActiveBranchMenu] = useState<boolean>(false);
-
-    const branchToDisplay = isOpenBrunch
-        ? currentBranch
-        : branch;
+    const [clickPosition, setClickPosition] = useState<{ x: number; y: number } | null>(null);
+    const branchToDisplay = isOpenBrunch ? currentBranch : branch;
 
     if (!branchToDisplay) return null;
 
     const text = branchToDisplay.name;
 
     const handleContainerClick = (e: React.MouseEvent) => {
-        if(!isCurrentBranchOpen){
+        if (!isCurrentBranchOpen) {
             const target = e.target as HTMLElement;
             if (target.closest('.quick-view-branches-container')) {
                 return;
             }
             setCurrentBranch(branchToDisplay);
             setIsCurrentBranchOpen(true);
-        }else {
-            setIsActiveBranchMenu(!isActiveBranchMenu)
+        } else {
+            setIsActiveBranchMenu(!isActiveBranchMenu);
         }
     };
 
     const handleButtonClick = (e: React.MouseEvent) => {
         e.stopPropagation();
+        setClickPosition({ x: e.clientX, y: e.clientY });
         setIsActiveBranchMenu(true);
     };
 
@@ -69,10 +68,11 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunc
                         changeIsActiveBranchQuickView={setIsActiveBranchMenu}
                     />
                 )}
-                {(isActiveBranchMenu && branchToDisplay.id && isCurrentBranchOpen) && (
+                {(isActiveBranchMenu && branchToDisplay.id && isCurrentBranchOpen && clickPosition) && (
                     <OpenBranchMenu
                         branchId={branchToDisplay.id}
                         changeIsActiveBranchQuickView={setIsActiveBranchMenu}
+                        clickPosition={clickPosition}
                     />
                 )}
             </div>

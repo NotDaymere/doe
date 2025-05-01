@@ -10,8 +10,10 @@ function PythonTaskManager() {
         getSavedPlaygroundLastByType,
         getOpenSavedPlaygroundsByType,
         getOpenSavedPlaygrounds,
+        closeNoPlayground,
     } = useChatStore();
     const openCodePlayground = () => {
+        closeNoPlayground();
         let oldPlayground = getSavedPlaygroundLastByType('code');
         if (getOpenSavedPlaygrounds().length >= 2) {
             const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react"; // Добавляем useEffect
+import React, { useRef, useEffect } from "react";
 import css from "./ChatTagsPanel.module.less";
 import { ChatTagsEnum } from "../../../../../../shared/enums/ChatTagsEnum";
 import { TAG_META } from "../../SideBarMenu";

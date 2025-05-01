@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import css from "./ChatBranchView.module.less";
 import { ChatMessageDate } from "../ChatMessageDate/ChatMessageDate";
 import { ChatMessage } from "../../../ChatMessage";
@@ -21,6 +21,7 @@ interface ChatBranchViewProps {
         }>
     >;
     dialogRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
+    chatRef: React.RefObject<HTMLDivElement>;
 }
 
 export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
@@ -29,8 +30,30 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                                                   editMsgMode,
                                                                   setEditMsgMode,
                                                                   dialogRefs,
+                                                                  chatRef,
                                                               }) => {
     const { activeMessage, setActiveMessage, getOpenSavedPlaygrounds } = useChatStore();
+    const branchSectionRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (branchSectionRef.current && chatRef.current) {
+                const scrollTop = chatRef.current.scrollTop;
+                branchSectionRef.current.style.transform = `translateY(${-scrollTop}px)`;
+            }
+        };
+
+        const scrollContainer = chatRef.current;
+        if (scrollContainer) {
+            scrollContainer.addEventListener("scroll", handleScroll);
+        }
+
+        return () => {
+            if (scrollContainer) {
+                scrollContainer.removeEventListener("scroll", handleScroll);
+            }
+        };
+    }, [chatRef]);
 
     useEffect(() => {
         if (activeMessage) {
@@ -43,7 +66,7 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
     }, [activeMessage, setActiveMessage]);
 
     return (
-        <div>
+        <div className={css.branches_wrapper}>
             <div className={css.content_chat_branch_messages}>
                 {currentBranch.messages.slice(-3).map((item, index) => (
                     <React.Fragment key={item.id}>
@@ -59,22 +82,34 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                     </React.Fragment>
                 ))}
             </div>
-            <div className={getOpenSavedPlaygrounds().length < 1
-                            ? css.content_chat_branch_dialogs
-                            : css.content_chat_branch_dialogs_open_playground}>
 
+            {currentBranch && (
+                <div
+                     className={
+                         getOpenSavedPlaygrounds().length < 1
+                             ? css.branch_section
+                             : css.branch_section_open_playground
+                     }
+                     ref={branchSectionRef}>
+                    <ChatBranchSection isOpenBrunch={true} />
+                </div>
+            )}
+
+            <div
+                className={
+                    getOpenSavedPlaygrounds().length < 1
+                        ? css.content_chat_branch_dialogs
+                        : css.content_chat_branch_dialogs_open_playground
+                }
+            >
                 {currentBranch.dialogsMessages.map((dialog, index) => (
                     <React.Fragment key={index}>
                         <div className={css.content_chat_branch}>
-                            {currentBranch && (
-                                <div className={css.branch_section}>
-                                    <ChatBranchSection isOpenBrunch={true} />
-                                </div>
-                                )
-                            }
                             <div className={css.content_chat_branch_dialog}>
-                                <div id={`chat-msg-${dialog.userRequest.id}`}
-                                    className={css.branch_message}>
+                                <div
+                                    id={`chat-msg-${dialog.userRequest.id}`}
+                                    className={css.branch_message}
+                                >
                                     <ChatMessage
                                         data={dialog.userRequest}
                                         editor={editor}
@@ -82,9 +117,11 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                         setEditMsgMode={setEditMsgMode}
                                     />
                                 </div>
-                                {dialog.botMessages &&
-                                    <div id={`chat-msg-${dialog.botMessages.id}`}
-                                         className={css.branch_message}>
+                                {dialog.botMessages && (
+                                    <div
+                                        id={`chat-msg-${dialog.botMessages.id}`}
+                                        className={css.branch_message}
+                                    >
                                         <ChatMessage
                                             data={dialog.botMessages}
                                             editor={editor}
@@ -92,7 +129,7 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                             setEditMsgMode={setEditMsgMode}
                                         />
                                     </div>
-                                }
+                                )}
                             </div>
                         </div>
                     </React.Fragment>
@@ -101,45 +138,3 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
         </div>
     );
 };
-// <div>
-//     <div className={css.content_chat_branch_messages}>
-//         {currentBranch.messages.slice(-3, -1).map((item: any, index: number) => (
-//             <React.Fragment key={item.id}>
-//                 <ChatMessageDate id={index} />
-//                 <ChatMessage
-//                     data={item}
-//                     editor={editor}
-//                     editMsgMode={editMsgMode}
-//                     setEditMsgMode={setEditMsgMode}
-//                 />
-//             </React.Fragment>
-//         ))}
-//     </div>
-//     <div className={css.content_chat_branch_dialogs}>
-//         {currentBranch.dialogsMessages.map((dialog: any, index: number) => (
-//             <React.Fragment key={index}>
-//                 <div
-//                     ref={(el) => (dialogRefs.current[index] = el)}
-//                     className={css.content_chat_branch}
-//                 >
-//                     <ChatBranchSection isOpenBrunch={true} />
-//                     <div className={css.content_chat_branch_dialog}>
-//                         <ChatMessage
-//                             data={dialog.userRequest}
-//                             editor={editor}
-//                             editMsgMode={editMsgMode}
-//                             setEditMsgMode={setEditMsgMode}
-//                         />
-//                         <ChatMessage
-//                             data={dialog.botMessages}
-//                             editor={editor}
-//                             editMsgMode={editMsgMode}
-//                             setEditMsgMode={setEditMsgMode}
-//                         />
-//                     </div>
-//                 </div>
-//             </React.Fragment>
-//         ))}
-//     </div>
-// </div>
-// );

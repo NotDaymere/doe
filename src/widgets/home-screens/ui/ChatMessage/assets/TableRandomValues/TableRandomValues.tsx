@@ -9,8 +9,10 @@ function TableRandomValues() {
         setPlayground,
         setSavedPlaygrounds,
         updateSavedPlaygrounds, getOpenSavedPlaygrounds,
-        getSavedPlaygroundLastByType, getOpenSavedPlaygroundsByType } = useChatStore();
+        getSavedPlaygroundLastByType, getOpenSavedPlaygroundsByType, closeNoPlayground,
+    } = useChatStore();
     const openTablePlayground = () => {
+        closeNoPlayground();
         const oldPlayground = getSavedPlaygroundLastByType('table');
         if (getOpenSavedPlaygrounds().length >= 2) {
             const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
@@ -55,7 +57,6 @@ function TableRandomValues() {
     return (
         <button onClick={openTablePlayground}
                 className={`table-playground-button ${getOpenSavedPlaygroundsByType('table').length > 0 && 'table-playground-button-active'}`}
-
         >
             <TableIcon /> Tabular Random Values
         </button>

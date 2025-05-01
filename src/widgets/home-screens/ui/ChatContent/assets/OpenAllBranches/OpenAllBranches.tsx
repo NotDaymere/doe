@@ -106,6 +106,7 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
                         {((contentIdHover === savedBranch.id) || (activeOpenAllBranchesMenu === savedBranch.id)) &&
                             <button
                                 className="open-all-branches-content-example-button"
+                                onMouseDown={e => e.stopPropagation()}
                                 onClick={(event) => {
                                     event.stopPropagation();
                                     changeActiveOpenAllBranchesMenu(savedBranch.id);
@@ -126,6 +127,7 @@ export default function OpenAllBranches({ changeActiveAllBranches }: OpenAllBran
                     position={menuPosition}
                     branchId={activeOpenAllBranchesMenu}
                     setActiveOpenAllBranchesMenu={setActiveOpenAllBranchesMenu}
+                    onClose={() => setActiveOpenAllBranchesMenu(null)}
                 />
             }
         </div>,
