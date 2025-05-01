@@ -34,6 +34,7 @@ interface PDFViewerProps {
     fontSize: number;
     fontColor: string;
     setIsTextMode: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsDrawingEnabled?: React.Dispatch<React.SetStateAction<boolean>>;
     onLoad?: () => void;
 }
 
@@ -74,6 +75,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
             isDrawingEnabled,
             isTextMode,
             setIsTextMode,
+            setIsDrawingEnabled,
             drawingColor,
             fontWeight,
             fontSize,
@@ -467,6 +469,16 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                 workerRef.current.postMessage({ type: "saveAnnotations", payload });
             });
         };
+        useEffect(() => {
+            if (isDrawingEnabled && isTextMode) {
+                setIsTextMode(false);
+            }
+        }, [isDrawingEnabled, isTextMode, setIsTextMode]);
+        useEffect(() => {
+            if (isTextMode && setIsDrawingEnabled) {
+                setIsDrawingEnabled(false);
+            }
+        }, [isTextMode, setIsDrawingEnabled]);
 
         useImperativeHandle(ref, () => ({
             saveAnnotations,
@@ -509,40 +521,18 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                 >
                                     <canvas
                                         ref={(el) => (canvasRefs.current[i * 2] = el)}
-                                        className={css.pdfCanvas}
-                                        style={{
-                                            position: "absolute",
-                                            top: 0,
-                                            left: 0,
-                                            width: "100%",
-                                            height: "100%",
-                                            maxHeight: "100%",
-                                            maxWidth: "100%",
-                                        }}
+                                        className={css.drawCanvas}
                                     />
                                     <canvas
                                         ref={(el) => (canvasRefs.current[i * 2 + 1] = el)}
                                         className={css.drawCanvas}
-                                        style={{
-                                            position: "absolute",
-                                            top: 0,
-                                            left: 0,
-                                            width: "100%",
-                                            height: "100%",
-                                            maxHeight: "100%",
-                                            maxWidth: "100%",
-                                            zIndex: 10,
-                                            touchAction: "none",
-                                        }}
                                     />
                                     {activeTextInput && activeTextInput.page === i && (
                                         <div
                                             className={css.annotationContainer}
                                             style={{
-                                                position: "absolute",
                                                 transform: `translate(${activeTextInput.x}px, ${activeTextInput.y}px)`,
                                                 cursor: draggingRef.current ? "grabbing" : "grab",
-                                                zIndex: 20,
                                             }}
                                             onMouseDown={(e) => onDraggableMouseDown(e, "input")}
                                             onMouseMove={onDraggableMouseMove}
@@ -552,13 +542,10 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                                 type="text"
                                                 className={css.textAnnotationInput}
                                                 style={{
-                                                    maxWidth: "150px",
                                                     fontWeight,
                                                     fontSize: `${fontSize}px`,
                                                     color: fontColor,
-                                                    border: "none",
-                                                    overflow: "hidden",
-                                                    whiteSpace: "nowrap",
+
                                                 }}
                                                 autoFocus
                                                 onKeyDown={(e) => handleTextInput(e, i, activeTextInput.x, activeTextInput.y)}
@@ -570,10 +557,8 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                         <div
                                             className={css.annotationContainer}
                                             style={{
-                                                position: "absolute",
                                                 transform: `translate(${activeTextInput.x}px, ${activeTextInput.y}px)`,
                                                 cursor: draggingRef.current ? "grabbing" : "grab",
-                                                zIndex: 20,
                                             }}
                                             onMouseDown={(e) => onDraggableMouseDown(e, "input")}
                                             onMouseMove={onDraggableMouseMove}
@@ -583,13 +568,10 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                                 type="text"
                                                 className={css.textAnnotationInput}
                                                 style={{
-                                                    maxWidth: "150px",
                                                     fontWeight,
                                                     fontSize: `${fontSize}px`,
                                                     color: fontColor,
-                                                    border: "none",
-                                                    overflow: "hidden",
-                                                    whiteSpace: "nowrap",
+
                                                 }}
                                                 autoFocus
                                                 onKeyDown={(e) => handleTextInput(e, i, activeTextInput.x, activeTextInput.y)}
@@ -601,17 +583,12 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                         <div
                                             className={css.textAnnotation}
                                             style={{
-                                                position: "absolute",
                                                 transform: `translate(${activeDraggableAnnotation.x}px, ${activeDraggableAnnotation.y}px)`,
-                                                maxWidth: "1000px",
                                                 fontSize: `${activeDraggableAnnotation.fontSize}px`,
                                                 color: activeDraggableAnnotation.fontColor,
                                                 fontWeight: activeDraggableAnnotation.fontWeight === "bold" ? "bold" : "normal",
                                                 cursor: draggingRef.current ? "grabbing" : "grab",
-                                                zIndex: 20,
-                                                overflow: "hidden",
-                                                whiteSpace: "nowrap",
-                                                userSelect: "none",
+
                                             }}
                                             onMouseDown={(e) => onDraggableMouseDown(e, "annotation")}
                                             onMouseMove={onDraggableMouseMove}
@@ -627,16 +604,10 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                                 key={idx}
                                                 className={css.textAnnotation}
                                                 style={{
-                                                    position: "absolute",
                                                     transform: `translate(${t.x}px, ${t.y}px)`,
-                                                    maxWidth: "1000px",
                                                     fontSize: `${t.fontSize}px`,
                                                     color: t.fontColor,
                                                     fontWeight: t.fontWeight === "bold" ? "bold" : "normal",
-                                                    cursor: "auto",
-                                                    zIndex: 20,
-                                                    overflow: "hidden",
-                                                    whiteSpace: "nowrap",
                                                 }}
                                             >
                                                 {t.text}
