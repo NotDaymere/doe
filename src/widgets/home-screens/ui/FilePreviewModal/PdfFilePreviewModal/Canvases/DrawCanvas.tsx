@@ -88,7 +88,7 @@ const DrawCanvas: React.FC<DrawCanvasProps> = ({
     const endDrawing = () => {
         if (isDrawingRef.current && drawCanvasRef.current) {
             isDrawingRef.current = false;
-            onAnnotationChange(); // Вызываем только после завершения рисования
+            onAnnotationChange();
         }
     };
 

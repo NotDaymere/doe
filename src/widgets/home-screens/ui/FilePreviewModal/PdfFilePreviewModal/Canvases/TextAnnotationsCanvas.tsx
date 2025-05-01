@@ -8,7 +8,6 @@ interface TextAnnotationCanvasProps {
     fontWeight: "regular" | "bold";
     fontSize: number;
     fontColor: string;
-    setIsTextMode: React.Dispatch<React.SetStateAction<boolean>>;
     originalDimensions: Array<{ width: number; height: number }>;
     computePageDimensions: (pageIndex: number) => {
         pageWidth: number;
@@ -16,9 +15,7 @@ interface TextAnnotationCanvasProps {
         scaleFactor: number;
     };
     canvasRef: React.MutableRefObject<(HTMLCanvasElement | null)[]>;
-    currentPage: number;
     onAnnotationChange: (newAnnotation: TextAnnotation) => void;
-    onAnnotationsUpdate: (annotations: TextAnnotation[]) => void;
 }
 
 const TextAnnotationCanvas: React.FC<TextAnnotationCanvasProps> = ({
@@ -27,29 +24,19 @@ const TextAnnotationCanvas: React.FC<TextAnnotationCanvasProps> = ({
                                                                        fontWeight,
                                                                        fontSize,
                                                                        fontColor,
-                                                                       setIsTextMode,
                                                                        originalDimensions,
                                                                        computePageDimensions,
                                                                        canvasRef,
-                                                                       currentPage,
                                                                        onAnnotationChange,
-                                                                       onAnnotationsUpdate,
                                                                    }) => {
     const [activeTextInput, setActiveTextInput] = useState<{
         page: number;
         x: number;
         y: number;
-        value?: string;
+        value: string;
     } | null>(null);
-    const [activeDraggableAnnotation, setActiveDraggableAnnotation] =
-        useState<TextAnnotation | null>(null);
-    const [dragOffset, setDragOffset] = useState<{
-        offsetX: number;
-        offsetY: number;
-    } | null>(null);
-    const draggingRef = useRef(false);
-    const containerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const getTextInputCoordinates = (
         e: React.MouseEvent,
@@ -63,66 +50,62 @@ const TextAnnotationCanvas: React.FC<TextAnnotationCanvasProps> = ({
     };
 
     const applyTextAnnotation = (page: number, x: number, y: number, text: string) => {
-        if (text) {
-            const safeFontColor =
-                fontColor && /^#[0-9A-F]{6}$/i.test(fontColor) ? fontColor : "#000000";
-            const safeFontSize = fontSize || 18;
-            const safeFontWeight = fontWeight || "regular";
-
-            const canvas = canvasRef.current[page * 2 + 1];
-            const canvasRect = canvas ? canvas.getBoundingClientRect() : { width: 100 };
-            const availableWidth = canvasRect.width - x;
-
-            const { width: ow, height: oh } = originalDimensions[page] || { width: 100, height: 100 };
-            const { pageWidth, pageHeight, scaleFactor } = computePageDimensions(page);
-
-            const pdfX = (x / pageWidth) * ow;
-            const pdfY = oh - (y / pageHeight) * oh - safeFontSize * scaleFactor;
-            const pdfFontSize = safeFontSize * scaleFactor;
-            const pdfMaxWidth = (availableWidth / pageWidth) * ow;
-
-            const newAnnotation: TextAnnotation = {
-                type: "text",
-                page,
-                x,
-                y,
-                text,
-                maxWidth: pdfMaxWidth,
-                fontColor: safeFontColor,
-                fontSize: safeFontSize,
-                fontWeight: safeFontWeight,
-                pdfX,
-                pdfY,
-                pdfFontSize,
-            };
-            setActiveDraggableAnnotation(newAnnotation);
-            onAnnotationChange(newAnnotation);
+        if (!text) {
             setActiveTextInput(null);
-        } else {
-            setActiveTextInput(null);
+            return;
         }
+
+        const safeFontColor = fontColor && /^#[0-9A-F]{6}$/i.test(fontColor) ? fontColor : "#000000";
+        const safeFontSize = fontSize || 18;
+        const safeFontWeight = fontWeight || "regular";
+
+        const canvas = canvasRef.current[page * 2 + 1];
+        const canvasRect = canvas ? canvas.getBoundingClientRect() : { width: 100 };
+        const availableWidth = canvasRect.width - x;
+
+        const { width: ow, height: oh } = originalDimensions[page] || { width: 100, height: 100 };
+        const { pageWidth, pageHeight, scaleFactor } = computePageDimensions(page);
+
+        const pdfX = (x / pageWidth) * ow;
+        const pdfY = oh - (y / pageHeight) * oh;
+        const pdfFontSize = safeFontSize * scaleFactor;
+        const pdfMaxWidth = (availableWidth / pageWidth) * ow;
+
+        const newAnnotation: TextAnnotation = {
+            type: "text",
+            page,
+            x,
+            y,
+            text,
+            maxWidth: pdfMaxWidth,
+            fontColor: safeFontColor,
+            fontSize: safeFontSize,
+            fontWeight: safeFontWeight,
+            pdfX,
+            pdfY,
+            pdfFontSize,
+        };
+
+        console.log("Applying text annotation:", newAnnotation);
+        onAnnotationChange(newAnnotation);
+        setActiveTextInput(null);
     };
 
     const handleCanvasClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (!isTextMode) return;
 
-        const target = e.target as HTMLElement;
-        if (inputRef.current && (inputRef.current.contains(target) || target.closest(`.${css.annotationContainer}`))) {
-            return;
-        }
-
         const canvas = canvasRef.current[pageIndex * 2 + 1];
         const { x, y } = canvas
             ? getTextInputCoordinates(e, canvas)
             : { x: e.clientX, y: e.clientY };
 
+        console.log("Canvas clicked:", { pageIndex, x, y });
+
         if (activeTextInput) {
-            applyTextAnnotation(activeTextInput.page, activeTextInput.x, activeTextInput.y, activeTextInput.value || "");
-            setActiveTextInput({ page: pageIndex, x, y, value: "" });
-        } else {
-            setActiveTextInput({ page: pageIndex, x, y, value: "" });
+            applyTextAnnotation(activeTextInput.page, activeTextInput.x, activeTextInput.y, activeTextInput.value);
         }
+        setActiveTextInput({ page: pageIndex, x, y, value: "" });
     };
 
     const handleTextInput = (
@@ -143,83 +126,11 @@ const TextAnnotationCanvas: React.FC<TextAnnotationCanvasProps> = ({
         }
     };
 
-    const onDraggableMouseDown = (
-        e: React.MouseEvent<HTMLDivElement>,
-        type: "input" | "annotation"
-    ) => {
-        e.stopPropagation();
-        e.preventDefault();
-        draggingRef.current = true;
-        const rect = (e.target as HTMLDivElement).getBoundingClientRect();
-        setDragOffset({ offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top });
-    };
-
-    const onDraggableMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!draggingRef.current || !dragOffset || !containerRef.current) return;
-        e.preventDefault();
-
-        const pageContainer = containerRef.current;
-        const pageContainerRect = pageContainer.getBoundingClientRect();
-        const newX = e.clientX - pageContainerRect.left - dragOffset.offsetX;
-        const newY = e.clientY - pageContainerRect.top - dragOffset.offsetY;
-
-        if (activeDraggableAnnotation) {
-            const { width: ow, height: oh } = originalDimensions[activeDraggableAnnotation.page] || { width: 100, height: 100 };
-            const { pageWidth, pageHeight, scaleFactor } = computePageDimensions(
-                activeDraggableAnnotation.page
-            );
-            const pdfX = (newX / pageWidth) * ow;
-            const pdfY = oh - (newY / pageHeight) * oh - activeDraggableAnnotation.fontSize * scaleFactor;
-
-            if (newX !== activeDraggableAnnotation.x || newY !== activeDraggableAnnotation.y) {
-                setActiveDraggableAnnotation({
-                    ...activeDraggableAnnotation,
-                    x: newX,
-                    y: newY,
-                    pdfX,
-                    pdfY,
-                });
-                onAnnotationChange({
-                    ...activeDraggableAnnotation,
-                    x: newX,
-                    y: newY,
-                    pdfX,
-                    pdfY,
-                });
-            }
-        } else if (activeTextInput) {
-            setActiveTextInput({
-                ...activeTextInput,
-                x: newX,
-                y: newY,
-            });
-        }
-    };
-
-    const onDraggableMouseUp = () => {
-        if (activeDraggableAnnotation) {
-            onAnnotationsUpdate([activeDraggableAnnotation]);
-            setActiveDraggableAnnotation(null);
-        }
-        draggingRef.current = false;
-        setDragOffset(null);
-    };
-
     useEffect(() => {
-        if (isTextMode && !activeTextInput && originalDimensions[pageIndex] && currentPage - 1 === pageIndex) {
-            const { width: ow, height: oh } = originalDimensions[pageIndex];
-            const maxWidth = window.innerWidth * 0.8;
-            const maxHeight = window.innerHeight * 0.8;
-            const scale = Math.min(maxWidth / ow, maxHeight / oh, 1);
-            const pageWidth = ow * scale;
-            setActiveTextInput({
-                page: pageIndex,
-                x: pageWidth / 3,
-                y: (oh * scale) / 2.5,
-                value: "",
-            });
+        if (activeTextInput && inputRef.current) {
+            inputRef.current.focus();
         }
-    }, [isTextMode, activeTextInput, pageIndex, originalDimensions, currentPage]);
+    }, [activeTextInput]);
 
     return (
         <div
@@ -240,12 +151,8 @@ const TextAnnotationCanvas: React.FC<TextAnnotationCanvasProps> = ({
                     className={css.annotationContainer}
                     style={{
                         transform: `translate(${activeTextInput.x}px, ${activeTextInput.y}px)`,
-                        cursor: draggingRef.current ? "grabbing" : "grab",
                         zIndex: 101,
                     }}
-                    onMouseDown={(e) => onDraggableMouseDown(e, "input")}
-                    onMouseMove={onDraggableMouseMove}
-                    onMouseUp={onDraggableMouseUp}
                 >
                     <input
                         ref={inputRef}
@@ -256,30 +163,12 @@ const TextAnnotationCanvas: React.FC<TextAnnotationCanvasProps> = ({
                             fontSize: `${fontSize}px`,
                             color: fontColor,
                         }}
-                        value={activeTextInput.value || ""}
+                        value={activeTextInput.value}
                         onChange={handleInputChange}
                         autoFocus
                         onKeyDown={(e) => handleTextInput(e, pageIndex, activeTextInput.x, activeTextInput.y)}
                         onClick={(e) => e.stopPropagation()}
                     />
-                </div>
-            )}
-            {activeDraggableAnnotation && activeDraggableAnnotation.page === pageIndex && (
-                <div
-                    className={css.textAnnotation}
-                    style={{
-                        transform: `translate(${activeDraggableAnnotation.x}px, ${activeDraggableAnnotation.y}px)`,
-                        fontSize: `${activeDraggableAnnotation.fontSize}px`,
-                        color: activeDraggableAnnotation.fontColor,
-                        fontWeight: activeDraggableAnnotation.fontWeight === "bold" ? "bold" : "normal",
-                        cursor: draggingRef.current ? "grabbing" : "grab",
-                        zIndex: 101,
-                    }}
-                    onMouseDown={(e) => onDraggableMouseDown(e, "annotation")}
-                    onMouseMove={onDraggableMouseMove}
-                    onMouseUp={onDraggableMouseUp}
-                >
-                    {activeDraggableAnnotation.text}
                 </div>
             )}
         </div>

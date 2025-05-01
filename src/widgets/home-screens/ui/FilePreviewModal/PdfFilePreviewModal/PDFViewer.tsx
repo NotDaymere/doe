@@ -234,7 +234,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                         const blob = new Blob([pdfBlob], { type: "application/pdf" });
                         const newUrl = URL.createObjectURL(blob);
                         pdfUrlCache.set(url as string, newUrl);
-                        setAnnotations([]); // Очищаем аннотации после сохранения
+                        setAnnotations([]);
                         setHasAnnotationsChanged(false);
                         resolve(newUrl);
                     } else {
@@ -345,17 +345,11 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                                         fontWeight={fontWeight}
                                         fontSize={fontSize}
                                         fontColor={fontColor}
-                                        setIsTextMode={setIsTextMode}
                                         originalDimensions={originalDimensions}
                                         computePageDimensions={computePageDimensions}
                                         canvasRef={canvasRefs}
-                                        currentPage={currentPage}
                                         onAnnotationChange={(newAnnotation: TextAnnotation) => {
                                             setAnnotations((prev) => [...prev, newAnnotation]);
-                                            setHasAnnotationsChanged(true);
-                                        }}
-                                        onAnnotationsUpdate={(newAnnotations: TextAnnotation[]) => {
-                                            setAnnotations((prev) => [...prev, ...newAnnotations]);
                                             setHasAnnotationsChanged(true);
                                         }}
                                     />
