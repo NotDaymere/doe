@@ -23,7 +23,7 @@ export const MainLayout: React.FC<Props> = ({
             <Gaia className={'gaia'} ref={gaiaRef} />
             <BaseLayout className={(getOpenSavedPlaygrounds().length > 0 || getNoPlayground().open) ? "main-layout-playground" : "main-layout" } hasSider>
                 <Sider />
-                <div className={`children-main-layout ${((!playgroundFullscreen) || (getOpenSavedPlaygrounds().length == 0 || !getNoPlayground().open)) && 'children-main-layout-active'}`}>
+                <div className={`children-main-layout ${((!playgroundFullscreen) || (getOpenSavedPlaygrounds().length == 0 || getNoPlayground().open)) && 'children-main-layout-active'}`}>
                     {children}
                 </div>
                 {(getOpenSavedPlaygrounds().length > 0 || getNoPlayground().open) &&
