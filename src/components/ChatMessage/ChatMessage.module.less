@@ -16,7 +16,7 @@
     align-self: flex-end;
     word-break: break-word;
     font-size: 16px;
-    animation: slide-up 1s ease-out forwards;
+    animation: slide-from-side 0.8s ease forwards;
 }
 
 .user_math_block {
@@ -31,11 +31,13 @@
     border-radius: 15px;
 }
 
-@keyframes slide-up {
+@keyframes slide-from-side {
     0% {
-        transform: translateY(100px);
+        opacity: 0;
+        transform: translateX(100px);
     }
     100% {
+        opacity: 1;
         transform: translateY(0);
     }
 }

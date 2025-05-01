@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useCursor } from "src/contexts/CursorContext";
 import {
-    pythonCode,
     transcribeText,
     translation,
     translationOrigin,
@@ -129,6 +128,15 @@ export function useOnboardingFlow(
         setStep(8.3);
     }
 
+    function handleCodePromptTypedOut() {
+        setCursorMoving();
+        setStep(9.1);
+    }
+
+    function handlePythonCodeTypedOut() {
+        setStep(9.3);
+    }
+
     // ------ OTHER HANDLERS ------
 
     function handleUserClickedSidebarButton(type: string) {
@@ -167,12 +175,7 @@ export function useOnboardingFlow(
         }
 
         if (step === 9) {
-            setMessages?.([
-                {
-                    role: "ai",
-                    content: pythonCode,
-                },
-            ]);
+            setMessages?.([]);
         }
         if (step === 10) {
             handleDeleteMessages();
@@ -236,6 +239,8 @@ export function useOnboardingFlow(
         handleBoldPlaceholderTypedOut, // #8
         handleMathPromptTypedOut,
         handleMathFormulaTypedOut,
+        handleCodePromptTypedOut,
+        handlePythonCodeTypedOut,
 
         handleSidebarClose,
 

@@ -279,6 +279,17 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 9,
+        location: '[data-step="input"]',
+        cursorVisible: true,
+        cursorPosition: {
+            top: 0,
+            left: 400,
+        },
+        tooltip: false,
+        blur: [""],
+    },
+    {
+        id: 9.1,
         location: '[data-step="code"]',
         cursorVisible: true,
         tooltip: true,
@@ -296,6 +307,25 @@ export const onboardingFlow: OnboardingStep[] = [
             </div>
         ),
 
+        blur: [""],
+    },
+    {
+        id: 9.2,
+        location: '[data-step="input"]',
+        cursorVisible: true,
+        cursorPosition: {
+            top: 0,
+            left: 400,
+        },
+        tooltip: false,
+        blur: [""],
+    },
+    {
+        id: 9.3,
+        location: '[data-step="send"]',
+        cursorVisible: true,
+        cursorClick: true,
+        tooltip: false,
         blur: [""],
     },
     {

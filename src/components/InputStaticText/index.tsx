@@ -14,6 +14,8 @@ interface InputStaticTextProps {
     typedPrompt: string;
     typedMathPrompt: string;
     typedMathFormula: string;
+    typedCodePrompt: string;
+    typedPythonCode: string;
     linkText: string;
     userClickedBold: boolean;
     userClickedUnderline: boolean;
@@ -30,6 +32,8 @@ export const InputStaticText = ({
     typedPrompt,
     typedMathPrompt,
     typedMathFormula,
+    typedCodePrompt,
+    typedPythonCode,
     linkText,
     userClickedBold,
     userClickedUnderline,
@@ -152,7 +156,34 @@ export const InputStaticText = ({
                     </p>
                 </>
             )}
-            {step === 9 && <p>Write me the deletion function in Python...</p>}
+            {step >= 9 && step < 10 && (
+                <>
+                    <p>
+                        {typedCodePrompt.split("").map((word, index) => {
+                            return (
+                                <span
+                                    key={index}
+                                    className={clsx(css.letter, {
+                                        [css.space]: word === " ",
+                                    })}
+                                    style={{ animationDelay: `${index * 0.005}s` }}
+                                    data-step={index + 1 === typedPrompt.length && "text"}
+                                >
+                                    {word}
+                                </span>
+                            );
+                        })}
+                    </p>
+                    {
+                        <span
+                            className={css.code}
+                            dangerouslySetInnerHTML={{
+                                __html: typedPythonCode + `<span class="${css.caret}"></span>`,
+                            }}
+                        />
+                    }
+                </>
+            )}
             {step === 10 && (
                 <>
                     <p>

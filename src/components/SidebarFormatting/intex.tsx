@@ -66,7 +66,7 @@ export const SidebarFormatting = ({
         {
             icon: <CodeIcon />,
             label: "Code mode",
-            step: 9,
+            step: [9.1, 9.2],
             dataStep: "code",
             onClick: editorState.toggleCode,
             isActive: editorState.isCode,

@@ -152,8 +152,15 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                         </>
                     ) : (
                         <>
-                            {message.content}
-                            <div className={css.user_math_block}>{mathElement}</div>
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: message.content,
+                                }}
+                            />
+                            {/* {message.content} */}
+                            {mathElement && (
+                                <div className={css.user_math_block}>{mathElement}</div>
+                            )}
                         </>
                     )}
                     {isTranslation && (

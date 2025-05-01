@@ -1,8 +1,14 @@
 import { useState } from "react";
-import { mathBlock, mathBlock2, simpleProjectText } from "src/helpers/onboardingMessages";
+import {
+    mathBlock,
+    mathBlock2,
+    pythonCode,
+    pythonCodeSmall,
+    simpleProjectText,
+} from "src/helpers/onboardingMessages";
 import { OnboardingMessage } from "src/shared/types/Message";
 
-export type MessageType = "greeting" | "project" | "math";
+export type MessageType = "greeting" | "project" | "math" | "code";
 
 export const useChat = (setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>) => {
     const [messages, setMessages] = useState<OnboardingMessage[]>([]);
@@ -10,10 +16,10 @@ export const useChat = (setShowSidebar: React.Dispatch<React.SetStateAction<bool
     const addMessage = (
         role: "user" | "ai",
         content: string,
-        mathBlock?: string,
-        noTypeEffect?: boolean
+        noTypeEffect?: boolean,
+        mathBlock?: string
     ) => {
-        setMessages((prev) => [...prev, { role, content, mathBlock, noTypeEffect }]);
+        setMessages((prev) => [...prev, { role, content, noTypeEffect, mathBlock }]);
     };
 
     const handleUserMessage = (message: string, type: MessageType) => {
@@ -41,12 +47,23 @@ export const useChat = (setShowSidebar: React.Dispatch<React.SetStateAction<bool
                 addMessage(
                     "user",
                     `Please put together a sample project that uses the equation`,
-                    mathBlock2,
+                    true,
+                    mathBlock2
+                );
+            }, 1000);
+            setTimeout(() => {
+                addMessage("ai", simpleProjectText, false, mathBlock);
+            }, 2000);
+        } else if (type === "code") {
+            setTimeout(() => {
+                addMessage(
+                    "user",
+                    `Write me the deletion function in Python that starts with:<br/> ${pythonCodeSmall}`,
                     true
                 );
             }, 1000);
             setTimeout(() => {
-                addMessage("ai", simpleProjectText, mathBlock);
+                addMessage("ai", pythonCode);
             }, 2000);
         }
     };

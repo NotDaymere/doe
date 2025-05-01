@@ -31,6 +31,25 @@ export function useStepNavigation(
                         prevSubStep();
                     }
                 }
+            } else if (step >= 9 && step <= 9.3) {
+                if (e.key === "ArrowRight") {
+                    setCursorMoving();
+                    console.log("out");
+                    if (step === 9.3) {
+                        setStep(10);
+                    } else {
+                        console.log("in");
+                        nextSubStep();
+                    }
+                }
+                if (e.key === "ArrowLeft") {
+                    setCursorMoving();
+                    if (step === 9) {
+                        prevStep();
+                    } else {
+                        prevSubStep();
+                    }
+                }
             } else if (step >= 1) {
                 console.log("test");
                 if (e.key === "ArrowRight") {

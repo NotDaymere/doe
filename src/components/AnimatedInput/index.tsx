@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ReactComponent as Grid } from "src/assets/icons/dot-grid.svg";
+import { pythonCodeSmall } from "src/helpers/onboardingMessages";
 import { MessageType } from "src/hooks/useChat";
 import { useTypewriterEffect } from "src/hooks/useTypewriterEffect";
 import ArrowUpIcon from "src/shared/icons/ArrowUp.icon";
@@ -24,6 +25,8 @@ interface AnimatedInputProps {
     handleBoldPlaceholderTypedOut: () => void;
     handleMathPromptTypedOut: () => void;
     handleMathFormulaTypedOut: () => void;
+    handleCodePromptTypedOut: () => void;
+    handlePythonCodeTypedOut: () => void;
     onSendMessage: (message: string, type: MessageType) => void;
 }
 
@@ -38,6 +41,8 @@ export function AnimatedInput({
     handleBoldPlaceholderTypedOut,
     handleMathPromptTypedOut,
     handleMathFormulaTypedOut,
+    handleCodePromptTypedOut,
+    handlePythonCodeTypedOut,
     onSendMessage,
 }: AnimatedInputProps) {
     if (!step || step < 4 || (step > 18 && step < 28)) return null;
@@ -72,7 +77,7 @@ export function AnimatedInput({
     });
 
     const typedMathPrompt = useTypewriterEffect({
-        text: "Please put together a sample project that uses the equation ",
+        text: "Please put together a sample project that uses the equation: ",
         speed: 50,
         onComplete: () => {
             if (step === 8) handleMathPromptTypedOut();
@@ -90,6 +95,25 @@ export function AnimatedInput({
         startTyping: step === 8.2,
     });
 
+    const typedCodePrompt = useTypewriterEffect({
+        text: "Write me the deletion function in Python that starts with: ",
+        speed: 50,
+        onComplete: () => {
+            setIsMessageSent(false);
+            if (step === 9) handleCodePromptTypedOut();
+        },
+        startTyping: step === 9,
+    });
+
+    const typedPythonCode = useTypewriterEffect({
+        text: pythonCodeSmall,
+        speed: 50,
+        onComplete: () => {
+            if (step === 9.2) handlePythonCodeTypedOut();
+        },
+        startTyping: step === 9.2,
+    });
+
     const linkText = useTypewriterEffect({
         text: "https://thisaichatbot.com",
         speed: 90,
@@ -97,7 +121,7 @@ export function AnimatedInput({
     });
 
     const handleSendMessage = () => {
-        if (safeStep !== 4.5 && safeStep !== 8.3 && safeStep !== 28) return;
+        if (safeStep !== 4.5 && safeStep !== 8.3 && safeStep !== 28 && safeStep !== 9.3) return;
         setUserInput("");
 
         let messageType: MessageType;
@@ -108,6 +132,9 @@ export function AnimatedInput({
                 break;
             case 8.3:
                 messageType = "math";
+                break;
+            case 9.3:
+                messageType = "code";
                 break;
             case 28:
                 messageType = "project";
@@ -137,11 +164,12 @@ export function AnimatedInput({
             if (
                 e.key === "ArrowRight" &&
                 !isMessageSent &&
-                (safeStep === 4.5 || safeStep === 8.3)
+                (safeStep === 4.5 || safeStep === 8.3 || safeStep === 9.3)
             ) {
                 e.preventDefault();
                 e.stopPropagation();
                 setStressButton(true);
+                console.log("stress");
 
                 setTimeout(() => setStressButton(false), 350);
             }
@@ -165,7 +193,7 @@ export function AnimatedInput({
                 <div className={clsx(css.panel_main, { [css.blocked]: blockInput && step >= 24 })}>
                     <MagicMenu step={step} />
                     <div className={clsx(css.panel_input_container, { [css.hide]: isMessageSent })}>
-                        <span className={css.static_text}>
+                        <span className={clsx(css.static_text, { [css.grow]: blockInput })}>
                             <InputStaticText
                                 step={safeStep}
                                 isMessageSent={isMessageSent}
@@ -175,6 +203,8 @@ export function AnimatedInput({
                                 typedPrompt={typedPrompt}
                                 typedMathPrompt={typedMathPrompt}
                                 typedMathFormula={typedMathFormula}
+                                typedCodePrompt={typedCodePrompt}
+                                typedPythonCode={typedPythonCode}
                                 linkText={linkText}
                                 userClickedBold={userClickedBold}
                                 userClickedUnderline={userClickedUnderline}
