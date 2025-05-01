@@ -58,6 +58,7 @@ async function resolveWorkerSrc(): Promise<string | null> {
 
         }
     }
+    // @ts-ignore
     pdfjsLib.GlobalWorkerOptions.disableWorker = true;
     return null;
 }
@@ -144,12 +145,13 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                         console.warn("[load] blob→data failed", err3);
                     }
                 }
-
+                // @ts-ignore
                 if (!doc && !pdfjsLib.GlobalWorkerOptions.disableWorker) {
-                    console.debug("[load] retry with disableWorker = true");
+                    // @ts-ignore
                     pdfjsLib.GlobalWorkerOptions.disableWorker = true;
                     try {
                         const buf = typeof url === "string" ? await fetch(url).then(r => r.arrayBuffer()) : await (url as Blob).arrayBuffer();
+                        // @ts-ignore
                         doc = await pdfjsLib.getDocument({ data: buf, disableWorker: true }).promise;
                     } catch (err4) {
                         console.error("[load] disableWorker fallback failed", err4);
@@ -421,11 +423,11 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
         };
 
         const saveAnnotations = async (): Promise<string> => {
-            if (!hasAnnotationsChanged && pdfUrlCache.has(url)) {
-                return Promise.resolve(pdfUrlCache.get(url)!);
+            if (!hasAnnotationsChanged && pdfUrlCache.has(url as string)) {
+                return Promise.resolve(pdfUrlCache.get(url as string)!);
             }
             if (!pdf) throw new Error("PDF not loaded");
-            const arrayBuffer = await fetch(url).then((r) => r.arrayBuffer());
+            const arrayBuffer = await fetch(url as string).then((r) => r.arrayBuffer());
             const drawCanvasesData: string[] = [];
             for (let i = 0; i < pdf.numPages; i++) {
                 const canvas = canvasRefs.current[i * 2 + 1];
@@ -450,7 +452,7 @@ export const PDFViewer = forwardRef<PDFViewerHandle, PDFViewerProps>(
                     if (status === "success") {
                         const blob = new Blob([pdfBlob], { type: "application/pdf" });
                         const newUrl = URL.createObjectURL(blob);
-                        pdfUrlCache.set(url, newUrl);
+                        pdfUrlCache.set(url as string, newUrl);
                         setHasAnnotationsChanged(false);
                         resolve(newUrl);
                     } else {
