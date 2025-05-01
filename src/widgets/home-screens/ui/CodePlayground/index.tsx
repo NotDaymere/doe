@@ -125,7 +125,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                     playgroundId: playground.id,
                     playground: playground,
                 });
-        }
+        };
     }, []);
     useEffect(() => {
         setTimeout(() => setShowButtons(true), 50);
@@ -182,11 +182,6 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             handleEditorMouseUp(editor);
         });
     };
-    useEffect(() => {
-        console.log("change theme", theme);
-
-        monaco.editor.setTheme(theme === "dark" ? "vs-dark" : "myCustomTheme");
-    }, [theme]);
 
     const handleEditorMouseUp = (editor: monaco.editor.IStandaloneCodeEditor) => {
         updateSelectedText(editor);
@@ -290,7 +285,7 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                 <section className="editor-section">
                     <Editor
                         onMount={handleEditorMount}
-                        theme="myCustomTheme"
+                        theme={theme === "dark" ? "vs-dark" : "myCustomTheme"}
                         language="python"
                         height="100%"
                         options={{
