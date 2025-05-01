@@ -4,10 +4,7 @@ interface MoonIconProps extends SVGProps<SVGSVGElement> {
     fill?: string;
 }
 
-const MoonIcon: React.FC<MoonIconProps> = ({
-                                               fill = "currentColor",
-                                               ...props
-                                           }) => {
+const MoonIcon: React.FC<MoonIconProps> = ({ fill = "currentColor", ...props }) => {
     return (
         <svg
             width="16"

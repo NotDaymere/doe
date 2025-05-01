@@ -9,31 +9,31 @@ import { SideBarMenu } from "./ui/SideBarMenu/SideBarMenu";
 import { TextFormatting } from "./ui/Text formatting/TextFormatting";
 import { LiveTools } from "./ui/Live tools/LiveTools";
 import ChangeProfileIcon from "../../shared/icons/ChangeProfileIcon";
-import {ProfileMockData} from "./ui/ProfileMockData";
-import {Profile} from "./ui/Profile";
+import { ProfileMockData } from "./ui/ProfileMockData";
+import { Profile } from "./ui/Profile";
 import AddProfileIcon from "../../shared/icons/AddProfileIcon";
-import {CSSTransition} from "react-transition-group";
+import { CSSTransition } from "react-transition-group";
 import GlobalIcon from "src/shared/icons/Global.icon";
 import clsx from "clsx";
-import {SharingTools} from "./ui/SharingTools/SharingTools";
+import { SharingTools } from "./ui/SharingTools/SharingTools";
 import ThemeToggleSwitch from "../../shared/components/ThemeToggler";
 
 export const Sidebar: React.FC = () => {
     const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
     const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
     const editorState = useEditorContext(editor);
-    const {getOpenSavedPlaygrounds} = useChatStore();
-    const { playground , clearCurrentChatMessages} = useChatStore();
+    const { getOpenSavedPlaygrounds } = useChatStore();
+    const { playground, clearCurrentChatMessages } = useChatStore();
     const { gaiaActive, setGaiaActive, setGaiaSidebarActive } = useAppStore();
-    const [theme, setTheme] = React.useState<"Light" | "Dark">("Light")
-    const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false)
+    const [theme, setTheme] = React.useState<"Light" | "Dark">("Light");
+    const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false);
     const [profiles, setProfiles] = React.useState<Profile[]>(ProfileMockData);
 
     const changeProfileRef = React.useRef<HTMLDivElement>(null);
     const changeProfileBtnRef = React.useRef<HTMLDivElement>(null);
 
     const pointerDown = (event: React.PointerEvent) => {
-        event.preventDefault()
+        event.preventDefault();
     };
     const toggleGaia = () => {
         setGaiaActive(!gaiaActive);
@@ -62,7 +62,6 @@ export const Sidebar: React.FC = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [isChangeProfilePanelOpen]);
 
-
     const handleOpenSideBar = () => {
         setIsSideBarOpen(!isSideBarOpen);
     };
@@ -77,27 +76,24 @@ export const Sidebar: React.FC = () => {
 
     const handleOpenChangeProfilePanel = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setIsChangeProfilePanelOpen(prev => {
+        setIsChangeProfilePanelOpen((prev) => {
             console.log("New state:", !prev); // Отладочный лог
             return !prev;
         });
     };
 
-    const currentProfile = profiles.find(p => p.isCurrent);
+    const currentProfile = profiles.find((p) => p.isCurrent);
 
     const handleSelectProfile = (id: number) => {
-        setProfiles(prev =>
-            prev.map(p => ({ ...p, isCurrent: p.id === id }))
-        );
+        setProfiles((prev) => prev.map((p) => ({ ...p, isCurrent: p.id === id })));
     };
 
     const handleDeleteAllMessages = () => {
         clearCurrentChatMessages();
-    }
+    };
 
     return (
         <aside className={isSideBarOpen ? css.sidebar_open : css.sidebar}>
-
             <SidebarGaia />
 
             <div className={css.sidebar_separator}>
@@ -114,8 +110,12 @@ export const Sidebar: React.FC = () => {
                 {isSideBarOpen && (
                     <div className={css.profile_user_info_container}>
                         <div className={css.profile_user_info}>
-                            <div className={css.profile_username}>{currentProfile ? currentProfile.username : ""}</div>
-                            <div className={css.profile_email}>{currentProfile ? currentProfile.email : ""}</div>
+                            <div className={css.profile_username}>
+                                {currentProfile ? currentProfile.username : ""}
+                            </div>
+                            <div className={css.profile_email}>
+                                {currentProfile ? currentProfile.email : ""}
+                            </div>
                         </div>
                         <div
                             className={css.change_profile_btn}
@@ -123,7 +123,7 @@ export const Sidebar: React.FC = () => {
                             data-active={isChangeProfilePanelOpen}
                             ref={changeProfileBtnRef}
                         >
-                            <ChangeProfileIcon fill="currentColor" width={11} height={15}/>
+                            <ChangeProfileIcon fill="currentColor" width={11} height={15} />
                         </div>
                     </div>
                 )}
@@ -132,27 +132,22 @@ export const Sidebar: React.FC = () => {
                 in={isChangeProfilePanelOpen}
                 timeout={300}
                 classNames={{
-                    enter: css['changeProfile-enter'],
-                    enterActive: css['changeProfile-enter-active'],
-                    exit: css['changeProfile-exit'],
-                    exitActive: css['changeProfile-exit-active']
+                    enter: css["changeProfile-enter"],
+                    enterActive: css["changeProfile-enter-active"],
+                    exit: css["changeProfile-exit"],
+                    exitActive: css["changeProfile-exit-active"],
                 }}
                 unmountOnExit
             >
-                <div
-                    className={css.change_profile_list}
-                    ref={changeProfileRef}
-                >
-                    {ProfileMockData.map(profile => (
+                <div className={css.change_profile_list} ref={changeProfileRef}>
+                    {ProfileMockData.map((profile) => (
                         <div
                             key={profile.id}
                             className={css.profile_container}
-                            onClick={() => handleSelectProfile(profile.id)}>
+                            onClick={() => handleSelectProfile(profile.id)}
+                        >
                             <div className={css.sidebar_profile}>
-                                <img
-                                    className={css.sidebar_profile_img}
-                                    src={profile.imgSrc}
-                                />
+                                <img className={css.sidebar_profile_img} src={profile.imgSrc} />
                             </div>
                             <div className={css.profile_user_info_container}>
                                 <div className={css.profile_user_info}>
@@ -165,20 +160,20 @@ export const Sidebar: React.FC = () => {
 
                     <div className={css.add_profile_btn}>
                         <div className={css.add_profile_btn_icon}>
-                            <AddProfileIcon/>
+                            <AddProfileIcon />
                         </div>
-                        <div>
-                            Add account
-                        </div>
+                        <div>Add account</div>
                     </div>
                 </div>
             </CSSTransition>
-            <ThemeToggleSwitch className={css.sidebar_theme_container} />
+            <ThemeToggleSwitch
+                className={css.sidebar_theme_container}
+                isHorizontal={isSideBarOpen}
+            />
             <div className={css.sidebar_separator}>
                 <div className={css.inner_sidebar_separator}></div>
             </div>
             <div className={css.sidebar_controls}>
-
                 <SideBarMenu />
                 <div className={css.sidebar_separator}>
                     <div className={css.inner_sidebar_separator}></div>
@@ -198,18 +193,18 @@ export const Sidebar: React.FC = () => {
                     <SharingTools />
                 </div>
 
-
-                <div className={ (getOpenSavedPlaygrounds().length > 0 || mode)
-                    ? css.delete_all_messages_open_playgrounds
-                    : css.delete_all_messages}>
+                <div
+                    className={
+                        getOpenSavedPlaygrounds().length > 0 || mode
+                            ? css.delete_all_messages_open_playgrounds
+                            : css.delete_all_messages
+                    }
+                >
                     <div
                         className={css.delete_all_messages_btn_container}
                         onClick={handleDeleteAllMessages}
                     >
-                        <button
-                            className={css.delete_all_messages_btn}
-
-                        >
+                        <button className={css.delete_all_messages_btn}>
                             <TrashIcon />
                         </button>
                         <div className={css.delete_all_messages_btn_tooltip}>
@@ -217,13 +212,8 @@ export const Sidebar: React.FC = () => {
                         </div>
                     </div>
                 </div>
-
-
             </div>
-            <div
-                className={css.sidebar_resize_handler}
-                onClick={handleOpenSideBar}
-            />
+            <div className={css.sidebar_resize_handler} onClick={handleOpenSideBar} />
         </aside>
     );
 };

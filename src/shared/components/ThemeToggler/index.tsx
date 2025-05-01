@@ -5,70 +5,65 @@ import LightThemeIcon from "src/shared/icons/LightTheme.icon";
 import classes from "./ThemeToggler.module.less";
 import { useTheme } from "src/shared/hooks/useTheme";
 
-const ThemeToggleSwitch = ({ className }: { className?: string }) => {
+const ThemeToggleSwitch = ({
+    className,
+    isHorizontal = false,
+}: {
+    className?: string;
+    isHorizontal?: boolean;
+}) => {
     const { toggleTheme, theme } = useTheme();
-    const [isHover, setIsHover] = useState(false);
-    const [isTransition, setIsTransition] = useState(false);
-    const handleTheme = () => {
-        toggleTheme();
-        setIsTransition(true);
-        setTimeout(() => setIsTransition(false), 500);
-    };
+    const themeTitle = theme === "light" ? "Light Theme" : "Dark Theme";
     return (
-        <div
-            className={clsx(
-                classes.themeToggle,
-                theme === "dark" ? classes.dark : classes.light,
-                isHover || isTransition ? classes.effect : "",
-                className
-            )}
-            onMouseEnter={() => setIsHover(true)}
-            onMouseLeave={() => setIsHover(false)}
-            onClick={handleTheme}
-        >
+        <div className={clsx(classes.themeToggleContainer, className)}>
             <div
                 className={clsx(
-                    classes.icon,
-                    classes.sunIcon,
+                    classes.themeToggle,
                     theme === "dark" ? classes.dark : classes.light,
-                    isHover || isTransition ? classes.effect : "",
-                    theme === "light" ? classes.active : ""
+                    isHorizontal && classes.horizontal
                 )}
+                onClick={toggleTheme}
             >
-                <LightThemeIcon />
+                <div
+                    className={clsx(
+                        classes.themeToggle__icon,
+                        classes.sunIcon,
+                        theme === "dark" ? classes.dark : classes.light,
+                        theme === "light" ? classes.active : ""
+                    )}
+                >
+                    <LightThemeIcon />
+                </div>
+                <div
+                    className={clsx(
+                        classes.themeToggle__icon,
+                        classes.moonIcon,
+                        theme === "dark" ? classes.dark : classes.light,
+                        theme === "dark" ? classes.active : ""
+                    )}
+                >
+                    <MoonIcon />
+                </div>
+                <div
+                    className={clsx(
+                        classes.themeToggle__glowBlock,
+                        theme === "dark" ? classes.dark : classes.light
+                    )}
+                />
+                <div
+                    className={clsx(
+                        classes.themeToggle__slider,
+                        theme === "dark" ? classes.dark : classes.light
+                    )}
+                />
+                <div
+                    className={clsx(
+                        classes.themeToggle__border,
+                        theme === "dark" ? classes.dark : classes.light
+                    )}
+                />
             </div>
-            <div
-                className={clsx(
-                    classes.icon,
-                    classes.moonIcon,
-                    theme === "dark" ? classes.dark : classes.light,
-                    isHover || isTransition ? classes.effect : "",
-                    theme === "dark" ? classes.active : ""
-                )}
-            >
-                <MoonIcon />
-            </div>
-            <div
-                className={clsx(
-                    classes.glowBlock,
-                    theme === "dark" ? classes.dark : classes.light,
-                    isHover || isTransition ? classes.effect : ""
-                )}
-            />
-            <div
-                className={clsx(
-                    classes.slider,
-                    theme === "dark" ? classes.dark : classes.light,
-                    isHover || isTransition ? classes.effect : ""
-                )}
-            />
-            <div
-                className={clsx(
-                    classes.border,
-                    theme === "dark" ? classes.dark : classes.light,
-                    isHover || isTransition ? classes.effect : ""
-                )}
-            />
+            {isHorizontal && <p className={classes.themeToggle__title}>{themeTitle}</p>}
         </div>
     );
 };

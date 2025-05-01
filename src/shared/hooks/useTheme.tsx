@@ -11,10 +11,6 @@ export const useTheme = () => {
         document.body.classList.replace(appTheme, nextTheme);
     };
     useEffect(() => {
-        if (localTheme) {
-            document.body.classList.add(localTheme);
-            return;
-        }
         document.body.classList.add(appTheme);
     }, []);
     return { theme: appTheme, toggleTheme };
