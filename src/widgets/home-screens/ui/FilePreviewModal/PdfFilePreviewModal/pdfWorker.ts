@@ -2,6 +2,7 @@ import { PDFDocument, rgb } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 
 export interface TextAnnotation {
+    type: "text";
     page: number;
     x: number;
     y: number;
@@ -15,10 +16,17 @@ export interface TextAnnotation {
     pdfFontSize: number;
 }
 
+export interface DrawAnnotation {
+    type: "draw";
+    page: number;
+    canvasData: string;
+}
+
+export type Annotation = TextAnnotation | DrawAnnotation;
+
 export interface SaveAnnotationsPayload {
     pdfArrayBuffer: ArrayBuffer;
-    drawCanvasesData: string[];
-    textAnnotations: TextAnnotation[];
+    annotations: Annotation[]; // Заменяем drawCanvasesData и textAnnotations
     originalDimensions: Array<{ width: number; height: number }>;
     regularFontUrl: string;
     boldFontUrl: string;
@@ -45,8 +53,7 @@ self.addEventListener("message", async (e: MessageEvent<WorkerMessage>) => {
         try {
             const {
                 pdfArrayBuffer,
-                drawCanvasesData,
-                textAnnotations,
+                annotations,
                 originalDimensions,
                 regularFontUrl,
                 boldFontUrl,
@@ -65,19 +72,32 @@ self.addEventListener("message", async (e: MessageEvent<WorkerMessage>) => {
             const customFontRegular = await (pdfDoc as any).embedFont(fontRegularBytes);
             const customFontBold = await (pdfDoc as any).embedFont(fontBoldBytes);
 
-            for (let i = 0; i < drawCanvasesData.length; i++) {
-                const dataUrl = drawCanvasesData[i];
-                if (!dataUrl || !dataUrl.startsWith("data:image/png")) continue;
-                const img = await pdfDoc.embedPng(dataUrl);
-                const page = (pdfDoc as any).getPage(i);
-                const dims = originalDimensions[i];
+            for (const ann of annotations) {
+                const page = (pdfDoc as any).getPage(ann.page);
+                const dims = originalDimensions[ann.page];
 
-                page.drawImage(img, {
-                    x: 0,
-                    y: 0,
-                    width: dims.width,
-                    height: dims.height,
-                });
+                if (ann.type === "draw") {
+                    if (!ann.canvasData || !ann.canvasData.startsWith("data:image/png")) continue;
+                    const img = await pdfDoc.embedPng(ann.canvasData);
+                    page.drawImage(img, {
+                        x: 0,
+                        y: 0,
+                        width: dims.width,
+                        height: dims.height,
+                    });
+                } else if (ann.type === "text") {
+                    const { r, g, b } = hexToRgb(ann.fontColor);
+                    const font = ann.fontWeight === "bold" ? customFontBold : customFontRegular;
+
+                    page.drawText(ann.text, {
+                        x: ann.pdfX,
+                        y: ann.pdfY - 25,
+                        size: ann.fontSize + 5,
+                        color: rgb(r, g, b),
+                        font: font,
+                        maxWidth: ann.maxWidth,
+                    });
+                }
             }
 
             function hexToRgb(hex: string): { r: number; g: number; b: number } {
@@ -87,22 +107,6 @@ self.addEventListener("message", async (e: MessageEvent<WorkerMessage>) => {
                     g: parseInt(validHex.slice(3, 5), 16) / 255,
                     b: parseInt(validHex.slice(5, 7), 16) / 255,
                 };
-            }
-
-            for (const ann of textAnnotations) {
-                const page = (pdfDoc as any).getPage(ann.page);
-                const { r, g, b } = hexToRgb(ann.fontColor);
-                const font = ann.fontWeight === "bold" ? customFontBold : customFontRegular;
-
-                page.drawText(ann.text, {
-                    x: ann.pdfX,
-                    y: ann.pdfY - 25,
-                    size: ann.fontSize + 5,
-                    color: rgb(r, g, b),
-                    font: font,
-                    maxWidth: ann.maxWidth,
-                    fontWeight: ann.fontWeight,
-                });
             }
 
             const bytes = await pdfDoc.save();
