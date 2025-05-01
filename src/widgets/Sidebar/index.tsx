@@ -19,7 +19,8 @@ import { SharingTools } from "./ui/SharingTools/SharingTools";
 import ThemeToggleSwitch from "../../shared/components/ThemeToggler";
 
 export const Sidebar: React.FC = () => {
-    const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
+    const { editor, mode, setMode, isSharingActive, setIsSharingActive, getNoPlayground } =
+        useChatStore();
     const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
     const editorState = useEditorContext(editor);
     const { getOpenSavedPlaygrounds } = useChatStore();
@@ -71,7 +72,7 @@ export const Sidebar: React.FC = () => {
     };
 
     const ballPositionStyle = isSideBarOpen
-        ? { left: theme === "Light" ? "6px" : "37px" }
+        ? { top: theme === "Light" ? "6px" : "37px" }
         : { top: theme === "Light" ? "6px" : "37px" };
 
     const handleOpenChangeProfilePanel = (e: React.MouseEvent) => {
@@ -107,26 +108,25 @@ export const Sidebar: React.FC = () => {
                         src={currentProfile ? currentProfile.imgSrc : ""}
                     />
                 </div>
-                {isSideBarOpen && (
-                    <div className={css.profile_user_info_container}>
-                        <div className={css.profile_user_info}>
-                            <div className={css.profile_username}>
-                                {currentProfile ? currentProfile.username : ""}
-                            </div>
-                            <div className={css.profile_email}>
-                                {currentProfile ? currentProfile.email : ""}
-                            </div>
+
+                <div className={css.profile_user_info_container}>
+                    <div className={css.profile_user_info}>
+                        <div className={css.profile_username}>
+                            {currentProfile ? currentProfile.username : ""}
                         </div>
-                        <div
-                            className={css.change_profile_btn}
-                            onClick={handleOpenChangeProfilePanel}
-                            data-active={isChangeProfilePanelOpen}
-                            ref={changeProfileBtnRef}
-                        >
-                            <ChangeProfileIcon fill="currentColor" width={11} height={15} />
+                        <div className={css.profile_email}>
+                            {currentProfile ? currentProfile.email : ""}
                         </div>
                     </div>
-                )}
+                    <div
+                        className={css.change_profile_btn}
+                        onClick={handleOpenChangeProfilePanel}
+                        data-active={isChangeProfilePanelOpen}
+                        ref={changeProfileBtnRef}
+                    >
+                        <ChangeProfileIcon fill="currentColor" width={11} height={15} />
+                    </div>
+                </div>
             </div>
             <CSSTransition
                 in={isChangeProfilePanelOpen}
@@ -198,6 +198,7 @@ export const Sidebar: React.FC = () => {
                     css.sidebar__delete__all__messages,
                     isSideBarOpen && css.sidebar__delete__all__messages__wide
                 )}
+                onClick={handleDeleteAllMessages}
             >
                 <TrashIcon />
                 <p>Delete All Messages</p>

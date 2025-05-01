@@ -13,8 +13,11 @@
     padding-bottom: 42px;
 
     .profile_container {
+        position: relative;
         padding-left: 8px;
         margin-top: 10px;
+        height: 40px;
+        width: 40px;
 
         .sidebar_profile {
             .sidebar_profile_img {
@@ -25,9 +28,43 @@
                 object-position: center;
             }
         }
-
         .profile_user_info_container {
-            display: none;
+            position: absolute;
+            left: 53px;
+            bottom: 3px;
+            overflow: hidden;
+
+            display: flex;
+            align-items: center;
+            flex-direction: row !important;
+            font-size: 14px;
+            font-weight: 500;
+            flex-wrap: nowrap;
+            gap: 3px;
+            opacity: 0;
+            transition:
+                opacity 0.4s ease-in,
+                width 0.3s ease-in-out;
+            width: 20px;
+
+            .profile_user_info {
+                display: flex;
+                flex-direction: column;
+                .profile_username {
+                    color: #5b5b5b;
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+                .profile_email {
+                    color: #b5b5b5;
+                    font-weight: 400;
+                    font-size: 14px;
+                }
+            }
+
+            .change_profile_btn {
+                display: none;
+            }
         }
     }
 
@@ -169,10 +206,10 @@
     height: 100%;
 
     .profile_container {
+        margin-bottom: 20px;
         padding: 10px 0;
         width: 100%;
-        max-width: 100%;
-        transition: max-width 0.3s ease-in-out;
+
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
@@ -197,9 +234,12 @@
             align-items: center;
             width: 100%;
             max-width: 100%;
-            transition: max-width 0.3s ease-in-out;
             justify-content: space-between;
             padding-right: 40px;
+            opacity: 1;
+            font-size: 14px;
+            font-weight: 500;
+            transition: opacity 0.4s ease-in;
 
             .profile_user_info {
                 display: flex;
@@ -292,7 +332,12 @@
     }
 
     .sidebar_theme_container {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
         margin-top: 10px;
+        align-items: center;
+        gap: 15px;
 
         .theme_name {
             font-weight: 500;
@@ -302,6 +347,97 @@
             flex-wrap: nowrap;
             flex-direction: row !important;
             gap: 3px;
+        }
+
+        .theme_toggle {
+            background: rgba(230, 230, 230, 0.7);
+            position: relative;
+            gap: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            width: 72px;
+            height: 40px;
+            border-radius: 1000px;
+            box-sizing: border-box;
+
+            .theme_toggle_ball {
+                position: absolute;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.43);
+                transition: left 0.3s ease;
+                z-index: 1;
+            }
+
+            .toggle_light_theme_icon {
+                z-index: 2;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-content: center;
+                align-items: center;
+                background: transparent;
+                padding: 2px;
+                cursor: pointer;
+
+                svg path {
+                    fill: #838383;
+                }
+            }
+            .toggle_light_theme_active_icon {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-content: center;
+                align-items: center;
+                padding: 2px;
+                cursor: pointer;
+
+                svg path {
+                    fill: #2b2b2b;
+                }
+            }
+
+            .toggle_dark_theme_icon {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-content: center;
+                align-items: center;
+                background: transparent;
+                padding: 2px;
+                cursor: pointer;
+
+                svg path {
+                    fill: #838383;
+                }
+            }
+            .toggle_dark_theme_active_icon {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-content: center;
+                align-items: center;
+                background: transparent;
+                padding: 2px;
+                cursor: pointer;
+
+                svg path {
+                    fill: #2b2b2b;
+                }
+            }
         }
     }
 

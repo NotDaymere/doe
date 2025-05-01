@@ -44,7 +44,6 @@ interface CodeChatMessageProps {
     handleClose: () => void;
     handleReferenceClick: () => void;
     messageRef: React.RefObject<HTMLDivElement>;
-    openSourcePlayground: (sourceData: string) => void;
     isAllStepOpen: boolean;
 }
 
@@ -57,10 +56,9 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                                                                     handleClose,
                                                                     handleReferenceClick,
                                                                     messageRef,
-                                                                    openSourcePlayground,
                                                                     isAllStepOpen,
                                                         }) => {
-    const {getOpenSavedPlaygrounds, updateSavedPlaygrounds, savedPlaygrounds, setSavedPlaygrounds } = useChatStore();
+    const {setNoPlayground, closeNoPlayground, noPlayground, closeSavedPlaygrounds } = useChatStore();
     const [isPaused, setIsPaused] = React.useState(true);
     const [utterance, setUtterance] = React.useState<SpeechSynthesisUtterance | null>(null);
     const [activeMenu, setActiveMenu] = React.useState(false);
@@ -70,25 +68,6 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
     });
 
     const toggleMenu = () => setActiveMenu(!activeMenu);
-
-    const setCloseHandler = (fn?: () => void) => {
-        return () => {
-            fn?.();
-            setActiveMenu(false);
-        };
-    };
-
-
-    const downloadPDF = useCallback(() => {
-        if (!messageRef.current) return;
-        const doc = new jsPDF();
-        doc.html(messageRef.current, {
-            callback: doc => doc.save("response.pdf"),
-            html2canvas: { scale: 0.3 },
-            x: 10,
-            y: 10,
-        });
-    }, []);
 
     const handleCopy = useCallback(() => {
         if (!messageRef.current) return;
@@ -118,7 +97,6 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
         };
 
         initUtterance();
-        //voice updating
         const handleVoicesChanged = () => {
             initUtterance();
         };
@@ -155,6 +133,21 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
 
         setIsPaused(true);
     };
+
+    const handlerSeeAllSteps = () => {
+        if (noPlayground.type === 'source') {
+            closeNoPlayground()
+        } else {
+            closeSavedPlaygrounds()
+            setNoPlayground({
+                id: null,
+                name: "See all steps",
+                type: "source",
+                data: null,
+                open: true,
+            });
+        }
+    }
 
     return (
         <div className={css.message_with_button_container}>
@@ -234,30 +227,7 @@ export const CodeChatMessage: React.FC<CodeChatMessageProps> = ({
                         {!data.isUser && (
                             <Flex justify={"space-between"} className={"message-actions"}>
                                 <button
-                                    onClick={() => {
-                                        getOpenSavedPlaygrounds()
-                                            .filter(playground => playground.type !== 'source')
-                                            .map((playground) => {
-                                                playground.open = false;
-                                                updateSavedPlaygrounds(playground);
-                                            })
-                                        ;
-                                        const savedPlaygroundsSource = savedPlaygrounds.filter(playground => playground.type === 'source');
-                                        if (savedPlaygroundsSource.length > 0) {
-                                            savedPlaygroundsSource.map((playground) => {
-                                                playground.open = true;
-                                                updateSavedPlaygrounds(playground);
-                                            });
-                                        } else {
-                                            setSavedPlaygrounds({
-                                                id: null,
-                                                name: 'See all steps',
-                                                type: "source",
-                                                data: null,
-                                                open: true ,
-                                            })
-                                        }
-                                    }}
+                                    onClick={handlerSeeAllSteps}
                                     className={clsx(css.steps_button, {
                                         [css.active_steps_button]: isAllStepOpen,
                                     })}

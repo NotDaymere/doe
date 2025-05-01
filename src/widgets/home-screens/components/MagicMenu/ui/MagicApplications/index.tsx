@@ -8,6 +8,7 @@ import css from "./MagicApplications.module.less";
 interface Props {}
 
 export const MagicApplications: React.FC<Props> = (props) => {
+  
     const [menuActive, setMenuActive] = React.useState(false);
     const nodeRef = React.useRef<HTMLDivElement>(null);
 
@@ -17,11 +18,13 @@ export const MagicApplications: React.FC<Props> = (props) => {
         <div className={css.apps}>
             <MagicMenuButton
                 className={clsx(css.apps_btn, menuActive && css._active)}
+          
                 icon={<PlusSquareIcon />}
                 text="Connect Applications"
                 onClick={toggleMenu}
                 hasMenu
             />
+          
             <CSSTransition 
                 classNames={css}
                 timeout={250}

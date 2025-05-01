@@ -13,8 +13,10 @@ function PythonTaskManager() {
         getSavedPlaygroundLastByType,
         getOpenSavedPlaygroundsByType,
         getOpenSavedPlaygrounds,
+        closeNoPlayground,
     } = useChatStore();
     const openCodePlayground = () => {
+        closeNoPlayground();
         let oldPlayground = getSavedPlaygroundLastByType("code");
         if (getOpenSavedPlaygrounds().length >= 2) {
             const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
@@ -56,8 +58,9 @@ function PythonTaskManager() {
         }
     };
     return (
-        <button onClick={openCodePlayground}
-                className={`table-playground-button ${getOpenSavedPlaygroundsByType('code').length > 0 && 'table-playground-button-active'}`}
+        <button
+            onClick={openCodePlayground}
+            className={`table-playground-button ${getOpenSavedPlaygroundsByType("code").length > 0 && "table-playground-button-active"}`}
         >
             <CodeIcon /> Python Task Manager
         </button>

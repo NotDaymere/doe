@@ -46,11 +46,12 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
 
     const toggleTextSettings = () => {
         setTextSettingsOpen((v) => !v);
+        setIsTextMode(true);
         setIsDrawingEnabled(false);
+        setIsEditing(false);
     };
 
     const confirmTextSettings = () => {
-        setIsTextMode(true);
         setTextSettingsOpen(false);
     };
 
@@ -92,8 +93,17 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
     const toggleDrawing = () => {
         setIsDrawingEnabled((prev) => !prev);
         setIsTextMode(false);
+        setIsEditing(false);
         setTextSettingsOpen(false);
     };
+
+    const toggleEditText = () => {
+        setIsEditing((prev) => !prev);
+
+        setIsDrawingEnabled(false);
+        setIsTextMode(false);
+        setTextSettingsOpen(false);
+    }
 
     return createPortal(
         <FilePreviewModalOverlay
@@ -131,7 +141,7 @@ const PdfFilePreviewModal: React.FC<PdfModalProps> = ({
                 <div
                     className={css.modalContentEditPanelItem}
                     data-active={isEditing}
-                    onClick={() => setIsEditing(true)}
+                    onClick={toggleEditText}
                 >
                     <ModalContentPanelRedactIcon fill="currentColor" />
                 </div>

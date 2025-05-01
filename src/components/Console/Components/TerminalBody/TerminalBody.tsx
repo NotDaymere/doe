@@ -11,9 +11,14 @@ function TerminalBody() {
     const terminalRef = useRef<HTMLDivElement>(null);
     const termInstance = useRef<Terminal | null>(null);
     const [hoveredBug, setHoveredBug] = useState<number | null>(null);
+    const [currentLineIndex, setCurrentLineIndex] = useState(0);
 
     const [bugs, setBugs] = useState<Array<{ id: number; type: string; x: number; y: number }>>([]);
     const { numberOfConsole } = useConsole();
+
+    const [showWhiteDot, setShowWhiteDot] = useState(false);
+
+    const [whiteDotLines, setWhiteDotLines] = useState<number[]>([]);
 
     useEffect(() => {
         if (!termInstance.current && terminalRef.current) {
@@ -33,7 +38,7 @@ function TerminalBody() {
             const red = "\x1b[31m";
             const reset = "\x1b[0m";
 
-            let currentLineIndex = 0;
+            let lineIndex = 0;
 
             const originalWriteln = term.writeln.bind(term);
             term.writeln = (text: string) => {
@@ -43,15 +48,16 @@ function TerminalBody() {
                 const lineCount = Math.ceil(text.length / maxCols) || 1;
 
                 const newBug = {
-                    id: currentLineIndex,
-                    type: currentLineIndex % 2 === 0 ? "red-bug" : "blue-bug",
+                    id: lineIndex,
+                    type: lineIndex % 2 === 0 ? "red-bug" : "blue-bug",
                     x: 0,
-                    y: currentLineIndex,
+                    y: lineIndex,
                 };
 
                 setBugs((prevBugs) => [...prevBugs, newBug]);
 
-                currentLineIndex += lineCount;
+                lineIndex += lineCount;
+                setCurrentLineIndex(lineIndex);
             };
 
             term.open(terminalRef.current);
@@ -70,8 +76,46 @@ function TerminalBody() {
                 );
                 term.writeln(`${red}23.1.2 ${reset}->${red}24.3.1${reset}`);
                 term.writeln("(venv) okezuebell@MacBook-Air Desktop % python3 chessgame.py");
+
+                setWhiteDotLines((prev) => [...prev, lineIndex]);
+
+                term.onData((data) => {
+                    const code = data.charCodeAt(0);
+
+                    if (code === 127) {
+                        term.write("\b \b");
+                    } else if (code === 13) {
+                        term.write("\r\n");
+
+                        lineIndex += 1;
+                        setCurrentLineIndex(lineIndex);
+
+                        setWhiteDotLines((prev) => [...prev, lineIndex]);
+                    } else {
+                        term.write(data);
+                    }
+                });
             } else {
                 term.writeln("");
+
+                setWhiteDotLines((prev) => [...prev, lineIndex]);
+
+                term.onData((data) => {
+                    const code = data.charCodeAt(0);
+
+                    if (code === 127) {
+                        term.write("\b \b");
+                    } else if (code === 13) {
+                        term.write("\r\n");
+
+                        lineIndex += 1;
+                        setCurrentLineIndex(lineIndex);
+
+                        setWhiteDotLines((prev) => [...prev, lineIndex]);
+                    } else {
+                        term.write(data);
+                    }
+                });
             }
             termInstance.current = term;
         }
@@ -84,15 +128,14 @@ function TerminalBody() {
         };
     }, []);
 
-    // Fixed row height for perfect alignment
     const calculatePosition = (x: number, y: number) => {
         if (!terminalRef.current || !termInstance.current) return { top: 19.5, left: 0 };
 
-        const charHeight = 19.3; // Directly using the known row height
+        const charHeight = 19.3;
 
         return {
             top: y * charHeight + 13.8,
-            left: 20, // Align dots to the left margin
+            left: 20,
         };
     };
 
@@ -127,6 +170,36 @@ function TerminalBody() {
                         </div>
                     );
                 })}
+
+                {whiteDotLines.map((lineIdx) => (
+                    <div
+                        key={`white-dot-${lineIdx}`}
+                        style={{
+                            position: "absolute",
+                            top: `${calculatePosition(0, lineIdx).top}px`,
+                            left: `${calculatePosition(0, lineIdx).left}px`,
+                            width: "8px",
+                            height: "8px",
+                            borderRadius: "50%",
+                            backgroundColor: "white",
+                            zIndex: 10,
+                        }}
+                        className="white-bug"
+                        onMouseEnter={() => setHoveredBug(999999 + lineIdx)}
+                        onMouseLeave={() => setHoveredBug(null)}
+                    >
+                        {hoveredBug === 999999 + lineIdx && (
+                            <div
+                                className="bug-modal"
+                                onMouseEnter={() => setHoveredBug(999999 + lineIdx)}
+                                onMouseLeave={() => setHoveredBug(null)}
+                            >
+                                <div className="bug-modal-arrow"></div>
+                                <BugCatchModal />
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
 
             <div className="terminal-container">
@@ -149,6 +222,21 @@ function TerminalBody() {
                         ></div>
                     );
                 })}
+
+                {whiteDotLines.map((lineIdx) => (
+                    <div
+                        key={`white-line-${lineIdx}`}
+                        style={{
+                            position: "absolute",
+                            top: `${calculatePosition(0, lineIdx).top}px`,
+                            height: `${19.5}px`,
+                            zIndex: 10,
+                            width: "100%",
+                            backgroundColor: "rgba(255, 255, 255, 0.1)",
+                        }}
+                        className="white-line"
+                    />
+                ))}
             </div>
         </>
     );
