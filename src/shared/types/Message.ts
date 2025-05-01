@@ -14,4 +14,5 @@ export interface OnboardingMessage {
     origin?: string;
     originTranscribed?: string;
     recording?: boolean;
+    noTypeEffect?: boolean;
 }

@@ -18,8 +18,6 @@ export function useTypewriterEffect({
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const previousTextRef = useRef<string | null>(null);
 
-    console.log("text: ", text);
-
     useEffect(() => {
         if (!startTyping || text.length === 0 || previousTextRef.current === text) return;
 

@@ -211,10 +211,6 @@
     flex-grow: 1;
 }
 
-.ghost {
-    color: rgba(0, 0, 0, 0.4);
-}
-
 .panel_editor_editor {
     padding: 8px 0;
     padding-right: 8px;
@@ -360,6 +356,45 @@
 }
 .panel_submitBtn {
     animation-delay: 1.4s;
+}
+
+.btn_stressed {
+    transform: scale(1.08);
+    opacity: 0.95;
+    background: rgba(180, 154, 100, 0.5);
+}
+
+@keyframes stress-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+        background: #1f1f1f;
+    }
+    20% {
+        transform: scale(1.08);
+        opacity: 0.95;
+        background: rgba(180, 154, 100, 0.5);
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+        background: #1f1f1f;
+    }
+    60% {
+        transform: scale(1.08);
+        opacity: 0.95;
+        background: rgba(255, 204, 102, 0.5);
+    }
+    80% {
+        transform: scale(1);
+        opacity: 1;
+        background: #1f1f1f;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        background: #1f1f1f;
+    }
 }
 
 @keyframes slideIn {

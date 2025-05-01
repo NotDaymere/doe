@@ -8,6 +8,7 @@ import { ReadyMessage } from "src/components/ReadyMessage";
 import { WelcomeHeader } from "src/components/WelcomeHeader";
 import { getBlurClasses } from "src/helpers/getBlurClasses";
 import { OnboardingStep } from "src/helpers/onboardingFlow";
+import { MessageType } from "src/hooks/useChat";
 import { OnboardingMessage } from "src/shared/types/Message";
 import css from "../OnboardingLayout.module.less";
 
@@ -16,7 +17,7 @@ interface OnboardingBodyProps {
     logoSlide: boolean;
     currentStep?: OnboardingStep;
     messages: OnboardingMessage[];
-    onSendMessage: (message: string, type: "greeting" | "project") => void;
+    onSendMessage: (message: string, type: MessageType) => void;
     blockInput: boolean;
     showTooltip: boolean;
     userClickedBold: boolean;

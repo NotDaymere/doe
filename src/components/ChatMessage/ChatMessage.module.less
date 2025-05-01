@@ -4,6 +4,9 @@
 }
 
 .userMessage {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     background: transparent;
     color: #1f1f1f;
     padding: 8px 12px;
@@ -14,6 +17,18 @@
     word-break: break-word;
     font-size: 16px;
     animation: slide-up 1s ease-out forwards;
+}
+
+.user_math_block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    padding: 8px 24px;
+    max-width: 80%;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 15px;
 }
 
 @keyframes slide-up {

@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ReactComponent as Grid } from "src/assets/icons/dot-grid.svg";
+import { MessageType } from "src/hooks/useChat";
 import { useTypewriterEffect } from "src/hooks/useTypewriterEffect";
 import ArrowUpIcon from "src/shared/icons/ArrowUp.icon";
 import MicrophoneIcon from "src/shared/icons/Microphone.icon";
@@ -23,7 +24,7 @@ interface AnimatedInputProps {
     handleBoldPlaceholderTypedOut: () => void;
     handleMathPromptTypedOut: () => void;
     handleMathFormulaTypedOut: () => void;
-    onSendMessage: (message: string, type: "greeting" | "project") => void;
+    onSendMessage: (message: string, type: MessageType) => void;
 }
 
 export function AnimatedInput({
@@ -46,6 +47,7 @@ export function AnimatedInput({
     const [isMessageSent, setIsMessageSent] = useState(false);
     const [showSelectedText, setShowSelectedText] = useState(false);
     const [stressTooltip, setStressTooltip] = useState(false);
+    const [stressSendButton, setStressButton] = useState(false);
     const [isMathBlock, setIsMathBlock] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -63,6 +65,7 @@ export function AnimatedInput({
         speed: 100,
         onComplete: () => {
             setShowSelectedText(true);
+            setIsMessageSent(false);
             if (step === 4.7) handleBoldPlaceholderTypedOut();
         },
         startTyping: step === 4.7,
@@ -94,8 +97,25 @@ export function AnimatedInput({
     });
 
     const handleSendMessage = () => {
+        if (safeStep !== 4.5 && safeStep !== 8.3 && safeStep !== 28) return;
         setUserInput("");
-        onSendMessage(userInput, safeStep <= 10 ? "greeting" : "project");
+
+        let messageType: MessageType;
+
+        switch (safeStep) {
+            case 4.5:
+                messageType = "greeting";
+                break;
+            case 8.3:
+                messageType = "math";
+                break;
+            case 28:
+                messageType = "project";
+                break;
+            default:
+                messageType = "project";
+        }
+        onSendMessage(userInput, messageType);
         setIsMessageSent(true);
     };
 
@@ -114,6 +134,20 @@ export function AnimatedInput({
 
                 setTimeout(() => setStressTooltip(false), 1500);
             }
+            if (
+                e.key === "ArrowRight" &&
+                !isMessageSent &&
+                (safeStep === 4.5 || safeStep === 8.3)
+            ) {
+                e.preventDefault();
+                e.stopPropagation();
+                setStressButton(true);
+
+                setTimeout(() => setStressButton(false), 350);
+            }
+            if (e.key === "Enter") {
+                handleSendMessage();
+            }
         };
 
         document.addEventListener("keydown", handleKeyDown);
@@ -131,11 +165,7 @@ export function AnimatedInput({
                 <div className={clsx(css.panel_main, { [css.blocked]: blockInput && step >= 24 })}>
                     <MagicMenu step={step} />
                     <div className={clsx(css.panel_input_container, { [css.hide]: isMessageSent })}>
-                        <span
-                            className={clsx(css.static_text, {
-                                [css.ghost]: !isMessageSent && blockInput,
-                            })}
-                        >
+                        <span className={css.static_text}>
                             <InputStaticText
                                 step={safeStep}
                                 isMessageSent={isMessageSent}
@@ -152,7 +182,7 @@ export function AnimatedInput({
                                 isMathBlock={isMathBlock}
                             />
                         </span>
-                        {showTooltip && !isMessageSent && (
+                        {showTooltip && !isMessageSent && step === 4.5 && (
                             <Tooltip position="top" stressed={stressTooltip}>
                                 {safeStep <= 10
                                     ? "Type your first and last name here:"
@@ -165,11 +195,11 @@ export function AnimatedInput({
                                 type="text"
                                 value={userInput}
                                 onChange={(e) => setUserInput(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter" && !blockInput && userInput.trim()) {
-                                        handleSendMessage();
-                                    }
-                                }}
+                                // onKeyDown={(e) => {
+                                //     if (e.key === "Enter" && !blockInput && userInput.trim()) {
+                                //         handleSendMessage();
+                                //     }
+                                // }}
                                 onFocus={() => setIsActive(true)}
                                 onBlur={() => setIsActive(false)}
                                 className={clsx(css.input_field, {
@@ -202,7 +232,9 @@ export function AnimatedInput({
                         <MicrophoneIcon />
                     </button>
                     <button
-                        className={css.panel_submitBtn}
+                        className={clsx(css.panel_submitBtn, {
+                            [css.btn_stressed]: stressSendButton,
+                        })}
                         onAnimationEnd={() => setAnimationDone(true)}
                         onClick={handleSendMessage}
                         data-step="send"

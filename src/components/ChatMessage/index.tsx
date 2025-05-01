@@ -78,8 +78,11 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                     <div
                         className={css.mathWrapper}
                         style={{
-                            opacity: isTypingDone || noTypeEffect ? 1 : 0,
-                            maxHeight: isTypingDone || noTypeEffect ? "500px" : "0px",
+                            opacity: isTypingDone || noTypeEffect || message.noTypeEffect ? 1 : 0,
+                            maxHeight:
+                                isTypingDone || noTypeEffect || message.noTypeEffect
+                                    ? "500px"
+                                    : "0px",
                             overflow: "hidden",
                             transition: "opacity 0s ease, max-height 0s ease",
                         }}
@@ -148,7 +151,10 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                             )}
                         </>
                     ) : (
-                        message.content
+                        <>
+                            {message.content}
+                            <div className={css.user_math_block}>{mathElement}</div>
+                        </>
                     )}
                     {isTranslation && (
                         <div className={css.translate_buttons}>

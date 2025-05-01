@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useCursor } from "src/contexts/CursorContext";
 import {
-    mathBlock,
     pythonCode,
-    simpleProjectText,
     transcribeText,
     translation,
     translationOrigin,
@@ -88,8 +86,8 @@ export function useOnboardingFlow(
 
     // #5 -> placeholder text is typed out, waiting for user input
     function handleGreetingPlaceholderTypedOut() {
-        if (step < 5) setStep(4.5);
         setTimeout(() => {
+            if (step < 5) setStep(4.5);
             setShowTooltip(true);
             setBlockInput(false);
         }, 1200);
@@ -166,19 +164,6 @@ export function useOnboardingFlow(
     useEffect(() => {
         if (step === 7) {
             handleDeleteMessages();
-        }
-        if (step === 8.3) {
-            setTimeout(
-                () =>
-                    setMessages?.([
-                        {
-                            role: "ai",
-                            content: simpleProjectText,
-                            mathBlock: mathBlock,
-                        },
-                    ]),
-                1000
-            );
         }
 
         if (step === 9) {

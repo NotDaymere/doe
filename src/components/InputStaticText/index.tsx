@@ -50,23 +50,20 @@ export const InputStaticText = ({
 
     return (
         <>
-            {!isMessageSent ? (
-                blockInput ? (
-                    typedGreeting.split("").map((char, index) => (
-                        <span
-                            key={index}
-                            className={clsx(css.letter, {
-                                [css.space]: char === " ",
-                            })}
-                            style={{ animationDelay: `${index * 0.01}s` }}
-                        >
-                            {char === " " ? "\u00A0" : char}
-                        </span>
-                    ))
-                ) : (
-                    <>{step <= 10 && <span>Hey Doe, I'm </span>}</>
-                )
-            ) : null}
+            {step === 4 &&
+                blockInput &&
+                typedGreeting.split("").map((char, index) => (
+                    <span
+                        key={index}
+                        className={clsx(css.letter, css.ghost, {
+                            [css.space]: char === " ",
+                        })}
+                        style={{ animationDelay: `${index * 0.01}s` }}
+                    >
+                        {char === " " ? "\u00A0" : char}
+                    </span>
+                ))}
+            {step === 4.5 && !isMessageSent && <>{step <= 10 && <span>Hey Doe, I'm </span>}</>}
             {(step === 4.7 || step === 5) && (
                 <p>
                     {typedPrompt.split("").map((word, index) => {
