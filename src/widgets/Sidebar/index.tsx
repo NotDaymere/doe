@@ -189,30 +189,19 @@ export const Sidebar: React.FC = () => {
                     <div className={css.inner_sidebar_separator}></div>
                 </div>
 
-                <div className={css.margin_bottom}>
+                <div>
                     <SharingTools />
                 </div>
-
-                <div
-                    className={
-                        getOpenSavedPlaygrounds().length > 0 || mode
-                            ? css.delete_all_messages_open_playgrounds
-                            : css.delete_all_messages
-                    }
-                >
-                    <div
-                        className={css.delete_all_messages_btn_container}
-                        onClick={handleDeleteAllMessages}
-                    >
-                        <button className={css.delete_all_messages_btn}>
-                            <TrashIcon />
-                        </button>
-                        <div className={css.delete_all_messages_btn_tooltip}>
-                            Delete All Messages
-                        </div>
-                    </div>
-                </div>
             </div>
+            <button
+                className={clsx(
+                    css.sidebar__delete__all__messages,
+                    isSideBarOpen && css.sidebar__delete__all__messages__wide
+                )}
+            >
+                <TrashIcon />
+                <p>Delete All Messages</p>
+            </button>
             <div className={css.sidebar_resize_handler} onClick={handleOpenSideBar} />
         </aside>
     );
