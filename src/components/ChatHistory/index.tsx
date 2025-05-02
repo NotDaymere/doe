@@ -11,6 +11,7 @@ interface ChatHistoryProps {
     step: number;
     userClickedTranslate: boolean;
     handleUntranslatedTypedOut: () => void;
+    handleVoiceMessageAppearing: () => void;
 }
 
 const mathJaxConfig = {
@@ -25,6 +26,7 @@ const ChatHistory = ({
     step,
     userClickedTranslate,
     handleUntranslatedTypedOut,
+    handleVoiceMessageAppearing,
 }: ChatHistoryProps) => {
     const historyRef = useRef<HTMLDivElement>(null);
 
@@ -46,6 +48,7 @@ const ChatHistory = ({
                             ref={historyRef}
                             userClickedTranslate={userClickedTranslate}
                             handleUntranslatedTypedOut={handleUntranslatedTypedOut}
+                            handleVoiceMessageAppearing={handleVoiceMessageAppearing}
                         />
                     </MathJaxContext>
                 ))}

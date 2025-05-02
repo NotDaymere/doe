@@ -585,6 +585,13 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 21,
+        location: '[data-step=""]',
+        cursorVisible: true,
+        tooltip: false,
+        blur: ["input", "navigate"],
+    },
+    {
+        id: 21.1,
         location: '[data-step="transcribe"]',
         cursorVisible: true,
         tooltip: true,

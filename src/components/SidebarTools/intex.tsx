@@ -25,7 +25,8 @@ export const SidebarTools = ({
             icon: "/img/icons/recording.svg",
             label: "Listen and transcribe",
             dataStep: "transcribe",
-            step: 21,
+            step: [21.1, 21.2],
+            onClick: () => handleUserClickedSidebarButton("transcribe"),
         },
         {
             icon: "/img/icons/shared.svg",

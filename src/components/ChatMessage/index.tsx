@@ -17,11 +17,20 @@ interface ChatMessageProps {
     noTypeEffect?: boolean;
     userClickedTranslate: boolean;
     handleUntranslatedTypedOut?: () => void;
+    handleVoiceMessageAppearing?: () => void;
 }
 
 const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
     (
-        { message, prevRole, step, noTypeEffect, userClickedTranslate, handleUntranslatedTypedOut },
+        {
+            message,
+            prevRole,
+            step,
+            noTypeEffect,
+            userClickedTranslate,
+            handleUntranslatedTypedOut,
+            handleVoiceMessageAppearing,
+        },
         ref
     ) => {
         const [isTypingDone, setIsTypingDone] = useState(false);
@@ -41,7 +50,12 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                       onComplete: () => {
                           setIsTypingDone(true);
                       },
-                      startTyping: !isTypingDone && step !== 19 && step !== 19.1,
+                      startTyping:
+                          !isTypingDone &&
+                          step !== 19 &&
+                          step !== 19.1 &&
+                          step !== 21 &&
+                          step !== 21.1,
                   })
                 : message.content;
 
@@ -147,12 +161,17 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                     )}
                     {isRecording && (
                         <div className={css.recording_img_container}>
-                            <img src={recording} alt="recording" />
+                            <img
+                                src={recording}
+                                alt="recording"
+                                className={css.recording_img}
+                                onAnimationEnd={handleVoiceMessageAppearing}
+                            />
                         </div>
                     )}
                     {isAI ? (
                         <>
-                            {step !== 19 && (
+                            {step !== 19 && step !== 21 && step !== 21.1 && (
                                 <div
                                     dangerouslySetInnerHTML={{
                                         __html:

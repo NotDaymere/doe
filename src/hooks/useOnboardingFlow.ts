@@ -22,6 +22,7 @@ export function useOnboardingFlow(
     const [userClickedUnderline, setUserClickedUnderline] = useState(false);
     const [userClickedItalic, setUserClickedItalic] = useState(false);
     const [userClickedTranslate, setUserClickedTranslate] = useState(false);
+    const [userClickedTranscribe, setUserClickedTranscribe] = useState(false);
     const [blockSteps, setBlockSteps] = useState(false);
     const { gaiaActive, setGaiaActive } = useAppStore();
 
@@ -143,6 +144,11 @@ export function useOnboardingFlow(
         setStep(19.1);
     }
 
+    function handleVoiceMessageAppearing() {
+        setBlockSteps(true);
+        setStep(21.1);
+    }
+
     // ------ OTHER HANDLERS ------
 
     function handleUserClickedSidebarButton(type: string) {
@@ -153,9 +159,12 @@ export function useOnboardingFlow(
         } else if (type === "underline") {
             setUserClickedUnderline(true);
         } else if (type === "translate") {
-            console.log("tedsds");
             setUserClickedTranslate(true);
             setStep(19.2);
+            setBlockSteps(false);
+        } else if (type === "transcribe") {
+            setStep(21.2);
+            console.log("blockSteps", blockSteps);
             setBlockSteps(false);
         }
     }
@@ -265,6 +274,7 @@ export function useOnboardingFlow(
         handleCodePromptTypedOut,
         handlePythonCodeTypedOut,
         handleUntranslatedTypedOut,
+        handleVoiceMessageAppearing,
 
         handleSidebarClose,
 

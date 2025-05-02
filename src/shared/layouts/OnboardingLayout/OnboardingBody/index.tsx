@@ -34,6 +34,7 @@ interface OnboardingBodyProps {
     handleCodePromptTypedOut: () => void;
     handlePythonCodeTypedOut: () => void;
     handleUntranslatedTypedOut: () => void;
+    handleVoiceMessageAppearing: () => void;
 }
 
 export function OnboardingBody(props: OnboardingBodyProps) {
@@ -59,6 +60,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         handleCodePromptTypedOut,
         handlePythonCodeTypedOut,
         handleUntranslatedTypedOut,
+        handleVoiceMessageAppearing,
     } = props;
 
     return (
@@ -82,6 +84,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                     messages={messages}
                     userClickedTranslate={userClickedTranslate}
                     handleUntranslatedTypedOut={handleUntranslatedTypedOut}
+                    handleVoiceMessageAppearing={handleVoiceMessageAppearing}
                 />
 
                 <ReadyMessage
@@ -147,11 +150,13 @@ function HistorySection({
     messages,
     userClickedTranslate,
     handleUntranslatedTypedOut,
+    handleVoiceMessageAppearing,
 }: {
     step: number;
     messages: OnboardingMessage[];
     userClickedTranslate: boolean;
     handleUntranslatedTypedOut: () => void;
+    handleVoiceMessageAppearing: () => void;
 }) {
     if (step >= 40 && step <= 42) {
         return (
@@ -170,6 +175,7 @@ function HistorySection({
                 step={step}
                 userClickedTranslate={userClickedTranslate}
                 handleUntranslatedTypedOut={handleUntranslatedTypedOut}
+                handleVoiceMessageAppearing={handleVoiceMessageAppearing}
             />
         </div>
     );
