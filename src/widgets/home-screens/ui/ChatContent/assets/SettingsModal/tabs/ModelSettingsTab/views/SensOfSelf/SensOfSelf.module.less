@@ -1,0 +1,41 @@
+.sos {
+    &__container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    &__header {
+        &__title__container {
+            display: flex;
+            gap: 7.5px;
+            margin-top: 9px;
+            align-self: start;
+            svg {
+                margin-top: 3px;
+            }
+        }
+        &__title {
+            color: rgb(31, 31, 31);
+        }
+    }
+    &__content {
+        padding-top: 13px;
+        &__container {
+            flex: 0 1 100%;
+            overflow-y: auto;
+            scrollbar-gutter: stable;
+            padding: 5px 17px 12px 20px;
+        }
+        &__description {
+            font-size: 0.875rem;
+            line-height: 1.19rem;
+            font-weight: 500;
+            color: rgb(181, 181, 181);
+            font-family: "Sohne", sans-serif;
+            margin-bottom: 20px;
+            &__highlight {
+                font-weight: 600;
+            }
+        }
+    }
+}

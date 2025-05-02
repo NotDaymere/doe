@@ -9,6 +9,8 @@ import { FileWithId } from "../../components/UploadButton";
 import { CreateStyle } from "./views/CreateStyle/CreateStyle";
 import { EditPersona } from "./views/EditPersona/EditPersona";
 import { EditStyle } from "./views/EditStyle/EditStyle";
+import { PazzleIcon } from "src/shared/icons/PazzleIcon";
+import { SensOfSelf } from "./views/SensOfSelf/SensOfSelf";
 
 type PersonaType = {
     name: string;
@@ -38,22 +40,27 @@ export const ModelSettingsTab = () => {
         setSearchParams(searchParams);
     };
 
+    const handleNavigationToSenseOfSelf = () => {
+        searchParams.set("view", "sensOfSelf");
+        setSearchParams(searchParams);
+    };
+
     const handleSavePersona = (data: PersonaType) => setPersonasList((prev) => [...prev, data]);
-    const handleSaveStyle = (data: PersonaType) => setStylesList((prev) => [...prev, data]);
     const handleEditPersona = (data: PersonaType) =>
         setPersonasList((prev) => prev.map((pers) => (pers.id === data.id ? data : pers)));
-    const handleEditStyle = (data: PersonaType) =>
-        setStylesList((prev) => prev.map((style) => (style.id === data.id ? data : style)));
     const deletePerson = (id: string) =>
         setPersonasList((prev) => prev.filter((persona) => persona.id !== id));
-    const deleteStyle = (id: string) =>
-        setStylesList((prev) => prev.filter((style) => style.id !== id));
     const getPersonasList = personasList.map(({ id, name }) => ({ value: id, label: name }));
-    const getStylesList = stylesList.map(({ id, name }) => ({ value: id, label: name }));
-
     const currentPersonaOpen = personasList.find(
         (persona) => persona.id === searchParams.get("personaId")
     );
+
+    const handleSaveStyle = (data: PersonaType) => setStylesList((prev) => [...prev, data]);
+    const handleEditStyle = (data: PersonaType) =>
+        setStylesList((prev) => prev.map((style) => (style.id === data.id ? data : style)));
+    const deleteStyle = (id: string) =>
+        setStylesList((prev) => prev.filter((style) => style.id !== id));
+    const getStylesList = stylesList.map(({ id, name }) => ({ value: id, label: name }));
     const currentStyleOpen = stylesList.find((style) => style.id === searchParams.get("styleId"));
     if (searchParams.get("view") === "persona" && searchParams.get("action") === "create")
         return <CreatePersona onSave={handleSavePersona} />;
@@ -72,6 +79,9 @@ export const ModelSettingsTab = () => {
         currentStyleOpen
     ) {
         return <EditStyle onSave={handleEditStyle} style={currentStyleOpen} />;
+    }
+    if (searchParams.get("view") === "sensOfSelf") {
+        return <SensOfSelf />;
     }
 
     return (
@@ -107,6 +117,13 @@ export const ModelSettingsTab = () => {
                             onCreate={() => handleNavigate("create", "style")}
                         />
                     </div>
+                    <button
+                        className={styles.modelSettings__content__SenseOfSelf}
+                        onClick={() => handleNavigationToSenseOfSelf()}
+                    >
+                        <PazzleIcon />
+                        <span>Sense of Self</span>
+                    </button>
                 </div>
             </div>
         </div>
