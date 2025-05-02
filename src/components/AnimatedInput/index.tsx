@@ -70,6 +70,7 @@ export function AnimatedInput({
     const typedPrompt = useTypewriterEffect({
         text: "Write a song about ",
         speed: 100,
+        delay: 1000,
         onComplete: () => {
             setShowSelectedText(true);
             setIsMessageSent(false);

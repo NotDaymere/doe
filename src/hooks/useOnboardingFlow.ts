@@ -118,6 +118,7 @@ export function useOnboardingFlow(
     function handleBoldPlaceholderTypedOut() {
         setBlockSteps(false);
         setBlockInput(true);
+        setCursorMoving();
         setTimeout(() => setStep(5), 100);
     }
 
