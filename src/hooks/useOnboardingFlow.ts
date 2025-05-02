@@ -190,6 +190,11 @@ export function useOnboardingFlow(
         if (step === 18) {
             handleDeleteMessages();
         }
+        if (step >= 18 && step < 18.3) {
+            setTimeout(() => {
+                nextSubStep();
+            }, 2000);
+        }
         if (step === 19) {
             setMessages?.([
                 {

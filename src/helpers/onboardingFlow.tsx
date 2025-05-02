@@ -501,6 +501,35 @@ export const onboardingFlow: OnboardingStep[] = [
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
+        id: 18.1,
+        location: '[data-step="profile-photo"]',
+        cursorVisible: true,
+        tooltip: false,
+        blur: ["input", "history", "body", "magicbox", "navigate"],
+    },
+    {
+        id: 18.2,
+        location: '[data-step="profile-name"]',
+        cursorVisible: true,
+        cursorPosition: {
+            top: 0,
+            left: -100,
+        },
+        tooltip: false,
+        blur: ["input", "history", "body", "magicbox", "navigate"],
+    },
+    {
+        id: 18.3,
+        location: '[data-step="profile-email"]',
+        cursorVisible: true,
+        cursorPosition: {
+            top: 0,
+            left: -100,
+        },
+        tooltip: false,
+        blur: ["input", "history", "body", "magicbox", "navigate"],
+    },
+    {
         id: 19,
         location: '[data-step="translate"]',
         cursorVisible: true,

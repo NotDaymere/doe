@@ -12,6 +12,11 @@ export type MessageType = "greeting" | "project" | "math" | "code";
 
 export const useChat = (setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>) => {
     const [messages, setMessages] = useState<OnboardingMessage[]>([]);
+    const [profileData, setProfileData] = useState({
+        name: "",
+        email: "johndoe@gmail.com",
+        photo: "/temp/profile.jpg",
+    });
 
     const addMessage = (
         role: "user" | "ai",
@@ -24,6 +29,7 @@ export const useChat = (setShowSidebar: React.Dispatch<React.SetStateAction<bool
 
     const handleUserMessage = (message: string, type: MessageType) => {
         if (type === "greeting") {
+            setProfileData((prev) => ({ ...prev, name: message }));
             addMessage("user", `Hey Doe, I'm ${message}`, true);
             setTimeout(() => {
                 addMessage("ai", `Hey, ${message}, I'm Doe!`);
@@ -67,5 +73,5 @@ export const useChat = (setShowSidebar: React.Dispatch<React.SetStateAction<bool
         }
     };
 
-    return { messages, setMessages, handleUserMessage };
+    return { messages, setMessages, handleUserMessage, profileData, setProfileData };
 };

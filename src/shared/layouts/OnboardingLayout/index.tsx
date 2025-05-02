@@ -11,7 +11,8 @@ import { OnboardingSidebar } from "./OnboardingSidebar";
 
 export default function OnboardingLayout() {
     const [showSidebar, setShowSidebar] = useState(false);
-    const { messages, setMessages, handleUserMessage } = useChat(setShowSidebar);
+    const { messages, setMessages, handleUserMessage, profileData, setProfileData } =
+        useChat(setShowSidebar);
     const flow = useOnboardingFlow(setMessages);
     const step = flow.step;
     const currentStep = useMemo(() => onboardingFlow.find((st) => st.id === step), [step]);
@@ -20,7 +21,7 @@ export default function OnboardingLayout() {
     return (
         <main className={css.layout_main}>
             <div className={clsx(css.layout, { [css.dark]: flow.step === 25 })}>
-                <OnboardingSidebar {...flow} showSidebar={showSidebar} />
+                <OnboardingSidebar {...flow} showSidebar={showSidebar} profileData={profileData} />
                 <OnboardingBody
                     {...flow}
                     currentStep={currentStep}
@@ -30,7 +31,12 @@ export default function OnboardingLayout() {
                 <Playground currentStep={currentStep} />
             </div>
 
-            <OnboardingOverlays {...flow} currentStep={currentStep} />
+            <OnboardingOverlays
+                {...flow}
+                currentStep={currentStep}
+                profileData={profileData}
+                setProfileData={setProfileData}
+            />
             {isDevMode && (
                 <div
                     style={{

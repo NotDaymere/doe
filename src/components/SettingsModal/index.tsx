@@ -2,6 +2,8 @@ import clsx from "clsx";
 import ReactDOM from "react-dom";
 import css from "./SettingsModal.module.less";
 
+import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { ReactComponent as CheckIcon } from "src/assets/icons/check-mark.svg";
 import gear from "src/assets/icons/gear.svg";
 import person from "src/assets/icons/person.svg";
 import personPlus from "src/assets/icons/personPlus.svg";
@@ -12,10 +14,40 @@ import CrossIcon from "src/shared/icons/Cross.icon";
 interface SettingsModalProps {
     step: number;
     nextStep: () => void;
+    profileData: {
+        name: string;
+        email: string;
+        photo: string;
+    };
+    setProfileData: Dispatch<
+        SetStateAction<{
+            name: string;
+            email: string;
+            photo: string;
+        }>
+    >;
 }
 
-export const SettingsModal = ({ step, nextStep }: SettingsModalProps) => {
-    if (step !== 18) return null;
+export const SettingsModal = ({
+    step,
+    nextStep,
+    profileData,
+    setProfileData,
+}: SettingsModalProps) => {
+    if (step < 18 || step >= 19) return null;
+    const [saved, setSaved] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileData((prev) => ({ ...prev, photo: reader.result as string }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     return ReactDOM.createPortal(
         <div className={css.settings_container}>
@@ -54,12 +86,18 @@ export const SettingsModal = ({ step, nextStep }: SettingsModalProps) => {
                                 Profile Photo
                                 <div className={css.settings_content_buttons}>
                                     <img
-                                        src="/temp/profile.jpg"
+                                        src={profileData.photo || "/temp/profile.jpg"}
                                         alt=""
                                         data-step="profile"
                                         className={css.settings_profile_img}
                                     />
-                                    <button className={css.settings_content_change}>
+                                    <button
+                                        className={clsx(css.settings_content_change, {
+                                            [css.highlighted]: step === 18.1,
+                                        })}
+                                        onClick={() => fileInputRef.current?.click()}
+                                        data-step="profile-photo"
+                                    >
                                         <img
                                             src={personPlus}
                                             alt=""
@@ -67,33 +105,80 @@ export const SettingsModal = ({ step, nextStep }: SettingsModalProps) => {
                                         />
                                         Change Photo
                                     </button>
-                                    <button className={css.settings_content_delete}>
+                                    <button
+                                        className={css.settings_content_delete}
+                                        onClick={() =>
+                                            setProfileData((prev) => ({
+                                                ...prev,
+                                                photo: "/temp/profile.jpg",
+                                            }))
+                                        }
+                                    >
                                         Delete Photo
                                     </button>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        ref={fileInputRef}
+                                        style={{ display: "none" }}
+                                        onChange={handlePhotoChange}
+                                    />
                                 </div>
                             </div>
                         </div>
                         <div className={css.settings_content_item}>
-                            <div className={css.settings_content_row}>
-                                Profile Name
-                                <input placeholder="John Doe" className={css.settings_input} />
+                            <div className={clsx(css.settings_content_row, { [css.saved]: saved })}>
+                                <div data-step="profile-name">Profile Name</div>
+                                <input
+                                    value={profileData.name}
+                                    onChange={(e) =>
+                                        setProfileData((prev) => ({
+                                            ...prev,
+                                            name: e.target.value,
+                                        }))
+                                    }
+                                    placeholder="John Doe"
+                                    className={clsx(css.settings_input, {
+                                        [css.highlighted]: step === 18.2,
+                                    })}
+                                />
                             </div>
                         </div>
                         <div className={css.settings_content_item}>
-                            <div className={css.settings_content_row}>
-                                Email Address
+                            <div className={clsx(css.settings_content_row, { [css.saved]: saved })}>
+                                <div data-step="profile-email">Email Address</div>
                                 <input
+                                    value={profileData.email}
+                                    onChange={(e) =>
+                                        setProfileData((prev) => ({
+                                            ...prev,
+                                            email: e.target.value,
+                                        }))
+                                    }
                                     placeholder="johndoe@gmail.com"
-                                    className={css.settings_input}
+                                    className={clsx(css.settings_input, {
+                                        [css.highlighted]: step === 18.3,
+                                    })}
                                 />
                             </div>
                         </div>
                     </div>
                     <div className={css.settings_footer}>
                         <button className={css.settings_footer_button}>Cancel</button>
-                        <button className={css.settings_footer_button}>
-                            <img src={gear} alt="" className={css.settings_footer_img} />
-                            Save Changes
+                        <button
+                            className={clsx(css.settings_footer_button, {
+                                [css.button_saved]: saved,
+                            })}
+                            onClick={() => setSaved(true)}
+                        >
+                            {!saved ? (
+                                <img src={gear} alt="" className={css.settings_footer_img} />
+                            ) : (
+                                <div className={css.check_icon_container}>
+                                    <CheckIcon className={css.check} />
+                                </div>
+                            )}
+                            {saved ? "Saved" : "Save Changes"}
                         </button>
                     </div>
                 </div>

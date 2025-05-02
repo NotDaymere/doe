@@ -18,6 +18,11 @@ interface SidebarProps {
     handleSidebarOpen: () => void;
     handleSidebarClose: () => void;
     handleUserClickedSidebarButton: (type: string) => void;
+    profileData: {
+        name: string;
+        email: string;
+        photo: string;
+    };
 }
 
 export const AnimatedSidebar = ({
@@ -27,6 +32,7 @@ export const AnimatedSidebar = ({
     handleSidebarOpen,
     handleSidebarClose,
     handleUserClickedSidebarButton,
+    profileData,
 }: SidebarProps) => {
     const { cursorMoving } = useCursor();
     const { editor } = useChatStore();
@@ -44,7 +50,7 @@ export const AnimatedSidebar = ({
 
             <div className={css.sidebar_profile}>
                 <img
-                    src="/temp/profile.jpg"
+                    src={profileData.photo}
                     alt=""
                     data-step="profile"
                     className={clsx(css.sidebar_profile_img, {

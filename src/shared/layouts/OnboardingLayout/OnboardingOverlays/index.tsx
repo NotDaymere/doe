@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import BranchesMenuBox from "src/components/BranchesMenuBox";
 import { GhostCursor } from "src/components/GhostCursor";
@@ -13,6 +14,18 @@ interface OnboardingOverlaysProps {
     step: number;
     nextStep: () => void;
     currentStep?: OnboardingStep;
+    profileData: {
+        name: string;
+        email: string;
+        photo: string;
+    };
+    setProfileData: Dispatch<
+        SetStateAction<{
+            name: string;
+            email: string;
+            photo: string;
+        }>
+    >;
     handleNavigationAnimation: () => void;
     handleCursorAcknowledged: () => void;
 }
@@ -21,6 +34,8 @@ export function OnboardingOverlays({
     step,
     nextStep,
     currentStep,
+    profileData,
+    setProfileData,
     handleNavigationAnimation,
     handleCursorAcknowledged,
 }: OnboardingOverlaysProps) {
@@ -34,7 +49,12 @@ export function OnboardingOverlays({
             <BranchesMenuBox step={step} />
             <PlaygroundsBox step={step} />
             <TalkingAssistant step={step} />
-            <SettingsModal nextStep={nextStep} step={step} />
+            <SettingsModal
+                nextStep={nextStep}
+                step={step}
+                profileData={profileData}
+                setProfileData={setProfileData}
+            />
             <ScreenSharing step={step} />
             <QuickSearch step={step} />
         </>,

@@ -6,6 +6,11 @@ interface OnboardingSidebarProps {
     handleSidebarOpen: () => void;
     handleSidebarClose: () => void;
     handleUserClickedSidebarButton: (type: string) => void;
+    profileData: {
+        name: string;
+        email: string;
+        photo: string;
+    };
 }
 
 export function OnboardingSidebar({
@@ -14,6 +19,7 @@ export function OnboardingSidebar({
     handleSidebarOpen,
     handleSidebarClose,
     handleUserClickedSidebarButton,
+    profileData,
 }: OnboardingSidebarProps) {
     return (
         <AnimatedSidebar
@@ -23,6 +29,7 @@ export function OnboardingSidebar({
             handleSidebarOpen={handleSidebarOpen}
             handleSidebarClose={handleSidebarClose}
             handleUserClickedSidebarButton={handleUserClickedSidebarButton}
+            profileData={profileData}
         />
     );
 }

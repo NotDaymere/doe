@@ -136,6 +136,10 @@
     font-weight: 600;
     color: #5b5b5b;
     text-wrap: nowrap;
+
+    &.saved input {
+        color: black;
+    }
 }
 
 .settings_content_buttons {
@@ -200,6 +204,7 @@
     border: 1px solid rgba(181, 181, 181, 0.2);
     width: 100%;
     max-width: 350px;
+    transition: all 0.3s ease;
 }
 
 .settings_footer {
@@ -230,9 +235,32 @@
     }
 }
 
+.button_saved {
+    border: 1px solid rgb(114, 161, 114);
+    background-color: rgba(114, 161, 114, 0.1);
+    color: rgb(114, 161, 114);
+}
+
 .settings_footer_img {
     width: 15px;
     height: 15px;
+}
+
+.check_icon_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+
+    path {
+        fill: rgb(114, 161, 114);
+    }
+}
+
+.highlighted {
+    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(181, 181, 181, 1);
 }
 
 @keyframes rotate {
