@@ -39,7 +39,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
                                     ? openHistory
                                         ? "width-80"
                                         : "width-100"
-                                    : "width-550px"
+                                    : "width-474px"
                             }`}
                         >
                             <MultiplePlaygroundRenderer />
