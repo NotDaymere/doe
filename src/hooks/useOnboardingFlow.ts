@@ -165,7 +165,6 @@ export function useOnboardingFlow(
             setBlockSteps(false);
         } else if (type === "transcribe") {
             setStep(21.2);
-            console.log("blockSteps", blockSteps);
             setBlockSteps(false);
         }
     }

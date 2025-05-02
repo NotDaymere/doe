@@ -727,6 +727,7 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 0,
             left: 100,
         },
+        sendButtonEnabled: true,
         tooltip: false,
         blur: [""],
     },

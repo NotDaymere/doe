@@ -15,11 +15,9 @@ export function useStepNavigation(
             if (step >= 8 && step <= 8.3) {
                 if (e.key === "ArrowRight") {
                     setCursorMoving();
-                    console.log("out");
                     if (step === 8.3) {
                         setStep(9);
                     } else {
-                        console.log("in");
                         nextSubStep();
                     }
                 }
@@ -94,7 +92,6 @@ export function useStepNavigation(
                     }
                 }
             } else if (step >= 1) {
-                console.log("test");
                 if (e.key === "ArrowRight") {
                     setCursorMoving();
                     nextStep();

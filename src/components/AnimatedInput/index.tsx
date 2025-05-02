@@ -174,7 +174,6 @@ export function AnimatedInput({
                 e.preventDefault();
                 e.stopPropagation();
                 setStressButton(true);
-                console.log("stress");
 
                 setTimeout(() => setStressButton(false), 350);
             }
@@ -217,7 +216,7 @@ export function AnimatedInput({
                                 isMathBlock={isMathBlock}
                             />
                         </span>
-                        {showTooltip && !isMessageSent && step === 4.5 && (
+                        {showTooltip && !isMessageSent && (step === 4.5 || step === 28) && (
                             <Tooltip position="top" stressed={stressTooltip}>
                                 {safeStep <= 10
                                     ? "Type your first and last name here:"

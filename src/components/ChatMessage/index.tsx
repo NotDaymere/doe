@@ -59,7 +59,6 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                   })
                 : message.content;
 
-        console.log("message: ", message);
         const typedOriginalMessage = useTypewriterEffect({
             text: message.origin || "origin",
             speed: 25,
@@ -68,7 +67,6 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
             },
             startTyping: step === 19,
         });
-        console.log("typedOriginalMessage: ", typedOriginalMessage);
 
         useEffect(() => {
             setIsTypingDone(false);
