@@ -30,6 +30,7 @@ export interface OnboardingStep {
     location: string;
     cursorVisible: boolean;
     cursorClick?: boolean;
+    cursorClickPrevPosition?: boolean;
     cursorPosition?: {
         top?: number;
         left?: number;
@@ -45,7 +46,7 @@ export interface OnboardingStep {
     tooltipIcons?: ReactNode;
     sendButtonEnabled?: boolean;
     blur?: string[];
-    autoSkip?: boolean;
+    autoSkip?: number; // number represents delay for autoskip
     [key: string]: any;
 }
 
@@ -377,7 +378,6 @@ export const onboardingFlow: OnboardingStep[] = [
                 <TrashIcon />
             </div>
         ),
-
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -385,13 +385,16 @@ export const onboardingFlow: OnboardingStep[] = [
         location: '[data-step="delete"]',
         cursorVisible: true,
         tooltip: false,
-
+        autoSkip: 500,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
         id: 13,
         location: '[data-step="corpora"]',
         cursorVisible: true,
+        cursorClick: true,
+        cursorClickPrevPosition: true,
+        cursorDelay: 500,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Corporas</b>,
@@ -412,6 +415,9 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 14,
         location: '[data-step="chats"]',
         cursorVisible: true,
+        cursorClick: true,
+        cursorClickPrevPosition: true,
+        cursorDelay: 500,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Individual chats</b>,
@@ -431,6 +437,9 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 15,
         location: '[data-step="favourites"]',
         cursorVisible: true,
+        cursorClick: true,
+        cursorClickPrevPosition: true,
+        cursorDelay: 500,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Favourites</b>,
@@ -451,6 +460,9 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 16,
         location: '[data-step="tags"]',
         cursorVisible: true,
+        cursorClick: true,
+        cursorClickPrevPosition: true,
+        cursorDelay: 500,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Tags</b>,
@@ -472,7 +484,6 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         tooltip: false,
         blur: ["input", "history", "body", "magicbox", "navigate"],
-        autoSkip: true,
     },
     {
         id: 18,

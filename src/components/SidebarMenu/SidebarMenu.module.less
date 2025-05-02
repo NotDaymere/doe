@@ -169,7 +169,14 @@
     font-size: 20px;
     font-weight: 300;
     transition: all 0.2s ease;
-    animation: fade-in 1s ease-in-out forwards;
+
+    &.fade {
+        animation: fade-in 1s ease-in-out forwards;
+    }
+
+    &.pop {
+        animation: scale-in 1s ease-in-out forwards;
+    }
 
     &:hover {
         transition: all 0.2s ease;
@@ -218,5 +225,25 @@
 
     .sidebar_controls {
         margin-top: 5px;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes scale-in {
+    0% {
+        scale: 1.2;
+        background-color: rgba(181, 181, 181, 0.2);
+    }
+    100% {
+        scale: 1;
+        background-color: transparent;
     }
 }

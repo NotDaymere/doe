@@ -58,7 +58,14 @@ export const SidebarMenu = ({ step, isOpen }: SidebarMenuProps) => {
                             {isOpen && (
                                 <>
                                     {step !== triggerStep || cursorMoving ? (
-                                        <div className={css.plus}>+</div>
+                                        <div
+                                            className={clsx(css.plus, {
+                                                [css.fade]: step === 12,
+                                                [css.pop]: step && step >= 13,
+                                            })}
+                                        >
+                                            +
+                                        </div>
                                     ) : (
                                         <div className={css.minus}>—</div>
                                     )}

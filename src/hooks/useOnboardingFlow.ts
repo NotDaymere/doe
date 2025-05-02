@@ -180,6 +180,13 @@ export function useOnboardingFlow(
         if (step === 10) {
             handleDeleteMessages();
         }
+        if (step === 12) {
+            setBlockSteps(true);
+            setTimeout(() => {
+                nextStep();
+                setBlockSteps(false);
+            }, 1500);
+        }
         if (step === 18) {
             handleDeleteMessages();
         }
