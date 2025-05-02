@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { memo, useState } from "react";
+import { useCursor } from "src/contexts/CursorContext";
 import BranchIcon from "src/shared/icons/Branch.icon";
 import BranchesSubmenu from "../BranchesSubmenu";
 import css from "./BranchesMenuBox.module.less";
@@ -56,6 +57,7 @@ const branches: BranchItem[] = [
 
 const BranchesMenuBox = ({ step }: BranchesMenuBoxProps) => {
     if (!step || step <= 41) return null;
+    const { cursorMoving } = useCursor();
     const [isOpen, setIsOpen] = useState(false);
     const [activeBranchId, setActiveBranchId] = useState<string | null>(null);
 
@@ -68,7 +70,7 @@ const BranchesMenuBox = ({ step }: BranchesMenuBoxProps) => {
         <button
             className={clsx(css.branches_box_wrapper, {
                 [css.branches_box_wrapper_open]: step === 43 || isOpen,
-                [css.active]: step === 42 || step === 43,
+                [css.active]: !cursorMoving && (step === 42 || step === 43),
             })}
             onClick={() => setIsOpen((prev) => !prev)}
         >

@@ -51,13 +51,15 @@ export function useStepNavigation(
                     setCursorMoving();
                     if (step === 18.4) {
                         setStep(19);
+                    } else if (step === 18) {
+                        setStep(18.1);
                     } else {
                         setStep(18.4);
                     }
                 }
                 if (e.key === "ArrowLeft") {
                     setCursorMoving();
-                    setStep(17);
+                    setStep(16);
                 }
             } else if (step >= 19 && step <= 19.2) {
                 if (e.key === "ArrowRight") {
@@ -93,7 +95,7 @@ export function useStepNavigation(
                 }
             } else if (step === 28.1) {
                 if (e.key === "ArrowRight") {
-                    setStep(29);
+                    setStep(30);
                 }
                 if (e.key === "ArrowLeft") {
                     setStep(28);

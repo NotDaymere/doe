@@ -214,10 +214,10 @@ export function useOnboardingFlow(
         if (step === 18) {
             handleDeleteMessages();
         }
-        if (step >= 18 && step < 18.4) {
+        if (step >= 18.1 && step < 18.4) {
             setTimeout(() => {
                 nextSubStep();
-            }, 2000);
+            }, 1100);
         }
         if (step === 19) {
             setMessages?.([
@@ -246,9 +246,11 @@ export function useOnboardingFlow(
             handleDeleteMessages();
         }
         if (step === 27 && !gaiaActive) {
-            setGaiaActive(true);
             handleAddGreetingMessages();
             setBlockInput(false);
+            setTimeout(() => {
+                setGaiaActive(true);
+            }, 1100);
         }
         if (step === 28) {
             setGaiaActive(false);
