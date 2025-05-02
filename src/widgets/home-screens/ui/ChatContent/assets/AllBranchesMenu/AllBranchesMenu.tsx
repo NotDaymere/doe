@@ -18,12 +18,12 @@ interface AllBranchesMenuProps {
 }
 
 export default function AllBranchesMenu({
-                                            branchId,
-                                            position,
-                                            setActiveOpenAllBranchesMenu,
-                                            onClose,
-                                            onDelete,
-                                        }: AllBranchesMenuProps) {
+    branchId,
+    position,
+    setActiveOpenAllBranchesMenu,
+    onClose,
+    onDelete,
+}: AllBranchesMenuProps) {
     const { setIsCurrentBranchOpen, setCurrentBranch } = useChatStore();
     const [isActiveBranchQuickView, setIsActiveBranchQuickView] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -69,31 +69,47 @@ export default function AllBranchesMenu({
         >
             <button className="all-branches-menu-button" onClick={handleQuickViewClick}>
                 <QuickViewIcon fill={"currentColor"} />
-                <span>Quick</span><span>View</span>
+                <span>Quick</span>
+                <span>View</span>
             </button>
-            <svg width="118" height="1" viewBox="0 0 118 1" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line y1="0.5" x2="118" y2="0.5" stroke="#F8F8F8" />
+            <svg
+                width="118"
+                height="1"
+                viewBox="0 0 118 1"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <line y1="0.5" x2="118" y2="0.5" />
             </svg>
 
             <button className="all-branches-menu-button" onClick={handleOpenBranchClick}>
                 <DialogIcon fill={"currentColor"} />
                 <span>Open</span> <span>Branch</span>
             </button>
-            <svg width="118" height="1" viewBox="0 0 118 1" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line y1="0.5" x2="118" y2="0.5" stroke="#F8F8F8" />
+            <svg
+                width="118"
+                height="1"
+                viewBox="0 0 118 1"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <line y1="0.5" x2="118" y2="0.5" />
             </svg>
 
             <button className="all-branches-menu-button" onClick={handleDeleteBranchClick}>
                 <DeleteIcon fill={"currentColor"} />
-                <span className={"text-margin-bottom"}><span>Delete</span><span>Branch</span></span>
+                <span className={"text-margin-bottom"}>
+                    <span>Delete</span>
+                    <span>Branch</span>
+                </span>
             </button>
-            {isActiveBranchQuickView &&
+            {isActiveBranchQuickView && (
                 <BranchQuickView
                     isOpenFromChat={false}
                     branchId={branchId}
                     changeIsActiveBranchQuickView={setIsActiveBranchQuickView}
                 />
-            }
+            )}
         </div>
     );
 }

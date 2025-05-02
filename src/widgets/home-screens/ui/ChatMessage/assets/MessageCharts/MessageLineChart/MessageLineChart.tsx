@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState } from "react";
 import {
     ComposedChart,
     Line,
@@ -7,11 +7,10 @@ import {
     YAxis,
     ResponsiveContainer,
     Cell,
-    CartesianGrid
-} from 'recharts';
-import './MessageLineChart.less';
+    CartesianGrid,
+} from "recharts";
+import "./MessageLineChart.less";
 import { ChartMessageData } from "../ChartDataParser";
-
 
 interface MessageChartProps {
     data: ChartMessageData[];
@@ -21,7 +20,7 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
     const [selectedId, setSelectedId] = useState<string | null>(null);
 
     const handleDotClick = (payload: ChartMessageData) => {
-        setSelectedId(prev => (prev === payload.id ? null : payload.id));
+        setSelectedId((prev) => (prev === payload.id ? null : payload.id));
     };
 
     const CustomDot: FC<any> = (props) => {
@@ -30,7 +29,7 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
         const dataPoint = payload as ChartMessageData;
         const isSelected = selectedId === dataPoint.id;
         const isAnySelected = selectedId !== null;
-        const strokeColor = isAnySelected && !isSelected ? '#eae9e9' : dataPoint.color;
+        const strokeColor = isAnySelected && !isSelected ? "#eae9e9" : dataPoint.color;
         const radius = isSelected ? 8 : 5;
         return (
             <circle
@@ -44,7 +43,7 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
                     e.stopPropagation();
                     onDotClick?.(dataPoint);
                 }}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
             />
         );
     };
@@ -67,13 +66,13 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
 
     const CustomXAxisTick: FC<any> = (props) => {
         const { x, y, payload } = props;
-        const dataPoint = data.find(item => item.label === payload.value);
+        const dataPoint = data.find((item) => item.label === payload.value);
         const bulletSize = 10;
         const spacing = 6;
         const bulletOffset = bulletSize + spacing;
-        const dotColor = dataPoint?.color || '#CFCFCF';
+        const dotColor = dataPoint?.color || "#CFCFCF";
         const labelText = payload.value;
-        const words = labelText.split(' ');
+        const words = labelText.split(" ");
         return (
             <g transform={`translate(${x}, ${y + 10})`}>
                 <g textAnchor="middle" alignmentBaseline="middle">
@@ -87,12 +86,12 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
                         ry={2}
                     />
                     {words.length > 1 ? (
-                        <text x="0" y="0" fill="#CFCFCF" fontSize={16}>
+                        <text x="0" y="0" fill="red" fontSize={16}>
                             <tspan x="0" dy="0">
                                 {words[0]}
                             </tspan>
                             <tspan x="0" dy="1.2em">
-                                {words.slice(1).join(' ')}
+                                {words.slice(1).join(" ")}
                             </tspan>
                         </text>
                     ) : (
@@ -105,7 +104,7 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
         );
     };
 
-    const selectedData = data.find(item => item.id === selectedId);
+    const selectedData = data.find((item) => item.id === selectedId);
 
     return (
         <div className="line-message-chart">
@@ -113,7 +112,10 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
             <div className="line-chart-container">
                 <div className="line-chart">
                     <ResponsiveContainer width="100%" height={400}>
-                        <ComposedChart data={data} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
+                        <ComposedChart
+                            data={data}
+                            margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+                        >
                             <defs>
                                 <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
                                     {data.map((item, index) => (
@@ -125,17 +127,26 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
                                     ))}
                                 </linearGradient>
                                 <linearGradient id="grayGradient" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#eee" stopOpacity={0.7} />
-                                    <stop offset="100%" stopColor="#f9f9f9" stopOpacity={0.7} />
+                                    <stop
+                                        offset="0%"
+                                        stopColor="rgb(141, 141, 141)"
+                                        stopOpacity={0.2}
+                                    />
+                                    <stop offset="100%" stopColor="rgba(181, 181, 181, 0.2)" />
                                 </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" horizontal vertical={false} />
+                            <CartesianGrid
+                                strokeDasharray="3 3"
+                                horizontal
+                                vertical={false}
+                                stroke="var(--var-68)"
+                            />
                             <XAxis
                                 dataKey="label"
                                 tick={<CustomXAxisTick />}
                                 tickLine={false}
                                 padding={{ left: 20, right: 20 }}
-                                axisLine={{ stroke: '#ccc', opacity: 1 }}
+                                axisLine={{ stroke: "var(--var-68)", opacity: 1 }}
                             />
                             <YAxis axisLine={false} tickLine={false} />
                             <Bar
@@ -148,7 +159,7 @@ const MessageLineChart: FC<MessageChartProps> = ({ data }) => {
                                     <Cell
                                         key={item.id}
                                         fill="url(#grayGradient)"
-                                        style={{ cursor: 'pointer' }}
+                                        style={{ cursor: "pointer" }}
                                         onClick={() =>
                                             setSelectedId(selectedId === item.id ? null : item.id)
                                         }
