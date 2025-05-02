@@ -16,6 +16,7 @@ import { eventEmitter } from "../Utils/eventEmitter";
 import EditTemplateModal from "../Chart/EditTemplate/EditTemplate";
 import Drawing from "../Drawing/Drawing";
 import DrawingModal from "../Drawing/DrawingModal/DrawingModal";
+import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
 
 interface ChartWidgetsContextType {
     prevPage: string;
@@ -45,6 +46,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
     const [paramter, setParameter] = useState("test");
     const [link, setLink] = useState("test");
     const [fullWindow, setFullWindow] = useState(false);
+    const {closeComments} = useCommentWindowStore();
 
     const setPage = (pageName: string, parameterName?: string, linkName?: string) => {
         setPrevPage(page);
@@ -61,8 +63,11 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
     }));
 
     useEffect(() => {
+      
         const openWindowHandler = (event: CustomEvent) => {
             setPage(event.detail?.page || Page.NEW_CHART, event.detail?.parameter || "test");
+            
+            closeComments();
             setIsVisible(true);
         };
 
