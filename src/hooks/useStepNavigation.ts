@@ -48,22 +48,18 @@ export function useStepNavigation(
                         prevSubStep();
                     }
                 }
-            } else if (step >= 18 && step <= 18.4) {
+            } else if (step >= 18 && step <= 18.9) {
                 if (e.key === "ArrowRight") {
                     setCursorMoving();
                     if (step === 18.4) {
                         setStep(19);
                     } else {
-                        nextSubStep();
+                        setStep(18.4);
                     }
                 }
                 if (e.key === "ArrowLeft") {
                     setCursorMoving();
-                    if (step === 17) {
-                        prevStep();
-                    } else {
-                        prevSubStep();
-                    }
+                    setStep(17);
                 }
             } else if (step >= 19 && step <= 19.2) {
                 if (e.key === "ArrowRight") {
