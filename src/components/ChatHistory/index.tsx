@@ -9,6 +9,8 @@ import css from "./ChatHistory.module.less";
 interface ChatHistoryProps {
     messages: OnboardingMessage[];
     step: number;
+    userClickedTranslate: boolean;
+    handleUntranslatedTypedOut: () => void;
 }
 
 const mathJaxConfig = {
@@ -18,7 +20,12 @@ const mathJaxConfig = {
     },
 };
 
-const ChatHistory = ({ messages, step }: ChatHistoryProps) => {
+const ChatHistory = ({
+    messages,
+    step,
+    userClickedTranslate,
+    handleUntranslatedTypedOut,
+}: ChatHistoryProps) => {
     const historyRef = useRef<HTMLDivElement>(null);
 
     return (
@@ -37,6 +44,8 @@ const ChatHistory = ({ messages, step }: ChatHistoryProps) => {
                             prevRole={index > 0 ? messages[index - 1]?.role : undefined}
                             step={step}
                             ref={historyRef}
+                            userClickedTranslate={userClickedTranslate}
+                            handleUntranslatedTypedOut={handleUntranslatedTypedOut}
                         />
                     </MathJaxContext>
                 ))}

@@ -530,7 +530,21 @@ export const onboardingFlow: OnboardingStep[] = [
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
+        id: 18.4,
+        location: '[data-step="profile-save"]',
+        cursorVisible: true,
+        tooltip: false,
+        blur: ["input", "history", "body", "magicbox", "navigate"],
+    },
+    {
         id: 19,
+        location: '[data-step="un-translated"]',
+        cursorVisible: true,
+        tooltip: false,
+        blur: ["input", "navigate"],
+    },
+    {
+        id: 19.1,
         location: '[data-step="translate"]',
         cursorVisible: true,
         tooltip: true,

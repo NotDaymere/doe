@@ -23,7 +23,9 @@ interface OnboardingBodyProps {
     userClickedBold: boolean;
     userClickedUnderline: boolean;
     userClickedItalic: boolean;
+    userClickedTranslate: boolean;
     startOnboardingFlow: () => void;
+    handleLogoSlideComplete: () => void;
     handleWelcomeTextTypedOut: () => void;
     handleGreetingPlaceholderTypedOut: () => void;
     handleBoldPlaceholderTypedOut: () => void;
@@ -31,7 +33,7 @@ interface OnboardingBodyProps {
     handleMathFormulaTypedOut: () => void;
     handleCodePromptTypedOut: () => void;
     handlePythonCodeTypedOut: () => void;
-    handleLogoSlideComplete: () => void;
+    handleUntranslatedTypedOut: () => void;
 }
 
 export function OnboardingBody(props: OnboardingBodyProps) {
@@ -46,7 +48,9 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         userClickedBold,
         userClickedUnderline,
         userClickedItalic,
+        userClickedTranslate,
         startOnboardingFlow,
+        handleLogoSlideComplete,
         handleWelcomeTextTypedOut,
         handleGreetingPlaceholderTypedOut,
         handleBoldPlaceholderTypedOut,
@@ -54,7 +58,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         handleMathFormulaTypedOut,
         handleCodePromptTypedOut,
         handlePythonCodeTypedOut,
-        handleLogoSlideComplete,
+        handleUntranslatedTypedOut,
     } = props;
 
     return (
@@ -73,7 +77,12 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                     handleWelcomeTextTypedOut={handleWelcomeTextTypedOut}
                 />
 
-                <HistorySection step={step} messages={messages} />
+                <HistorySection
+                    step={step}
+                    messages={messages}
+                    userClickedTranslate={userClickedTranslate}
+                    handleUntranslatedTypedOut={handleUntranslatedTypedOut}
+                />
 
                 <ReadyMessage
                     step={step}
@@ -133,7 +142,17 @@ function HeaderSection({
     );
 }
 
-function HistorySection({ step, messages }: { step: number; messages: OnboardingMessage[] }) {
+function HistorySection({
+    step,
+    messages,
+    userClickedTranslate,
+    handleUntranslatedTypedOut,
+}: {
+    step: number;
+    messages: OnboardingMessage[];
+    userClickedTranslate: boolean;
+    handleUntranslatedTypedOut: () => void;
+}) {
     if (step >= 40 && step <= 42) {
         return (
             <>
@@ -146,7 +165,12 @@ function HistorySection({ step, messages }: { step: number; messages: Onboarding
     }
     return (
         <div className={css.layout_history} data-step="history">
-            <ChatHistory messages={messages} step={step} />
+            <ChatHistory
+                messages={messages}
+                step={step}
+                userClickedTranslate={userClickedTranslate}
+                handleUntranslatedTypedOut={handleUntranslatedTypedOut}
+            />
         </div>
     );
 }

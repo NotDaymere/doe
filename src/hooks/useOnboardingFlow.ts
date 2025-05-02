@@ -21,6 +21,7 @@ export function useOnboardingFlow(
     const [userClickedBold, setUserClickedBold] = useState(false);
     const [userClickedUnderline, setUserClickedUnderline] = useState(false);
     const [userClickedItalic, setUserClickedItalic] = useState(false);
+    const [userClickedTranslate, setUserClickedTranslate] = useState(false);
     const [blockSteps, setBlockSteps] = useState(false);
     const { gaiaActive, setGaiaActive } = useAppStore();
 
@@ -137,6 +138,11 @@ export function useOnboardingFlow(
         setStep(9.3);
     }
 
+    function handleUntranslatedTypedOut() {
+        setBlockSteps(true);
+        setStep(19.1);
+    }
+
     // ------ OTHER HANDLERS ------
 
     function handleUserClickedSidebarButton(type: string) {
@@ -146,6 +152,11 @@ export function useOnboardingFlow(
             setUserClickedItalic(true);
         } else if (type === "underline") {
             setUserClickedUnderline(true);
+        } else if (type === "translate") {
+            console.log("tedsds");
+            setUserClickedTranslate(true);
+            setStep(19.2);
+            setBlockSteps(false);
         }
     }
 
@@ -190,7 +201,7 @@ export function useOnboardingFlow(
         if (step === 18) {
             handleDeleteMessages();
         }
-        if (step >= 18 && step < 18.3) {
+        if (step >= 18 && step < 18.4) {
             setTimeout(() => {
                 nextSubStep();
             }, 2000);
@@ -253,6 +264,7 @@ export function useOnboardingFlow(
         handleMathFormulaTypedOut,
         handleCodePromptTypedOut,
         handlePythonCodeTypedOut,
+        handleUntranslatedTypedOut,
 
         handleSidebarClose,
 
@@ -264,6 +276,7 @@ export function useOnboardingFlow(
         userClickedBold,
         userClickedUnderline,
         userClickedItalic,
+        userClickedTranslate,
         handleUserClickedSidebarButton,
         setBlockSteps,
     };

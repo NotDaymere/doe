@@ -167,9 +167,11 @@ export const SettingsModal = ({
                         <button className={css.settings_footer_button}>Cancel</button>
                         <button
                             className={clsx(css.settings_footer_button, {
+                                [css.highlighted]: step === 18.4,
                                 [css.button_saved]: saved,
                             })}
                             onClick={() => setSaved(true)}
+                            data-step="profile-save"
                         >
                             {!saved ? (
                                 <img src={gear} alt="" className={css.settings_footer_img} />

@@ -90,7 +90,11 @@ export const AnimatedSidebar = ({
                     handleUserClickedSidebarButton={handleUserClickedSidebarButton}
                 />
 
-                <SidebarTools step={step} isOpen={isOpen} />
+                <SidebarTools
+                    step={step}
+                    isOpen={isOpen}
+                    handleUserClickedSidebarButton={handleUserClickedSidebarButton}
+                />
             </div>
 
             <button className={css.sidebar_removeMsg} data-step="delete">

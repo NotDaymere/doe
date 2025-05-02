@@ -15,10 +15,15 @@ interface ChatMessageProps {
     prevRole?: "user" | "ai";
     step: number;
     noTypeEffect?: boolean;
+    userClickedTranslate: boolean;
+    handleUntranslatedTypedOut?: () => void;
 }
 
 const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
-    ({ message, prevRole, step, noTypeEffect }, ref) => {
+    (
+        { message, prevRole, step, noTypeEffect, userClickedTranslate, handleUntranslatedTypedOut },
+        ref
+    ) => {
         const [isTypingDone, setIsTypingDone] = useState(false);
         const isAI = message.role === "ai";
         const isTranslation = isAI && message.origin;
@@ -36,9 +41,20 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                       onComplete: () => {
                           setIsTypingDone(true);
                       },
-                      startTyping: !isTypingDone,
+                      startTyping: !isTypingDone && step !== 19 && step !== 19.1,
                   })
                 : message.content;
+
+        console.log("message: ", message);
+        const typedOriginalMessage = useTypewriterEffect({
+            text: message.origin || "origin",
+            speed: 25,
+            onComplete: () => {
+                handleUntranslatedTypedOut?.();
+            },
+            startTyping: step === 19,
+        });
+        console.log("typedOriginalMessage: ", typedOriginalMessage);
 
         useEffect(() => {
             setIsTypingDone(false);
@@ -46,11 +62,14 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
 
         useEffect(() => {
             const handleKeyDown = (e: KeyboardEvent) => {
-                if (e.key === "ArrowRight" && !isTypingDone) {
+                if (e.key === "ArrowRight" && !isTypingDone && step !== 19 && step !== 19.1) {
                     e.preventDefault();
                     e.stopPropagation();
 
                     setIsTypingDone(true);
+                } else if (step === 19.1) {
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
             };
 
@@ -133,14 +152,16 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                     )}
                     {isAI ? (
                         <>
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html:
-                                        isTypingDone || noTypeEffect
-                                            ? message.content
-                                            : typedText + `<span class="${css.caret}"></span>`,
-                                }}
-                            />
+                            {step !== 19 && (
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html:
+                                            isTypingDone || noTypeEffect
+                                                ? message.content
+                                                : typedText + `<span class="${css.caret}"></span>`,
+                                    }}
+                                />
+                            )}
                             {mathElement}
                             {message.content2 && (
                                 <div
@@ -173,20 +194,28 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                             </button>
                         </div>
                     )}
-                    {isTranslation && isTypingDone && (
+                    {isTranslation && (
                         <div className={css.origin_container}>
-                            <div
-                                className={css.origin}
-                                dangerouslySetInnerHTML={{
-                                    __html: message.origin || "Translation",
-                                }}
-                            ></div>
-                            <div
-                                className={css.origin_transcribed}
-                                dangerouslySetInnerHTML={{
-                                    __html: message.originTranscribed || "Translation",
-                                }}
-                            ></div>
+                            {message.origin && (
+                                <div
+                                    className={css.origin}
+                                    dangerouslySetInnerHTML={{
+                                        __html:
+                                            step === 19.1
+                                                ? message.origin
+                                                : typedOriginalMessage +
+                                                  `<span class="${css.caret}"></span>`,
+                                    }}
+                                />
+                            )}
+                            {step >= 19.1 && step <= 20 && (
+                                <div
+                                    className={css.origin_transcribed}
+                                    dangerouslySetInnerHTML={{
+                                        __html: message.originTranscribed || "Translation",
+                                    }}
+                                />
+                            )}
                         </div>
                     )}
                 </div>
