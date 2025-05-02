@@ -2,7 +2,7 @@
     transform: translateX(100%);
     transition: all 1s ease;
     position: fixed;
-    top: 65px;
+    top: 24px;
     right: 0;
     max-width: 500px;
     // max-width: 0;
@@ -68,7 +68,11 @@
 }
 
 .playground_tag {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     background: rgba(31, 31, 31, 0.35);
+    backdrop-filter: blur(20px);
     color: #f8f8f8;
     padding: 8px;
     border-radius: 16px;
