@@ -1,6 +1,4 @@
 import React from "react";
-import LightThemeIcon from "src/shared/icons/LightTheme.icon";
-import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
 import { useEditorContext } from "src/shared/components/Editor";
 import { useAppStore, useChatStore } from "src/shared/providers";
@@ -18,15 +16,15 @@ import { CSSTransition } from "react-transition-group";
 import GlobalIcon from "src/shared/icons/Global.icon";
 import clsx from "clsx";
 import { SharingTools } from "./ui/SharingTools/SharingTools";
-import { SettingsModal } from "../home-screens/ui/ChatContent/assets/SettingsModal/SettingsModal";
+import ThemeToggleSwitch from "src/shared/components/ThemeToggler";
 
 export const Sidebar: React.FC = () => {
-    const { editor, mode, setMode, isSharingActive, setIsSharingActive } = useChatStore();
+    const { editor, mode, setMode, isSharingActive, setIsSharingActive, getNoPlayground } =
+        useChatStore();
     const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
     const editorState = useEditorContext(editor);
     const { getOpenSavedPlaygrounds } = useChatStore();
     const { playground, clearCurrentChatMessages } = useChatStore();
-    const { isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useChatStore();
     const { gaiaActive, setGaiaActive, setGaiaSidebarActive } = useAppStore();
     const [theme, setTheme] = React.useState<"Light" | "Dark">("Light");
     const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false);
@@ -87,7 +85,7 @@ export const Sidebar: React.FC = () => {
         });
     };
 
-    const currentProfile = profiles.find((p) => p.isCurrent) as Profile;
+    const currentProfile = profiles.find((p) => p.isCurrent);
 
     const handleSelectProfile = (id: number) => {
         setProfiles((prev) => prev.map((p) => ({ ...p, isCurrent: p.id === id })));
@@ -112,26 +110,25 @@ export const Sidebar: React.FC = () => {
                         src={currentProfile ? currentProfile.imgSrc : ""}
                     />
                 </div>
-                {isSideBarOpen && (
-                    <div className={css.profile_user_info_container}>
-                        <div className={css.profile_user_info}>
-                            <div className={css.profile_username}>
-                                {currentProfile ? currentProfile.username : ""}
-                            </div>
-                            <div className={css.profile_email}>
-                                {currentProfile ? currentProfile.email : ""}
-                            </div>
+
+                <div className={css.profile_user_info_container}>
+                    <div className={css.profile_user_info}>
+                        <div className={css.profile_username}>
+                            {currentProfile ? currentProfile.username : ""}
                         </div>
-                        <div
-                            className={css.change_profile_btn}
-                            onClick={handleOpenChangeProfilePanel}
-                            data-active={isChangeProfilePanelOpen}
-                            ref={changeProfileBtnRef}
-                        >
-                            <ChangeProfileIcon fill="currentColor" width={11} height={15} />
+                        <div className={css.profile_email}>
+                            {currentProfile ? currentProfile.email : ""}
                         </div>
                     </div>
-                )}
+                    <div
+                        className={css.change_profile_btn}
+                        onClick={handleOpenChangeProfilePanel}
+                        data-active={isChangeProfilePanelOpen}
+                        ref={changeProfileBtnRef}
+                    >
+                        <ChangeProfileIcon fill="currentColor" width={11} height={15} />
+                    </div>
+                </div>
             </div>
             <CSSTransition
                 in={isChangeProfilePanelOpen}
@@ -171,39 +168,10 @@ export const Sidebar: React.FC = () => {
                     </div>
                 </div>
             </CSSTransition>
-
-            <div className={css.sidebar_theme_container}>
-                <div className={css.theme_toggle}>
-                    <div className={css.theme_toggle_ball} style={ballPositionStyle} />
-                    <div
-                        className={
-                            theme === "Light"
-                                ? css.toggle_light_theme_active_icon
-                                : css.toggle_light_theme_icon
-                        }
-                        onClick={() => handleToggleTheme("Light")}
-                    >
-                        <LightThemeIcon width={20} height={20} />
-                    </div>
-                    <div
-                        className={
-                            theme === "Dark"
-                                ? css.toggle_dark_theme_active_icon
-                                : css.toggle_dark_theme_icon
-                        }
-                        onClick={() => handleToggleTheme("Dark")}
-                    >
-                        <MoonIcon width={20} height={20} />
-                    </div>
-                </div>
-                {isSideBarOpen && (
-                    <div className={css.theme_name}>
-                        <span>{theme}</span>
-                        <span>Theme</span>
-                    </div>
-                )}
-            </div>
-
+            <ThemeToggleSwitch
+                className={css.sidebar_theme_container}
+                isHorizontal={isSideBarOpen}
+            />
             <div className={css.sidebar_separator}>
                 <div className={css.inner_sidebar_separator}></div>
             </div>
@@ -223,30 +191,20 @@ export const Sidebar: React.FC = () => {
                     <div className={css.inner_sidebar_separator}></div>
                 </div>
 
-                <div className={css.margin_bottom}>
+                <div>
                     <SharingTools />
                 </div>
-
-                <div
-                    className={
-                        getOpenSavedPlaygrounds().length > 0 || mode
-                            ? css.delete_all_messages_open_playgrounds
-                            : css.delete_all_messages
-                    }
-                >
-                    <div
-                        className={css.delete_all_messages_btn_container}
-                        onClick={handleDeleteAllMessages}
-                    >
-                        <button className={css.delete_all_messages_btn}>
-                            <TrashIcon />
-                        </button>
-                        <div className={css.delete_all_messages_btn_tooltip}>
-                            Delete All Messages
-                        </div>
-                    </div>
-                </div>
             </div>
+            <button
+                className={clsx(
+                    css.sidebar__delete__all__messages,
+                    isSideBarOpen && css.sidebar__delete__all__messages__wide
+                )}
+                onClick={handleDeleteAllMessages}
+            >
+                <TrashIcon />
+                <p>Delete All Messages</p>
+            </button>
             <div className={css.sidebar_resize_handler} onClick={handleOpenSideBar} />
         </aside>
     );

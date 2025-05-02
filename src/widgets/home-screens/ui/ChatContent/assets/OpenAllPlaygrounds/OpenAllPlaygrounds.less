@@ -29,14 +29,13 @@
     height: 165px;
     padding: 10px;
     border-radius: 16px;
-    background: #f0f0f0;
-    border: 1px solid #dddddd;
+    background: var(--var-23);
+    border: 1px solid var(--var-68);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
     gap: 8px;
-    transition: width 500ms;
     animation: fadeIn 0.45s ease-out forwards;
     transition:
         opacity 0.3s ease,
@@ -49,8 +48,8 @@
 }
 
 .open-all-playgrounds-container-without-playground {
-    top: 175px;
-    left: 95px;
+    top: 110px;
+    left: 75px;
 }
 
 .playgrounds-sidebar-open {
@@ -70,14 +69,14 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 18.56px;
-    color: #5b5b5b;
+    color: var(--var-112);
 }
 .open-all-playgrounds-header-text {
     display: flex;
     align-items: center;
     gap: 4px;
     svg {
-        fill: #5b5b5b;
+        fill: var(--var-94);
         width: 16px;
         height: 16px;
     }
@@ -88,7 +87,7 @@
     top: 10px;
     left: 247px;
     border-radius: 3px;
-    background: #f8f8f8;
+    background: var(--var-2);
     padding: 3px;
     display: flex;
     align-items: center;
@@ -96,7 +95,7 @@
     svg {
         width: 12px;
         height: 12px;
-        fill: #5b5b5b;
+        fill: var(--var-93);
     }
 }
 .open-all-playgrounds-content {
@@ -104,18 +103,13 @@
     height: 117px;
     padding: 4px;
     border-radius: 12px;
-    background: #ffffffcc;
+    background: var(--var-10);
     box-shadow: 0px 8px 12px 0px #0000000a;
     backdrop-filter: blur(100px);
     overflow-y: auto;
     scrollbar-width: none;
 }
 
-.open-all-playgrounds-example-span {
-    width: 12px;
-    height: 2px;
-    background: #dbd8d8;
-}
 .open-all-playgrounds-content-example {
     display: flex;
     flex-direction: row;
@@ -129,28 +123,28 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 18.56px;
-    color: #cfcfcf;
+    color: var(--var-115);
     cursor: pointer;
     span {
         display: none;
     }
     svg {
-        fill: #b5b5b5;
+        fill: var(--color-neutral-400);
     }
 }
 .open-all-playgrounds-content-example-hover {
-    background: #f8f8f8;
-    color: #1f1f1f;
+    background: var(--var-2);
+    color: var(--var-7);
     span {
         display: block;
     }
     svg {
-        fill: #5b5b5b;
+        fill: var(--var-7);
     }
 }
 .open-all-playgrounds-content-example-button {
-    height: 12px;
-    width: 12px;
+    height: 20px;
+    width: 20px;
 }
 .open-all-playgrounds-content-name {
     max-width: 100%;

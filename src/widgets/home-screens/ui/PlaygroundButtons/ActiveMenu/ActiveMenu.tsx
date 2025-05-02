@@ -17,7 +17,7 @@ function ActiveMenu() {
             <Button className={'button'}><File /></Button>
             <Button className={'button'}><Router /></Button>
             <Button className={'button'}><LikeP /></Button>
-            <Button className={'button'}><Massage /></Button>
+            <Button onClick = {toggleComment(id)} className={'button'}><Massage /></Button>
             <Button className={'button'}><Arrows /></Button>
             <Button className={'button'}><NotePlus /></Button>
             <Button className={'button'}><Note /></Button>

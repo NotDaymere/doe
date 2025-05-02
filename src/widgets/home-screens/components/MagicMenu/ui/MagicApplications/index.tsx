@@ -4,24 +4,28 @@ import { CSSTransition } from "react-transition-group";
 import PlusSquareIcon from "src/shared/icons/PlusSquare.icon";
 import { MagicMenuButton } from "..";
 import css from "./MagicApplications.module.less";
+import { useMagicMenuStore } from "src/shared/providers/useMagicApplicationStore";
 
 interface Props {}
 
 export const MagicApplications: React.FC<Props> = (props) => {
-    const [menuActive, setMenuActive] = React.useState(false);
+  
+  
     const nodeRef = React.useRef<HTMLDivElement>(null);
 
-    const toggleMenu = () => setMenuActive(!menuActive);
+    const { menuActive, toggleMenu } = useMagicMenuStore();
 
     return (
         <div className={css.apps}>
             <MagicMenuButton
                 className={clsx(css.apps_btn, menuActive && css._active)}
+          
                 icon={<PlusSquareIcon />}
                 text="Connect Applications"
                 onClick={toggleMenu}
                 hasMenu
             />
+          
             <CSSTransition 
                 classNames={css}
                 timeout={250}

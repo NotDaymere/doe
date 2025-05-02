@@ -5,11 +5,10 @@ import PenIcon from "src/shared/icons/Pen.icon";
 import { IVersionHistory } from "src/shared/types/VersionHistory";
 
 interface IProps {
-    history: IVersionHistory,
-    setActiveMenu:  React.Dispatch<React.SetStateAction<boolean>>,
+    history: IVersionHistory;
+    setActiveMenu: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export default function HistoryPlaygroundMenu({history, setActiveMenu}
-                                              : IProps) {
+export default function HistoryPlaygroundMenu({ history, setActiveMenu }: IProps) {
     const { updateHistory } = useVersionHistoryStore();
     const { updateSavedPlaygrounds } = useChatStore();
     const historyRename = () => {
@@ -19,27 +18,23 @@ export default function HistoryPlaygroundMenu({history, setActiveMenu}
             updateHistory(history);
             setActiveMenu((p: boolean) => !p);
         }
-    }
+    };
     const historyRestore = () => {
         if (history.playground) {
             console.log(history.playground);
             updateSavedPlaygrounds(history.playground);
         }
-        setActiveMenu((p: boolean)=> !p);
-    }
+        setActiveMenu((p: boolean) => !p);
+    };
 
     return (
         <div className="history-playground-menu-container">
-            <button className={'history-playground-menu-button'}
-                    onClick={ historyRename }
-            >
-                <PenIcon className={'pen-icon'}/> Rename
+            <button className={"history-playground-menu-button"} onClick={historyRename}>
+                <PenIcon className={"pen-icon"} /> Rename
             </button>
-            <button className={'history-playground-menu-button'}
-                    onClick={historyRestore}
-            >
-                <HistoryIcon/> Restore
+            <button className={"history-playground-menu-button"} onClick={historyRestore}>
+                <HistoryIcon /> Restore
             </button>
         </div>
-    )
+    );
 }

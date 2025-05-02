@@ -161,39 +161,39 @@ export const ChatMessage: FC<ChatMessageProps> = ({
                         {!isUser && (
                             <Flex vertical>
                                 <Flex justify={"space-between"} className={"message-actions"}>
-                                <Button
-                                    icon={
-                                        <SvgIcon
-                                            style={{ width: "15px", height: "15px" }}
-                                            type={"seeAllStepsIcon"}
+                                    <Button
+                                        icon={
+                                            <SvgIcon
+                                                style={{ width: "15px", height: "15px" }}
+                                                type={"seeAllStepsIcon"}
+                                            />
+                                        }
+                                        onClick={openSourcePlayground}
+                                    >
+                                        See all steps
+                                    </Button>
+                                    <Flex gap={10}>
+                                        <Button onClick={openCodePlayground}>Playground</Button>
+                                        <Button
+                                            onClick={downloadPDF}
+                                            icon={
+                                                <SvgIcon
+                                                    style={{ width: "15px", height: "15px" }}
+                                                    type={"downloadAnswerIcon"}
+                                                />
+                                            }
                                         />
-                                    }
-                                    onClick={openSourcePlayground}
-                                >
-                                    See all steps
-                                </Button>
-                                <Flex gap={10}>
-                                    <Button onClick={openCodePlayground}>Playground</Button>
-                                    <Button
-                                        onClick={downloadPDF}
-                                        icon={
-                                            <SvgIcon
-                                                style={{ width: "15px", height: "15px" }}
-                                                type={"downloadAnswerIcon"}
-                                            />
-                                        }
-                                    />
-                                    <Button
-                                        icon={
-                                            <SvgIcon
-                                                style={{ width: "15px", height: "15px" }}
-                                                type={"copyAnswerIcon"}
-                                            />
-                                        }
-                                        onClick={handleCopy}
-                                    />
+                                        <Button
+                                            icon={
+                                                <SvgIcon
+                                                    style={{ width: "15px", height: "15px" }}
+                                                    type={"copyAnswerIcon"}
+                                                />
+                                            }
+                                            onClick={handleCopy}
+                                        />
+                                    </Flex>
                                 </Flex>
-                            </Flex>
                             </Flex>
                         )}
                     </div>

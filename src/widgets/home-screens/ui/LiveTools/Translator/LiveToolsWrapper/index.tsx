@@ -26,13 +26,17 @@ const LiveToolsWrapper: FC<IProps> = ({
     isRotated,
     children,
 }) => {
-    const { mode, getOpenSavedPlaygrounds, updateSavedPlaygrounds } = useChatStore();
+    const { mode, getOpenSavedPlaygrounds, updateSavedPlaygrounds, closeNoPlayground } = useChatStore();
 
     useEffect(() => {
-        getOpenSavedPlaygrounds().map((savedPlayground) => {
+        const savedPlaygrounds = getOpenSavedPlaygrounds();
+
+        savedPlaygrounds.forEach((savedPlayground) => {
             savedPlayground.open = false;
-            updateSavedPlaygrounds(savedPlayground)
-        })
+            updateSavedPlaygrounds(savedPlayground);
+        });
+
+        closeNoPlayground();
     }, []);
 
     const [showBookmarks, setShowBookmarks] = useState(false);

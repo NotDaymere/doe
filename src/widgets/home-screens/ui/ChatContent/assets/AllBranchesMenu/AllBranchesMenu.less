@@ -3,60 +3,68 @@
   @leading: 1.25,
   @letterSpacing: normal
 ) {
-  font: 500 @fontSize/@leading var(--font-sohne);
-  letter-spacing: @letterSpacing;
+    font: 500 @fontSize / @leading var(--font-sohne);
+    letter-spacing: @letterSpacing;
 }
 .all-branches-menu-container {
-  position: absolute;
-  width: fit-content;
-  height: fit-content;
-  padding: 6px;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  z-index: 1000;
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(248, 248, 248, 1)
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    padding: 6px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    box-sizing: border-box;
+    background: var(--bg-general);
+    box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--var-1);
+    > svg {
+        stroke: var(--var-1);
+    }
 }
 .all-branches-menu-button {
-  width: 100%;
-  height: 40px;
-  padding-left: 6px;
-  padding-right: 6px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  flex-direction: row !important;
-  box-sizing: border-box;
-  font-weight: 500;
-  gap: 5px;
-  .setFontSohneBuch(16px, 1.4, normal);
-  color: rgba(181, 181, 181, 1);
-  border: 1px solid transparent;
-  transition: background-color 0.3s ease, color 0.3s ease, fill 0.3s ease, border 0.3s ease;
-  svg {
-    transition: background-color 0.3s ease,  fill 0.3s ease, border 0.3s ease;
-    fill: rgba(181, 181, 181, 1);
-  }
-  .text-margin-bottom{
-    margin-bottom: -4px;
+    width: 100%;
+    height: 40px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 12px;
     display: flex;
+    align-items: center;
+    justify-content: start;
     flex-direction: row !important;
+    box-sizing: border-box;
+    font-weight: 500;
     gap: 5px;
-  }
+    .setFontSohneBuch(16px, 1.4, normal);
+    color: var(--color-neutral-400);
+    border: 1px solid transparent;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        fill 0.3s ease,
+        border 0.3s ease;
+    svg {
+        transition:
+            background-color 0.3s ease,
+            fill 0.3s ease,
+            border 0.3s ease;
+        fill: var(--color-neutral-400);
+    }
+    .text-margin-bottom {
+        margin-bottom: -4px;
+        display: flex;
+        flex-direction: row !important;
+        gap: 5px;
+    }
 }
 .all-branches-menu-button:hover {
-  background: #F8F8F8;
-  border: 1px solid #DDDDDD;
-  color: #1F1F1F;
-  svg {
-    fill: #5B5B5B;
-  }
+    background: var(--var-1);
+    border: 1px solid var(--var-2);
+    color: var(--var-107);
+    svg {
+        fill: var(--var-93);
+    }
 }
-

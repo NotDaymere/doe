@@ -11,14 +11,12 @@ interface TalkModeDynamicObjProps {
 }
 
 export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
-                                                                          onMouseEnter,
-                                                                          onMouseLeave,
-                                                                          volume = 0,
-                                                                          isThinkDoeMode = false,
-                                                                      }) => {
-    const defaultBoxShadow = `0 0 ${5 + volume * 140}px rgba(255, 139, 18, ${
-        0.5 + volume * 0.6
-    })`;
+    onMouseEnter,
+    onMouseLeave,
+    volume = 0,
+    isThinkDoeMode = false,
+}) => {
+    const defaultBoxShadow = `0 0 ${5 + volume * 140}px rgba(255, 139, 18, ${0.5 + volume * 0.6})`;
     const answerModeBoxShadow = `0 0 25px rgba(255, 139, 18, 1)`;
 
     const boxShadow = isThinkDoeMode ? answerModeBoxShadow : defaultBoxShadow;
@@ -37,12 +35,9 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
     const wave3Height = isThinkDoeMode ? 58 : 58 + volume * 32;
     const wave3Opacity = isThinkDoeMode ? 1 : Math.min(0.3 + volume * 0.7, 1);
 
-
     return (
         <section
-            className={`${css.talkModeIconContainer} ${
-                isThinkDoeMode ? css.answerMode : ""
-            }`}
+            className={`${css.talkModeIconContainer} ${isThinkDoeMode ? css.answerMode : ""}`}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             style={{
@@ -69,10 +64,12 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
                                 viewBox="0 0 65 65"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
-                                style={{
-                                    transform: `scale(${scale * 1.3})`,
-                                    pointerEvents: "none",
-                                } as React.CSSProperties}
+                                style={
+                                    {
+                                        transform: `scale(${scale * 1.3})`,
+                                        pointerEvents: "none",
+                                    } as React.CSSProperties
+                                }
                             >
                                 <g filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                                     <feDropShadow
@@ -312,13 +309,7 @@ export const TalkModeDynamicObj: React.FC<TalkModeDynamicObjProps> = ({
                                     />
                                 </g>
                                 <defs>
-                                    <filter
-                                        id="filter0_d"
-                                        x="0"
-                                        y="0"
-                                        width="82"
-                                        height="82"
-                                    >
+                                    <filter id="filter0_d" x="0" y="0" width="82" height="82">
                                         <feFlood floodOpacity="0" result="BackgroundImageFix" />
                                         <feColorMatrix
                                             in="SourceAlpha"
