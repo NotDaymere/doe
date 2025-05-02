@@ -2,10 +2,13 @@ import React from "react";
 import { ReactComponent as CodeIcon } from "src/assets/icons/code.svg";
 import { useChatStore } from "src/shared/providers";
 import { IPlayground } from "src/shared/types/Playground";
-import './PythonTaskManager.less'
+import css from "./PythonTaskManager.module.less";
 
 function PythonTaskManager() {
-    const { setPlayground, setSavedPlaygrounds,
+    const {
+        playground,
+        setPlayground,
+        setSavedPlaygrounds,
         updateSavedPlaygrounds,
         getSavedPlaygroundLastByType,
         getOpenSavedPlaygroundsByType,
@@ -14,10 +17,10 @@ function PythonTaskManager() {
     } = useChatStore();
     const openCodePlayground = () => {
         closeNoPlayground();
-        let oldPlayground = getSavedPlaygroundLastByType('code');
+        let oldPlayground = getSavedPlaygroundLastByType("code");
         if (getOpenSavedPlaygrounds().length >= 2) {
             const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
-            if (lastPlayground && lastPlayground.type != 'code') {
+            if (lastPlayground && lastPlayground.type != "code") {
                 lastPlayground.open = false;
                 updateSavedPlaygrounds(lastPlayground);
             }
@@ -35,7 +38,7 @@ function PythonTaskManager() {
             setPlayground(newPlayground);
             return;
         }
-        if ((getOpenSavedPlaygroundsByType('code').length > 0) ) {
+        if (getOpenSavedPlaygroundsByType("code").length > 0) {
             oldPlayground.open = false;
             updateSavedPlaygrounds(oldPlayground);
             const newPlayground: IPlayground = {
@@ -55,12 +58,12 @@ function PythonTaskManager() {
         }
     };
     return (
-        <button onClick={openCodePlayground}
-                className={`table-playground-button ${getOpenSavedPlaygroundsByType('code').length > 0 && 'table-playground-button-active'}`}
+        <button
+            onClick={openCodePlayground}
+            className={`table-playground-button ${getOpenSavedPlaygroundsByType("code").length > 0 && "table-playground-button-active"}`}
         >
             <CodeIcon /> Python Task Manager
         </button>
-
-    )
+    );
 }
-export default PythonTaskManager
+export default PythonTaskManager;

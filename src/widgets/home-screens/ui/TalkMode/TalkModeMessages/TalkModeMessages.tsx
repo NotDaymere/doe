@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import css from "./TalkModeMessages.module.less";
 import { CloseMessageIcon } from "../../../../../shared/icons/CloseMessage.icon";
+import { Close } from "src/shared/icons/Close";
 
 interface TalkModeMessagesProps {
     showMessage: boolean;
@@ -10,11 +11,10 @@ interface TalkModeMessagesProps {
 }
 
 export const TalkModeMessages: React.FC<TalkModeMessagesProps> = ({
-                                                                      showMessage,
-                                                                      message,
-                                                                      closeBubbleHandler,
-                                                                  }) => {
-
+    showMessage,
+    message,
+    closeBubbleHandler,
+}) => {
     const [typedText, setTypedText] = useState("");
 
     const isEmptyOrWhitespace = message.trim().length === 0;
@@ -54,15 +54,17 @@ export const TalkModeMessages: React.FC<TalkModeMessagesProps> = ({
             className={clsx(css.messageBubble, { [css._showBubble]: showMessage })}
             style={{ maxWidth: dynamicMaxWidth }}
         >
-            <p className={css.messageText}>{typedText.split("\n").map((line, index) => (
-                <React.Fragment key={index}>
-                    {line}
-                    <br />
-                </React.Fragment>
-            ))}</p>
+            <p className={css.messageText}>
+                {typedText.split("\n").map((line, index) => (
+                    <React.Fragment key={index}>
+                        {line}
+                        <br />
+                    </React.Fragment>
+                ))}
+            </p>
 
             <button className={css.bubbleCloseButton} onClick={closeBubbleHandler}>
-                <CloseMessageIcon />
+                <Close />
             </button>
         </div>
     );

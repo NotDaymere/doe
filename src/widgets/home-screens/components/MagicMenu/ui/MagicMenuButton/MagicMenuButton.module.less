@@ -1,6 +1,5 @@
 .magicBtn {
     padding: 10px;
-    border-radius: 12px;
     border: 1px solid transparent;
     width: 100%;
 
@@ -9,14 +8,16 @@
     gap: 6px;
 
     .setFontSohneBuch(14px, 1.1, normal);
-    color: #8D8D8D;
+    color: var(--var-108);
 
     transition: 200ms ease;
     transition-property: border, background;
 
+    border-radius: 12px;
     &:hover {
-        background: darken(#FFF, 5%);
-        border-color: darken(#FFF, 10%);
+        background: var(--var-2);
+        border: 1px solid var(--var-69);
+        color: var(--var-7);
 
         .magicBtn_hasMenu {
             opacity: 1;
@@ -32,19 +33,18 @@
     svg {
         width: 100%;
         height: 100%;
-        fill: #8d8d8d;
+        fill: var(--var-89);
         transition: fill 200ms ease;
     }
 }
-
 
 .magicBtn_hasMenu {
     margin-left: auto;
     width: 20px;
     height: 20px;
     border-radius: 4px;
-    background: #FFF;
-    
+    background: var(--var-11);
+
     position: relative;
 
     opacity: 0;
@@ -57,7 +57,7 @@
         display: block;
         width: 10px;
         height: 1px;
-        background: #1F1F1F;
+        background: var(--var-7);
 
         position: absolute;
         left: 50%;

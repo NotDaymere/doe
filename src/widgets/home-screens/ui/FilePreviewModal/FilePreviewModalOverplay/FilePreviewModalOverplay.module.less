@@ -1,37 +1,42 @@
 .modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(10px);
-  pointer-events: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--var-32);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    pointer-events: auto;
 }
 
 .modalCloseBtn {
-  backdrop-filter: blur(5px);
-  width: 36px;
-  height: 36px;
-  position: absolute;
-  top: -15px;
-  right: -15px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  z-index: 20000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50px;
-  background-color: #1F1F1FA6;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(5px);
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    border: 1px solid var(--color-white-11);
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 20000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    background-color: #1f1f1fa6;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease;
+    svg {
+        fill: var(--var-90);
+    }
 }
 
 .modalFileNameWrapper {
@@ -49,16 +54,17 @@
   display: inline;
   margin: 0;
   padding: 0;
+  width: fit-content;
 }
 
 .modalContent:hover .modalCloseBtn {
-  opacity: 1;
-  visibility: visible;
+    opacity: 1;
+    visibility: visible;
 }
 
 .modalFileName {
-  white-space: nowrap;
-  overflow: hidden;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .modalFileExt {
@@ -87,14 +93,5 @@
 }
 
 .fileNameInput input {
-  text-align: center;
+  text-align: start;
 }
-
-
-
-
-
-
-
-
-

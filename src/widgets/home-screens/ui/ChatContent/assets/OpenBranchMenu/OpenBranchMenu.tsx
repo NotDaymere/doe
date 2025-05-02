@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import './OpenBranchMenu.less';
+import "./OpenBranchMenu.less";
 import DialogIcon from "../../../../../../shared/icons/Dialog.icon";
 import DeleteIcon from "../../../../../../shared/icons/DeleteIcon";
 import { useChatStore } from "../../../../../../shared/providers";
@@ -15,12 +15,12 @@ type BranchQuickViewProps = {
 type AnimationState = "enter" | "visible" | "exit";
 
 export default function OpenBranchMenu({
-                                           branchId,
-                                           changeIsActiveBranchQuickView,
-                                           clickPosition,
-                                       }: BranchQuickViewProps) {
+    branchId,
+    changeIsActiveBranchQuickView,
+    clickPosition,
+}: BranchQuickViewProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const deleteSavedBranch = useChatStore(state => state.deleteSavedBranch);
+    const deleteSavedBranch = useChatStore((state) => state.deleteSavedBranch);
     const { setIsCurrentBranchOpen, setCurrentBranch } = useChatStore();
     const [animationState, setAnimationState] = useState<AnimationState>("enter");
 
@@ -60,7 +60,7 @@ export default function OpenBranchMenu({
     };
 
     const menuStyles: React.CSSProperties = {
-        position: 'absolute',
+        position: "absolute",
         top: `${clickPosition.y + 50}px`,
         left: `${clickPosition.x}px`,
     };
@@ -79,9 +79,6 @@ export default function OpenBranchMenu({
                 <CloseBranchIcon fill={"currentColor"} />
                 <span>Close Branch</span>
             </button>
-            <svg width="118" height="1" viewBox="0 0 118 1" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line y1="0.5" x2="118" y2="0.5" stroke="#F8F8F8" />
-            </svg>
 
             <button className="open-menu-branches-menu-button" onClick={handleDeleteBranchClick}>
                 <DeleteIcon fill={"currentColor"} />

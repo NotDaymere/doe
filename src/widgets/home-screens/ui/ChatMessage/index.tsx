@@ -4,6 +4,15 @@ import hljs from "highlight.js";
 import { useReferenceSelection } from "../../lib/hooks/useReferenceSelection";
 import { IMessage } from "src/shared/types/Message";
 import { useAppStore, useChatStore } from "src/shared/providers";
+
+// Shared components
+import { Editor } from "src/shared/components/Editor";
+import { useApp } from "src/components/app";
+import ExampleTableMassage from "./assets/ExampleTabelMassage/ExampleTableMassage";
+import { FileListForDisplay } from "../../../../shared/components/FileList/FileListForDisplay";
+
+// Icons
+import CrossIcon from "src/shared/icons/Cross.icon";
 import PenIcon from "src/shared/icons/Pen.icon";
 import css from "./ChatMessage.module.less";
 import "highlight.js/styles/github-dark.css";
@@ -54,7 +63,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     } = useAppStore();
     const messageRef = React.useRef<HTMLDivElement>(null);
 
-
     const { setSelectedText, setIsShowReferencePanel } = useChatContext();
     const [isAllStepOpen, setIsAllStepOpen] = React.useState(false);
 
@@ -67,9 +75,9 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         setSelectedText(text);
         setIsShowReferencePanel(true);
     });
-    useEffect(()=> {
-        setIsAllStepOpen(getNoPlayground().type === 'source');
-        if (getNoPlayground().type !== 'iframe') {
+    useEffect(() => {
+        setIsAllStepOpen(getNoPlayground().type === "source");
+        if (getNoPlayground().type !== "iframe") {
             setCitationPlaygroundRef(null);
             setIsCitationPlayground(false);
             const allCitationContainers = document.querySelectorAll(".citation-container");
@@ -87,7 +95,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 }
             });
         }
-    }, [getNoPlayground()])
+    }, [getNoPlayground()]);
 
     useEffect(() => {
         const handleCitationClick = (event: Event) => {
@@ -130,12 +138,16 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             } else {
                 citationContainer.classList.add("citation-active");
 
-                const citedText = citationContainer.querySelector(".cited-text") as HTMLElement | null;
+                const citedText = citationContainer.querySelector(
+                    ".cited-text"
+                ) as HTMLElement | null;
                 if (citedText) {
                     citedText.style.textDecoration = "underline dashed #9747FF";
                 }
 
-                const citationElement = citationContainer.querySelector(".citation") as HTMLElement | null;
+                const citationElement = citationContainer.querySelector(
+                    ".citation"
+                ) as HTMLElement | null;
                 if (citationElement) {
                     citationElement.style.border = "1px solid #9747ff";
                     citationElement.style.backgroundColor = "#9747ff";
@@ -192,7 +204,6 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
             content: content,
         };
 
-
         addMessageNodeVersion(data.id, newMessage);
 
         setUpdatedContent(content);
@@ -201,45 +212,47 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
         const reply = await doMessageReply();
         const lastNodeForUserMessage = getLastCurrentVersionMessageNode();
         addMessageNode(lastNodeForUserMessage, reply);
-
     };
 
     const cancelEdit = (id: number) => {
         setContent(data.content);
         setEditMsgMode({ isEditMsgMode: false, msgId: null });
         setEdit(false);
-
     };
 
     const toggleEditUnauthorized = () => {
         setEdit(!isEdit);
     };
     if (data.isUser) {
-        return <UserChatMessage
-            data={data}
-            content={content}
-            updatedContent={updatedContent}
-            isCurrentBranchOpen={isCurrentBranchOpen}
-            cancelEdit={cancelEdit}
-            editMsgMode={editMsgMode}
-            setContent={setContent}
-            handleEdit={handleEdit}
-            toggleEdit={toggleEdit}
-        />
+        return (
+            <UserChatMessage
+                data={data}
+                content={content}
+                updatedContent={updatedContent}
+                isCurrentBranchOpen={isCurrentBranchOpen}
+                cancelEdit={cancelEdit}
+                editMsgMode={editMsgMode}
+                setContent={setContent}
+                handleEdit={handleEdit}
+                toggleEdit={toggleEdit}
+            />
+        );
     }
 
     if (data.isCode) {
-        return <CodeChatMessage
-            isCurrentBranchOpen={isCurrentBranchOpen}
-            data={data}
-            isHyperlinkInputOpen={isHyperlinkInputOpen}
-            referenceButtonVisible={referenceButtonVisible}
-            referenceButtonPosition={referenceButtonPosition}
-            handleClose={handleClose}
-            handleReferenceClick={handleReferenceClick}
-            messageRef={messageRef}
-            isAllStepOpen={isAllStepOpen}
+        return (
+            <CodeChatMessage
+                isCurrentBranchOpen={isCurrentBranchOpen}
+                data={data}
+                isHyperlinkInputOpen={isHyperlinkInputOpen}
+                referenceButtonVisible={referenceButtonVisible}
+                referenceButtonPosition={referenceButtonPosition}
+                handleClose={handleClose}
+                handleReferenceClick={handleReferenceClick}
+                messageRef={messageRef}
+                isAllStepOpen={isAllStepOpen}
             />
+        );
     }
 
     return (
@@ -254,5 +267,5 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 }}
             />
         </div>
-    )
-}
+    );
+};
