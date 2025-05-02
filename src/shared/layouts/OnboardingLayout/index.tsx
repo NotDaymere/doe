@@ -16,7 +16,7 @@ export default function OnboardingLayout() {
     const flow = useOnboardingFlow(setMessages);
     const step = flow.step;
     const currentStep = useMemo(() => onboardingFlow.find((st) => st.id === step), [step]);
-    const isDevMode = true;
+    const isDevMode = false;
 
     return (
         <main className={css.layout_main}>
