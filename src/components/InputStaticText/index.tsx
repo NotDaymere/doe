@@ -187,7 +187,7 @@ export const InputStaticText = ({
             {step === 10 && (
                 <>
                     <p>
-                        Write a song about <a>chicken</a>
+                        Write a song about <a className={css.link}>chicken</a>
                         <div className={css.link_modal}>{linkText}</div>
                     </p>
                 </>

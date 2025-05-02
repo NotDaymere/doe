@@ -17,6 +17,7 @@ import css from "./AnimatedInput.module.less";
 interface AnimatedInputProps {
     step?: number;
     blockInput: boolean;
+    sendButtonEnabled?: boolean;
     showTooltip: boolean;
     userClickedBold: boolean;
     userClickedUnderline: boolean;
@@ -33,6 +34,7 @@ interface AnimatedInputProps {
 export function AnimatedInput({
     step,
     blockInput,
+    sendButtonEnabled,
     showTooltip,
     userClickedBold,
     userClickedUnderline,
@@ -92,6 +94,7 @@ export function AnimatedInput({
         delay: 1200,
         onComplete: () => {
             setIsMathBlock(true);
+            setIsMessageSent(false);
             if (step === 8.2) handleMathFormulaTypedOut();
         },
         startTyping: step === 8.2,
@@ -121,11 +124,12 @@ export function AnimatedInput({
     const linkText = useTypewriterEffect({
         text: "https://thisaichatbot.com",
         speed: 90,
+        delay: 3000,
         startTyping: step === 10,
     });
 
     const handleSendMessage = () => {
-        if (safeStep !== 4.5 && safeStep !== 8.3 && safeStep !== 28 && safeStep !== 9.3) return;
+        if (!sendButtonEnabled) return;
 
         let messageType: MessageType;
 
@@ -165,11 +169,7 @@ export function AnimatedInput({
 
                 setTimeout(() => setStressTooltip(false), 1500);
             }
-            if (
-                e.key === "ArrowRight" &&
-                !isMessageSent &&
-                (safeStep === 4.5 || safeStep === 8.3 || safeStep === 9.3)
-            ) {
+            if (e.key === "ArrowRight" && !isMessageSent && sendButtonEnabled) {
                 e.preventDefault();
                 e.stopPropagation();
                 setStressButton(true);
@@ -268,10 +268,12 @@ export function AnimatedInput({
                     <button
                         className={clsx(css.panel_submitBtn, {
                             [css.btn_stressed]: stressSendButton,
+                            [css.btn_disabled]: !sendButtonEnabled,
                         })}
                         onAnimationEnd={() => setAnimationDone(true)}
                         onClick={handleSendMessage}
                         data-step="send"
+                        disabled={!sendButtonEnabled}
                     >
                         Send <ArrowUpIcon />
                     </button>

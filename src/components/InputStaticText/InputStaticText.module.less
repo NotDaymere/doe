@@ -22,19 +22,6 @@
     color: rgba(0, 0, 0, 0.4);
 }
 
-.link_modal {
-    position: absolute;
-    top: -80%;
-    left: 20%;
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 14px;
-    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
-    backdrop-filter: blur(15px);
-    color: rgba(18, 127, 255, 1);
-    font-size: 16px;
-}
-
 .mathWrapper {
     display: flex;
     justify-self: center;
@@ -66,6 +53,58 @@
     }
 }
 
+.link_modal {
+    position: absolute;
+    top: -80%;
+    left: 20%;
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 0 14px;
+    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(15px);
+    color: rgba(18, 127, 255, 1);
+    font-size: 16px;
+    height: 49px;
+    max-height: 0;
+    overflow: hidden;
+    animation: fade-in 0.7s ease 3s forwards;
+}
+
+.link {
+    position: relative;
+    color: black !important;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.link::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -2px;
+    width: 0%;
+    height: 100%;
+    z-index: -1;
+    background-color: rgba(179, 215, 255, 100%);
+    transition: width 0.3s ease;
+    animation: select-word 1s ease 0.5s forwards;
+}
+
+.link:active {
+    background-color: rgba(71, 148, 255, 0.2);
+}
+
+@keyframes select-word {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
 @keyframes fade-in {
     0% {
         max-height: 0;
@@ -73,7 +112,7 @@
     }
     100% {
         opacity: 1;
-        max-height: 61px;
+        max-height: 64px;
     }
 }
 

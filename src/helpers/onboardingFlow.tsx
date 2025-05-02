@@ -43,6 +43,7 @@ export interface OnboardingStep {
     tooltipParagraph1?: ReactNode;
     tooltipParagraph2?: ReactNode;
     tooltipIcons?: ReactNode;
+    sendButtonEnabled?: boolean;
     blur?: string[];
     autoSkip?: boolean;
     [key: string]: any;
@@ -111,6 +112,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 4.5,
         location: '[data-step="send"]',
         cursorVisible: true,
+        sendButtonEnabled: true,
         tooltip: false,
     },
     {
@@ -275,6 +277,7 @@ export const onboardingFlow: OnboardingStep[] = [
         location: '[data-step="send"]',
         cursorVisible: true,
         cursorClick: true,
+        sendButtonEnabled: true,
         tooltip: false,
         blur: [""],
     },
@@ -328,6 +331,7 @@ export const onboardingFlow: OnboardingStep[] = [
         location: '[data-step="send"]',
         cursorVisible: true,
         cursorClick: true,
+        sendButtonEnabled: true,
         tooltip: false,
         blur: [""],
     },
@@ -335,6 +339,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 10,
         location: '[data-step="link"]',
         cursorVisible: true,
+        cursorDelay: 1500,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Hyperlink button.</b>,

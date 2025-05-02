@@ -96,6 +96,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                         userClickedBold={userClickedBold}
                         userClickedUnderline={userClickedUnderline}
                         userClickedItalic={userClickedItalic}
+                        sendButtonEnabled={currentStep?.sendButtonEnabled}
                         handleGreetingPlaceholderTypedOut={handleGreetingPlaceholderTypedOut}
                         handleBoldPlaceholderTypedOut={handleBoldPlaceholderTypedOut}
                         handleMathPromptTypedOut={handleMathPromptTypedOut}
