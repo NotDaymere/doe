@@ -44,8 +44,8 @@ export const WelcomeHeader = ({
                 <Logo />
             </div>
 
-            {animationComplete && (
-                <WelcomeText onComplete={handleWelcomeTextTypedOut} text={text} />
+            {(animationComplete || step > 5) && (
+                <WelcomeText onComplete={handleWelcomeTextTypedOut} text={text} step={step} />
             )}
         </div>
     );
