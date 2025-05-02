@@ -732,6 +732,18 @@ export const onboardingFlow: OnboardingStep[] = [
         blur: [""],
     },
     {
+        id: 28.1,
+        location: '[data-step="input"]',
+        cursorVisible: true,
+        cursorPosition: {
+            top: 0,
+            left: 100,
+        },
+        sendButtonEnabled: true,
+        tooltip: false,
+        blur: [""],
+    },
+    {
         id: 29,
         location: '[data-step="playgroun"]',
         cursorVisible: true,

@@ -35,6 +35,7 @@ interface OnboardingBodyProps {
     handlePythonCodeTypedOut: () => void;
     handleUntranslatedTypedOut: () => void;
     handleVoiceMessageAppearing: () => void;
+    handleSendProjectMessage: () => void;
 }
 
 export function OnboardingBody(props: OnboardingBodyProps) {
@@ -61,6 +62,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         handlePythonCodeTypedOut,
         handleUntranslatedTypedOut,
         handleVoiceMessageAppearing,
+        handleSendProjectMessage,
     } = props;
 
     return (
@@ -98,7 +100,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                 <div
                     className={clsx(css.layout_input, {
                         [css.lower_height]: step >= 5,
-                        [css.sm]: step >= 29,
+                        [css.sm]: step >= 28.1,
                     })}
                 >
                     <AnimatedInput
@@ -115,6 +117,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                         handleMathFormulaTypedOut={handleMathFormulaTypedOut}
                         handleCodePromptTypedOut={handleCodePromptTypedOut}
                         handlePythonCodeTypedOut={handlePythonCodeTypedOut}
+                        handleSendProjectMessage={handleSendProjectMessage}
                         onSendMessage={onSendMessage}
                     />
                 </div>
@@ -182,7 +185,7 @@ function HistorySection({
 }
 
 function getMarginTop(step: number, logoSlide: boolean) {
-    if (step >= 29) return 0;
+    if (step >= 28.1) return 0;
     if (step <= 4.5) return logoSlide ? 10 : 18;
     return 5;
 }

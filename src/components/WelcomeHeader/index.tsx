@@ -30,7 +30,7 @@ export const WelcomeHeader = ({
 
     return (
         <div
-            className={clsx(css.header_container, { [css.hidden]: step >= 29 && step <= 57 })}
+            className={clsx(css.header_container, { [css.hidden]: step >= 28.1 && step <= 57 })}
             data-step="head"
         >
             {hideGrid && (

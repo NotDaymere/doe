@@ -150,6 +150,10 @@ export function useOnboardingFlow(
         setStep(21.1);
     }
 
+    function handleSendProjectMessage() {
+        setStep(28.1);
+    }
+
     // ------ OTHER HANDLERS ------
 
     function handleUserClickedSidebarButton(type: string) {
@@ -275,6 +279,7 @@ export function useOnboardingFlow(
         handlePythonCodeTypedOut,
         handleUntranslatedTypedOut,
         handleVoiceMessageAppearing,
+        handleSendProjectMessage,
 
         handleSidebarClose,
 

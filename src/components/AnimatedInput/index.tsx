@@ -28,6 +28,7 @@ interface AnimatedInputProps {
     handleMathFormulaTypedOut: () => void;
     handleCodePromptTypedOut: () => void;
     handlePythonCodeTypedOut: () => void;
+    handleSendProjectMessage: () => void;
     onSendMessage: (message: string, type: MessageType) => void;
 }
 
@@ -45,6 +46,7 @@ export function AnimatedInput({
     handleMathFormulaTypedOut,
     handleCodePromptTypedOut,
     handlePythonCodeTypedOut,
+    handleSendProjectMessage,
     onSendMessage,
 }: AnimatedInputProps) {
     if (!step || step < 4 || (step > 18 && step < 28)) return null;
@@ -149,6 +151,10 @@ export function AnimatedInput({
                 break;
             default:
                 messageType = "project";
+        }
+
+        if (messageType === "project") {
+            handleSendProjectMessage();
         }
         onSendMessage(userInput, messageType);
         setIsMessageSent(true);
