@@ -60,7 +60,7 @@ function PythonTaskManager() {
     return (
         <button
             onClick={openCodePlayground}
-            className={`table-playground-button ${getOpenSavedPlaygroundsByType("code").length > 0 && "table-playground-button-active"}`}
+            className={`${css["table-playground-button"]} ${getOpenSavedPlaygroundsByType("code").length > 0 && css["table-playground-button-active"]}`}
         >
             <CodeIcon /> Python Task Manager
         </button>

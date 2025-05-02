@@ -1,6 +1,6 @@
 import React from "react";
 import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
-import "./TableRandomValues.module.less";
+import css from "./TableRandomValues.module.less";
 import { useChatStore } from "src/shared/providers";
 import { IPlayground } from "src/shared/types/Playground";
 
@@ -61,7 +61,7 @@ function TableRandomValues() {
     return (
         <button
             onClick={openTablePlayground}
-            className={`table-playground-button ${getOpenSavedPlaygroundsByType("table").length > 0 && "table-playground-button-active"}`}
+            className={`${css["table-playground-button"]} ${getOpenSavedPlaygroundsByType("table").length > 0 && css["table-playground-button-active"]}`}
         >
             <TableIcon /> Tabular Random Values
         </button>

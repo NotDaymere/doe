@@ -28,9 +28,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
                 hasSider
             >
                 <Sider />
-                <div
-                    className={`children-main-layout ${(!playgroundFullscreen || getOpenSavedPlaygrounds().length == 0 || !getNoPlayground().open) && "children-main-layout-active"}`}
-                >
+                <div className={`children-main-layout ${((!playgroundFullscreen) || (getOpenSavedPlaygrounds().length == 0 || getNoPlayground().open)) && 'children-main-layout-active'}`}>
                     {children}
                 </div>
                 {(getOpenSavedPlaygrounds().length > 0 || getNoPlayground().open) && (
@@ -41,7 +39,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
                                     ? openHistory
                                         ? "width-80"
                                         : "width-100"
-                                    : "width-550px"
+                                    : "width-474px"
                             }`}
                         >
                             <MultiplePlaygroundRenderer />
