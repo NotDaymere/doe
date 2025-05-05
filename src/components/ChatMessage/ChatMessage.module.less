@@ -1,6 +1,17 @@
+.messageWrapper {
+    max-width: 100%;
+}
+
 .userMessageWrapper {
     display: flex;
     justify-content: flex-end;
+}
+
+.aiMessageWrapper {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    animation: fade-in 0.5s ease forwards;
 }
 
 .userMessage {
@@ -40,13 +51,6 @@
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.aiMessageWrapper {
-    display: flex;
-    align-items: flex-start;
-    position: relative;
-    animation: fade-in 0.5s ease forwards;
 }
 
 @keyframes fade-in {
@@ -111,10 +115,6 @@
     span {
         align-self: center;
     }
-}
-
-.wrapperFullWidth {
-    max-width: 100%;
 }
 
 .recording_img {

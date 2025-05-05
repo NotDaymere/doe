@@ -62,14 +62,14 @@ export function AnimatedInput({
 
     const safeStep = step ?? 0;
 
-    const typedGreeting = useTypewriterEffect({
+    const { text: typedGreeting } = useTypewriterEffect({
         text: "Hey Doe, I'm John Smith",
         speed: 90,
         onComplete: handleGreetingPlaceholderTypedOut,
         startTyping: animationDone && safeStep <= 5,
     });
 
-    const typedPrompt = useTypewriterEffect({
+    const { text: typedPrompt } = useTypewriterEffect({
         text: "Write a song about ",
         speed: 100,
         delay: 1000,
@@ -81,7 +81,7 @@ export function AnimatedInput({
         startTyping: step === 4.7,
     });
 
-    const typedMathPrompt = useTypewriterEffect({
+    const { text: typedMathPrompt } = useTypewriterEffect({
         text: "Please put together a sample project that uses the equation: ",
         speed: 50,
         delay: 1200,
@@ -91,7 +91,7 @@ export function AnimatedInput({
         startTyping: step === 8,
     });
 
-    const typedMathFormula = useTypewriterEffect({
+    const { text: typedMathFormula } = useTypewriterEffect({
         text: "$Nat(C(-, X), F) cong F(X)$",
         speed: 50,
         delay: 1200,
@@ -103,7 +103,7 @@ export function AnimatedInput({
         startTyping: step === 8.2,
     });
 
-    const typedCodePrompt = useTypewriterEffect({
+    const { text: typedCodePrompt } = useTypewriterEffect({
         text: "Write me the deletion function in Python that starts with: ",
         speed: 50,
         delay: 1200,
@@ -114,7 +114,7 @@ export function AnimatedInput({
         startTyping: step === 9,
     });
 
-    const typedPythonCode = useTypewriterEffect({
+    const { text: typedPythonCode } = useTypewriterEffect({
         text: pythonCodeSmall,
         speed: 50,
         delay: 1200,
@@ -124,7 +124,7 @@ export function AnimatedInput({
         startTyping: step === 9.2,
     });
 
-    const linkText = useTypewriterEffect({
+    const { text: linkText } = useTypewriterEffect({
         text: "https://thisaichatbot.com",
         speed: 90,
         delay: 3000,
