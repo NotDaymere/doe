@@ -22,6 +22,13 @@
             fill: rgba(181, 181, 181, 0.5);
         }
     }
+
+    .layout_chat,
+    .layout_input,
+    .layout_history {
+        background-color: #2d2d2d;
+        transition: background-color 0.3s ease;
+    }
 }
 
 .layout_body {
@@ -43,6 +50,18 @@
 
     &.tableOpen {
         max-width: calc(100% - 500px);
+    }
+
+    @media screen and (max-width: 1248px) {
+        &.tableOpen {
+            max-width: calc(100% - 400px);
+        }
+    }
+
+    @media screen and (max-width: 1120px) {
+        &.tableOpen {
+            max-width: calc(100% - 300px);
+        }
     }
 }
 
@@ -95,6 +114,10 @@
 
 .lower_height {
     height: 45%;
+
+    @media screen and (max-width: 1248px) {
+        height: 30%;
+    }
 }
 
 .sm {

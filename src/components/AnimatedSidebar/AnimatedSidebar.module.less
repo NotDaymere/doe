@@ -16,12 +16,16 @@
     height: 100%;
     opacity: 1;
     z-index: 1;
-    transition: all 1s ease;
+    transition: opacity 1s ease, transform 1s ease, background-color 0.3s ease 1s;
     animation: border-move-right-side 10s ease-in-out infinite;
 
     &.hidden {
         opacity: 0;
         transform: translateX(-100%);
+    }
+
+    &.dark_mode {
+        background-color: #2d2d2d;
     }
 
     &::-webkit-scrollbar {

@@ -1,5 +1,8 @@
 import clsx from "clsx";
+import { ReactComponent as BubbleIcon } from "src/assets/icons/bubble-plus.svg";
 import { ReactComponent as HistoryIcon } from "src/assets/icons/history.svg";
+import { ReactComponent as ArrowsIcon } from "src/assets/icons/opposing-arrows.svg";
+import { ReactComponent as PencilIcon } from "src/assets/icons/pencil-icon.svg";
 import { ReactComponent as StarDocIcon } from "src/assets/icons/starDoc.svg";
 import { OnboardingStep } from "src/helpers/onboardingFlow";
 import { Tooltip } from "../Tooltip";
@@ -81,11 +84,17 @@ export const Playground = ({ currentStep }: PlaygroundProps) => {
                 </div>
                 <div className={css.playground_footer}>
                     <div className={css.playground_left}>
-                        <div className={css.playground_circle_filled}></div>
+                        <div className={css.playground_circle_filled}>
+                            <BubbleIcon />
+                        </div>
                     </div>
                     <div className={css.playground_right}>
-                        <div className={css.playground_circle}></div>
-                        <div className={css.playground_circle}></div>
+                        <div className={css.playground_circle}>
+                            <PencilIcon />
+                        </div>
+                        <div className={css.playground_circle}>
+                            <ArrowsIcon />
+                        </div>
                     </div>
                 </div>
             </div>

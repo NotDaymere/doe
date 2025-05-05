@@ -47,7 +47,7 @@ export const SidebarMenu = ({ step, isOpen }: SidebarMenuProps) => {
                             key={`${label}-${triggerStep}`}
                             className={clsx(css.sidebar_controls_item, css.border, {
                                 [css.open_item]: isOpen,
-                                [css.highlighted_item]: step === triggerStep,
+                                [css.highlighted_item]: step === triggerStep && !cursorMoving,
                             })}
                             data-step={dataStep}
                         >

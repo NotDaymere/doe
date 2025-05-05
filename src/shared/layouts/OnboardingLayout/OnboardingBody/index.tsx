@@ -34,6 +34,7 @@ interface OnboardingBodyProps {
     handleCodePromptTypedOut: () => void;
     handlePythonCodeTypedOut: () => void;
     handleUntranslatedTypedOut: () => void;
+    handleBranchTypedOut: () => void;
     handleVoiceMessageAppearing: () => void;
     handleSendProjectMessage: () => void;
     setStep: (value: number) => void;
@@ -62,6 +63,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         handleCodePromptTypedOut,
         handlePythonCodeTypedOut,
         handleUntranslatedTypedOut,
+        handleBranchTypedOut,
         handleVoiceMessageAppearing,
         handleSendProjectMessage,
         setStep,
@@ -121,6 +123,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                         handleCodePromptTypedOut={handleCodePromptTypedOut}
                         handlePythonCodeTypedOut={handlePythonCodeTypedOut}
                         handleSendProjectMessage={handleSendProjectMessage}
+                        handleBranchTypedOut={handleBranchTypedOut}
                         onSendMessage={onSendMessage}
                     />
                 </div>
@@ -166,7 +169,7 @@ function HistorySection({
     handleUntranslatedTypedOut: () => void;
     handleVoiceMessageAppearing: () => void;
 }) {
-    if (step >= 40 && step <= 42) {
+    if (step >= 40 && step <= 43) {
         return (
             <>
                 <BranchBar withDots step={step} />

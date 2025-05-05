@@ -18,6 +18,7 @@ const PlaygroundsBox = ({ step }: PlaygroundsBoxProps) => {
             className={clsx(css.playground_box_wrapper, {
                 [css.playground_box_wrapper_open]: step === 34 || isOpen,
                 [css.active]: !cursorMoving && (step === 33 || step === 34),
+                [css.no_sidebar]: step >= 58,
             })}
             data-step="playgrounds"
             onClick={() => setIsOpen((prev) => !prev)}

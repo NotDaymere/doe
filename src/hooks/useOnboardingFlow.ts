@@ -145,6 +145,10 @@ export function useOnboardingFlow(
         setStep(19.1);
     }
 
+    function handleBranchTypedOut() {
+        setStep(39);
+    }
+
     function handleVoiceMessageAppearing() {
         setBlockSteps(true);
         setStep(21.1);
@@ -263,6 +267,11 @@ export function useOnboardingFlow(
                 nextStep();
             }, 2000);
         }
+        if (step === 38) {
+            setTimeout(() => {
+                setStep(38.1);
+            }, 2000);
+        }
         if (step === 40) {
             setMessages?.((prev) => prev.slice(-2));
         }
@@ -310,6 +319,7 @@ export function useOnboardingFlow(
         handleUntranslatedTypedOut,
         handleVoiceMessageAppearing,
         handleSendProjectMessage,
+        handleBranchTypedOut,
 
         handleSidebarClose,
 

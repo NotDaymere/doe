@@ -18,6 +18,7 @@ const mathJaxConfig = {
 };
 
 export const HistorySlider = ({ messages, step }: HistorySliderProps) => {
+    const historyRef = useRef<HTMLDivElement>(null);
     const secondRef = useRef<HTMLDivElement>(null);
     const [mathKey, setMathKey] = useState(0);
 
@@ -46,7 +47,7 @@ export const HistorySlider = ({ messages, step }: HistorySliderProps) => {
                 <div className={css.branch}>
                     Create a simple project for me in any language. Using math mode.
                 </div>
-                <div className={css.chatHistoryContainer}>
+                <div className={css.chatHistoryContainer} ref={historyRef}>
                     <div className={css.chatHistoryContent}>
                         {messages.map((msg, index) => (
                             <MathJaxContext config={mathJaxConfig} key={index}>
@@ -54,6 +55,7 @@ export const HistorySlider = ({ messages, step }: HistorySliderProps) => {
                                     message={msg}
                                     prevRole={index > 0 ? messages[index - 1]?.role : undefined}
                                     // setTypingDone={setTypingDone}
+                                    ref={historyRef}
                                     noTypeEffect
                                     step={step}
                                 />

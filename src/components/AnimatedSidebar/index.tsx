@@ -42,7 +42,11 @@ export const AnimatedSidebar = ({
 
     return (
         <aside
-            className={clsx(css.sidebar, { [css.open]: isOpen, [css.hidden]: !showSidebar })}
+            className={clsx(css.sidebar, {
+                [css.open]: isOpen,
+                [css.hidden]: !showSidebar,
+                [css.dark_mode]: darkMode,
+            })}
             // onTransitionEnd={isOpen && step === 11 ? handleSidebarClose : handleSidebarOpen}
             onTransitionEnd={step === 17 ? handleSidebarClose : handleSidebarOpen}
         >

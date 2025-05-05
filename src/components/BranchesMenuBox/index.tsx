@@ -71,6 +71,7 @@ const BranchesMenuBox = ({ step }: BranchesMenuBoxProps) => {
             className={clsx(css.branches_box_wrapper, {
                 [css.branches_box_wrapper_open]: step === 43 || isOpen,
                 [css.active]: !cursorMoving && (step === 42 || step === 43),
+                [css.no_sidebar]: step >= 58,
             })}
             onClick={() => setIsOpen((prev) => !prev)}
         >

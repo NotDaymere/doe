@@ -91,44 +91,46 @@ export const SettingsModal = ({
                                         data-step="profile"
                                         className={css.settings_profile_img}
                                     />
-                                    <button
-                                        className={clsx(css.settings_content_change, {
-                                            [css.highlighted]: step === 18.1,
-                                        })}
-                                        onClick={() => fileInputRef.current?.click()}
-                                        data-step="profile-photo"
-                                    >
-                                        <img
-                                            src={personPlus}
-                                            alt=""
-                                            className={css.settings_change_img}
+                                    <div className={css.settings_content_img_buttons}>
+                                        <button
+                                            className={clsx(css.settings_content_change, {
+                                                [css.highlighted]: step === 18.1,
+                                            })}
+                                            onClick={() => fileInputRef.current?.click()}
+                                            data-step="profile-photo"
+                                        >
+                                            <img
+                                                src={personPlus}
+                                                alt=""
+                                                className={css.settings_change_img}
+                                            />
+                                            Change Photo
+                                        </button>
+                                        <button
+                                            className={css.settings_content_delete}
+                                            onClick={() =>
+                                                setProfileData((prev) => ({
+                                                    ...prev,
+                                                    photo: "/temp/profile.jpg",
+                                                }))
+                                            }
+                                        >
+                                            Delete Photo
+                                        </button>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            ref={fileInputRef}
+                                            style={{ display: "none" }}
+                                            onChange={handlePhotoChange}
                                         />
-                                        Change Photo
-                                    </button>
-                                    <button
-                                        className={css.settings_content_delete}
-                                        onClick={() =>
-                                            setProfileData((prev) => ({
-                                                ...prev,
-                                                photo: "/temp/profile.jpg",
-                                            }))
-                                        }
-                                    >
-                                        Delete Photo
-                                    </button>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        ref={fileInputRef}
-                                        style={{ display: "none" }}
-                                        onChange={handlePhotoChange}
-                                    />
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className={css.settings_content_item}>
                             <div className={clsx(css.settings_content_row, { [css.saved]: saved })}>
-                                <div data-step="profile-name">Profile Name</div>
+                                <div>Profile Name</div>
                                 <input
                                     value={profileData.name}
                                     onChange={(e) =>
@@ -137,6 +139,7 @@ export const SettingsModal = ({
                                             name: e.target.value,
                                         }))
                                     }
+                                    data-step="profile-name"
                                     placeholder="John Doe"
                                     className={clsx(css.settings_input, {
                                         [css.highlighted]: step === 18.2,
@@ -146,7 +149,7 @@ export const SettingsModal = ({
                         </div>
                         <div className={css.settings_content_item}>
                             <div className={clsx(css.settings_content_row, { [css.saved]: saved })}>
-                                <div data-step="profile-email">Email Address</div>
+                                <div>Email Address</div>
                                 <input
                                     value={profileData.email}
                                     onChange={(e) =>
@@ -155,6 +158,7 @@ export const SettingsModal = ({
                                             email: e.target.value,
                                         }))
                                     }
+                                    data-step="profile-email"
                                     placeholder="johndoe@gmail.com"
                                     className={clsx(css.settings_input, {
                                         [css.highlighted]: step === 18.3,

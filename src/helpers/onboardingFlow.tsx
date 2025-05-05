@@ -518,7 +518,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         cursorPosition: {
             top: 0,
-            left: -100,
+            left: 150,
         },
         tooltip: false,
         blur: ["input", "history", "body", "magicbox", "navigate"],
@@ -529,7 +529,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         cursorPosition: {
             top: 0,
-            left: -100,
+            left: 150,
         },
         tooltip: false,
         blur: ["input", "history", "body", "magicbox", "navigate"],
@@ -870,6 +870,19 @@ export const onboardingFlow: OnboardingStep[] = [
         blur: ["history", "body", "magicbox", "navigate"],
     },
     {
+        id: 38.1,
+        location: '[data-step="input"]',
+        cursorVisible: true,
+        cursorClickPrevPosition: true,
+        cursorPosition: {
+            top: 0,
+            left: 100,
+        },
+        cursorDelay: 200,
+        tooltip: false,
+        blur: ["history", "body", "magicbox", "navigate"],
+    },
+    {
         id: 39,
         location: '[data-step="branch"]',
         cursorVisible: true,
@@ -880,6 +893,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 40,
         location: '[data-step="branch-bar"]',
         cursorVisible: true,
+        cursorDelay: 500,
         cursorPosition: {
             top: 0,
             left: -10,

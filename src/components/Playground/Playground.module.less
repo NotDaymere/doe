@@ -6,6 +6,14 @@
     right: 0;
     max-width: 500px;
     // max-width: 0;
+
+    @media screen and (max-width: 1248px) {
+        max-width: 400px;
+    }
+
+    @media screen and (max-width: 1120px) {
+        max-width: 300px;
+    }
 }
 
 .open {
@@ -94,6 +102,11 @@
     border: 1px solid #ddd;
     padding: 10px 12px;
     text-align: center;
+
+    @media screen and (max-width: 1120px) {
+        padding: 6px 8px;
+        font-size: 14px;
+    }
 }
 
 .data_table th {
@@ -115,6 +128,12 @@
     font-size: 15px;
     line-height: 1.6;
     padding: 0 20px;
+
+    @media screen and (max-width: 1120px) {
+        font-size: 13px;
+        line-height: 1.5;
+        padding: 0 12px;
+    }
 }
 
 .playground_footer {
@@ -132,6 +151,10 @@
 }
 
 .playground_circle_filled {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     width: 36px;
     height: 36px;
     background: rgba(31, 31, 31, 0.35);
@@ -139,6 +162,10 @@
 }
 
 .playground_circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     width: 36px;
     height: 36px;
     border: 1px solid #5b5b5b;

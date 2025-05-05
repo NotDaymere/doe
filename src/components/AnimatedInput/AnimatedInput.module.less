@@ -8,6 +8,10 @@
 
     display: flex;
     justify-content: center;
+
+    @media screen and (max-width: 1248px) {
+        margin-top: 20px;
+    }
 }
 
 .panel_wrapper {
@@ -26,6 +30,10 @@
         .panel_drag::before {
             opacity: 1;
         }
+    }
+
+    @media screen and (max-width: 1120px) {
+        max-width: 700px;
     }
 }
 
@@ -166,6 +174,7 @@
     border-radius: 16px;
     padding: 8px;
     padding-left: 10px;
+    z-index: 1;
 
     display: flex;
     align-items: center;
@@ -305,8 +314,8 @@
 
 .panel_grid {
     position: absolute;
-    bottom: -150%;
-    right: 35%;
+    bottom: -100%;
+    right: 40%;
     z-index: -1;
     animation: fadeIn 2s ease forwards;
 }

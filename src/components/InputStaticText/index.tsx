@@ -16,6 +16,7 @@ interface InputStaticTextProps {
     typedMathFormula: string;
     typedCodePrompt: string;
     typedPythonCode: string;
+    typedBranch: string;
     linkText: string;
     userClickedBold: boolean;
     userClickedUnderline: boolean;
@@ -34,6 +35,7 @@ export const InputStaticText = ({
     typedMathFormula,
     typedCodePrompt,
     typedPythonCode,
+    typedBranch,
     linkText,
     userClickedBold,
     userClickedUnderline,
@@ -130,7 +132,7 @@ export const InputStaticText = ({
                                         [css.space]: word === " ",
                                     })}
                                     style={{ animationDelay: `${index * 0.005}s` }}
-                                    data-step={index + 1 === typedPrompt.length && "text"}
+                                    data-step={index + 1 === typedMathPrompt.length && "text"}
                                 >
                                     {word}
                                 </span>
@@ -167,7 +169,7 @@ export const InputStaticText = ({
                                         [css.space]: word === " ",
                                     })}
                                     style={{ animationDelay: `${index * 0.005}s` }}
-                                    data-step={index + 1 === typedPrompt.length && "text"}
+                                    data-step={index + 1 === typedGreeting.length && "text"}
                                 >
                                     {word}
                                 </span>
@@ -182,6 +184,26 @@ export const InputStaticText = ({
                             }}
                         />
                     }
+                </>
+            )}
+            {step === 38.1 && (
+                <>
+                    <p>
+                        {typedBranch.split("").map((word, index) => {
+                            return (
+                                <span
+                                    key={index}
+                                    className={clsx(css.letter, {
+                                        [css.space]: word === " ",
+                                    })}
+                                    style={{ animationDelay: `${index * 0.005}s` }}
+                                    data-step={index + 1 === typedBranch.length && "text"}
+                                >
+                                    {word}
+                                </span>
+                            );
+                        })}
+                    </p>
                 </>
             )}
             {step === 10 && (

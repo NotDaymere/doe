@@ -1,18 +1,31 @@
 .settings_container {
     position: absolute;
-    top: 20%;
-    left: 30%;
-    min-width: 40vw;
+    top: 50%;
+    left: 50%;
+    min-width: 50vw;
     min-height: 50vh;
     background-color: #f0f0f0;
     padding: 14px 12px;
     border-radius: 16px;
     border: 1px solid #dddddd;
-    animation: fade-in 0.5s ease-in-out;
+    animation: fade-in 0.5s ease-in-out forwards;
 
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    @media screen and (max-width: 1500px) {
+        min-width: 60vw;
+    }
+
+    @media screen and (max-width: 1248px) {
+        min-width: 50vw;
+        min-height: 60vh;
+    }
+
+    @media screen and (max-width: 1024px) {
+        min-width: 65vw;
+    }
 }
 
 .settings_head {
@@ -73,6 +86,11 @@
     background-color: #ffffff;
     border-radius: 12px;
     min-width: 200px;
+
+    @media screen and (max-width: 1248px) {
+        min-width: 120px;
+        padding: 8px;
+    }
 }
 
 .settings_nav_item {
@@ -95,12 +113,21 @@
         cursor: pointer;
         background-color: rgba(181, 181, 181, 0.15);
     }
+
+    @media screen and (max-width: 1248px) {
+        font-size: 12px;
+    }
 }
 
 .settings_nav_img {
     width: 20px;
     height: 20px;
     flex-shrink: 0;
+
+    @media screen and (max-width: 1248px) {
+        width: 16px;
+        height: 16px;
+    }
 }
 
 .settings_content {
@@ -113,11 +140,19 @@
     border-radius: 12px;
     // width: 100%;
     flex-grow: 1;
+
+    @media screen and (max-width: 1248px) {
+        padding: 8px 12px;
+    }
 }
 
 .settings_content_item {
     padding: 12px 0;
     border-bottom: 1px solid rgba(181, 181, 181, 0.2);
+
+    @media screen and (max-width: 1248px) {
+        padding: 8px 0;
+    }
 }
 
 .settings_content_head {
@@ -140,6 +175,16 @@
     &.saved input {
         color: black;
     }
+
+    @media screen and (max-width: 1560px) {
+        gap: 40px;
+        font-size: 14px;
+    }
+
+    @media screen and (max-width: 1248px) {
+        gap: 24px;
+        font-size: 14px;
+    }
 }
 
 .settings_content_buttons {
@@ -148,6 +193,24 @@
     gap: 8px;
     align-items: center;
     justify-items: flex-end;
+
+    @media screen and (max-width: 1248px) {
+        justify-content: space-between;
+    }
+}
+
+.settings_content_img_buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-items: flex-end;
+
+    @media screen and (max-width: 1248px) {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+    }
 }
 
 .settings_profile_img {
@@ -155,10 +218,17 @@
     height: 72px;
     border-radius: 100%;
     margin-right: 24px;
+
+    @media screen and (max-width: 1248px) {
+        width: 56px;
+        height: 56px;
+        margin-right: 8px;
+    }
 }
 
 .settings_content_change {
     display: flex;
+    align-items: center;
     flex-direction: row;
     gap: 4px;
     padding: 8px 7px;
@@ -171,6 +241,10 @@
 
     &:hover {
         background-color: #eeeeee;
+    }
+
+    @media screen and (max-width: 1248px) {
+        font-size: 12px;
     }
 }
 
@@ -196,6 +270,10 @@
     &:hover {
         background-color: rgba(255, 95, 95, 0.4);
     }
+
+    @media screen and (max-width: 1248px) {
+        font-size: 12px;
+    }
 }
 
 .settings_input {
@@ -205,6 +283,11 @@
     width: 100%;
     max-width: 350px;
     transition: all 0.3s ease;
+
+    @media screen and (max-width: 1248px) {
+        padding: 6px 8px;
+        max-width: 65%;
+    }
 }
 
 .settings_footer {
@@ -275,10 +358,10 @@
 @keyframes fade-in {
     from {
         opacity: 0;
-        transform: translateY(15px);
+        transform: translateX(-50%) translateY(-45%);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(-50%);
     }
 }

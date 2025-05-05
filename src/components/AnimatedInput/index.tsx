@@ -28,6 +28,7 @@ interface AnimatedInputProps {
     handleMathFormulaTypedOut: () => void;
     handleCodePromptTypedOut: () => void;
     handlePythonCodeTypedOut: () => void;
+    handleBranchTypedOut: () => void;
     handleSendProjectMessage: () => void;
     onSendMessage: (message: string, type: MessageType) => void;
 }
@@ -46,6 +47,7 @@ export function AnimatedInput({
     handleMathFormulaTypedOut,
     handleCodePromptTypedOut,
     handlePythonCodeTypedOut,
+    handleBranchTypedOut,
     handleSendProjectMessage,
     onSendMessage,
 }: AnimatedInputProps) {
@@ -122,6 +124,16 @@ export function AnimatedInput({
         startTyping: step === 9.2,
     });
 
+    const { text: typedBranch } = useTypewriterEffect({
+        text: "Create a simple project for me in any language.",
+        speed: 50,
+        delay: 500,
+        onComplete: () => {
+            handleBranchTypedOut();
+        },
+        startTyping: step === 38.1,
+    });
+
     const { text: linkText } = useTypewriterEffect({
         text: "https://thisaichatbot.com",
         speed: 90,
@@ -130,7 +142,7 @@ export function AnimatedInput({
     });
 
     const handleSendMessage = () => {
-        if (!sendButtonEnabled) return;
+        if (!sendButtonEnabled || isMessageSent) return;
 
         let messageType: MessageType;
 
@@ -213,6 +225,7 @@ export function AnimatedInput({
                                 typedMathFormula={typedMathFormula}
                                 typedCodePrompt={typedCodePrompt}
                                 typedPythonCode={typedPythonCode}
+                                typedBranch={typedBranch}
                                 linkText={linkText}
                                 userClickedBold={userClickedBold}
                                 userClickedUnderline={userClickedUnderline}
@@ -281,8 +294,8 @@ export function AnimatedInput({
                     >
                         Send <ArrowUpIcon />
                     </button>
-                    <div className={css.panel_grid}>{MemoizedGrid}</div>
                 </div>
+                <div className={css.panel_grid}>{MemoizedGrid}</div>
             </div>
         </div>
     );
