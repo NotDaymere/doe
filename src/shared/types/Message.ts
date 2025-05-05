@@ -9,6 +9,7 @@ export interface OnboardingMessage {
     role: "user" | "ai";
     content: string;
     content2?: string;
+    hasCode?: boolean;
     mathBlock?: string;
     translation?: string;
     origin?: string;

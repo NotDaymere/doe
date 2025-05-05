@@ -57,7 +57,6 @@ export function AnimatedInput({
     const [showSelectedText, setShowSelectedText] = useState(false);
     const [stressTooltip, setStressTooltip] = useState(false);
     const [stressSendButton, setStressButton] = useState(false);
-    const [isMathBlock, setIsMathBlock] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const safeStep = step ?? 0;
@@ -76,7 +75,7 @@ export function AnimatedInput({
         onComplete: () => {
             setShowSelectedText(true);
             setIsMessageSent(false);
-            if (step === 4.7) handleBoldPlaceholderTypedOut();
+            handleBoldPlaceholderTypedOut();
         },
         startTyping: step === 4.7,
     });
@@ -86,19 +85,18 @@ export function AnimatedInput({
         speed: 50,
         delay: 1200,
         onComplete: () => {
-            if (step === 8) handleMathPromptTypedOut();
+            handleMathPromptTypedOut();
         },
         startTyping: step === 8,
     });
 
-    const { text: typedMathFormula } = useTypewriterEffect({
+    const { text: typedMathFormula, isDone: isMathBlock } = useTypewriterEffect({
         text: "$Nat(C(-, X), F) cong F(X)$",
         speed: 50,
         delay: 1200,
         onComplete: () => {
-            setIsMathBlock(true);
             setIsMessageSent(false);
-            if (step === 8.2) handleMathFormulaTypedOut();
+            handleMathFormulaTypedOut();
         },
         startTyping: step === 8.2,
     });
@@ -109,7 +107,7 @@ export function AnimatedInput({
         delay: 1200,
         onComplete: () => {
             setIsMessageSent(false);
-            if (step === 9) handleCodePromptTypedOut();
+            handleCodePromptTypedOut();
         },
         startTyping: step === 9,
     });
@@ -119,7 +117,7 @@ export function AnimatedInput({
         speed: 50,
         delay: 1200,
         onComplete: () => {
-            if (step === 9.2) handlePythonCodeTypedOut();
+            handlePythonCodeTypedOut();
         },
         startTyping: step === 9.2,
     });

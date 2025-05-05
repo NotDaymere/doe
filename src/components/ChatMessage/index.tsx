@@ -50,7 +50,6 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
             },
         });
 
-        const showMath = isTypingDone || noTypeEffect || message.noTypeEffect;
         useScrollIntoViewOnUpdate(ref, [typedText, isTypingDone]);
 
         return (
@@ -91,7 +90,6 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                         typedText={typedText}
                         isTypingDone={isTypingDone}
                         noTypeEffect={noTypeEffect}
-                        showMath={showMath}
                     />
                     {isTranslation && (
                         <ChatMessageTranslation

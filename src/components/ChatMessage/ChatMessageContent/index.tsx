@@ -1,6 +1,7 @@
 import { OnboardingMessage } from "src/shared/types/Message";
 import ChatMathBlock from "../ChatMathBlock";
-import css from "./ChatMessage.module.less";
+import css from "../ChatMessage.module.less";
+import { ChatMessageCodeButtons } from "../ChatMessageCodeButtons";
 
 interface Props {
     isAI: boolean;
@@ -9,7 +10,6 @@ interface Props {
     typedText: string;
     isTypingDone: boolean;
     noTypeEffect?: boolean;
-    showMath?: boolean;
 }
 
 export const ChatMessageContent = ({
@@ -19,22 +19,22 @@ export const ChatMessageContent = ({
     typedText,
     isTypingDone,
     noTypeEffect,
-    showMath,
 }: Props) => {
+    const showMath = isTypingDone || noTypeEffect || message.noTypeEffect;
+
     if (isAI) {
         return (
             <>
-                {step !== 19 && step !== 21 && step !== 21.1 && (
-                    <div
-                        dangerouslySetInnerHTML={{
-                            __html:
-                                isTypingDone || noTypeEffect
-                                    ? message.content
-                                    : typedText + `<span class="${css.caret}"></span>`,
-                        }}
-                    />
-                )}
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html:
+                            isTypingDone || noTypeEffect
+                                ? message.content
+                                : typedText + `<span class="${css.caret}"></span>`,
+                    }}
+                />
                 <ChatMathBlock content={message.mathBlock} isVisible={showMath} />
+                {message.hasCode && <ChatMessageCodeButtons isVisible={showMath} />}
                 {message.content2 && (
                     <div
                         dangerouslySetInnerHTML={{
