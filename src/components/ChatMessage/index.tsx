@@ -16,6 +16,7 @@ interface ChatMessageProps {
     step: number;
     noTypeEffect?: boolean;
     userClickedTranslate: boolean;
+    setStep?: (value: number) => void;
     handleUntranslatedTypedOut?: () => void;
     handleVoiceMessageAppearing?: () => void;
 }
@@ -28,6 +29,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
             step,
             noTypeEffect,
             userClickedTranslate,
+            setStep,
             handleUntranslatedTypedOut,
             handleVoiceMessageAppearing,
         },
@@ -49,6 +51,15 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                       speed,
                       onComplete: () => {
                           setIsTypingDone(true);
+                          if (step === 28.1) {
+                              setTimeout(() => {
+                                  setStep?.(29);
+                              }, 1000);
+
+                              setTimeout(() => {
+                                  setStep?.(30);
+                              }, 1500);
+                          }
                       },
                       startTyping:
                           !isTypingDone &&
@@ -79,6 +90,15 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                     e.stopPropagation();
 
                     setIsTypingDone(true);
+
+                    if (step === 28.1) {
+                        setTimeout(() => {
+                            setStep?.(29);
+                        }, 1000);
+                        setTimeout(() => {
+                            setStep?.(30);
+                        }, 1500);
+                    }
                 } else if (step === 19.1) {
                     e.preventDefault();
                     e.stopPropagation();

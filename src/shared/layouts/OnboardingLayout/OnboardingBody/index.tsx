@@ -36,6 +36,7 @@ interface OnboardingBodyProps {
     handleUntranslatedTypedOut: () => void;
     handleVoiceMessageAppearing: () => void;
     handleSendProjectMessage: () => void;
+    setStep: (value: number) => void;
 }
 
 export function OnboardingBody(props: OnboardingBodyProps) {
@@ -63,6 +64,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         handleUntranslatedTypedOut,
         handleVoiceMessageAppearing,
         handleSendProjectMessage,
+        setStep,
     } = props;
 
     return (
@@ -83,6 +85,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
 
                 <HistorySection
                     step={step}
+                    setStep={setStep}
                     messages={messages}
                     userClickedTranslate={userClickedTranslate}
                     handleUntranslatedTypedOut={handleUntranslatedTypedOut}
@@ -152,12 +155,14 @@ function HistorySection({
     step,
     messages,
     userClickedTranslate,
+    setStep,
     handleUntranslatedTypedOut,
     handleVoiceMessageAppearing,
 }: {
     step: number;
     messages: OnboardingMessage[];
     userClickedTranslate: boolean;
+    setStep: (value: number) => void;
     handleUntranslatedTypedOut: () => void;
     handleVoiceMessageAppearing: () => void;
 }) {
@@ -176,6 +181,7 @@ function HistorySection({
             <ChatHistory
                 messages={messages}
                 step={step}
+                setStep={setStep}
                 userClickedTranslate={userClickedTranslate}
                 handleUntranslatedTypedOut={handleUntranslatedTypedOut}
                 handleVoiceMessageAppearing={handleVoiceMessageAppearing}

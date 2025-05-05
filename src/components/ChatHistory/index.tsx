@@ -10,6 +10,7 @@ interface ChatHistoryProps {
     messages: OnboardingMessage[];
     step: number;
     userClickedTranslate: boolean;
+    setStep: (value: number) => void;
     handleUntranslatedTypedOut: () => void;
     handleVoiceMessageAppearing: () => void;
 }
@@ -25,6 +26,7 @@ const ChatHistory = ({
     messages,
     step,
     userClickedTranslate,
+    setStep,
     handleUntranslatedTypedOut,
     handleVoiceMessageAppearing,
 }: ChatHistoryProps) => {
@@ -47,6 +49,7 @@ const ChatHistory = ({
                             step={step}
                             ref={historyRef}
                             userClickedTranslate={userClickedTranslate}
+                            setStep={setStep}
                             handleUntranslatedTypedOut={handleUntranslatedTypedOut}
                             handleVoiceMessageAppearing={handleVoiceMessageAppearing}
                         />

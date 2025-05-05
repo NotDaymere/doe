@@ -185,9 +185,9 @@ export function useOnboardingFlow(
     function handleAddGreetingMessages() {
         setBlockInput(false);
         setMessages?.([
-            { role: "user", content: `Hey Doe, I'm John Smith` },
-            { role: "ai", content: `Hey, John Smith, I'm Doe!` },
-            { role: "ai", content: `Let me introduce my main functionality.` },
+            { role: "user", content: `Hey Doe, I'm John Smith`, noTypeEffect: true },
+            { role: "ai", content: `Hey, John Smith, I'm Doe!`, noTypeEffect: true },
+            { role: "ai", content: `Let me introduce my main functionality.`, noTypeEffect: true },
         ]);
     }
 
@@ -257,6 +257,11 @@ export function useOnboardingFlow(
         }
         if (step === 29) {
             setBlockInput(true);
+        }
+        if (step === 37) {
+            setTimeout(() => {
+                nextStep();
+            }, 2000);
         }
     }, [step, setMessages]);
 
