@@ -36,8 +36,10 @@ export const MagicMenuButton: React.FC<Props> = ({
             aria-label={text}
             data-step={dataStep}
         >
-            <span className={css.magicBtn_icon}>{icon}</span>
-            <span className={css.magicBtn_text}>{text}</span>
+            <div className={css.magicBtn_row}>
+                <span className={css.magicBtn_icon}>{icon}</span>
+                <span className={css.magicBtn_text}>{text}</span>
+            </div>
             {hasMenu && <span className={css.magicBtn_hasMenu} data-has-menu />}
             {isActive && <span className={css.magicBtn_plus}>+</span>}
         </button>

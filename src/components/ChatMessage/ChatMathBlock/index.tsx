@@ -1,14 +1,17 @@
 import { MathJax } from "better-react-mathjax";
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import css from "../ChatMessage.module.less";
 
 interface ChatMathBlockProps {
     content?: string | null;
     isVisible?: boolean;
+    step?: number;
 }
 
-const ChatMathBlock = ({ content, isVisible }: ChatMathBlockProps) => {
+const ChatMathBlock = ({ content, isVisible, step }: ChatMathBlockProps) => {
     if (!content) return null;
+
+    useEffect(() => {}, [step]);
 
     return (
         <MathJax dynamic hideUntilTypeset="first">

@@ -33,7 +33,7 @@ export const ChatMessageContent = ({
                                 : typedText + `<span class="${css.caret}"></span>`,
                     }}
                 />
-                <ChatMathBlock content={message.mathBlock} isVisible={showMath} />
+                <ChatMathBlock content={message.mathBlock} isVisible={showMath} step={step} />
                 {message.hasCode && <ChatMessageCodeButtons isVisible={showMath} />}
                 {message.content2 && (
                     <div
@@ -55,7 +55,7 @@ export const ChatMessageContent = ({
             />
             {message.mathBlock && (
                 <div className={css.user_math_block}>
-                    <ChatMathBlock content={message.mathBlock} isVisible={showMath} />
+                    <ChatMathBlock content={message.mathBlock} isVisible={showMath} step={step} />
                 </div>
             )}
         </>

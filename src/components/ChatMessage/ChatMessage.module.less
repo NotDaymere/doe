@@ -77,6 +77,20 @@
     box-shadow: 0 0 20px rgba(71, 148, 255, 0.5), 0 0 0px rgba(71, 148, 255, 0.4),
         0 0 0px rgba(71, 148, 255, 0.3), 0 0 0px rgba(71, 148, 255, 0.2),
         0 0 0px rgba(71, 148, 255, 0.15);
+
+    &.logoIcon_no_shadow {
+        box-shadow: none;
+        path {
+            fill: url(#logoGradient_black);
+        }
+    }
+
+    &.logoIcon_black {
+        background: linear-gradient(to bottom, #5b5b5b 0%, #1f1f1f 100%);
+        path {
+            fill: url(#logoGradient_white);
+        }
+    }
 }
 
 .logoIcon::after {
@@ -256,6 +270,16 @@ code {
     flex-direction: row;
     align-items: center;
     gap: 4px;
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border: 1px solid rgba(151, 71, 255, 0.6);
+        background-color: rgba(151, 71, 255, 0.08);
+        scale: 1.05;
+    }
 }
 
 .gradient_text {

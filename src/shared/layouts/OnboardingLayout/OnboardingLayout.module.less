@@ -57,6 +57,23 @@
     // flex-direction: row;
     // justify-content: center;
     // flex-wrap: nowrap;
+
+    &::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #dddddd;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: yellow;
+    }
 }
 
 .layout_chat {

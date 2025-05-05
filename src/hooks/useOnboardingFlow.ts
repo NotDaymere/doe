@@ -263,6 +263,9 @@ export function useOnboardingFlow(
                 nextStep();
             }, 2000);
         }
+        if (step === 40) {
+            setMessages?.((prev) => prev.slice(-2));
+        }
     }, [step, setMessages]);
 
     return {

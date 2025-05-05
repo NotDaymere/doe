@@ -1,4 +1,5 @@
 import cn from "classnames";
+import clsx from "clsx";
 import { forwardRef, memo } from "react";
 import { ReactComponent as DoeLogoIcon } from "src/assets/icons/logo-gradient.svg";
 import { ReactComponent as TranslateIcon } from "src/assets/icons/translateIcon.svg";
@@ -59,7 +60,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                     [css.userMessageWrapper]: !isAI,
                 })}
             >
-                <LogoIcon show={isAI && prevRole !== "ai"} />
+                <LogoIcon show={isAI && prevRole !== "ai"} step={step} />
                 <div
                     className={cn(css.message, {
                         [css.aiMessage]: isAI,
@@ -108,13 +109,22 @@ export default memo(ChatMessage);
 
 interface LogoIconProps {
     show: boolean;
+    step: number;
 }
 
-export const LogoIcon = memo(({ show }: LogoIconProps) => {
+export const LogoIcon = memo(({ show, step }: LogoIconProps) => {
     if (!show) return null;
 
+    const noShadow = step >= 28;
+    const blackLogo = step >= 40 && step <= 42;
+
     return (
-        <div className={css.logoIcon}>
+        <div
+            className={clsx(css.logoIcon, {
+                [css.logoIcon_no_shadow]: noShadow,
+                [css.logoIcon_black]: blackLogo,
+            })}
+        >
             <DoeLogoIcon />
         </div>
     );

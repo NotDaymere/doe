@@ -5,5 +5,13 @@
 <stop stop-color="#47AFFF"/>
 <stop offset="1" stop-color="#1F1F1F"/>
 </linearGradient>
+<linearGradient id="logoGradient_black" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse">
+  <stop offset="0%" stop-color="#090F01" />
+  <stop offset="100%" stop-color="#8D8D8D" />
+</linearGradient>
+<linearGradient id="logoGradient_white" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse">
+  <stop offset="0%" stop-color="#F8F8F8" stop-opacity="0.6" />
+  <stop offset="100%" stop-color="#F8F8F8" stop-opacity="1" />
+</linearGradient>
 </defs>
 </svg>
