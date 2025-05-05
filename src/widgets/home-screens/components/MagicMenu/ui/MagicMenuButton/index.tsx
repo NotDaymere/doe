@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React from "react";
+import { ReactComponent as PlusIcon } from "src/assets/icons/plus.svg";
 import { useCursor } from "src/contexts/CursorContext";
 import css from "./MagicMenuButton.module.less";
 
@@ -25,12 +26,13 @@ export const MagicMenuButton: React.FC<Props> = ({
     triggerStep,
 }) => {
     const { cursorMoving } = useCursor();
-    const isActive = triggerStep && step === triggerStep && !cursorMoving;
+    const isActivePlus = triggerStep && step === triggerStep && step !== 45 && !cursorMoving;
+    const isActiveCircle = triggerStep && step === triggerStep && step === 45 && !cursorMoving;
 
     return (
         <button
             className={clsx(css.magicBtn, className, {
-                [css.active]: isActive,
+                [css.active]: isActivePlus || isActiveCircle,
             })}
             onClick={onClick}
             aria-label={text}
@@ -41,7 +43,12 @@ export const MagicMenuButton: React.FC<Props> = ({
                 <span className={css.magicBtn_text}>{text}</span>
             </div>
             {hasMenu && <span className={css.magicBtn_hasMenu} data-has-menu />}
-            {isActive && <span className={css.magicBtn_plus}>+</span>}
+            {isActivePlus && (
+                <span className={css.magicBtn_plus}>
+                    <PlusIcon />
+                </span>
+            )}
+            {isActiveCircle && <span className={css.magicBtn_circle} />}
         </button>
     );
 };
