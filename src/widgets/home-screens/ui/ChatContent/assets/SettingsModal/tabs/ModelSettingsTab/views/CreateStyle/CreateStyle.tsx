@@ -25,7 +25,6 @@ export const CreateStyle = ({ onSave }: CreateStyleProps) => {
         text: "",
         files: [],
     });
-    console.log(" CreateStyle ~ styleData:", styleData);
     const navigate = useNavigate();
     const handleSave = () => {
         const style: SaveStyleDataType = {
