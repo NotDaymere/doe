@@ -4,8 +4,43 @@ import styles from "../Personalization.module.less";
 import { GeneralSettingsIcon } from "src/shared/icons/GeneralSettingsIcon";
 import { GradientPazzleIcon } from "src/shared/icons/GradientPazzleIcon";
 import { Puzzles } from "../../../../components/Puzzles/Puzzles";
+import { useNavigate } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { PuzzleType } from "../../../../components/Puzzles/PuzzleItem/PuzzleItem";
 
 export const SensOfSelf = () => {
+    const [puzzles, setPuzzles] = useState<PuzzleType[]>([
+        {
+            id: crypto.randomUUID(),
+            category: null,
+            description: "Create new memory block!",
+        },
+    ]);
+    const initialState = useRef<PuzzleType[] | null>(null);
+    useEffect(() => {
+        initialState.current = puzzles;
+    }, []);
+    const [isDirty, setIsDirty] = useState(false);
+
+    useEffect(() => {
+        if (!initialState.current) return;
+        if (puzzles.length !== initialState.current.length) return setIsDirty(true);
+        if (
+            puzzles.some(
+                (puzzle, index) =>
+                    puzzle.description !== initialState.current?.[index].description ||
+                    puzzle.category !== initialState.current?.[index].category ||
+                    puzzle.id !== initialState.current?.[index].id
+            )
+        )
+            return setIsDirty(true);
+        setIsDirty(false);
+    }, [puzzles]);
+    const navigation = useNavigate();
+    const handleSave = () => {
+        console.log("puzzles", puzzles);
+        navigation(-1);
+    };
     return (
         <div className={sosStyles.sos__container}>
             <div className={clsx(styles.personalization__header, sosStyles.sos__header)}>
@@ -23,8 +58,8 @@ export const SensOfSelf = () => {
 
                 <button
                     className={styles.personalization__saveBtn}
-                    disabled
-                    // onClick={() => handleSave()}
+                    disabled={!isDirty}
+                    onClick={() => handleSave()}
                 >
                     <GeneralSettingsIcon />
                     <span>Save changes</span>
@@ -41,7 +76,7 @@ export const SensOfSelf = () => {
                         knowledge, static and emergent behaviors immediately and longitudinally in
                         addition to its encoded persona(s) or writing style(s).
                     </p>
-                    <Puzzles />
+                    <Puzzles puzzles={puzzles} setPuzzles={setPuzzles} />
                 </div>
             </div>
         </div>

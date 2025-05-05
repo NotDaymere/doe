@@ -13,16 +13,16 @@ import { useSearchParams } from "react-router-dom";
 
 type SettingsModalProps = {
     onClose: () => void;
-    isOpen?: boolean;
     currentProfile: Profile;
+    isSideBarOpen: boolean;
     profiles: Profile[];
 };
 
 export const SettingsModal = ({
     onClose,
-    isOpen = false,
     currentProfile,
     profiles,
+    isSideBarOpen,
 }: SettingsModalProps) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const tab = searchParams.get("tab");
@@ -87,7 +87,10 @@ export const SettingsModal = ({
     return ReactDOM.createPortal(
         <>
             <div className={styles.settingsModal__backdrop} onClick={handleClose} />
-            <div className={styles.settingsModal__container}>
+            <div
+                style={{ left: isSideBarOpen ? "300px" : "92px" }}
+                className={styles.settingsModal__container}
+            >
                 <div className={styles.settingsModal__header}>
                     <h2 className={styles.settingsModal__title}>Settings</h2>
                     <button className={styles.settingsModal__closeButton} onClick={handleClose}>

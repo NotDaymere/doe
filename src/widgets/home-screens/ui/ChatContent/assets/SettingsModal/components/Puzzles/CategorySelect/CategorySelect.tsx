@@ -1,50 +1,45 @@
-import { useEffect, useRef, useState } from "react";
-import styles from "./PopupMenu.module.less";
-import { MoveToFolderIcon } from "src/shared/icons/MoveToFolderIcon";
-import { PenIcon } from "src/shared/icons/PenIcon";
-import TrashIcon from "src/shared/icons/Trash.icon";
-import { FolderType } from "../../tabs/GeneralTab/views/KnowledgeView/KnowledgeView";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
+import styles from "./CategorySelect.module.less";
+import clsx from "clsx";
+import { puzzleCategories } from "../Puzzles.config";
+import { PuzzleCategories } from "../PuzzleItem/PuzzleItem";
+import { MemoryIcon } from "src/shared/icons/MemoryIcon";
 
-type PopupMenuProps = {
-    children: React.ReactNode;
+export type CategorySelectProps = {
+    category: PuzzleCategories | null;
+    onSelect: (category: PuzzleCategories) => void;
     className?: string;
-    folders: FolderType[];
-    onDelete: () => void;
-    onMoveToFolder: (folderId: string) => void;
 };
-
+const ANIMATION_DURATION = 300;
 type MenuState = {
     active: boolean;
     position: { top: number; left: number } | null;
     anchorRect: DOMRect | null;
 };
-
-const ANIMATION_DURATION = 300;
-
-export const PopupMenu = ({
-    children,
-    className,
-    folders,
-    onDelete,
-    onMoveToFolder,
-}: PopupMenuProps) => {
+export const CategorySelect = ({ category, onSelect, className }: CategorySelectProps) => {
     const [menuState, setMenuState] = useState<MenuState>({
         active: false,
         position: null,
         anchorRect: null,
     });
-
+    const currentCategory = useMemo(() => {
+        if (!category) {
+            return null;
+        }
+        return puzzleCategories.find((cat) => cat.name === category);
+    }, [category]);
     const menuRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const handleOpenMenu = (e: React.MouseEvent) => {
+        // e.stopPropagation();
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
         setMenuState({
             active: true,
             position: {
-                top: rect.top + 2 + window.scrollY,
-                left: rect.right - 1 + window.scrollX,
+                top: rect.bottom + 5 + window.scrollY,
+                left: rect.left + window.scrollX,
             },
             anchorRect: rect,
         });
@@ -98,13 +93,18 @@ export const PopupMenu = ({
             window.removeEventListener("scroll", handleScroll, true);
         };
     }, [menuState.anchorRect]);
-    const handleMoveToFolder = (folderId: string) => {
-        onMoveToFolder(folderId);
+    const handleSelect = (e: React.MouseEvent, category: PuzzleCategories) => {
+        e.stopPropagation();
+        onSelect(category);
         handleCloseMenu();
     };
     return (
-        <button onClick={handleOpenMenu} ref={buttonRef} className={className}>
-            {children}
+        <button
+            onClick={handleOpenMenu}
+            ref={buttonRef}
+            className={clsx(styles.categorySelect, styles[currentCategory?.value ?? ""], className)}
+        >
+            {category ?? <MemoryIcon />}
             {createPortal(
                 <CSSTransition
                     classNames={styles}
@@ -121,33 +121,22 @@ export const PopupMenu = ({
                             left: menuState.position?.left,
                             zIndex: 1000,
                         }}
-                        className={styles.menu}
+                        className={styles.categorySelect__menu}
                     >
-                        <button className={styles.menu__item}>
-                            <PenIcon />
-                            Rename
-                        </button>
-                        <button className={styles.menu__item}>
-                            <MoveToFolderIcon />
-                            <p>Move</p>
-                            {!!folders.length && (
-                                <div className={styles.menu__submenu}>
-                                    {folders.map((folder) => (
-                                        <button
-                                            key={folder.id}
-                                            className={styles.menu__submenu__item}
-                                            onClick={() => handleMoveToFolder(folder.id)}
-                                        >
-                                            <span>{folder.name}</span>
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </button>
-                        <button className={styles.menu__item} onClick={() => onDelete()}>
-                            <TrashIcon />
-                            Delete
-                        </button>
+                        {puzzleCategories.map((cat) => (
+                            <button
+                                key={cat.name}
+                                className={clsx(
+                                    styles.categorySelect__menu__item,
+                                    styles[cat.value],
+                                    cat.value === currentCategory?.value &&
+                                        styles[`${cat.value}--selected`]
+                                )}
+                                onClick={(e) => handleSelect(e, cat.name)}
+                            >
+                                {cat.name}
+                            </button>
+                        ))}
                     </div>
                 </CSSTransition>,
                 document.body

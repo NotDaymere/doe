@@ -1,12 +1,14 @@
-import { LeftTopPuzzle } from "src/shared/icons/puzzleShapes/LeftTopPuzzle";
 import styles from "./PuzzleItem.module.less";
-import { MiddleTopPuzzle } from "src/shared/icons/puzzleShapes/MiddleTopPuzzle";
-import { RightTopPuzzle } from "src/shared/icons/puzzleShapes/RightTopPuzle";
-import { LeftMiddlePuzzle } from "src/shared/icons/puzzleShapes/LeftMiddlePuzzle";
-import { MiddlePuzzle } from "src/shared/icons/puzzleShapes/MiddlePuzzle";
-import { RightMiddlePuzzle } from "src/shared/icons/puzzleShapes/RightMiddlePuzzle";
 import clsx from "clsx";
-import { useCallback } from "react";
+import { PuzzleShape } from "./PuzzleShape";
+import { CategorySelect } from "../CategorySelect/CategorySelect";
+import { puzzleCategories } from "../Puzzles.config";
+import MinusIcon from "src/shared/icons/Minus.icon";
+import { PlusIcon } from "src/shared/icons/PlusIcon";
+import { useState } from "react";
+import { create } from "zustand";
+import { createPortal } from "react-dom";
+import { PuzzleEditModal } from "../PuzzleEditModal/PuzzleEditModal";
 
 export type PuzzleCategories = "Identity" | "Preferences" | "Knowledge" | "Intent" | "Cognition";
 export type PuzzleType = {
@@ -18,30 +20,29 @@ type PuzzleItemProps = {
     index: number;
     puzzle: PuzzleType;
     addPuzzle: () => void;
+    removePuzzle: () => void;
+    onEdit: (text: string) => void;
     onClick: () => void;
+    onSelectCategory: ({ category, id }: { category: PuzzleCategories; id: string }) => void;
     selectedPuzzleId: string | null;
+    isSingle: boolean;
 };
 export const PazzleItem = ({
     index,
-    puzzle: { category, id },
+    puzzle: { category, id, description },
     selectedPuzzleId,
+    isSingle,
     addPuzzle,
+    removePuzzle,
+    onEdit,
     onClick,
+    onSelectCategory,
 }: PuzzleItemProps) => {
     const isLastInRow = index % 4 === 3 || index === 3;
     const isSelected = selectedPuzzleId === id;
-    const renderPuzzle = useCallback(() => {
-        const puzzleProps = {
-            category: category ?? "without_category",
-            isColored: isSelected || !selectedPuzzleId,
-        } as const;
-        if (index === 0) return <LeftTopPuzzle {...puzzleProps} />;
-        if (index > 0 && index < 3) return <MiddleTopPuzzle {...puzzleProps} />;
-        if (index === 3) return <RightTopPuzzle {...puzzleProps} />;
-        if (index % 4 === 0) return <LeftMiddlePuzzle {...puzzleProps} />;
-        if (index % 4 > 0 && index % 4 < 3) return <MiddlePuzzle {...puzzleProps} />;
-        if (index % 4 === 3) return <RightMiddlePuzzle {...puzzleProps} />;
-    }, [index, category, selectedPuzzleId]);
+    const isUnselected = selectedPuzzleId && selectedPuzzleId !== id;
+    const [openEditModal, setOpenEditModal] = useState(false);
+
     return (
         <div
             className={clsx(
@@ -49,14 +50,36 @@ export const PazzleItem = ({
                 isSelected && styles.puzzleItem__container__selected
             )}
             onClick={() => onClick()}
+            onDoubleClick={() => setOpenEditModal(true)}
         >
-            {renderPuzzle()}
+            <CategorySelect
+                category={category}
+                onSelect={(cat) => onSelectCategory({ category: cat, id })}
+                className={clsx(isUnselected && styles.puzzleItem__menu__unselected)}
+            />
+            <p
+                className={clsx(
+                    styles.puzzleItem__description,
+                    category && !isUnselected && styles[category],
+                    isUnselected && styles.puzzleItem__description__unselected
+                )}
+            >
+                {description}
+            </p>
+            <PuzzleShape
+                index={index}
+                isColored={!selectedPuzzleId || isSelected}
+                category={category}
+            />
             {isSelected && (
                 <div
                     className={clsx(
                         styles.puzzleItem__control__container,
                         isLastInRow && styles.puzzleItem__control__container__last
                     )}
+                    onDoubleClick={(e) => {
+                        e.stopPropagation();
+                    }}
                 >
                     <button
                         className={clsx(
@@ -65,18 +88,33 @@ export const PazzleItem = ({
                         )}
                         onClick={addPuzzle}
                     >
-                        +
+                        <PlusIcon />
                     </button>
-                    <button
-                        className={clsx(
-                            styles.puzzleItem__controlBtn,
-                            styles.puzzleItem__controlBtn__remove
-                        )}
-                    >
-                        -
-                    </button>
+                    {!isSingle && (
+                        <button
+                            className={clsx(
+                                styles.puzzleItem__controlBtn,
+                                styles.puzzleItem__controlBtn__remove
+                            )}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                removePuzzle();
+                            }}
+                        >
+                            <MinusIcon />
+                        </button>
+                    )}
                 </div>
             )}
+            {openEditModal &&
+                createPortal(
+                    <PuzzleEditModal
+                        text={description ?? ""}
+                        onClose={() => setOpenEditModal(false)}
+                        onSave={onEdit}
+                    />,
+                    document.body
+                )}
         </div>
     );
 };

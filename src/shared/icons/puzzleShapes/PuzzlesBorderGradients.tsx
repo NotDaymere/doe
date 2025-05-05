@@ -1,6 +1,6 @@
 export const PuzzlesBorderGradients = () => {
     return (
-        <defs>
+        <>
             <linearGradient
                 x1="-32.769539"
                 y1="-0.000004"
@@ -68,6 +68,6 @@ export const PuzzlesBorderGradients = () => {
                 <stop stopColor="#2ED5EB" />
                 <stop offset="1.000000" stopColor="#00677D" />
             </linearGradient>
-        </defs>
+        </>
     );
 };

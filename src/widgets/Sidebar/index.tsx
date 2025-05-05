@@ -135,8 +135,8 @@ export const Sidebar: React.FC = () => {
             {currentProfile && isSettingsOpen && (
                 <SettingsModal
                     currentProfile={currentProfile}
-                    isOpen={isSettingsOpen}
                     onClose={() => setIsSettingsOpen(false)}
+                    isSideBarOpen={isSideBarOpen}
                     profiles={profiles}
                 />
             )}
