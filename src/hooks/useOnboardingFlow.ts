@@ -209,7 +209,7 @@ export function useOnboardingFlow(
             setTimeout(() => {
                 nextStep();
                 setBlockSteps(false);
-            }, 1500);
+            }, 500);
         }
         if (step === 18) {
             handleDeleteMessages();

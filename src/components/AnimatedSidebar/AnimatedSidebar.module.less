@@ -2,6 +2,7 @@
     width: 76px;
     padding: 75px 18px 42px;
     // overflow: auto;
+    background-color: #ffffff;
 
     display: flex;
     flex-direction: column;
@@ -158,6 +159,7 @@
     align-items: center;
     justify-content: space-between;
 }
+
 .sidebar_theme_toggler {
     padding: 4px 0;
     border-radius: 100px;
@@ -170,6 +172,13 @@
     align-items: center;
     gap: 4px;
 }
+
+.sidebar_theme_toggler_horizontal {
+    justify-content: center;
+    width: 72px;
+    height: 40px;
+}
+
 .sidebar_theme_btn {
     width: 30px;
     height: 30px;
@@ -523,6 +532,8 @@
     border-radius: 12px;
     border: 1px solid #dddddd;
     transition: all 1s ease;
+
+    overflow: hidden;
 
     svg {
         width: 20px;

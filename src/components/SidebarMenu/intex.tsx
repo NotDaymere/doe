@@ -52,7 +52,7 @@ export const SidebarMenu = ({ step, isOpen }: SidebarMenuProps) => {
                             data-step={dataStep}
                         >
                             <div className={css.sidebar_controls_head}>
-                                <img src={icon} alt="" />
+                                <img src={icon} alt={`${label} icon`} />
                                 <div className={css.sidebar_controls_text}>{label}</div>
                             </div>
                             {isOpen && (

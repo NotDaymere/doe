@@ -54,14 +54,12 @@ export const useChat = (setShowSidebar: React.Dispatch<React.SetStateAction<bool
                 );
             }, 1000);
         } else if (type === "math") {
-            setTimeout(() => {
-                addMessage(
-                    "user",
-                    `Please put together a sample project that uses the equation`,
-                    true,
-                    mathBlock2
-                );
-            }, 1000);
+            addMessage(
+                "user",
+                `Please put together a sample project that uses the equation`,
+                true,
+                mathBlock2
+            );
             setTimeout(() => {
                 addMessage("ai", simpleProjectText, false, mathBlock);
             }, 2000);

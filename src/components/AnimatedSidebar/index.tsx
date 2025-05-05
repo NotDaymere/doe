@@ -69,7 +69,11 @@ export const AnimatedSidebar = ({
                     [css.light]: (step === 24 || step === 26) && !cursorMoving,
                 })}
             >
-                <div className={css.sidebar_theme_toggler}>
+                <div
+                    className={clsx(css.sidebar_theme_toggler, {
+                        [css.sidebar_theme_toggler_horizontal]: step >= 12 && step <= 16,
+                    })}
+                >
                     <button className={css.sidebar_theme_btn} disabled data-step="lightMode">
                         <LightThemeIcon />
                     </button>
