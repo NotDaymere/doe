@@ -60,9 +60,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         currentBranchDialog,
         setCurrentBranchDialog,
         getOpenSavedPlaygrounds,
-        showQuickSearch,
-        setShowQuickSearch,
-        getNoPlayground
+        getNoPlayground,
     } = useChatStore();
     const { talkModeActive, isSideBarOpen } = useAppStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
@@ -98,17 +96,13 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
             setActiveAllPlaygrounds(true);
             return;
         }
-        setTimeout(
-            () => setActiveAllPlaygrounds(!activeAllPlaygrounds),
-            450
-        )
-    }
+        setTimeout(() => setActiveAllPlaygrounds(!activeAllPlaygrounds), 450);
+    };
 
     const [activeAllBranches, setActiveAllBranches] = useState<boolean>(false);
-    const changeActiveAllBranches = () => setActiveAllBranches(!activeAllBranches)
+    const changeActiveAllBranches = () => setActiveAllBranches(!activeAllBranches);
 
-
-    const messageNodeMap = useChatStore((state) => state.currentChat.messageNodeMap|| {});
+    const messageNodeMap = useChatStore((state) => state.currentChat.messageNodeMap || {});
 
     const messageQueue = React.useMemo(() => {
         return useChatStore.getState().getMessageQueueFromNode();
@@ -208,21 +202,6 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         return () => clearInterval(intervalId);
     }, [messageQueue.length, isCurrentBranchOpen]);
 
-    useEffect(() => {
-        const handleKeyDown = (event: any) => {
-            if ((event.metaKey || event.ctrlKey) && event.key === "f") {
-                event.preventDefault();
-                setShowQuickSearch(true);
-            }
-        };
-
-        document.addEventListener("keydown", handleKeyDown);
-
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, []);
-
     const handleStepsButtonClick = () => {
         setPlayground({
             ...playground,
@@ -234,7 +213,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
     return (
         <div
             className={
-                (getOpenSavedPlaygrounds().length > 0 || getNoPlayground().open)
+                getOpenSavedPlaygrounds().length > 0 || getNoPlayground().open
                     ? playgroundFullscreen
                         ? css.content_playground_fullscreen
                         : css.content_playground
@@ -261,48 +240,47 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     />
                 )}
                 {!isCurrentBranchOpen && (
-                    <div className={(getOpenSavedPlaygrounds().length <= 0 && !getNoPlayground().open)
-                                    ? !isSideBarOpen
-                                        ? css.logoWrapper
-                                        : css.logoWrapperSideBarOpen
-                                    : !isSideBarOpen
-                                        ? css.logoWrapperPlaygroundOpen
-                                        : css.logoWrapperPlaygroundAndSideBarOpen}>
-                            {!playgroundFullscreen && (
-                                <div className={css.logoPopup}
-                                    data-active={activeAllPlaygrounds || activeAllBranches}>
-                                    <div className={css.allPlaygroundsWrapper}>
-                                        <AllPlaygrounds
-                                            activeAllPlaygrounds={activeAllPlaygrounds}
-                                            changeActiveAllPlaygrounds={changeActiveAllPlaygrounds}
-                                        />
-                                    </div>
-                                    <div className={css.allBranchesContainer}>
-                                        <AllBranches
-                                            activeAllBranches={activeAllBranches}
-                                            changeActiveAllBranches={changeActiveAllBranches}
-                                        />
-                                    </div>
+                    <div
+                        className={
+                            getOpenSavedPlaygrounds().length <= 0 && !getNoPlayground().open
+                                ? !isSideBarOpen
+                                    ? css.logoWrapper
+                                    : css.logoWrapperSideBarOpen
+                                : !isSideBarOpen
+                                  ? css.logoWrapperPlaygroundOpen
+                                  : css.logoWrapperPlaygroundAndSideBarOpen
+                        }
+                    >
+                        {!playgroundFullscreen && (
+                            <div
+                                className={css.logoPopup}
+                                data-active={activeAllPlaygrounds || activeAllBranches}
+                            >
+                                <div className={css.allPlaygroundsWrapper}>
+                                    <AllPlaygrounds
+                                        activeAllPlaygrounds={activeAllPlaygrounds}
+                                        changeActiveAllPlaygrounds={changeActiveAllPlaygrounds}
+                                    />
                                 </div>
-                            )}
+                                <div className={css.allBranchesContainer}>
+                                    <AllBranches
+                                        activeAllBranches={activeAllBranches}
+                                        changeActiveAllBranches={changeActiveAllBranches}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
-
-                {!talkModeActive && !playgroundFullscreen && !isCurrentBranchOpen &&
+                {!talkModeActive && !playgroundFullscreen && !isCurrentBranchOpen && (
                     <Reflections />
-                }
+                )}
 
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
 
                 <TalkMode targetRef={chatRef} />
-
-                {showQuickSearch && (
-                    <div className={css.quickSearch}>
-                        <QuickSearch onClose={setShowQuickSearch} />
-                    </div>
-                )}
             </div>
-    </div>
+        </div>
     );
 };
