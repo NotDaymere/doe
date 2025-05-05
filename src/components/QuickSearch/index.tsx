@@ -18,7 +18,7 @@ export const QuickSearch = ({ step }: QuickSearchProps) => {
     const [filteredSuggestions, setFilteredSuggestions] = useState(suggestionsMock);
     const [isCaseSensitive, setIsCaseSensitive] = useState(false);
 
-    const typedSearchInput = useTypewriterEffect({
+    const { text: typedSearchInput } = useTypewriterEffect({
         text: "Yoneda Lemma",
         speed: 200,
         startTyping: step >= 56,
@@ -53,7 +53,7 @@ export const QuickSearch = ({ step }: QuickSearchProps) => {
         return (
             <>
                 {before}
-                <strong>{match}</strong>
+                <strong className={css.quick_search_find}>{match}</strong>
                 {after}
             </>
         );
@@ -92,7 +92,7 @@ export const QuickSearch = ({ step }: QuickSearchProps) => {
                 <button className={css.quick_search_close}>
                     <CrossIcon />
                 </button>
-                <div className={css.quick_search_suggestions}>
+                <div className={clsx(css.quick_search_suggestions, { [css.hidden]: step === 55 })}>
                     <div className={css.suggestions_head}>
                         <div className={css.suggestions_calendar}>
                             <div className={css.suggestions_calendar_icon}>

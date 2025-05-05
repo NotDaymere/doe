@@ -31,7 +31,7 @@ export const ReadyMessage = ({ step, text, handleWelcomeTextTypedOut }: ReadyMes
                 <Logo />
             </div>
 
-            <WelcomeText onComplete={handleWelcomeTextTypedOut} text={text} />
+            <WelcomeText onComplete={handleWelcomeTextTypedOut} text={text} step={step} />
 
             <div className={css.messages}>
                 {messages.map((msg, index) => (

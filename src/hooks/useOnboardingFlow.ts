@@ -158,11 +158,11 @@ export function useOnboardingFlow(
 
     function handleUserClickedSidebarButton(type: string) {
         if (type === "bold") {
-            setUserClickedBold(true);
+            setUserClickedBold((prev) => !prev);
         } else if (type === "italic") {
-            setUserClickedItalic(true);
+            setUserClickedItalic((prev) => !prev);
         } else if (type === "underline") {
-            setUserClickedUnderline(true);
+            setUserClickedUnderline((prev) => !prev);
         } else if (type === "translate") {
             setUserClickedTranslate(true);
             setStep(19.2);
@@ -265,6 +265,26 @@ export function useOnboardingFlow(
         }
         if (step === 40) {
             setMessages?.((prev) => prev.slice(-2));
+        }
+        if (step === 46) {
+            setTimeout(() => {
+                nextStep();
+            }, 1000);
+        }
+        if (step === 47) {
+            setTimeout(() => {
+                nextStep();
+            }, 1000);
+        }
+        if (step === 50) {
+            setTimeout(() => {
+                nextStep();
+            }, 500);
+        }
+        if (step === 54) {
+            setTimeout(() => {
+                nextStep();
+            }, 500);
         }
     }, [step, setMessages]);
 

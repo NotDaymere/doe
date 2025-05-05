@@ -100,6 +100,33 @@ export function useStepNavigation(
                 if (e.key === "ArrowLeft") {
                     setStep(28);
                 }
+            } else if (step >= 46 && step <= 48) {
+                if (e.key === "ArrowRight") {
+                    if (step === 48) {
+                        setStep(49);
+                    } else {
+                        setStep(48);
+                    }
+                }
+                if (e.key === "ArrowLeft") {
+                    setStep(45);
+                }
+            } else if (step === 51) {
+                if (e.key === "ArrowRight") {
+                    setCursorMoving();
+                    nextStep();
+                }
+                if (e.key === "ArrowLeft") {
+                    setStep(49);
+                }
+            } else if (step === 55) {
+                if (e.key === "ArrowRight") {
+                    setCursorMoving();
+                    nextStep();
+                }
+                if (e.key === "ArrowLeft") {
+                    setStep(53);
+                }
             } else if (step >= 1) {
                 if (e.key === "ArrowRight") {
                     setCursorMoving();

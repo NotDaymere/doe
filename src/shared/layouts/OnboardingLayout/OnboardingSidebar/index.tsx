@@ -24,7 +24,7 @@ export function OnboardingSidebar({
     return (
         <AnimatedSidebar
             step={step}
-            showSidebar={showSidebar}
+            showSidebar={showSidebar && step <= 57}
             darkMode={step === 25}
             handleSidebarOpen={handleSidebarOpen}
             handleSidebarClose={handleSidebarClose}

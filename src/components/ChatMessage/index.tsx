@@ -16,7 +16,7 @@ interface ChatMessageProps {
     prevRole?: "user" | "ai";
     step: number;
     noTypeEffect?: boolean;
-    userClickedTranslate: boolean;
+    userClickedTranslate?: boolean;
     setStep?: (value: number) => void;
     handleUntranslatedTypedOut?: () => void;
     handleVoiceMessageAppearing?: () => void;
@@ -115,7 +115,7 @@ interface LogoIconProps {
 export const LogoIcon = memo(({ show, step }: LogoIconProps) => {
     if (!show) return null;
 
-    const noShadow = step >= 28;
+    const noShadow = step >= 28 && step <= 57;
     const blackLogo = step >= 40 && step <= 42;
 
     return (
