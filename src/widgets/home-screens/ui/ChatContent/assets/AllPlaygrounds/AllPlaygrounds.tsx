@@ -9,8 +9,10 @@ interface AllPlaygroundsProps {
     changeActiveAllPlaygrounds: () => void;
 }
 
-export default function AllPlaygrounds( { activeAllPlaygrounds, changeActiveAllPlaygrounds}: AllPlaygroundsProps) {
-
+export default function AllPlaygrounds({
+    activeAllPlaygrounds,
+    changeActiveAllPlaygrounds,
+}: AllPlaygroundsProps) {
     return (
         <div className={"position-fixed"}>
             <button className={"all-playgrounds-button"} onClick={changeActiveAllPlaygrounds}>
