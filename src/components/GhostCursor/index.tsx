@@ -16,6 +16,7 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
     const { setCursorStopped, cursorMoving } = useCursor();
     const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
     const [clicked, setClicked] = useState(false);
+    const [stressTooltip, setStressTooltip] = useState(false);
 
     const position = useElementCursorPosition({
         location: currentStep?.location,
@@ -25,11 +26,16 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
     });
 
     useEffect(() => {
-        if (currentStep?.id !== 3) return;
+        if (currentStep?.id !== 3 && currentStep?.id !== 19.1 && currentStep?.id !== 21.1) return;
 
         const handleKey = (e: KeyboardEvent) => {
             if (e.key === "ArrowRight") {
-                handleCursorAcknowledged?.();
+                if (currentStep?.id === 3) handleCursorAcknowledged?.();
+                if (currentStep.id === 19.1 || currentStep.id === 21.1) {
+                    setStressTooltip(true);
+
+                    setTimeout(() => setStressTooltip(false), 1500);
+                }
             }
         };
 
@@ -76,6 +82,7 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
             {!cursorMoving && currentStep?.tooltip && (
                 <Tooltip
                     key={currentStep.id}
+                    stressed={stressTooltip}
                     position={currentStep?.tooltipPosition}
                     className={`highlight-step highlight-step-${currentStep.id}`}
                 >

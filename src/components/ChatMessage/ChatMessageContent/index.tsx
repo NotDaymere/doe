@@ -25,14 +25,16 @@ export const ChatMessageContent = ({
     if (isAI) {
         return (
             <>
-                <div
-                    dangerouslySetInnerHTML={{
-                        __html:
-                            isTypingDone || noTypeEffect
-                                ? message.content
-                                : typedText + `<span class="${css.caret}"></span>`,
-                    }}
-                />
+                {step !== 21 && step !== 21.1 && (
+                    <div
+                        dangerouslySetInnerHTML={{
+                            __html:
+                                isTypingDone || noTypeEffect
+                                    ? message.content
+                                    : typedText + `<span class="${css.caret}"></span>`,
+                        }}
+                    />
+                )}
                 <ChatMathBlock content={message.mathBlock} isVisible={showMath} step={step} />
                 {message.hasCode && <ChatMessageCodeButtons isVisible={showMath} />}
                 {message.content2 && (

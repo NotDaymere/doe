@@ -300,6 +300,12 @@
 
 .tooltip--stressed {
     animation: stress-pulse 1.5s ease-in-out;
+
+    &.tooltip--right {
+        .tooltip__arrow {
+            border-color: transparent rgba(180, 154, 100, 0.5) transparent transparent;
+        }
+    }
 }
 
 @keyframes stress-pulse {
