@@ -1,0 +1,145 @@
+.settingsModal {
+    &__backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 100;
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+    &__container {
+        position: absolute;
+        top: 81px;
+        left: 92px;
+        max-width: 716px;
+        width: 100%;
+        height: 532px;
+        padding: 9px 11px 13px;
+        border-radius: 16px;
+        background: rgba(240, 240, 240, 1);
+        border: 1px solid rgba(221, 221, 221, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        z-index: 101;
+        animation: fadeIn 0.45s ease-out forwards;
+    }
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+    }
+    &__title {
+        font-family: var(--font-sohne), sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        line-height: 1.3rem;
+        color: rgba(91, 91, 91, 1);
+        margin-left: 12px;
+    }
+    &__closeButton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        border: 1px solid rgba(221, 221, 221, 1);
+        background-color: rgba(221, 221, 221, 0.2);
+        backdrop-filter: blur(15px);
+        svg path {
+            stroke: rgba(221, 221, 221, 1);
+        }
+    }
+    &__content {
+        display: flex;
+        flex: 1;
+        gap: 5px;
+        overflow: hidden;
+    }
+    &__tabsContainer,
+    &__tabContent {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(255, 255, 255, 1);
+        border-radius: 12px;
+        height: 100%;
+    }
+    &__tabsContainer {
+        flex: 0 0 202px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px;
+    }
+    &__tabContent {
+        flex: 1;
+        padding: 0 1px;
+        overflow-x: hidden;
+    }
+    &__tab {
+        display: flex;
+        gap: 6px;
+        width: 100%;
+        padding: 8px;
+        border-radius: 8px;
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+        &:hover {
+            background-color: rgba(181, 181, 181, 0.08);
+        }
+        svg {
+            fill: rgba(141, 141, 141, 1);
+            transition: fill 0.3s ease;
+        }
+        span {
+            font-family: var(--font-sohne), sans-serif;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: rgba(91, 91, 91, 1);
+            transition: color 0.3s ease;
+        }
+        &--active {
+            background-color: rgba(181, 181, 181, 0.2);
+            &:hover {
+                background-color: rgba(181, 181, 181, 0.2);
+            }
+            svg {
+                fill: rgba(91, 91, 91, 1);
+            }
+            span {
+                color: rgba(31, 31, 31, 1);
+            }
+        }
+    }
+    &__deleteBtn {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 7px 11px;
+        border: 1px solid rgb(255, 95, 95);
+        border-radius: 8px;
+        background-color: rgba(255, 95, 95, 0.2);
+        color: rgb(255, 95, 95);
+        font-family: "Sohne";
+        font-size: 0.875rem;
+        line-height: 1.19rem;
+        font-weight: 600;
+    }
+    &__cancelBtn {
+        padding: 7px 11px;
+        border: 1px solid rgb(221, 221, 221);
+        border-radius: 8px;
+        color: rgb(181, 181, 181);
+        font-family: "Sohne";
+        font-size: 0.875rem;
+        line-height: 1.2rem;
+        font-weight: 500;
+        transition: 0.3s ease;
+        max-height: 35px;
+        &:hover {
+            border-color: rgb(141, 141, 141);
+            color: rgb(91, 91, 91);
+        }
+    }
+}
