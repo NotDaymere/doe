@@ -68,36 +68,48 @@ export function useDragFile(props: Props = {}) {
         };
     }, []);
 
-    const handleDragOverTarget = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDragOverTarget = (
+        event: React.DragEvent<HTMLDivElement> | React.DragEvent<HTMLButtonElement>
+    ) => {
         event.preventDefault();
         setDragTarget(true);
     };
 
-    const handleDragLeaveTarget = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDragLeaveTarget = (
+        event: React.DragEvent<HTMLDivElement> | React.DragEvent<HTMLButtonElement>
+    ) => {
         event.preventDefault();
         setDragTarget(false);
     };
 
-    const handleDragDropTarget = async (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDragDropTarget = async (
+        event: React.DragEvent<HTMLDivElement> | React.DragEvent<HTMLButtonElement>
+    ) => {
         event.preventDefault();
 
-        let filesWithId: FileWithId[] = Array.from(event.dataTransfer.files).map((file) =>
-            Object.assign(file, {
-                id: `${Date.now()}-${Math.random()}`,
-            }) as FileWithId
+        let filesWithId: FileWithId[] = Array.from(event.dataTransfer.files).map(
+            (file) =>
+                Object.assign(file, {
+                    id: `${Date.now()}-${Math.random()}`,
+                }) as FileWithId
         );
 
         const linkFiles = await extractFilesFromLinks(event.dataTransfer.items);
         filesWithId = filesWithId.concat(linkFiles);
+        console.log("filesWithId", filesWithId);
 
         props.onUploadFiles?.(filesWithId);
     };
 
-    const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDragStart = (
+        event: React.DragEvent<HTMLDivElement> | React.DragEvent<HTMLButtonElement>
+    ) => {
         event.preventDefault();
     };
 
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleDragOver = (
+        event: React.DragEvent<HTMLDivElement> | React.DragEvent<HTMLButtonElement>
+    ) => {
         event.preventDefault();
         setDrag(true);
     };

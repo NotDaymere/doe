@@ -16,7 +16,8 @@ import { CSSTransition } from "react-transition-group";
 import GlobalIcon from "src/shared/icons/Global.icon";
 import clsx from "clsx";
 import { SharingTools } from "./ui/SharingTools/SharingTools";
-import ThemeToggleSwitch from "../../shared/components/ThemeToggler";
+import ThemeToggleSwitch from "src/shared/components/ThemeToggler";
+import { SettingsModal } from "../home-screens/ui/ChatContent/assets/SettingsModal/SettingsModal";
 
 export const Sidebar: React.FC = () => {
     const { editor, mode, setMode, isSharingActive, setIsSharingActive, getNoPlayground } =
@@ -28,6 +29,8 @@ export const Sidebar: React.FC = () => {
     const { gaiaActive, setGaiaActive, setGaiaSidebarActive } = useAppStore();
     const [theme, setTheme] = React.useState<"Light" | "Dark">("Light");
     const [isChangeProfilePanelOpen, setIsChangeProfilePanelOpen] = React.useState<boolean>(false);
+    const [isSettingsOpen, setIsSettingsOpen] = React.useState<boolean>(false);
+
     const [profiles, setProfiles] = React.useState<Profile[]>(ProfileMockData);
 
     const changeProfileRef = React.useRef<HTMLDivElement>(null);
@@ -106,6 +109,7 @@ export const Sidebar: React.FC = () => {
                     <img
                         className={css.sidebar_profile_img}
                         src={currentProfile ? currentProfile.imgSrc : ""}
+                        onClick={() => setIsSettingsOpen(true)}
                     />
                 </div>
 
@@ -128,6 +132,14 @@ export const Sidebar: React.FC = () => {
                     </div>
                 </div>
             </div>
+            {currentProfile && isSettingsOpen && (
+                <SettingsModal
+                    currentProfile={currentProfile}
+                    onClose={() => setIsSettingsOpen(false)}
+                    isSideBarOpen={isSideBarOpen}
+                    profiles={profiles}
+                />
+            )}
             <CSSTransition
                 in={isChangeProfilePanelOpen}
                 timeout={300}

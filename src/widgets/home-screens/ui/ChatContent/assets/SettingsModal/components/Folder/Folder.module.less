@@ -1,0 +1,71 @@
+.folder {
+    border: 1px solid rgba(151, 71, 255, 0.5);
+    border-radius: 8px;
+    background: rgba(151, 71, 255, 0.3);
+    padding: 11px 11px 9px 11px;
+    height: 85px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    position: relative;
+    &:hover &__controls {
+        opacity: 1;
+    }
+    &__controls {
+        opacity: 0;
+        position: absolute;
+        display: flex;
+        gap: 2px;
+        top: 6px;
+        right: 6px;
+        transition: 0.2s ease;
+    }
+    & button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 4px;
+        svg,
+        svg path {
+            transition: 0.15s;
+            fill: rgb(141, 141, 141);
+        }
+        &:hover svg,
+        &:hover svg path {
+            fill: rgb(91, 91, 91);
+        }
+    }
+    &__edit {
+        padding: 3px;
+        svg {
+            width: 12px;
+        }
+    }
+    &__delete {
+        padding: 2px;
+    }
+
+    &__name {
+        color: rgb(91, 43, 153);
+        font-family: "Sohne", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 19px;
+        min-width: 0;
+        width: 114px;
+        &:read-only {
+            cursor: pointer;
+        }
+    }
+    &__size {
+        color: rgba(151, 71, 255, 0.5);
+        font-family: "Sohne", sans-serif;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 16px;
+    }
+}

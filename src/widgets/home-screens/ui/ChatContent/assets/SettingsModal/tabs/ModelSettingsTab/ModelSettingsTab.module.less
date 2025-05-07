@@ -1,0 +1,51 @@
+.modelSettings {
+    font-family: "Sohne", sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    &__container {
+        padding: 15px 18px;
+        flex: 1;
+        overflow: hidden auto;
+    }
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        &__item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(181, 181, 181, 0.2);
+            &__text {
+                font-size: 0.875rem;
+                color: rgb(91, 91, 91);
+                font-weight: 600;
+                line-height: 1.19rem;
+            }
+        }
+        &__SenseOfSelf {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            width: fit-content;
+            span {
+                font-size: 0.875rem;
+                color: rgb(91, 91, 91);
+                font-weight: 600;
+                line-height: 1.19rem;
+                font-family: "Sohne", sans-serif;
+            }
+        }
+    }
+}
+.personalization {
+    &__wrapper {
+        max-width: 100%;
+        display: flex;
+        gap: 8px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(181, 181, 181, 0.2);
+    }
+}

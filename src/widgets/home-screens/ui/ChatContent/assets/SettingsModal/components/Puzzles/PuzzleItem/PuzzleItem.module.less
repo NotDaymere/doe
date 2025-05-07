@@ -1,0 +1,111 @@
+.puzzleItem {
+    &__container {
+        position: relative;
+        height: 109px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 23px 15px 14px;
+        cursor: pointer;
+        > svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 127px;
+            height: 127px;
+            z-index: 1;
+            & * {
+                transition: 0.3s;
+            }
+        }
+        &__selected svg {
+            z-index: 2;
+        }
+    }
+    &__control__container {
+        position: absolute;
+        top: 21px;
+        left: calc(100% + 7px);
+        z-index: 15;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        gap: 4px;
+        &__last {
+            top: calc(100% + 24px);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+    &__controlBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid;
+        backdrop-filter: blur(50px);
+        &__add {
+            border-color: rgb(139, 207, 22);
+            background-color: rgba(139, 207, 22, 0.4);
+        }
+        &__remove {
+            border-color: rgb(255, 69, 58);
+            background-color: rgba(255, 69, 58, 0.4);
+            svg {
+                width: 10px;
+                height: 2px;
+                path {
+                    fill: rgb(255, 69, 58);
+                }
+            }
+        }
+    }
+    &__menu__unselected {
+        background-color: rgba(221, 221, 221, 0.3) !important;
+        color: rgb(221, 221, 221) !important;
+        svg path {
+            fill: rgb(221, 221, 221);
+        }
+    }
+    &__description {
+        position: relative;
+        z-index: 15;
+        text-align: center;
+        font-size: 0.75rem;
+        line-height: 0.875rem;
+        font-weight: 500;
+        font-family: "Sohne", sans-serif;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        max-height: 42px;
+        color: rgb(31, 31, 31);
+        user-select: none;
+        max-width: 100%;
+        padding-left: 10px;
+        &__unselected {
+            color: rgb(221, 221, 221);
+        }
+    }
+}
+.Identity {
+    color: rgb(165, 0, 0);
+}
+.Preferences {
+    color: rgb(203, 105, 3);
+}
+.Knowledge {
+    color: rgb(127, 93, 0);
+}
+.Intent {
+    color: rgb(49, 145, 0);
+}
+.Cognition {
+    color: rgb(0, 103, 125);
+}
