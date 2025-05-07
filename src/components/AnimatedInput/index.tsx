@@ -178,6 +178,10 @@ export function AnimatedInput({
     }, [blockInput]);
 
     useEffect(() => {
+        setIsMessageSent(false);
+    }, [step]);
+
+    useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "ArrowRight" && safeStep == 28 && !isMessageSent) {
                 e.preventDefault();

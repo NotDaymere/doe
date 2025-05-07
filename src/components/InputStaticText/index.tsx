@@ -128,7 +128,7 @@ export const InputStaticText = ({
                     </span>
                 </p>
             )}
-            {step >= 8 && step < 9 && (
+            {step >= 8 && step < 9 && !isMessageSent && (
                 <>
                     <p>
                         {typedMathPrompt.text.split("").map((word, index) => {
@@ -166,7 +166,7 @@ export const InputStaticText = ({
                     </p>
                 </>
             )}
-            {step >= 9 && step < 10 && (
+            {step >= 9 && step < 10 && !isMessageSent && (
                 <>
                     <p>
                         {typedCodePrompt.text.split("").map((word, index) => {
@@ -188,7 +188,7 @@ export const InputStaticText = ({
                         <span
                             className={css.code}
                             dangerouslySetInnerHTML={{
-                                __html: typedPythonCode.text + `<span class="${css.caret}"></span>`,
+                                __html: typedPythonCode.text,
                             }}
                         />
                     }
