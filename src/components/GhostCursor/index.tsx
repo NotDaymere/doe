@@ -84,7 +84,9 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
                     key={currentStep.id}
                     stressed={stressTooltip}
                     position={currentStep?.tooltipPosition}
-                    className={`highlight-step highlight-step-${currentStep.id}`}
+                    className={`highlight-step highlight-step-${currentStep.id} ${
+                        currentStep.id >= 18.1 && currentStep.id < 19 ? "continuous" : ""
+                    }`}
                 >
                     <div className={css.tooltip_content}>
                         {currentStep?.tooltipTitle}

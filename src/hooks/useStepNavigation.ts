@@ -56,8 +56,8 @@ export function useStepNavigation(
                 }
             } else if (step >= 18 && step <= 18.9) {
                 if (e.key === "ArrowRight") {
-                    setCursorMoving();
                     if (step === 18.4) {
+                        setCursorMoving();
                         setStep(19);
                     } else if (step === 18) {
                         setStep(18.1);

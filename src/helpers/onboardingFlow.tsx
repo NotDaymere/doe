@@ -509,7 +509,15 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 18.1,
         location: '[data-step="profile-photo"]',
         cursorVisible: true,
-        tooltip: false,
+        tooltip: true,
+        tooltipPosition: "right",
+        tooltipTitle: <b className={css.tooltip_title}>Settings</b>,
+        tooltipParagraph1: (
+            <p className={css.tooltip_paragraph}>
+                You can set up your profile, customize model and Doe’s writing style, connect and
+                manage your apps.
+            </p>
+        ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -520,7 +528,15 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 0,
             left: 150,
         },
-        tooltip: false,
+        tooltip: true,
+        tooltipPosition: "right",
+        tooltipTitle: <b className={css.tooltip_title}>Settings</b>,
+        tooltipParagraph1: (
+            <p className={css.tooltip_paragraph}>
+                You can set up your profile, customize model and Doe’s writing style, connect and
+                manage your apps.
+            </p>
+        ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -531,14 +547,30 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 0,
             left: 150,
         },
-        tooltip: false,
+        tooltip: true,
+        tooltipPosition: "right",
+        tooltipTitle: <b className={css.tooltip_title}>Settings</b>,
+        tooltipParagraph1: (
+            <p className={css.tooltip_paragraph}>
+                You can set up your profile, customize model and Doe’s writing style, connect and
+                manage your apps.
+            </p>
+        ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
         id: 18.4,
         location: '[data-step="profile-save"]',
         cursorVisible: true,
-        tooltip: false,
+        tooltip: true,
+        tooltipPosition: "right",
+        tooltipTitle: <b className={css.tooltip_title}>Settings</b>,
+        tooltipParagraph1: (
+            <p className={css.tooltip_paragraph}>
+                You can set up your profile, customize model and Doe’s writing style, connect and
+                manage your apps.
+            </p>
+        ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
