@@ -143,6 +143,7 @@ export function AnimatedInput({
         speed: 90,
         delay: 3000,
         startTyping: step === 10,
+        reset: step === 9 || step === 11,
     });
 
     const handleSendMessage = () => {

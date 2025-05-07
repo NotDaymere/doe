@@ -142,6 +142,7 @@ export function useOnboardingFlow(
 
     function handleUntranslatedTypedOut() {
         setBlockSteps(true);
+        setCursorMoving();
         setStep(19.1);
     }
 

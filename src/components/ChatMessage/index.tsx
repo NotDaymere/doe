@@ -42,8 +42,9 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
         const { text: typedText, isDone: isTypingDone } = useTypewriterEffect({
             text: message.content,
             speed: message.content.length > 200 ? 18 : 70,
-            startTyping: isAI && !noTypeEffect && ![19, 19.1, 21, 21.1].includes(step),
+            startTyping: isAI && !noTypeEffect && ![21, 21.1].includes(step),
             onComplete: () => {
+                if (step === 19) handleUntranslatedTypedOut?.();
                 if (step === 28.1) {
                     setTimeout(() => setStep?.(29), 1000);
                     setTimeout(() => setStep?.(30), 1500);

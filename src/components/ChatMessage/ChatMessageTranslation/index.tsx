@@ -1,5 +1,6 @@
 import { ReactComponent as TranslateIcon } from "src/assets/icons/translateIcon2.svg";
 import { ReactComponent as VolumeIcon } from "src/assets/icons/volume.svg";
+import { useCursor } from "src/contexts/CursorContext";
 import { useTypewriterEffect } from "src/hooks/useTypewriterEffect";
 import { OnboardingMessage } from "src/shared/types/Message";
 import css from "../ChatMessage.module.less";
@@ -15,12 +16,16 @@ export const ChatMessageTranslation = ({
     step,
     handleUntranslatedTypedOut,
 }: ChatMessageTranslationProps) => {
+    if (step < 19.2 || step > 20) return null;
+    const { setCursorMoving } = useCursor();
+
     const { text: typedOriginalMessage, isDone } = useTypewriterEffect({
         text: message.origin || "origin",
         speed: 25,
         onComplete: () => {
-            handleUntranslatedTypedOut?.();
+            setCursorMoving();
         },
+        startTyping: step === 19.2,
     });
 
     return (
