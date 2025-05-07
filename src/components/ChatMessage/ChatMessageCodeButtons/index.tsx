@@ -11,7 +11,7 @@ interface ChatMessageCodeButtonsProps {
 
 export const ChatMessageCodeButtons = ({ isVisible }: ChatMessageCodeButtonsProps) => {
     return (
-        <div className={clsx(css.code_buttons, { [css.code_buttons_hidden]: !isVisible })}>
+        <div className={clsx(css.code_buttons, { [css.code_buttons_visible]: isVisible })}>
             <button className={css.code_buttons_magic}>
                 <WandIcon />
                 <span className={css.gradient_text}>See all steps</span>

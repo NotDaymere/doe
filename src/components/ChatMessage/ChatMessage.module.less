@@ -254,14 +254,15 @@ code {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    max-height: 37px;
-    opacity: 1;
     transition: all 0.3s ease;
+    opacity: 0;
+    max-height: 0;
+    animation: fade-in-with-slide 2s ease 7s forwards;
 }
 
-.code_buttons_hidden {
-    max-height: 0;
-    opacity: 0;
+.code_buttons_visible {
+    max-height: 37px;
+    opacity: 1;
     overflow: hidden;
 }
 
@@ -344,6 +345,18 @@ code {
     }
 }
 
+.hide_button {
+    button {
+        display: none;
+    }
+}
+
+.show_button {
+    button {
+        display: flex;
+    }
+}
+
 .selectText {
     :global(#simulate-selection) {
         position: relative;
@@ -363,65 +376,25 @@ code {
             animation-delay: 1s;
         }
 
-        #selection-quotes {
-            content: "“";
-            .setFontSohneBuch(60px);
-            vertical-align: middle;
+        :global(#simulate-selection-button) {
+            .setFontSohneBuch(42px);
+
+            padding-top: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: absolute;
-            left: -10px;
-            bottom: 100%;
-            padding-top: 18px;
+            vertical-align: middle;
             height: 36px;
             width: 36px;
             border-radius: 8px;
             background-color: #ffffff;
             z-index: 100;
-            box-shadow: 0 4px 12px rgba(#000, 0.1);
-            opacity: 0;
-            animation: appearAfterFill 0.4s ease-out forwards;
+            box-shadow: 0 4px 12px rgba(#000, 0.2);
+            // animation: appearAfterFill 0.4s ease-out forwards;
             animation-delay: 3.5s;
             transition: all 0.3s ease;
-            cursor: pointer;
-            pointer-events: auto;
 
             &:hover {
-                background-color: red;
-            }
-        }
-
-        &::after {
-            content: "“";
-            .setFontSohneBuch(60px);
-            vertical-align: middle;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            left: -10px;
-            bottom: 100%;
-            padding-top: 18px;
-            height: 36px;
-            width: 36px;
-            border-radius: 8px;
-            background-color: #ffffff;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(#000, 0.1);
-            opacity: 0;
-            animation: appearAfterFill 0.4s ease-out forwards;
-            animation-delay: 3.5s;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            pointer-events: auto;
-
-            &:hover {
-                background-color: red;
-            }
-        }
-        &:hover {
-            &::after {
                 color: #4794ff;
             }
         }

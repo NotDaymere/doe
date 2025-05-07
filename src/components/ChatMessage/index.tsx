@@ -92,6 +92,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                         typedText={typedText}
                         isTypingDone={isTypingDone}
                         noTypeEffect={noTypeEffect}
+                        setStep={setStep}
                     />
                     {isTranslation && (
                         <ChatMessageTranslation

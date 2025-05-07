@@ -845,6 +845,10 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 34,
         location: '[data-step="playgrounds"]',
         cursorVisible: true,
+        cursorPosition: {
+            top: 4,
+            left: 5,
+        },
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>All Playgrounds</b>,
@@ -855,7 +859,7 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 35,
-        location: '[data-step="playgrounds"]',
+        location: '[data-step="quotes"]',
         cursorVisible: true,
         cursorPosition: {
             top: 0,
