@@ -163,10 +163,22 @@ export function useOnboardingFlow(
     function handleUserClickedSidebarButton(type: string) {
         if (type === "bold") {
             setUserClickedBold((prev) => !prev);
+            setCursorMoving();
+            setTimeout(() => {
+                nextStep();
+            }, 1000);
         } else if (type === "italic") {
             setUserClickedItalic((prev) => !prev);
+            setCursorMoving();
+            setTimeout(() => {
+                nextStep();
+            }, 1000);
         } else if (type === "underline") {
             setUserClickedUnderline((prev) => !prev);
+            setCursorMoving();
+            setTimeout(() => {
+                nextStep();
+            }, 1000);
         } else if (type === "translate") {
             setUserClickedTranslate(true);
             setStep(19.2);
