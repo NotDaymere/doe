@@ -8,6 +8,7 @@ interface UseTypewriterEffectOptions {
     startTyping?: boolean;
     enableSkip?: boolean;
     onSkip?: () => void;
+    reset?: boolean;
 }
 
 export function useTypewriterEffect({
@@ -18,6 +19,7 @@ export function useTypewriterEffect({
     startTyping = true,
     enableSkip = true,
     onSkip,
+    reset,
 }: UseTypewriterEffectOptions) {
     const [displayText, setDisplayText] = useState("");
     const [isDone, setIsDone] = useState(false);
@@ -77,6 +79,18 @@ export function useTypewriterEffect({
         document.addEventListener("keydown", handleKeyDown);
         return () => document.removeEventListener("keydown", handleKeyDown);
     }, [enableSkip, startTyping, isDone]);
+
+    useEffect(() => {
+        if (!reset) return;
+
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+        setDisplayText("");
+        setIsDone(false);
+        indexRef.current = 0;
+        previousTextRef.current = null;
+    }, [reset]);
 
     return { text: displayText, isDone, skip: finishImmediately };
 }

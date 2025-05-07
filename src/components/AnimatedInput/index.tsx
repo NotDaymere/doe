@@ -90,6 +90,7 @@ export function AnimatedInput({
             handleMathPromptTypedOut();
         },
         startTyping: step === 8,
+        reset: step === 7 || step === 9,
     });
 
     const typedMathFormulaState = useTypewriterEffect({
@@ -101,6 +102,7 @@ export function AnimatedInput({
             handleMathFormulaTypedOut();
         },
         startTyping: step === 8.2,
+        reset: step === 7 || step === 9,
     });
 
     const typedCodePromptState = useTypewriterEffect({
@@ -112,6 +114,7 @@ export function AnimatedInput({
             handleCodePromptTypedOut();
         },
         startTyping: step === 9,
+        reset: step === 8 || step === 10,
     });
 
     const typedPythonCodeState = useTypewriterEffect({
@@ -122,6 +125,7 @@ export function AnimatedInput({
             handlePythonCodeTypedOut();
         },
         startTyping: step === 9.2,
+        reset: step === 8 || step === 10,
     });
 
     const typedBranchState = useTypewriterEffect({
