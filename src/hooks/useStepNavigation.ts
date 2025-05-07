@@ -101,6 +101,21 @@ export function useStepNavigation(
                         prevSubStep();
                     }
                 }
+            } else if (step === 22) {
+                if (e.key === "ArrowRight") {
+                    setStep(22.1);
+                }
+                if (e.key === "ArrowLeft") {
+                    setCursorMoving();
+                    prevStep();
+                }
+            } else if (step === 22.1) {
+                if (e.key === "ArrowRight") {
+                    setStep(23);
+                }
+                if (e.key === "ArrowLeft") {
+                    setStep(21);
+                }
             } else if (step === 28.1) {
                 if (e.key === "ArrowRight") {
                     setStep(30);

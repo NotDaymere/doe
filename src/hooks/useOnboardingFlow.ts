@@ -259,6 +259,11 @@ export function useOnboardingFlow(
                 },
             ]);
         }
+        if (step === 22) {
+            setTimeout(() => {
+                nextSubStep();
+            }, 1200);
+        }
         if (step === 25) {
             handleDeleteMessages();
         }
