@@ -63,14 +63,14 @@ export function AnimatedInput({
 
     const safeStep = step ?? 0;
 
-    const { text: typedGreeting } = useTypewriterEffect({
+    const typedGreetingState = useTypewriterEffect({
         text: "Hey Doe, I'm John Smith",
         speed: 90,
         onComplete: handleGreetingPlaceholderTypedOut,
         startTyping: animationDone && safeStep <= 5,
     });
 
-    const { text: typedPrompt } = useTypewriterEffect({
+    const typedPromptState = useTypewriterEffect({
         text: "Write a song about ",
         speed: 100,
         delay: 1000,
@@ -82,7 +82,7 @@ export function AnimatedInput({
         startTyping: step === 4.7,
     });
 
-    const { text: typedMathPrompt } = useTypewriterEffect({
+    const typedMathPromptState = useTypewriterEffect({
         text: "Please put together a sample project that uses the equation: ",
         speed: 50,
         delay: 1200,
@@ -92,7 +92,7 @@ export function AnimatedInput({
         startTyping: step === 8,
     });
 
-    const { text: typedMathFormula, isDone: isMathBlock } = useTypewriterEffect({
+    const typedMathFormulaState = useTypewriterEffect({
         text: "$Nat(C(-, X), F) cong F(X)$",
         speed: 50,
         delay: 1200,
@@ -103,7 +103,7 @@ export function AnimatedInput({
         startTyping: step === 8.2,
     });
 
-    const { text: typedCodePrompt } = useTypewriterEffect({
+    const typedCodePromptState = useTypewriterEffect({
         text: "Write me the deletion function in Python that starts with: ",
         speed: 50,
         delay: 1200,
@@ -114,7 +114,7 @@ export function AnimatedInput({
         startTyping: step === 9,
     });
 
-    const { text: typedPythonCode } = useTypewriterEffect({
+    const typedPythonCodeState = useTypewriterEffect({
         text: pythonCodeSmall,
         speed: 50,
         delay: 1200,
@@ -124,7 +124,7 @@ export function AnimatedInput({
         startTyping: step === 9.2,
     });
 
-    const { text: typedBranch } = useTypewriterEffect({
+    const typedBranchState = useTypewriterEffect({
         text: "Create a simple project for me in any language.",
         speed: 50,
         delay: 500,
@@ -209,7 +209,11 @@ export function AnimatedInput({
     return (
         <div className={css.panel}>
             {step === 36 && <ReplyPanel />}
-            <div className={clsx(css.panel_wrapper, { [css.active]: isActive && animationDone })}>
+            <div
+                className={clsx(css.panel_wrapper, {
+                    [css.active]: isActive && animationDone && sendButtonEnabled,
+                })}
+            >
                 <div className={clsx(css.panel_main, { [css.blocked]: blockInput && step >= 24 })}>
                     <MagicMenu step={step} />
                     <div className={clsx(css.panel_input_container, { [css.hide]: isMessageSent })}>
@@ -219,18 +223,18 @@ export function AnimatedInput({
                                 isMessageSent={isMessageSent}
                                 blockInput={blockInput}
                                 showSelectedText={showSelectedText}
-                                typedGreeting={typedGreeting}
-                                typedPrompt={typedPrompt}
-                                typedMathPrompt={typedMathPrompt}
-                                typedMathFormula={typedMathFormula}
-                                typedCodePrompt={typedCodePrompt}
-                                typedPythonCode={typedPythonCode}
-                                typedBranch={typedBranch}
+                                typedGreeting={typedGreetingState}
+                                typedPrompt={typedPromptState}
+                                typedMathPrompt={typedMathPromptState}
+                                typedMathFormula={typedMathFormulaState}
+                                typedCodePrompt={typedCodePromptState}
+                                typedPythonCode={typedPythonCodeState}
+                                typedBranch={typedBranchState}
                                 linkText={linkText}
                                 userClickedBold={userClickedBold}
                                 userClickedUnderline={userClickedUnderline}
                                 userClickedItalic={userClickedItalic}
-                                isMathBlock={isMathBlock}
+                                isMathBlock={typedMathFormulaState.isDone}
                             />
                         </span>
                         {showTooltip && !isMessageSent && (step === 4.5 || step === 28) && (

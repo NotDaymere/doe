@@ -5,18 +5,24 @@ import { useCursor } from "src/contexts/CursorContext";
 import { mathBlock2 } from "src/helpers/onboardingMessages";
 import css from "./InputStaticText.module.less";
 
+interface typedTextState {
+    text: string;
+    isDone: boolean;
+    skip: () => void;
+}
+
 interface InputStaticTextProps {
     step: number;
     blockInput: boolean;
     isMessageSent: boolean;
     showSelectedText: boolean;
-    typedGreeting: string;
-    typedPrompt: string;
-    typedMathPrompt: string;
-    typedMathFormula: string;
-    typedCodePrompt: string;
-    typedPythonCode: string;
-    typedBranch: string;
+    typedGreeting: typedTextState;
+    typedPrompt: typedTextState;
+    typedMathPrompt: typedTextState;
+    typedMathFormula: typedTextState;
+    typedCodePrompt: typedTextState;
+    typedPythonCode: typedTextState;
+    typedBranch: typedTextState;
     linkText: string;
     userClickedBold: boolean;
     userClickedUnderline: boolean;
@@ -56,36 +62,37 @@ export const InputStaticText = ({
 
     return (
         <>
-            {step === 4 &&
-                blockInput &&
-                typedGreeting.split("").map((char, index) => (
-                    <span
-                        key={index}
-                        className={clsx(css.letter, css.ghost, {
-                            [css.space]: char === " ",
-                        })}
-                        style={{ animationDelay: `${index * 0.01}s` }}
-                    >
-                        {char === " " ? "\u00A0" : char}
-                    </span>
-                ))}
+            {step === 4 && blockInput && (
+                <>
+                    {typedGreeting.text.split("").map((char, index) => (
+                        <span
+                            key={index}
+                            className={clsx(css.letter, css.ghost, {
+                                [css.space]: char === " ",
+                            })}
+                        >
+                            {char === " " ? "\u00A0" : char}
+                        </span>
+                    ))}
+                    {!typedGreeting.isDone && <span className={css.caret} />}
+                </>
+            )}
             {step === 4.5 && !isMessageSent && <>{step <= 10 && <span>Hey Doe, I'm </span>}</>}
             {(step === 4.7 || step === 5) && (
                 <p>
-                    {typedPrompt.split("").map((word, index) => {
+                    {typedPrompt.text.split("").map((word, index) => {
                         return (
                             <span
                                 key={index}
                                 className={clsx(css.letter, {
                                     [css.space]: word === " ",
                                 })}
-                                style={{ animationDelay: `${index * 0.005}s` }}
-                                data-step={index + 1 === typedPrompt.length && "text"}
                             >
                                 {word}
                             </span>
                         );
                     })}
+                    {!typedPrompt.isDone && <span className={css.caret} />}
                     {showSelectedText && (
                         <span
                             className={clsx(css.selected, {
@@ -124,63 +131,64 @@ export const InputStaticText = ({
             {step >= 8 && step < 9 && (
                 <>
                     <p>
-                        {typedMathPrompt.split("").map((word, index) => {
+                        {typedMathPrompt.text.split("").map((word, index) => {
                             return (
                                 <span
                                     key={index}
                                     className={clsx(css.letter, {
                                         [css.space]: word === " ",
                                     })}
-                                    style={{ animationDelay: `${index * 0.005}s` }}
-                                    data-step={index + 1 === typedMathPrompt.length && "text"}
                                 >
                                     {word}
                                 </span>
                             );
                         })}
-                        {!isMathBlock
-                            ? typedMathFormula.split("").map((word, index) => {
-                                  return (
-                                      <span
-                                          key={index}
-                                          className={clsx(css.letter, {
-                                              [css.space]: word === " ",
-                                          })}
-                                          style={{ animationDelay: `${index * 0.005}s` }}
-                                          data-step={index + 1 === typedPrompt.length && "text"}
-                                      >
-                                          {" "}
-                                          {word}
-                                      </span>
-                                  );
-                              })
-                            : memoizedMathJax}
+                        {!typedMathPrompt.isDone && <span className={css.caret} />}
+                        {!isMathBlock ? (
+                            <>
+                                {typedMathFormula.text.split("").map((word, index) => {
+                                    return (
+                                        <span
+                                            key={index}
+                                            className={clsx(css.letter, {
+                                                [css.space]: word === " ",
+                                            })}
+                                        >
+                                            {" "}
+                                            {word}
+                                        </span>
+                                    );
+                                })}
+                            </>
+                        ) : (
+                            memoizedMathJax
+                        )}
                     </p>
                 </>
             )}
             {step >= 9 && step < 10 && (
                 <>
                     <p>
-                        {typedCodePrompt.split("").map((word, index) => {
+                        {typedCodePrompt.text.split("").map((word, index) => {
                             return (
                                 <span
                                     key={index}
                                     className={clsx(css.letter, {
                                         [css.space]: word === " ",
                                     })}
-                                    style={{ animationDelay: `${index * 0.005}s` }}
-                                    data-step={index + 1 === typedGreeting.length && "text"}
                                 >
                                     {word}
                                 </span>
                             );
                         })}
+
+                        {!typedCodePrompt.isDone && <span className={css.caret} />}
                     </p>
                     {
                         <span
                             className={css.code}
                             dangerouslySetInnerHTML={{
-                                __html: typedPythonCode + `<span class="${css.caret}"></span>`,
+                                __html: typedPythonCode.text + `<span class="${css.caret}"></span>`,
                             }}
                         />
                     }
@@ -189,20 +197,20 @@ export const InputStaticText = ({
             {step === 38.1 && (
                 <>
                     <p>
-                        {typedBranch.split("").map((word, index) => {
+                        {typedBranch.text.split("").map((word, index) => {
                             return (
                                 <span
                                     key={index}
                                     className={clsx(css.letter, {
                                         [css.space]: word === " ",
                                     })}
-                                    style={{ animationDelay: `${index * 0.005}s` }}
-                                    data-step={index + 1 === typedBranch.length && "text"}
                                 >
                                     {word}
                                 </span>
                             );
                         })}
+
+                        {!typedBranch.isDone && <span className={css.caret} />}
                     </p>
                 </>
             )}

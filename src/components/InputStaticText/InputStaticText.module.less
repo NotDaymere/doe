@@ -1,12 +1,23 @@
 .letter {
     display: inline-block;
-    opacity: 0;
+    // opacity: 0;
     // transform: scale(0.5);
-    animation: scaleIn 0.3s ease-out forwards;
+    // animation: scaleIn 0.3s ease-out forwards;
 }
 
 .space {
     width: 5px;
+}
+
+.caret {
+    display: inline-block;
+    width: 1px;
+    height: 1em;
+    background: currentColor;
+    margin-left: 1px;
+    animation: blink 1s steps(1) infinite;
+    vertical-align: text-top;
+    display: inline-block;
 }
 
 .selected {
@@ -94,6 +105,16 @@
 
 .link:active {
     background-color: rgba(71, 148, 255, 0.2);
+}
+
+@keyframes blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
 }
 
 @keyframes select-word {
