@@ -179,6 +179,10 @@ export function useOnboardingFlow(
             setTimeout(() => {
                 nextStep();
             }, 1000);
+        } else if (type === "math") {
+            nextSubStep();
+        } else if (type === "code") {
+            nextSubStep();
         } else if (type === "translate") {
             setUserClickedTranslate(true);
             setStep(19.2);

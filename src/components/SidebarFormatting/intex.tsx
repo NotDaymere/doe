@@ -62,13 +62,19 @@ export const SidebarFormatting = ({
             label: "Math mode",
             step: [8.1, 8.2],
             dataStep: "function",
+            onClick: () => {
+                handleUserClickedSidebarButton("math");
+            },
         },
         {
             icon: <CodeIcon />,
             label: "Code mode",
             step: [9.1, 9.2],
             dataStep: "code",
-            onClick: editorState.toggleCode,
+            onClick: () => {
+                editorState.toggleCode?.();
+                handleUserClickedSidebarButton("code");
+            },
             isActive: editorState.isCode,
         },
         {
@@ -103,7 +109,12 @@ export const SidebarFormatting = ({
                             onClick={onClick}
                             data-active={isActive}
                             data-step={dataStep}
-                            disabled={btnStep !== step}
+                            disabled={
+                                !step ||
+                                (Array.isArray(btnStep)
+                                    ? !btnStep.includes(step)
+                                    : btnStep !== step)
+                            }
                         >
                             {icon}
                             <div className={css.sidebar_controls_text}>{label}</div>
