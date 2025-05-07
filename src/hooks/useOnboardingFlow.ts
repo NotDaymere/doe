@@ -161,6 +161,18 @@ export function useOnboardingFlow(
         setStep(28.1);
     }
 
+    function handleTalkModeClick() {
+        setStep(46);
+    }
+
+    function handleScreenSharing() {
+        setStep(52);
+    }
+
+    function handleCloseScreenSharing() {
+        setStep(53);
+    }
+
     // ------ OTHER HANDLERS ------
 
     function handleUserClickedSidebarButton(type: string) {
@@ -217,6 +229,8 @@ export function useOnboardingFlow(
     // ------ STEP-SPECIFIC EFFECTS ------
 
     useEffect(() => {
+        setCursorMoving();
+
         if (step === 7) {
             handleDeleteMessages();
         }
@@ -311,6 +325,16 @@ export function useOnboardingFlow(
             setBlockSteps(false);
             setMessages?.((prev) => prev.slice(-2));
         }
+        if (step === 45) {
+            setCursorMoving();
+            setBlockSteps(true);
+            setTimeout(() => {
+                nextSubStep();
+            }, 2000);
+        }
+        if (step === 45.1) {
+            setBlockSteps(false);
+        }
         if (step === 46) {
             setTimeout(() => {
                 nextStep();
@@ -356,6 +380,9 @@ export function useOnboardingFlow(
         handleVoiceMessageAppearing,
         handleSendProjectMessage,
         handleBranchTypedOut,
+        handleTalkModeClick,
+        handleScreenSharing,
+        handleCloseScreenSharing,
 
         handleSidebarClose,
 

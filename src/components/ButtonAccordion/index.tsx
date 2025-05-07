@@ -5,7 +5,11 @@ import { ReactComponent as BluetoothIcon } from "src/assets/icons/monitor.svg";
 import { ReactComponent as UsbIcon } from "src/assets/icons/usb.svg";
 import css from "./ButtonAccordion.module.less";
 
-export const ButtonAccordion = () => {
+export const ButtonAccordion = ({
+    handleCloseScreenSharing,
+}: {
+    handleCloseScreenSharing: () => void;
+}) => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
     useEffect(() => {
@@ -13,8 +17,9 @@ export const ButtonAccordion = () => {
         const interval = setInterval(() => {
             setActiveIndex(current);
             current++;
-            if (current >= 3) {
+            if (current >= 4) {
                 clearInterval(interval);
+                handleCloseScreenSharing();
             }
         }, 2000);
 

@@ -30,6 +30,9 @@ interface AnimatedInputProps {
     handlePythonCodeTypedOut: () => void;
     handleBranchTypedOut: () => void;
     handleSendProjectMessage: () => void;
+    handleTalkModeClick: () => void;
+    handleScreenSharing: () => void;
+    handleCloseScreenSharing: () => void;
     onSendMessage: (message: string, type: MessageType) => void;
 }
 
@@ -49,6 +52,9 @@ export function AnimatedInput({
     handlePythonCodeTypedOut,
     handleBranchTypedOut,
     handleSendProjectMessage,
+    handleTalkModeClick,
+    handleScreenSharing,
+    handleCloseScreenSharing,
     onSendMessage,
 }: AnimatedInputProps) {
     if (!step || step < 4 || (step > 18 && step < 28)) return null;
@@ -138,7 +144,6 @@ export function AnimatedInput({
         startTyping: step === 38,
         reset: step === 37,
     });
-    console.log("typedBranchPromptState: ", typedBranchPromptState);
 
     const typedBranchState = useTypewriterEffect({
         text: "Create a simple project for me in any language.",
@@ -237,7 +242,7 @@ export function AnimatedInput({
                 })}
             >
                 <div className={clsx(css.panel_main, { [css.blocked]: blockInput && step >= 24 })}>
-                    <MagicMenu step={step} />
+                    <MagicMenu step={step} handleTalkModeClick={handleTalkModeClick} />
                     <div className={clsx(css.panel_input_container, { [css.hide]: isMessageSent })}>
                         <span className={clsx(css.static_text, { [css.grow]: blockInput })}>
                             <InputStaticText
@@ -300,11 +305,14 @@ export function AnimatedInput({
                         })}
                         disabled={step < 51 || step > 53}
                         data-step="screen-share"
+                        onClick={handleScreenSharing}
                     >
                         <div className={css.panel_button_test} data-step="input">
                             <ScreenShareIcon className={css.panel_button_icon} />
                         </div>
-                        {step === 52 && <ButtonAccordion />}
+                        {step === 52 && (
+                            <ButtonAccordion handleCloseScreenSharing={handleCloseScreenSharing} />
+                        )}
                     </button>
                     <button className={css.panel_button}>
                         <MicrophoneIcon />

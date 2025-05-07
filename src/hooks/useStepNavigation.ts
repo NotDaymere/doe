@@ -148,6 +148,13 @@ export function useStepNavigation(
                 if (e.key === "ArrowLeft") {
                     setStep(36);
                 }
+            } else if (step === 45.1) {
+                if (e.key === "ArrowRight") {
+                    setStep(46);
+                }
+                if (e.key === "ArrowLeft") {
+                    setStep(44);
+                }
             } else if (step >= 46 && step <= 48) {
                 if (e.key === "ArrowRight") {
                     if (step === 48) {
@@ -157,7 +164,7 @@ export function useStepNavigation(
                     }
                 }
                 if (e.key === "ArrowLeft") {
-                    setStep(45);
+                    setStep(44);
                 }
             } else if (step === 51) {
                 if (e.key === "ArrowRight") {

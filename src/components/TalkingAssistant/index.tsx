@@ -12,7 +12,7 @@ interface TalkingAssistantProps {
 }
 
 export const TalkingAssistant = ({ step }: TalkingAssistantProps) => {
-    if (step <= 45 || step >= 50) return null;
+    if (step < 46 || step >= 50) return null;
     const [isImgAnimDone, setIsImgAnimDone] = useState(false);
 
     return (

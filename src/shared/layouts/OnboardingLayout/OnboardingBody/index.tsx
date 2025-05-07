@@ -37,6 +37,9 @@ interface OnboardingBodyProps {
     handleBranchTypedOut: () => void;
     handleVoiceMessageAppearing: () => void;
     handleSendProjectMessage: () => void;
+    handleTalkModeClick: () => void;
+    handleScreenSharing: () => void;
+    handleCloseScreenSharing: () => void;
     setStep: (value: number) => void;
 }
 
@@ -66,6 +69,9 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         handleBranchTypedOut,
         handleVoiceMessageAppearing,
         handleSendProjectMessage,
+        handleTalkModeClick,
+        handleScreenSharing,
+        handleCloseScreenSharing,
         setStep,
     } = props;
 
@@ -124,6 +130,9 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                         handlePythonCodeTypedOut={handlePythonCodeTypedOut}
                         handleSendProjectMessage={handleSendProjectMessage}
                         handleBranchTypedOut={handleBranchTypedOut}
+                        handleTalkModeClick={handleTalkModeClick}
+                        handleScreenSharing={handleScreenSharing}
+                        handleCloseScreenSharing={handleCloseScreenSharing}
                         onSendMessage={onSendMessage}
                     />
                 </div>

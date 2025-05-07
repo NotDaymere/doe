@@ -26,8 +26,8 @@ export const MagicMenuButton: React.FC<Props> = ({
     triggerStep,
 }) => {
     const { cursorMoving } = useCursor();
-    const isActivePlus = triggerStep && step === triggerStep && step !== 45 && !cursorMoving;
-    const isActiveCircle = triggerStep && step === triggerStep && step === 45 && !cursorMoving;
+    const isActivePlus = triggerStep && step === triggerStep && step !== 45.1 && !cursorMoving;
+    const isActiveCircle = triggerStep && step === triggerStep && step === 45.1 && !cursorMoving;
 
     return (
         <button

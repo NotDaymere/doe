@@ -12,7 +12,6 @@ export type MessageType = "greeting" | "project" | "math" | "code";
 
 export const useChat = (setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>) => {
     const [messages, setMessages] = useState<OnboardingMessage[]>([]);
-    console.log("messages: ", messages);
     const [profileData, setProfileData] = useState({
         name: "",
         email: "johndoe@gmail.com",

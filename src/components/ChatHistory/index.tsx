@@ -49,7 +49,7 @@ const ChatHistory = ({
                             step={step}
                             ref={historyRef}
                             userClickedTranslate={userClickedTranslate}
-                            noTypeEffect={step === 44}
+                            noTypeEffect={step >= 44}
                             setStep={setStep}
                             handleUntranslatedTypedOut={handleUntranslatedTypedOut}
                             handleVoiceMessageAppearing={handleVoiceMessageAppearing}

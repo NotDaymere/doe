@@ -15,9 +15,15 @@ interface Props {
     onUploadFiles?: (files: File[]) => void;
     onDispatchDoe?: () => void;
     step?: number;
+    handleTalkModeClick?: () => void;
 }
 
-export const MagicMenu: React.FC<Props> = ({ onUploadFiles, onDispatchDoe, step }) => {
+export const MagicMenu: React.FC<Props> = ({
+    onUploadFiles,
+    onDispatchDoe,
+    step,
+    handleTalkModeClick,
+}) => {
     const { cursorMoving } = useCursor();
     const [activeMenu, setActiveMenu] = React.useState(false);
     const nodeRef = React.useRef<HTMLDivElement>(null);
@@ -48,7 +54,9 @@ export const MagicMenu: React.FC<Props> = ({ onUploadFiles, onDispatchDoe, step 
 
     return (
         <div
-            className={clsx(css.magic, { [css.magic_active]: step === 37 && !cursorMoving })}
+            className={clsx(css.magic, {
+                [css.magic_active]: (step === 37 || step === 45) && !cursorMoving,
+            })}
             style={{
                 zIndex: activeMenu ? 100 : "",
             }}
@@ -61,7 +69,7 @@ export const MagicMenu: React.FC<Props> = ({ onUploadFiles, onDispatchDoe, step 
             <CSSTransition
                 classNames={css}
                 timeout={300}
-                in={activeMenu || step === 38 || step === 45}
+                in={activeMenu || step === 38 || step === 45.1}
                 nodeRef={nodeRef}
                 mountOnEnter
                 unmountOnExit
@@ -83,8 +91,9 @@ export const MagicMenu: React.FC<Props> = ({ onUploadFiles, onDispatchDoe, step 
                         icon={<TalkIcon />}
                         text="Talk mode"
                         step={step}
-                        triggerStep={45}
+                        triggerStep={45.1}
                         dataStep="talk-mode"
+                        onClick={handleTalkModeClick}
                     />
                     <MagicMenuButton
                         icon={<BranchIcon />}

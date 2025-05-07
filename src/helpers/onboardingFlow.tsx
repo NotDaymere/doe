@@ -1011,6 +1011,14 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 45,
+        location: '[data-step="sparkle"]',
+        cursorVisible: true,
+        cursorClick: true,
+        tooltip: false,
+        blur: ["history", "body", "magicbox", "navigate"],
+    },
+    {
+        id: 45.1,
         location: '[data-step="talk-mode"]',
         cursorVisible: true,
         cursorDelay: 500,
@@ -1023,7 +1031,8 @@ export const onboardingFlow: OnboardingStep[] = [
                 AI-assistant.
             </p>
         ),
-        blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
+        // blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
+        blur: [""],
     },
     {
         id: 46,
