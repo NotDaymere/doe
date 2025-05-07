@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { useMemo } from "react";
 import { useCursor } from "src/contexts/CursorContext";
 import { mathBlock2 } from "src/helpers/onboardingMessages";
+import BranchIcon from "src/shared/icons/Branch.icon";
 import css from "./InputStaticText.module.less";
 
 interface typedTextState {
@@ -22,6 +23,7 @@ interface InputStaticTextProps {
     typedMathFormula: typedTextState;
     typedCodePrompt: typedTextState;
     typedPythonCode: typedTextState;
+    typedBranchPrompt: typedTextState;
     typedBranch: typedTextState;
     linkText: string;
     userClickedBold: boolean;
@@ -41,6 +43,7 @@ export const InputStaticText = ({
     typedMathFormula,
     typedCodePrompt,
     typedPythonCode,
+    typedBranchPrompt,
     typedBranch,
     linkText,
     userClickedBold,
@@ -193,6 +196,25 @@ export const InputStaticText = ({
                         />
                     }
                 </>
+            )}
+            {step === 38 && (
+                <div className={css.text_with_icon}>
+                    <BranchIcon className={css.branch_icon} />
+                    <p>
+                        {typedBranchPrompt.text.split("").map((word, index) => {
+                            return (
+                                <span
+                                    key={index}
+                                    className={clsx(css.letter, {
+                                        [css.space]: word === " ",
+                                    })}
+                                >
+                                    {word}
+                                </span>
+                            );
+                        })}
+                    </p>
+                </div>
             )}
             {step === 38.1 && (
                 <>

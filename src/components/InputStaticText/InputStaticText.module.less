@@ -107,6 +107,30 @@
     background-color: rgba(71, 148, 255, 0.2);
 }
 
+.text_with_icon {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+    color: #b5b5b5;
+}
+
+.branch_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: slide-from-left 1s ease 1s forwards;
+    overflow: hidden;
+
+    path {
+        fill: #b5b5b5;
+    }
+}
+
 @keyframes blink {
     0%,
     100% {
@@ -134,6 +158,17 @@
     100% {
         opacity: 1;
         max-height: 64px;
+    }
+}
+
+@keyframes slide-from-left {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0px);
     }
 }
 

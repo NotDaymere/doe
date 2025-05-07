@@ -128,14 +128,27 @@ export function AnimatedInput({
         reset: step === 8 || step === 10,
     });
 
+    const typedBranchPromptState = useTypewriterEffect({
+        text: "Create new branch",
+        speed: 30,
+        delay: 2000,
+        onComplete: () => {
+            // handleBranchTypedOut();
+        },
+        startTyping: step === 38,
+        reset: step === 37,
+    });
+    console.log("typedBranchPromptState: ", typedBranchPromptState);
+
     const typedBranchState = useTypewriterEffect({
         text: "Create a simple project for me in any language.",
         speed: 50,
-        delay: 500,
+        delay: 2000,
         onComplete: () => {
             handleBranchTypedOut();
         },
         startTyping: step === 38.1,
+        reset: step === 37,
     });
 
     const { text: linkText } = useTypewriterEffect({
@@ -238,6 +251,7 @@ export function AnimatedInput({
                                 typedMathFormula={typedMathFormulaState}
                                 typedCodePrompt={typedCodePromptState}
                                 typedPythonCode={typedPythonCodeState}
+                                typedBranchPrompt={typedBranchPromptState}
                                 typedBranch={typedBranchState}
                                 linkText={linkText}
                                 userClickedBold={userClickedBold}

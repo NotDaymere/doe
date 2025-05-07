@@ -913,6 +913,14 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         blur: ["history", "body", "magicbox", "navigate"],
     },
+    // {
+    //     id: 38.1,
+    //     location: '[data-step="branch"]',
+    //     cursorVisible: true,
+    //     cursorDelay: 200,
+    //     tooltip: false,
+    //     blur: ["history", "body", "magicbox", "navigate"],
+    // },
     {
         id: 38.1,
         location: '[data-step="input"]',
@@ -920,7 +928,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorClickPrevPosition: true,
         cursorPosition: {
             top: 0,
-            left: 100,
+            left: 400,
         },
         cursorDelay: 200,
         tooltip: false,
@@ -937,7 +945,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 40,
         location: '[data-step="branch-bar"]',
         cursorVisible: true,
-        cursorDelay: 500,
+        cursorDelay: 1000,
         cursorPosition: {
             top: 0,
             left: -10,

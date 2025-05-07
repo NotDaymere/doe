@@ -147,7 +147,9 @@ export function useOnboardingFlow(
     }
 
     function handleBranchTypedOut() {
-        setStep(39);
+        setTimeout(() => {
+            setStep(39);
+        }, 2000);
     }
 
     function handleVoiceMessageAppearing() {
@@ -284,17 +286,29 @@ export function useOnboardingFlow(
         if (step === 29) {
             setBlockInput(true);
         }
+        if (step === 36) {
+            setBlockSteps(false);
+        }
         if (step === 37) {
+            setBlockSteps(true);
             setTimeout(() => {
                 nextStep();
             }, 2000);
         }
         if (step === 38) {
+            setCursorMoving();
             setTimeout(() => {
                 setStep(38.1);
+            }, 5000);
+        }
+        if (step === 39) {
+            setCursorMoving();
+            setTimeout(() => {
+                setStep(40);
             }, 2000);
         }
         if (step === 40) {
+            setBlockSteps(false);
             setMessages?.((prev) => prev.slice(-2));
         }
         if (step === 46) {
@@ -356,5 +370,6 @@ export function useOnboardingFlow(
         userClickedTranslate,
         handleUserClickedSidebarButton,
         setBlockSteps,
+        blockSteps,
     };
 }
