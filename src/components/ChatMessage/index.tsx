@@ -7,6 +7,7 @@ import recording from "src/assets/images/recording.png";
 import { useScrollIntoViewOnUpdate } from "src/hooks/useScrollIntoViewOnUpdate";
 import { useTypewriterEffect } from "src/hooks/useTypewriterEffect";
 import { OnboardingMessage } from "src/shared/types/Message";
+import { ChatBetaWidget } from "./ChatBetaWidget/intex";
 import css from "./ChatMessage.module.less";
 import { ChatMessageContent } from "./ChatMessageContent";
 import { ChatMessageTranslation } from "./ChatMessageTranslation";
@@ -20,6 +21,8 @@ interface ChatMessageProps {
     setStep?: (value: number) => void;
     handleUntranslatedTypedOut?: () => void;
     handleVoiceMessageAppearing?: () => void;
+    handleFirstReadyMessage?: () => void;
+    handleSecondReadyMessage?: () => void;
 }
 
 const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
@@ -32,6 +35,8 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
             setStep,
             handleUntranslatedTypedOut,
             handleVoiceMessageAppearing,
+            handleFirstReadyMessage,
+            handleSecondReadyMessage,
         },
         ref
     ) => {
@@ -49,6 +54,8 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                     setTimeout(() => setStep?.(29), 1000);
                     setTimeout(() => setStep?.(30), 1500);
                 }
+                if (step === 58) handleFirstReadyMessage?.();
+                if (step === 59) handleSecondReadyMessage?.();
             },
         });
 
@@ -101,6 +108,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                             handleUntranslatedTypedOut={handleUntranslatedTypedOut}
                         />
                     )}
+                    {message.betaWidget && isTypingDone && <ChatBetaWidget />}
                 </div>
             </div>
         );

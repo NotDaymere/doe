@@ -40,6 +40,8 @@ interface OnboardingBodyProps {
     handleTalkModeClick: () => void;
     handleScreenSharing: () => void;
     handleCloseScreenSharing: () => void;
+    handleFirstReadyMessage: () => void;
+    handleSecondReadyMessage: () => void;
     setStep: (value: number) => void;
 }
 
@@ -72,6 +74,8 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         handleTalkModeClick,
         handleScreenSharing,
         handleCloseScreenSharing,
+        handleFirstReadyMessage,
+        handleSecondReadyMessage,
         setStep,
     } = props;
 
@@ -84,7 +88,11 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                 [css.tableOpen]: currentStep?.openTable,
             })}
         >
-            <div className={css.layout_chat}>
+            <div
+                className={clsx(css.layout_chat, {
+                    [css.centered]: step >= 60,
+                })}
+            >
                 <HeaderSection
                     step={step}
                     startOnboardingFlow={startOnboardingFlow}
@@ -103,11 +111,13 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                 <ReadyMessage
                     step={step}
                     handleWelcomeTextTypedOut={handleWelcomeTextTypedOut}
+                    handleFirstReadyMessage={handleFirstReadyMessage}
+                    handleSecondReadyMessage={handleSecondReadyMessage}
                     text="Okay, you are ready to start!"
                 />
             </div>
 
-            {(step <= 18 || step >= 28) && (
+            {(step <= 18 || step >= 28) && step < 60 && (
                 <div
                     className={clsx(css.layout_input, {
                         [css.lower_height]: step >= 5,
@@ -178,6 +188,8 @@ function HistorySection({
     handleUntranslatedTypedOut: () => void;
     handleVoiceMessageAppearing: () => void;
 }) {
+    if (step >= 60) return null;
+
     if (step >= 40 && step <= 43) {
         return (
             <>

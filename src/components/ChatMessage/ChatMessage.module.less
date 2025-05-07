@@ -426,6 +426,65 @@ code {
     }
 }
 
+.beta_widget {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 425px;
+    padding: 22px;
+    border-radius: 12px;
+    border: 1px solid #f1f1f1;
+    background: linear-gradient(90deg, rgba(248, 248, 248, 1) 0%, rgba(248, 248, 248, 0.8) 100%);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 10%;
+        right: 10%;
+        height: 70px;
+        width: 70px;
+        background-color: rgba(71, 148, 255, 0.8);
+        z-index: 1;
+        filter: blur(100px);
+    }
+}
+
+.beta_widget_frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 25px 22px 15px;
+    border-radius: 12px;
+    border: 1px solid #dddddd;
+    background: #ffffff;
+    z-index: 2;
+}
+
+.beta_widget_icon {
+    height: 82px;
+    width: 82px;
+}
+
+.beta_widget_button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #1f1f1f;
+    border-radius: 8px;
+    color: #ffffff;
+    padding: 6px 14px;
+
+    svg {
+        path {
+            fill: #ffffff;
+        }
+    }
+}
+
 @keyframes fade-in {
     0% {
         opacity: 0;

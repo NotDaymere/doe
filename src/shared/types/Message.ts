@@ -15,5 +15,6 @@ export interface OnboardingMessage {
     origin?: string;
     originTranscribed?: string;
     recording?: boolean;
+    betaWidget?: boolean;
     noTypeEffect?: boolean;
 }

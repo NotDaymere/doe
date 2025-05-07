@@ -173,6 +173,14 @@ export function useOnboardingFlow(
         setStep(53);
     }
 
+    function handleFirstReadyMessage() {
+        setStep(59);
+    }
+
+    function handleSecondReadyMessage() {
+        setStep(60);
+    }
+
     // ------ OTHER HANDLERS ------
 
     function handleUserClickedSidebarButton(type: string) {
@@ -383,6 +391,8 @@ export function useOnboardingFlow(
         handleTalkModeClick,
         handleScreenSharing,
         handleCloseScreenSharing,
+        handleFirstReadyMessage,
+        handleSecondReadyMessage,
 
         handleSidebarClose,
 
