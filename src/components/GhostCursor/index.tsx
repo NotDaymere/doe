@@ -32,6 +32,7 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
             if (e.key === "ArrowRight") {
                 if (currentStep?.id === 3) handleCursorAcknowledged?.();
                 if (currentStep.id === 19.1 || currentStep.id === 21.1) {
+                    e.preventDefault();
                     setStressTooltip(true);
 
                     setTimeout(() => setStressTooltip(false), 1500);

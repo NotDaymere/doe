@@ -57,6 +57,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                 if (step === 58) handleFirstReadyMessage?.();
                 if (step === 59) handleSecondReadyMessage?.();
             },
+            reset: step === 21,
         });
 
         useScrollIntoViewOnUpdate(ref, [typedText, isTypingDone]);
@@ -88,7 +89,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                                 src={recording}
                                 alt="recording"
                                 className={css.recording_img}
-                                onAnimationEnd={handleVoiceMessageAppearing}
+                                // onAnimationEnd={handleVoiceMessageAppearing}
                             />
                         </div>
                     )}

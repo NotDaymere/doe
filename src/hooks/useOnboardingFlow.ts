@@ -1,17 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useCursor } from "src/contexts/CursorContext";
-import {
-    transcribeText,
-    translation,
-    translationOrigin,
-    translationOriginTranscribed,
-} from "src/helpers/onboardingMessages";
-import { useAppStore } from "src/shared/providers";
 import { OnboardingMessage } from "src/shared/types/Message";
-import { useStepNavigation } from "./useStepNavigation";
+import { useArrowNavigation } from "./useArrowNavigation";
+import { useStepEffects } from "./useStepEffects";
 
 export function useOnboardingFlow(
-    setMessages?: React.Dispatch<React.SetStateAction<OnboardingMessage[]>>
+    setMessages: React.Dispatch<React.SetStateAction<OnboardingMessage[]>>
 ) {
     const { setCursorMoving } = useCursor();
     const [step, setStep] = useState(0);
@@ -22,9 +16,7 @@ export function useOnboardingFlow(
     const [userClickedUnderline, setUserClickedUnderline] = useState(false);
     const [userClickedItalic, setUserClickedItalic] = useState(false);
     const [userClickedTranslate, setUserClickedTranslate] = useState(false);
-    const [userClickedTranscribe, setUserClickedTranscribe] = useState(false);
     const [blockSteps, setBlockSteps] = useState(false);
-    const { gaiaActive, setGaiaActive } = useAppStore();
 
     // --- Step Navigation ---
 
@@ -40,20 +32,8 @@ export function useOnboardingFlow(
         setStep((prev) => parseFloat((prev + 0.1).toFixed(1)));
     }, [blockSteps]);
 
-    const prevStep = useCallback(() => {
-        if (blockSteps) return;
-
-        setStep((prev) => Math.max(prev - 1, 5));
-    }, [blockSteps]);
-
-    const prevSubStep = useCallback(() => {
-        if (blockSteps) return;
-
-        setStep((prev) => parseFloat((prev - 0.1).toFixed(1)));
-    }, [blockSteps]);
-
     // listener for arrow keys to navigate through the steps
-    useStepNavigation(step, nextStep, prevStep, nextSubStep, prevSubStep, setStep);
+    useArrowNavigation(step, setStep);
 
     // ------ HANDLERS IN ORDER ------
 
@@ -116,14 +96,13 @@ export function useOnboardingFlow(
 
     // #8 -> text is typed out, cursor going to sidebar to show sidebar buttons functionality
     function handleBoldPlaceholderTypedOut() {
+        setCursorMoving();
         setBlockSteps(false);
         setBlockInput(true);
-        setCursorMoving();
         setTimeout(() => setStep(5), 100);
     }
 
     function handleMathPromptTypedOut() {
-        setCursorMoving();
         setStep(8.1);
     }
 
@@ -132,7 +111,6 @@ export function useOnboardingFlow(
     }
 
     function handleCodePromptTypedOut() {
-        setCursorMoving();
         setStep(9.1);
     }
 
@@ -142,7 +120,6 @@ export function useOnboardingFlow(
 
     function handleUntranslatedTypedOut() {
         setBlockSteps(true);
-        setCursorMoving();
         setStep(19.1);
     }
 
@@ -185,20 +162,20 @@ export function useOnboardingFlow(
 
     function handleUserClickedSidebarButton(type: string) {
         if (type === "bold") {
-            setUserClickedBold((prev) => !prev);
             setCursorMoving();
+            setUserClickedBold((prev) => !prev);
             setTimeout(() => {
                 nextStep();
             }, 1000);
         } else if (type === "italic") {
-            setUserClickedItalic((prev) => !prev);
             setCursorMoving();
+            setUserClickedItalic((prev) => !prev);
             setTimeout(() => {
                 nextStep();
             }, 1000);
         } else if (type === "underline") {
-            setUserClickedUnderline((prev) => !prev);
             setCursorMoving();
+            setUserClickedUnderline((prev) => !prev);
             setTimeout(() => {
                 nextStep();
             }, 1000);
@@ -221,149 +198,9 @@ export function useOnboardingFlow(
         setBlockInput(true);
     }
 
-    function handleDeleteMessages() {
-        setMessages?.([]);
-    }
-
-    function handleAddGreetingMessages() {
-        setBlockInput(false);
-        setMessages?.([
-            { role: "user", content: `Hey Doe, I'm John Smith`, noTypeEffect: true },
-            { role: "ai", content: `Hey, John Smith, I'm Doe!`, noTypeEffect: true },
-            { role: "ai", content: `Let me introduce my main functionality.`, noTypeEffect: true },
-        ]);
-    }
-
     // ------ STEP-SPECIFIC EFFECTS ------
 
-    useEffect(() => {
-        setCursorMoving();
-
-        if (step === 7) {
-            handleDeleteMessages();
-        }
-
-        if (step === 9) {
-            setMessages?.([]);
-        }
-        if (step === 10) {
-            handleDeleteMessages();
-        }
-        if (step === 12) {
-            setBlockSteps(true);
-            setTimeout(() => {
-                nextStep();
-                setBlockSteps(false);
-            }, 500);
-        }
-        if (step === 18) {
-            handleDeleteMessages();
-        }
-        if (step >= 18.1 && step < 18.4) {
-            setTimeout(() => {
-                nextSubStep();
-            }, 1100);
-        }
-        if (step === 19) {
-            setMessages?.([
-                {
-                    role: "ai",
-                    content: translation,
-                    origin: translationOrigin,
-                    originTranscribed: translationOriginTranscribed,
-                },
-            ]);
-        }
-        if (step === 21) {
-            setMessages?.([
-                {
-                    role: "ai",
-                    recording: true,
-                    content: transcribeText,
-                },
-            ]);
-        }
-        if (step === 22) {
-            setTimeout(() => {
-                nextSubStep();
-            }, 1200);
-        }
-        if (step === 25) {
-            handleDeleteMessages();
-        }
-        if (step === 26) {
-            setGaiaActive(false);
-            handleDeleteMessages();
-        }
-        if (step === 27 && !gaiaActive) {
-            handleAddGreetingMessages();
-            setBlockInput(false);
-            setTimeout(() => {
-                setGaiaActive(true);
-            }, 1100);
-        }
-        if (step === 28) {
-            setGaiaActive(false);
-        }
-        if (step === 29) {
-            setBlockInput(true);
-        }
-        if (step === 36) {
-            setBlockSteps(false);
-        }
-        if (step === 37) {
-            setBlockSteps(true);
-            setTimeout(() => {
-                nextStep();
-            }, 2000);
-        }
-        if (step === 38) {
-            setCursorMoving();
-            setTimeout(() => {
-                setStep(38.1);
-            }, 5000);
-        }
-        if (step === 39) {
-            setCursorMoving();
-            setTimeout(() => {
-                setStep(40);
-            }, 2000);
-        }
-        if (step === 40) {
-            setBlockSteps(false);
-            setMessages?.((prev) => prev.slice(-2));
-        }
-        if (step === 45) {
-            setCursorMoving();
-            setBlockSteps(true);
-            setTimeout(() => {
-                nextSubStep();
-            }, 2000);
-        }
-        if (step === 45.1) {
-            setBlockSteps(false);
-        }
-        if (step === 46) {
-            setTimeout(() => {
-                nextStep();
-            }, 1000);
-        }
-        if (step === 47) {
-            setTimeout(() => {
-                nextStep();
-            }, 1000);
-        }
-        if (step === 50) {
-            setTimeout(() => {
-                nextStep();
-            }, 500);
-        }
-        if (step === 54) {
-            setTimeout(() => {
-                nextStep();
-            }, 500);
-        }
-    }, [step, setMessages]);
+    useStepEffects(step, setMessages, nextStep, nextSubStep, setBlockInput, setBlockSteps);
 
     return {
         // Step number, changing step

@@ -23,7 +23,8 @@ export const MagicBox = ({ step }: MagicBoxProps) => {
                 data-step="magic"
                 className={clsx(
                     css.magicbox_container,
-                    (step === 20 || step === 22.1) && !cursorMoving && css.magicbox_container_active
+                    ((step === 20 && !cursorMoving) || step === 22.1) &&
+                        css.magicbox_container_active
                 )}
             >
                 <StarsIcon className={step === 20 ? css.icon_active : css.icon_disabled} />
@@ -40,7 +41,7 @@ export const MagicBox = ({ step }: MagicBoxProps) => {
                         </div>
                     </div>
                 )}
-                {step === 22.1 && !cursorMoving && (
+                {step === 22.1 && (
                     <div className={css.magicbox_popup}>
                         <div className={css.magicbox_popup_item}>
                             <ZipIcon /> Connect Applications
