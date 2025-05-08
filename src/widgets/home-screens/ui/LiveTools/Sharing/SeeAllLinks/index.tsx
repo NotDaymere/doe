@@ -163,8 +163,8 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
 
     const ref = useClickOut({
         handler: () => {
-            setShowSeeAllLink(false);
-            setIsActive(false);
+            // setShowSeeAllLink(false);
+            // setIsActive(false);
         },
     });
 
@@ -173,12 +173,12 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
             setShowSeeAllLink(true);
 
             return () => {
-                setShowSeeAllLink(false);
-                setIsActive(false);
+                // setShowSeeAllLink(false);
+                // setIsActive(false);
             };
         } else {
-            setShowSeeAllLink(false);
-            setIsActive(false);
+            // setShowSeeAllLink(false);
+            // setIsActive(false);
         }
     }, [isActive]);
 

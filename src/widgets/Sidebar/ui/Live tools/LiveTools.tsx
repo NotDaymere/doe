@@ -6,16 +6,14 @@ import { useAppStore, useChatStore } from "../../../../shared/providers";
 import { MODE } from "src/shared/types/Chat";
 
 export const LiveTools = () => {
-
     const { isSideBarOpen } = useAppStore();
-    const {mode, setMode} = useChatStore();
+    const { mode, setMode } = useChatStore();
     const [isSideBarLiveToolsOpen, setIsSideBarLiveToolsOpen] = React.useState(true);
     const [showTooltips, setShowTooltips] = React.useState(false);
 
-
     const handleOpenSideBarLiveTools = () => {
         setIsSideBarLiveToolsOpen(!isSideBarLiveToolsOpen);
-    }
+    };
 
     React.useEffect(() => {
         if (isSideBarOpen) {
@@ -27,29 +25,32 @@ export const LiveTools = () => {
         }
     }, [isSideBarOpen]);
 
-
     return (
         <div className={isSideBarOpen ? css.sidebar_open_live_tools : css.sidebar_live_tools}>
-
             <div className={css.live_tools_actions_section_name}>
                 <div>Live tools</div>
                 <div
                     className={css.live_tools_show_actions_btn}
-                    onClick={handleOpenSideBarLiveTools}>
+                    onClick={handleOpenSideBarLiveTools}
+                >
                     {!isSideBarLiveToolsOpen ? "+" : "-"}
                 </div>
             </div>
 
             {isSideBarLiveToolsOpen && (
                 <div className={css.live_tools_actions_section_container}>
-
-                    <div className={css.sidebar_live_tools_action_container}
-                         onClick={() => setMode(MODE.TRANSLATION)}>
-                        <button
-                            className={css.sidebar_controls_btn}
-                        >
+                    <div
+                        className={css.sidebar_live_tools_action_container}
+                        onClick={() => setMode(MODE.TRANSLATION)}
+                        data-active={mode === MODE.TRANSLATION}
+                    >
+                        <button className={css.sidebar_controls_btn}>
                             {mode === MODE.TRANSLATION ? (
-                                <TranslationIcon fill1={'#FFD632'} fill2={'#AC7CFF'} isFill={true} />
+                                <TranslationIcon
+                                    fill1={"#FFD632"}
+                                    fill2={"#AC7CFF"}
+                                    isFill={true}
+                                />
                             ) : (
                                 <TranslationIcon fill="currentColor" isFill={false} />
                             )}
@@ -58,23 +59,25 @@ export const LiveTools = () => {
                             <span>Translate</span> <span>Content</span>
                         </div>
                     </div>
-                    <div className={css.sidebar_live_tools_action_container}
-                         onClick={() => setMode(MODE.RECORDING)}>
-                        <button
-                            className={css.sidebar_controls_btn}
-                        >
+                    <div
+                        className={css.sidebar_live_tools_action_container}
+                        onClick={() => setMode(MODE.RECORDING)}
+                    >
+                        <button className={css.sidebar_controls_btn}>
                             {mode === MODE.RECORDING ? (
-                                <RecordIcon fill={'#FF4646'} />
+                                <RecordIcon fill={"#FF4646"} />
                             ) : (
                                 <RecordIcon fill="currentColor" />
                             )}
                         </button>
-                            <div className={css.sidebar_live_tools_action_btn_tooltip}>
-                                <span>Listen</span><span>and</span><span>Transcribe</span>
-                            </div>
+                        <div className={css.sidebar_live_tools_action_btn_tooltip}>
+                            <span>Listen</span>
+                            <span>and</span>
+                            <span>Transcribe</span>
+                        </div>
                     </div>
                 </div>
             )}
         </div>
-    )
-}
+    );
+};

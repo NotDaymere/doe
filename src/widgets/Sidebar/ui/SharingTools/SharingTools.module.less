@@ -1,156 +1,185 @@
 .sidebar_live_tools {
-
-  .live_tools_actions_section_name {
-    display: none;
-  }
-
-  .live_tools_actions_section_container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .sidebar_live_tools_action_container {
-      padding-top: 2px;
-      padding-right: 1px;
-      border-radius: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      align-content: center;
-      height: 40px;
-      width: 40px;
-      cursor: pointer;
-      color: #B5B5B5;
-      background-color: transparent;
-      transition: background-color 0.3s ease-out,
-      color 0.3s ease-out;
-
-      &:hover {
-        color: #5B5B5B;
-        background-color: #B5B5B533;
-        svg {
-          fill: #5B5B5B;
-          stroke: #5B5B5B;
-        }
-      }
-
-      .live_tools_menu_action_btn {
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-      }
-
-      .sidebar_live_tools_action_btn_tooltip {
+    .live_tools_actions_section_name {
         display: none;
-      }
     }
-  }
+
+    .live_tools_actions_section_container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .sidebar_live_tools_action_container {
+            padding-top: 2px;
+            padding-right: 1px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            height: 40px;
+            width: 40px;
+            cursor: pointer;
+            color: var(--var-85);
+            background-color: transparent;
+            transition:
+                background-color 0.3s ease-out,
+                color 0.3s ease-out;
+            &:hover {
+                color: var(--var-86);
+                background-color: var(--var-1);
+            }
+            &[data-active="true"] {
+                background-color: var(--var-84);
+                svg {
+                    path:nth-child(1) {
+                        fill: #00d77a;
+                    }
+                    path:nth-child(2) {
+                        fill: #e5c600;
+                    }
+                    path:nth-child(3) {
+                        fill: #7898ff;
+                    }
+                    path:nth-child(4) {
+                        stroke: #b5b5b5;
+                    }
+                }
+            }
+
+            .live_tools_menu_action_btn {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+
+            .sidebar_live_tools_action_btn_tooltip {
+                display: none;
+            }
+        }
+    }
 }
 
-
 .sidebar_open_live_tools {
-  padding-right: 25px;
+    padding-right: 25px;
 
-  .live_tools_actions_section_name {
-    padding-right: 6px;
-    padding-bottom: 5px;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    color: #CFCFCF;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    background-color: transparent;
-    transition: background-color 0.3s ease-out,
-    color 0.3s ease-out;
-
-    &:hover {
-      color: #1F1F1F;
-    }
-
-    .live_tools_show_actions_btn {
-      padding-bottom: 3px;
-      width: 20px;
-      height: 20px;
-      border-radius: 4px;
-      font-size: 20px !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      align-content: center;
-      cursor: pointer;
-      color: #DDDDDD;
-      background-color: transparent;
-      transition: background-color 0.3s ease-out,
-      color 0.3s ease-out;
-
-      &:hover {
-        color: #1F1F1F!important;
-        background-color: rgba(220, 220, 220, 0.68);
-      }
-    }
-  }
-
-  .live_tools_actions_section_container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    .sidebar_live_tools_action_container {
-      border-radius: 12px;
-      width: 100%;
-      height: 40px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 90px !important;
-      cursor: pointer;
-      color: #B5B5B5;
-      background-color: transparent;
-      border: 2px solid transparent;
-      transition:
-              background-color 0.3s ease-out,
-              color 0.3s ease-out,
-              border 0.3s ease-out;
-
-      &:hover {
-        background-color: rgba(181, 181, 181, 0.09);
-        color: #5B5B5B;
-        border: 2px solid #B5B5B533;
-      }
-
-      &[data-active="true"] {
-        background-color: #B5B5B533;
-        color: #1F1F1F;
-      }
-
-      .live_tools_menu_action_btn {
-        padding-left: 8px;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-      }
-
-
-      .sidebar_live_tools_action_btn_tooltip {
-        width: 100%;
+    .live_tools_actions_section_name {
+        padding-right: 6px;
+        padding-bottom: 5px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
         flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        color: var(--var-88);
         font-size: 14px;
         font-weight: 500;
+        cursor: pointer;
+        background-color: transparent;
+        transition:
+            background-color 0.3s ease-out,
+            color 0.3s ease-out;
 
-
-        .show_more_btn {
-          font-size: 20px !important;
-          cursor: pointer;
+        &:hover {
+            color: var(--var-101);
+            & .live_tools_show_actions_btn {
+                color: var(--var-102);
+                background-color: var(--var-11);
+            }
         }
-      }
+
+        .live_tools_show_actions_btn {
+            padding-bottom: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            font-size: 20px !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-content: center;
+            cursor: pointer;
+            color: var(--var-49);
+            background-color: transparent;
+            transition:
+                background-color 0.3s ease-out,
+                color 0.3s ease-out;
+
+            &:hover {
+                color: var(--var-7) !important;
+                background-color: var(--var-11);
+            }
+        }
     }
-  }
+
+    .live_tools_actions_section_container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .sidebar_live_tools_action_container {
+            border-radius: 12px;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 90px !important;
+            cursor: pointer;
+            color: var(--var-116);
+            background-color: transparent;
+            border: 2px solid transparent;
+            transition:
+                background-color 0.3s ease-out,
+                color 0.3s ease-out,
+                border 0.3s ease-out;
+
+            &:hover {
+                background-color: var(--var-2);
+                color: var(--var-95);
+                border: 2px solid var(--var-69);
+            }
+
+            &[data-active="true"] {
+                background-color: var(--var-9);
+                color: var(--var-7);
+                svg {
+                    path:nth-child(1) {
+                        fill: #00d77a;
+                    }
+                    path:nth-child(2) {
+                        fill: #e5c600;
+                    }
+                    path:nth-child(3) {
+                        fill: #7898ff;
+                    }
+                    path:nth-child(4) {
+                        stroke: #b5b5b5;
+                    }
+                }
+            }
+
+            .live_tools_menu_action_btn {
+                padding-left: 8px;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+
+            .sidebar_live_tools_action_btn_tooltip {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-direction: row;
+                font-size: 14px;
+                font-weight: 500;
+
+                .show_more_btn {
+                    font-size: 20px !important;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
 }
