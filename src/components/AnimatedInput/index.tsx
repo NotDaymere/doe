@@ -29,6 +29,7 @@ interface AnimatedInputProps {
     handleCodePromptTypedOut: () => void;
     handlePythonCodeTypedOut: () => void;
     handleBranchTypedOut: () => void;
+    handleNewBranchClick: () => void;
     handleSendProjectMessage: () => void;
     handleTalkModeClick: () => void;
     handleScreenSharing: () => void;
@@ -51,6 +52,7 @@ export function AnimatedInput({
     handleCodePromptTypedOut,
     handlePythonCodeTypedOut,
     handleBranchTypedOut,
+    handleNewBranchClick,
     handleSendProjectMessage,
     handleTalkModeClick,
     handleScreenSharing,
@@ -242,7 +244,11 @@ export function AnimatedInput({
                 })}
             >
                 <div className={clsx(css.panel_main, { [css.blocked]: blockInput && step >= 24 })}>
-                    <MagicMenu step={step} handleTalkModeClick={handleTalkModeClick} />
+                    <MagicMenu
+                        step={step}
+                        handleTalkModeClick={handleTalkModeClick}
+                        handleNewBranchClick={handleNewBranchClick}
+                    />
                     <div className={clsx(css.panel_input_container, { [css.hide]: isMessageSent })}>
                         <span className={clsx(css.static_text, { [css.grow]: blockInput })}>
                             <InputStaticText

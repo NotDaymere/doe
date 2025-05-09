@@ -26,12 +26,10 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
     });
 
     useEffect(() => {
-        if (currentStep?.id !== 3 && currentStep?.id !== 19.1 && currentStep?.id !== 21.1) return;
-
         const handleKey = (e: KeyboardEvent) => {
             if (e.key === "ArrowRight") {
                 if (currentStep?.id === 3) handleCursorAcknowledged?.();
-                if (currentStep.id === 19.1 || currentStep.id === 21.1) {
+                if (currentStep?.stressTooltipOnArrowRight) {
                     e.preventDefault();
                     setStressTooltip(true);
 
@@ -86,7 +84,7 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
                     stressed={stressTooltip}
                     position={currentStep?.tooltipPosition}
                     className={`highlight-step highlight-step-${currentStep.id} ${
-                        currentStep.id >= 18.1 && currentStep.id < 19 ? "continuous" : ""
+                        currentStep.id >= 18.2 && currentStep.id < 19 ? "continuous" : ""
                     }`}
                 >
                     <div className={css.tooltip_content}>

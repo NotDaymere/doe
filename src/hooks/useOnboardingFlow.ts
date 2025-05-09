@@ -118,15 +118,13 @@ export function useOnboardingFlow(
         setStep(9.3);
     }
 
+    function handleSaveSettings() {
+        setTimeout(() => setStep(19), 1000);
+    }
+
     function handleUntranslatedTypedOut() {
         setBlockSteps(true);
         setStep(19.1);
-    }
-
-    function handleBranchTypedOut() {
-        setTimeout(() => {
-            setStep(39);
-        }, 2000);
     }
 
     function handleVoiceMessageAppearing() {
@@ -138,7 +136,18 @@ export function useOnboardingFlow(
         setStep(28.1);
     }
 
+    function handleNewBranchClick() {
+        setStep(38.1);
+    }
+
+    function handleBranchTypedOut() {
+        setTimeout(() => {
+            setStep(39);
+        }, 2000);
+    }
+
     function handleTalkModeClick() {
+        setCursorMoving();
         setStep(46);
     }
 
@@ -200,7 +209,7 @@ export function useOnboardingFlow(
 
     // ------ STEP-SPECIFIC EFFECTS ------
 
-    useStepEffects(step, setMessages, nextStep, nextSubStep, setBlockInput, setBlockSteps);
+    useStepEffects(step, setMessages, nextStep, nextSubStep, setBlockSteps, setBlockInput);
 
     return {
         // Step number, changing step
@@ -220,10 +229,12 @@ export function useOnboardingFlow(
         handleMathPromptTypedOut,
         handleMathFormulaTypedOut,
         handleCodePromptTypedOut,
+        handleSaveSettings,
         handlePythonCodeTypedOut,
         handleUntranslatedTypedOut,
         handleVoiceMessageAppearing,
         handleSendProjectMessage,
+        handleNewBranchClick,
         handleBranchTypedOut,
         handleTalkModeClick,
         handleScreenSharing,
@@ -245,5 +256,6 @@ export function useOnboardingFlow(
         handleUserClickedSidebarButton,
         setBlockSteps,
         blockSteps,
+        setBlockInput,
     };
 }

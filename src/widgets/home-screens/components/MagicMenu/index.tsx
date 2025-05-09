@@ -16,6 +16,7 @@ interface Props {
     onDispatchDoe?: () => void;
     step?: number;
     handleTalkModeClick?: () => void;
+    handleNewBranchClick?: () => void;
 }
 
 export const MagicMenu: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const MagicMenu: React.FC<Props> = ({
     onDispatchDoe,
     step,
     handleTalkModeClick,
+    handleNewBranchClick,
 }) => {
     const { cursorMoving } = useCursor();
     const [activeMenu, setActiveMenu] = React.useState(false);
@@ -55,7 +57,7 @@ export const MagicMenu: React.FC<Props> = ({
     return (
         <div
             className={clsx(css.magic, {
-                [css.magic_active]: (step === 37 || step === 45) && !cursorMoving,
+                [css.magic_active]: ((step === 37 || step === 45) && !cursorMoving) || step === 38,
             })}
             style={{
                 zIndex: activeMenu ? 100 : "",
@@ -101,6 +103,7 @@ export const MagicMenu: React.FC<Props> = ({
                         step={step}
                         triggerStep={38}
                         dataStep="branch"
+                        onClick={handleNewBranchClick}
                     />
                 </div>
             </CSSTransition>

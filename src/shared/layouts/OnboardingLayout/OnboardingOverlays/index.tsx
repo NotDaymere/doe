@@ -28,6 +28,7 @@ interface OnboardingOverlaysProps {
     >;
     handleNavigationAnimation: () => void;
     handleCursorAcknowledged: () => void;
+    handleSaveSettings: () => void;
 }
 
 export function OnboardingOverlays({
@@ -38,6 +39,7 @@ export function OnboardingOverlays({
     setProfileData,
     handleNavigationAnimation,
     handleCursorAcknowledged,
+    handleSaveSettings,
 }: OnboardingOverlaysProps) {
     return createPortal(
         <>
@@ -54,6 +56,7 @@ export function OnboardingOverlays({
                 step={step}
                 profileData={profileData}
                 setProfileData={setProfileData}
+                handleSaveSettings={handleSaveSettings}
             />
             <ScreenSharing step={step} />
             <QuickSearch step={step} />

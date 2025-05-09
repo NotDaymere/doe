@@ -10,7 +10,7 @@ export function useStepEffects(
     nextStep: () => void,
     nextSubStep: () => void,
     setBlockSteps: (b: boolean) => void,
-    setBlockInput: (b: boolean) => void
+    setBlockInput: React.Dispatch<React.SetStateAction<boolean>>
 ) {
     const { setCursorMoving } = useCursor();
     const { setGaiaActive } = useAppStore();
@@ -38,15 +38,12 @@ export function useStepEffects(
         /** auto‑skip */
         if (curr?.autoSkip) {
             const t = setTimeout(() => nextStep(), curr.autoSkip);
-            console.log("skip in new effect");
             return () => clearTimeout(t);
         } else if (curr?.autoSkipSubStep) {
             const t = setTimeout(() => nextSubStep(), curr.autoSkipSubStep);
-
-            console.log("subskip in new effect");
             return () => clearTimeout(t);
         }
 
         prevStepRef.current = step;
-    }, [step, setMessages, setCursorMoving, setGaiaActive]);
+    }, [step, setMessages, setCursorMoving, setGaiaActive, setBlockInput, setBlockSteps]);
 }

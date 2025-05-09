@@ -38,7 +38,7 @@ export interface OnboardingCtx {
     setCursorMoving: () => void;
     setGaiaActive: (b: boolean) => void;
     setBlockSteps: (b: boolean) => void;
-    setBlockInput: (b: boolean) => void;
+    setBlockInput: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface OnboardingStep {
@@ -60,6 +60,7 @@ export interface OnboardingStep {
     tooltipParagraph1?: ReactNode;
     tooltipParagraph2?: ReactNode;
     tooltipIcons?: ReactNode;
+    stressTooltipOnArrowRight?: boolean;
     sendButtonEnabled?: boolean;
     blur?: string[];
     onEnter?: (ctx: OnboardingCtx) => void;
@@ -552,7 +553,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 manage your apps.
             </p>
         ),
-        autoSkipSubStep: 1100,
+        autoSkipSubStep: 2100,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -645,6 +646,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 <TranslationsIcon />
             </div>
         ),
+        stressTooltipOnArrowRight: true,
         blur: ["input", "navigate"],
     },
     {
@@ -703,6 +705,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 <RecordingIcon />
             </div>
         ),
+        stressTooltipOnArrowRight: true,
         blur: ["input", "navigate"],
     },
     {
@@ -834,8 +837,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
-        onEnter: ({ setBlockInput, setMessages, setGaiaActive }) => {
-            setBlockInput(false);
+        onEnter: ({ setMessages, setGaiaActive }) => {
             setMessages?.([
                 { role: "user", content: `Hey Doe, I'm John Smith`, noTypeEffect: true },
                 { role: "ai", content: `Hey, John Smith, I'm Doe!`, noTypeEffect: true },
@@ -849,9 +851,8 @@ export const onboardingFlow: OnboardingStep[] = [
                 setGaiaActive(true);
             }, 1100);
         },
-        onExit: ({ setGaiaActive, setBlockInput }) => {
+        onExit: ({ setGaiaActive }) => {
             setGaiaActive(false);
-            setBlockInput(false);
         },
     },
     {
@@ -865,7 +866,9 @@ export const onboardingFlow: OnboardingStep[] = [
         sendButtonEnabled: true,
         tooltip: false,
         blur: [""],
-        onEnter: ({ setBlockInput }) => {},
+        onEnter: ({ setBlockInput }) => {
+            setBlockInput(false);
+        },
     },
     {
         id: 28.1,
@@ -901,6 +904,7 @@ export const onboardingFlow: OnboardingStep[] = [
         location: '[data-step="playground-btn"]',
         cursorVisible: true,
         cursorClick: true,
+        cursorDelay: 1000,
         tooltip: true,
         tooltipPosition: "left",
         tooltipTitle: <b className={css.tooltip_title}>Revision History</b>,
@@ -920,6 +924,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorCentered: true,
         tooltip: false,
         blur: [""],
+        autoSkip: 100,
     },
     {
         id: 33,
@@ -981,8 +986,11 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorClick: true,
         tooltip: false,
         blur: ["history", "body", "magicbox", "navigate"],
-        autoSkip: 2000,
-        onEnter: ({ setBlockSteps }) => setBlockSteps(true),
+        autoSkip: 1150,
+        onExit: ({ setCursorMoving }) => {
+            setCursorMoving();
+            console.log("trueeee");
+        },
     },
     {
         id: 38,
@@ -992,7 +1000,8 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 10,
             left: 30,
         },
-        cursorDelay: 200,
+        cursorDelay: 500,
+        // cursorSpeed: 2000,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Creating branches</b>,
@@ -1003,8 +1012,11 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         blur: ["history", "body", "magicbox", "navigate"],
-        autoSkipSubStep: 5000,
-        onEnter: ({ setCursorMoving }) => setCursorMoving(),
+        stressTooltipOnArrowRight: true,
+        // autoSkipSubStep: 1000,
+        onEnter: ({ setCursorMoving }) => {
+            setCursorMoving();
+        },
     },
     {
         id: 38.1,
@@ -1107,10 +1119,9 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorClick: true,
         tooltip: false,
         blur: ["history", "body", "magicbox", "navigate"],
-        autoSkipSubStep: 2000,
-        onEnter: ({ setBlockSteps, setCursorMoving }) => {
+        autoSkipSubStep: 1150,
+        onExit: ({ setCursorMoving }) => {
             setCursorMoving();
-            setBlockSteps(true);
         },
     },
     {
@@ -1128,8 +1139,11 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         // blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
+        stressTooltipOnArrowRight: true,
         blur: [""],
-        onEnter: ({ setBlockSteps }) => setBlockSteps(true),
+        onEnter: ({ setCursorMoving }) => {
+            setCursorMoving();
+        },
     },
     {
         id: 46,
@@ -1190,6 +1204,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 phone, or tablet.
             </p>
         ),
+        stressTooltipOnArrowRight: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
     {
@@ -1246,8 +1261,8 @@ export const onboardingFlow: OnboardingStep[] = [
         location: '[data-step="search"]',
         cursorVisible: true,
         cursorPosition: {
-            top: 5,
-            left: 4,
+            top: -5,
+            left: -40,
         },
         tooltip: true,
         tooltipPosition: "left",

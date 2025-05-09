@@ -26,6 +26,7 @@ interface SettingsModalProps {
             photo: string;
         }>
     >;
+    handleSaveSettings: () => void;
 }
 
 export const SettingsModal = ({
@@ -33,6 +34,7 @@ export const SettingsModal = ({
     nextStep,
     profileData,
     setProfileData,
+    handleSaveSettings,
 }: SettingsModalProps) => {
     if (step < 18 || step >= 19) return null;
     const [saved, setSaved] = useState(false);
@@ -174,7 +176,10 @@ export const SettingsModal = ({
                                 [css.highlighted]: step === 18.4,
                                 [css.button_saved]: saved,
                             })}
-                            onClick={() => setSaved(true)}
+                            onClick={() => {
+                                handleSaveSettings();
+                                setSaved(true);
+                            }}
                             data-step="profile-save"
                         >
                             {!saved ? (

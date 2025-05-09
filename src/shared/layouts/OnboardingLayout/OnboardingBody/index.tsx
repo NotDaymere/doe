@@ -35,6 +35,7 @@ interface OnboardingBodyProps {
     handlePythonCodeTypedOut: () => void;
     handleUntranslatedTypedOut: () => void;
     handleBranchTypedOut: () => void;
+    handleNewBranchClick: () => void;
     handleVoiceMessageAppearing: () => void;
     handleSendProjectMessage: () => void;
     handleTalkModeClick: () => void;
@@ -69,6 +70,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         handlePythonCodeTypedOut,
         handleUntranslatedTypedOut,
         handleBranchTypedOut,
+        handleNewBranchClick,
         handleVoiceMessageAppearing,
         handleSendProjectMessage,
         handleTalkModeClick,
@@ -86,11 +88,12 @@ export function OnboardingBody(props: OnboardingBodyProps) {
             className={clsx(css.layout_body, ...getBlurClasses(currentStep?.blur), {
                 [css.end]: step >= 8,
                 [css.tableOpen]: currentStep?.openTable,
+                [css.centered]: step >= 60,
             })}
         >
             <div
                 className={clsx(css.layout_chat, {
-                    [css.centered]: step >= 60,
+                    // [css.centered]: step >= 60,
                 })}
             >
                 <HeaderSection
@@ -117,7 +120,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                 />
             </div>
 
-            {(step <= 18 || step >= 28) && step < 60 && (
+            {(step <= 18 || step >= 28) && (
                 <div
                     className={clsx(css.layout_input, {
                         [css.lower_height]: step >= 5,
@@ -140,6 +143,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                         handlePythonCodeTypedOut={handlePythonCodeTypedOut}
                         handleSendProjectMessage={handleSendProjectMessage}
                         handleBranchTypedOut={handleBranchTypedOut}
+                        handleNewBranchClick={handleNewBranchClick}
                         handleTalkModeClick={handleTalkModeClick}
                         handleScreenSharing={handleScreenSharing}
                         handleCloseScreenSharing={handleCloseScreenSharing}
@@ -188,8 +192,6 @@ function HistorySection({
     handleUntranslatedTypedOut: () => void;
     handleVoiceMessageAppearing: () => void;
 }) {
-    if (step >= 60) return null;
-
     if (step >= 40 && step <= 43) {
         return (
             <>
