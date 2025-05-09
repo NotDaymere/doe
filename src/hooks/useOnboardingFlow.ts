@@ -79,7 +79,6 @@ export function useOnboardingFlow(
         if (step < 4.7) {
             setTimeout(() => {
                 setStep(4.6);
-                setMessages?.([]);
                 setBlockInput(true);
             }, 1000);
         }

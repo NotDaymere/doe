@@ -1,6 +1,7 @@
 import { MathJaxContext } from "better-react-mathjax";
 import clsx from "clsx";
 import { memo, useRef } from "react";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { OnboardingMessage } from "src/shared/types/Message";
 import { BranchBar } from "../BranchBar";
 import ChatMessage from "../ChatMessage";
@@ -41,21 +42,33 @@ const ChatHistory = ({
             })}
         >
             <div className={css.chatHistoryContent}>
-                {messages.map((msg, index) => (
-                    <MathJaxContext config={mathJaxConfig} key={index}>
-                        <ChatMessage
-                            message={msg}
-                            prevRole={index > 0 ? messages[index - 1]?.role : undefined}
-                            step={step}
-                            ref={historyRef}
-                            userClickedTranslate={userClickedTranslate}
-                            noTypeEffect={step === 35 || step >= 44}
-                            setStep={setStep}
-                            handleUntranslatedTypedOut={handleUntranslatedTypedOut}
-                            handleVoiceMessageAppearing={handleVoiceMessageAppearing}
-                        />
-                    </MathJaxContext>
-                ))}
+                <TransitionGroup component={null}>
+                    {messages.map((msg, index) => (
+                        <CSSTransition
+                            key={index}
+                            timeout={1000}
+                            classNames={{
+                                exit: css.msgExit,
+                                exitActive: css.msgExitActive,
+                            }}
+                            unmountOnExit
+                        >
+                            <MathJaxContext config={mathJaxConfig} key={index}>
+                                <ChatMessage
+                                    message={msg}
+                                    prevRole={index > 0 ? messages[index - 1]?.role : undefined}
+                                    step={step}
+                                    ref={historyRef}
+                                    userClickedTranslate={userClickedTranslate}
+                                    noTypeEffect={step === 35 || step >= 44}
+                                    setStep={setStep}
+                                    handleUntranslatedTypedOut={handleUntranslatedTypedOut}
+                                    handleVoiceMessageAppearing={handleVoiceMessageAppearing}
+                                />
+                            </MathJaxContext>
+                        </CSSTransition>
+                    ))}
+                </TransitionGroup>
             </div>
             {step >= 39 && <BranchBar />}
         </div>
