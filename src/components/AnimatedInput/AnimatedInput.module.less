@@ -9,6 +9,13 @@
     display: flex;
     justify-content: center;
 
+    transition: margin-bottom 1s ease;
+
+    &.panel_lowered {
+        margin-bottom: 0;
+        padding: 0 30px 30px 80px;
+    }
+
     @media screen and (max-width: 1248px) {
         margin-top: 20px;
     }

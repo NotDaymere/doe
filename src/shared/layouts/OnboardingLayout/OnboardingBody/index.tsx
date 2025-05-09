@@ -93,6 +93,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
             <div
                 className={clsx(css.layout_chat, {
                     // [css.centered]: step >= 60,
+                    [css.chat_end]: step >= 8,
                 })}
             >
                 <HeaderSection
@@ -125,7 +126,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                 <div
                     className={clsx(css.layout_input, {
                         // [css.lower_height]: step >= 5,
-                        [css.sm]: step >= 28.1,
+                        // [css.sm]: step >= 28.1,
                     })}
                 >
                     <AnimatedInput

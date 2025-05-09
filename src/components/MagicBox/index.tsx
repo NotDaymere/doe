@@ -14,7 +14,7 @@ interface MagicBoxProps {
 }
 
 export const MagicBox = ({ step }: MagicBoxProps) => {
-    if (step < 19 || step > 24) return null;
+    if (step < 19 || step >= 23) return null;
     const { cursorMoving } = useCursor();
 
     return (

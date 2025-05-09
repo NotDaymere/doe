@@ -236,7 +236,7 @@ export function AnimatedInput({
     const MemoizedGrid = useMemo(() => <Grid />, []);
 
     return (
-        <div className={css.panel}>
+        <div className={clsx(css.panel, { [css.panel_lowered]: step >= 28.1 })}>
             {step === 36 && <ReplyPanel />}
             <div
                 className={clsx(css.panel_wrapper, {
