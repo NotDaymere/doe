@@ -61,6 +61,7 @@ export interface OnboardingStep {
     tooltipParagraph2?: ReactNode;
     tooltipIcons?: ReactNode;
     stressTooltipOnArrowRight?: boolean;
+    disableNavigationHover?: boolean;
     sendButtonEnabled?: boolean;
     blur?: string[];
     onEnter?: (ctx: OnboardingCtx) => void;
@@ -617,6 +618,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         tooltip: false,
         blur: ["input", "navigate"],
+        disableNavigationHover: true,
         onEnter: ({ setMessages }) =>
             setMessages([
                 {
@@ -647,6 +649,16 @@ export const onboardingFlow: OnboardingStep[] = [
             </div>
         ),
         stressTooltipOnArrowRight: true,
+        disableNavigationHover: true,
+        blur: ["input", "navigate"],
+    },
+    {
+        id: 19.2,
+        location: '[data-step="translate"]',
+        cursorVisible: true,
+        cursorClick: true,
+        tooltip: false,
+        disableNavigationHover: true,
         blur: ["input", "navigate"],
     },
     {
@@ -669,6 +681,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </div>
         ),
         blur: ["input", "navigate"],
+        disableNavigationHover: true,
     },
     {
         id: 21,
@@ -685,6 +698,7 @@ export const onboardingFlow: OnboardingStep[] = [
                     content: transcribeText,
                 },
             ]),
+        disableNavigationHover: true,
     },
     {
         id: 21.1,
@@ -707,6 +721,16 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         stressTooltipOnArrowRight: true,
         blur: ["input", "navigate"],
+        disableNavigationHover: true,
+    },
+    {
+        id: 21.2,
+        location: '[data-step="transcribe"]',
+        cursorVisible: true,
+        cursorClick: true,
+        tooltip: false,
+        blur: ["input", "navigate"],
+        disableNavigationHover: true,
     },
     {
         id: 22,
@@ -716,6 +740,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: ["input", "navigate"],
         autoSkipSubStep: 1200,
+        disableNavigationHover: true,
         // onExit: ({ setCursorMoving }) => {
         //     setCursorMoving();
         // },
@@ -740,6 +765,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </div>
         ),
         blur: ["input", "navigate"],
+        disableNavigationHover: true,
         onEnter: ({ setCursorMoving }) => {
             setCursorMoving();
         },
@@ -881,6 +907,7 @@ export const onboardingFlow: OnboardingStep[] = [
         sendButtonEnabled: true,
         tooltip: false,
         blur: [""],
+        disableNavigationHover: true,
     },
     {
         id: 29,
@@ -889,6 +916,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: [""],
         openTable: true,
+        disableNavigationHover: true,
         onEnter: ({ setBlockInput }) => setBlockInput(false),
     },
     {
@@ -898,6 +926,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: ["input", "history", "body", "magicbox", "navigate"],
         openTable: true,
+        disableNavigationHover: true,
     },
     {
         id: 31,
@@ -916,6 +945,7 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
         openTable: true,
+        disableNavigationHover: true,
     },
     {
         id: 32,
@@ -925,6 +955,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: [""],
         autoSkip: 100,
+        disableNavigationHover: true,
     },
     {
         id: 33,
@@ -932,6 +963,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         cursorClick: true,
         tooltip: false,
+        disableNavigationHover: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -948,6 +980,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltipParagraph1: (
             <p className={css.tooltip_paragraph}>Browse and access all your saved playgrounds.</p>
         ),
+        disableNavigationHover: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -960,6 +993,7 @@ export const onboardingFlow: OnboardingStep[] = [
         },
         cursorClickPrevPosition: true,
         tooltip: false,
+        disableNavigationHover: true,
         blur: [""],
     },
     {
@@ -976,6 +1010,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 clarify, expand, rephrase the text, etc.
             </p>
         ),
+        disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate"],
         onEnter: ({ setBlockSteps }) => setBlockSteps(false),
     },
@@ -987,6 +1022,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: ["history", "body", "magicbox", "navigate"],
         autoSkip: 1150,
+        disableNavigationHover: true,
         onExit: ({ setCursorMoving }) => {
             setCursorMoving();
             console.log("trueeee");
@@ -1011,6 +1047,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 to disrupt the flow of the main conversation.
             </p>
         ),
+        disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate"],
         stressTooltipOnArrowRight: true,
         // autoSkipSubStep: 1000,
@@ -1029,6 +1066,7 @@ export const onboardingFlow: OnboardingStep[] = [
         },
         cursorDelay: 200,
         tooltip: false,
+        disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate"],
     },
     {
@@ -1038,6 +1076,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorClickPrevPosition: true,
         tooltip: false,
         autoSkip: 2000,
+        disableNavigationHover: true,
         onEnter: ({ setCursorMoving }) => setCursorMoving(),
     },
     {
@@ -1057,6 +1096,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 By opening the branch, you switch to horizontal scrolling mode.
             </p>
         ),
+        disableNavigationHover: true,
         onEnter: ({ setBlockSteps, setMessages }) => {
             setBlockSteps(false);
             setMessages((prev) => prev.slice(-2));
@@ -1072,6 +1112,7 @@ export const onboardingFlow: OnboardingStep[] = [
             left: -10,
         },
         tooltip: false,
+        disableNavigationHover: true,
     },
     {
         id: 42,
@@ -1083,6 +1124,7 @@ export const onboardingFlow: OnboardingStep[] = [
             left: 0,
         },
         tooltip: false,
+        disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
     {
@@ -1102,6 +1144,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 You can easily access to all your branches, navigate and manage it.
             </p>
         ),
+        disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
     {
@@ -1111,6 +1154,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorCentered: true,
         tooltip: false,
         blur: [""],
+        disableNavigationHover: true,
     },
     {
         id: 45,
@@ -1120,6 +1164,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: ["history", "body", "magicbox", "navigate"],
         autoSkipSubStep: 1150,
+        disableNavigationHover: true,
         onExit: ({ setCursorMoving }) => {
             setCursorMoving();
         },
@@ -1140,6 +1185,7 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         // blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
         stressTooltipOnArrowRight: true,
+        disableNavigationHover: true,
         blur: [""],
         onEnter: ({ setCursorMoving }) => {
             setCursorMoving();
@@ -1152,6 +1198,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
         autoSkip: 1000,
+        disableNavigationHover: true,
     },
     {
         id: 47,
@@ -1160,6 +1207,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
         autoSkip: 1000,
+        disableNavigationHover: true,
     },
     {
         id: 48,
@@ -1174,6 +1222,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 You can manage your audio settings. Or star a video chat with Doe.
             </p>
         ),
+        disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
     {
@@ -1181,6 +1230,7 @@ export const onboardingFlow: OnboardingStep[] = [
         location: '[data-step=""]',
         cursorVisible: true,
         tooltip: false,
+        disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
     {
@@ -1190,6 +1240,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: [""],
         autoSkip: 500,
+        disableNavigationHover: true,
     },
     {
         id: 51,
@@ -1204,6 +1255,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 phone, or tablet.
             </p>
         ),
+        disableNavigationHover: true,
         stressTooltipOnArrowRight: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
@@ -1224,6 +1276,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 window will open to show what Doe is seeing.
             </p>
         ),
+        disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
     {
@@ -1232,6 +1285,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         tooltip: false,
         blur: [""],
+        disableNavigationHover: true,
     },
     {
         id: 54,
@@ -1240,6 +1294,7 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: [""],
         autoSkip: 500,
+        disableNavigationHover: true,
     },
     {
         id: 55,
@@ -1254,6 +1309,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 limit by case or timeframe.
             </p>
         ),
+        disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
     {
@@ -1274,6 +1330,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 ( <BubbleIcon fill="#FFFFFF" /> ) are your messages
             </p>
         ),
+        disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
 ];

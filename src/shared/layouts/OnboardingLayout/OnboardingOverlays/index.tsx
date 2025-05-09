@@ -47,7 +47,11 @@ export function OnboardingOverlays({
                 currentStep={currentStep}
                 handleCursorAcknowledged={handleCursorAcknowledged}
             />
-            <NavigationPrompt step={step} handleNavigationAnimation={handleNavigationAnimation} />
+            <NavigationPrompt
+                step={step}
+                currentStep={currentStep}
+                handleNavigationAnimation={handleNavigationAnimation}
+            />
             <BranchesMenuBox step={step} />
             <PlaygroundsBox step={step} />
             <TalkingAssistant step={step} />

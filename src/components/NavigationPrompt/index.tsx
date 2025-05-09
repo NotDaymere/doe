@@ -1,14 +1,20 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { OnboardingStep } from "src/helpers/onboardingFlow";
 import ArrowUpIcon from "src/shared/icons/ArrowUp.icon";
 import css from "./NavigationPrompt.module.less";
 
 interface NavigationPromptProps {
     step: number;
+    currentStep: OnboardingStep | undefined;
     handleNavigationAnimation: () => void;
 }
 
-export const NavigationPrompt = ({ step, handleNavigationAnimation }: NavigationPromptProps) => {
+export const NavigationPrompt = ({
+    step,
+    currentStep,
+    handleNavigationAnimation,
+}: NavigationPromptProps) => {
     if (step < 4.5) return null;
     const [isFading, setIsFading] = useState(false);
 
@@ -23,6 +29,7 @@ export const NavigationPrompt = ({ step, handleNavigationAnimation }: Navigation
             onTransitionEnd={() => step === 4.6 && handleNavigationAnimation()}
             className={clsx(css.navigation_prompt, {
                 [css.visible]: step === 4.6,
+                [css.hover_visible]: !currentStep?.disableNavigationHover,
             })}
         >
             <p className={css.navigation_text} data-step="navigation">
