@@ -5,7 +5,7 @@ import { OptionType, PopupSelect } from "../../components/PopupSelect/PopupSelec
 import styles from "./ModelSettingsTab.module.less";
 import { CreatePersona } from "./views/CreatePersona/CreatePersona";
 import { useState } from "react";
-import { FileWithId } from "../../components/UploadButton";
+import { FileWithId } from "../../components/UploadButton/UploadButton";
 import { CreateStyle } from "./views/CreateStyle/CreateStyle";
 import { EditPersona } from "./views/EditPersona/EditPersona";
 import { EditStyle } from "./views/EditStyle/EditStyle";

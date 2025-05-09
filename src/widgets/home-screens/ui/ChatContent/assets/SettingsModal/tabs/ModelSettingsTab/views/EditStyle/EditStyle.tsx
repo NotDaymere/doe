@@ -1,5 +1,4 @@
 import styles from "../Personalization.module.less";
-import modalStyles from "../../../../SettingsModal.module.less";
 import styleCSS from "./EditStyle.module.less";
 import { GeneralSettingsIcon } from "src/shared/icons/GeneralSettingsIcon";
 import { SettingsUploadIcon } from "src/shared/icons/SettingsUploadIcon";
@@ -7,9 +6,10 @@ import { useState } from "react";
 import clsx from "clsx";
 import { TextBlock } from "../tabs/TextBlock/TextBlock";
 import { UploadFiles } from "../tabs/UploadFiles/UploadFiles";
-import { FileWithId } from "../../../../components/UploadButton";
+import { FileWithId } from "../../../../components/UploadButton/UploadButton";
 import { useNavigate } from "react-router";
 import { UploadProgress } from "../../../../components/UploadProgress/UploadProgress";
+import { ModalButton } from "../../../../components/ModalButton/ModalButton";
 type StyleDataType = {
     id: string;
     name: string;
@@ -41,27 +41,24 @@ export const EditStyle = ({ onSave, style }: EditStyleProps) => {
                 <p
                     className={clsx(
                         styles.personalization__header__title,
-                        styleCSS.editPerson__header__title
+                        styleCSS.editStyle__header__title
                     )}
                 >
                     {styleData.name}
                 </p>
 
                 <div className={styles.personalization__header__controls}>
-                    <button
-                        className={modalStyles.settingsModal__cancelBtn}
-                        onClick={() => navigate(-1)}
-                    >
+                    <ModalButton variant="outline primary" onClick={() => navigate(-1)}>
                         Cancel
-                    </button>
-                    <button
-                        className={styles.personalization__saveBtn}
+                    </ModalButton>
+                    <ModalButton
+                        variant="primary"
                         disabled={!styleData.text && !styleData.files.length}
                         onClick={() => handleSave()}
                     >
                         <GeneralSettingsIcon />
                         <span>Save changes</span>
-                    </button>
+                    </ModalButton>
                 </div>
             </div>
             <div className={styles.personalization__container}>

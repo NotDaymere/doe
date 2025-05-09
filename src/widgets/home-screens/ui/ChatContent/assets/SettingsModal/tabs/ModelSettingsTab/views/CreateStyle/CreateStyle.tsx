@@ -1,15 +1,16 @@
 import { MagicIcon } from "src/shared/icons/MagicIcon";
 import styles from "../Personalization.module.less";
 import styleCSS from "./CreateStyle.module.less";
-import modalStyles from "../../../../SettingsModal.module.less";
 import { GeneralSettingsIcon } from "src/shared/icons/GeneralSettingsIcon";
 import { SettingsUploadIcon } from "src/shared/icons/SettingsUploadIcon";
 import { useState } from "react";
 import clsx from "clsx";
 import { TextBlock } from "../tabs/TextBlock/TextBlock";
 import { UploadFiles } from "../tabs/UploadFiles/UploadFiles";
-import { FileWithId } from "../../../../components/UploadButton";
+import { FileWithId } from "../../../../components/UploadButton/UploadButton";
 import { useNavigate } from "react-router";
+import { ModalButton } from "../../../../components/ModalButton/ModalButton";
+import { UploadProgress } from "../../../../components/UploadProgress/UploadProgress";
 type StyleDataType = {
     text: string;
     files: FileWithId[];
@@ -35,6 +36,12 @@ export const CreateStyle = ({ onSave }: CreateStyleProps) => {
         onSave(style);
         navigate(-1);
     };
+    const onFileDelete = (fileId: string) => {
+        setStyleData((prev) => ({
+            ...prev,
+            files: prev.files.filter(({ id }) => id !== fileId),
+        }));
+    };
     return (
         <div className={styles.personalization}>
             <div className={styles.personalization__header}>
@@ -55,20 +62,17 @@ export const CreateStyle = ({ onSave }: CreateStyleProps) => {
                     </p>
                 </div>
                 <div className={styles.personalization__header__controls}>
-                    <button
-                        className={modalStyles.settingsModal__cancelBtn}
-                        onClick={() => navigate(-1)}
-                    >
+                    <ModalButton variant="outline primary" onClick={() => navigate(-1)}>
                         Cancel
-                    </button>
-                    <button
-                        className={styles.personalization__saveBtn}
+                    </ModalButton>
+                    <ModalButton
+                        variant="primary"
                         disabled={!styleData.text && !styleData.files.length}
                         onClick={() => handleSave()}
                     >
                         <GeneralSettingsIcon />
                         <span>Save changes</span>
-                    </button>
+                    </ModalButton>
                 </div>
             </div>
             <div className={styles.personalization__container}>
@@ -101,19 +105,32 @@ export const CreateStyle = ({ onSave }: CreateStyleProps) => {
                         <div className={styles.personalization__tabs__content}>
                             {activeTab === 1 && (
                                 <TextBlock
-                                    // onChange={(text) => console.log(text)}
                                     onChange={(text) => setStyleData((prev) => ({ ...prev, text }))}
                                 />
                             )}
                             {activeTab === 2 && (
                                 <UploadFiles
+                                    files={styleData.files}
                                     setFile={(file) =>
                                         setStyleData((prev) => ({
                                             ...prev,
                                             files: [file, ...prev.files],
                                         }))
                                     }
-                                />
+                                >
+                                    <>
+                                        {!!styleData.files.length &&
+                                            styleData.files.map((file) => (
+                                                <UploadProgress
+                                                    file={file}
+                                                    onClear={() => onFileDelete(file.id)}
+                                                    onCompleteUpload={(file) => console.log(file)}
+                                                    disappearAfterUpload={false}
+                                                    showAsUploaded
+                                                />
+                                            ))}
+                                    </>
+                                </UploadFiles>
                             )}
                         </div>
                     </div>

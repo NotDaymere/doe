@@ -1,9 +1,9 @@
 import { FolderType } from "../KnowledgeView/KnowledgeView";
 import styles from "./FolderView.module.less";
-import modalStyles from "../../../../SettingsModal.module.less";
 import { FolderIcon } from "src/shared/icons/FolderIcon";
-import { File, FileProps } from "../../../../components/File/File";
+import { File } from "../../../../components/File/File";
 import { useNavigate } from "react-router";
+import { ModalButton } from "../../../../components/ModalButton/ModalButton";
 
 type FolderViewProps = {
     folder: FolderType;
@@ -19,12 +19,9 @@ export const FolderView = ({ folder, folders, onDelete, onMoveToFolder }: Folder
             <div className={styles.folderView__header__container}>
                 <FolderIcon />
                 <h2 className={styles.folderView__header__title}>{folder.name}</h2>
-                <button
-                    className={modalStyles.settingsModal__cancelBtn}
-                    onClick={() => navigate(-1)}
-                >
+                <ModalButton variant="outline primary" onClick={() => navigate(-1)}>
                     Back
-                </button>
+                </ModalButton>
             </div>
             <div className={styles.folderView__content__container}>
                 <div className={styles.folderView__content}>

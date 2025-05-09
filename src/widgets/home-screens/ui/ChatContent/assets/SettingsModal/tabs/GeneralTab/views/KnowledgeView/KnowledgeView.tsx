@@ -6,11 +6,12 @@ import { File } from "../../../../components/File/File";
 import { useState } from "react";
 import classNames from "classnames";
 import { UploadArea } from "../../../../components/UploadArea/UploadArea";
-import { FileWithId } from "../../../../components/UploadButton";
+import { FileWithId } from "../../../../components/UploadButton/UploadButton";
 import { FolderView } from "../FolderView/FolderView";
 import { UploadProgress } from "../../../../components/UploadProgress/UploadProgress";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
+import { ModalButton } from "../../../../components/ModalButton/ModalButton";
 
 type FileType = FileWithId & { folderId: string | null };
 export type FolderType = {
@@ -129,12 +130,9 @@ export const KnowledgeView = () => {
         <div className={styles.knowledge}>
             <div className={styles.knowledge__header__container}>
                 <h2 className={styles.knowledge__header__title}>Knowledge</h2>
-                <button
-                    className={modalStyles.settingsModal__cancelBtn}
-                    onClick={() => navigate(-1)}
-                >
+                <ModalButton variant="outline primary" onClick={() => navigate(-1)}>
                     Back to general settings
-                </button>
+                </ModalButton>
             </div>
             <div className={styles.knowledge__content__container}>
                 <UploadArea

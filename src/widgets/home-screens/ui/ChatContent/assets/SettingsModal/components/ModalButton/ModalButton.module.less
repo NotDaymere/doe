@@ -1,0 +1,117 @@
+.primary {
+    display: flex;
+    align-items: start;
+    gap: 3px;
+    padding: 7px 11px 6px 7px;
+    border: 1px solid var(--var-61);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    line-height: 1.19rem;
+    font-weight: 600;
+    max-height: 35px;
+    transition: 0.3s ease;
+    &:disabled {
+        border-color: var(--var-61);
+        cursor: not-allowed;
+        span {
+            color: var(--var-116);
+        }
+        svg {
+            fill: var(--var-85);
+        }
+    }
+    &:not(:disabled):hover {
+        border-color: rgb(151, 71, 255);
+        background-color: rgba(151, 71, 255, 0.2);
+        color: rgb(151, 71, 255);
+    }
+    span {
+        color: rgb(151, 71, 255);
+        font-family: "Sohne";
+        font-size: 0.875rem;
+        line-height: 1.19rem;
+        font-weight: 600;
+        transition: 0.3s ease;
+    }
+    svg {
+        fill: rgb(151, 71, 255);
+        transition: 0.3s ease;
+    }
+}
+.outline {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 11px;
+    border: 1px solid var(--var-61);
+    border-radius: 8px;
+    color: var(--var-116);
+    font-family: "Sohne";
+    font-size: 0.875rem;
+    line-height: 1.19rem;
+    font-weight: 600;
+    transition: 0.3s ease;
+    max-height: 35px;
+    &:hover {
+        border-color: var(--var-148);
+        color: var(--var-95);
+        background-color: var(--var-127);
+    }
+    &__primary {
+        border-color: var(--var-61);
+        color: var(--var-116);
+        &:hover {
+            border-color: var(--var-148);
+            color: var(--var-95);
+            background-color: var(--var-127);
+        }
+    }
+    &__secondary {
+        border: 1px solid var(--var-61);
+        color: var(--var-97);
+        &:hover {
+            border-color: var(--var-148);
+            color: var(--var-7);
+        }
+    }
+}
+.secondary {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    padding: 7px 11px 6px 8px;
+    border: 1px solid var(--var-69);
+    border-radius: 8px;
+    font-family: "Sohne", sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.19rem;
+    color: var(--var-97);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    svg path {
+        fill: var(--var-94);
+    }
+    &:hover {
+        border-color: transparent;
+        background-color: rgb(31, 31, 31);
+        color: rgb(255, 255, 255);
+        svg path {
+            fill: rgb(255, 255, 255);
+        }
+    }
+}
+.delete {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 7px 11px;
+    border: 1px solid rgb(255, 95, 95);
+    border-radius: 8px;
+    background-color: rgba(255, 95, 95, 0.2);
+    color: rgb(255, 95, 95);
+    font-family: "Sohne";
+    font-size: 0.875rem;
+    line-height: 1.19rem;
+    font-weight: 600;
+    max-height: 35px;
+}
