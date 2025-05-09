@@ -84,7 +84,6 @@ export function OnboardingBody(props: OnboardingBodyProps) {
     return (
         <div
             onTransitionEnd={handleLogoSlideComplete}
-            style={{ marginTop: `${getMarginTop(step, logoSlide)}%` }}
             className={clsx(css.layout_body, ...getBlurClasses(currentStep?.blur), {
                 [css.end]: step >= 8,
                 [css.tableOpen]: currentStep?.openTable,
@@ -98,8 +97,10 @@ export function OnboardingBody(props: OnboardingBodyProps) {
             >
                 <HeaderSection
                     step={step}
+                    logoSlide={logoSlide}
                     startOnboardingFlow={startOnboardingFlow}
                     handleWelcomeTextTypedOut={handleWelcomeTextTypedOut}
+                    handleLogoSlideComplete={handleLogoSlideComplete}
                 />
 
                 <HistorySection
@@ -123,7 +124,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
             {(step <= 18 || step >= 28) && (
                 <div
                     className={clsx(css.layout_input, {
-                        [css.lower_height]: step >= 5,
+                        // [css.lower_height]: step >= 5,
                         [css.sm]: step >= 28.1,
                     })}
                 >
@@ -159,20 +160,26 @@ export function OnboardingBody(props: OnboardingBodyProps) {
 
 function HeaderSection({
     step,
+    logoSlide,
     startOnboardingFlow,
     handleWelcomeTextTypedOut,
+    handleLogoSlideComplete,
 }: {
     step: number;
+    logoSlide: boolean;
     startOnboardingFlow: () => void;
     handleWelcomeTextTypedOut: () => void;
+    handleLogoSlideComplete: () => void;
 }) {
     if (step >= 31) return null;
     return (
         <WelcomeHeader
             step={step}
+            logoSlide={logoSlide}
             startOnboardingFlow={startOnboardingFlow}
             handleWelcomeTextTypedOut={handleWelcomeTextTypedOut}
             text="Welcome to Doe, let’s get to know each other."
+            handleLogoSlideComplete={handleLogoSlideComplete}
         />
     );
 }
@@ -214,10 +221,4 @@ function HistorySection({
             />
         </div>
     );
-}
-
-function getMarginTop(step: number, logoSlide: boolean) {
-    if (step >= 28.1) return 0;
-    if (step <= 4.5) return logoSlide ? 10 : 18;
-    return 5;
 }
