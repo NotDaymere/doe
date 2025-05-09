@@ -9,7 +9,7 @@ interface NavigationPromptProps {
 }
 
 export const NavigationPrompt = ({ step, handleNavigationAnimation }: NavigationPromptProps) => {
-    if (step !== 4.6 && step !== 4.7) return null;
+    if (step < 4.5) return null;
     const [isFading, setIsFading] = useState(false);
 
     useEffect(() => {
@@ -20,9 +20,9 @@ export const NavigationPrompt = ({ step, handleNavigationAnimation }: Navigation
 
     return (
         <div
-            onAnimationEnd={handleNavigationAnimation}
+            onTransitionEnd={() => step === 4.6 && handleNavigationAnimation()}
             className={clsx(css.navigation_prompt, {
-                [css.fading]: isFading,
+                [css.visible]: step === 4.6,
             })}
         >
             <p className={css.navigation_text}>
