@@ -25,7 +25,7 @@ export const NavigationPrompt = ({ step, handleNavigationAnimation }: Navigation
                 [css.visible]: step === 4.6,
             })}
         >
-            <p className={css.navigation_text}>
+            <p className={css.navigation_text} data-step="navigation">
                 To navigate through onboarding use your <b>keyboard buttons.</b>
             </p>
             <div className={css.navigation_buttons}>

@@ -138,7 +138,7 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 4.6,
-        location: '[data-step="input"]',
+        location: '[data-step="navigation"]',
         cursorVisible: true,
         cursorPosition: {
             top: 0,
