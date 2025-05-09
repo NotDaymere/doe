@@ -21,7 +21,7 @@ const FilesList: FC<IProps> = ({ files, isRotated, classes }) => (
                 <span className={classNames(css.fileName, { [css.fileNameShorten]: isRotated })}>
                     {file.name}
                 </span>
-                <CheckFilledIcon width={16} height={16} />
+                <CheckFilledIcon width={16} height={16} className={css.checkFilledIcon} />
             </div>
         ))}
     </div>

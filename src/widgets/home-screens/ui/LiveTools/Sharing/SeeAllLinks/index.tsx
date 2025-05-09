@@ -92,7 +92,6 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
     const [results, setResults] = useState(SEARCH_RESULTS);
     const [isCaseSensitive, setIsCaseSensitive] = useState(false);
     const [search, setSearch] = useState("");
-    const [showSeeAllLink, setShowSeeAllLink] = useState(false);
     const [showPasswords, setShowPasswords] = useState<Record<string, boolean>>({});
     const [hoveredPasswordId, setHoveredPasswordId] = useState<string | null>(null);
 
@@ -161,32 +160,10 @@ const SeeAllLinks: FC<IProps> = ({ isActive, setIsActive }) => {
         }
     };
 
-    const ref = useClickOut({
-        handler: () => {
-            setShowSeeAllLink(false);
-            setIsActive(false);
-        },
-    });
-
-    useEffect(() => {
-        if (isActive) {
-            setShowSeeAllLink(true);
-
-            return () => {
-                setShowSeeAllLink(false);
-                setIsActive(false);
-            };
-        } else {
-            setShowSeeAllLink(false);
-            setIsActive(false);
-        }
-    }, [isActive]);
-
     return (
-        <CSSTransition in={showSeeAllLink} timeout={500} classNames={css} unmountOnExit>
+        <CSSTransition in={isActive} timeout={500} classNames={css} unmountOnExit>
             <div
                 className={css.seeAllLinks}
-                ref={ref}
                 onMouseDown={(e: any) => {
                     e.stopPropagation();
                 }}

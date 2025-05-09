@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const LOADING_FILE_DURATION = 20000;
+const LOADING_FILE_DURATION = 4000;
 
 export const useFileLoading = (
     translateFromImage: boolean,
@@ -39,7 +39,7 @@ export const useFileLoading = (
     const simulateFileUpload = (duration: number) => {
         return new Promise<void>((resolve) => {
             let currentProgress = 0;
-            const updateInterval = 100; // раз в 100 мс
+            const updateInterval = 100;
             const totalSteps = duration / updateInterval;
             const step = 100 / totalSteps;
 
