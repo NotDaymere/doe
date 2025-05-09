@@ -1,6 +1,6 @@
 .chat-branch-section {
-  background: linear-gradient(273.07deg, rgba(255, 205, 205, 0.12) -11.76%, #F8F8F8 18.11%, #FFF9E6 47.97%, #F8F8F8 77.84%, #E4F4FF 107.71%, #F8F8F8 137.58%);
-  border: 2px dashed rgba(221, 221, 221, 1);
+  background: var(--bg-gradient-var-6);
+  border: 2px dashed var(--var-61);
   border-radius: 8px;
   width: calc(100% - 60px);
   display: flex;
@@ -11,7 +11,7 @@
   box-sizing: border-box;
   margin-left: 60px;
   padding: 20px;
-  color: rgba(91, 91, 91, 1);
+  color: var(--var-97);
   transition: background 0.3s ease, color 0.3s ease;
   position: relative;
   cursor: pointer;
@@ -21,7 +21,7 @@
     position: relative;
     font-weight: 500;
     font-size: 16px;
-    color: rgba(91, 91, 91, 1);
+    color: var(--var-112);
     display: inline-block;
   }
 
@@ -64,8 +64,9 @@
 
   &:hover,
   &.active {
-    background: #FFFFFF;
+    background: var(--var-27);
     color: rgba(246, 132, 132, 1);
+    border-color: var(--var-74);
 
     .normal-text {
       opacity: 0;

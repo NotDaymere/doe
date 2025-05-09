@@ -7,12 +7,16 @@
     display: flex;
     align-items: center;
     padding: 8px;
-    border: 1px solid #dddddd;
+    border: 1px solid var(--var-140);
+    color: var(--var-7);
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
-    background-color: #f8f8f8;
+    background-color: transparent;
     border-radius: 8px;
+    > svg path {
+        fill: var(--var-90);
+    }
 }
 
 .text {
@@ -27,7 +31,10 @@
     justify-content: center;
     align-items: center;
     border-radius: 4px;
-    background-color: #fff;
+    background-color: transparent;
+    svg path {
+        fill: var(--var-92);
+    }
 }
 
 .arrowIconRotated {
