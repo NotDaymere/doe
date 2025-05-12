@@ -22,10 +22,10 @@ export const PuzzleEditModal = ({ text, onClose, onSave }: PuzzleEditModalProps)
     };
     return (
         <div className={style.puzzleEditModal} onMouseDown={(e) => e.stopPropagation()}>
-            <div className={style.puzzleEditModal__backdrop} onClick={handleClose}>
+            <div className={style.puzzleEditModal__backdrop} onMouseDown={handleClose}>
                 <div
                     className={style.puzzleEditModal__container}
-                    onClick={(e) => e.stopPropagation()}
+                    onMouseDown={(e) => e.stopPropagation()}
                 >
                     <div className={style.puzzleEditModal__content}>
                         <input

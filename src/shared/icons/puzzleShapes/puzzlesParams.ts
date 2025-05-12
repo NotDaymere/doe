@@ -11,5 +11,7 @@ export const fillColors = {
     Cognition: "rgb(229, 255, 255)",
 };
 
-export const defaultBgColor = "rgb(248, 248, 248)";
-export const defaultPlaceholderColor = "rgb(240, 240, 240)";
+export const defaultBgColor = "var(--var-1)";
+export const defaultPlaceholderColor = "var(--var-161)";
+export const withoutCategoryBorderColor = "var(--icon-puzzle-without-category)";
+export const unselectedBorderColor = "var(--var-162)";
