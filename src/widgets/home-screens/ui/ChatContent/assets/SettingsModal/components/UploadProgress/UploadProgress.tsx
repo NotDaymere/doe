@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FileWithId } from "../UploadButton";
+import { FileWithId } from "../UploadButton/UploadButton";
 import styles from "./UploadProgress.module.less";
 import FileFilledIcon from "src/shared/icons/FileFilled.icon";
 import { CrossIcon } from "src/shared/icons/CrossIcon";

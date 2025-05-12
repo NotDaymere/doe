@@ -8,9 +8,9 @@
     overflow-x: hidden;
     max-height: min-content;
     &:hover {
-        border-color: rgb(221, 221, 221);
+        border-color: var(--var-67);
         border-radius: 8px;
-        background: rgb(248, 248, 248);
+        background: var(--var-1);
     }
     &:hover &__menuBtn {
         opacity: 1;
@@ -26,6 +26,9 @@
         justify-content: center;
         opacity: 0;
         transition: 0.3s;
+        > svg path {
+            fill: var(--var-7);
+        }
     }
     &__iconContainer {
         padding: 8px;
@@ -47,7 +50,7 @@
         overflow: hidden;
         display: flex;
         font-size: 14px;
-        color: rgb(53, 83, 2);
+        color: var(--var-151);
         font-family: "Sohne", sans-serif;
         line-height: 1.19rem;
         margin-top: 5px;
@@ -57,7 +60,7 @@
         text-overflow: ellipsis;
     }
     &__size {
-        color: rgb(181, 181, 181);
+        color: var(--var-119);
         font-size: 14px;
         align-self: center;
     }

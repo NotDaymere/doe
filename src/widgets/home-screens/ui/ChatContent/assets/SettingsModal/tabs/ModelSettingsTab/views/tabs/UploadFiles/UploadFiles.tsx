@@ -2,7 +2,7 @@ import { ReactNode, useState } from "react";
 import { UploadArea } from "../../../../../components/UploadArea/UploadArea";
 import { UploadProgress } from "../../../../../components/UploadProgress/UploadProgress";
 import styles from "./UploadFiles.module.less";
-import { FileWithId } from "../../../../../components/UploadButton";
+import { FileWithId } from "../../../../../components/UploadButton/UploadButton";
 
 type UploadFilesProps = {
     setFile: (file: FileWithId) => void;
@@ -11,6 +11,7 @@ type UploadFilesProps = {
 };
 
 export const UploadFiles = ({ setFile, files, children }: UploadFilesProps) => {
+    console.log(" UploadFiles ~ files:", files);
     const [uploadedFiles, setUploadedFiles] = useState<FileWithId[]>([]);
 
     return (
@@ -30,11 +31,11 @@ export const UploadFiles = ({ setFile, files, children }: UploadFilesProps) => {
                         {uploadedFiles.map((file) => (
                             <UploadProgress
                                 key={file.id}
-                                onClear={() =>
+                                onClear={() => {
                                     setUploadedFiles((prev) =>
                                         prev.filter((item) => item.id !== file.id)
-                                    )
-                                }
+                                    );
+                                }}
                                 onCompleteUpload={(file) => {
                                     setFile(file);
                                     setUploadedFiles((prev) =>

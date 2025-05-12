@@ -65,10 +65,13 @@
         }
     }
     &__menu__unselected {
-        background-color: rgba(221, 221, 221, 0.3) !important;
-        color: rgb(221, 221, 221) !important;
+        &:has(> svg) {
+            background-color: transparent !important;
+        }
+        background-color: rgba(221, 221, 221, 0.1) !important;
+        color: rgba(221, 221, 221, 0.3) !important;
         svg path {
-            fill: rgb(221, 221, 221);
+            fill: rgba(221, 221, 221, 0.3) !important;
         }
     }
     &__description {
@@ -85,12 +88,12 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 3;
         max-height: 42px;
-        color: rgb(31, 31, 31);
+        color: var(--var-7);
         user-select: none;
         max-width: 100%;
         padding-left: 10px;
         &__unselected {
-            color: rgb(221, 221, 221);
+            color: var(--var-163);
         }
     }
 }

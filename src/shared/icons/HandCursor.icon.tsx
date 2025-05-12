@@ -1,4 +1,6 @@
-const HandCursorIcon = () => {
+import React from "react";
+
+const HandCursorIcon = (props: React.SVGProps<SVGSVGElement>) => {
     return (
         <svg
             width="20"
@@ -6,6 +8,7 @@ const HandCursorIcon = () => {
             viewBox="0 0 20 20"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            {...props}
         >
             <g clipPath="url(#clip0_136_3553)">
                 <path

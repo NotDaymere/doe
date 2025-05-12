@@ -14,6 +14,18 @@ export const PuzzlesBorderGradients = () => {
                 <stop offset="1.000000" stopColor="#000000" />
             </linearGradient>
             <linearGradient
+                x1="39.817886"
+                y1="0.000010"
+                x2="63.499996"
+                y2="127.000015"
+                id="without_category_dark"
+                gradientUnits="userSpaceOnUse"
+            >
+                <stop stop-color="#FFAE00" />
+                <stop offset="0.515000" stop-color="#007BFF" />
+                <stop offset="1.000000" stop-color="#FFFBFB" stop-opacity="0.149020" />
+            </linearGradient>
+            <linearGradient
                 id="Identity"
                 x1="63.5"
                 y1="9.91536e-06"

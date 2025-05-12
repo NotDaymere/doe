@@ -1,29 +1,36 @@
 .personalization {
     &__container {
         flex: 1 0 0%;
-        border: 1px solid rgb(238, 238, 238);
+        border: 1px solid var(--var-21);
         border-radius: 12px;
         max-width: 50%;
         align-self: start;
+        overflow: hidden;
     }
     &__header {
         display: flex;
         justify-content: space-between;
         padding: 11px 11px 6px;
         background-color: rgba(221, 221, 221, 0.2);
-        border-bottom: 1px solid rgb(238, 238, 238);
+        border-bottom: 1px solid rgba(181, 181, 181, 0.2);
         &__title {
-            color: rgb(31, 31, 31);
+            color: var(--var-7);
             font-size: 0.875rem;
             font-weight: 600;
             line-height: 1.19rem;
+        }
+        &__icon {
+            height: 20px;
+            svg path {
+                fill: var(--var-146);
+            }
         }
     }
     &__content {
         padding: 7px 11px 11px;
         &__title {
             font-size: 0.75rem;
-            color: rgb(207, 207, 207);
+            color: var(--var-113);
             font-weight: 600;
             line-height: 1rem;
         }
@@ -32,9 +39,9 @@
         &__wrapper {
             display: flex;
             margin-top: 6px;
-            max-height: 95px;
+            height: 95px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgb(238, 238, 238);
+            border-bottom: 1px solid var(--var-82);
         }
         &__container {
             overflow-y: auto;
@@ -55,11 +62,12 @@
             margin-left: var(--margin-left);
             transition: 0.3s;
             &:hover {
-                border-color: rgb(221, 221, 221);
-                background-color: rgb(248, 248, 248);
+                border-color: var(--var-69);
+                background-color: var(--var-13);
             }
             &:hover &__name {
                 font-weight: 600;
+                color: var(--var-95);
             }
             &:hover &__controls {
                 opacity: 1;
@@ -75,14 +83,15 @@
                 width: 12px;
                 height: 35px;
                 display: block;
-                border: 1px solid rgb(240, 240, 240);
+                border: 1px solid var(--var-154);
+                pointer-events: none;
                 border-right: none;
                 border-top: none;
                 border-bottom-left-radius: 6px;
             }
             &__name {
                 font-size: 0.875rem;
-                color: rgb(91, 91, 91);
+                color: var(--var-97);
                 font-weight: 500;
                 line-height: 1.19rem;
                 transition: 0.1s;
@@ -101,19 +110,19 @@
                 align-items: center;
                 justify-content: center;
                 padding: 3px;
-                background-color: rgba(181, 181, 181, 0.2);
+                background-color: var(--var-9);
                 border-radius: 4px;
                 width: 20px;
                 height: 20px;
                 &:hover path {
-                    fill: rgb(91, 91, 91);
+                    fill: var(--var-146);
                 }
                 svg {
                     width: 14px;
                     height: 14px;
 
                     path {
-                        fill: rgb(141, 141, 141);
+                        fill: var(--var-147);
                         transition: 0.3s;
                     }
                 }
@@ -134,18 +143,18 @@
         outline: 1px solid;
         &--persona {
             background-color: rgba(255, 139, 18, 0.05);
-            border-color: rgba(255, 139, 18, 0.2);
-            outline-color: rgba(255, 139, 18, 0.2);
-            color: rgb(185, 69, 0);
+            border-color: var(--var-156);
+            outline-color: var(--var-156);
+            color: var(--var-155);
             svg path {
                 fill: rgb(255, 139, 18);
             }
         }
         &--style {
             background-color: rgba(151, 71, 255, 0.05);
-            border-color: rgba(151, 71, 255, 0.3);
-            outline-color: rgba(151, 71, 255, 0.3);
-            color: rgb(91, 43, 153);
+            border-color: var(--var-157);
+            outline-color: var(--var-157);
+            color: var(--var-158);
             svg path {
                 fill: rgb(151, 71, 255);
             }

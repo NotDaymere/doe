@@ -7,6 +7,7 @@ import { Puzzles } from "../../../../components/Puzzles/Puzzles";
 import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { PuzzleType } from "../../../../components/Puzzles/PuzzleItem/PuzzleItem";
+import { ModalButton } from "../../../../components/ModalButton/ModalButton";
 
 export const SensOfSelf = () => {
     const [puzzles, setPuzzles] = useState<PuzzleType[]>([
@@ -56,14 +57,10 @@ export const SensOfSelf = () => {
                     </p>
                 </div>
 
-                <button
-                    className={styles.personalization__saveBtn}
-                    disabled={!isDirty}
-                    onClick={() => handleSave()}
-                >
+                <ModalButton variant="primary" disabled={!isDirty} onClick={() => handleSave()}>
                     <GeneralSettingsIcon />
                     <span>Save changes</span>
-                </button>
+                </ModalButton>
             </div>
             <div className={sosStyles.sos__content__container}>
                 <div className={sosStyles.sos__content}>
