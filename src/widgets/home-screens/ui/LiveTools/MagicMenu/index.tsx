@@ -18,8 +18,10 @@ export const MagicMenu: React.FC<IProps> = ({
     magicButtonClass,
     classes,
 }) => {
-    const nodeRef = React.useRef<HTMLDivElement>(null);
-    let closeTimeout = useRef<any>(null);
+    const nodeRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const menuWrapperRef = useRef<HTMLDivElement>(null);
+
     const [showMagicMenu, setShowMagicMenu] = useState(false);
     const { activeTranslationOption } = useAppStore();
 
@@ -27,41 +29,47 @@ export const MagicMenu: React.FC<IProps> = ({
         setShowMagicMenu(false);
     }, [activeTranslationOption]);
 
-    const handleMouseEnter = () => {
-        setShowMagicMenu(true);
-        clearTimeout(closeTimeout.current);
-    };
-
-    const handleMouseLeave = () => {
-        closeTimeout.current = setTimeout(() => {
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node;
+            if (nodeRef.current?.contains(target) || buttonRef.current?.contains(target)) {
+                return;
+            }
             setShowMagicMenu(false);
-        }, 200);
-    };
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     return (
         <div
             className={css.magicMenu}
             style={{
-                zIndex: showMagicMenu ? 100 : "",
+                zIndex: showMagicMenu ? 100 : undefined,
             }}
         >
             <button
-                className={magicButtonClass ? magicButtonClass : ""}
-                onMouseEnter={handleMouseEnter}
+                ref={buttonRef}
+                className={magicButtonClass || ""}
+                onClick={() => setShowMagicMenu((prev) => !prev)}
             >
                 {magicButtonIcon}
             </button>
+
             <CSSTransition
-                classNames={css}
-                timeout={500}
                 in={showMagicMenu}
+                timeout={500}
+                classNames={css}
                 nodeRef={nodeRef}
                 mountOnEnter
                 unmountOnExit
             >
-                <div className={classNames(css.menuWrapper, classes)}>
-                    <div className={css.menu} ref={nodeRef} onMouseLeave={handleMouseLeave}>
-                        {items.map((item: any) => (
+                <div className={classNames(css.menuWrapper, classes)} ref={menuWrapperRef}>
+                    <div className={css.menu} ref={nodeRef}>
+                        {items.map((item) => (
                             <MagicMenuItem key={item.text} item={item} />
                         ))}
                     </div>
