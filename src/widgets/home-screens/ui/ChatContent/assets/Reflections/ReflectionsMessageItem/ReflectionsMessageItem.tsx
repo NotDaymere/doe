@@ -11,9 +11,9 @@ interface ReflectionsMessageItemProps {
 }
 
 export const ReflectionsMessageItem: React.FC<ReflectionsMessageItemProps> = ({
-                                                                                  message,
-                                                                                  onTogglePinned,
-                                                                              }) => {
+    message,
+    onTogglePinned,
+}) => {
     const togglePinned = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         onTogglePinned(message.id);
@@ -25,7 +25,7 @@ export const ReflectionsMessageItem: React.FC<ReflectionsMessageItemProps> = ({
                 <div className={`message-icon ${!message.isRead ? "new-message" : ""}`}>
                     {message.isUser ? <UserMessageIcon /> : <StarsIcon width={13} height={17} />}
                 </div>
-                <div>{message.content}</div>
+                <div className="message-content">{message.content}</div>
             </div>
             <div
                 className={`oblique_pin_icon ${message.isPinned ? "pinned_icon" : ""}`}

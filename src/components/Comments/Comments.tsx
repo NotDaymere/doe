@@ -4,28 +4,19 @@ import Filter from "./Components/Filter/Filter";
 import Thread from "./Components/Thread/Thread";
 import Menu from "./Components/Menu/Menu";
 
-
 import { MOCKCOMMENTS } from "./Mock";
 import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
 import CommentContainer from "./Components/Comment Container/CommentContainer";
 
-
 function Comments() {
-    const { isOpen,comment,setComment, closeComments } = useCommentWindowStore();
+    const { isOpen, comment, setComment, closeComments } = useCommentWindowStore();
 
-    
-    
-    
     const [showFilter, setShowFilter] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
-  
 
-
-   
     const filterButtonRef = useRef<HTMLButtonElement>(null);
     const filterContainerRef = useRef<HTMLDivElement>(null);
 
-  
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             // If filter is not shown, no need to do anything
@@ -34,7 +25,6 @@ function Comments() {
             // Check if the click is outside both the filter button and filter container
             const isClickOutsideFilter =
                 filterContainerRef.current &&
-               
                 !filterContainerRef.current.contains(event.target as Node) &&
                 filterButtonRef.current &&
                 !filterButtonRef.current.contains(event.target as Node);
@@ -92,18 +82,14 @@ function Comments() {
 
             <div className="body">
                 <div className="comments_container">
-                   {comment && <CommentContainer showMenu={showMenu} setShowMenu={setShowMenu}/>}
+                    {comment && <CommentContainer showMenu={showMenu} setShowMenu={setShowMenu} />}
 
                     <div className="">
-                      
                         {comment?.replies.map((comment: any, index: number) => {
                             return <Thread key={index} comment={comment} />;
-                     
-                     })}
+                        })}
                     </div>
-              
                 </div>
-           
             </div>
         </div>
     );
