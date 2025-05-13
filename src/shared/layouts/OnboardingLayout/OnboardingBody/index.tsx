@@ -24,7 +24,6 @@ interface OnboardingBodyProps {
     userClickedBold: boolean;
     userClickedUnderline: boolean;
     userClickedItalic: boolean;
-    userClickedTranslate: boolean;
     startOnboardingFlow: () => void;
     handleLogoSlideComplete: () => void;
     handleWelcomeTextTypedOut: () => void;
@@ -34,10 +33,8 @@ interface OnboardingBodyProps {
     handleMathFormulaTypedOut: () => void;
     handleCodePromptTypedOut: () => void;
     handlePythonCodeTypedOut: () => void;
-    handleUntranslatedTypedOut: () => void;
     handleBranchTypedOut: () => void;
     handleNewBranchClick: () => void;
-    handleVoiceMessageAppearing: () => void;
     handleSendProjectMessage: () => void;
     handleTalkModeClick: () => void;
     handleScreenSharing: () => void;
@@ -60,7 +57,6 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         userClickedBold,
         userClickedUnderline,
         userClickedItalic,
-        userClickedTranslate,
         startOnboardingFlow,
         handleLogoSlideComplete,
         handleWelcomeTextTypedOut,
@@ -70,10 +66,8 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         handleMathFormulaTypedOut,
         handleCodePromptTypedOut,
         handlePythonCodeTypedOut,
-        handleUntranslatedTypedOut,
         handleBranchTypedOut,
         handleNewBranchClick,
-        handleVoiceMessageAppearing,
         handleSendProjectMessage,
         handleTalkModeClick,
         handleScreenSharing,
@@ -106,14 +100,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                     handleLogoSlideComplete={handleLogoSlideComplete}
                 />
 
-                <HistorySection
-                    step={step}
-                    setStep={setStep}
-                    messages={messages}
-                    userClickedTranslate={userClickedTranslate}
-                    handleUntranslatedTypedOut={handleUntranslatedTypedOut}
-                    handleVoiceMessageAppearing={handleVoiceMessageAppearing}
-                />
+                <HistorySection step={step} setStep={setStep} messages={messages} />
 
                 <ReadyMessage
                     step={step}
@@ -125,12 +112,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
             </div>
 
             {(step <= 18 || step >= 28) && (
-                <div
-                    className={clsx(css.layout_input, {
-                        // [css.lower_height]: step >= 5,
-                        // [css.sm]: step >= 28.1,
-                    })}
-                >
+                <div className={css.layout_input}>
                     <AnimatedInput
                         step={step}
                         currentStep={currentStep}
@@ -192,17 +174,11 @@ function HeaderSection({
 function HistorySection({
     step,
     messages,
-    userClickedTranslate,
     setStep,
-    handleUntranslatedTypedOut,
-    handleVoiceMessageAppearing,
 }: {
     step: number;
     messages: OnboardingMessage[];
-    userClickedTranslate: boolean;
     setStep: (value: number) => void;
-    handleUntranslatedTypedOut: () => void;
-    handleVoiceMessageAppearing: () => void;
 }) {
     if (step >= 40 && step <= 43) {
         return (
@@ -216,14 +192,7 @@ function HistorySection({
     }
     return (
         <div className={css.layout_history} data-step="history">
-            <ChatHistory
-                messages={messages}
-                step={step}
-                setStep={setStep}
-                userClickedTranslate={userClickedTranslate}
-                handleUntranslatedTypedOut={handleUntranslatedTypedOut}
-                handleVoiceMessageAppearing={handleVoiceMessageAppearing}
-            />
+            <ChatHistory messages={messages} step={step} setStep={setStep} />
         </div>
     );
 }

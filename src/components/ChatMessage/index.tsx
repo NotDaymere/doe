@@ -17,10 +17,7 @@ interface ChatMessageProps {
     prevRole?: "user" | "ai";
     step: number;
     noTypeEffect?: boolean;
-    userClickedTranslate?: boolean;
     setStep?: (value: number) => void;
-    handleUntranslatedTypedOut?: () => void;
-    handleVoiceMessageAppearing?: () => void;
     handleFirstReadyMessage?: () => void;
     handleSecondReadyMessage?: () => void;
 }
@@ -33,8 +30,6 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
             step,
             noTypeEffect,
             setStep,
-            handleUntranslatedTypedOut,
-            handleVoiceMessageAppearing,
             handleFirstReadyMessage,
             handleSecondReadyMessage,
         },
@@ -47,9 +42,8 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
         const { text: typedText, isDone: isTypingDone } = useTypewriterEffect({
             text: message.content,
             speed: message.content.length > 200 ? 18 : 70,
-            startTyping: isAI && !noTypeEffect && ![21, 21.1].includes(step),
+            startTyping: isAI && !noTypeEffect,
             onComplete: () => {
-                if (step === 19) handleUntranslatedTypedOut?.();
                 if (step === 28.1) {
                     setTimeout(() => setStep?.(29), 1000);
                     setTimeout(() => setStep?.(30), 1500);
@@ -57,7 +51,6 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                 if (step === 58) handleFirstReadyMessage?.();
                 if (step === 59) handleSecondReadyMessage?.();
             },
-            reset: step === 21,
         });
 
         useScrollIntoViewOnUpdate(ref, [typedText, isTypingDone]);
@@ -85,12 +78,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                     )}
                     {isRecording && (
                         <div className={css.recording_img_container}>
-                            <img
-                                src={recording}
-                                alt="recording"
-                                className={css.recording_img}
-                                // onAnimationEnd={handleVoiceMessageAppearing}
-                            />
+                            <img src={recording} alt="recording" className={css.recording_img} />
                         </div>
                     )}
                     <ChatMessageContent
@@ -103,11 +91,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                         setStep={setStep}
                     />
                     {isTranslation && (
-                        <ChatMessageTranslation
-                            message={message}
-                            step={step}
-                            handleUntranslatedTypedOut={handleUntranslatedTypedOut}
-                        />
+                        <ChatMessageTranslation message={message} noTypeEffect={noTypeEffect} />
                     )}
                     {message.betaWidget && isTypingDone && <ChatBetaWidget />}
                 </div>

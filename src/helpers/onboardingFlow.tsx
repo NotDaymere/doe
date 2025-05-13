@@ -777,23 +777,6 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 19,
-        location: '[data-step="un-translated"]',
-        cursorVisible: true,
-        tooltip: false,
-        blur: ["input", "navigate"],
-        disableNavigationHover: true,
-        onEnter: ({ setMessages }) =>
-            setMessages([
-                {
-                    role: "ai",
-                    content: translation,
-                    origin: translationOrigin,
-                    originTranscribed: translationOriginTranscribed,
-                },
-            ]),
-    },
-    {
-        id: 19.1,
         location: '[data-step="translate"]',
         cursorVisible: true,
         cursorClick: true,
@@ -811,18 +794,19 @@ export const onboardingFlow: OnboardingStep[] = [
                 <TranslationsIcon />
             </div>
         ),
-        stressTooltipOnArrowRight: true,
-        disableNavigationHover: true,
         blur: ["input", "navigate"],
-    },
-    {
-        id: 19.2,
-        location: '[data-step="translate"]',
-        cursorVisible: true,
-        cursorClick: true,
-        tooltip: false,
         disableNavigationHover: true,
-        blur: ["input", "navigate"],
+        onEnter: ({ setMessages }) =>
+            setTimeout(() => {
+                setMessages([
+                    {
+                        role: "ai",
+                        content: translation,
+                        origin: translationOrigin,
+                        originTranscribed: translationOriginTranscribed,
+                    },
+                ]);
+            }, 1500),
     },
     {
         id: 20,
@@ -845,26 +829,23 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         blur: ["input", "navigate"],
         disableNavigationHover: true,
-    },
-    {
-        id: 21,
-        location: '[data-step=""]',
-        cursorVisible: true,
-        tooltip: false,
-        blur: ["input", "navigate"],
-        autoSkipSubStep: 500,
-        onEnter: ({ setMessages }) =>
+        onEnter: ({ setMessages }) => {
             setMessages([
                 {
                     role: "ai",
-                    recording: true,
-                    content: transcribeText,
+                    content: translation,
+                    origin: translationOrigin,
+                    originTranscribed: translationOriginTranscribed,
+                    noTypeEffect: true,
                 },
-            ]),
-        disableNavigationHover: true,
+            ]);
+        },
+        onExit: ({ setMessages }) => {
+            setMessages([]);
+        },
     },
     {
-        id: 21.1,
+        id: 21,
         location: '[data-step="transcribe"]',
         cursorVisible: true,
         cursorClick: true,
@@ -882,36 +863,34 @@ export const onboardingFlow: OnboardingStep[] = [
                 <RecordingIcon />
             </div>
         ),
-        stressTooltipOnArrowRight: true,
         blur: ["input", "navigate"],
         disableNavigationHover: true,
-    },
-    {
-        id: 21.2,
-        location: '[data-step="transcribe"]',
-        cursorVisible: true,
-        cursorClick: true,
-        tooltip: false,
-        blur: ["input", "navigate"],
-        disableNavigationHover: true,
+        onEnter: ({ setMessages }) => {
+            setTimeout(() => {
+                setMessages([
+                    {
+                        role: "ai",
+                        recording: true,
+                        content: transcribeText,
+                    },
+                ]);
+            }, 1500);
+        },
     },
     {
         id: 22,
         location: '[data-step="magic"]',
         cursorVisible: true,
-        cursorClick: true,
         tooltip: false,
         blur: ["input", "navigate"],
-        autoSkipSubStep: 1200,
+        autoSkipSubStep: 1150,
         disableNavigationHover: true,
-        // onExit: ({ setCursorMoving }) => {
-        //     setCursorMoving();
-        // },
     },
     {
         id: 22.1,
         location: '[data-step="magic-voice"]',
         cursorVisible: true,
+        cursorClickPrevPosition: true,
         cursorDelay: 300,
         tooltip: true,
         tooltipPosition: "right",
@@ -953,6 +932,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </div>
         ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
+        onEnter: ({ setMessages }) => setMessages([]),
     },
     {
         id: 24,

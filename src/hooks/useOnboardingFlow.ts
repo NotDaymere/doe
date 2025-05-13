@@ -139,16 +139,6 @@ export function useOnboardingFlow(
         setTimeout(() => setStep(19), 1000);
     }
 
-    function handleUntranslatedTypedOut() {
-        setBlockSteps(true);
-        setStep(19.1);
-    }
-
-    function handleVoiceMessageAppearing() {
-        setBlockSteps(true);
-        setStep(21.1);
-    }
-
     function handleSendProjectMessage() {
         setStep(28.1);
     }
@@ -209,13 +199,6 @@ export function useOnboardingFlow(
             nextSubStep();
         } else if (type === "code") {
             nextSubStep();
-        } else if (type === "translate") {
-            setUserClickedTranslate(true);
-            setStep(19.2);
-            setBlockSteps(false);
-        } else if (type === "transcribe") {
-            setStep(21.2);
-            setBlockSteps(false);
         }
     }
 
@@ -241,8 +224,6 @@ export function useOnboardingFlow(
         handleCodePromptTypedOut,
         handleSaveSettings,
         handlePythonCodeTypedOut,
-        handleUntranslatedTypedOut,
-        handleVoiceMessageAppearing,
         handleSendProjectMessage,
         handleNewBranchClick,
         handleBranchTypedOut,

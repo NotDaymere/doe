@@ -33,43 +33,20 @@ export const navigationRules: Rule[] = [
         match: inRange(18, 18.9),
         next: (s, d) => (d === "right" ? (s === 18.4 ? 19 : s === 18 ? 18.1 : 18.4) : 16),
     },
-    // 19–19.2
-    {
-        match: inRange(19, 19.2),
-        next: (s, d) =>
-            d === "right"
-                ? s === 19.2
-                    ? 20
-                    : s === 19.1
-                    ? 19.1
-                    : add(s, 0.1)
-                : s === 19
-                ? 17
-                : sub(s, 0.1),
-    },
-    // 21–21.2
-    {
-        match: inRange(21, 21.2),
-        next: (s, d) =>
-            d === "right"
-                ? s === 21.2
-                    ? 22
-                    : s === 21.1
-                    ? 21.1
-                    : add(s, 0.1)
-                : s === 21
-                ? 20
-                : sub(s, 0.1),
-    },
     // 22
     {
         match: is(22),
-        next: (s, d) => (d === "right" ? 22.1 : 20),
+        next: (s, d) => (d === "right" ? 22.1 : 21),
     },
     // 22.1
     {
         match: is(22.1),
-        next: (s, d) => (d === "right" ? 23 : 20),
+        next: (s, d) => (d === "right" ? 23 : 21),
+    },
+    // 23
+    {
+        match: is(23),
+        next: (s, d) => (d === "right" ? 24 : 22.1),
     },
     // 28.1
     {

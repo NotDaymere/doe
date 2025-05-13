@@ -55,18 +55,16 @@ export const ChatMessageContent = ({
     if (isAI) {
         return (
             <>
-                {step !== 21 && step !== 21.1 && (
-                    <div
-                        className={clsx(css.hide_button, { [css.show_button]: step === 35 })}
-                        ref={containerRef}
-                        dangerouslySetInnerHTML={{
-                            __html:
-                                isTypingDone || noTypeEffect
-                                    ? message.content
-                                    : typedText + `<span class="${css.caret}"></span>`,
-                        }}
-                    />
-                )}
+                <div
+                    className={clsx(css.hide_button, { [css.show_button]: step === 35 })}
+                    ref={containerRef}
+                    dangerouslySetInnerHTML={{
+                        __html:
+                            isTypingDone || noTypeEffect
+                                ? message.content
+                                : typedText + `<span class="${css.caret}"></span>`,
+                    }}
+                />
                 <ChatMathBlock content={message.mathBlock} isVisible={showMath} step={step} />
                 {message.hasCode && <ChatMessageCodeButtons isVisible={isTypingDone} />}
                 {message.content2 && (

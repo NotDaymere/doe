@@ -7,16 +7,10 @@ import css from "../ChatMessage.module.less";
 
 interface ChatMessageTranslationProps {
     message: OnboardingMessage;
-    step: number;
-    handleUntranslatedTypedOut?: () => void;
+    noTypeEffect?: boolean;
 }
 
-export const ChatMessageTranslation = ({
-    message,
-    step,
-    handleUntranslatedTypedOut,
-}: ChatMessageTranslationProps) => {
-    if (step < 19.2 || step > 20) return null;
+export const ChatMessageTranslation = ({ message, noTypeEffect }: ChatMessageTranslationProps) => {
     const { setCursorMoving } = useCursor();
 
     const { text: typedOriginalMessage, isDone } = useTypewriterEffect({
@@ -25,7 +19,6 @@ export const ChatMessageTranslation = ({
         onComplete: () => {
             setCursorMoving();
         },
-        startTyping: step === 19.2,
     });
 
     return (
@@ -43,13 +36,14 @@ export const ChatMessageTranslation = ({
                     <div
                         className={css.origin}
                         dangerouslySetInnerHTML={{
-                            __html: isDone
-                                ? message.origin
-                                : typedOriginalMessage + `<span class="${css.caret}"></span>`,
+                            __html:
+                                isDone || noTypeEffect
+                                    ? message.origin
+                                    : typedOriginalMessage + `<span class="${css.caret}"></span>`,
                         }}
                     />
                 )}
-                {isDone && (
+                {(isDone || noTypeEffect) && (
                     <div
                         className={css.origin_transcribed}
                         dangerouslySetInnerHTML={{
