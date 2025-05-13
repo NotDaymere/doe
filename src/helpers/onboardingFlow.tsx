@@ -1088,6 +1088,7 @@ export const onboardingFlow: OnboardingStep[] = [
         blur: ["history", "body", "magicbox", "navigate"],
         autoSkip: 1150,
         disableNavigationHover: true,
+        navigationOverrideStep: 40,
         onExit: ({ setCursorMoving }) => {
             setCursorMoving();
             console.log("trueeee");
@@ -1114,7 +1115,8 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate"],
-        stressTooltipOnArrowRight: true,
+        // stressTooltipOnArrowRight: true,
+        navigationOverrideStep: 40,
         // autoSkipSubStep: 1000,
         onEnter: ({ setCursorMoving }) => {
             setCursorMoving();
@@ -1162,7 +1164,8 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         disableNavigationHover: true,
-        onEnter: ({ setBlockSteps, setMessages }) => {
+        onEnter: ({ setBlockSteps, setMessages, setCursorMoving }) => {
+            setCursorMoving();
             setBlockSteps(false);
             setMessages((prev) => prev.slice(-2));
         },
@@ -1183,19 +1186,20 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 42,
         location: '[data-step="branches-box"]',
         cursorVisible: true,
-        cursorClick: true,
         cursorPosition: {
             top: 0,
             left: 0,
         },
         tooltip: false,
         disableNavigationHover: true,
+        autoSkip: 1200,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
     {
         id: 43,
         location: '[data-step="branches-item"]',
         cursorVisible: true,
+        cursorClickPrevPosition: true,
         cursorPosition: {
             top: -20,
             left: 0,
@@ -1211,6 +1215,7 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
+        onEnter: ({ setCursorMoving }) => setCursorMoving(),
     },
     {
         id: 44,
