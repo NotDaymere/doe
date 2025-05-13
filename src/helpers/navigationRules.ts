@@ -12,6 +12,26 @@ const sub = (s: number, val: number) => parseFloat((s - val).toFixed(1));
 const add = (s: number, val: number) => parseFloat((s + val).toFixed(1));
 
 export const navigationRules: Rule[] = [
+    // 4
+    {
+        match: is(4),
+        next: (s, d) => (d === "right" ? 4.5 : 4),
+    },
+    // 4.5
+    {
+        match: is(4.5),
+        next: (s, d) => (d === "right" ? 4.5 : 4.5),
+    },
+    // 4.6-4.7
+    {
+        match: inRange(4.6, 4.7),
+        next: (s, d) => (d === "right" ? 4.7 : 4.6),
+    },
+    // 5
+    {
+        match: is(5),
+        next: (s, d) => (d === "right" ? 6 : 5),
+    },
     // 8–8.4
     {
         match: inRange(8, 8.4),
