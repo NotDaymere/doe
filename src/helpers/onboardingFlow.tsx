@@ -278,22 +278,6 @@ export const onboardingFlow: OnboardingStep[] = [
             setCursorMoving();
         },
         navigationOverrideStep: 8.4,
-        onKeyboardSkip: ({ setMessages }) => {
-            console.log("skip");
-            setMessages?.([
-                {
-                    role: "user",
-                    content: `Please put together a sample project that uses the equation`,
-                    mathBlock: mathBlock2,
-                    noTypeEffect: true,
-                },
-                {
-                    role: "ai",
-                    content: simpleProjectText,
-                    mathBlock: mathBlock,
-                },
-            ]);
-        },
     },
     {
         id: 8.1,
@@ -324,22 +308,6 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         blur: [""],
         navigationOverrideStep: 8.4,
-        onKeyboardSkip: ({ setMessages }) => {
-            console.log("skip");
-            setMessages?.([
-                {
-                    role: "user",
-                    content: `Please put together a sample project that uses the equation`,
-                    mathBlock: mathBlock2,
-                    noTypeEffect: true,
-                },
-                {
-                    role: "ai",
-                    content: simpleProjectText,
-                    mathBlock: mathBlock,
-                },
-            ]);
-        },
     },
     {
         id: 8.2,
@@ -352,22 +320,6 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: [""],
         navigationOverrideStep: 8.4,
-        onKeyboardSkip: ({ setMessages }) => {
-            console.log("skip");
-            setMessages?.([
-                {
-                    role: "user",
-                    content: `Please put together a sample project that uses the equation`,
-                    mathBlock: mathBlock2,
-                    noTypeEffect: true,
-                },
-                {
-                    role: "ai",
-                    content: simpleProjectText,
-                    mathBlock: mathBlock,
-                },
-            ]);
-        },
     },
     {
         id: 8.3,
@@ -378,9 +330,17 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: [""],
         stressSendButtonOnArrowRight: true,
+    },
+    {
+        id: 8.4,
+        location: '[data-step="send"]',
+        cursorVisible: true,
+        cursorClick: true,
+        sendButtonEnabled: true,
+        tooltip: false,
+        blur: [""],
         // navigationOverrideStep: 8.4,
-        onKeyboardSkip: ({ setMessages }) => {
-            console.log("skip");
+        onEnter: ({ setMessages }) => {
             setMessages?.([
                 {
                     role: "user",
@@ -414,21 +374,6 @@ export const onboardingFlow: OnboardingStep[] = [
             setCursorMoving();
         },
         navigationOverrideStep: 9.4,
-        onKeyboardSkip: ({ setMessages }) => {
-            console.log("skip");
-            setMessages?.([
-                {
-                    role: "user",
-                    content: `Write me the deletion function in Python that starts with:<br/> ${pythonCodeSmall}`,
-                    noTypeEffect: true,
-                    hasCode: true,
-                },
-                {
-                    role: "ai",
-                    content: pythonCode,
-                },
-            ]);
-        },
     },
     {
         id: 9.1,
@@ -452,21 +397,6 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         blur: [""],
         navigationOverrideStep: 9.4,
-        onKeyboardSkip: ({ setMessages }) => {
-            console.log("skip");
-            setMessages?.([
-                {
-                    role: "user",
-                    content: `Write me the deletion function in Python that starts with:<br/> ${pythonCodeSmall}`,
-                    noTypeEffect: true,
-                    hasCode: true,
-                },
-                {
-                    role: "ai",
-                    content: pythonCode,
-                },
-            ]);
-        },
     },
     {
         id: 9.2,
@@ -479,21 +409,6 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: [""],
         navigationOverrideStep: 9.4,
-        onKeyboardSkip: ({ setMessages }) => {
-            console.log("skip");
-            setMessages?.([
-                {
-                    role: "user",
-                    content: `Write me the deletion function in Python that starts with:<br/> ${pythonCodeSmall}`,
-                    noTypeEffect: true,
-                    hasCode: true,
-                },
-                {
-                    role: "ai",
-                    content: pythonCode,
-                },
-            ]);
-        },
     },
     {
         id: 9.3,
@@ -505,8 +420,15 @@ export const onboardingFlow: OnboardingStep[] = [
         blur: [""],
         stressSendButtonOnArrowRight: true,
         navigationOverrideStep: 9.4,
-        onKeyboardSkip: ({ setMessages }) => {
-            console.log("skip");
+    },
+    {
+        id: 9.4,
+        location: '[data-step="send"]',
+        cursorVisible: true,
+        cursorClick: true,
+        tooltip: false,
+        blur: [""],
+        onEnter: ({ setMessages }) => {
             setMessages?.([
                 {
                     role: "user",
@@ -520,14 +442,6 @@ export const onboardingFlow: OnboardingStep[] = [
                 },
             ]);
         },
-    },
-    {
-        id: 9.4,
-        location: '[data-step="send"]',
-        cursorVisible: true,
-        cursorClick: true,
-        tooltip: false,
-        blur: [""],
         onExit: ({ setCursorMoving }) => setCursorMoving(),
     },
     {
