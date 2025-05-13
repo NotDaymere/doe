@@ -106,7 +106,17 @@ export const navigationRules: Rule[] = [
     // 51
     {
         match: is(51),
-        next: (s, d) => (d === "right" ? 52 : 49),
+        next: (s, d) => (d === "right" ? 53 : 49),
+    },
+    // 52
+    {
+        match: is(52),
+        next: (s, d) => (d === "right" ? 53 : 51),
+    },
+    // 53
+    {
+        match: is(53),
+        next: (s, d) => (d === "right" ? 54 : 51),
     },
     // 55
     {

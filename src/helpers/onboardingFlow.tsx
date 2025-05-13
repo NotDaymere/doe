@@ -1253,8 +1253,6 @@ export const onboardingFlow: OnboardingStep[] = [
                 AI-assistant.
             </p>
         ),
-        // blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
-        stressTooltipOnArrowRight: true,
         disableNavigationHover: true,
         blur: [""],
         onEnter: ({ setCursorMoving }) => {
@@ -1326,7 +1324,6 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         disableNavigationHover: true,
-        stressTooltipOnArrowRight: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
     {
