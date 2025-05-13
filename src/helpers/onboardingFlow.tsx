@@ -565,6 +565,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 11,
         location: '[data-step="delete"]',
         cursorVisible: true,
+        cursorDelay: 500,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Delete button.</b>,
@@ -585,8 +586,6 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: ["input", "history", "body", "magicbox", "navigate"],
         autoSkip: 500,
-        // onEnter: ({ setBlockSteps }) => setBlockSteps(true),
-        // onExit: ({ setBlockSteps }) => setBlockSteps(false),
     },
     {
         id: 13,
@@ -680,9 +679,12 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 17,
-        location: '[data-step="tags"]',
+        location: '[data-step="profile"]',
         cursorVisible: true,
+        cursorClick: true,
+        cursorSpeed: 900,
         tooltip: false,
+        autoSkip: 1000,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -715,7 +717,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 manage your apps.
             </p>
         ),
-        autoSkipSubStep: 2100,
+        autoSkipSubStep: 1200,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {

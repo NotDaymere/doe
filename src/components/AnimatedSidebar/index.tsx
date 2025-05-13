@@ -16,7 +16,6 @@ interface SidebarProps {
     darkMode?: boolean;
     showSidebar: boolean;
     handleSidebarOpen: () => void;
-    handleSidebarClose: () => void;
     handleUserClickedSidebarButton: (type: string) => void;
     profileData: {
         name: string;
@@ -30,7 +29,6 @@ export const AnimatedSidebar = ({
     darkMode,
     showSidebar,
     handleSidebarOpen,
-    handleSidebarClose,
     handleUserClickedSidebarButton,
     profileData,
 }: SidebarProps) => {
@@ -47,8 +45,7 @@ export const AnimatedSidebar = ({
                 [css.hidden]: !showSidebar,
                 [css.dark_mode]: darkMode,
             })}
-            // onTransitionEnd={isOpen && step === 11 ? handleSidebarClose : handleSidebarOpen}
-            onTransitionEnd={step === 17 ? handleSidebarClose : handleSidebarOpen}
+            onTransitionEnd={handleSidebarOpen}
         >
             <SidebarGaia />
 

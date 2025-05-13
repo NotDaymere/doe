@@ -4,7 +4,6 @@ interface OnboardingSidebarProps {
     step: number;
     showSidebar: boolean;
     handleSidebarOpen: () => void;
-    handleSidebarClose: () => void;
     handleUserClickedSidebarButton: (type: string) => void;
     profileData: {
         name: string;
@@ -17,7 +16,6 @@ export function OnboardingSidebar({
     step,
     showSidebar,
     handleSidebarOpen,
-    handleSidebarClose,
     handleUserClickedSidebarButton,
     profileData,
 }: OnboardingSidebarProps) {
@@ -27,7 +25,6 @@ export function OnboardingSidebar({
             showSidebar={showSidebar && step <= 57}
             darkMode={step === 25}
             handleSidebarOpen={handleSidebarOpen}
-            handleSidebarClose={handleSidebarClose}
             handleUserClickedSidebarButton={handleUserClickedSidebarButton}
             profileData={profileData}
         />

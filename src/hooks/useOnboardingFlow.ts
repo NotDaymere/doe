@@ -219,11 +219,6 @@ export function useOnboardingFlow(
         }
     }
 
-    function handleSidebarClose() {
-        setStep(18);
-        setBlockInput(true);
-    }
-
     return {
         // Step number, changing step
         step,
@@ -256,8 +251,6 @@ export function useOnboardingFlow(
         handleCloseScreenSharing,
         handleFirstReadyMessage,
         handleSecondReadyMessage,
-
-        handleSidebarClose,
 
         logoSlide,
         blockInput,
