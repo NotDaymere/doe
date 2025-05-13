@@ -16,6 +16,7 @@
 }
 
 .dark {
+    transition: background-color 0.3s ease 1s;
     background-color: #2d2d2d;
     > * svg {
         path {
@@ -23,11 +24,9 @@
         }
     }
 
-    .layout_chat,
-    .layout_input,
     .layout_history {
         background-color: #2d2d2d;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease 1s, filter 2s ease;
     }
 }
 
@@ -155,7 +154,7 @@
 .history_blur {
     .layout_history {
         filter: blur(25px);
-        transition: filter 2s ease;
+        transition: background-color 0.3s ease 1s, filter 2s ease;
         user-select: none;
         pointer-events: none;
     }
