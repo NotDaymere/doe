@@ -1019,15 +1019,19 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 33,
         location: '[data-step="playgrounds"]',
         cursorVisible: true,
-        cursorClick: true,
         tooltip: false,
         disableNavigationHover: true,
+        autoSkip: 1200,
         blur: ["input", "history", "body", "magicbox", "navigate"],
+        onExit: ({ setCursorMoving }) => {
+            setCursorMoving();
+        },
     },
     {
         id: 34,
         location: '[data-step="playgrounds"]',
         cursorVisible: true,
+        cursorClickPrevPosition: true,
         cursorPosition: {
             top: 4,
             left: 5,
@@ -1040,6 +1044,9 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         disableNavigationHover: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
+        onEnter: ({ setCursorMoving }) => {
+            setCursorMoving();
+        },
     },
     {
         id: 35,
