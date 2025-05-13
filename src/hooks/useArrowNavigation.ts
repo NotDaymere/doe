@@ -1,14 +1,23 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useCursor } from "src/contexts/CursorContext";
 import { calcNextStep } from "src/helpers/navigator";
-import { onboardingFlow } from "src/helpers/onboardingFlow";
+import { OnboardingStep } from "src/helpers/onboardingFlow";
+import { OnboardingMessage } from "src/shared/types/Message";
 
 export function useArrowNavigation(
     step: number,
-    setStep: React.Dispatch<React.SetStateAction<number>>
+    currentStep: OnboardingStep | undefined,
+    setStep: React.Dispatch<React.SetStateAction<number>>,
+    ctx: {
+        setMessages: React.Dispatch<React.SetStateAction<OnboardingMessage[]>>;
+        setCursorMoving: () => void;
+        setGaiaActive: (bool: boolean) => void;
+        setBlockSteps: React.Dispatch<React.SetStateAction<boolean>>;
+        setBlockInput: React.Dispatch<React.SetStateAction<boolean>>;
+        setManualSkip: React.Dispatch<React.SetStateAction<boolean>>;
+    }
 ) {
     const { setCursorMoving } = useCursor();
-    const currentStep = useMemo(() => onboardingFlow.find((st) => st.id === step), [step]);
 
     useEffect(() => {
         const handle = (e: KeyboardEvent) => {
@@ -21,8 +30,14 @@ export function useArrowNavigation(
                 return;
             }
 
-            const next = calcNextStep(step, dir);
+            const target = dir === "right" ? currentStep?.navigationOverrideStep : undefined;
+
+            const next = target ?? calcNextStep(step, dir);
             if (next !== step) {
+                if (target) {
+                    ctx.setManualSkip(true);
+                    currentStep?.onKeyboardSkip?.(ctx);
+                }
                 setCursorMoving();
                 setStep(next);
             }

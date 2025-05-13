@@ -131,7 +131,7 @@ export const InputStaticText = ({
                     </span>
                 </p>
             )}
-            {step >= 8 && step < 9 && !isMessageSent && (
+            {step >= 8 && step < 8.4 && !isMessageSent && (
                 <>
                     <p>
                         {typedMathPrompt.text.split("").map((word, index) => {
@@ -169,7 +169,7 @@ export const InputStaticText = ({
                     </p>
                 </>
             )}
-            {step >= 9 && step < 10 && !isMessageSent && (
+            {step >= 9 && step < 9.4 && !isMessageSent && (
                 <>
                     <p>
                         {typedCodePrompt.text.split("").map((word, index) => {

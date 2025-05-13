@@ -1,5 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useCursor } from "src/contexts/CursorContext";
+import { onboardingFlow } from "src/helpers/onboardingFlow";
+import { useAppStore } from "src/shared/providers";
 import { OnboardingMessage } from "src/shared/types/Message";
 import { useArrowNavigation } from "./useArrowNavigation";
 import { useStepEffects } from "./useStepEffects";
@@ -17,6 +19,19 @@ export function useOnboardingFlow(
     const [userClickedItalic, setUserClickedItalic] = useState(false);
     const [userClickedTranslate, setUserClickedTranslate] = useState(false);
     const [blockSteps, setBlockSteps] = useState(false);
+    const [manualSkip, setManualSkip] = useState(false);
+    const { setGaiaActive } = useAppStore();
+
+    const currentStep = useMemo(() => onboardingFlow.find((st) => st.id === step), [step]);
+
+    const ctx = {
+        setMessages,
+        setCursorMoving,
+        setGaiaActive,
+        setBlockSteps,
+        setBlockInput,
+        setManualSkip,
+    };
 
     // --- Step Navigation ---
 
@@ -33,7 +48,10 @@ export function useOnboardingFlow(
     }, [blockSteps]);
 
     // listener for arrow keys to navigate through the steps
-    useArrowNavigation(step, setStep);
+    useArrowNavigation(step, currentStep, setStep, ctx);
+
+    // ------ STEP-SPECIFIC EFFECTS ------
+    useStepEffects(step, nextStep, nextSubStep, ctx);
 
     // ------ HANDLERS IN ORDER ------
 
@@ -206,15 +224,13 @@ export function useOnboardingFlow(
         setBlockInput(true);
     }
 
-    // ------ STEP-SPECIFIC EFFECTS ------
-
-    useStepEffects(step, setMessages, nextStep, nextSubStep, setBlockSteps, setBlockInput);
-
     return {
         // Step number, changing step
         step,
+        currentStep,
         nextStep,
         setStep,
+        manualSkip,
 
         // Start onboarding
         startOnboardingFlow, // #1

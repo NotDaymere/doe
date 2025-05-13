@@ -18,6 +18,7 @@ interface OnboardingBodyProps {
     currentStep?: OnboardingStep;
     messages: OnboardingMessage[];
     onSendMessage: (message: string, type: MessageType) => void;
+    manualSkip: boolean;
     blockInput: boolean;
     showTooltip: boolean;
     userClickedBold: boolean;
@@ -53,6 +54,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
         currentStep,
         messages,
         onSendMessage,
+        manualSkip,
         blockInput,
         showTooltip,
         userClickedBold,
@@ -131,6 +133,8 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                 >
                     <AnimatedInput
                         step={step}
+                        currentStep={currentStep}
+                        manualSkip={manualSkip}
                         blockInput={blockInput}
                         showTooltip={showTooltip}
                         userClickedBold={userClickedBold}

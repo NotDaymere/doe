@@ -42,33 +42,33 @@ const ChatHistory = ({
             })}
         >
             <div className={css.chatHistoryContent}>
-                <TransitionGroup component={null}>
-                    {messages.map((msg, index) => (
-                        <CSSTransition
-                            key={index}
-                            timeout={1000}
-                            classNames={{
-                                exit: css.msgExit,
-                                exitActive: css.msgExitActive,
-                            }}
-                            unmountOnExit
-                        >
-                            <MathJaxContext config={mathJaxConfig} key={index}>
+                <MathJaxContext config={mathJaxConfig}>
+                    <TransitionGroup component={null}>
+                        {messages.map((msg, index) => (
+                            <CSSTransition
+                                key={index}
+                                timeout={1000}
+                                classNames={{
+                                    exit: css.msgExit,
+                                    exitActive: css.msgExitActive,
+                                }}
+                                unmountOnExit
+                            >
                                 <ChatMessage
                                     message={msg}
                                     prevRole={index > 0 ? messages[index - 1]?.role : undefined}
                                     step={step}
                                     ref={historyRef}
                                     userClickedTranslate={userClickedTranslate}
-                                    noTypeEffect={step === 35 || step >= 44}
+                                    noTypeEffect={step === 35 || step >= 44 || msg.noTypeEffect}
                                     setStep={setStep}
                                     handleUntranslatedTypedOut={handleUntranslatedTypedOut}
                                     handleVoiceMessageAppearing={handleVoiceMessageAppearing}
                                 />
-                            </MathJaxContext>
-                        </CSSTransition>
-                    ))}
-                </TransitionGroup>
+                            </CSSTransition>
+                        ))}
+                    </TransitionGroup>
+                </MathJaxContext>
             </div>
             {step >= 39 && <BranchBar />}
         </div>

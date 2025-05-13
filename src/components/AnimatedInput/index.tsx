@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ReactComponent as Grid } from "src/assets/icons/dot-grid.svg";
+import { OnboardingStep } from "src/helpers/onboardingFlow";
 import { pythonCodeSmall } from "src/helpers/onboardingMessages";
 import { MessageType } from "src/hooks/useChat";
 import { useTypewriterEffect } from "src/hooks/useTypewriterEffect";
@@ -16,6 +17,8 @@ import css from "./AnimatedInput.module.less";
 
 interface AnimatedInputProps {
     step?: number;
+    currentStep?: OnboardingStep;
+    manualSkip: boolean;
     blockInput: boolean;
     sendButtonEnabled?: boolean;
     showTooltip: boolean;
@@ -39,6 +42,8 @@ interface AnimatedInputProps {
 
 export function AnimatedInput({
     step,
+    currentStep,
+    manualSkip,
     blockInput,
     sendButtonEnabled,
     showTooltip,
@@ -65,7 +70,6 @@ export function AnimatedInput({
     const [animationDone, setAnimationDone] = useState(false);
     const [isMessageSent, setIsMessageSent] = useState(false);
     const [showSelectedText, setShowSelectedText] = useState(false);
-    const [stressTooltip, setStressTooltip] = useState(false);
     const [stressSendButton, setStressButton] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -97,8 +101,9 @@ export function AnimatedInput({
         onComplete: () => {
             handleMathPromptTypedOut();
         },
+        enableSkip: false,
         startTyping: step === 8,
-        reset: step === 7 || step === 9,
+        reset: step === 7 || step === 9 || manualSkip,
     });
 
     const typedMathFormulaState = useTypewriterEffect({
@@ -110,7 +115,7 @@ export function AnimatedInput({
             handleMathFormulaTypedOut();
         },
         startTyping: step === 8.2,
-        reset: step === 7 || step === 9,
+        reset: step === 7 || step === 9 || manualSkip,
     });
 
     const typedCodePromptState = useTypewriterEffect({
@@ -121,8 +126,9 @@ export function AnimatedInput({
             setIsMessageSent(false);
             handleCodePromptTypedOut();
         },
+        enableSkip: false,
         startTyping: step === 9,
-        reset: step === 8 || step === 10,
+        reset: step === 8 || step === 10 || manualSkip,
     });
 
     const typedPythonCodeState = useTypewriterEffect({
@@ -133,7 +139,7 @@ export function AnimatedInput({
             handlePythonCodeTypedOut();
         },
         startTyping: step === 9.2,
-        reset: step === 8 || step === 10,
+        reset: step === 8 || step === 10 || manualSkip,
     });
 
     const typedBranchPromptState = useTypewriterEffect({
@@ -143,6 +149,7 @@ export function AnimatedInput({
         onComplete: () => {
             // handleBranchTypedOut();
         },
+        enableSkip: false,
         startTyping: step === 38,
         reset: step === 37,
     });
@@ -154,6 +161,7 @@ export function AnimatedInput({
         onComplete: () => {
             handleBranchTypedOut();
         },
+        enableSkip: false,
         startTyping: step === 38.1,
         reset: step === 37,
     });
@@ -162,6 +170,7 @@ export function AnimatedInput({
         text: "https://thisaichatbot.com",
         speed: 90,
         delay: 3000,
+        enableSkip: false,
         startTyping: step === 10,
         reset: step === 9 || step === 11,
     });
@@ -208,18 +217,15 @@ export function AnimatedInput({
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "ArrowRight" && safeStep == 28 && !isMessageSent) {
+            if (
+                e.key === "ArrowRight" &&
+                !isMessageSent &&
+                currentStep?.stressSendButtonOnArrowRight
+            ) {
                 e.preventDefault();
                 e.stopPropagation();
-                setStressTooltip(true);
 
-                setTimeout(() => setStressTooltip(false), 1500);
-            }
-            if (e.key === "ArrowRight" && !isMessageSent && sendButtonEnabled) {
-                e.preventDefault();
-                e.stopPropagation();
                 setStressButton(true);
-
                 setTimeout(() => setStressButton(false), 350);
             }
             if (e.key === "Enter") {
@@ -272,7 +278,7 @@ export function AnimatedInput({
                             />
                         </span>
                         {showTooltip && !isMessageSent && (step === 4.5 || step === 28) && (
-                            <Tooltip position="top" stressed={stressTooltip}>
+                            <Tooltip position="top">
                                 {safeStep <= 10
                                     ? "Type your first and last name here:"
                                     : "Ask Doe to write a small project for you!"}

@@ -12,16 +12,16 @@ const sub = (s: number, val: number) => parseFloat((s - val).toFixed(1));
 const add = (s: number, val: number) => parseFloat((s + val).toFixed(1));
 
 export const navigationRules: Rule[] = [
-    // 8–8.3
+    // 8–8.4
     {
-        match: inRange(8, 8.3),
-        next: (s, d) => (d === "right" ? (s === 8.3 ? 9 : add(s, 0.1)) : s === 8 ? 7 : sub(s, 0.1)),
+        match: inRange(8, 8.4),
+        next: (s, d) => (d === "right" ? (s === 8.4 ? 9 : add(s, 0.1)) : 7),
     },
-    // 9–9.3
+    // 9–9.4
     {
-        match: inRange(9, 9.3),
+        match: inRange(9, 9.4),
         next: (s, d) =>
-            d === "right" ? (s === 9.3 ? 10 : add(s, 0.1)) : s === 9 ? 8 : sub(s, 0.1),
+            d === "right" ? (s === 9.4 ? 10 : add(s, 0.1)) : s === 9 ? 8 : sub(s, 0.1),
     },
     // 13
     {
