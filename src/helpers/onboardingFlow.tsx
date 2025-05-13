@@ -1348,8 +1348,12 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 53,
-        location: '[data-step=""]',
+        location: '[data-step="screen-share"]',
         cursorVisible: true,
+        cursorPosition: {
+            top: 5,
+            left: 5,
+        },
         tooltip: false,
         blur: [""],
         disableNavigationHover: true,
