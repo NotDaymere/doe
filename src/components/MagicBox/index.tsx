@@ -14,11 +14,11 @@ interface MagicBoxProps {
 }
 
 export const MagicBox = ({ step }: MagicBoxProps) => {
-    if (step < 19 || step >= 23) return null;
+    if (step < 19 || step > 23) return null;
     const { cursorMoving } = useCursor();
 
     return (
-        <div className={css.magicbox_wrapper}>
+        <div className={clsx(css.magicbox_wrapper, { [css.hidden]: step >= 23 })}>
             <div
                 data-step="magic"
                 className={clsx(
