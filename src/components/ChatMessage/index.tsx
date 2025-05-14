@@ -72,7 +72,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                         [css.aiMessage]: isAI,
                         [css.userMessage]: !isAI,
                         [css.translationMessage]: isTranslation || isRecording,
-                        [css.selectText]: step === 35,
+                        [css.selectText]: step === 35 || step === 32,
                     })}
                 >
                     {isTranslation && (

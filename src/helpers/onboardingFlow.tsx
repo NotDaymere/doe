@@ -1096,16 +1096,17 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorCentered: true,
         tooltip: false,
         blur: [""],
-        autoSkip: 100,
+        // autoSkip: 100,
         disableNavigationHover: true,
     },
     {
         id: 33,
         location: '[data-step="playgrounds"]',
         cursorVisible: true,
+        cursorDelay: 300,
         tooltip: false,
         disableNavigationHover: true,
-        autoSkip: 1200,
+        autoSkip: 1500,
         blur: ["input", "history", "body", "magicbox", "navigate"],
         onExit: ({ setCursorMoving }) => {
             setCursorMoving();

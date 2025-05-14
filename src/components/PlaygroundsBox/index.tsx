@@ -9,7 +9,7 @@ interface PlaygroundsBoxProps {
 }
 
 const PlaygroundsBox = ({ step }: PlaygroundsBoxProps) => {
-    if (!step || step <= 31 || (step >= 42 && step <= 43)) return null;
+    if (!step || step <= 31 || step === 43) return null;
     const { cursorMoving } = useCursor();
     const [isOpen, setIsOpen] = useState(false);
 

@@ -33,7 +33,7 @@ export const ChatMessageContent = ({
         const handleClick = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
             // const button = target.closest("#simulate-selection button");
-            if (target.matches("#simulate-selection button")) {
+            if (step === 35 && target.matches("#simulate-selection button")) {
                 e.preventDefault();
                 setCursorMoving();
                 setStep?.(36);
@@ -50,7 +50,7 @@ export const ChatMessageContent = ({
                 container.removeEventListener("click", handleClick);
             }
         };
-    }, []);
+    }, [step]);
 
     if (isAI) {
         return (

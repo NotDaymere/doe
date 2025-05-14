@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { Dispatch, SetStateAction } from "react";
 import { createPortal } from "react-dom";
 import BranchesMenuBox from "src/components/BranchesMenuBox";
@@ -9,6 +10,7 @@ import { ScreenSharing } from "src/components/ScreenSharing";
 import { SettingsModal } from "src/components/SettingsModal";
 import { TalkingAssistant } from "src/components/TalkingAssistant";
 import { OnboardingStep } from "src/helpers/onboardingFlow";
+import css from "../OnboardingLayout.module.less";
 
 interface OnboardingOverlaysProps {
     step: number;
@@ -52,8 +54,14 @@ export function OnboardingOverlays({
                 currentStep={currentStep}
                 handleNavigationAnimation={handleNavigationAnimation}
             />
-            <BranchesMenuBox step={step} />
-            <PlaygroundsBox step={step} />
+            <div
+                className={clsx(css.overlay_boxes, {
+                    [css.unfold]: (step >= 33 && step <= 34) || (step >= 42 && step <= 43),
+                })}
+            >
+                <BranchesMenuBox step={step} />
+                <PlaygroundsBox step={step} />
+            </div>
             <TalkingAssistant step={step} />
             <SettingsModal
                 nextStep={nextStep}
