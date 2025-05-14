@@ -3,6 +3,18 @@
     flex-direction: column;
     gap: 6px;
     width: 100%;
+
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 400px;
+    transition: all 0.8s ease 1.7s;
+}
+
+.hidden {
+    opacity: 0;
+    transform: translateY(-4px);
+    max-height: 0px;
+    transition: all 0.8s ease 0s;
 }
 
 .sidebar_controls_btn {
@@ -164,7 +176,6 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    animation: fadeIn 0.8s ease;
     overflow: hidden;
     padding-top: 8px;
 }

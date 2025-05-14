@@ -1,6 +1,9 @@
 import clsx from "clsx";
 import { useCursor } from "src/contexts/CursorContext";
-import { SidebarItem } from "../SidebarItem";
+import { ChatMenu } from "../ChatMenu";
+import { CorporasMenu } from "../CorporasMenu";
+import { FavouritesMenu } from "../FavouritesMenu";
+import { TagsMenu } from "../TagsMenu";
 import css from "./SidebarMenu.module.less";
 
 const menuItems = [
@@ -72,14 +75,36 @@ export const SidebarMenu = ({ step, isOpen }: SidebarMenuProps) => {
                                 </>
                             )}
                         </button>
-                        {!cursorMoving && (
-                            <SidebarItem
-                                key={`${label}-${dataStep}`}
-                                icon={icon}
-                                label={label}
+                        {label === "Corpora" && (
+                            <CorporasMenu
                                 step={step}
                                 triggerStep={triggerStep}
                                 isOpen={isOpen}
+                                label={label}
+                            />
+                        )}
+                        {label === "Individual Chats" && (
+                            <ChatMenu
+                                step={step}
+                                triggerStep={triggerStep}
+                                isOpen={isOpen}
+                                label={label}
+                            />
+                        )}
+                        {label === "Favourites" && (
+                            <FavouritesMenu
+                                step={step}
+                                triggerStep={triggerStep}
+                                isOpen={isOpen}
+                                label={label}
+                            />
+                        )}
+                        {label === "Tags" && (
+                            <TagsMenu
+                                step={step}
+                                triggerStep={triggerStep}
+                                isOpen={isOpen}
+                                label={label}
                             />
                         )}
                     </>
