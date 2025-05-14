@@ -76,7 +76,7 @@
     top: 50%;
     transform: translateY(-50%);
     border-width: 6px 0 6px 6px;
-    border-color: transparent transparent transparent rgba(60, 60, 60, 1);
+    border-color: transparent transparent transparent rgba(31, 31, 31, 0.5);
 }
 
 .tooltip--right .tooltip__arrow {
@@ -96,14 +96,20 @@
 
 :global(.continuous) {
     animation: none !important;
+    transform: scaleY(1) scaleX(1);
 }
 
 :global(.highlight-step) {
-    // top: 355px;
     left: 60px;
     border-radius: 20px;
     padding: 20px 20px 20px 30px;
+    transition: all 1s ease;
 }
+
+// .tooltip--left {
+//     right: 150%;
+//     left: unset;
+// }
 
 @media screen and (max-height: 950px) {
     :global(.highlight-step-3) {

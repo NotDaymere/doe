@@ -303,7 +303,6 @@ export const onboardingFlow: OnboardingStep[] = [
                 content in the LaTeX format with the ability to further work with the raw code.
             </p>
         ),
-
         tooltipIcons: (
             <div className={css.tooltip_icons}>
                 <FunctionIcon />
@@ -311,6 +310,9 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         blur: [""],
         navigationOverrideStep: 8.4,
+        onEnter: ({ setCursorMoving }) => {
+            setCursorMoving();
+        },
     },
     {
         id: 8.2,
@@ -320,7 +322,26 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 0,
             left: 400,
         },
-        tooltip: false,
+        tooltip: true,
+        tooltipPosition: "right",
+        tooltipTitle: <b className={css.tooltip_title}>Math mode.</b>,
+        tooltipParagraph1: (
+            <p className={css.tooltip_paragraph}>
+                <b>Math mode</b> allows you to convert your text into a mathematical formula or
+                equation using the <b>LaTeX</b> framework.
+            </p>
+        ),
+        tooltipParagraph2: (
+            <p className={css.tooltip_paragraph}>
+                By <b>holding the button</b> you can create a <b>math block</b> with generated
+                content in the LaTeX format with the ability to further work with the raw code.
+            </p>
+        ),
+        tooltipIcons: (
+            <div className={css.tooltip_icons}>
+                <FunctionIcon />
+            </div>
+        ),
         blur: [""],
         navigationOverrideStep: 8.4,
     },
@@ -328,18 +349,58 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 8.3,
         location: '[data-step="send"]',
         cursorVisible: true,
-        cursorClick: true,
+        cursorPosition: {
+            top: 0,
+            left: 50,
+        },
         sendButtonEnabled: true,
-        tooltip: false,
+        tooltip: true,
+        tooltipPosition: "right",
+        tooltipTitle: <b className={css.tooltip_title}>Math mode.</b>,
+        tooltipParagraph1: (
+            <p className={css.tooltip_paragraph}>
+                <b>Math mode</b> allows you to convert your text into a mathematical formula or
+                equation using the <b>LaTeX</b> framework.
+            </p>
+        ),
+        tooltipParagraph2: (
+            <p className={css.tooltip_paragraph}>
+                By <b>holding the button</b> you can create a <b>math block</b> with generated
+                content in the LaTeX format with the ability to further work with the raw code.
+            </p>
+        ),
+        tooltipIcons: (
+            <div className={css.tooltip_icons}>
+                <FunctionIcon />
+            </div>
+        ),
         blur: [""],
-        stressSendButtonOnArrowRight: true,
+        navigationOverrideStep: 8.4,
     },
     {
         id: 8.4,
         location: '[data-step="send"]',
         cursorVisible: true,
-        cursorClick: true,
-        tooltip: false,
+        tooltip: true,
+        tooltipPosition: "right",
+        tooltipTitle: <b className={css.tooltip_title}>Math mode.</b>,
+        tooltipParagraph1: (
+            <p className={css.tooltip_paragraph}>
+                <b>Math mode</b> allows you to convert your text into a mathematical formula or
+                equation using the <b>LaTeX</b> framework.
+            </p>
+        ),
+        tooltipParagraph2: (
+            <p className={css.tooltip_paragraph}>
+                By <b>holding the button</b> you can create a <b>math block</b> with generated
+                content in the LaTeX format with the ability to further work with the raw code.
+            </p>
+        ),
+        tooltipIcons: (
+            <div className={css.tooltip_icons}>
+                <FunctionIcon />
+            </div>
+        ),
         blur: [""],
         // navigationOverrideStep: 8.4,
         onEnter: ({ setMessages }) => {
@@ -408,7 +469,20 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 0,
             left: 400,
         },
-        tooltip: false,
+        tooltip: true,
+        tooltipPosition: "right",
+        tooltipTitle: <b className={css.tooltip_title}>Code/ markdown mode.</b>,
+        tooltipParagraph1: (
+            <p className={css.tooltip_paragraph}>
+                By <b>holding the button</b> you can create a <b>block code</b> with example of
+                rendered code&
+            </p>
+        ),
+        tooltipIcons: (
+            <div className={css.tooltip_icons}>
+                <CodeIcon />
+            </div>
+        ),
         blur: [""],
         navigationOverrideStep: 9.4,
     },
@@ -416,11 +490,23 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 9.3,
         location: '[data-step="send"]',
         cursorVisible: true,
-        cursorClick: true,
         sendButtonEnabled: true,
-        tooltip: false,
+        tooltip: true,
+        tooltipPosition: "right",
+        tooltipTitle: <b className={css.tooltip_title}>Code/ markdown mode.</b>,
+        tooltipParagraph1: (
+            <p className={css.tooltip_paragraph}>
+                By <b>holding the button</b> you can create a <b>block code</b> with example of
+                rendered code&
+            </p>
+        ),
+        tooltipIcons: (
+            <div className={css.tooltip_icons}>
+                <CodeIcon />
+            </div>
+        ),
         blur: [""],
-        stressSendButtonOnArrowRight: true,
+        // stressSendButtonOnArrowRight: true,
         navigationOverrideStep: 9.4,
     },
     {
