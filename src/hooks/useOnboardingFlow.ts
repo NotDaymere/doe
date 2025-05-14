@@ -158,6 +158,11 @@ export function useOnboardingFlow(
         setStep(46);
     }
 
+    function handleVideoClick() {
+        setCursorMoving();
+        setStep(49);
+    }
+
     function handleScreenSharing() {
         setStep(52);
     }
@@ -228,6 +233,7 @@ export function useOnboardingFlow(
         handleNewBranchClick,
         handleBranchTypedOut,
         handleTalkModeClick,
+        handleVideoClick,
         handleScreenSharing,
         handleCloseScreenSharing,
         handleFirstReadyMessage,

@@ -9,9 +9,10 @@ import css from "./TalkingAssistant.module.less";
 
 interface TalkingAssistantProps {
     step: number;
+    handleVideoClick: () => void;
 }
 
-export const TalkingAssistant = ({ step }: TalkingAssistantProps) => {
+export const TalkingAssistant = ({ step, handleVideoClick }: TalkingAssistantProps) => {
     if (step < 46 || step >= 50) return null;
     const [isImgAnimDone, setIsImgAnimDone] = useState(false);
 
@@ -34,6 +35,7 @@ export const TalkingAssistant = ({ step }: TalkingAssistantProps) => {
                     <button
                         className={clsx(css.assistant_button, { [css.active]: step === 48 })}
                         data-step="camera"
+                        onClick={handleVideoClick}
                     >
                         <CameraIcon />
                     </button>

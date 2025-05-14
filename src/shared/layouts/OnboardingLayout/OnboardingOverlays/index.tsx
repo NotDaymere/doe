@@ -31,6 +31,7 @@ interface OnboardingOverlaysProps {
     handleNavigationAnimation: () => void;
     handleCursorAcknowledged: () => void;
     handleSaveSettings: () => void;
+    handleVideoClick: () => void;
 }
 
 export function OnboardingOverlays({
@@ -42,6 +43,7 @@ export function OnboardingOverlays({
     handleNavigationAnimation,
     handleCursorAcknowledged,
     handleSaveSettings,
+    handleVideoClick,
 }: OnboardingOverlaysProps) {
     return createPortal(
         <>
@@ -62,7 +64,7 @@ export function OnboardingOverlays({
                 <BranchesMenuBox step={step} />
                 <PlaygroundsBox step={step} />
             </div>
-            <TalkingAssistant step={step} />
+            <TalkingAssistant step={step} handleVideoClick={handleVideoClick} />
             <SettingsModal
                 nextStep={nextStep}
                 step={step}
