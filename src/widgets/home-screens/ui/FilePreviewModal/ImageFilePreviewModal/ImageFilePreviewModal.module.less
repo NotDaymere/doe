@@ -1,10 +1,10 @@
 .modalImage {
-  max-width: 100%;
-  max-height: 80vh;
-  height: 100%;
-  flex-shrink: 10;
-  display: block;
-  margin: 0 auto;
+    max-width: 100%;
+    max-height: 80vh;
+    height: 100%;
+    flex-shrink: 10;
+    display: block;
+    margin: 0 auto;
 }
 
 .modalFileNameImgContainer {
@@ -51,9 +51,9 @@
 }
 
 .imageContainer {
-  max-width: 100%;
-  max-height: 100%;
-  overflow: hidden;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
 }
 
 .modalContentImg:hover .modalFileNameImgContainer {
@@ -77,7 +77,7 @@
     align-items: center;
     padding: 4px;
     cursor: pointer;
-    color: #b5b5b5;
+    color: var(--var-85);
     border-radius: 7px;
 
     transition:
@@ -89,16 +89,17 @@
         fill: var(--var-85);
     }
     &:hover {
-        color: #5b5b5b;
+        color: var(--var-95);
         border: 1px solid var(--var-76);
         background-color: var(--var-2);
         svg {
             fill: var(--var-95);
         }
-      &[data-active=true] {
-        color: #5B5B5B;
-        border: 1px solid #B5B5B5;
-      }
+    }
+    &[data-active="true"] {
+        color: var(--var-95);
+        border: 1px solid var(--var-76);
+        background-color: var(--var-2);
     }
 }
 
@@ -119,108 +120,105 @@
 }
 
 .drawContainer {
-  display: flex;
-  align-items: center;
-  align-content: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 7px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 7px;
 }
 
 .colorInputContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  align-content: center;
-  justify-content: space-between;
-  width: 100%;
-  color: #b8b8b8;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: color 0.3s ease-in-out;
-  padding-left: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    width: 100%;
+    color: #b8b8b8;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+    padding-left: 5px;
 
-  &:hover {
-    color: #7a7a7a;
-  }
+    &:hover {
+        color: #7a7a7a;
+    }
 }
 
 .colorInput {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 .colorInput::-webkit-color-swatch-wrapper {
-  padding: 0;
-  border-radius: 50%;
+    padding: 0;
+    border-radius: 50%;
 }
 
 .colorInput::-webkit-color-swatch {
-  border: none;
-  border-radius: 50%;
+    border: none;
+    border-radius: 50%;
 }
 
 .selectWeightInput {
-  border-radius: 8px;
-  border: none;
-  font-size: 12px;
-  padding: 5px;
-  width: 100%;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    padding: 5px;
+    width: 100%;
 
-  :focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  }
+    :focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
 
-  ::selection {
-    background-color: #ff7f50;
-    color: #fff;
-  }
+    ::selection {
+        background-color: #ff7f50;
+        color: #fff;
+    }
 
-  ::-moz-selection {
-    background-color: #ff7f50;
-    color: #fff;
-  }
+    ::-moz-selection {
+        background-color: #ff7f50;
+        color: #fff;
+    }
 }
 
-
-
 .addTextContainer {
-  background: #FFFFFF;
-  position: absolute;
-  bottom: 45px;
-  right: -25px;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  border-radius: 8px;
-  border: none;
-  font-size: 12px;
-  padding: 5px;
-  width: 80px;
+    background: #ffffff;
+    position: absolute;
+    bottom: 45px;
+    right: -25px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    padding: 5px;
+    width: 80px;
 }
 
 .selectTextSize {
-  border-radius: 8px;
-  border: none;
-  font-size: 12px;
-  padding: 5px;
-  width: 100%;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    padding: 5px;
+    width: 100%;
 }
 
 .canvas_styles {
-  position: relative;
-  display: inline-block;
-  flex-shrink: 10;
+    position: relative;
+    display: inline-block;
+    flex-shrink: 10;
 }
-

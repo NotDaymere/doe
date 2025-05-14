@@ -7,6 +7,10 @@ import Menu from "./Components/Menu/Menu";
 import { MOCKCOMMENTS } from "./Mock";
 import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
 import CommentContainer from "./Components/Comment Container/CommentContainer";
+import LinesIcon from "src/shared/icons/LinesIcon";
+import clsx from "clsx";
+import { Close } from "src/shared/icons/Close";
+import SearchIcon from "src/shared/icons/SearchIcon";
 
 function Comments() {
     const { isOpen, comment, setComment, closeComments } = useCommentWindowStore();
@@ -55,23 +59,24 @@ function Comments() {
         >
             <div className="header">
                 <div className="search">
-                    <img src="/img/icons/search.svg" alt="Search" />
+                    <SearchIcon />
 
                     <input type="text" placeholder="Search" />
                 </div>
                 <button
                     ref={filterButtonRef}
                     onClick={() => setShowFilter(!showFilter)}
-                    className={showFilter ? "active-filter" : ""}
+                    className={clsx("action-button", showFilter ? "active" : "")}
                 >
-                    <img src="/img/icons/filter.svg" className="filter-icon" alt="Filter" />
+                    <LinesIcon />
                 </button>
                 <button
                     onClick={() => {
                         closeComments();
                     }}
+                    className="action-button close"
                 >
-                    <img src="/img/icons/close_2.svg" alt="Close" />
+                    <Close />
                 </button>
                 {showFilter && (
                     <div ref={filterContainerRef} className="filterdiv">
