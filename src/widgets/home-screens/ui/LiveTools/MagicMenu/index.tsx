@@ -4,6 +4,7 @@ import { CSSTransition } from "react-transition-group";
 import MagicMenuItem, { IMagicMenuItem } from "./MagicMenuItem";
 import { useAppStore } from "src/shared/providers";
 import css from "./MagicMenu.module.less";
+import clsx from "clsx";
 
 interface IProps {
     items: IMagicMenuItem[];
@@ -46,14 +47,14 @@ export const MagicMenu: React.FC<IProps> = ({
 
     return (
         <div
-            className={css.magicMenu}
+            className={clsx(css.magicMenu, showMagicMenu && css.active)}
             style={{
                 zIndex: showMagicMenu ? 100 : undefined,
             }}
         >
             <button
                 ref={buttonRef}
-                className={magicButtonClass || ""}
+                className={clsx(magicButtonClass)}
                 onClick={() => setShowMagicMenu((prev) => !prev)}
             >
                 {magicButtonIcon}

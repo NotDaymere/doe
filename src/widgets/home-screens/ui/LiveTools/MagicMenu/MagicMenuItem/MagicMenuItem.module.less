@@ -10,14 +10,20 @@
     gap: 6px;
 
     .setFontSohneBuch(14px, 1.1, normal);
-    color: #8d8d8d;
+    color: var(--var-119);
 
     transition: 200ms ease;
     transition-property: border, background;
-
+    & svg path {
+        fill: var(--var-96) !important;
+    }
     &:hover {
-        background: #f8f8f8;
-        border-color: #dddddd;
+        background-color: var(--var-2);
+        border-color: var(--var-74);
+        color: var(--var-7);
+        & svg path {
+            fill: var(--var-7) !important;
+        }
         border-radius: 12px;
 
         .hasMenu {
