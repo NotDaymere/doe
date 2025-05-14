@@ -717,6 +717,7 @@ export const onboardingFlow: OnboardingStep[] = [
         location: '[data-step="profile"]',
         cursorVisible: true,
         cursorClick: true,
+        overrideTooltipPosition: '[data-step="profile"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Settings</b>,
@@ -733,6 +734,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 18.1,
         location: '[data-step="profile-photo"]',
         cursorVisible: true,
+        overrideTooltipPosition: '[data-step="profile"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Settings</b>,
@@ -753,6 +755,7 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 0,
             left: 150,
         },
+        overrideTooltipPosition: '[data-step="profile"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Settings</b>,
@@ -773,6 +776,7 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 0,
             left: 150,
         },
+        overrideTooltipPosition: '[data-step="profile"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Settings</b>,
@@ -789,6 +793,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 18.4,
         location: '[data-step="profile-save"]',
         cursorVisible: true,
+        overrideTooltipPosition: '[data-step="profile"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Settings</b>,
@@ -854,7 +859,8 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         blur: ["input", "navigate"],
         disableNavigationHover: true,
-        onEnter: ({ setMessages }) => {
+        onEnter: ({ setMessages, setCursorMoving }) => {
+            setCursorMoving();
             setMessages([
                 {
                     role: "ai",
