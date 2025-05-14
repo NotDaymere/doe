@@ -8,6 +8,7 @@ function AddChartsAndWidgets() {
   const nodeRef = useRef<HTMLDivElement>(null);
 
   const closeModal = () => {
+   
     setIsVisible(false);
   };
 
@@ -22,7 +23,8 @@ function AddChartsAndWidgets() {
   return (
      <Draggable nodeRef={nodeRef} handle=".drag-handle">
     <div ref={nodeRef} className="modalAddChartWidget">
-      <div className="modalHead drag-handle">
+   
+      <div className="modalHead drag-handle">    
         <p>Charts and widgets</p>
         <button className="closeBtn" onClick={closeModal}>
           <img src="/img/icons/close.svg" alt="Close" />
@@ -31,6 +33,7 @@ function AddChartsAndWidgets() {
       <div className="modalAddChartWidget_container">
         <div
           className="addWidget"
+    
           onClick={() => handleOpenWindow(Page.NEW_WIDGET)}
         >
           <div className="dottedbg">
@@ -40,6 +43,7 @@ function AddChartsAndWidgets() {
                   <img src="/img/icons/mirro.svg" alt="Mirro" />
                 </div>
               </button>
+ 
               <button>
                 <div>
                   <img src="/img/icons/norton.svg" alt="Norton" />
@@ -49,6 +53,7 @@ function AddChartsAndWidgets() {
                 <div>
                   <img src="/img/icons/google.svg" alt="Google" />
                 </div>
+ 
               </button>
             </div>
             <p>Add Widget</p>
@@ -58,6 +63,7 @@ function AddChartsAndWidgets() {
           className="addWidget"
           onClick={() => handleOpenWindow(Page.NEW_CHART)}
         >
+ 
           <div className="linebg">
             <div className="flex">
               <img src="/img/icons/chart_icon.svg" alt="Chart" />
@@ -67,6 +73,7 @@ function AddChartsAndWidgets() {
         </div>
       </div>
     </div>
+ 
     </Draggable>
   );
 }

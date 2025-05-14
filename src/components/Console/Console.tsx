@@ -5,6 +5,7 @@ import CodingLanguageMenu from "./Components/CodingLanguageMenu/CodingLanguageMe
 import ConsoleWindow from "./Components/Consolewindow/ConsoleWindow";
 import Draggable from "react-draggable";
 import "./Console.less";
+import { useConsoleStore } from "src/shared/providers/useConsoleStore/useConsoleStore";
 
 const ConsoleContext = createContext({
     showMenu: false,
@@ -28,10 +29,12 @@ function Console() {
     const nodeRef = useRef<HTMLDivElement>(null);
     const menuButtonRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
+    const { isOpen, close } = useConsoleStore();
 
     const toggleMenu = () => setShowMenu((prev) => !prev);
-    const hideConsole = () => setIsVisible(false);
-    const splitConsole = () => {
+     const hideConsole = () => setIsVisible(false);
+  
+     const splitConsole = () => {
         setNumberOfConsole(numberOfConsole + 1);
     };
     const clearConsole = () => {
@@ -80,8 +83,8 @@ function Console() {
             if (!isResizing.current) return;
 
             let newWidth = startWidth;
+           
             let newHeight = startHeight;
-
             if (resizeDirection.current.includes("right")) {
                 newWidth = Math.max(300, startWidth + (e.clientX - startX));
             } else if (resizeDirection.current.includes("left")) {
@@ -90,6 +93,7 @@ function Console() {
 
             if (resizeDirection.current.includes("bottom")) {
                 newHeight = Math.max(150, startHeight + (e.clientY - startY));
+         
             } else if (resizeDirection.current.includes("top")) {
                 newHeight = Math.max(150, startHeight - (e.clientY - startY));
             }
@@ -99,6 +103,7 @@ function Console() {
 
         const handleMouseUp = () => {
             isResizing.current = false;
+         
             resizeDirection.current = "";
             document.removeEventListener("mousemove", handleMouseMove);
             document.removeEventListener("mouseup", handleMouseUp);
@@ -108,10 +113,12 @@ function Console() {
         document.addEventListener("mouseup", handleMouseUp);
     };
 
+    
     return (
-        isVisible && (
+        isOpen && (
             <ConsoleContext.Provider
                 value={{
+    
                     showMenu,
                     toggleMenu,
                     isVisible,
@@ -126,6 +133,7 @@ function Console() {
                         <div className="console_head drag-handle">
                             <div className="title">
                                 <p className="">Console</p>
+    
                             </div>
                             <div className="right_buttons">
                                 <button ref={menuButtonRef} onClick={toggleMenu}>
@@ -135,15 +143,17 @@ function Console() {
                                     <img src="/img/console/window.svg" />
                                 </button>
                                 <button onClick={clearConsole}>
+    
                                     <img src="/img/console/delete.svg" />
                                 </button>
-                                <button onClick={hideConsole}>
+                                <button onClick={close}>
                                     <img src="/img/console/hide.svg" />
                                 </button>
                             </div>
                             {showMenu && (
                                 <CodingLanguageMenu
                                     ref={menuRef}
+    
                                     onSelectLanguage={() => setShowMenu(false)}
                                 />
                             )}
@@ -153,6 +163,7 @@ function Console() {
                             style={{ width: dimensions.width, height: dimensions.height }}
                         >
                             <div className="consoleWidowTabContainer">
+    
                                 {[...Array(numberOfConsole)].map((_, i) => {
                                     return (
                                         <ConsoleWindow
@@ -162,6 +173,7 @@ function Console() {
                                         />
                                     );
                                 })}
+    
                             </div>
 
                             <div
@@ -171,7 +183,8 @@ function Console() {
                             <div
                                 className="resizer top-right"
                                 onMouseDown={(e) => handleMouseDown(e, "top-right")}
-                            ></div>
+    
+    ></div>
                             <div
                                 className="resizer bottom-left"
                                 onMouseDown={(e) => handleMouseDown(e, "bottom-left")}
@@ -180,6 +193,7 @@ function Console() {
                                 className="resizer bottom-right"
                                 onMouseDown={(e) => handleMouseDown(e, "bottom-right")}
                             ></div>
+    
                         </div>
                     </div>
                 </Draggable>
