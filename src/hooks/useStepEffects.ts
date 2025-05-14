@@ -32,7 +32,6 @@ export function useStepEffects(
         /** auto‑skip */
         if (curr?.autoSkip) {
             const t = setTimeout(() => nextStep(), curr.autoSkip);
-            console.log("t: ", t);
             return () => clearTimeout(t);
         } else if (curr?.autoSkipSubStep) {
             const t = setTimeout(() => nextSubStep(), curr.autoSkipSubStep);

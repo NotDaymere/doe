@@ -949,13 +949,13 @@ export const onboardingFlow: OnboardingStep[] = [
                 Manage the dark or light theme according to your preference.
             </p>
         ),
+        autoSkip: 2000,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
         id: 25,
         location: '[data-step="darkMode"]',
         cursorVisible: true,
-        cursorClick: true,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Light and Dark Theme.</b>,
@@ -964,14 +964,13 @@ export const onboardingFlow: OnboardingStep[] = [
                 Manage the dark or light theme according to your preference.
             </p>
         ),
+        autoSkip: 2000,
         blur: ["input", "history", "body", "magicbox", "navigate"],
-        onEnter: ({ setMessages }) => setMessages([]),
     },
     {
         id: 26,
         location: '[data-step="lightMode"]',
         cursorVisible: true,
-        cursorClick: true,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Light and Dark Theme.</b>,
@@ -981,10 +980,6 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
-        onEnter: ({ setMessages, setGaiaActive }) => {
-            setGaiaActive(false);
-            setMessages([]);
-        },
     },
     {
         id: 27,

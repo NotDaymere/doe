@@ -87,7 +87,7 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
                         currentStep.id >= 18.2 && currentStep.id < 19 ? "continuous" : ""
                     } ${currentStep.id >= 8.2 && currentStep.id < 8.4 ? "continuous" : ""} ${
                         currentStep.id >= 9.2 && currentStep.id < 9.4 ? "continuous" : ""
-                    }`}
+                    } ${currentStep.id >= 25 && currentStep.id <= 26 ? "continuous" : ""}`}
                 >
                     <div className={css.tooltip_content}>
                         {currentStep?.tooltipTitle}

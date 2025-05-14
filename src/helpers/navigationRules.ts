@@ -67,6 +67,11 @@ export const navigationRules: Rule[] = [
         match: is(23),
         next: (s, d) => (d === "right" ? 24 : 22.1),
     },
+    // 24-26
+    {
+        match: inRange(24, 26),
+        next: (s, d) => (d === "right" ? 27 : 23),
+    },
     // 28.1
     {
         match: is(28.1),
