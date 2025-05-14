@@ -43,12 +43,28 @@
     // overflow-y: auto;
     max-width: 100%;
 
+    &.gap {
+        gap: 30px;
+
+        .layout_chat {
+            background-color: #f1f1f1;
+            margin-top: 64px;
+            margin-right: 64px;
+            padding-top: 12px;
+            border-radius: 16px;
+        }
+
+        .layout_history {
+            background-color: transparent;
+        }
+    }
+
     & > * {
         transition: filter 2s ease;
     }
 
     &.tableOpen {
-        max-width: calc(100% - 500px);
+        max-width: calc(100% - 516px);
     }
 
     @media screen and (max-width: 1248px) {

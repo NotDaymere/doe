@@ -114,7 +114,7 @@ interface LogoIconProps {
 export const LogoIcon = memo(({ show, step }: LogoIconProps) => {
     if (!show) return null;
 
-    const noShadow = step >= 28 && step <= 57;
+    const noShadow = step >= 28 && step <= 57 && step !== 28.1;
     const blackLogo = step >= 40 && step <= 42;
 
     return (

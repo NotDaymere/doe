@@ -33,27 +33,37 @@ export const BranchBar = ({ withDots, step }: BranchBarProps) => {
         <div
             className={clsx(css.branch_bar, {
                 [css.margin_top]: step && step >= 40,
-                [css.text_gradient]: step === 41,
+                [css.background_white]: step === 41,
             })}
             ref={branchRef}
         >
-            <BranchIcon data-step="branch-bar" className={css.branch_icon} />
-            Create a simple project for me in any language.
-            {withDots && (
-                <button onClick={() => setIsOpenMenu((prev) => !prev)}>
-                    <Dots className={css.dots} data-step="branch-dots" />
-                    {step === 41 && !cursorMoving && (
-                        <div className={css.bar_menu}>
-                            <div className={clsx(css.bar_menu_item, { [css.active]: step === 41 })}>
-                                <Arrows className={css.arrow_icon} /> <p>Close Branch</p>
+            <div
+                className={clsx(css.branch_bar_content, {
+                    [css.text_gradient]: step === 41,
+                })}
+            >
+                <BranchIcon data-step="branch-bar" className={css.branch_icon} />
+                Create a simple project for me in any language.
+                {withDots && (
+                    <button onClick={() => setIsOpenMenu((prev) => !prev)}>
+                        <Dots className={css.dots} data-step="branch-dots" />
+                        {step === 41 && !cursorMoving && (
+                            <div className={css.bar_menu}>
+                                <div
+                                    className={clsx(css.bar_menu_item, {
+                                        [css.active]: step === 41,
+                                    })}
+                                >
+                                    <Arrows className={css.arrow_icon} /> <p>Close Branch</p>
+                                </div>
+                                <div className={css.bar_menu_item}>
+                                    <TrashIcon className={css.trash_icon} /> <p>Delete Branch</p>
+                                </div>
                             </div>
-                            <div className={css.bar_menu_item}>
-                                <TrashIcon className={css.trash_icon} /> <p>Delete Branch</p>
-                            </div>
-                        </div>
-                    )}
-                </button>
-            )}
+                        )}
+                    </button>
+                )}
+            </div>
         </div>
     );
 };

@@ -27,7 +27,7 @@ const ChatHistory = ({ messages, step, setStep }: ChatHistoryProps) => {
         <div
             ref={historyRef}
             className={clsx(css.chatHistoryContainer, {
-                [css.low_padding]: step >= 29,
+                [css.low_padding]: step >= 28.1,
                 [css.half]: step === 40,
             })}
         >
