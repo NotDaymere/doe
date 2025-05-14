@@ -1085,6 +1085,9 @@ export const onboardingFlow: OnboardingStep[] = [
         tooltip: false,
         blur: [""],
         disableNavigationHover: true,
+        onEnter: ({ setBlockInput }) => {
+            setBlockInput(true);
+        },
     },
     {
         id: 29,
@@ -1094,7 +1097,6 @@ export const onboardingFlow: OnboardingStep[] = [
         blur: [""],
         openTable: true,
         disableNavigationHover: true,
-        onEnter: ({ setBlockInput }) => setBlockInput(false),
     },
     {
         id: 30,
