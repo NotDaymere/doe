@@ -942,6 +942,9 @@ export const onboardingFlow: OnboardingStep[] = [
         onEnter: ({ setCursorMoving }) => {
             setCursorMoving();
         },
+        onExit: ({ setMessages }) => {
+            setMessages([]);
+        },
     },
     {
         id: 23,
@@ -962,6 +965,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 <ShareIcon />
             </div>
         ),
+        disableNavigationHover: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
         onEnter: ({ setMessages }) => setMessages([]),
     },
@@ -969,6 +973,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 24,
         location: '[data-step="lightMode"]',
         cursorVisible: true,
+        overrideTooltipPosition: '[data-step="lightMode"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Light and Dark Theme.</b>,
@@ -984,6 +989,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 25,
         location: '[data-step="darkMode"]',
         cursorVisible: true,
+        overrideTooltipPosition: '[data-step="lightMode"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Light and Dark Theme.</b>,
@@ -999,6 +1005,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 26,
         location: '[data-step="lightMode"]',
         cursorVisible: true,
+        overrideTooltipPosition: '[data-step="lightMode"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Light and Dark Theme.</b>,
