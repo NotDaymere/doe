@@ -302,7 +302,7 @@ export function AnimatedInput({
                                 className={clsx(css.input_field, {
                                     [css.ghost]: !isMessageSent && blockInput,
                                 })}
-                                disabled={blockInput}
+                                disabled={blockInput || isMessageSent}
                                 placeholder={
                                     blockInput && step >= 29
                                         ? "Ask Doe anything you’d like about the world..."
