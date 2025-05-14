@@ -44,6 +44,8 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
             speed: message.content.length > 200 ? 18 : 70,
             startTyping: isAI && !noTypeEffect,
             onComplete: () => {
+                if (step === 8.3) setStep?.(8.4);
+                if (step === 9.3) setStep?.(9.4);
                 if (step === 28.1) {
                     setTimeout(() => setStep?.(29), 1000);
                     setTimeout(() => setStep?.(30), 1500);

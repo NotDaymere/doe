@@ -114,6 +114,7 @@ export function AnimatedInput({
             setIsMessageSent(false);
             handleMathFormulaTypedOut();
         },
+        enableSkip: false,
         startTyping: step === 8.2,
         reset: step === 7 || step === 9 || manualSkip,
     });
@@ -138,6 +139,7 @@ export function AnimatedInput({
         onComplete: () => {
             handlePythonCodeTypedOut();
         },
+        enableSkip: false,
         startTyping: step === 9.2,
         reset: step === 8 || step === 10 || manualSkip,
     });
@@ -332,12 +334,12 @@ export function AnimatedInput({
                     <button
                         className={clsx(css.panel_submitBtn, {
                             [css.btn_stressed]: stressSendButton,
-                            [css.btn_disabled]: !sendButtonEnabled,
+                            [css.btn_disabled]: !sendButtonEnabled || isMessageSent,
                         })}
                         onAnimationEnd={() => setAnimationDone(true)}
                         onClick={handleSendMessage}
                         data-step="send"
-                        disabled={!sendButtonEnabled}
+                        disabled={!sendButtonEnabled || isMessageSent}
                     >
                         Send <ArrowUpIcon />
                     </button>

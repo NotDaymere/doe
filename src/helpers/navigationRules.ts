@@ -40,8 +40,7 @@ export const navigationRules: Rule[] = [
     // 9–9.4
     {
         match: inRange(9, 9.4),
-        next: (s, d) =>
-            d === "right" ? (s === 9.4 ? 10 : add(s, 0.1)) : s === 9 ? 8 : sub(s, 0.1),
+        next: (s, d) => (d === "right" ? (s === 9.4 ? 10 : add(s, 0.1)) : 8),
     },
     // 13
     {

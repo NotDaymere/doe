@@ -274,6 +274,9 @@ export const onboardingFlow: OnboardingStep[] = [
         },
         tooltip: false,
         blur: [""],
+        onEnter: ({ setMessages }) => {
+            setMessages([]);
+        },
         onExit: ({ setCursorMoving }) => {
             setCursorMoving();
         },
@@ -336,7 +339,6 @@ export const onboardingFlow: OnboardingStep[] = [
         location: '[data-step="send"]',
         cursorVisible: true,
         cursorClick: true,
-        sendButtonEnabled: true,
         tooltip: false,
         blur: [""],
         // navigationOverrideStep: 8.4,
