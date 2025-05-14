@@ -60,6 +60,7 @@ export interface OnboardingStep {
     cursorCentered?: boolean;
     cursorSpeed?: number; // in seconds
     cursorDelay?: number; // in milliseconds
+    overrideTooltipPosition?: string;
     tooltip: boolean;
     tooltipPosition?: "top" | "bottom" | "left" | "right";
     tooltipTitle?: string | ReactNode;
@@ -288,6 +289,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         cursorClick: true,
         cursorDelay: 300,
+        overrideTooltipPosition: '[data-step="function"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Math mode.</b>,
@@ -322,6 +324,7 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 0,
             left: 400,
         },
+        overrideTooltipPosition: '[data-step="function"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Math mode.</b>,
@@ -354,6 +357,7 @@ export const onboardingFlow: OnboardingStep[] = [
             left: 50,
         },
         sendButtonEnabled: true,
+        overrideTooltipPosition: '[data-step="function"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Math mode.</b>,
@@ -381,6 +385,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 8.4,
         location: '[data-step="send"]',
         cursorVisible: true,
+        overrideTooltipPosition: '[data-step="function"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Math mode.</b>,
@@ -444,6 +449,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         cursorClick: true,
         cursorDelay: 300,
+        overrideTooltipPosition: '[data-step="code"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Code/ markdown mode.</b>,
@@ -469,6 +475,7 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 0,
             left: 400,
         },
+        overrideTooltipPosition: '[data-step="code"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Code/ markdown mode.</b>,
@@ -491,6 +498,7 @@ export const onboardingFlow: OnboardingStep[] = [
         location: '[data-step="send"]',
         cursorVisible: true,
         sendButtonEnabled: true,
+        overrideTooltipPosition: '[data-step="code"]',
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Code/ markdown mode.</b>,
@@ -514,7 +522,21 @@ export const onboardingFlow: OnboardingStep[] = [
         location: '[data-step="send"]',
         cursorVisible: true,
         cursorClick: true,
-        tooltip: false,
+        overrideTooltipPosition: '[data-step="code"]',
+        tooltip: true,
+        tooltipPosition: "right",
+        tooltipTitle: <b className={css.tooltip_title}>Code/ markdown mode.</b>,
+        tooltipParagraph1: (
+            <p className={css.tooltip_paragraph}>
+                By <b>holding the button</b> you can create a <b>block code</b> with example of
+                rendered code&
+            </p>
+        ),
+        tooltipIcons: (
+            <div className={css.tooltip_icons}>
+                <CodeIcon />
+            </div>
+        ),
         blur: [""],
         onEnter: ({ setMessages }) => {
             setMessages?.([

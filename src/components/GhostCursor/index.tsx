@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useCursor } from "src/contexts/CursorContext";
 import { OnboardingStep } from "src/helpers/onboardingFlow";
 import { useElementCursorPosition } from "src/hooks/useElementCursorPosition";
@@ -57,46 +57,86 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
         transition: `top ${cursorSpeed}ms ease, left ${cursorSpeed}ms ease`,
     };
 
-    return (
-        <div
-            className={clsx(css.cursor, {
-                [css.cursor_hidden]: !currentStep?.cursorVisible,
-                [css.cursor_highlighted]: currentStep?.id === 3,
-                [css.cursor_clicked]: clicked,
-            })}
-            style={cursorPositionAndSpeed}
-            onTransitionEnd={() => {
-                clearTimeout(transitionTimeoutRef.current);
-                transitionTimeoutRef.current = setTimeout(() => {
-                    setCursorStopped();
+    const tooltipPositionOverride = useMemo(() => {
+        if (currentStep?.overrideTooltipPosition) {
+            const element = document.querySelector(currentStep?.overrideTooltipPosition);
+            const rect = element?.getBoundingClientRect();
+            return {
+                top: rect?.bottom,
+                left: rect?.right,
+            };
+        }
+        return null;
+    }, [currentStep?.overrideTooltipPosition]);
 
-                    if (currentStep?.cursorClick) {
-                        setClicked(true);
-                        setTimeout(() => setClicked(false), 300);
-                    }
-                }, 100);
-            }}
-        >
-            <CursorIcon className={css.cursor_icon} />
-            {!cursorMoving && currentStep?.tooltip && (
-                <Tooltip
-                    key={currentStep.id}
-                    stressed={stressTooltip}
-                    position={currentStep?.tooltipPosition}
-                    className={`highlight-step highlight-step-${currentStep.id} ${
-                        currentStep.id >= 18.2 && currentStep.id < 19 ? "continuous" : ""
-                    } ${currentStep.id >= 8.2 && currentStep.id < 8.4 ? "continuous" : ""} ${
-                        currentStep.id >= 9.2 && currentStep.id < 9.4 ? "continuous" : ""
-                    } ${currentStep.id >= 25 && currentStep.id <= 26 ? "continuous" : ""}`}
+    return (
+        <>
+            <div
+                className={clsx(css.cursor, {
+                    [css.cursor_hidden]: !currentStep?.cursorVisible,
+                    [css.cursor_highlighted]: currentStep?.id === 3,
+                    [css.cursor_clicked]: clicked,
+                })}
+                style={cursorPositionAndSpeed}
+                onTransitionEnd={() => {
+                    clearTimeout(transitionTimeoutRef.current);
+                    transitionTimeoutRef.current = setTimeout(() => {
+                        setCursorStopped();
+
+                        if (currentStep?.cursorClick) {
+                            setClicked(true);
+                            setTimeout(() => setClicked(false), 300);
+                        }
+                    }, 100);
+                }}
+            >
+                <CursorIcon className={css.cursor_icon} />
+                {!cursorMoving && currentStep?.tooltip && !currentStep?.overrideTooltipPosition && (
+                    <Tooltip
+                        key={currentStep.id}
+                        stressed={stressTooltip}
+                        position={currentStep?.tooltipPosition}
+                        className={`highlight-step highlight-step-${currentStep.id} ${
+                            currentStep.id >= 18.2 && currentStep.id < 19 ? "continuous" : ""
+                        } ${currentStep.id >= 8.2 && currentStep.id < 8.4 ? "continuous" : ""} ${
+                            currentStep.id >= 9.2 && currentStep.id < 9.4 ? "continuous" : ""
+                        } ${currentStep.id >= 25 && currentStep.id <= 26 ? "continuous" : ""}`}
+                    >
+                        <div className={css.tooltip_content}>
+                            {currentStep?.tooltipTitle}
+                            {currentStep?.tooltipParagraph1}
+                            {currentStep?.tooltipParagraph2}
+                            {currentStep?.tooltipIcons}
+                        </div>
+                    </Tooltip>
+                )}
+            </div>
+
+            {/* tooltip on overrideTooltipPosition location */}
+            {!cursorMoving && currentStep?.overrideTooltipPosition && (
+                <div
+                    className={clsx(css.tooltip_override, {
+                        [`tooltip_${currentStep.location}`]: currentStep.overrideTooltipPosition,
+                    })}
+                    style={{
+                        top: tooltipPositionOverride?.top,
+                        left: 40,
+                    }}
                 >
-                    <div className={css.tooltip_content}>
-                        {currentStep?.tooltipTitle}
-                        {currentStep?.tooltipParagraph1}
-                        {currentStep?.tooltipParagraph2}
-                        {currentStep?.tooltipIcons}
-                    </div>
-                </Tooltip>
+                    <Tooltip
+                        stressed={stressTooltip}
+                        position="right"
+                        className={`highlight-step highlight-step-${currentStep.id}`}
+                    >
+                        <div className={css.tooltip_content}>
+                            {currentStep?.tooltipTitle}
+                            {currentStep?.tooltipParagraph1}
+                            {currentStep?.tooltipParagraph2}
+                            {currentStep?.tooltipIcons}
+                        </div>
+                    </Tooltip>
+                </div>
             )}
-        </div>
+        </>
     );
 }
