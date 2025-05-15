@@ -12,12 +12,13 @@ import LiveToolsWrapper from "./LiveToolsWrapper";
 import DictionaryIcon from "src/shared/icons/Dictionary.icon";
 import ScreenIcon from "src/shared/icons/Screen.icon";
 import css from "./Translator.module.less";
+import { useTheme } from "src/shared/hooks/useTheme";
 
 const Translator = () => {
     const { activeTranslationOption, setActiveTranslationOption } = useAppStore();
     const [showChip, setShowChip] = useState(false);
     const [isRotated, setIsRotated] = useState(false);
-
+    const { theme } = useTheme();
     useEffect(() => {
         if (activeTranslationOption === TRANSLATION_MENU_OPTIONS.TRANSLATION) return;
         setShowChip(true);
@@ -109,7 +110,7 @@ const Translator = () => {
                 />
             </div>
             <LiveToolsWrapper
-                bookmarkIcon={<DictionaryIcon width={48} height={48} />}
+                bookmarkIcon={<DictionaryIcon width={48} height={48} theme={theme} />}
                 magicMenuItems={MAGIC_MENU_ITEMS}
                 magicButtonIcon={<StarsIcon width={21} height={28} />}
                 magicButtonClass={css.magicButton}

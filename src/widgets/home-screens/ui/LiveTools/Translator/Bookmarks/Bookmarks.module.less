@@ -4,8 +4,8 @@
     gap: 8px;
     .setFontSohneKraftig(14px);
     padding: 14px 8px;
-    background-color: #f0f0f0;
-    border: 1px solid #dddddd;
+    background-color: var(--var-185);
+    border: 1px solid var(--var-68);
     border-radius: 16px;
     animation: show 0.5s ease-in-out;
     transform-origin: left;
@@ -57,7 +57,10 @@
     display: flex;
     align-items: center;
     gap: 7px;
-    color: #5b5b5b;
+    color: var(--var-97);
+    svg path {
+        fill: var(--var-94);
+    }
 }
 
 .icon path {
@@ -71,8 +74,20 @@
     width: 20px;
     height: 20px;
     border-radius: 4px;
-    background-color: #f8f8f8;
+    background-color: var(--var-2);
     cursor: pointer;
+    svg path {
+        fill: var(--var-94);
+    }
+}
+.bookmarkWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid var(--var-60);
+    background-color: var(--var-10);
 }
 
 .bookmark {
@@ -82,12 +97,12 @@
     align-items: center;
     gap: 16px;
     padding: 12px;
-    background-color: #f8f8f8;
-    border: 4px solid #ffffff;
+    background-color: var(--var-2);
     border-radius: 12px;
     box-shadow: 0 8px 12px rgba(#000, 0.04);
     white-space: nowrap;
     opacity: 0;
+    color: var(--var-7);
 }
 
 .bookmarkShow {
@@ -97,6 +112,9 @@
 }
 
 .removeButton {
+    path {
+        fill: var(--var-87);
+    }
     &:hover {
         path {
             fill: #ff453a;

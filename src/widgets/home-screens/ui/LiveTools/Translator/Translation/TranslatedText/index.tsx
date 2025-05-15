@@ -93,7 +93,7 @@ const TranslatedText: FC<IProps> = ({ translateFromImage, isRotated, onRotate })
                     </div>
                 )}
             </div>
-            {translateFromImage ? (
+            {!translateFromImage ? (
                 <TranslationFromImage />
             ) : (
                 <>

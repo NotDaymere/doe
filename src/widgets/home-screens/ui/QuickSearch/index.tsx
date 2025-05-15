@@ -6,6 +6,7 @@ import StarsIcon from "src/shared/icons/Stars.icon";
 import css from "./QuickSearch.module.less";
 import ToggleSwitch from "src/shared/components/ToogleSwitch";
 import TimeSpan from "src/shared/components/TimeSpan";
+import clsx from "clsx";
 
 interface IP {
     text: string;
@@ -110,7 +111,11 @@ const QuickSearch: FC<IProps> = ({ onClose }) => {
                     value={search}
                     onChange={(e: any) => setSearch(e.target.value)}
                 />
-                <SearchIcon width={14} height={14} className={css.startAdornment} />
+                <SearchIcon
+                    width={14}
+                    height={14}
+                    className={clsx(css.startAdornment, !!search && css.startAdornment__hasValue)}
+                />
                 <button className={css.endAdornment} onClick={() => onClose(false)}>
                     <CrossIcon width={8} height={8} />
                 </button>

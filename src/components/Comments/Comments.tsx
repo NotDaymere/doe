@@ -4,28 +4,23 @@ import Filter from "./Components/Filter/Filter";
 import Thread from "./Components/Thread/Thread";
 import Menu from "./Components/Menu/Menu";
 
-
 import { MOCKCOMMENTS } from "./Mock";
 import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
 import CommentContainer from "./Components/Comment Container/CommentContainer";
-
+import LinesIcon from "src/shared/icons/LinesIcon";
+import clsx from "clsx";
+import { Close } from "src/shared/icons/Close";
+import SearchIcon from "src/shared/icons/SearchIcon";
 
 function Comments() {
-    const { isOpen,comment,setComment, closeComments } = useCommentWindowStore();
+    const { isOpen, comment, setComment, closeComments } = useCommentWindowStore();
 
-    
-    
-    
     const [showFilter, setShowFilter] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
-  
 
-
-   
     const filterButtonRef = useRef<HTMLButtonElement>(null);
     const filterContainerRef = useRef<HTMLDivElement>(null);
 
-  
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             // If filter is not shown, no need to do anything
@@ -34,7 +29,6 @@ function Comments() {
             // Check if the click is outside both the filter button and filter container
             const isClickOutsideFilter =
                 filterContainerRef.current &&
-               
                 !filterContainerRef.current.contains(event.target as Node) &&
                 filterButtonRef.current &&
                 !filterButtonRef.current.contains(event.target as Node);
@@ -65,23 +59,24 @@ function Comments() {
         >
             <div className="header">
                 <div className="search">
-                    <img src="/img/icons/search.svg" alt="Search" />
+                    <SearchIcon />
 
                     <input type="text" placeholder="Search" />
                 </div>
                 <button
                     ref={filterButtonRef}
                     onClick={() => setShowFilter(!showFilter)}
-                    className={showFilter ? "active-filter" : ""}
+                    className={clsx("action-button", showFilter ? "active" : "")}
                 >
-                    <img src="/img/icons/filter.svg" className="filter-icon" alt="Filter" />
+                    <LinesIcon />
                 </button>
                 <button
                     onClick={() => {
                         closeComments();
                     }}
+                    className="action-button close"
                 >
-                    <img src="/img/icons/close_2.svg" alt="Close" />
+                    <Close />
                 </button>
                 {showFilter && (
                     <div ref={filterContainerRef} className="filterdiv">
@@ -92,18 +87,14 @@ function Comments() {
 
             <div className="body">
                 <div className="comments_container">
-                   {comment && <CommentContainer showMenu={showMenu} setShowMenu={setShowMenu}/>}
+                    {comment && <CommentContainer showMenu={showMenu} setShowMenu={setShowMenu} />}
 
                     <div className="">
-                      
                         {comment?.replies.map((comment: any, index: number) => {
                             return <Thread key={index} comment={comment} />;
-                     
-                     })}
+                        })}
                     </div>
-              
                 </div>
-           
             </div>
         </div>
     );

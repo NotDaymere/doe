@@ -19,12 +19,13 @@
     justify-content: center;
     align-items: center;
     gap: 5px;
-    color: #f8f8f8;
-    background-color: #b1b1b1;
-    border: 1px solid #aaaaaa;
+    color: var(--var-109);
+    background-color: var(--var-5);
+    border: 1px solid var(--var-78);
     border-radius: 1000px;
     padding: 8px 12px;
     box-shadow: 0 4px 20px rgba(#000, 0.06);
+    backdrop-filter: blur(20px);
 }
 
 .iconWrapper {
@@ -34,6 +35,9 @@
     background-color: rgba(#f8f8f8, 0.1);
     border-radius: 4px;
     padding: 4px;
+    svg * {
+        fill: var(--var-178);
+    }
 }
 
 .searchInput {
@@ -46,6 +50,10 @@
     top: 50%;
     transform: translateY(-50%);
     left: 10px;
+    fill: var(--var-88);
+    &__hasValue {
+        fill: var(--var-7);
+    }
 }
 
 .endAdornment {
@@ -58,23 +66,28 @@
     top: 50%;
     transform: translateY(-50%);
     right: 7px;
-    background-color: #f2f2f2;
-    border: 1px solid #dddddd;
+    background-color: var(--var-19);
+    border: 1px solid var(--var-68);
     border-radius: 100%;
 
     path {
-        fill: #dddddd;
+        fill: var(--var-91);
     }
 }
 
 .input {
     width: 100%;
     height: 40px;
-    background-color: #f8f8f8;
-    color: #1f1f1f;
-    border: 1px solid #dddddd;
+    background-color: var(--var-57);
+    color: var(--var-7);
+    border: 1px solid var(--var-61);
     border-radius: 12px;
     padding: 10px 36px 10px 28px;
+    &::placeholder {
+        background: linear-gradient(90deg, rgb(181, 181, 181), rgba(181, 181, 181, 0.2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 }
 
 .searchResults {
@@ -82,8 +95,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: #fff;
-    border: 1px solid #dddddd;
+    background-color: var(--bg-general);
+    border: 1px solid var(--var-68);
     border-radius: 16px;
     width: 100%;
 }
@@ -93,14 +106,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px 12px 12px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--var-149);
 }
 
 .results {
     display: flex;
     flex-direction: column;
     padding: 12px;
-    background-color: #ffffff;
     border-radius: 16px;
 }
 
@@ -110,7 +122,7 @@
     align-items: center;
     padding: 4px;
     font-size: 14px;
-    color: #1f1f1f;
+    color: var(--var-7);
     white-space: nowrap;
 }
 
@@ -122,9 +134,9 @@
     align-items: center;
     flex-shrink: 0;
     border-radius: 4px;
-    background-color: #f8f8f8;
+    background-color: var(--var-1);
 
     path {
-        fill: #b5b5b5;
+        fill: var(--var-85);
     }
 }
