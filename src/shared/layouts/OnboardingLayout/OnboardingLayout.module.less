@@ -45,11 +45,17 @@
 
     &.gap {
         gap: 30px;
+        margin-right: 80px;
+        padding-top: 40px;
+
+        @media screen and (max-height: 900px) {
+            padding-top: 16px;
+            margin-right: 16px;
+        }
 
         .layout_chat {
             background-color: #f1f1f1;
-            margin-top: 64px;
-            margin-right: 128px;
+            max-width: 100%;
             padding-top: 12px;
             border-radius: 16px;
         }
@@ -119,6 +125,7 @@
     overflow: auto;
     display: flex;
     flex-direction: column;
+    transition: background-color 1s ease;
 
     justify-content: space-between;
     align-items: center;
