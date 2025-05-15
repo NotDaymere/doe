@@ -184,7 +184,9 @@ function HistorySection({
     if (step >= 40 && step <= 43) {
         return (
             <>
-                <BranchBar withDots step={step} />
+                <div className={css.branch_bar_wrapper}>
+                    <BranchBar withDots step={step} />
+                </div>
                 <div className={css.layout_history} data-step="history">
                     <HistorySlider messages={messages} step={step} />
                 </div>

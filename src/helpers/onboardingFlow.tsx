@@ -1199,7 +1199,10 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate"],
-        onEnter: ({ setBlockSteps }) => setBlockSteps(false),
+        onEnter: ({ setBlockSteps, setBlockInput }) => {
+            setBlockInput(true);
+            setBlockSteps(false);
+        },
     },
     {
         id: 37,
@@ -1213,7 +1216,6 @@ export const onboardingFlow: OnboardingStep[] = [
         navigationOverrideStep: 40,
         onExit: ({ setCursorMoving }) => {
             setCursorMoving();
-            console.log("trueeee");
         },
     },
     {

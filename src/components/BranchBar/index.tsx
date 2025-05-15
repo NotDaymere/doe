@@ -32,7 +32,7 @@ export const BranchBar = ({ withDots, step }: BranchBarProps) => {
     return (
         <div
             className={clsx(css.branch_bar, {
-                [css.margin_top]: step && step >= 40,
+                [css.margin_top]: step && step >= 42,
                 [css.background_white]: step === 41,
             })}
             ref={branchRef}
