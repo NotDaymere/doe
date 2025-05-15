@@ -700,6 +700,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </div>
         ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
+        onEnter: ({ setMessages }) => setMessages([]),
     },
     {
         id: 17,
@@ -727,8 +728,9 @@ export const onboardingFlow: OnboardingStep[] = [
                 manage your apps.
             </p>
         ),
+        autoSkipSubStep: 2000,
         blur: ["input", "history", "body", "magicbox", "navigate"],
-        onEnter: ({ setMessages }) => setMessages([]),
+        onExit: ({ setMessages }) => setMessages([]),
     },
     {
         id: 18.1,
