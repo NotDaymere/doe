@@ -18,7 +18,7 @@ interface IProps {
 
 const MagicMenuItem: FC<IProps> = ({ item }) => (
     <button
-        className={classNames(css.magicMenuItem, item.classes && css[item.classes])}
+        className={classNames(css.magicMenuItem, item.classes && css[item.classes], item.classes)}
         onClick={item.onClick}
     >
         {item.icon}

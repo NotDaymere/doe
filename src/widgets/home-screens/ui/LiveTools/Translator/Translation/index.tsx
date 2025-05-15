@@ -63,12 +63,13 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
         setLangText(e.target.value);
     };
 
-    const MAGIC_MENU_ITEMS: IMagicMenuItem[] = useMemo(
-        () => [
+    const MAGIC_MENU_ITEMS = useMemo(
+        (): IMagicMenuItem[] => [
             {
                 icon: <DeviceIcon width={18} height={11} />,
                 text: "Device Files",
                 onClick: uploadFiles,
+                classes: css.attachmentsMenuItem,
             },
             {
                 icon: <AppsIcon width={9} height={15} />,
@@ -76,6 +77,7 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
                 onClick: () => {
                     console.log("Applications");
                 },
+                classes: css.attachmentsMenuItem,
             },
             {
                 icon: <PlaygroundIcon width={15} height={15} />,
@@ -83,6 +85,7 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
                 onClick: () => {
                     console.log("Playgrounds");
                 },
+                classes: css.attachmentsMenuItem,
             },
         ],
         []

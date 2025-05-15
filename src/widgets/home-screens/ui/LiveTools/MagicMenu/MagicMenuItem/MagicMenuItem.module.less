@@ -15,19 +15,19 @@
     transition: 200ms ease;
     transition-property: border, background;
     & svg path {
-        fill: var(--var-96) !important;
+        fill: var(--var-96);
     }
     &:hover {
         background-color: var(--var-2);
-        border-color: var(--var-74);
-        color: var(--var-7);
-        & svg path {
-            fill: var(--var-7) !important;
-        }
+        border-color: var(--var-69);
+        color: var(--var-129);
         border-radius: 12px;
 
         .hasMenu {
-            opacity: 1;
+            opacity: 1 !important;
+            svg path {
+                fill: var(--var-101) !important;
+            }
         }
 
         .hasConnection {
@@ -39,7 +39,7 @@
 .camera {
     &:hover {
         path {
-            fill: #ff8b12;
+            fill: #ff8b12 !important;
         }
     }
 }
@@ -47,7 +47,7 @@
 .practice {
     &:hover {
         path {
-            fill: #33826b;
+            fill: #33826b !important;
         }
     }
 }
@@ -55,7 +55,7 @@
 .voice {
     &:hover {
         path {
-            fill: #9747ff;
+            fill: #9747ff !important;
         }
     }
 }
@@ -68,11 +68,10 @@
     justify-content: center;
     align-items: center;
     border-radius: 4px;
-    background: #fff;
+    background: var(--var-11);
     margin-right: 0;
     margin-left: auto;
 }
-
 .hasConnection {
     opacity: 0;
     width: 20px;
