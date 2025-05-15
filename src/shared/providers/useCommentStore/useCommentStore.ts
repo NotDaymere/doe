@@ -3,22 +3,27 @@ import { create } from "zustand";
 
 interface User {
     name: string;
+ 
     avatar: string;
 }
 
 interface Comment {
+ 
     id: number;
     user: User;
     timestamp: string;
     message: string;
+ 
     replies: Comment[];
 }
 
 interface CommentWindowStore {
+ 
     isOpen: boolean;
     comment?: Comment;
     openComments: () => void;
     closeComments: () => void;
+ 
     toggleComments: () => void;
     setComment: (comment: Comment) => void;
     addReply: (content: string) => void;
@@ -30,13 +35,15 @@ interface CommentWindowStore {
     copyLink: () => boolean;
 }
 
+
 export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => ({
-    isOpen: true,
+    isOpen: false,
     isResolved: false,
     comment: {
         id: 1,
         user: {
             name: "John Doe",
+
             avatar: "https://example.com/avatar.jpg",
         },
         timestamp: "Today, 9:41 AM",
@@ -46,6 +53,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
                 id: 2,
                 user: {
                     name: "Jane Smith",
+
                     avatar: "https://example.com/avatar2.jpg",
                 },
                 timestamp: "Today, 9:45 AM",
@@ -54,6 +62,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
             },
         ],
     },
+
 
     openComments: () => set({ isOpen: true }),
     closeComments: () => set({ isOpen: false }),
@@ -64,6 +73,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
     addReply: (content: string) => {
         const newReply: Comment = {
             id: Date.now(),
+
             user: {
                 name: "Reply User",
                 avatar: "https://example.com/avatar3.jpg",
@@ -72,6 +82,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
             message: content,
             replies: [],
         };
+
 
         set((state) => ({
             comment: {
@@ -82,6 +93,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
     },
 
     removeComment: () => {
+
         set({
             comment: undefined,
             isOpen: false,
@@ -91,21 +103,26 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
     toggleResolved: () => {
         set({
             isResolved: !get().isResolved,
+
         });
     },
 
     updateComment: (content: string) => {
+
         set((state) => ({
             comment: {
                 ...state.comment,
                 message: content,
+
             },
         }));
     },
 
+
     copyLink: () => {
         const state = get();
         if (!state.comment) return;
+
 
         const commentLink = `${window.location.origin}/comment/${state.comment.id}`;
         navigator.clipboard
@@ -116,6 +133,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
                 return true;
             })
             .catch((err) => {
+
                 return false;
             });
     },

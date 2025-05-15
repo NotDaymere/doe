@@ -8,18 +8,22 @@ function ConsoleWindow({ currentConsole, icon }: any) {
     const [activeTab, setActiveTab] = useState("terminal");
 
     return (
-        <div className="consoleInnerWindow">
+       
+       <div className="consoleInnerWindow">
             <div className="consoletop">
                 <div className="consoleTabContainer">
                     <div className="consoleTitle">
+       
                         <img
                             src={
                                 icon % 2
                                     ? "/img/console/consoleicon1.svg"
+       
                                     : "/img/console/consoleicon2.svg"
                             }
                         />
                         <p>cnsl {currentConsole}</p>
+       
                     </div>
                     <div className={`consoleTab ${activeTab === "terminal" ? "on" : ""}`}>
                         <button onClick={() => setActiveTab("terminal")}>
@@ -29,6 +33,7 @@ function ConsoleWindow({ currentConsole, icon }: any) {
                         </button>
                     </div>
                     <div className={`consoleTab ${activeTab === "output" ? "on" : ""}`}>
+       
                         <button onClick={() => setActiveTab("output")}>
                             <img src="/img/console/graph.svg" alt="Output" />
                             <p>Output</p>
@@ -38,6 +43,7 @@ function ConsoleWindow({ currentConsole, icon }: any) {
                 </div>
                 <button>
                     <img src="/img/console/bug.svg" alt="Bug" />
+       
                 </button>
             </div>
             <div className="consoleBody">
@@ -46,5 +52,6 @@ function ConsoleWindow({ currentConsole, icon }: any) {
         </div>
     );
 }
+
 
 export default ConsoleWindow;

@@ -15,13 +15,15 @@ function NewWidget() {
             <div className="newWidgetContainerInner">
              
                 <WidgetButton icon="/img/icons/norton.svg" text="Microsoft" />
+
                 <WidgetButton icon="/img/icons/google.svg" text="Google" />
                 <WidgetButton icon="/img/icons/mirro.svg" text="Miro" />
+               
                 <WidgetButton icon="/img/icons/norton.svg" text="Microsoft" />
-         
             </div>
         </div>
     );
+
 }
 
 export default NewWidget;
