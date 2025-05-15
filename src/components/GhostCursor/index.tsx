@@ -111,7 +111,8 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
             </div>
 
             {/* tooltip on overrideTooltipPosition location */}
-            {!cursorMoving && currentStep?.overrideTooltipPosition && (
+            {((!cursorMoving && currentStep?.overrideTooltipPosition) ||
+                currentStep?.id === 18.1) && (
                 <div
                     className={css.tooltip_override}
                     style={{
