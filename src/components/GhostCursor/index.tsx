@@ -113,12 +113,10 @@ export function GhostCursor({ currentStep, handleCursorAcknowledged }: GhostCurs
             {/* tooltip on overrideTooltipPosition location */}
             {!cursorMoving && currentStep?.overrideTooltipPosition && (
                 <div
-                    className={clsx(css.tooltip_override, {
-                        [`tooltip_${currentStep.location}`]: currentStep.overrideTooltipPosition,
-                    })}
+                    className={css.tooltip_override}
                     style={{
                         top: tooltipPositionOverride?.top,
-                        left: 40,
+                        left: tooltipPositionOverride?.left,
                     }}
                 >
                     <Tooltip

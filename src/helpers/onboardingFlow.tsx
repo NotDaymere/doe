@@ -1516,6 +1516,7 @@ export const onboardingFlow: OnboardingStep[] = [
             top: -5,
             left: -40,
         },
+        overrideTooltipPosition: '[data-step="search"]',
         tooltip: true,
         tooltipPosition: "left",
         tooltipTitle: <b className={css.tooltip_title}>Quick search</b>,
