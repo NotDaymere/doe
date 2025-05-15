@@ -473,18 +473,52 @@ code {
 }
 
 .beta_widget_button {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
-    background-color: #1f1f1f;
-    border-radius: 8px;
-    color: #ffffff;
     padding: 6px 14px;
+
+    background: #4794ff;
+    color: #ffffff;
+
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
 
     svg {
         path {
             fill: #ffffff;
         }
+    }
+}
+
+.beta_widget_button > * {
+    position: relative;
+    z-index: 1;
+}
+
+.beta_widget_button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    bottom: -50px;
+    background: #1f1f1f;
+
+    background: linear-gradient(to bottom, #1f1f1f 0%, #1f1f1f 65%, rgba(31, 31, 31, 0) 100%);
+
+    transform-origin: top;
+    animation: btn-fill 1.2s ease-out forwards 4s;
+    z-index: 0;
+    pointer-events: none;
+}
+@keyframes btn-fill {
+    0% {
+        bottom: -50px;
+        filter: blur(5px);
+    }
+    100% {
+        bottom: 100%;
+        filter: blur(5px);
     }
 }
 

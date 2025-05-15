@@ -10,7 +10,7 @@ export const ChatBetaWidget = () => {
                     <LogoIcon />
                 </div>
                 <button className={css.beta_widget_button}>
-                    Let's start <SparklesIcon />
+                    <p>Let's start</p> <SparklesIcon />
                 </button>
             </div>
         </div>
