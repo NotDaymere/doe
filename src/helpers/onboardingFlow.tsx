@@ -1537,6 +1537,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         tooltip: false,
         disableNavigationHover: true,
+        autoSkip: 2000,
         blur: [""],
     },
     {
