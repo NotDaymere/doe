@@ -2,12 +2,16 @@
     position: absolute;
     display: flex;
     align-items: center;
-    bottom: 100px;
-    right: 100px;
+    bottom: 128px;
+    right: 90px;
     border-radius: 16px;
     max-width: 224px;
     max-height: 354px;
     animation: border-move 3s ease-in-out infinite, fade-in 1s ease forwards;
+
+    @media screen and (max-width: 1248px) {
+        bottom: 150px;
+    }
 }
 
 .screen_sharing_img {
