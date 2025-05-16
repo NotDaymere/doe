@@ -21,7 +21,7 @@ export default function OnboardingLayout() {
             <div
                 className={clsx(css.layout, {
                     [css.dark]: flow.step === 25,
-                    [css.white_bg]: step >= 28.1 && step < 60,
+                    [css.white_bg]: step >= 28.1 && step < 58,
                 })}
             >
                 <OnboardingSidebar {...flow} showSidebar={showSidebar} profileData={profileData} />

@@ -83,7 +83,8 @@ export function OnboardingBody(props: OnboardingBodyProps) {
             className={clsx(css.layout_body, ...getBlurClasses(currentStep?.blur), {
                 [css.end]: step >= 8,
                 [css.tableOpen]: currentStep?.openTable,
-                [css.gap]: step >= 28.1 && step < 60,
+                [css.gap]: step >= 28.1 && step < 58,
+                [css.blur_top]: step >= 58,
                 [css.centered]: step >= 60,
             })}
         >
