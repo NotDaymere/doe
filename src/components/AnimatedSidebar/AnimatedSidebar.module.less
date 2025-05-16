@@ -17,7 +17,6 @@
     opacity: 1;
     z-index: 1;
     transition: opacity 1s ease, transform 1s ease, background-color 0.3s ease 1s, width 0.8s ease;
-    animation: border-move-right-side 10s ease-in-out infinite;
 
     &.hidden {
         opacity: 0;
@@ -26,6 +25,10 @@
 
     &.dark_mode {
         background-color: #2d2d2d;
+    }
+
+    &.border {
+        animation: border-move-right-side 10s ease-in-out infinite;
     }
 
     &::-webkit-scrollbar {
@@ -84,7 +87,7 @@
     }
 }
 
-.sidebar::after {
+.border::after {
     content: "";
     position: absolute;
     inset: 0;

@@ -44,6 +44,7 @@ export const AnimatedSidebar = ({
                 [css.open]: isOpen,
                 [css.hidden]: !showSidebar,
                 [css.dark_mode]: darkMode,
+                [css.border]: safeStep < 5,
             })}
             onTransitionEnd={handleSidebarOpen}
         >
