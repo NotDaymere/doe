@@ -186,19 +186,19 @@ export function useOnboardingFlow(
             setUserClickedBold((prev) => !prev);
             setTimeout(() => {
                 setCursorMoving();
-                nextStep();
+                setStep(6);
             }, 1000);
         } else if (type === "italic") {
             setUserClickedItalic((prev) => !prev);
             setTimeout(() => {
                 setCursorMoving();
-                nextStep();
+                setStep(7);
             }, 1000);
         } else if (type === "underline") {
             setUserClickedUnderline((prev) => !prev);
             setTimeout(() => {
                 setCursorMoving();
-                nextStep();
+                setStep(8);
             }, 1000);
         } else if (type === "math") {
             nextSubStep();
