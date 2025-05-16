@@ -1,6 +1,6 @@
 .branches_box_wrapper {
     position: absolute;
-    top: 50px;
+    top: 81px;
     left: 92px;
     height: 50px;
     width: 50px;
@@ -12,7 +12,8 @@
     // max-width: 50px;
     max-height: 50px;
     overflow: hidden;
-    background-color: #dddddd;
+    background-color: rgba(237, 237, 237, 1);
+    border: 1px solid #dddddd;
     z-index: 2;
     transform: rotate(-15deg);
 
@@ -33,8 +34,8 @@
         left: 16px;
     }
 
-    @media screen and (max-height: 900px) {
-        top: 26px;
+    @media screen and (max-height: 940px) {
+        top: 42px;
     }
 }
 
@@ -69,6 +70,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12);
     transition: all 0.3s ease;
 
     svg {
