@@ -198,6 +198,8 @@
     --var-186: var(--color-black-20); // rgba(0, 0, 0, 0.2) rgba(255, 255, 255, 0.11)
     --var-187: var(--color-red-100); // rgb(255, 240, 240) rgba(246, 70, 70, 0.05)
     --var-188: var(--color-red-400); // rgb(229, 198, 198) rgba(229,198, 198, 0.2)
+    --var-189: var(--color-orange-250); // rgb(255, 228, 200) rgba(255, 139, 18, 0.1)
+    --var-190: var(--color-red-500); // rgb(255, 95, 95) rgba(255, 95, 95, 0.2)
 }
 body.dark {
     --bg-general: var(--color-neutral-900);
@@ -391,6 +393,8 @@ body.dark {
     --var-186: var(--color-white-11);
     --var-187: var(--color-red-600-05);
     --var-188: var(--color-red-400-20);
+    --var-189: var(--color-orange-500-10);
+    --var-190: var(--color-red-500-20);
 }
 
 // GRADIENTS
@@ -429,6 +433,14 @@ body.dark {
         rgba(248, 248, 248, 1)
     );
     --bg-gradient-var-9: linear-gradient(rgb(214, 214, 214), rgba(255, 255, 255, 0));
+    --bg-gradient-var-10: linear-gradient(rgba(255, 255, 255, 0.8), rgba(248, 248, 248, 0.5));
+    --bg-gradient-var-11: linear-gradient(rgb(255, 255, 255), rgb(248, 248, 248));
+    // border gradients
+    --border-gradient-var-1: linear-gradient(
+        to right bottom,
+        rgb(255, 228, 200) 0%,
+        rgb(255, 255, 255) ;100%
+    );
     //text gradients
     --text-gradient-var-1: linear-gradient(to right, var(--color-black-60), var(--color-black-10));
     --text-gradient-var-2: linear-gradient(
@@ -481,7 +493,14 @@ body.dark {
         rgba(45, 45, 45, 1)
     );
     --bg-gradient-var-9: linear-gradient(rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
-
+    --bg-gradient-var-10: linear-gradient(rgb(45, 45, 45), rgb(31, 31, 31));
+    --bg-gradient-var-11: linear-gradient(rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.05));
+    // border gradients
+    --border-gradient-var-1: linear-gradient(
+        to right bottom,
+        rgba(255, 228, 200, 0.4) 0%,
+        rgba(255, 255, 255, 0.05) 100%;
+    );
     //text gradients
     --text-gradient-var-1: linear-gradient(to right, var(--color-white-60), var(--color-white-100));
     --text-gradient-var-2: linear-gradient(
