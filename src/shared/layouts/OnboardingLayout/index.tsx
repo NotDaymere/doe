@@ -1,7 +1,6 @@
 import clsx from "clsx";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Playground } from "src/components/Playground";
-import { onboardingFlow } from "src/helpers/onboardingFlow";
 import { useChat } from "src/hooks/useChat";
 import { useOnboardingFlow } from "src/hooks/useOnboardingFlow";
 import { OnboardingBody } from "./OnboardingBody";
@@ -15,25 +14,23 @@ export default function OnboardingLayout() {
         useChat(setShowSidebar);
     const flow = useOnboardingFlow(setMessages);
     const step = flow.step;
-    const currentStep = useMemo(() => onboardingFlow.find((st) => st.id === step), [step]);
     const isDevMode = false;
 
     return (
         <main className={css.layout_main}>
-            <div className={clsx(css.layout, { [css.dark]: flow.step === 25 })}>
+            <div
+                className={clsx(css.layout, {
+                    [css.dark]: flow.step === 25,
+                    [css.white_bg]: step >= 28.1 && step < 60,
+                })}
+            >
                 <OnboardingSidebar {...flow} showSidebar={showSidebar} profileData={profileData} />
-                <OnboardingBody
-                    {...flow}
-                    currentStep={currentStep}
-                    messages={messages}
-                    onSendMessage={handleUserMessage}
-                />
-                <Playground currentStep={currentStep} />
+                <OnboardingBody {...flow} messages={messages} onSendMessage={handleUserMessage} />
+                <Playground currentStep={flow.currentStep} />
             </div>
 
             <OnboardingOverlays
                 {...flow}
-                currentStep={currentStep}
                 profileData={profileData}
                 setProfileData={setProfileData}
             />
@@ -81,6 +78,9 @@ export default function OnboardingLayout() {
                     </button>
                     <button style={btnStyle} onClick={() => flow.setBlockSteps(false)}>
                         Unblock Steps
+                    </button>
+                    <button style={btnStyle} onClick={() => flow.setBlockInput(false)}>
+                        Unblock Input
                     </button>
                 </div>
             )}

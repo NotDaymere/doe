@@ -30,6 +30,11 @@
     }
 }
 
+.white_bg {
+    transition: background-color 1s ease;
+    background-color: #ffffff;
+}
+
 .layout_body {
     display: flex;
     flex-direction: column;
@@ -45,12 +50,11 @@
 
     &.gap {
         gap: 30px;
-        margin-right: 80px;
+        margin-right: 76px;
         padding-top: 65px;
 
         @media screen and (max-height: 940px) {
             padding-top: 32px;
-            margin-right: 32px;
         }
 
         .layout_chat {
