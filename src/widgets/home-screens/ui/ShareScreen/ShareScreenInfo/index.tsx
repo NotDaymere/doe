@@ -2,6 +2,7 @@ import { CSSTransition } from "react-transition-group";
 import { FC, useEffect, useRef, useState } from "react";
 import { IScreenShareConfig } from "src/shared/types/ScreenShare";
 import css from "./ShareScreenInfo.module.less";
+import clsx from "clsx";
 
 interface IProps extends IScreenShareConfig {
     onClickOutside: () => void;
@@ -55,7 +56,7 @@ const ShareScreenInfo: FC<IProps> = ({
                 )}
                 <div className={css.shareScreen}>
                     <div className={css.instruction}>
-                        <span className={css.bold}>{title}</span>
+                        <span className={clsx(css.title, css.bold)}>{title}</span>
                         <div
                             className={css.description}
                             dangerouslySetInnerHTML={{ __html: description }}
