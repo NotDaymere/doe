@@ -2,9 +2,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #707070;
+    border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 100px;
-    background: rgba(#1f1f1f, 0.65);
+    background: rgba(31, 31, 31, 0.65);
+    backdrop-filter: blur(16px);
     z-index: 1;
     width: 36px;
     height: 36px;
@@ -13,7 +14,6 @@
 
 .icon {
     path {
-        fill: #fff;
-        fillopacity: 0.6;
+        fill: var(--var-98);
     }
 }

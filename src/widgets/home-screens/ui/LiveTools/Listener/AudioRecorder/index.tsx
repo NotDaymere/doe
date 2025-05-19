@@ -50,8 +50,8 @@ const AudioRecorder = () => {
 
             const recordedWaveSurfer = WaveSurfer.create({
                 container: waveformRef.current,
-                waveColor: "#CFCFCF",
-                progressColor: "#1F1F1F",
+                waveColor: "var(--var-88)",
+                progressColor: "var(--var-7)",
                 barWidth: 1,
                 barGap: 2,
                 barHeight: 22,

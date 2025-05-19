@@ -160,36 +160,32 @@
 
 .steps_button {
     .buttons;
-    position: relative;
-    z-index: 1;
-    color: transparent;
-    background: linear-gradient(to right, #9747ff, #1f1f1f);
-    background-clip: text;
-    -webkit-background-clip: text;
-    transition: color 0.3s ease;
-
-    &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 16px;
+    background: var(--var-8);
+    border-color: transparent;
+    transition:
+        background 0.3s ease,
+        border 0.3s ease,
+        border-radius 0.3s ease,
+        color 0.3s ease;
+    span {
+        background-image: var(--text-gradient-var-2);
+        color: transparent;
+        background-clip: text;
+    }
+    &:hover {
         background:
             linear-gradient(#1f1f1f, #5b2b99) padding-box,
             linear-gradient(to bottom, #f1e7ff, #9747ff) border-box;
-        z-index: -2;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    &:hover {
-        color: #fff;
-
-        &::before {
-            opacity: 1;
+        border-radius: 24px;
+        border: 1px solid transparent;
+        span {
+            color: #fff;
         }
 
-        svg path {
-            fill: #fff;
+        svg {
+            path {
+                fill: #fff;
+            }
         }
     }
 }
@@ -197,8 +193,10 @@
 .active_steps_button {
     .buttons;
     border-color: #9747ff;
-    background: #fff;
-    color: #9747ff;
+    background: transparent;
+    span {
+        color: #9747ff;
+    }
 
     svg {
         path {
@@ -309,7 +307,7 @@
     align-content: center;
     border-radius: 18px;
     padding: 8.5px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--var-61);
     overflow: hidden;
     white-space: nowrap;
     transition:
@@ -319,17 +317,19 @@
 
     svg path {
         flex-shrink: 0;
-        fill: #b5b5b5;
+        fill: var(--var-90);
     }
 
     &:hover {
         border: 1px solid #8d8d8d;
-        background: #f8f8f8;
+        background: var(--var-2);
         width: auto;
         border-radius: 20px;
-
+        span {
+            color: var(--var-97);
+        }
         svg path {
-            fill: #5b5b5b;
+            fill: var(--var-86);
         }
     }
 
@@ -339,7 +339,7 @@
 
     .tooltip {
         margin-right: 0;
-        color: #5b5b5b;
+        color: var(--var-97);
         font-size: 14px;
         display: inline-block;
         max-width: 0;
@@ -383,22 +383,23 @@
             justify-content: center;
             align-items: center;
             border-radius: 12px;
-            border: 1px solid #fff;
-            background: white;
+            border: 1px solid var(--var-60);
+            background: var(--var-38);
             box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
             backdrop-filter: blur(8px);
 
             li {
                 cursor: pointer;
                 padding: 8px;
-                color: #b5b5b5;
+                color: var(--var-119);
                 font-size: 16px;
                 border: 1px solid transparent;
 
                 &:hover {
                     border-radius: 8px;
-                    border: 1px solid #f8f8f8;
-                    color: #1f1f1f;
+                    border: 1px solid var(--var-1);
+                    color: var(--var-7);
+                    background-color: var(--var-11);
                 }
             }
         }
@@ -416,7 +417,7 @@
     border-radius: 12px;
     padding: 7px;
     background-color: transparent;
-    border: 1px solid #8bcf16;
+    border: 1px solid var(--var-43);
     overflow: hidden;
     white-space: nowrap;
     transition:
@@ -436,12 +437,12 @@
     }
 
     &:hover {
-        background: #f3ffdf;
+        background: var(--var-37);
         width: auto;
     }
 
     .tooltip {
-        color: #355302;
+        color: var(--var-122);
         font-size: 14px;
         display: inline-block;
         max-width: 0;

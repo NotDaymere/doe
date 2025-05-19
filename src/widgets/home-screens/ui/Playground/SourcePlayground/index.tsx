@@ -15,6 +15,7 @@ import { useAppStore } from "src/shared/providers";
 import PreviewSource from "../PreviewSource";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import css from "./SourcePlayground.module.less";
+import { useTheme } from "src/shared/hooks/useTheme";
 
 interface IProps {
     isActive: boolean;
@@ -22,6 +23,7 @@ interface IProps {
 
 const SourcePlayground: FC<IProps> = ({ isActive }) => {
     const { previewPlayground, setPreviewPlayground } = useAppStore();
+    const { theme } = useTheme();
     const [openedPopover, setOpenedPopover] = useState({
         web: false,
         docs: false,
@@ -158,7 +160,7 @@ const SourcePlayground: FC<IProps> = ({ isActive }) => {
                 >
                     {!previewPlayground.data ? (
                         <>
-                            <SourcesIcon />
+                            <SourcesIcon theme={theme} />
                             <span className={css.defaultText}>
                                 Choose resource from Web, Docs or Apps to view here.
                             </span>

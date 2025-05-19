@@ -1,13 +1,14 @@
 .bordered(@width, @height) {
     width: @width;
     height: @height;
-    border: 1px solid #ececec;
+    border: 1px solid var(--var-149);
     border-radius: 12px;
 }
 
 .doubleBorder {
     .bordered(120px, 45px);
     position: relative;
+    background-color: var(--var-191);
 }
 
 .innerBorder {
@@ -20,4 +21,8 @@
     top: 4px;
     left: 4px;
     box-shadow: 0 3px 20px rgba(#000, 0.04);
+    background-color: var(--var-13);
+    svg path {
+        fill: var(--var-192);
+    }
 }
