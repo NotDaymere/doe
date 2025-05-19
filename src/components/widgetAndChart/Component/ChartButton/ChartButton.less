@@ -1,54 +1,45 @@
 .chartbutton {
-  background: #fff;
-  box-shadow: inset 0 0 0 1px #f1f1f1;
-  width: 120px;
-  height: 98px;
-  border-radius: 12px;
-  padding-top: 12px;
-  padding-bottom: 12px;
- 
-
-  content: "";
-
-  &:hover::after {
-    width: 130px;
-    height: 106px;
+    background: var(--var-60);
+    width: 120px;
+    height: 98px;
     border-radius: 12px;
+    border: 1px solid var(--var-21);
+    padding-top: 12px;
+    padding-bottom: 12px;
 
-    box-shadow: inset 0 0 0 2px #f1f1f1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    content: "";
-
-    position: relative;
-    top: -100px;
-    left: -5px;
-  }
-  .chartbutton_image {
-    width: 100%;
-    height: 84px;
-    background-repeat: no-repeat;
-    background-position: bottom;
-    background-size: contain;
-  }
-  p {
-    color: #5b5b5b;
-    padding-left: 12px;
-    font-size: 14px;
-    font-family: "Sohne";
-      font-weight: 600;
-      display: inline-block;
-  max-width: 13ch; /* Limits to 13 characters */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-    
-  }
-  &:hover{
+    box-shadow:
+        0 0 0 0px var(--var-57),
+        0 0 0 0px var(--var-21);
+    transition: 0.3s;
+    &:hover {
+        box-shadow:
+            0 0 0 3px var(--var-57),
+            0 0 0 5px var(--var-21);
+        border-color: var(--var-197);
+        background: var(--var-11);
+    }
+    .chartbutton_image {
+        width: 100%;
+        height: 84px;
+        background-repeat: no-repeat;
+        background-position: bottom;
+        background-size: contain;
+    }
     p {
-    color: #1F1F1F;
-  }
-}
+        color: var(--var-97);
+        padding-left: 12px;
+        font-size: 14px;
+        font-family: "Sohne";
+        font-weight: 600;
+        display: inline-block;
+        max-width: 13ch; /* Limits to 13 characters */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    &:hover {
+        p {
+            color: var(--var-7);
+        }
+    }
 }
