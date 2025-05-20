@@ -104,6 +104,12 @@
     border: 1px solid #4794ff;
     color: #4794ff;
     animation: fade-in-with-slide 0.5s ease forwards;
+
+    svg {
+        path {
+            stroke: #4794ff;
+        }
+    }
 }
 
 .magicBtn_circle {
@@ -133,19 +139,29 @@
 
 @keyframes border-move {
     0% {
-        box-shadow: inset 0px -1px 2px 1px #4794ff, 0px -2px 5px -1px #94a9c7;
+        box-shadow:
+            inset 0px -1px 2px 1px #4794ff,
+            0px -2px 5px -1px #94a9c7;
     }
     25% {
-        box-shadow: inset 1px 0px 2px 1px #4794ff, 2px 0px 5px -1px #94a9c7;
+        box-shadow:
+            inset 1px 0px 2px 1px #4794ff,
+            2px 0px 5px -1px #94a9c7;
     }
     50% {
-        box-shadow: inset 0px 1px 2px 1px #4794ff, 0px 2px 5px -1px #94a9c7;
+        box-shadow:
+            inset 0px 1px 2px 1px #4794ff,
+            0px 2px 5px -1px #94a9c7;
     }
     75% {
-        box-shadow: inset -1px 0px 2px 1px #4794ff, -2px 0px 5px -1px #94a9c7;
+        box-shadow:
+            inset -1px 0px 2px 1px #4794ff,
+            -2px 0px 5px -1px #94a9c7;
     }
     100% {
-        box-shadow: inset 0px -1px 2px 1px #4794ff, 0px -2px 5px -1px #94a9c7;
+        box-shadow:
+            inset 0px -1px 2px 1px #4794ff,
+            0px -2px 5px -1px #94a9c7;
     }
 }
 

@@ -26,7 +26,7 @@ export const SidebarGaia = () => {
     return (
         <div className={clsx(css.gaia, gaiaActive && css._active)}>
             <div className={css.gaia_btn_wrapper}>
-                <button className={css.gaia_btn} onClick={toggleGaia}>
+                <button className={css.gaia_btn} onClick={toggleGaia} data-step="gaia">
                     <GlobalIcon />
                 </button>
                 <CSSTransition
