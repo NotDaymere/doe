@@ -44,7 +44,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         fabricCanvas.current = new fabric.Canvas(canvasRef.current, {
             width: 700,
             height: 350,
-            backgroundColor: "#ffffff",
+            backgroundColor: "transparent",
             isDrawingMode: false,
         });
 

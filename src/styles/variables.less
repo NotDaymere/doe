@@ -205,6 +205,14 @@
     --var-194: var(--color-neutral-100); // rgb(248, 248, 248) rgb(91, 91, 91)
     --var-195: transparent; // transparent rgb(255, 255, 255)
     --var-196: var(--color-neutral-950-05); // rgba(31, 31, 31, 0.05) transparent
+    --var-197: var(--color-neutral-105); // rgb(241, 241, 241) rgba(255, 255, 255, 0.05)
+    --var-198: linear-gradient(
+        rgba(255, 255, 255, 0.2),
+        rgba(255, 255, 255)
+    ); // linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255)) rgba(255, 255, 255, 0.07)
+    --var-199: var(--color-black-100); // rgb(0, 0, 0) rgb(191, 191, 191)
+    --var-200: var(--color-neutral-700); // rgb(62, 62, 62) rgb(255, 255, 255)
+    --var-201: var(--color-neutral-700); // rgb(62, 62, 62) rgb(237, 237, 237)
 }
 body.dark {
     --bg-general: var(--color-neutral-900);
@@ -406,6 +414,11 @@ body.dark {
     --var-194: var(--color-neutral-600);
     --var-195: var(--color-white-100);
     --var-196: transparent;
+    --var-197: var(--color-white-05);
+    --var-198: var(--color-white-07);
+    --var-199: var(--color-neutral-350);
+    --var-200: var(--color-white-100);
+    --var-201: var(--color-neutral-120);
 }
 
 // GRADIENTS
@@ -447,6 +460,11 @@ body.dark {
     --bg-gradient-var-10: linear-gradient(rgba(255, 255, 255, 0.8), rgba(248, 248, 248, 0.5));
     --bg-gradient-var-11: linear-gradient(rgb(255, 255, 255), rgb(248, 248, 248));
     --bg-gradient-var-12: linear-gradient(rgba(248, 248, 248, 0.5), rgb(248, 248, 248));
+    --bg-gradient-var-13: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 1) 100%
+    );
     // border gradients
     --border-gradient-var-1: linear-gradient(
         to right bottom,
@@ -508,6 +526,7 @@ body.dark {
     --bg-gradient-var-10: linear-gradient(rgb(45, 45, 45), rgb(31, 31, 31));
     --bg-gradient-var-11: linear-gradient(rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.05));
     --bg-gradient-var-12: linear-gradient(rgb(31, 31, 31), rgb(25, 25, 25));
+    --bg-gradient-var-13: linear-gradient(90deg, rgba(31, 31, 31, 0) 0%, rgb(57, 57, 57) 100%);
     // border gradients
     --border-gradient-var-1: linear-gradient(
         to right bottom,
