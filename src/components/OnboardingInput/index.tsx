@@ -8,12 +8,12 @@ import { useTypewriterEffect } from "src/hooks/useTypewriterEffect";
 import ArrowUpIcon from "src/shared/icons/ArrowUp.icon";
 import MicrophoneIcon from "src/shared/icons/Microphone.icon";
 import ScreenShareIcon from "src/shared/icons/ScreenShare.icon";
-import { MagicMenu } from "src/widgets/home-screens";
 import { ButtonAccordion } from "../ButtonAccordion";
 import { InputStaticText } from "../InputStaticText";
 import { ReplyPanel } from "../ReplyPanel";
 import { Tooltip } from "../Tooltip";
 import css from "./OnboardingInput.module.less";
+import { OnboardingMagicMenu } from "../OnboardingMagicMenu";
 
 interface OnboardingInputProps {
     step?: number;
@@ -252,7 +252,7 @@ export function OnboardingInput({
                 })}
             >
                 <div className={clsx(css.panel_main, { [css.blocked]: blockInput && step >= 24 })}>
-                    <MagicMenu
+                    <OnboardingMagicMenu
                         step={step}
                         handleTalkModeClick={handleTalkModeClick}
                         handleNewBranchClick={handleNewBranchClick}
