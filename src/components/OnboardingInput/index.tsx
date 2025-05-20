@@ -171,7 +171,7 @@ export function OnboardingInput({
     const { text: linkText } = useTypewriterEffect({
         text: "https://thisaichatbot.com",
         speed: 90,
-        delay: 3000,
+        delay: 3500,
         enableSkip: false,
         startTyping: step === 10,
         reset: step === 9 || step === 11,

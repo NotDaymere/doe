@@ -72,7 +72,7 @@ export const ChatMenu = ({ step, label, triggerStep, isOpen }: ChatMenuProps) =>
                     </button>
                 </div>
                 <button
-                    className={clsx(css.sidebar_controls_btn, css.low_opacity, {
+                    className={clsx(css.sidebar_controls_btn, {
                         [css.open]: isOpen,
                         [css.highlighted]: step === triggerStep,
                     })}
@@ -85,7 +85,7 @@ export const ChatMenu = ({ step, label, triggerStep, isOpen }: ChatMenuProps) =>
                     {step === triggerStep && <div className={css.plus}>+</div>}
                 </button>
                 <button
-                    className={clsx(css.sidebar_controls_btn, css.low_opacity, {
+                    className={clsx(css.sidebar_controls_btn, {
                         [css.open]: isOpen,
                         [css.highlighted]: step === triggerStep,
                     })}

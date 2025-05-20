@@ -133,7 +133,7 @@ export const TagsMenu = ({ step, label, triggerStep, isOpen }: TagsMenuProps) =>
                     </div>
                 </div>
                 <button
-                    className={clsx(css.sidebar_controls_btn, css.low_opacity, {
+                    className={clsx(css.sidebar_controls_btn, {
                         [css.open]: isOpen,
                         [css.highlighted]: step === triggerStep,
                     })}
@@ -146,7 +146,7 @@ export const TagsMenu = ({ step, label, triggerStep, isOpen }: TagsMenuProps) =>
                     {step === triggerStep && <div className={css.plus}>+</div>}
                 </button>
                 <button
-                    className={clsx(css.sidebar_controls_btn, css.low_opacity, {
+                    className={clsx(css.sidebar_controls_btn, {
                         [css.open]: isOpen,
                         [css.highlighted]: step === triggerStep,
                     })}
