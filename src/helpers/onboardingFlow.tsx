@@ -18,13 +18,13 @@ import WaterIcon from "src/shared/icons/Water.icon";
 import WindIcon from "src/shared/icons/Wind.icon";
 import { OnboardingMessage } from "src/shared/types/Message";
 import css from "src/styles/onboardingFlow.module.less";
-import { ReactComponent as ChatIcon } from "../../public/img/icons/chats.svg";
-import { ReactComponent as CorporaIcon } from "../../public/img/icons/corpora.svg";
-import { ReactComponent as RecordingIcon } from "../../public/img/icons/recording.svg";
-import { ReactComponent as ShareIcon } from "../../public/img/icons/shared.svg";
-import { ReactComponent as StarIcon } from "../../public/img/icons/star.svg";
-import { ReactComponent as TagsIcon } from "../../public/img/icons/tags.svg";
-import { ReactComponent as TranslationsIcon } from "../../public/img/icons/translations.svg";
+import { ReactComponent as ChatIcon } from "../../public/img/icons/chats3.svg";
+import { ReactComponent as CorporaIcon } from "../../public/img/icons/corpora3.svg";
+import { ReactComponent as RecordingIcon } from "../../public/img/icons/recording3.svg";
+import { ReactComponent as ShareIcon } from "../../public/img/icons/shared3.svg";
+import { ReactComponent as StarIcon } from "../../public/img/icons/star3.svg";
+import { ReactComponent as TagsIcon } from "../../public/img/icons/tags3.svg";
+import { ReactComponent as TranslationsIcon } from "../../public/img/icons/translations3.svg";
 import {
     mathBlock,
     mathBlock2,
