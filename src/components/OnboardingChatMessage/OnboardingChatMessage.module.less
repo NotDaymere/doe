@@ -74,8 +74,11 @@
     height: 48px;
     background-color: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 0 20px rgba(71, 148, 255, 0.5), 0 0 0px rgba(71, 148, 255, 0.4),
-        0 0 0px rgba(71, 148, 255, 0.3), 0 0 0px rgba(71, 148, 255, 0.2),
+    box-shadow:
+        0 0 20px rgba(71, 148, 255, 0.5),
+        0 0 0px rgba(71, 148, 255, 0.4),
+        0 0 0px rgba(71, 148, 255, 0.3),
+        0 0 0px rgba(71, 148, 255, 0.2),
         0 0 0px rgba(71, 148, 255, 0.15);
     animation: fade-in 0.5s ease forwards;
 
@@ -101,8 +104,12 @@
     border-radius: 12px;
     padding: 1px;
     background: linear-gradient(135deg, #8d8d8d 46%, #ffffff 100%);
-    -webkit-mask: linear-gradient(white, white) content-box, linear-gradient(white, white);
-    mask: linear-gradient(white, white) content-box, linear-gradient(white, white);
+    -webkit-mask:
+        linear-gradient(white, white) content-box,
+        linear-gradient(white, white);
+    mask:
+        linear-gradient(white, white) content-box,
+        linear-gradient(white, white);
     mask-composite: exclude;
     -webkit-mask-composite: destination-out;
     opacity: 0.5;
@@ -228,6 +235,7 @@
 }
 
 pre {
+    display: block;
     margin-top: 16px;
     padding: 12px;
     background: #090f01;
@@ -405,7 +413,9 @@ code {
             position: absolute;
             animation-delay: 3s;
             opacity: 0;
-            animation: fade-in 3s ease forwards, handlePulse 1s linear infinite;
+            animation:
+                fade-in 3s ease forwards,
+                handlePulse 1s linear infinite;
 
             &::after {
                 content: "▼";

@@ -16,7 +16,7 @@
     background: currentColor;
     margin-left: 1px;
     animation: blink 1s steps(1) infinite;
-    vertical-align: text-top;
+    // vertical-align: text-top;
     display: inline-block;
 }
 
@@ -49,6 +49,7 @@
     min-height: 61px;
     animation: fade-in 2s ease forwards;
     pre {
+        display: block;
         padding: 12px;
         background: #090f01;
         color: white;
@@ -87,7 +88,9 @@
     position: relative;
     color: black !important;
     text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
 }
 
 .link::after {
