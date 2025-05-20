@@ -1,12 +1,12 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { Playground } from "src/components/Playground";
+import { OnboardingPlayground } from "src/components/OnboardingPlayground";
 import { useChat } from "src/hooks/useChat";
 import { useOnboardingFlow } from "src/hooks/useOnboardingFlow";
 import { OnboardingBody } from "./OnboardingBody";
 import css from "./OnboardingLayout.module.less";
 import { OnboardingOverlays } from "./OnboardingOverlays";
-import { OnboardingSidebar } from "./OnboardingSidebar";
+import { OnboardingSidebarWrapper } from "./OnboardingSidebarWrapper";
 
 export default function OnboardingLayout() {
     const [showSidebar, setShowSidebar] = useState(false);
@@ -24,9 +24,13 @@ export default function OnboardingLayout() {
                     [css.white_bg]: step >= 28.1 && step < 58,
                 })}
             >
-                <OnboardingSidebar {...flow} showSidebar={showSidebar} profileData={profileData} />
+                <OnboardingSidebarWrapper
+                    {...flow}
+                    showSidebar={showSidebar}
+                    profileData={profileData}
+                />
                 <OnboardingBody {...flow} messages={messages} onSendMessage={handleUserMessage} />
-                <Playground currentStep={flow.currentStep} />
+                <OnboardingPlayground currentStep={flow.currentStep} />
             </div>
 
             <OnboardingOverlays

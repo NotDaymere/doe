@@ -13,9 +13,9 @@ import { ButtonAccordion } from "../ButtonAccordion";
 import { InputStaticText } from "../InputStaticText";
 import { ReplyPanel } from "../ReplyPanel";
 import { Tooltip } from "../Tooltip";
-import css from "./AnimatedInput.module.less";
+import css from "./OnboardingInput.module.less";
 
-interface AnimatedInputProps {
+interface OnboardingInputProps {
     step?: number;
     currentStep?: OnboardingStep;
     manualSkip: boolean;
@@ -40,7 +40,7 @@ interface AnimatedInputProps {
     onSendMessage: (message: string, type: MessageType) => void;
 }
 
-export function AnimatedInput({
+export function OnboardingInput({
     step,
     currentStep,
     manualSkip,
@@ -63,7 +63,7 @@ export function AnimatedInput({
     handleScreenSharing,
     handleCloseScreenSharing,
     onSendMessage,
-}: AnimatedInputProps) {
+}: OnboardingInputProps) {
     if (!step || step < 4 || (step > 18 && step < 28)) return null;
     const [userInput, setUserInput] = useState("");
     const [isActive, setIsActive] = useState(false);

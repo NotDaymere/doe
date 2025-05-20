@@ -6,12 +6,12 @@ import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
 import { useChatStore } from "src/shared/providers";
 import { SidebarGaia } from "src/widgets/Sidebar/ui";
-import { SidebarFormatting } from "../SidebarFormatting/intex";
-import { SidebarMenu } from "../SidebarMenu/intex";
-import { SidebarTools } from "../SidebarTools/intex";
-import css from "./AnimatedSidebar.module.less";
+import { OnboardingSidebarFormatting } from "../OnboardingSidebarFormatting/intex";
+import { OnboardingSidebarMenu } from "../OnboardingSidebarMenu/intex";
+import { OnboardingSidebarTools } from "../OnboardingSidebarTools/intex";
+import css from "./OnboardingSidebar.module.less";
 
-interface SidebarProps {
+interface OnboardingSidebarProps {
     step: number;
     darkMode?: boolean;
     showSidebar: boolean;
@@ -24,14 +24,14 @@ interface SidebarProps {
     };
 }
 
-export const AnimatedSidebar = ({
+export const OnboardingSidebar = ({
     step,
     darkMode,
     showSidebar,
     handleSidebarOpen,
     handleUserClickedSidebarButton,
     profileData,
-}: SidebarProps) => {
+}: OnboardingSidebarProps) => {
     const { cursorMoving } = useCursor();
     const { editor } = useChatStore();
     const editorState = useEditorContext(editor);
@@ -87,16 +87,16 @@ export const AnimatedSidebar = ({
             </div>
 
             <div className={css.sidebar_controls}>
-                <SidebarMenu step={step} isOpen={isOpen} />
+                <OnboardingSidebarMenu step={step} isOpen={isOpen} />
 
-                <SidebarFormatting
+                <OnboardingSidebarFormatting
                     step={step}
                     isOpen={isOpen}
                     editorState={editorState}
                     handleUserClickedSidebarButton={handleUserClickedSidebarButton}
                 />
 
-                <SidebarTools step={step} isOpen={isOpen} />
+                <OnboardingSidebarTools step={step} isOpen={isOpen} />
             </div>
 
             <button className={css.sidebar_removeMsg} data-step="delete">

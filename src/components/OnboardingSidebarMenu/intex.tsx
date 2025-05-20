@@ -4,7 +4,7 @@ import { ChatMenu } from "../ChatMenu";
 import { CorporasMenu } from "../CorporasMenu";
 import { FavouritesMenu } from "../FavouritesMenu";
 import { TagsMenu } from "../TagsMenu";
-import css from "./SidebarMenu.module.less";
+import css from "./OnboardingSidebarMenu.module.less";
 
 const menuItems = [
     {
@@ -33,12 +33,12 @@ const menuItems = [
     },
 ];
 
-interface SidebarMenuProps {
+interface OnboardingSidebarMenuProps {
     step?: number;
     isOpen: boolean;
 }
 
-export const SidebarMenu = ({ step, isOpen }: SidebarMenuProps) => {
+export const OnboardingSidebarMenu = ({ step, isOpen }: OnboardingSidebarMenuProps) => {
     const { cursorMoving } = useCursor();
     return (
         <div className={clsx(css.sidebar_controls_subgroup, { [css.open]: isOpen })}>

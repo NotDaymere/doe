@@ -3,7 +3,7 @@ import { ReactComponent as Grid } from "src/assets/icons/dot-grid.svg";
 import { ReactComponent as Logo } from "src/assets/icons/logo-gradient.svg";
 import WelcomeText from "src/components/WelcomeText";
 import { OnboardingMessage } from "src/shared/types/Message";
-import ChatMessage from "../ChatMessage";
+import OnboardingChatMessage from "../OnboardingChatMessage";
 import css from "./ReadyMessage.module.less";
 
 interface ReadyMessageProps {
@@ -56,7 +56,7 @@ export const ReadyMessage = ({
 
             <div className={css.messages}>
                 {visibleMessages.map((msg, index) => (
-                    <ChatMessage
+                    <OnboardingChatMessage
                         message={msg}
                         prevRole={index > 0 ? visibleMessages[index - 1]?.role : undefined}
                         step={step}

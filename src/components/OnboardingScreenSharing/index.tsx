@@ -1,13 +1,13 @@
 import ReactDOM from "react-dom";
 import { ReactComponent as ScreensIcon } from "src/assets/icons/screens.svg";
 import notebook from "src/assets/images/notebook.png";
-import css from "./ScreenSharing.module.less";
+import css from "./OnboardingScreenSharing.module.less";
 
-interface ScreenSharingProps {
+interface OnboardingScreenSharingProps {
     step: number;
 }
 
-export const ScreenSharing = ({ step }: ScreenSharingProps) => {
+export const OnboardingScreenSharing = ({ step }: OnboardingScreenSharingProps) => {
     if (step !== 53) return null;
 
     return (

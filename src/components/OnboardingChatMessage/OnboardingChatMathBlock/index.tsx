@@ -1,14 +1,14 @@
 import { MathJax } from "better-react-mathjax";
 import { memo, useEffect } from "react";
-import css from "../ChatMessage.module.less";
+import css from "../OnboardingChatMessage.module.less";
 
-interface ChatMathBlockProps {
+interface OnboardingChatMathBlockProps {
     content?: string | null;
     isVisible?: boolean;
     step?: number;
 }
 
-const ChatMathBlock = ({ content, isVisible, step }: ChatMathBlockProps) => {
+const OnboardingChatMathBlock = ({ content, isVisible, step }: OnboardingChatMathBlockProps) => {
     if (!content) return null;
 
     useEffect(() => {}, [step]);
@@ -30,4 +30,4 @@ const ChatMathBlock = ({ content, isVisible, step }: ChatMathBlockProps) => {
     );
 };
 
-export default memo(ChatMathBlock);
+export default memo(OnboardingChatMathBlock);

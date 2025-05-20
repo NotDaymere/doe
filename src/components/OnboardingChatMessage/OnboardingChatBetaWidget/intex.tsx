@@ -1,8 +1,8 @@
 import { ReactComponent as LogoIcon } from "src/assets/icons/logo-dotted.svg";
 import { ReactComponent as SparklesIcon } from "src/assets/icons/sparkles-icon.svg";
-import css from "../ChatMessage.module.less";
+import css from "../OnboardingChatMessage.module.less";
 
-export const ChatBetaWidget = () => {
+export const OnboardingChatBetaWidget = () => {
     return (
         <div className={css.beta_widget}>
             <div className={css.beta_widget_frame}>

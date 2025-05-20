@@ -2,14 +2,17 @@ import { ReactComponent as TranslateIcon } from "src/assets/icons/translateIcon2
 import { ReactComponent as VolumeIcon } from "src/assets/icons/volume.svg";
 import { useTypewriterEffect } from "src/hooks/useTypewriterEffect";
 import { OnboardingMessage } from "src/shared/types/Message";
-import css from "../ChatMessage.module.less";
+import css from "../OnboardingChatMessage.module.less";
 
-interface ChatMessageTranslationProps {
+interface OnboardingChatMessageTranslationProps {
     message: OnboardingMessage;
     noTypeEffect?: boolean;
 }
 
-export const ChatMessageTranslation = ({ message, noTypeEffect }: ChatMessageTranslationProps) => {
+export const OnboardingChatMessageTranslation = ({
+    message,
+    noTypeEffect,
+}: OnboardingChatMessageTranslationProps) => {
     const { text: typedOriginalMessage, isDone } = useTypewriterEffect({
         text: message.origin || "origin",
         speed: 25,

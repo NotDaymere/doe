@@ -4,9 +4,9 @@ import { createPortal } from "react-dom";
 import BranchesMenuBox from "src/components/BranchesMenuBox";
 import { GhostCursor } from "src/components/GhostCursor";
 import { NavigationPrompt } from "src/components/NavigationPrompt";
+import { OnboardingScreenSharing } from "src/components/OnboardingScreenSharing";
 import PlaygroundsBox from "src/components/PlaygroundsBox";
 import { QuickSearch } from "src/components/QuickSearch";
-import { ScreenSharing } from "src/components/ScreenSharing";
 import { SettingsModal } from "src/components/SettingsModal";
 import { TalkingAssistant } from "src/components/TalkingAssistant";
 import { OnboardingStep } from "src/helpers/onboardingFlow";
@@ -72,7 +72,7 @@ export function OnboardingOverlays({
                 setProfileData={setProfileData}
                 handleSaveSettings={handleSaveSettings}
             />
-            <ScreenSharing step={step} />
+            <OnboardingScreenSharing step={step} />
             <QuickSearch step={step} />
         </>,
         document.body

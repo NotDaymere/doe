@@ -2,7 +2,7 @@ import { MathJaxContext } from "better-react-mathjax";
 import { useEffect, useRef, useState } from "react";
 import { mathBlock } from "src/helpers/onboardingMessages";
 import { OnboardingMessage } from "src/shared/types/Message";
-import ChatMessage from "../ChatMessage";
+import OnboardingChatMessage from "../OnboardingChatMessage";
 import css from "./HistorySlider.module.less";
 
 interface HistorySliderProps {
@@ -51,7 +51,7 @@ export const HistorySlider = ({ messages, step }: HistorySliderProps) => {
                     <div className={css.chatHistoryContent}>
                         {messages.map((msg, index) => (
                             <MathJaxContext config={mathJaxConfig} key={index}>
-                                <ChatMessage
+                                <OnboardingChatMessage
                                     message={msg}
                                     prevRole={index > 0 ? messages[index - 1]?.role : undefined}
                                     // setTypingDone={setTypingDone}
@@ -73,7 +73,7 @@ export const HistorySlider = ({ messages, step }: HistorySliderProps) => {
                 <div className={css.chatHistoryContainer}>
                     <div className={css.chatHistoryContent}>
                         <MathJaxContext config={mathJaxConfig}>
-                            <ChatMessage
+                            <OnboardingChatMessage
                                 key={mathKey}
                                 message={mathMessage}
                                 // setTypingDone={setTypingDone}

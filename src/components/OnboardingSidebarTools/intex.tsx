@@ -1,12 +1,12 @@
 import clsx from "clsx";
-import css from "./SidebarTools.module.less";
+import css from "./OnboardingSidebarTools.module.less";
 
-interface SidebarToolsProps {
+interface OnboardingSidebarToolsProps {
     step?: number;
     isOpen: boolean;
 }
 
-export const SidebarTools = ({ step, isOpen }: SidebarToolsProps) => {
+export const OnboardingSidebarTools = ({ step, isOpen }: OnboardingSidebarToolsProps) => {
     const toolButtons = [
         {
             icon: "/img/icons/translations.svg",

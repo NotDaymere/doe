@@ -6,13 +6,13 @@ import { ReactComponent as PencilIcon } from "src/assets/icons/pencil-icon.svg";
 import { ReactComponent as StarDocIcon } from "src/assets/icons/starDoc.svg";
 import { OnboardingStep } from "src/helpers/onboardingFlow";
 import { Tooltip } from "../Tooltip";
-import css from "./Playground.module.less";
+import css from "./OnboardingPlayground.module.less";
 
-interface PlaygroundProps {
+interface OnboardingPlaygroundProps {
     currentStep: OnboardingStep | undefined;
 }
 
-export const Playground = ({ currentStep }: PlaygroundProps) => {
+export const OnboardingPlayground = ({ currentStep }: OnboardingPlaygroundProps) => {
     return (
         <div
             className={clsx(css.playground_wrapper, {

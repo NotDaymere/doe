@@ -4,10 +4,10 @@ import { memo, useRef } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { OnboardingMessage } from "src/shared/types/Message";
 import { BranchBar } from "../BranchBar";
-import ChatMessage from "../ChatMessage";
-import css from "./ChatHistory.module.less";
+import OnboardingChatMessage from "../OnboardingChatMessage";
+import css from "./OnboardingChatHistory.module.less";
 
-interface ChatHistoryProps {
+interface OnboardingChatHistoryProps {
     messages: OnboardingMessage[];
     step: number;
     setStep: (value: number) => void;
@@ -20,7 +20,7 @@ const mathJaxConfig = {
     },
 };
 
-const ChatHistory = ({ messages, step, setStep }: ChatHistoryProps) => {
+const OnboardingChatHistory = ({ messages, step, setStep }: OnboardingChatHistoryProps) => {
     const historyRef = useRef<HTMLDivElement>(null);
 
     return (
@@ -44,7 +44,7 @@ const ChatHistory = ({ messages, step, setStep }: ChatHistoryProps) => {
                                 }}
                                 unmountOnExit
                             >
-                                <ChatMessage
+                                <OnboardingChatMessage
                                     message={msg}
                                     prevRole={index > 0 ? messages[index - 1]?.role : undefined}
                                     step={step}
@@ -62,4 +62,4 @@ const ChatHistory = ({ messages, step, setStep }: ChatHistoryProps) => {
     );
 };
 
-export default memo(ChatHistory);
+export default memo(OnboardingChatHistory);

@@ -2,9 +2,9 @@ import clsx from "clsx";
 import { useEffect, useRef } from "react";
 import { useCursor } from "src/contexts/CursorContext";
 import { OnboardingMessage } from "src/shared/types/Message";
-import ChatMathBlock from "../ChatMathBlock";
-import css from "../ChatMessage.module.less";
-import { ChatMessageCodeButtons } from "../ChatMessageCodeButtons";
+import OnboardingChatMathBlock from "../OnboardingChatMathBlock";
+import css from "../OnboardingChatMessage.module.less";
+import { OnboardingChatMessageCodeButtons } from "../OnboardingChatMessageCodeButtons";
 
 interface Props {
     isAI: boolean;
@@ -16,7 +16,7 @@ interface Props {
     setStep?: (value: number) => void;
 }
 
-export const ChatMessageContent = ({
+export const OnboardingChatMessageContent = ({
     isAI,
     step,
     message,
@@ -65,8 +65,12 @@ export const ChatMessageContent = ({
                                 : typedText + `<span class="${css.caret}"></span>`,
                     }}
                 />
-                <ChatMathBlock content={message.mathBlock} isVisible={showMath} step={step} />
-                {message.hasCode && <ChatMessageCodeButtons isVisible={isTypingDone} />}
+                <OnboardingChatMathBlock
+                    content={message.mathBlock}
+                    isVisible={showMath}
+                    step={step}
+                />
+                {message.hasCode && <OnboardingChatMessageCodeButtons isVisible={isTypingDone} />}
                 {message.content2 && (
                     <div
                         dangerouslySetInnerHTML={{
@@ -87,7 +91,11 @@ export const ChatMessageContent = ({
             />
             {message.mathBlock && (
                 <div className={css.user_math_block}>
-                    <ChatMathBlock content={message.mathBlock} isVisible={showMath} step={step} />
+                    <OnboardingChatMathBlock
+                        content={message.mathBlock}
+                        isVisible={showMath}
+                        step={step}
+                    />
                 </div>
             )}
         </>

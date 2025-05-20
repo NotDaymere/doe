@@ -7,12 +7,12 @@ import recording from "src/assets/images/recording.png";
 import { useScrollIntoViewOnUpdate } from "src/hooks/useScrollIntoViewOnUpdate";
 import { useTypewriterEffect } from "src/hooks/useTypewriterEffect";
 import { OnboardingMessage } from "src/shared/types/Message";
-import { ChatBetaWidget } from "./ChatBetaWidget/intex";
-import css from "./ChatMessage.module.less";
-import { ChatMessageContent } from "./ChatMessageContent";
-import { ChatMessageTranslation } from "./ChatMessageTranslation";
+import { OnboardingChatBetaWidget } from "./OnboardingChatBetaWidget/intex";
+import css from "./OnboardingChatMessage.module.less";
+import { OnboardingChatMessageContent } from "./OnboardingChatMessageContent";
+import { OnboardingChatMessageTranslation } from "./OnboardingChatMessageTranslation";
 
-interface ChatMessageProps {
+interface OnboardingChatMessageProps {
     message: OnboardingMessage;
     prevRole?: "user" | "ai";
     step: number;
@@ -22,7 +22,7 @@ interface ChatMessageProps {
     handleSecondReadyMessage?: () => void;
 }
 
-const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
+const OnboardingChatMessage = forwardRef<HTMLDivElement, OnboardingChatMessageProps>(
     (
         {
             message,
@@ -85,7 +85,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                             <img src={recording} alt="recording" className={css.recording_img} />
                         </div>
                     )}
-                    <ChatMessageContent
+                    <OnboardingChatMessageContent
                         isAI={isAI}
                         step={step}
                         message={message}
@@ -95,16 +95,19 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
                         setStep={setStep}
                     />
                     {isTranslation && (
-                        <ChatMessageTranslation message={message} noTypeEffect={noTypeEffect} />
+                        <OnboardingChatMessageTranslation
+                            message={message}
+                            noTypeEffect={noTypeEffect}
+                        />
                     )}
-                    {message.betaWidget && isTypingDone && <ChatBetaWidget />}
+                    {message.betaWidget && isTypingDone && <OnboardingChatBetaWidget />}
                 </div>
             </div>
         );
     }
 );
 
-export default memo(ChatMessage);
+export default memo(OnboardingChatMessage);
 
 interface LogoIconProps {
     show: boolean;

@@ -6,21 +6,21 @@ import FunctionIcon from "src/shared/icons/Function.icon";
 import ItalicIcon from "src/shared/icons/Italic.icon";
 import LinkIcon from "src/shared/icons/Link.icon";
 import UnderlineIcon from "src/shared/icons/Underline.icon";
-import css from "./SidebarFormatting.module.less";
+import css from "./OnboardingSidebarFormatting.module.less";
 
-interface SidebarFormattingProps {
+interface OnboardingSidebarFormattingProps {
     step?: number;
     isOpen: boolean;
     editorState: any;
     handleUserClickedSidebarButton: (type: string) => void;
 }
 
-export const SidebarFormatting = ({
+export const OnboardingSidebarFormatting = ({
     step,
     isOpen,
     editorState,
     handleUserClickedSidebarButton,
-}: SidebarFormattingProps) => {
+}: OnboardingSidebarFormattingProps) => {
     const { cursorMoving } = useCursor();
 
     const formattingButtons = [

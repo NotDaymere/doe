@@ -1,4 +1,4 @@
-import { AnimatedSidebar } from "src/components/AnimatedSidebar";
+import { OnboardingSidebar } from "src/components/OnboardingSidebar";
 
 interface OnboardingSidebarProps {
     step: number;
@@ -12,7 +12,7 @@ interface OnboardingSidebarProps {
     };
 }
 
-export function OnboardingSidebar({
+export function OnboardingSidebarWrapper({
     step,
     showSidebar,
     handleSidebarOpen,
@@ -20,7 +20,7 @@ export function OnboardingSidebar({
     profileData,
 }: OnboardingSidebarProps) {
     return (
-        <AnimatedSidebar
+        <OnboardingSidebar
             step={step}
             showSidebar={showSidebar && step <= 57}
             darkMode={step === 25}

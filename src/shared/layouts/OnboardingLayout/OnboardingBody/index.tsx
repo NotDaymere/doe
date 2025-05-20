@@ -1,9 +1,9 @@
 import clsx from "clsx";
-import { AnimatedInput } from "src/components/AnimatedInput";
 import { BranchBar } from "src/components/BranchBar";
-import ChatHistory from "src/components/ChatHistory";
 import { HistorySlider } from "src/components/HistorySlider";
 import { MagicBox } from "src/components/MagicBox";
+import OnboardingChatHistory from "src/components/OnboardingChatHistory";
+import { OnboardingInput } from "src/components/OnboardingInput";
 import { ReadyMessage } from "src/components/ReadyMessage";
 import { WelcomeHeader } from "src/components/WelcomeHeader";
 import { getBlurClasses } from "src/helpers/getBlurClasses";
@@ -94,15 +94,31 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                     [css.chat_end]: step >= 8,
                 })}
             >
-                <HeaderSection
-                    step={step}
-                    logoSlide={logoSlide}
-                    startOnboardingFlow={startOnboardingFlow}
-                    handleWelcomeTextTypedOut={handleWelcomeTextTypedOut}
-                    handleLogoSlideComplete={handleLogoSlideComplete}
-                />
+                {step < 31 && (
+                    <WelcomeHeader
+                        step={step}
+                        logoSlide={logoSlide}
+                        startOnboardingFlow={startOnboardingFlow}
+                        handleWelcomeTextTypedOut={handleWelcomeTextTypedOut}
+                        text="Welcome to Doe, let’s get to know each other."
+                        handleLogoSlideComplete={handleLogoSlideComplete}
+                    />
+                )}
 
-                <HistorySection step={step} setStep={setStep} messages={messages} />
+                {step >= 40 && step <= 43 ? (
+                    <>
+                        <div className={css.branch_bar_wrapper}>
+                            <BranchBar withDots step={step} />
+                        </div>
+                        <div className={css.layout_history} data-step="history">
+                            <HistorySlider messages={messages} step={step} />
+                        </div>
+                    </>
+                ) : (
+                    <div className={css.layout_history} data-step="history">
+                        <OnboardingChatHistory messages={messages} step={step} setStep={setStep} />
+                    </div>
+                )}
 
                 <ReadyMessage
                     step={step}
@@ -115,7 +131,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
 
             {(step <= 18 || step >= 28) && (
                 <div className={css.layout_input}>
-                    <AnimatedInput
+                    <OnboardingInput
                         step={step}
                         currentStep={currentStep}
                         manualSkip={manualSkip}
@@ -143,60 +159,6 @@ export function OnboardingBody(props: OnboardingBodyProps) {
             )}
 
             <MagicBox step={step} />
-        </div>
-    );
-}
-
-function HeaderSection({
-    step,
-    logoSlide,
-    startOnboardingFlow,
-    handleWelcomeTextTypedOut,
-    handleLogoSlideComplete,
-}: {
-    step: number;
-    logoSlide: boolean;
-    startOnboardingFlow: () => void;
-    handleWelcomeTextTypedOut: () => void;
-    handleLogoSlideComplete: () => void;
-}) {
-    if (step >= 31) return null;
-    return (
-        <WelcomeHeader
-            step={step}
-            logoSlide={logoSlide}
-            startOnboardingFlow={startOnboardingFlow}
-            handleWelcomeTextTypedOut={handleWelcomeTextTypedOut}
-            text="Welcome to Doe, let’s get to know each other."
-            handleLogoSlideComplete={handleLogoSlideComplete}
-        />
-    );
-}
-
-function HistorySection({
-    step,
-    messages,
-    setStep,
-}: {
-    step: number;
-    messages: OnboardingMessage[];
-    setStep: (value: number) => void;
-}) {
-    if (step >= 40 && step <= 43) {
-        return (
-            <>
-                <div className={css.branch_bar_wrapper}>
-                    <BranchBar withDots step={step} />
-                </div>
-                <div className={css.layout_history} data-step="history">
-                    <HistorySlider messages={messages} step={step} />
-                </div>
-            </>
-        );
-    }
-    return (
-        <div className={css.layout_history} data-step="history">
-            <ChatHistory messages={messages} step={step} setStep={setStep} />
         </div>
     );
 }
