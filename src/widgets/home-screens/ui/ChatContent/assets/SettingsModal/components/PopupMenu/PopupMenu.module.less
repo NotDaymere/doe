@@ -1,0 +1,111 @@
+.enter {
+    opacity: 0;
+    transform: translateY(10px);
+}
+.enterActive {
+    opacity: 1;
+    transform: translateY(0px);
+    transition: 300ms ease;
+    transition-property: transform, opacity;
+}
+
+.exit {
+    opacity: 1;
+    transform: translateY(0px);
+}
+.exitActive {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: 300ms ease;
+    transition-property: transform, opacity;
+}
+.menu {
+    position: absolute;
+    border: 1px solid var(--var-1);
+    border-radius: 12px;
+    box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.05);
+    background: var(--bg-general);
+    padding: 5px;
+    width: 102px;
+    &__item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        gap: 4px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        padding: 9px 5px 9px 7px;
+        color: var(--var-116);
+        font-family: "Sohne", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.19rem;
+        cursor: pointer;
+        transition: 0.3s;
+        svg,
+        path {
+            transition: 0.3s;
+            fill: var(--var-85);
+        }
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+        &:hover {
+            background-color: var(--var-2);
+            border-color: var(--var-74);
+            color: var(--var-7);
+            svg,
+            path {
+                fill: var(--var-86);
+            }
+        }
+        &:hover .menu__submenu {
+            display: block;
+        }
+    }
+    &__submenu {
+        display: none;
+        position: absolute;
+        border: 1px solid var(--var-1);
+        border-radius: 12px;
+        box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.05);
+        background: var(--bg-general);
+        padding: 5px;
+        top: 5px;
+        right: -95%;
+        min-width: 102px;
+        max-width: 120px;
+        max-height: 168px;
+        overflow-y: auto;
+
+        &__item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 4px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 9px 5px 9px 7px;
+            color: var(--var-116);
+            font-family: "Sohne", sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1.19rem;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+            & span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            &:hover {
+                background-color: var(--var-2);
+                border-color: var(--var-74);
+                color: var(--var-7);
+            }
+        }
+    }
+}

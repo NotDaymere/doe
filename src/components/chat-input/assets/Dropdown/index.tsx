@@ -1,7 +1,6 @@
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import type { UploadProps } from "antd";
 import { Dropdown as AntdDropdown, MenuProps, Upload } from "antd";
-import { GlobalWorkerOptions } from "pdfjs-dist";
 import React, { FC } from "react";
 import { useApp } from "src/components/app";
 import { SvgIcon } from "src/components/icon";
@@ -9,8 +8,6 @@ import { useEditorContext } from "src/contexts/EditorProvider";
 import { ReactComponent as DispatchIcon } from "../icons/dispatch-icon.svg";
 import { ReactComponent as IntegrationsIcon } from "../icons/integrations-icon.svg";
 import { ReactComponent as UploadIcon } from "../icons/upload-icon.svg";
-
-GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js";
 
 interface DropdownProps {
     onFileUpload: (file: any) => void;

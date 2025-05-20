@@ -1,0 +1,45 @@
+.magicMenu {
+    position: relative;
+    width: max-content;
+    margin: 0 auto;
+    svg path {
+        fill: var(--var-183);
+    }
+}
+
+.menuWrapper {
+    margin-bottom: 20px;
+    position: absolute;
+    left: 50%;
+    bottom: 65%;
+    transform: translate(-50%, -10px);
+}
+
+.menu {
+    width: max-content;
+    padding: 6px;
+    border-radius: 16px;
+    background: var(--bg-general);
+    border: 1px solid var(--var-36);
+    backdrop-filter: blur(80px);
+    box-shadow: 0 0 12px rgba(#000, 5%);
+}
+
+.enter {
+    opacity: 0;
+}
+
+.enterActive {
+    opacity: 1;
+    transition: 0.5s ease-in;
+    transition-property: transform, opacity;
+}
+
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: 0.5s ease-in;
+    transition-property: opacity;
+}

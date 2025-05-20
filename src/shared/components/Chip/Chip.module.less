@@ -1,0 +1,36 @@
+.chip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 0 16px;
+    white-space: nowrap;
+    height: 36px;
+    border: 1px solid var(--var-78);
+    border-radius: 1000px;
+    background-color: var(--var-5);
+    color: var(--var-109);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    z-index: 999;
+    opacity: 1;
+    svg path {
+        fill: var(--var-16);
+    }
+}
+
+.enter {
+    opacity: 0;
+}
+.enterActive {
+    opacity: 1;
+    transition: opacity 300ms;
+}
+
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: opacity 300ms;
+}

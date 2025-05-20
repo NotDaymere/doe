@@ -1,0 +1,38 @@
+.Databox {
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    .box {
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+    }
+    p {
+      font-size: 14px;
+      color: #1f1f1f !important;
+      font-weight: bold;
+    }
+  }
+  .bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    p {
+      font-size: 14px;
+      color: #cfcfcf;
+    }
+    .valueNumber {
+      font-size: 14px;
+      color: #1f1f1f;
+    }
+  }
+}

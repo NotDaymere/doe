@@ -1,13 +1,13 @@
-import { CloseCircleOutlined } from "@ant-design/icons";
 import Editor, { OnMount } from "@monaco-editor/react";
-import { Flex } from "antd";
 import * as monaco from "monaco-editor";
-import { useRef, useState } from "react";
-import { useEditorContext } from "src/contexts/EditorProvider";
-import { useApp } from "../app";
-import { QuestionButton } from "./assets/QuestionButton";
-import { calculateButtonPosition } from "./helpers/calculateButtonPosition";
 import "./index.less";
+import React, { useRef, useState } from "react";
+import { useApp } from "../app";
+import { calculateButtonPosition } from "./helpers/calculateButtonPosition";
+import { QuestionButton } from "./assets/QuestionButton";
+import { useEditorContext } from "src/contexts/EditorProvider";
+import { CloseCircleOutlined } from "@ant-design/icons";
+import { Flex } from "antd";
 
 const CodePlayground = () => {
     const [selectedText, setSelectedText] = useState<string | null>(null);
@@ -28,9 +28,7 @@ const CodePlayground = () => {
 
     const handleSetContent = () => {
         if (selectedText) {
-            const template = `I have a question about ${determineCodeType(
-                selectedText
-            )}<div class="inline-wrapper">:<div data-tag="true" class="custom-tag yellow">question</div></div>`;
+            const template = `I have a question about ${determineCodeType(selectedText)}<div class="inline-wrapper">:<div data-tag="true" class="custom-tag yellow">question</div></div>`;
             const contentHTML = template;
 
             editor?.commands.setContent(contentHTML);
@@ -75,6 +73,7 @@ const CodePlayground = () => {
             if (!model) return;
 
             const selectedText = model.getValueInRange(selection);
+
             setSelectedText(selectedText);
         }
     };

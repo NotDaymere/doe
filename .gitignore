@@ -1,5 +1,6 @@
 build
 .cache
+.idea
 dev-dist
 vite.config.d.ts
 vite.config.js
@@ -11,3 +12,10 @@ vite.config.js
 node_modules
 .env.*
 !.env.example
+package-lock.json
+
+
+.DS_Store
+settings.json
+.vercel
+dist

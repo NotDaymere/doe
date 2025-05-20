@@ -31,6 +31,10 @@ import { useEditorContext } from "src/contexts/EditorProvider";
 import { App } from "src/types";
 import DefaultLayout from "../../components/layout";
 import "./index.less";
+import ChartWidgetsWindow from "src/components/widgetAndChart/Window/ChartWidgetsWindow";
+import Console from "src/components/Console/Console";
+import Comments from "src/components/Comments/Comments";
+import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
 
 const Home: FC = () => {
     const {
@@ -167,15 +171,28 @@ const Home: FC = () => {
 
     return (
         <DefaultLayout>
+          
             <div className={"home-page"}>
+               
                 <div className={"page-section chat-section"}>
                     <div className={"chat-container"}>
+                     
+                    
                         <Flex vertical gap={75}>
+                        
+                        
                             <h2>Table Example</h2>
-                            {!playground.open && <CustomTable />}
+
+
+                            {/* <Console/> */}
+                           {/* <AddChartsAndWidgets/>
+                           <Comments/>
+                           <ChartWidgetsWindow/> */}
+                            {/* {!playground.open && <CustomTable />} */}
                             <h2>YouTube Widget Example</h2>
-                            <YouTubeWidget
+                            {/* <YouTubeWidget
                                 src={
+                                
                                     "https://www.youtube.com/embed/LXb3EKWsInQ?si=YqSqq2qm6X3tc-9F"
                                 }
                             />
@@ -198,7 +215,7 @@ const Home: FC = () => {
                                 }
                             />
                             <h2>Drawing Example</h2>
-                            <Drawing />
+                            <Drawing /> */}
                         </Flex>
                         {messages.map((msg) =>
                             msg.id === editMessage.id ? (

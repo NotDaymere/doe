@@ -1,9 +1,9 @@
-import { Editor, EditorContent } from "@tiptap/react";
-import { MathJax } from "better-react-mathjax";
-import { FC, useEffect } from "react";
-import { useEditorContext } from "src/contexts/EditorProvider";
+import { FC, useEffect, useState } from "react";
+import { EditorContent, Editor } from "@tiptap/react";
 import FormulaInput from "./assets/FormulaInput";
+import { MathJax } from "better-react-mathjax";
 import { LinkInput } from "./assets/LinkInput";
+import { useEditorContext } from "src/contexts/EditorProvider";
 import "./index.less";
 
 interface Props {
@@ -21,6 +21,7 @@ export const CustomEditor: FC<Props> = ({ editor, classname }) => {
         setFormulaFocused,
         setFormula,
         linkInputVisible,
+        setLinkInputVisible,
         formulaInputVisible,
         inputPosition,
         formula,
@@ -28,6 +29,21 @@ export const CustomEditor: FC<Props> = ({ editor, classname }) => {
         setFormulaInputVisible,
         setLinkFocused,
     } = useEditorContext();
+
+    const openLinkInput = () => {
+        if (!editor) return;
+        const { from } = editor.state.selection;
+        try {
+            const coords = editor.view.coordsAtPos(from);
+            setInputPosition({
+                top: coords.top,
+                left: coords.left,
+            });
+            setLinkInputVisible(true);
+        } catch (error) {
+            console.error("Error getting coordinates:", error);
+        }
+    };
 
     useEffect(() => {
         if (editor) {

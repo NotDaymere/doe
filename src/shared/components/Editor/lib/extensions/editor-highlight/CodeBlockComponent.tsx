@@ -1,27 +1,28 @@
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
-import css from "./CodeBlockComponent.module.less";
 import { supportLanguages } from "./editor-highlight";
+import css from "./CodeBlockComponent.module.less";
+import { LanguageDropDownSelect } from "./LanguageDropDownSelect/LanguageDropDownSelect";
 
 export function CodeBlockComponent({
     node: { attrs },
     updateAttributes,
     extension,
 }: NodeViewProps) {
+    const languageOptions = [
+        { value: "null", label: "Auto" },
+        ...supportLanguages.map((lang) => ({
+            value: lang.name,
+            label: lang.name,
+        })),
+    ];
+
     return (
         <NodeViewWrapper className={css.codeBlock}>
-            <select
-                contentEditable={false}
+            <LanguageDropDownSelect
+                options={languageOptions}
                 defaultValue={attrs.language}
-                onChange={(event) => updateAttributes({ language: event.target.value })}
-            >
-                <option value="null">Auto</option>
-                <option disabled>—</option>
-                {supportLanguages.map((lang) => (
-                    <option key={lang.name} value={lang.name}>
-                        {lang.name}
-                    </option>
-                ))}
-            </select>
+                onChange={(value) => updateAttributes({ language: value })}
+            />
             <pre>
                 <NodeViewContent as="code" />
             </pre>

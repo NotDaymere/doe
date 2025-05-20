@@ -2,16 +2,19 @@ import {
     Area,
     Box,
     Bullet,
+    CirclePacking,
     DualAxes,
     Funnel,
     Heatmap,
     Radar,
+    Sunburst,
     Venn,
     Violin,
     Waterfall,
     WordCloud,
 } from "@ant-design/charts";
-import React, { useMemo } from "react";
+import { interpolateHcl } from "d3-interpolate";
+import React, { useEffect, useMemo } from "react";
 import { Chart as GoogleChart, GoogleChartWrapperChartType } from "react-google-charts";
 
 interface ChartData {
@@ -386,7 +389,7 @@ const parseGanttChartData = (
 
     return [columns, ...rows] as [
         Array<{ type: string; label: string }>,
-        ...Array<Array<string | number | Date>>
+        ...Array<Array<string | number | Date>>,
     ];
 };
 
@@ -851,8 +854,8 @@ const ChartRenderer: React.FC<ChartRendererProps> = ({ input }) => {
                                             return idx === 0 || d.isTotal
                                                 ? "#FF4848"
                                                 : d.value > 0
-                                                ? "#FF704F"
-                                                : "#FE9202";
+                                                  ? "#FF704F"
+                                                  : "#FE9202";
                                         },
                                     }}
                                     xField={"x"}

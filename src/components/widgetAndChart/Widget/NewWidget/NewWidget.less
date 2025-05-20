@@ -1,0 +1,26 @@
+.newWidgetContainerOne {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .connectApplicationbutton {
+        width: 100%;
+        height: 39px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        border-radius: 8px;
+        gap: 10px;
+        font-size: 14px;
+        color: #5b5b5b;
+        font-weight: 500;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    .newWidgetContainerInner {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        gap: 5px;
+    }
+}

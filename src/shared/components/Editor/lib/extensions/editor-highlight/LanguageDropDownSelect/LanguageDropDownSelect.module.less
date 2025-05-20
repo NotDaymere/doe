@@ -1,0 +1,74 @@
+.language_select_menu {
+  background-color: #505050;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: 5px;
+  width: 83px;
+  align-items: center;
+  .setFontSohneBuch(12px, 1.1, normal);
+      color: #dfdfdf;
+      cursor: pointer;
+
+  user-select: none;
+}
+
+.language_select_container {
+  position: relative;
+  user-select: none;
+}
+
+.language_select_name {
+  display: flex;
+  gap: 7px;
+  user-select: none;
+}
+
+.language_select_list {
+  background-color: #505050;
+  z-index: 100;
+  width: 83px;
+  .setFontSohneBuch(14px, 1.1, normal);
+  font-size: 12px;
+  color: #dfdfdf;
+  cursor: pointer;
+  padding: 7px;
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.visible {
+  opacity: 1;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.language_select_list_item {
+  transition: background-color 0.3s ease-in-out;
+  padding: 3px;
+  &:hover {
+    background-color: #737373;
+
+  }
+}
+
+.partial_loaded_files_down_btn {
+  width: 10px;
+  height: 10px;
+}
+
+.partial_loaded_files_up_btn {
+  transform: rotate(180deg);
+  width: 10px;
+  height: 10px;
+}

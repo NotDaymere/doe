@@ -1,5 +1,6 @@
 import { Layout as BaseLayout } from "antd";
-import { FC } from "react";
+import { FC, Suspense } from "react";
+import { Outlet } from "react-router-dom";
 import { Sider } from ".";
 import { useApp } from "../app";
 import PlaygroundRenderer from "../playground-renderer";
@@ -19,9 +20,9 @@ const Layout: FC<Props> = ({ children }) => {
             </BaseLayout.Sider>
 
             <BaseLayout.Content className={"content"}>
-                {/* <Suspense>
-          <Outlet />
-        </Suspense> */}
+                {/*<Suspense>*/}
+                {/*  <Outlet />*/}
+                {/*</Suspense>*/}
                 {children}
             </BaseLayout.Content>
 

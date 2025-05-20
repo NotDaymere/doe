@@ -1,0 +1,199 @@
+.sourceSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 16px;
+    position: relative;
+    //padding: 24px;
+    //box-shadow: 0 3px 20px rgba(#000, 0.04);
+    background: var(--bg-gradient-var-12);
+
+    width: 100%;
+    height: 100%;
+    &::after {
+        position: absolute;
+        content: "";
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("../assets/steps.png") center -37px no-repeat;
+        opacity: 0.6;
+        z-index: 1;
+    }
+}
+
+.sourcePlayground {
+    display: grid;
+    grid-template-rows: repeat(2, calc((100vh - 65px - 24px - 10px) / 2));
+    gap: 10px;
+    height: calc((100vh - 65px));
+    transition:
+        transform 0.3 ease,
+        opacity 0.3 ease;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.enter {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.enterActive {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.exit {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.exitActive {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.generalSection {
+    .sourceSection;
+    justify-content: space-between;
+    position: relative;
+}
+
+.infoCardNodes {
+    display: flex;
+    flex-direction: row;
+    gap: 48px;
+    position: relative;
+}
+
+.glowIcon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    z-index: 1;
+}
+
+.styledLineIcon {
+    margin: -25px 0 -32px 0;
+}
+
+.sourceNodes {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 28%;
+}
+
+.nodes {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.popoverweb {
+    position: absolute;
+    top: 0;
+    left: -100px;
+}
+
+.popoverdocs {
+    position: absolute;
+    top: -50px;
+    right: -100px;
+}
+
+.popoverapps {
+    position: absolute;
+    top: 100px;
+    right: -100px;
+}
+
+.detailsSection {
+    .sourceSection;
+    justify-content: center;
+    padding: 12px;
+    overflow: hidden;
+    height: 93%;
+}
+
+.detailsSectionWithData {
+    justify-content: flex-start;
+}
+
+.defaultText {
+    font-size: 14px;
+    background: linear-gradient(to right, rgb(181, 181, 181), rgba(181, 181, 181, 0.6));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    padding-top: 12px;
+}
+
+.lineIcon {
+    width: 171px;
+    height: 347px;
+}
+
+.popoverContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 12px;
+    width: max-content;
+    height: 80px;
+    //width: 156px;
+    //height: 105px;
+}
+
+.title {
+    .setFontSohneBuch(12px);
+    color: var(--var-113);
+}
+
+.list {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    svg * {
+        stroke: var(--var-194);
+    }
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.itemText {
+    .setFontSohneBuch(14px);
+    color: var(--var-97);
+}
+
+.link {
+    .setFontSohneBuch(14px);
+    color: var(--var-97);
+
+    &:hover {
+        color: #4285f4;
+    }
+}
+
+.bold {
+    .setFontSohneKraftig(14px);
+}

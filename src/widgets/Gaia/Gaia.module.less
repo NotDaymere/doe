@@ -5,6 +5,12 @@
     z-index: 100;
 
     &._active {
+        .gaia_wrapper {
+            background-color: var(--var-5);
+            border: 1px solid var(--var-64);
+            transition: 0.2s;
+            transition-delay: 0.5s;
+        }
         .gaia_box {
             transition-delay: 0s;
             width: 240px;
@@ -57,7 +63,8 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: rgba(#1f1f1f, 0.35);
+    border: 1px solid var(--border-gaia-widget);
+    background: var(--var-5);
 
     transition: 300ms ease;
     transition-property: opacity, visibility, transform;
@@ -85,13 +92,13 @@
 
     padding: 8px;
     border-radius: 1000px;
-    background: rgba(#1f1f1f, 0.35);
+    background-color: var(--var-5);
+    border: 1px solid var(--var-64);
     backdrop-filter: blur(20px);
 
     display: flex;
     align-items: center;
     gap: 4px;
-
     .setFontSohneBuch(16px, 1.2, normal);
     color: #f8f8f8;
 
@@ -119,10 +126,13 @@
 .gaia_wrapper {
     width: 240px;
     padding: 8px;
+    border: 1px solid var(--var-63);
     border-radius: 22px;
-    background: rgba(#1f1f1f, 0.35);
+    background-color: var(--var-4);
     backdrop-filter: blur(20px);
-    box-sizing: 0 4px 20px rgba(#000, 0.06);
+    box-shadow: 0 4px 20px rgba(#000, 0.06);
+    transition: 0.2s;
+    transition-delay: 0s;
 }
 
 .gaia_box {
@@ -137,7 +147,7 @@
     justify-content: space-between;
     padding: 6px 8px;
     border-radius: 1000px;
-    background: rgba(#fff, 0.8);
+    background: var(--var-6);
     backdrop-filter: blur(40px);
 }
 .gaia_items_item {
@@ -202,7 +212,7 @@
 
     + .gaia_stats_item {
         position: relative;
-        border-left: 1px solid rgba(#000, 0.05);
+        border-left: 1px solid var(--var-83);
     }
 }
 .gaia_stats_item p {
@@ -213,15 +223,15 @@
     > span {
         .setFontSohneBuch(16px, 1, normal);
         &:nth-child(1) {
-            color: #fff;
+            color: var(--color-white-100);
         }
 
         &:nth-child(2) {
-            color: #eeeeee;
+            color: var(--var-124);
         }
 
         sup {
-            color: #eeeeee;
+            color: var(--var-124);
             font-size: 0.6em;
         }
     }

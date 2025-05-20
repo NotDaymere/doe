@@ -1,8 +1,20 @@
 import React, { SVGProps } from "react";
 
-const StarsIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
+interface StarsIconProps extends SVGProps<SVGSVGElement> {
+    width?: number | string;
+    height?: number | string;
+}
+
+const StarsIcon: React.FC<StarsIconProps> = ({ width = 20, height = 20, ...props }) => {
     return (
-        <svg {...props} viewBox="0 0 20 20" stroke="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+            {...props}
+            width={width}
+            height={height}
+            viewBox="0 0 20 20"
+            stroke="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
             <path
                 d="M9.90821 3.95131C10.0115 3.95131 10.0672 3.8864 10.0831 3.78904C10.3216 2.47465 10.2977 2.40973 11.6809 2.15822C11.7762 2.13387 11.8399 2.07708 11.8399 1.9716C11.8399 1.87424 11.7762 1.80932 11.6809 1.7931C10.2977 1.54158 10.3216 1.47667 10.0831 0.162271C10.0672 0.0649086 10.0115 0 9.90821 0C9.80487 0 9.74923 0.0649086 9.73332 0.162271C9.49485 1.47667 9.51869 1.54158 8.13554 1.7931C8.03221 1.80932 7.97656 1.87424 7.97656 1.9716C7.97656 2.07708 8.03221 2.13387 8.13554 2.15822C9.51869 2.40973 9.49485 2.47465 9.73332 3.78904C9.74923 3.8864 9.80487 3.95131 9.90821 3.95131Z"
                 stroke="none"

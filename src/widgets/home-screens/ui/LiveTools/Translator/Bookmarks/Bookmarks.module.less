@@ -1,0 +1,139 @@
+.bookmarks {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    .setFontSohneKraftig(14px);
+    padding: 14px 8px;
+    background-color: var(--var-185);
+    border: 1px solid var(--var-68);
+    border-radius: 16px;
+    animation: show 0.5s ease-in-out;
+    transform-origin: left;
+}
+
+@keyframes close {
+    from {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+    to {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+}
+
+.bookmarksClose {
+    opacity: 0;
+    animation: close 0.5s forwards;
+    transform-origin: left;
+}
+
+@keyframes show {
+    from {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+    to {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+}
+
+.bookmarkHeader {
+    opacity: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.bookmarkHeaderShow {
+    opacity: 1;
+    animation-delay: 0.5s;
+    animation: show 0.5s ease;
+}
+
+.bookmarkTitle {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--var-97);
+    svg path {
+        fill: var(--var-94);
+    }
+}
+
+.icon path {
+    fill: #5b5b5b;
+}
+
+.minimizeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background-color: var(--var-2);
+    cursor: pointer;
+    svg path {
+        fill: var(--var-94);
+    }
+}
+.bookmarkWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid var(--var-60);
+    background-color: var(--var-10);
+}
+
+.bookmark {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    background-color: var(--var-2);
+    border-radius: 12px;
+    box-shadow: 0 8px 12px rgba(#000, 0.04);
+    white-space: nowrap;
+    opacity: 0;
+    color: var(--var-7);
+}
+
+.bookmarkShow {
+    opacity: 1;
+    animation-delay: 0.5s;
+    animation: show 0.5s ease-in-out;
+}
+
+.removeButton {
+    path {
+        fill: var(--var-87);
+    }
+    &:hover {
+        path {
+            fill: #ff453a;
+        }
+    }
+}
+
+.enter {
+    opacity: 0;
+}
+.enterActive {
+    opacity: 1;
+    transition: opacity 500ms;
+}
+
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: opacity 500ms;
+}

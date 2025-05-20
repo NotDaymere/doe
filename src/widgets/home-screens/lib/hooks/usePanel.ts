@@ -1,8 +1,10 @@
 import React from "react";
 
+import { FileWithId } from "./useDragFile";
+
 interface PanelValue {
     text: string;
-    files: File[];
+    files: FileWithId[];
 }
 
 export function usePanel() {
@@ -13,7 +15,7 @@ export function usePanel() {
 
     const setText = (text: string) => setValue({ ...value, text });
 
-    const setFiles = (files: File[]) => setValue({ ...value, files });
+    const setFiles = (files: FileWithId[]) => setValue({ ...value, files });
 
     const reset = () => setValue({ files: [], text: "" });
 

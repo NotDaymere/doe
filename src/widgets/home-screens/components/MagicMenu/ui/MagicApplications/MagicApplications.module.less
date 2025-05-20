@@ -14,8 +14,10 @@
 
     &:hover,
     &._active {
-        color: #1f1f1f;
-        background: #f8f8f8;
+        background: var(--var-2);
+        border: 1px solid var(--var-69);
+        color: var(--var-7);
+        border-radius: 12px;
 
         > span > svg {
             fill: #9747ff;
@@ -27,9 +29,9 @@
     // width: 148px;
     padding: 4px;
     border-radius: 12px;
-    border: 1px solid #f8f8f8;
+    border: 1px solid var(--var-36);
 
-    background: #ffffff;
+    background: var(--bg-general);
     position: absolute;
     bottom: 8px;
     left: calc(100% - 8px);
@@ -53,20 +55,20 @@
     border-radius: 8px;
     border: 1px solid transparent;
     transition: border 200ms ease;
-
+    background-color: transparent;
     position: relative;
 
     &::after {
         content: attr(data-label);
         padding: 2px 8px;
         border-radius: 6px;
-        background: rgba(#1f1f1f, 35%);
-        border: 1px solid rgba(#1f1f1f, 5%);
+        background: var(--var-12);
+        border: 1px solid var(--var-63);
         backdrop-filter: blur(20px);
         box-shadow: 0 4px 20px rgba(#000, 6%);
 
         .setFontSohneBuch(14px);
-        color: #f8f8f8;
+        color: var(--var-109);
 
         position: absolute;
         bottom: 18px;
@@ -80,8 +82,8 @@
     }
 
     &:hover {
-        border-color: #dddddd;
-
+        border-color: var(--var-70);
+        background-color: var(--var-2);
         &::after {
             opacity: 1;
             z-index: 50;

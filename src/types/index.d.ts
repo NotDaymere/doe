@@ -19,7 +19,8 @@ declare namespace App {
 
     interface Playground {
         id: string | null;
-        type: "code" | "table" | "source" | null;
+        name: string;
+        type: "code" | "table" | "source" | "iframe" | null;
         open: boolean;
         data: any;
         text?: string;

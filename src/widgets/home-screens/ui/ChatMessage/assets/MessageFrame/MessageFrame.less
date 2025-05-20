@@ -1,0 +1,183 @@
+.message-frame-layout {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.message-frame {
+    width: -webkit-fill-available;
+    margin: 20px auto;
+    border: 1px solid rgba(221, 221, 221, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    &.minimized {
+        height: 50px;
+        .message-frame-content {
+            display: none;
+        }
+    }
+
+    &.maximized {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 90vw;
+        height: 90vh;
+        margin: 0;
+        border-radius: 0;
+        z-index: 1000;
+        background-color: black;
+
+        .message-frame-content {
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    .message-frame-titlebar {
+        background-color: var(--var-59);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 50px;
+        padding: 0 10px;
+        font-size: 20px;
+        font-weight: 600;
+        font-family: Sohne;
+        .window-controls {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            position: relative;
+
+            .window-control {
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-content: center;
+                align-items: center;
+                margin-right: 8px;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+                color: transparent;
+
+                &.default {
+                    background: #f8f8f880;
+                    border: 1px solid #b5b5b5;
+                    cursor: auto !important;
+                }
+
+                &:hover {
+                    transform: scale(1.1);
+                }
+
+                &.close {
+                    background-color: #ff5f57;
+                }
+
+                &.minimize {
+                    background: #ffd6004d;
+                    border: 1px solid #ffd600;
+                    color: transparent;
+                    transition: color 300ms ease;
+
+                    &:hover {
+                        color: var(--var-105);
+                    }
+                }
+
+                &.maximize {
+                    background: #8bcf164d;
+                    border: 1px solid #8bcf16;
+                    color: transparent;
+                    transition: color 300ms ease;
+
+                    &:hover {
+                        color: var(--var-106);
+                    }
+                }
+            }
+        }
+
+        .window-title {
+            font-size: 16px;
+            color: var(--var-7);
+        }
+    }
+
+    .message-frame-content {
+        position: relative;
+        height: fit-content;
+        min-height: 400px;
+
+        .message-frame-subtitle {
+            margin-top: 0;
+            position: relative;
+            z-index: 1;
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+        }
+
+        p {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 16px;
+        }
+    }
+}
+
+.notion_logo {
+    height: 30px;
+    width: 30px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+}
+
+.enter-fullscreen-tooltip {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 140px;
+    height: 35px;
+    font-size: 14px;
+    font-weight: 1000;
+    color: var(--var-7);
+    background: var(--var-10);
+    border: 2px solid var(--var-36);
+    border-radius: 12px;
+    position: absolute;
+    left: 25px;
+    bottom: -40px;
+    pointer-events: none;
+    z-index: 100;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    backdrop-filter: blur(100px);
+
+    & .enter-fullscreen-icon {
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        width: 18px;
+        height: 14px;
+        svg {
+            fill: var(--var-86);
+        }
+    }
+}
+
+.window-control.maximize:hover + .enter-fullscreen-tooltip {
+    opacity: 1;
+}

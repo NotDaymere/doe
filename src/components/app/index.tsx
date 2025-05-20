@@ -2,11 +2,11 @@ import { ConfigProvider } from "antd";
 import { MathJaxContext } from "better-react-mathjax";
 import { createContext, memo, useContext, useState, type FC, type PropsWithChildren } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { EditorProvider } from "src/contexts/EditorProvider";
 import { App as AppTypes } from "src/types";
 import { version } from "../../../package.json";
 import routes from "../../pages";
 import theme from "../../themes";
+import { EditorProvider } from "src/contexts/EditorProvider";
 
 type ContextProps = {
     app: {

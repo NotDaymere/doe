@@ -1,13 +1,13 @@
-import { Tooltip } from "antd";
 import { FC, useState } from "react";
-import { useEditorContext } from "src/contexts/EditorProvider";
-import useEditorFormatting from "src/hooks/useEditorFormatting";
-import useTheme from "src/hooks/useTheme";
-import { useApp } from "../app";
-import { GaiaBar } from "../gaia-bar";
-import { IconsType, SvgIcon } from "../icon";
-import ButtonWithIcon from "../ui/ButtonWithIcon";
 import "./Sider.less";
+import useTheme from "src/hooks/useTheme";
+import ButtonWithIcon from "../ui/ButtonWithIcon";
+import { IconsType, SvgIcon } from "../icon";
+import { useApp } from "../app";
+import useEditorFormatting from "src/hooks/useEditorFormatting";
+import { GaiaBar } from "../gaia-bar";
+import { Dropdown, Tooltip } from "antd";
+import { useEditorContext } from "src/contexts/EditorProvider";
 
 interface Button {
     icon: IconsType;

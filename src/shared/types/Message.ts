@@ -1,9 +1,13 @@
+import { FileWithId} from "../../widgets/home-screens/lib/hooks/useDragFile";
+
 export interface IMessage {
     id: number;
+    name?: string;
     content: string;
-    files: File[];
+    files?: FileWithId[];
     isUser: boolean;
     isCode: boolean;
+    isLiked?: boolean;
 }
 export interface OnboardingMessage {
     role: "user" | "ai";

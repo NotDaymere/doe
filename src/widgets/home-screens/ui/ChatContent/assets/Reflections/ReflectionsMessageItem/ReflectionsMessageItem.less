@@ -1,0 +1,66 @@
+.message-list-of-each-day-item {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    font-size: 14px;
+    background-color: var(--var-36);
+}
+.message-content {
+    background: var(--text-gradient-var-3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.message-and-icon {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.message-icon {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 4px;
+    background: var(--var-36);
+
+    svg path {
+        fill: #5b5b5b;
+    }
+}
+
+.new-message {
+    svg path {
+        fill: #ff8b12 !important;
+    }
+}
+
+.oblique_pin_icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    color: var(--var-87);
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: var(--var-86);
+    }
+}
+
+.oblique_pin_icon.pinned_icon {
+    color: #ff8b12 !important;
+}

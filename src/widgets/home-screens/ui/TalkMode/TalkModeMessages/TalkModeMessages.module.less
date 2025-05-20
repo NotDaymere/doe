@@ -1,0 +1,70 @@
+.messageBubble {
+    position: relative;
+    bottom: 20px;
+    left: 0;
+    background: var(--var-18);
+    border-radius: 10px;
+    padding: 12px 16px;
+    box-shadow: 0 8px 20px 0 #0000000a;
+    backdrop-filter: blur(60px);
+    border: 1px solid var(--var-11);
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+}
+
+._showBubble {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.messageText {
+    margin: 0;
+    font-size: 16px;
+    white-space: pre-wrap;
+    width: fit-content;
+    background: var(--text-gradient-var-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bubbleCloseButton {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    top: -8px;
+    right: -8px;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0;
+    background-color: var(--var-19);
+    border: 1px solid var(--var-68);
+    backdrop-filter: blur(145px);
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+    z-index: 2;
+    svg {
+        fill: var(--var-91);
+    }
+}
+
+.messageBubble:hover .bubbleCloseButton {
+    opacity: 1;
+}
+
+.bubbleCloseButton:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.bubbleCloseButton:active {
+    transform: scale(0.95);
+}

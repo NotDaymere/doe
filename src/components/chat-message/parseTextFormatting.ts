@@ -54,20 +54,25 @@ export function parseTextFormatting(input: string): string {
         footnote: /<footnote id="(\d+)">(.*?)<\/footnote>/g,
     };
 
-    const formatTag = (input: string, tag: TagType): string => {
+    const formatTag = (inputStr: string, tag: TagType): string => {
         const pattern = tagPatterns[tag];
-        if (!pattern) return input;
+        if (!pattern) return inputStr;
 
         switch (tag) {
             case "inline-code":
-                return input.replace(pattern, "<code>$1</code>");
+                return inputStr.replace(
+                    pattern,
+                    `<code class="code-inline-output" style="color: rgba(255, 95, 95, 1); background: #ededed">$1</code>`
+                );
+
             case "block-code":
-                return input.replace(
+                return inputStr.replace(
                     pattern,
                     `<div class="code-without-output"><pre><code>$1</code></pre></div>`
                 );
+
             case "code-with-output":
-                return input.replace(pattern, (_, content) => {
+                return inputStr.replace(pattern, (_, content) => {
                     const blockCodeMatch = content.match(/<pre>([\s\S]*?)<\/pre>/);
                     const outputMatch = content.match(/<output>([\s\S]*?)<\/output>/);
 
@@ -75,55 +80,79 @@ export function parseTextFormatting(input: string): string {
                     const output = outputMatch ? outputMatch[1].trim() : "";
 
                     return `
-        <div class="code-with-output">
-          <pre><code>${blockCode}</code></pre>
-          <div class="output">${output}</div>
-        </div>
-      `;
+          <div class="code-with-output">
+            <pre><code>${blockCode}</code></pre>
+            <div class="output">${output}</div>
+          </div>
+        `;
                 });
+
             case "bold":
-                return input.replace(pattern, "<strong>$1</strong>");
+                return inputStr.replace(pattern, "<strong>$1</strong>");
+
             case "italic":
-                return input.replace(pattern, "<em>$1</em>");
+                return inputStr.replace(pattern, "<em>$1</em>");
+
             case "underline":
-                return input.replace(pattern, "<u>$1</u>");
+                return inputStr.replace(pattern, "<u>$1</u>");
+
             case "inline-math":
-                return input.replace(pattern, `$$$1$`);
+                return inputStr.replace(pattern, `$$$1$`);
+
             case "block-math":
-                return input.replace(pattern, `$$$1$$`);
+                return inputStr.replace(pattern, `$$$1$$`);
+
             case "link":
-                return input.replace(pattern, '<a href="$1">$2</a>');
+                return inputStr.replace(pattern, '<a href="$1">$2</a>');
+
             case "block-text":
-                return input.replace(pattern, "<p>$1</p>");
+                return inputStr.replace(pattern, "<p>$1</p>");
+
             case "quote":
-                return input.replace(pattern, "<q>$1</q>");
+                return inputStr.replace(pattern, "<q>$1</q>");
+
             case "strikethrough":
-                return input.replace(pattern, "<del>$1</del>");
+                return inputStr.replace(pattern, "<del>$1</del>");
+
             case "red":
-                return input.replace(pattern, '<span style="color: red;">$1</span>');
+                return inputStr.replace(pattern, '<span style="color: red;">$1</span>');
+
             case "blue":
-                return input.replace(pattern, '<span style="color: blue;">$1</span>');
+                return inputStr.replace(pattern, '<span style="color: blue;">$1</span>');
+
             case "medium-text":
-                return input.replace(pattern, "<h3>$1</h3>");
+                return inputStr.replace(pattern, "<h3>$1</h3>");
+
             case "large-text":
-                return input.replace(pattern, "<h1>$1</h1>");
+                return inputStr.replace(pattern, "<h1>$1</h1>");
+
             case "superscript":
-                return input.replace(pattern, "<sup>$1</sup>");
+                return inputStr.replace(pattern, "<sup>$1</sup>");
+
             case "subscript":
-                return input.replace(pattern, "<sub>$1</sub>");
+                return inputStr.replace(pattern, "<sub>$1</sub>");
+
             case "highlight":
-                return input.replace(pattern, "<mark>$1</mark>");
+                return inputStr.replace(pattern, "<mark>$1</mark>");
+
             case "tab":
-                return input.replace(pattern, "&nbsp;&nbsp;&nbsp;&nbsp;");
+                return inputStr.replace(pattern, "&nbsp;&nbsp;&nbsp;&nbsp;");
+
             case "citation":
-                return input.replace(
-                    pattern,
-                    '<blockquote class="citation" data-id="$1">$2</blockquote>'
-                );
+                return inputStr.replace(pattern, (_, id, content) => {
+                    return `
+                  <span class="citation-container" data-citation-url="https://en.wikipedia.org/wiki/Yoneda_lemma" id="citation-ref-${id}">
+                    <span class="cited-text">${content}</span>
+                    <sup class="citation">${id}</sup>
+                  </span>
+                `;
+                });
+
             case "footnote":
-                return input.replace(pattern, '<cite class="footnote" data-id="$1">$2</cite>');
+                return inputStr.replace(pattern, '<cite class="footnote" data-id="$1">$2</cite>');
+
             default:
-                return input;
+                return inputStr;
         }
     };
 

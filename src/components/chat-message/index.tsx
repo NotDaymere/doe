@@ -73,6 +73,13 @@ export const ChatMessage: FC<ChatMessageProps> = ({
             open: true,
         }));
     };
+    const openTablePlayground = () => {
+        setPlayground((prev) => ({
+            ...prev,
+            type: "table",
+            open: true,
+        }));
+    };
 
     const handleCopy = () => {
         if (messageRef.current) {
@@ -152,38 +159,40 @@ export const ChatMessage: FC<ChatMessageProps> = ({
                             </MathJax>
                         </div>
                         {!isUser && (
-                            <Flex justify={"space-between"} className={"message-actions"}>
-                                <Button
-                                    icon={
-                                        <SvgIcon
-                                            style={{ width: "15px", height: "15px" }}
-                                            type={"seeAllStepsIcon"}
+                            <Flex vertical>
+                                <Flex justify={"space-between"} className={"message-actions"}>
+                                    <Button
+                                        icon={
+                                            <SvgIcon
+                                                style={{ width: "15px", height: "15px" }}
+                                                type={"seeAllStepsIcon"}
+                                            />
+                                        }
+                                        onClick={openSourcePlayground}
+                                    >
+                                        See all steps
+                                    </Button>
+                                    <Flex gap={10}>
+                                        <Button onClick={openCodePlayground}>Playground</Button>
+                                        <Button
+                                            onClick={downloadPDF}
+                                            icon={
+                                                <SvgIcon
+                                                    style={{ width: "15px", height: "15px" }}
+                                                    type={"downloadAnswerIcon"}
+                                                />
+                                            }
                                         />
-                                    }
-                                    onClick={openSourcePlayground}
-                                >
-                                    See all steps
-                                </Button>
-                                <Flex gap={10}>
-                                    <Button onClick={openCodePlayground}>Playground</Button>
-                                    <Button
-                                        onClick={downloadPDF}
-                                        icon={
-                                            <SvgIcon
-                                                style={{ width: "15px", height: "15px" }}
-                                                type={"downloadAnswerIcon"}
-                                            />
-                                        }
-                                    />
-                                    <Button
-                                        icon={
-                                            <SvgIcon
-                                                style={{ width: "15px", height: "15px" }}
-                                                type={"copyAnswerIcon"}
-                                            />
-                                        }
-                                        onClick={handleCopy}
-                                    />
+                                        <Button
+                                            icon={
+                                                <SvgIcon
+                                                    style={{ width: "15px", height: "15px" }}
+                                                    type={"copyAnswerIcon"}
+                                                />
+                                            }
+                                            onClick={handleCopy}
+                                        />
+                                    </Flex>
                                 </Flex>
                             </Flex>
                         )}
