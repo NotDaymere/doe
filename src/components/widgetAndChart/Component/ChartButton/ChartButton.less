@@ -1,12 +1,12 @@
 .chartbutton {
     background: var(--var-60);
+    border: 1px solid var(--var-21);
     width: 120px;
     height: 98px;
     border-radius: 12px;
-    border: 1px solid var(--var-21);
     padding-top: 12px;
     padding-bottom: 12px;
-
+    overflow: hidden;
     box-shadow:
         0 0 0 0px var(--var-57),
         0 0 0 0px var(--var-21);
@@ -17,6 +17,9 @@
             0 0 0 5px var(--var-21);
         border-color: var(--var-197);
         background: var(--var-11);
+        p {
+            color: var(--var-7);
+        }
     }
     .chartbutton_image {
         width: 100%;
@@ -36,10 +39,5 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-    &:hover {
-        p {
-            color: var(--var-7);
-        }
     }
 }
