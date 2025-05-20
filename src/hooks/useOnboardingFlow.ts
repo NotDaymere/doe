@@ -192,13 +192,13 @@ export function useOnboardingFlow(
             setUserClickedItalic((prev) => !prev);
             setTimeout(() => {
                 setCursorMoving();
-                setStep(7);
+                setStep(8);
             }, 1000);
         } else if (type === "underline") {
             setUserClickedUnderline((prev) => !prev);
             setTimeout(() => {
                 setCursorMoving();
-                setStep(8);
+                setStep(7);
             }, 1000);
         } else if (type === "math") {
             nextSubStep();
