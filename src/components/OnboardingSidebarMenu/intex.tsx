@@ -8,25 +8,25 @@ import css from "./OnboardingSidebarMenu.module.less";
 
 const menuItems = [
     {
-        icon: "/img/icons/corpora.svg",
+        icon: "/img/icons/corpora3.svg",
         label: "Corpora",
         dataStep: "corpora",
         triggerStep: 13,
     },
     {
-        icon: "/img/icons/chats.svg",
+        icon: "/img/icons/chats3.svg",
         label: "Individual Chats",
         dataStep: "chats",
         triggerStep: 14,
     },
     {
-        icon: "/img/icons/star.svg",
+        icon: "/img/icons/star3.svg",
         label: "Favourites",
         dataStep: "favourites",
         triggerStep: 15,
     },
     {
-        icon: "/img/icons/tags.svg",
+        icon: "/img/icons/tags3.svg",
         label: "Tags",
         dataStep: "tags",
         triggerStep: 16,

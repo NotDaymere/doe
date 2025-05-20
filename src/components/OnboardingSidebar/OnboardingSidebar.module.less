@@ -16,7 +16,11 @@
     height: 100%;
     opacity: 1;
     z-index: 1;
-    transition: opacity 1s ease, transform 1s ease, background-color 0.3s ease 1s, width 0.8s ease;
+    transition:
+        opacity 1s ease,
+        transform 1s ease,
+        background-color 0.3s ease 1s,
+        width 0.8s ease;
 
     &.hidden {
         opacity: 0;
@@ -93,8 +97,12 @@
     inset: 0;
     padding: 0px 1px;
     background: linear-gradient(260deg, rgba(71, 157, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
-    -webkit-mask: linear-gradient(white, white) content-box, linear-gradient(white, white);
-    mask: linear-gradient(white, white) content-box, linear-gradient(white, white);
+    -webkit-mask:
+        linear-gradient(white, white) content-box,
+        linear-gradient(white, white);
+    mask:
+        linear-gradient(white, white) content-box,
+        linear-gradient(white, white);
     mask-composite: exclude;
     -webkit-mask-composite: destination-out;
     opacity: 0.5;
@@ -545,7 +553,10 @@
     svg {
         width: 20px;
         height: 20px;
-        fill: #b5b5b5;
+
+        path {
+            fill: #b5b5b5;
+        }
     }
 }
 
@@ -636,12 +647,18 @@
 
 @keyframes border-move-right-side {
     0% {
-        box-shadow: 1px 500px 2px -1px #4794ff, 1px 0px 5px -1px #9499a0;
+        box-shadow:
+            1px 500px 2px -1px #4794ff,
+            1px 0px 5px -1px #9499a0;
     }
     50% {
-        box-shadow: 1px -500px 2px -1px #4794ff, 1px 0 5px -1px #94a9c7;
+        box-shadow:
+            1px -500px 2px -1px #4794ff,
+            1px 0 5px -1px #94a9c7;
     }
     100% {
-        box-shadow: 1px 500px 2px -1px #4794ff, 1px 0px 5px -1px #94a9c7;
+        box-shadow:
+            1px 500px 2px -1px #4794ff,
+            1px 0px 5px -1px #94a9c7;
     }
 }

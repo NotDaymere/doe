@@ -9,19 +9,19 @@ interface OnboardingSidebarToolsProps {
 export const OnboardingSidebarTools = ({ step, isOpen }: OnboardingSidebarToolsProps) => {
     const toolButtons = [
         {
-            icon: "/img/icons/translations.svg",
+            icon: "/img/icons/translations3.svg",
             label: "Translate content",
             dataStep: "translate",
             step: [19, 20],
         },
         {
-            icon: "/img/icons/recording.svg",
+            icon: "/img/icons/recording3.svg",
             label: "Listen and transcribe",
             dataStep: "transcribe",
             step: [21, 22],
         },
         {
-            icon: "/img/icons/shared.svg",
+            icon: "/img/icons/shared3.svg",
             label: "Sharing Content",
             dataStep: "share",
             step: 23,
