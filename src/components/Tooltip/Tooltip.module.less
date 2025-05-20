@@ -1,0 +1,437 @@
+.tooltip {
+    position: absolute;
+    background: rgba(31, 31, 31, 0.5);
+    box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.05);
+
+    color: #ffffff;
+    box-sizing: border-box;
+    padding: 12px;
+    border-radius: 8px;
+    min-width: 285px;
+    max-width: 300px;
+    white-space: nowrap;
+    z-index: 10;
+    transform: translateY(5px) scale(0.9);
+    transform-origin: bottom;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+
+    &:not(.tooltip--stressed) {
+        animation: popIn 0.7s ease-out forwards;
+    }
+}
+
+@keyframes popIn {
+    0% {
+        transform: scaleY(0.2) scaleX(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scaleY(1.1) scaleX(1.05);
+        opacity: 0.6;
+    }
+    80% {
+        transform: scaleY(0.9) scaleX(0.95);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scaleY(1) scaleX(1);
+        opacity: 1;
+    }
+}
+
+.tooltip--top {
+    bottom: 103%;
+    left: 0;
+}
+
+.tooltip--right {
+    left: 103%;
+}
+
+.tooltip__arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.tooltip--top .tooltip__arrow {
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px 6px 0;
+    border-color: rgba(31, 31, 31, 0.5) transparent transparent;
+}
+
+.tooltip--bottom .tooltip__arrow {
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 6px 6px;
+    border-color: transparent transparent rgba(31, 31, 31, 0.5);
+}
+
+.tooltip--left .tooltip__arrow {
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 6px 0 6px 6px;
+    border-color: transparent transparent transparent rgba(31, 31, 31, 0.5);
+}
+
+.tooltip--right .tooltip__arrow {
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 6px 6px 6px 0;
+    border-color: transparent rgba(31, 31, 31, 0.5) transparent transparent;
+}
+
+.tooltip__content {
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: 0%;
+    .setFontSohneBuch(16px);
+}
+
+:global(.continuous) {
+    animation: none !important;
+    transform: scaleY(1) scaleX(1);
+}
+
+:global(.highlight-step) {
+    left: 60px;
+    border-radius: 20px;
+    padding: 20px 20px 20px 30px;
+    transition: all 1s ease;
+}
+
+// .tooltip--left {
+//     right: 150%;
+//     left: unset;
+// }
+
+@media screen and (max-height: 950px) {
+    :global(.highlight-step-3) {
+        top: -40px;
+        .tooltip__arrow {
+            top: 25%;
+        }
+    }
+}
+
+:global(.highlight-step-8\.1) {
+    top: -160px;
+    left: 40px;
+}
+
+:global(.highlight-step-8\.2) {
+    top: -160px;
+    left: 40px;
+}
+
+:global(.highlight-step-8\.3) {
+    top: -160px;
+    left: 40px;
+}
+
+:global(.highlight-step-8\.4) {
+    top: -160px;
+    left: 40px;
+}
+
+:global(.highlight-step-9\.1) {
+    top: -100px;
+    left: 40px;
+}
+
+:global(.highlight-step-9\.2) {
+    top: -100px;
+    left: 40px;
+}
+
+:global(.highlight-step-9\.3) {
+    top: -100px;
+    left: 40px;
+}
+
+:global(.highlight-step-9\.4) {
+    top: -100px;
+    left: 40px;
+}
+
+:global(.highlight-step-11) {
+    top: -115px;
+    .tooltip__arrow {
+        top: 80%;
+    }
+}
+
+:global(.highlight-step-18) {
+    top: -85px;
+    left: 40px;
+}
+
+:global(.highlight-step-18\.1) {
+    top: -85px;
+    left: 40px;
+}
+
+:global(.highlight-step-18\.2) {
+    top: -85px;
+    left: 40px;
+}
+
+:global(.highlight-step-18\.3) {
+    top: -85px;
+    left: 40px;
+}
+
+:global(.highlight-step-18\.4) {
+    top: -85px;
+    left: 40px;
+}
+
+:global(.highlight-step-20) {
+    top: -150px;
+    left: -450px;
+    .tooltip__arrow {
+        top: 80%;
+        border-color: transparent transparent transparent rgba(31, 31, 31, 0.5);
+    }
+}
+
+:global(.highlight-step-22) {
+    top: -160px;
+    left: unset;
+    right: -410px;
+    animation: pop-in-with-translate-right 0.7s ease-out forwards;
+    .tooltip__arrow {
+        top: 50%;
+    }
+}
+
+:global(.highlight-step-23) {
+    top: -140px;
+    .tooltip__arrow {
+        top: 80%;
+    }
+}
+
+:global(.highlight-step-24) {
+    top: -50px;
+    left: 40px;
+}
+
+:global(.highlight-step-25) {
+    top: -50px;
+    left: 40px;
+}
+
+:global(.highlight-step-26) {
+    top: -50px;
+    left: 40px;
+}
+
+:global(.highlight-step-27) {
+    // top: 50px;
+    top: -15px;
+    left: 250px;
+    animation: popIn 0.7s ease-out forwards;
+    .tooltip__arrow {
+        top: 25%;
+    }
+}
+
+:global(.highlight-step-30) {
+    top: 0px;
+    left: -300px;
+    animation: popIn 0.7s ease-out forwards;
+    .tooltip__arrow {
+        top: 25%;
+        border-color: transparent transparent transparent rgba(31, 31, 31, 0.5);
+    }
+}
+
+:global(.highlight-step-31) {
+    top: -30px;
+    left: -335px;
+    animation: popIn 0.7s ease-out forwards;
+    .tooltip__arrow {
+        top: 25%;
+        border-color: transparent transparent transparent rgba(31, 31, 31, 0.5);
+    }
+}
+
+:global(.highlight-step-34) {
+    top: -30px;
+    left: 70px;
+    animation: popIn 0.7s ease-out forwards;
+    .tooltip__arrow {
+        top: 50%;
+        border-color: transparent rgba(31, 31, 31, 0.5) transparent transparent;
+    }
+}
+
+:global(.highlight-step-36) {
+    top: -180px;
+    // height: 100%;
+    bottom: unset;
+    left: -120px;
+    animation: popIn 0.7s ease-out forwards;
+    .tooltip__arrow {
+        border-color: transparent transparent transparent transparent rgba(31, 31, 31, 0.5);
+    }
+}
+
+:global(.highlight-step-38) {
+    top: -115px;
+    // height: 100%;
+    left: 75px;
+    animation: popIn 0.7s ease-out forwards;
+    .tooltip__arrow {
+        top: 82%;
+        border-color: transparent transparent transparent transparent rgba(31, 31, 31, 0.5);
+    }
+}
+
+:global(.highlight-step-40) {
+    left: unset;
+    right: 100px;
+    animation: popIn 0.7s ease-out forwards;
+    .tooltip__arrow {
+        top: 50%;
+        border-color: transparent transparent transparent rgba(31, 31, 31, 0.5);
+    }
+}
+
+:global(.highlight-step-48) {
+    top: -90px;
+    left: 120px;
+    animation: popIn 0.7s ease-out forwards;
+    .tooltip__arrow {
+        top: 75%;
+    }
+}
+
+:global(.highlight-step-51) {
+    top: -190px;
+    left: -140px;
+    bottom: unset;
+    animation: popIn 0.7s ease-out forwards;
+}
+
+:global(.highlight-step-52) {
+    top: -210px;
+    left: -140px;
+    bottom: unset;
+    animation: popIn 0.7s ease-out forwards;
+}
+
+:global(.highlight-step-55) {
+    top: -65px;
+    left: -330px;
+    bottom: unset;
+    animation: popIn 0.7s ease-out forwards;
+    .tooltip__arrow {
+        top: 50%;
+        border-color: transparent transparent transparent rgba(31, 31, 31, 0.5);
+    }
+}
+
+:global(.highlight-step-56) {
+    left: -350px;
+    top: -100px;
+
+    svg {
+        opacity: 1 !important;
+        path {
+            fill: #ffffff;
+        }
+    }
+    .tooltip__arrow {
+        top: 50%;
+        border-color: transparent transparent transparent rgba(31, 31, 31, 0.5);
+    }
+}
+
+@keyframes pop-in-with-translate {
+    0% {
+        transform: scaleY(0.2) scaleX(0.8) translateX(-50%);
+        opacity: 0;
+    }
+    50% {
+        transform: scaleY(1.1) scaleX(1.05) translateX(-50%);
+        opacity: 0.6;
+    }
+    80% {
+        transform: scaleY(0.9) scaleX(0.95) translateX(-50%);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scaleY(1) scaleX(1) translateX(-50%);
+        opacity: 1;
+    }
+}
+
+@keyframes pop-in-with-translate-right {
+    0% {
+        transform: scaleY(0.2) scaleX(0.8) translateX(100%);
+        opacity: 0;
+    }
+    50% {
+        transform: scaleY(1.1) scaleX(1.05) translateX(100%);
+        opacity: 0.6;
+    }
+    80% {
+        transform: scaleY(0.9) scaleX(0.95) translateX(100%);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scaleY(1) scaleX(1) translateX(100%);
+        opacity: 1;
+    }
+}
+
+.tooltip--stressed {
+    animation: stress-pulse 1.5s ease-in-out;
+
+    &.tooltip--right {
+        .tooltip__arrow {
+            border-color: transparent rgba(180, 154, 100, 0.5) transparent transparent;
+        }
+    }
+}
+
+@keyframes stress-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+        background: rgba(31, 31, 31, 0.5);
+    }
+    20% {
+        transform: scale(1.08);
+        opacity: 0.95;
+        background: rgba(180, 154, 100, 0.5);
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+        background: rgba(31, 31, 31, 0.5);
+    }
+    60% {
+        transform: scale(1.08);
+        opacity: 0.95;
+        background: rgba(255, 204, 102, 0.5);
+    }
+    80% {
+        transform: scale(1);
+        opacity: 1;
+        background: rgba(31, 31, 31, 0.5);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        background: rgba(31, 31, 31, 0.5);
+    }
+}

@@ -3,18 +3,17 @@ import { supportLanguages } from "./editor-highlight";
 import css from "./CodeBlockComponent.module.less";
 import { LanguageDropDownSelect } from "./LanguageDropDownSelect/LanguageDropDownSelect";
 
-
 export function CodeBlockComponent({
-                                       node: { attrs },
-                                       updateAttributes,
-                                       extension,
-                                   }: NodeViewProps) {
+    node: { attrs },
+    updateAttributes,
+    extension,
+}: NodeViewProps) {
     const languageOptions = [
         { value: "null", label: "Auto" },
-        ...supportLanguages.map(lang => ({
+        ...supportLanguages.map((lang) => ({
             value: lang.name,
-            label: lang.name
-        }))
+            label: lang.name,
+        })),
     ];
 
     return (

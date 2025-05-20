@@ -40,7 +40,6 @@
         width: 1.5em;
         height: 1.5em;
     }
-
 }
 .select_btn_icon {
     // @include size(10px);
@@ -55,7 +54,7 @@
     top: 100%;
     transform: translate(-50%, 10px);
     min-width: 100%;
-    background: #FFF;
+    background: #fff;
     border-radius: 9px;
     padding: 9px;
 
@@ -63,9 +62,7 @@
     overflow-y: auto;
     overflow-x: hidden;
 
-    
     // box-shadow: 0 4px 16px colorBlack(5%);
-    
 
     &::-webkit-scrollbar {
         width: 8px;
@@ -102,7 +99,7 @@
     }
 
     &:hover {
-        background: #F5F9FC;
+        background: #f5f9fc;
     }
 
     &._active {
@@ -110,6 +107,6 @@
     }
 
     &:not(._nullable)._active {
-        pointer-events: none
+        pointer-events: none;
     }
 }

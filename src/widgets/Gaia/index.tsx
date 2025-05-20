@@ -1,14 +1,14 @@
 import clsx from "clsx";
 import React from "react";
-import { useAppStore } from "src/shared/providers";
 import CrossIcon from "src/shared/icons/Cross.icon";
 import EnergyIcon from "src/shared/icons/Energy.icon";
 import LeafIcon from "src/shared/icons/Leaf.icon";
+import LeafResourceIcon from "src/shared/icons/LeafResource.icon";
 import TreeIcon from "src/shared/icons/Tree.icon";
 import WaterIcon from "src/shared/icons/Water.icon";
 import WindIcon from "src/shared/icons/Wind.icon";
+import { useAppStore } from "src/shared/providers";
 import css from "./Gaia.module.less";
-import LeafResourceIcon from "src/shared/icons/LeafResource.icon";
 
 interface Props {
     className?: string;

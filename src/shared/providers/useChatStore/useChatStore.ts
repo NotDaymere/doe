@@ -9,11 +9,10 @@ import { IBranchDialog } from "../../types/BranchDialog";
 import { IMessageNode } from "../../types/MessageNode";
 import { testTextAndCharts } from "../../../components/chat-message/mockData";
 import { useVersionHistoryStore } from "../index";
-import {TableSelectedAreaType} from "../../../widgets/home-screens/lib/enums/TableSelectedAreaTypeEnum";
+import { TableSelectedAreaType } from "../../../widgets/home-screens/lib/enums/TableSelectedAreaTypeEnum";
 
 import { ChatTagsEnum } from "../../enums/ChatTagsEnum";
 import { IChat } from "../../types/Chat";
-
 
 const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMessageNode> => {
     const messageNodeMap: Record<string, IMessageNode> = {
@@ -44,10 +43,8 @@ const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMes
     return messageNodeMap;
 };
 const stripAndTruncate = (html: string): string => {
-    const stripped = html.replace(/<[^>]*>/g, '').trim();
-    return stripped.length > 150
-        ? stripped.slice(0, 150) + '…'
-        : stripped;
+    const stripped = html.replace(/<[^>]*>/g, "").trim();
+    return stripped.length > 150 ? stripped.slice(0, 150) + "…" : stripped;
 };
 
 //mock
@@ -100,7 +97,6 @@ print(result)  # Output: [1, 2, 4, 5]
     },
 ];
 
-
 const initialMessagesChat2: IMessage[] = [
     {
         id: 101,
@@ -110,7 +106,6 @@ const initialMessagesChat2: IMessage[] = [
         isUser: true,
     },
     {
-      
         id: 102,
         content: "<p>This is a mock reply in Chat 02. Enjoy your conversation!</p>",
         files: [],
@@ -130,7 +125,7 @@ const defaultChat: IChat = {
             id: 1,
             name: stripAndTruncate(initialMessages[0].content),
             messages: initialMessages,
-            dialogsMessages: [{ userRequest: initialMessages[0], botMessages: initialMessages[1]}],
+            dialogsMessages: [{ userRequest: initialMessages[0], botMessages: initialMessages[1] }],
             mainMessageId: initialMessages[0].id,
             isMain: true,
         },
@@ -148,7 +143,9 @@ const defaultChat2: IChat = {
             id: 1,
             name: stripAndTruncate(initialMessagesChat2[0].content),
             messages: initialMessagesChat2,
-            dialogsMessages: [{ userRequest: initialMessagesChat2[0], botMessages: initialMessagesChat2[1] }],
+            dialogsMessages: [
+                { userRequest: initialMessagesChat2[0], botMessages: initialMessagesChat2[1] },
+            ],
             mainMessageId: initialMessagesChat2[0].id,
             isMain: true,
         },
@@ -213,12 +210,16 @@ export interface ChatState {
     getOpenSavedPlaygrounds: () => IPlayground[];
     getOpenSavedPlaygroundsByType: (type: "code" | "table" | "source" | "iframe") => IPlayground[];
     getSavedPlaygroundLast: () => IPlayground | null;
-    getSavedPlaygroundLastByType: (type: "code" | "table" | "source" | "iframe") => IPlayground | null;
+    getSavedPlaygroundLastByType: (
+        type: "code" | "table" | "source" | "iframe"
+    ) => IPlayground | null;
     setPlaygroundFullscreen: (playgroundFullscreen: boolean) => void;
     setIsUploadFileChatMode: (IsUploadFileChatMode: boolean) => void;
     setIsHyperlinkInputOpen: (isHyperlinkInput: boolean) => void;
-    setSelectedArea: (area: { type: TableSelectedAreaType | null;
-        value: string | number | null }) => void;
+    setSelectedArea: (area: {
+        type: TableSelectedAreaType | null;
+        value: string | number | null;
+    }) => void;
     isMaximized: boolean;
     setIsMaximized: (isMaximized: boolean) => void;
     setIsTablePromptVisible: (visible: boolean) => void;
@@ -240,8 +241,6 @@ export interface ChatState {
         value: string | number | null;
     };
 
-
-
     doMessageReply: () => Promise<IMessage>;
     cancelReply: () => void;
     isReplyLoading: boolean;
@@ -256,8 +255,14 @@ export interface ChatState {
     setMessages: (messages: IMessage[]) => void;
     changeMessage: (oldMessage: IMessage, newMessage: IMessage) => IMessage | null;
     addMessageNode: (parent: IMessageNode | string | undefined, message: IMessage) => void;
-    addMessageNodeVersion: (current: IMessageNode | string | IMessage | number, message: IMessage) => void;
-    changeCurrentNodeVersion: (node: IMessageNode | string | IMessage | number, direction: "prev" | "next") => void;
+    addMessageNodeVersion: (
+        current: IMessageNode | string | IMessage | number,
+        message: IMessage
+    ) => void;
+    changeCurrentNodeVersion: (
+        node: IMessageNode | string | IMessage | number,
+        direction: "prev" | "next"
+    ) => void;
     getMessageQueueFromNode: () => IMessage[];
     getFavouritesMessages: () => IMessage[];
     getLastCurrentVersionMessageNode: () => IMessageNode;
@@ -444,7 +449,8 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     setPlayground: (playground) => set(() => ({ playground })),
     getNoPlayground: () => get().noPlayground,
     setNoPlayground: (noPlayground) => set(() => ({ noPlayground })),
-    closeNoPlayground: () => set(() => ({
+    closeNoPlayground: () =>
+        set(() => ({
             noPlayground: {
                 type: null,
                 name: "",
@@ -452,9 +458,8 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 data: null,
                 text: "",
                 id: null,
-            }
-        })
-    ),
+            },
+        })),
     setPlaygroundFullscreen: (playgroundFullscreen) => set(() => ({ playgroundFullscreen })),
     setQuestionCodeMessage: (questionCodeMessage) => set(() => ({ questionCodeMessage })),
 
@@ -479,9 +484,17 @@ export const useChatStore = create<ChatState>()((set, get) => ({
             return { savedPlaygrounds: [...state.savedPlaygrounds, newPlayground] };
         }),
 
-    updateSavedPlaygrounds: (playground) => set((state) =>  ({ savedPlaygrounds: state.savedPlaygrounds.map((p) => p.id === playground.id ? playground : p) })),
+    updateSavedPlaygrounds: (playground) =>
+        set((state) => ({
+            savedPlaygrounds: state.savedPlaygrounds.map((p) =>
+                p.id === playground.id ? playground : p
+            ),
+        })),
 
-    closeSavedPlaygrounds: () => set((state) =>  ({ savedPlaygrounds: state.savedPlaygrounds.map((p) => ({ ...p, open: false, })) })),
+    closeSavedPlaygrounds: () =>
+        set((state) => ({
+            savedPlaygrounds: state.savedPlaygrounds.map((p) => ({ ...p, open: false })),
+        })),
 
     deleteSavedPlaygrounds: (id) =>
         set((state) => ({
@@ -603,8 +616,8 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         }),
     deleteSavedBranch: (branchId: number) =>
         set((state) => {
-            const chatWithBranch = state.chats.find(chat =>
-                chat.branches.some(branch => branch.id === branchId)
+            const chatWithBranch = state.chats.find((chat) =>
+                chat.branches.some((branch) => branch.id === branchId)
             );
 
             if (!chatWithBranch) {
@@ -612,17 +625,24 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 return state;
             }
 
-            const updatedBranches = chatWithBranch.branches.filter(branch => branch.id !== branchId);
+            const updatedBranches = chatWithBranch.branches.filter(
+                (branch) => branch.id !== branchId
+            );
 
-            const updatedChats = state.chats.map(chat =>
+            const updatedChats = state.chats.map((chat) =>
                 chat.id === chatWithBranch.id ? { ...chat, branches: updatedBranches } : chat
             );
 
-            const updatedSavedBranches = state.savedBranches.filter(branch => branch.id !== branchId);
+            const updatedSavedBranches = state.savedBranches.filter(
+                (branch) => branch.id !== branchId
+            );
 
-            const isCurrentBranchDeleted = state.currentBranch && state.currentBranch.id === branchId;
+            const isCurrentBranchDeleted =
+                state.currentBranch && state.currentBranch.id === branchId;
             const newCurrentBranch = isCurrentBranchDeleted ? null : state.currentBranch;
-            const newIsCurrentBranchOpen = isCurrentBranchDeleted ? false : state.isCurrentBranchOpen;
+            const newIsCurrentBranchOpen = isCurrentBranchDeleted
+                ? false
+                : state.isCurrentBranchOpen;
 
             return {
                 chats: updatedChats,

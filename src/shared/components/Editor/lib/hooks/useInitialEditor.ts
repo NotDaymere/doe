@@ -1,7 +1,7 @@
-import React from "react";
 import Bold from "@tiptap/extension-bold";
 import Document from "@tiptap/extension-document";
 import Focus from "@tiptap/extension-focus";
+import History from "@tiptap/extension-history";
 import Italic from "@tiptap/extension-italic";
 import Link from "@tiptap/extension-link";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -9,10 +9,10 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Strike from "@tiptap/extension-strike";
 import Text from "@tiptap/extension-text";
 import Underline from "@tiptap/extension-underline";
-import History from "@tiptap/extension-history";
 import { useEditor } from "@tiptap/react";
-import { EditorProps, getCodeBlockConfigured } from "..";
 import clsx from "clsx";
+import React from "react";
+import { EditorProps, getCodeBlockConfigured } from "..";
 
 export function useInitialEditor(props: EditorProps) {
     const editor = useEditor({

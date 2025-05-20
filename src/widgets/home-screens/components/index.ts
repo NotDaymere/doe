@@ -1,1 +1,1 @@
-export { MagicMenu } from "./MagicMenu"
+export { MagicMenu } from "./MagicMenu";

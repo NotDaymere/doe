@@ -1,5 +1,5 @@
-import React from "react";
 import { Editor } from "@tiptap/react";
+import React from "react";
 import css from "./EditorLink.module.scss";
 
 interface Props {
@@ -9,9 +9,5 @@ interface Props {
 export const EditorLink: React.FC<Props> = ({ editor }) => {
     const [isActive, setActive] = React.useState(false);
 
-    return (
-        <div className={css.root}>
-            EditorLink
-        </div>
-    );
+    return <div className={css.root}>EditorLink</div>;
 };

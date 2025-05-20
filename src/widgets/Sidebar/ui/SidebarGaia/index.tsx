@@ -10,7 +10,6 @@ import WindIcon from "src/shared/icons/Wind.icon";
 import { useAppStore } from "src/shared/providers";
 import css from "./SidebarGaia.module.less";
 
-
 export const SidebarGaia = () => {
     const { gaiaActive, setGaiaActive } = useAppStore();
     const nodeRef = React.useRef<HTMLDivElement>(null);
@@ -27,7 +26,7 @@ export const SidebarGaia = () => {
     return (
         <div className={clsx(css.gaia, gaiaActive && css._active)}>
             <div className={css.gaia_btn_wrapper}>
-                <button className={css.gaia_btn} onClick={toggleGaia}>
+                <button className={css.gaia_btn} onClick={toggleGaia} data-step="gaia">
                     <GlobalIcon />
                 </button>
                 <CSSTransition
@@ -40,17 +39,19 @@ export const SidebarGaia = () => {
                 >
                     <>
                         {showGaia && (
-                        <p className={css.gaia_hint} ref={nodeRef}>
-                            Environmental savings per (calculated per token) by using our models
-                            compared to existing SOTA models.
-                            <br />
-                            <br />
-                            For each token you generate, we calculate tree mass{" "}
-                            <TreeIcon fill="#5B5B5B" />, volume of water <WaterIcon fill="#268AFF" />,
-                            mass of carbon dioxide (CO2) <WindIcon fill="#FF4848" />, joules of energy{" "}
-                            <EnergyIcon fill="#FF8B12" />, and size of land <LeafIcon fill="#8BCF16" />{" "}
-                            conserved with the Bilateral Cortex Model (BCM).
-                        </p>
+                            <p className={css.gaia_hint} ref={nodeRef}>
+                                Environmental savings per (calculated per token) by using our models
+                                compared to existing SOTA models.
+                                <br />
+                                <br />
+                                For each token you generate, we calculate tree mass{" "}
+                                <TreeIcon fill="#5B5B5B" />, volume of water{" "}
+                                <WaterIcon fill="#268AFF" />, mass of carbon dioxide (CO2){" "}
+                                <WindIcon fill="#FF4848" />, joules of energy{" "}
+                                <EnergyIcon fill="#FF8B12" />, and size of land{" "}
+                                <LeafIcon fill="#8BCF16" /> conserved with the Bilateral Cortex
+                                Model (BCM).
+                            </p>
                         )}
                     </>
                 </CSSTransition>

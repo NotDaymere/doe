@@ -14,13 +14,7 @@ interface FileItemProps {
     onDelete?: () => void;
 }
 
-export const FileItem: React.FC<FileItemProps> = ({
-                                                      name,
-                                                      mimetype,
-                                                      url,
-                                                      className,
-                                                      onDelete,
-                                                  }) => {
+export const FileItem: React.FC<FileItemProps> = ({ name, mimetype, url, className, onDelete }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentIconIndex, setCurrentIconIndex] = useState(0);
     const [savedImage, setSavedImage] = useState<string | undefined>(undefined);
@@ -108,8 +102,12 @@ export const FileItem: React.FC<FileItemProps> = ({
                 </div>
                 <div className={css.file_content}>
                     <p className={css.file_name}>
-                        <span>{fileName.length > 15 ? `${fileName.slice(0, 15)}...` : fileName}</span>
-                        {!(name.startsWith("http://") || name.startsWith("https://")) && <>.{info.ext}</>}
+                        <span>
+                            {fileName.length > 15 ? `${fileName.slice(0, 15)}...` : fileName}
+                        </span>
+                        {!(name.startsWith("http://") || name.startsWith("https://")) && (
+                            <>.{info.ext}</>
+                        )}
                     </p>
                     <p className={css.file_ext}>{info.ext}</p>
                 </div>
@@ -148,17 +146,15 @@ export const FileItem: React.FC<FileItemProps> = ({
                         onSaveDrawing={setSavedImage}
                     />
                 )}
-            {isModalOpen &&
-                ["mp4", "webm", "ogg"].includes(extLower) &&
-                url && (
-                    <VideoFilePreviewModal
-                        url={savedVideoUrl || url}
-                        onClose={() => setIsModalOpen(false)}
-                        fileName={fileName}
-                        fileExt={info.ext}
-                        onUpdateUrl={handleUpdateVideoUrl}
-                    />
-                )}
+            {isModalOpen && ["mp4", "webm", "ogg"].includes(extLower) && url && (
+                <VideoFilePreviewModal
+                    url={savedVideoUrl || url}
+                    onClose={() => setIsModalOpen(false)}
+                    fileName={fileName}
+                    fileExt={info.ext}
+                    onUpdateUrl={handleUpdateVideoUrl}
+                />
+            )}
         </>
     );
 };

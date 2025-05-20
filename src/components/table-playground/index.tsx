@@ -15,219 +15,219 @@ import TableRandomValues from "../../widgets/home-screens/ui/ChatMessage/assets/
 import PythonTaskManager from "../../widgets/home-screens/ui/ChatMessage/assets/PythonTaskManager/PythonTaskManager";
 
 const TablePlayground: FC = () => {
-  const { setPlayground } = useApp().app;
-  const { editor } = useEditorContext();
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
-  const [selectedRow, setSelectedRow] = useState<number | null>(null);
-  const [selectedCell, setSelectedCell] = useState<string | null>(null);
-  const [selectedText, setSelectedText] = useState<string | null>(null);
-  const [isPen, setIsPen] = useState<boolean>(false);
-  const [buttonPosition, setButtonPosition] = useState<{
-    top?: number;
-    left?: number;
-    bottom?: number;
-    right?: number;
-  } | null>(null);
+    const { setPlayground } = useApp().app;
+    const { editor } = useEditorContext();
+    const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+    const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
+    const [selectedRow, setSelectedRow] = useState<number | null>(null);
+    const [selectedCell, setSelectedCell] = useState<string | null>(null);
+    const [selectedText, setSelectedText] = useState<string | null>(null);
+    const [isPen, setIsPen] = useState<boolean>(false);
+    const [buttonPosition, setButtonPosition] = useState<{
+        top?: number;
+        left?: number;
+        bottom?: number;
+        right?: number;
+    } | null>(null);
 
-  const customTheme: monaco.editor.IStandaloneThemeData = {
-    base: "vs",
-    inherit: true,
-    rules: [
-      { token: "string", foreground: "A5201E" },
-      { token: "keyword", foreground: "0000FF" },
-      { token: "identifier", foreground: "0171C1" },
-      { token: "variable", foreground: "0171C1" },
-      { token: "delimiter", foreground: "3D3F46" },
-      { token: "function", foreground: "0000FF" },
-    ],
-    colors: {
-      "editor.background": "#FAFAF9",
-      "editor.lineHighlightBackground": "#FAFAF9",
-      "editor.selectionBackground": "#c1d3ff",
-    },
-  };
-
-  useEffect(() => {
-    handleSetDataToInput();
-  }, [selectedRow, selectedColumn, selectedCell]);
-
-  const handleSetDataToInput = () => {
-    if (!editor) {
-      return;
-    }
-
-    let template = "";
-
-    if (selectedCell) {
-      template = `<div>I have a question about <span class="highlighted-span green">Tab ${selectedCell}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
-    } else if (selectedRow) {
-      template = `<div>I have a question about <span class="highlighted-span green">Row ${selectedRow}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
-    } else if (selectedColumn) {
-      template = `<div>I have a question about <span class="highlighted-span green">Column ${selectedColumn}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
-    }
-
-    if (template) {
-      editor.chain().clearContent().insertContent(template).run();
-    }
-  };
-
-  const rowHeaderColumn: TableProps<any>["columns"] = [
-    {
-      title: "",
-      dataIndex: "rowHeader",
-      width: "36px",
-      render: (_: any, __: any, rowIndex: number) => `${rowIndex + 1}`,
-      onCell: (_: any, rowIndex?: number) => ({
-        onClick: (event: React.MouseEvent<HTMLElement>) => {
-          event.stopPropagation();
-          if (rowIndex === undefined) return;
-          setSelectedRow(rowIndex + 1);
-          setSelectedCell(null);
-          setSelectedColumn(null);
+    const customTheme: monaco.editor.IStandaloneThemeData = {
+        base: "vs",
+        inherit: true,
+        rules: [
+            { token: "string", foreground: "A5201E" },
+            { token: "keyword", foreground: "0000FF" },
+            { token: "identifier", foreground: "0171C1" },
+            { token: "variable", foreground: "0171C1" },
+            { token: "delimiter", foreground: "3D3F46" },
+            { token: "function", foreground: "0000FF" },
+        ],
+        colors: {
+            "editor.background": "#FAFAF9",
+            "editor.lineHighlightBackground": "#FAFAF9",
+            "editor.selectionBackground": "#c1d3ff",
         },
-      }),
-    },
-  ];
+    };
 
-  const columns: TableProps<any>["columns"] = [
-    ...rowHeaderColumn,
-    ...mockData.columns.map((col) => ({
-      ...col,
-      onCell: (_: any, rowIndex?: number) => ({
-        onClick: (event: React.MouseEvent<HTMLElement>) => {
-          event.stopPropagation();
-          if (rowIndex === undefined) return;
-          const cellAddress = `${col.title}${rowIndex + 1}`;
-          setSelectedCell(cellAddress);
-          setSelectedRow(null);
-          setSelectedColumn(null);
+    useEffect(() => {
+        handleSetDataToInput();
+    }, [selectedRow, selectedColumn, selectedCell]);
+
+    const handleSetDataToInput = () => {
+        if (!editor) {
+            return;
+        }
+
+        let template = "";
+
+        if (selectedCell) {
+            template = `<div>I have a question about <span class="highlighted-span green">Tab ${selectedCell}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
+        } else if (selectedRow) {
+            template = `<div>I have a question about <span class="highlighted-span green">Row ${selectedRow}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
+        } else if (selectedColumn) {
+            template = `<div>I have a question about <span class="highlighted-span green">Column ${selectedColumn}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
+        }
+
+        if (template) {
+            editor.chain().clearContent().insertContent(template).run();
+        }
+    };
+
+    const rowHeaderColumn: TableProps<any>["columns"] = [
+        {
+            title: "",
+            dataIndex: "rowHeader",
+            width: "36px",
+            render: (_: any, __: any, rowIndex: number) => `${rowIndex + 1}`,
+            onCell: (_: any, rowIndex?: number) => ({
+                onClick: (event: React.MouseEvent<HTMLElement>) => {
+                    event.stopPropagation();
+                    if (rowIndex === undefined) return;
+                    setSelectedRow(rowIndex + 1);
+                    setSelectedCell(null);
+                    setSelectedColumn(null);
+                },
+            }),
         },
-        className:
-            selectedColumn === col.title
-                ? "selected-column"
-                : selectedCell === `${col.title}${rowIndex! + 1}`
-                    ? "selected-cell"
-                    : "",
-      }),
-      onHeaderCell: () => ({
-        onClick: () => {
-          setSelectedColumn(col.title);
-          setSelectedCell(null);
-          setSelectedRow(null);
-        },
-        className: selectedColumn === col.title ? "selected-column" : "",
-      }),
-    })),
-  ];
+    ];
 
-  const handleCollapsePlayground = () =>
-      setPlayground({ type: null, data: null, id: null, open: false });
+    const columns: TableProps<any>["columns"] = [
+        ...rowHeaderColumn,
+        ...mockData.columns.map((col) => ({
+            ...col,
+            onCell: (_: any, rowIndex?: number) => ({
+                onClick: (event: React.MouseEvent<HTMLElement>) => {
+                    event.stopPropagation();
+                    if (rowIndex === undefined) return;
+                    const cellAddress = `${col.title}${rowIndex + 1}`;
+                    setSelectedCell(cellAddress);
+                    setSelectedRow(null);
+                    setSelectedColumn(null);
+                },
+                className:
+                    selectedColumn === col.title
+                        ? "selected-column"
+                        : selectedCell === `${col.title}${rowIndex! + 1}`
+                          ? "selected-cell"
+                          : "",
+            }),
+            onHeaderCell: () => ({
+                onClick: () => {
+                    setSelectedColumn(col.title);
+                    setSelectedCell(null);
+                    setSelectedRow(null);
+                },
+                className: selectedColumn === col.title ? "selected-column" : "",
+            }),
+        })),
+    ];
 
-  const handleEditorMount: OnMount = (editor, monaco) => {
-    editorRef.current = editor;
-    editor.focus();
+    const handleCollapsePlayground = () =>
+        setPlayground({ type: null, data: null, id: null, open: false });
 
-    monaco.editor.defineTheme("myCustomTheme", customTheme);
-    monaco.editor.setTheme("myCustomTheme");
-    editor.onMouseUp(() => {
-      setIsPen(false);
-      handleEditorMouseUp(editor);
-    });
+    const handleEditorMount: OnMount = (editor, monaco) => {
+        editorRef.current = editor;
+        editor.focus();
 
-    editor.onKeyUp(() => {
-      setIsPen(false);
-      handleEditorMouseUp(editor);
-    });
-  };
+        monaco.editor.defineTheme("myCustomTheme", customTheme);
+        monaco.editor.setTheme("myCustomTheme");
+        editor.onMouseUp(() => {
+            setIsPen(false);
+            handleEditorMouseUp(editor);
+        });
 
-  const handleEditorMouseUp = (editor: monaco.editor.IStandaloneCodeEditor) => {
-    updateSelectedText(editor);
-    const position = calculateButtonPosition(editor);
-    if (position) {
-      setButtonPosition(position);
-    }
-  };
+        editor.onKeyUp(() => {
+            setIsPen(false);
+            handleEditorMouseUp(editor);
+        });
+    };
 
-  const updateSelectedText = (editor: monaco.editor.IStandaloneCodeEditor) => {
-    const selection = editor.getSelection();
-    if (selection) {
-      const model = editor.getModel();
-      if (!model) return;
-      const selectedText = model.getValueInRange(selection);
-      setSelectedText(selectedText);
-    }
-  };
+    const handleEditorMouseUp = (editor: monaco.editor.IStandaloneCodeEditor) => {
+        updateSelectedText(editor);
+        const position = calculateButtonPosition(editor);
+        if (position) {
+            setButtonPosition(position);
+        }
+    };
 
-  const handlePenClick = () => {
-    if (selectedText) {
-      setSelectedText(null);
-      setButtonPosition(null);
-      setIsPen(false);
-    } else {
-      setSelectedText("Pen");
-      setIsPen(true);
-      setButtonPosition({
-        bottom: 137,
-        right: 45,
-      });
-    }
-  };
+    const updateSelectedText = (editor: monaco.editor.IStandaloneCodeEditor) => {
+        const selection = editor.getSelection();
+        if (selection) {
+            const model = editor.getModel();
+            if (!model) return;
+            const selectedText = model.getValueInRange(selection);
+            setSelectedText(selectedText);
+        }
+    };
 
-  return (
-      <div className="table-playground-container">
-        <Flex className="tabs-panel">
-          <TableRandomValues />
-          <TableRandomValues />
-          <PythonTaskManager />
-        </Flex>
-        <Table
-            className="table"
-            dataSource={mockData.data}
-            columns={columns}
-            pagination={false}
-            bordered
-            rowKey={(_, rowIndex) => rowIndex!.toString()}
-        />
-        <Editor
-            onMount={handleEditorMount}
-            theme="customTheme"
-            language="plaintext"
-            height="100%"
-            options={{
-              tabSize: 2,
-              insertSpaces: true,
-              minimap: { enabled: false },
-            }}
-            className="example-text"
-            defaultValue={`
+    const handlePenClick = () => {
+        if (selectedText) {
+            setSelectedText(null);
+            setButtonPosition(null);
+            setIsPen(false);
+        } else {
+            setSelectedText("Pen");
+            setIsPen(true);
+            setButtonPosition({
+                bottom: 137,
+                right: 45,
+            });
+        }
+    };
+
+    return (
+        <div className="table-playground-container">
+            <Flex className="tabs-panel">
+                <TableRandomValues />
+                <TableRandomValues />
+                <PythonTaskManager />
+            </Flex>
+            <Table
+                className="table"
+                dataSource={mockData.data}
+                columns={columns}
+                pagination={false}
+                bordered
+                rowKey={(_, rowIndex) => rowIndex!.toString()}
+            />
+            <Editor
+                onMount={handleEditorMount}
+                theme="customTheme"
+                language="plaintext"
+                height="100%"
+                options={{
+                    tabSize: 2,
+                    insertSpaces: true,
+                    minimap: { enabled: false },
+                }}
+                className="example-text"
+                defaultValue={`
 This is what your table looks like when it's in Doe Playground! 
 Larger tables can be navigated, folded in to reveal text, etc.
 Typically, a Playground table will not include both text blocks and graphs 
 as it does here, but it is still possible! 
 The graph interaction with highlighting still applies here!
       `}
-        />
-
-        <div className="action-buttons">
-          <ResizePlaygroundButton onClick={handleCollapsePlayground} />
-          <CloudPlusButton />
-          <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
-        </div>
-
-        {selectedText && (
-            <TextFormat
-                buttonPosition={{
-                  top: buttonPosition?.top,
-                  left: buttonPosition?.left,
-                  bottom: buttonPosition?.bottom,
-                  right: buttonPosition?.right,
-                }}
-                isPen={isPen}
             />
-        )}
-      </div>
-  );
+
+            <div className="action-buttons">
+                <ResizePlaygroundButton onClick={handleCollapsePlayground} />
+                <CloudPlusButton />
+                <PenFormatingButton isActive={selectedText} onClick={handlePenClick} />
+            </div>
+
+            {selectedText && (
+                <TextFormat
+                    buttonPosition={{
+                        top: buttonPosition?.top,
+                        left: buttonPosition?.left,
+                        bottom: buttonPosition?.bottom,
+                        right: buttonPosition?.right,
+                    }}
+                    isPen={isPen}
+                />
+            )}
+        </div>
+    );
 };
 
 export default TablePlayground;

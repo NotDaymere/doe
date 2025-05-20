@@ -1,4 +1,3 @@
-
 export const testTextAndCharts = `
 <response>
 <p><large-text>Example answer</large-text></p>
@@ -349,4 +348,4 @@ export const testTextAndCharts = `
     <p>Here is some inline code: <inline-code>let y = 10;</inline-code>.</p>  
   
 </response>
-`
+`;

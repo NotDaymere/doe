@@ -531,7 +531,10 @@ export const ChatPanel: React.FC = () => {
                     }
                     blob = await response.blob();
                 } catch (error) {
-                    console.error("Failed to fetch content from link (possibly due to CORS).", error);
+                    console.error(
+                        "Failed to fetch content from link (possibly due to CORS).",
+                        error
+                    );
                     blob = new Blob([`Failed to fetch content from link:\n${link}`], {
                         type: "text/plain",
                     });
