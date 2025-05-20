@@ -92,6 +92,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                 className={clsx(css.layout_chat, {
                     // [css.centered]: step >= 60,
                     [css.chat_end]: step >= 8,
+                    [css.chat_top]: step >= 40 && step <= 43,
                 })}
             >
                 {step < 31 && (

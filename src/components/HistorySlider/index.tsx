@@ -22,6 +22,8 @@ export const HistorySlider = ({ messages, step }: HistorySliderProps) => {
     const secondRef = useRef<HTMLDivElement>(null);
     const [mathKey, setMathKey] = useState(0);
 
+    const lastMessage = messages[messages.length - 1];
+
     const mathMessage: OnboardingMessage = {
         role: "ai",
         content:
@@ -49,18 +51,15 @@ export const HistorySlider = ({ messages, step }: HistorySliderProps) => {
                 </div>
                 <div className={css.chatHistoryContainer} ref={historyRef}>
                     <div className={css.chatHistoryContent}>
-                        {messages.map((msg, index) => (
-                            <MathJaxContext config={mathJaxConfig} key={index}>
+                        {lastMessage && (
+                            <MathJaxContext config={mathJaxConfig}>
                                 <OnboardingChatMessage
-                                    message={msg}
-                                    prevRole={index > 0 ? messages[index - 1]?.role : undefined}
-                                    // setTypingDone={setTypingDone}
-                                    ref={historyRef}
+                                    message={lastMessage}
                                     noTypeEffect
                                     step={step}
                                 />
                             </MathJaxContext>
-                        ))}
+                        )}
                     </div>
                 </div>
             </div>
@@ -76,7 +75,6 @@ export const HistorySlider = ({ messages, step }: HistorySliderProps) => {
                             <OnboardingChatMessage
                                 key={mathKey}
                                 message={mathMessage}
-                                // setTypingDone={setTypingDone}
                                 noTypeEffect
                                 step={step}
                             />

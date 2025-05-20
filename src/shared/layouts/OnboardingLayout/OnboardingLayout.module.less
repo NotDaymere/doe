@@ -153,6 +153,18 @@
     &.chat_end {
         justify-content: flex-end;
     }
+
+    &.chat_top {
+        justify-content: flex-start;
+        overflow: hidden;
+        height: 100%;
+
+        .layout_history {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+        }
+    }
 }
 
 .layout_input {
@@ -249,10 +261,8 @@
 }
 
 .branch_bar_wrapper {
-    position: sticky;
     width: 100%;
     z-index: 11;
-    top: 0;
 
     display: flex;
     justify-content: center;
