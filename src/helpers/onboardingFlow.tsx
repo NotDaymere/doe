@@ -206,7 +206,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </div>
         ),
         navigationOverrideStep: 6,
-        keyboardSkipDelay: 1500,
+        keyboardSkipDelay: 1000,
         onKeyboardSkip: ({ setUserClickedBold }) => {
             setUserClickedBold(true);
         },
@@ -240,7 +240,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </div>
         ),
         navigationOverrideStep: 7,
-        keyboardSkipDelay: 1500,
+        keyboardSkipDelay: 1000,
         onKeyboardSkip: ({ setUserClickedUnderline }) => {
             setUserClickedUnderline(true);
         },
@@ -275,7 +275,7 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         blur: ["history", "body", "magicbox"],
         navigationOverrideStep: 8,
-        keyboardSkipDelay: 1500,
+        keyboardSkipDelay: 1000,
         onKeyboardSkip: ({ setUserClickedItalic }) => {
             setUserClickedItalic(true);
         },
