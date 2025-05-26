@@ -210,6 +210,9 @@ export const onboardingFlow: OnboardingStep[] = [
         onKeyboardSkip: ({ setUserClickedBold }) => {
             setUserClickedBold(true);
         },
+        onExit: ({ setUserClickedBold }) => {
+            setUserClickedBold(false);
+        },
         blur: ["history", "body", "magicbox"],
     },
     {
@@ -243,6 +246,9 @@ export const onboardingFlow: OnboardingStep[] = [
         keyboardSkipDelay: 1000,
         onKeyboardSkip: ({ setUserClickedUnderline }) => {
             setUserClickedUnderline(true);
+        },
+        onExit: ({ setUserClickedUnderline }) => {
+            setUserClickedUnderline(false);
         },
         blur: ["history", "body", "magicbox"],
     },
@@ -278,6 +284,9 @@ export const onboardingFlow: OnboardingStep[] = [
         keyboardSkipDelay: 1000,
         onKeyboardSkip: ({ setUserClickedItalic }) => {
             setUserClickedItalic(true);
+        },
+        onExit: ({ setUserClickedItalic }) => {
+            setUserClickedItalic(false);
         },
         onEnter: ({ setMessages, setManualSkip }) => {
             setManualSkip(false);

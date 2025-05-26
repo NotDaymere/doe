@@ -14,7 +14,7 @@ export default function OnboardingLayout() {
         useChat(setShowSidebar);
     const flow = useOnboardingFlow(setMessages);
     const step = flow.step;
-    const isDevMode = false;
+    const isDevMode = true;
 
     return (
         <main className={css.layout_main}>
