@@ -6,6 +6,7 @@ import { useCursor } from "src/contexts/CursorContext";
 import BranchIcon from "src/shared/icons/Branch.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
 import css from "./BranchBar.module.less";
+import { Tooltip } from "../Tooltip";
 
 interface BranchBarProps {
     withDots?: boolean;
@@ -43,6 +44,16 @@ export const BranchBar = ({ withDots, step }: BranchBarProps) => {
                 })}
             >
                 <BranchIcon data-step="branch-bar" className={css.branch_icon} />
+                {!cursorMoving && step === 40.1 && (
+                    <Tooltip position="left" className={`highlight-step highlight-step-${step}`}>
+                        <div className={css.tooltip_content}>
+                            <b className={css.tooltip_title}>Viewing branch</b>
+                            <p className={css.tooltip_paragraph}>
+                                By opening the branch, you switch to horizontal scrolling mode.
+                            </p>
+                        </div>
+                    </Tooltip>
+                )}
                 Create a simple project for me in any language.
                 {withDots && (
                     <button onClick={() => setIsOpenMenu((prev) => !prev)}>

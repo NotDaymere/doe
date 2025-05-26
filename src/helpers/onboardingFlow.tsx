@@ -1246,9 +1246,6 @@ export const onboardingFlow: OnboardingStep[] = [
         autoSkip: 1150,
         disableNavigationHover: true,
         navigationOverrideStep: 40,
-        onExit: ({ setCursorMoving }) => {
-            setCursorMoving();
-        },
     },
     {
         id: 38,
@@ -1307,21 +1304,25 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 40,
-        location: '[data-step="branch-bar"]',
+        location: '[data-step="input"]',
         cursorVisible: true,
-        cursorDelay: 1000,
         cursorPosition: {
             top: 0,
-            left: -10,
+            left: 401,
         },
-        tooltip: true,
-        tooltipPosition: "left",
-        tooltipTitle: <b className={css.tooltip_title}>Viewing branch</b>,
-        tooltipParagraph1: (
-            <p className={css.tooltip_paragraph}>
-                By opening the branch, you switch to horizontal scrolling mode.
-            </p>
-        ),
+        tooltip: false,
+        disableNavigationHover: true,
+        autoSkipSubStep: 10,
+    },
+    {
+        id: 40.1,
+        location: '[data-step="input"]',
+        cursorVisible: true,
+        cursorPosition: {
+            top: 0,
+            left: 401,
+        },
+        tooltip: false,
         disableNavigationHover: true,
         onEnter: ({ setBlockSteps, setMessages, setCursorMoving }) => {
             setCursorMoving();

@@ -33,7 +33,7 @@ export const HistorySlider = ({ messages, step }: HistorySliderProps) => {
     };
 
     useEffect(() => {
-        if (secondRef.current && step !== 40) {
+        if (secondRef.current && step > 40.1) {
             // setMathKey((prev) => prev + 1);
             secondRef.current.scrollIntoView({
                 behavior: "smooth",
