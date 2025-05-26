@@ -15,6 +15,10 @@
         overflow: hidden;
     }
 
+    &.blurred {
+        filter: blur(25px);
+    }
+
     @media screen and (max-width: 1248px) {
         padding: 64px 0 16px 0;
     }
@@ -31,7 +35,9 @@
     position: relative;
     background-color: #ffffff;
     z-index: 10;
-    box-shadow: 0 0 40px rgba(71, 157, 255, 0.6), 0 0 80px rgba(71, 157, 255, 0.4),
+    box-shadow:
+        0 0 40px rgba(71, 157, 255, 0.6),
+        0 0 80px rgba(71, 157, 255, 0.4),
         0 0 120px rgba(71, 157, 255, 0.2);
     animation: pop 1s ease forwards;
 
@@ -48,8 +54,12 @@
     border-radius: 12px;
     padding: 1px;
     background: linear-gradient(135deg, rgba(71, 157, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
-    -webkit-mask: linear-gradient(white, white) content-box, linear-gradient(white, white);
-    mask: linear-gradient(white, white) content-box, linear-gradient(white, white);
+    -webkit-mask:
+        linear-gradient(white, white) content-box,
+        linear-gradient(white, white);
+    mask:
+        linear-gradient(white, white) content-box,
+        linear-gradient(white, white);
     mask-composite: exclude;
     -webkit-mask-composite: destination-out;
     opacity: 0.5;
