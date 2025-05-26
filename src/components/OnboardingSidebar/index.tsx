@@ -76,10 +76,18 @@ export const OnboardingSidebar = ({
                         [css.sidebar_theme_toggler_horizontal]: step >= 12 && step <= 16,
                     })}
                 >
-                    <button className={css.sidebar_theme_btn} disabled data-step="lightMode">
+                    <button
+                        className={css.sidebar_theme_btn}
+                        data-step="lightMode"
+                        onClick={() => handleUserClickedSidebarButton("lightMode")}
+                    >
                         <LightThemeIcon />
                     </button>
-                    <button className={css.sidebar_theme_btn} data-step="darkMode">
+                    <button
+                        className={css.sidebar_theme_btn}
+                        data-step="darkMode"
+                        onClick={() => handleUserClickedSidebarButton("darkMode")}
+                    >
                         <MoonIcon />
                     </button>
                 </div>

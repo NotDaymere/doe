@@ -231,6 +231,14 @@ export function useOnboardingFlow(
             nextSubStep();
         } else if (type === "code") {
             nextSubStep();
+        } else if (type === "lightMode") {
+            if (step >= 23 && step <= 26) {
+                setStep(26);
+            }
+        } else if (type === "darkMode") {
+            if (step >= 23 && step <= 26) {
+                setStep(25);
+            }
         }
     }
 

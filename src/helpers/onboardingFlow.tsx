@@ -856,7 +856,8 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         blur: ["input", "navigate"],
         disableNavigationHover: true,
-        onEnter: ({ setMessages }) =>
+        onEnter: ({ setMessages, setCursorMoving }) => {
+            setCursorMoving();
             setTimeout(() => {
                 setMessages([
                     {
@@ -866,7 +867,8 @@ export const onboardingFlow: OnboardingStep[] = [
                         originTranscribed: translationOriginTranscribed,
                     },
                 ]);
-            }, 1500),
+            }, 1500);
+        },
     },
     {
         id: 20,
