@@ -713,7 +713,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         cursorClick: true,
         cursorClickPrevPosition: true,
-        cursorDelay: 800,
+        cursorDelay: 900,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Tags</b>,
