@@ -87,7 +87,11 @@ export const OnboardingSidebar = ({
             </div>
 
             <div className={css.sidebar_controls}>
-                <OnboardingSidebarMenu step={step} isOpen={isOpen} />
+                <OnboardingSidebarMenu
+                    step={step}
+                    isOpen={isOpen}
+                    handleUserClickedSidebarButton={handleUserClickedSidebarButton}
+                />
 
                 <OnboardingSidebarFormatting
                     step={step}
