@@ -13,6 +13,9 @@ export function useStepEffects(
         setBlockSteps: React.Dispatch<React.SetStateAction<boolean>>;
         setBlockInput: React.Dispatch<React.SetStateAction<boolean>>;
         setManualSkip: React.Dispatch<React.SetStateAction<boolean>>;
+        setUserClickedBold: React.Dispatch<React.SetStateAction<boolean>>;
+        setUserClickedUnderline: React.Dispatch<React.SetStateAction<boolean>>;
+        setUserClickedItalic: React.Dispatch<React.SetStateAction<boolean>>;
     }
 ) {
     const prevStepRef = useRef<number>(step);

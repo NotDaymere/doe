@@ -45,6 +45,9 @@ export interface OnboardingCtx {
     setBlockSteps: (b: boolean) => void;
     setBlockInput: React.Dispatch<React.SetStateAction<boolean>>;
     setManualSkip: React.Dispatch<React.SetStateAction<boolean>>;
+    setUserClickedBold: React.Dispatch<React.SetStateAction<boolean>>;
+    setUserClickedUnderline: React.Dispatch<React.SetStateAction<boolean>>;
+    setUserClickedItalic: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface OnboardingStep {
@@ -75,6 +78,7 @@ export interface OnboardingStep {
     onEnter?: (ctx: OnboardingCtx) => void;
     onExit?: (ctx: OnboardingCtx) => void;
     onKeyboardSkip?: (ctx: OnboardingCtx) => void;
+    keyboardSkipDelay?: number;
     navigationOverrideStep?: number;
     autoSkip?: number; // number represents delay for autoskip
     autoSkipSubStep?: number; // skip by sub step
@@ -201,6 +205,11 @@ export const onboardingFlow: OnboardingStep[] = [
                 <ItalicIcon />
             </div>
         ),
+        navigationOverrideStep: 6,
+        keyboardSkipDelay: 1500,
+        onKeyboardSkip: ({ setUserClickedBold }) => {
+            setUserClickedBold(true);
+        },
         blur: ["history", "body", "magicbox"],
     },
     {
@@ -230,6 +239,11 @@ export const onboardingFlow: OnboardingStep[] = [
                 <ItalicIcon />
             </div>
         ),
+        navigationOverrideStep: 7,
+        keyboardSkipDelay: 1500,
+        onKeyboardSkip: ({ setUserClickedUnderline }) => {
+            setUserClickedUnderline(true);
+        },
         blur: ["history", "body", "magicbox"],
     },
     {
@@ -260,6 +274,11 @@ export const onboardingFlow: OnboardingStep[] = [
             </div>
         ),
         blur: ["history", "body", "magicbox"],
+        navigationOverrideStep: 8,
+        keyboardSkipDelay: 1500,
+        onKeyboardSkip: ({ setUserClickedItalic }) => {
+            setUserClickedItalic(true);
+        },
         onEnter: ({ setMessages, setManualSkip }) => {
             setManualSkip(false);
             setMessages([]);

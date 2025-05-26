@@ -31,6 +31,9 @@ export function useOnboardingFlow(
         setBlockSteps,
         setBlockInput,
         setManualSkip,
+        setUserClickedBold,
+        setUserClickedUnderline,
+        setUserClickedItalic,
     };
 
     // --- Step Navigation ---

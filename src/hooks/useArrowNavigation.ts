@@ -15,6 +15,9 @@ export function useArrowNavigation(
         setBlockSteps: React.Dispatch<React.SetStateAction<boolean>>;
         setBlockInput: React.Dispatch<React.SetStateAction<boolean>>;
         setManualSkip: React.Dispatch<React.SetStateAction<boolean>>;
+        setUserClickedBold: React.Dispatch<React.SetStateAction<boolean>>;
+        setUserClickedUnderline: React.Dispatch<React.SetStateAction<boolean>>;
+        setUserClickedItalic: React.Dispatch<React.SetStateAction<boolean>>;
     }
 ) {
     const { setCursorMoving } = useCursor();
@@ -38,8 +41,15 @@ export function useArrowNavigation(
                     ctx.setManualSkip(true);
                     currentStep?.onKeyboardSkip?.(ctx);
                 }
-                setCursorMoving();
-                setStep(next);
+                if (!currentStep?.keyboardSkipDelay) {
+                    setCursorMoving();
+                    setStep(next);
+                } else {
+                    setTimeout(() => {
+                        setCursorMoving();
+                        setStep(next);
+                    }, currentStep.keyboardSkipDelay);
+                }
             }
         };
 
