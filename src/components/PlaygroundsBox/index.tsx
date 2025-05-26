@@ -22,6 +22,7 @@ const PlaygroundsBox = ({ step }: PlaygroundsBoxProps) => {
             })}
             data-step="playgrounds"
             onClick={() => setIsOpen((prev) => !prev)}
+            onMouseLeave={() => setIsOpen(false)}
         >
             {!isOpen && step !== 34 ? (
                 <div className={css.playground_box_container}>

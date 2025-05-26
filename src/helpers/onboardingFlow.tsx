@@ -1277,6 +1277,9 @@ export const onboardingFlow: OnboardingStep[] = [
         onEnter: ({ setCursorMoving }) => {
             setCursorMoving();
         },
+        onExit: ({ setCursorMoving }) => {
+            setCursorMoving();
+        },
     },
     {
         id: 38.1,

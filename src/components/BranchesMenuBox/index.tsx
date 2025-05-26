@@ -74,6 +74,7 @@ const BranchesMenuBox = ({ step }: BranchesMenuBoxProps) => {
                 [css.no_sidebar]: step >= 58,
             })}
             onClick={() => setIsOpen((prev) => !prev)}
+            onMouseLeave={() => setIsOpen(false)}
         >
             {!isOpen && step !== 43 ? (
                 <div className={css.branches_box_container} data-step="branches-box">
