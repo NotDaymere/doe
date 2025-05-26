@@ -7,6 +7,8 @@ import { useEffect, useRef, useState } from "react";
 import { GeneralSettingsIcon } from "src/shared/icons/GeneralSettingsIcon";
 import { ContentHeader } from "../../components/ContentHeader/ContentHeader";
 import { ModalButton } from "../../components/ModalButton/ModalButton";
+import { PopupSelect } from "../../components/PopupSelect/PopupSelect";
+import clsx from "clsx";
 type ProfileTabProps = {
     currentProfile: Profile;
     onClose: () => void;
@@ -112,6 +114,23 @@ export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
                         >
                             <CrossIcon />
                         </button>
+                    </div>
+                </div>
+                <div className={styles.profileTab__userInfo__container}>
+                    <p className={styles.profileTab__userInfo__title}>Default Language</p>
+                    <div
+                        className={clsx(
+                            styles.profileTab__userInfo__content,
+                            styles.profileTab__userInfo__content__alignRight
+                        )}
+                    >
+                        <PopupSelect
+                            options={[
+                                { label: "Auto", value: "auto" },
+                                { label: "English", value: "en" },
+                            ]}
+                            value={"auto"}
+                        />
                     </div>
                 </div>
             </div>
