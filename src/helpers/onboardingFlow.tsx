@@ -1414,7 +1414,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         disableNavigationHover: true,
-        blur: [""],
+        blur: ["history", "body", "magicbox", "navigate"],
         onEnter: ({ setCursorMoving }) => {
             setCursorMoving();
         },
