@@ -48,7 +48,7 @@ export const OnboardingSidebar = ({
             })}
             onTransitionEnd={handleSidebarOpen}
         >
-            <SidebarGaia />
+            <SidebarGaia noPadding />
 
             <div className={css.sidebar_profile}>
                 <img

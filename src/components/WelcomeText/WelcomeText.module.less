@@ -1,13 +1,14 @@
 .welcome_text {
     font-weight: 400;
     font-size: 24px;
-    line-height: 120%;
-    text-align: center;
-    .setFontSohneBuch(24px);
+    text-align: text-bottom;
+    .setFontSohneKraftig(24px);
+    font-weight: 500;
+    vertical-align: bottom;
 
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-end;
     flex-wrap: wrap;
 }
 
@@ -16,14 +17,16 @@
     animation: fadeInUp 2s ease-out forwards;
 }
 
-.word:nth-child(3) {
-    font-style: italic;
-    font-weight: 600;
-}
-
 .letter {
     opacity: 0;
     animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.italic {
+    .setFontInter500(24px);
+    font-style: italic;
+    font-weight: 400;
+    vertical-align: bottom;
 }
 
 @keyframes fadeInUp {
