@@ -1,11 +1,9 @@
 import ToggleSwitch from "src/shared/components/ToogleSwitch";
 import { ContentHeader } from "../../components/ContentHeader/ContentHeader";
 import styles from "./GeneralTab.module.less";
-import modalStyles from "../../SettingsModal.module.less";
 import { useState } from "react";
 import { Profile } from "src/widgets/Sidebar/ui/Profile";
 import { LogOutIcon } from "src/shared/icons/LogOutIcon";
-import classNames from "classnames";
 import { AddProfilePhotoIcon } from "src/shared/icons/AddProfilePhotoIcon";
 import { EmailIcon } from "src/shared/icons/EmailIcon";
 import { UploadButton } from "../../components/UploadButton/UploadButton";
