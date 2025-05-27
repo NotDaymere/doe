@@ -164,7 +164,7 @@
 
 .plus {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     width: 20px;
     height: 20px;
@@ -173,6 +173,7 @@
     border: 1px solid transparent;
     font-size: 20px;
     font-weight: 300;
+    line-height: 15px;
     transition: all 0.2s ease;
 
     &.fade {
@@ -180,6 +181,7 @@
     }
 
     &.pop {
+        transform-origin: center;
         animation: scale-in 1s ease-in-out forwards;
     }
 
@@ -246,9 +248,11 @@
     0% {
         scale: 1.2;
         background-color: rgba(181, 181, 181, 0.2);
+        color: rgb(100, 100, 100);
     }
     100% {
         scale: 1;
         background-color: transparent;
+        color: rgba(141, 141, 141, 1);
     }
 }

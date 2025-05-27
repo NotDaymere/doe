@@ -13,7 +13,9 @@
     z-index: 10;
     transform: translateY(5px) scale(0.9);
     transform-origin: bottom;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
 
     &:not(.tooltip--stressed) {
         animation: popIn 0.7s ease-out forwards;
@@ -295,9 +297,8 @@
     }
 }
 
-:global(.highlight-step-40) {
-    left: unset;
-    right: 100px;
+:global(.highlight-step-40\.1) {
+    left: -310px;
     animation: popIn 0.7s ease-out forwards;
     .tooltip__arrow {
         top: 50%;

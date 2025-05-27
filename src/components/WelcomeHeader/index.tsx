@@ -34,7 +34,10 @@ export const WelcomeHeader = ({
 
     return (
         <div
-            className={clsx(css.header_container, { [css.hidden]: step >= 28.1 && step <= 57 })}
+            className={clsx(css.header_container, {
+                [css.hidden]: step >= 28.1 && step <= 57,
+                [css.blurred]: step === 7,
+            })}
             style={{ marginTop: `${logoSlide ? 10 : 18}%` }}
             data-step="head"
             onTransitionEnd={handleLogoSlideComplete}

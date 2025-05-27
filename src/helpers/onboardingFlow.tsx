@@ -45,6 +45,9 @@ export interface OnboardingCtx {
     setBlockSteps: (b: boolean) => void;
     setBlockInput: React.Dispatch<React.SetStateAction<boolean>>;
     setManualSkip: React.Dispatch<React.SetStateAction<boolean>>;
+    setUserClickedBold: React.Dispatch<React.SetStateAction<boolean>>;
+    setUserClickedUnderline: React.Dispatch<React.SetStateAction<boolean>>;
+    setUserClickedItalic: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface OnboardingStep {
@@ -75,6 +78,7 @@ export interface OnboardingStep {
     onEnter?: (ctx: OnboardingCtx) => void;
     onExit?: (ctx: OnboardingCtx) => void;
     onKeyboardSkip?: (ctx: OnboardingCtx) => void;
+    keyboardSkipDelay?: number;
     navigationOverrideStep?: number;
     autoSkip?: number; // number represents delay for autoskip
     autoSkipSubStep?: number; // skip by sub step
@@ -201,6 +205,14 @@ export const onboardingFlow: OnboardingStep[] = [
                 <ItalicIcon />
             </div>
         ),
+        navigationOverrideStep: 6,
+        keyboardSkipDelay: 1000,
+        onKeyboardSkip: ({ setUserClickedBold }) => {
+            setUserClickedBold(true);
+        },
+        onExit: ({ setUserClickedBold }) => {
+            setUserClickedBold(false);
+        },
         blur: ["history", "body", "magicbox"],
     },
     {
@@ -230,6 +242,14 @@ export const onboardingFlow: OnboardingStep[] = [
                 <ItalicIcon />
             </div>
         ),
+        navigationOverrideStep: 7,
+        keyboardSkipDelay: 1000,
+        onKeyboardSkip: ({ setUserClickedUnderline }) => {
+            setUserClickedUnderline(true);
+        },
+        onExit: ({ setUserClickedUnderline }) => {
+            setUserClickedUnderline(false);
+        },
         blur: ["history", "body", "magicbox"],
     },
     {
@@ -260,6 +280,14 @@ export const onboardingFlow: OnboardingStep[] = [
             </div>
         ),
         blur: ["history", "body", "magicbox"],
+        navigationOverrideStep: 8,
+        keyboardSkipDelay: 1000,
+        onKeyboardSkip: ({ setUserClickedItalic }) => {
+            setUserClickedItalic(true);
+        },
+        onExit: ({ setUserClickedItalic }) => {
+            setUserClickedItalic(false);
+        },
         onEnter: ({ setMessages, setManualSkip }) => {
             setManualSkip(false);
             setMessages([]);
@@ -685,7 +713,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         cursorClick: true,
         cursorClickPrevPosition: true,
-        cursorDelay: 800,
+        cursorDelay: 900,
         tooltip: true,
         tooltipPosition: "right",
         tooltipTitle: <b className={css.tooltip_title}>Tags</b>,
@@ -828,7 +856,8 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         blur: ["input", "navigate"],
         disableNavigationHover: true,
-        onEnter: ({ setMessages }) =>
+        onEnter: ({ setMessages, setCursorMoving }) => {
+            setCursorMoving();
             setTimeout(() => {
                 setMessages([
                     {
@@ -838,7 +867,8 @@ export const onboardingFlow: OnboardingStep[] = [
                         originTranscribed: translationOriginTranscribed,
                     },
                 ]);
-            }, 1500),
+            }, 1500);
+        },
     },
     {
         id: 20,
@@ -1216,9 +1246,6 @@ export const onboardingFlow: OnboardingStep[] = [
         autoSkip: 1150,
         disableNavigationHover: true,
         navigationOverrideStep: 40,
-        onExit: ({ setCursorMoving }) => {
-            setCursorMoving();
-        },
     },
     {
         id: 38,
@@ -1245,6 +1272,9 @@ export const onboardingFlow: OnboardingStep[] = [
         navigationOverrideStep: 40,
         // autoSkipSubStep: 1000,
         onEnter: ({ setCursorMoving }) => {
+            setCursorMoving();
+        },
+        onExit: ({ setCursorMoving }) => {
             setCursorMoving();
         },
     },
@@ -1274,21 +1304,25 @@ export const onboardingFlow: OnboardingStep[] = [
     },
     {
         id: 40,
-        location: '[data-step="branch-bar"]',
+        location: '[data-step="input"]',
         cursorVisible: true,
-        cursorDelay: 1000,
         cursorPosition: {
             top: 0,
-            left: -10,
+            left: 401,
         },
-        tooltip: true,
-        tooltipPosition: "left",
-        tooltipTitle: <b className={css.tooltip_title}>Viewing branch</b>,
-        tooltipParagraph1: (
-            <p className={css.tooltip_paragraph}>
-                By opening the branch, you switch to horizontal scrolling mode.
-            </p>
-        ),
+        tooltip: false,
+        disableNavigationHover: true,
+        autoSkipSubStep: 10,
+    },
+    {
+        id: 40.1,
+        location: '[data-step="input"]',
+        cursorVisible: true,
+        cursorPosition: {
+            top: 0,
+            left: 401,
+        },
+        tooltip: false,
         disableNavigationHover: true,
         onEnter: ({ setBlockSteps, setMessages, setCursorMoving }) => {
             setCursorMoving();
@@ -1381,7 +1415,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         disableNavigationHover: true,
-        blur: [""],
+        blur: ["history", "body", "magicbox", "navigate"],
         onEnter: ({ setCursorMoving }) => {
             setCursorMoving();
         },
@@ -1507,7 +1541,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 limit by case or timeframe.
             </p>
         ),
-        autoSkip: 3000,
+        autoSkip: 1500,
         disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },

@@ -31,6 +31,9 @@ export function useOnboardingFlow(
         setBlockSteps,
         setBlockInput,
         setManualSkip,
+        setUserClickedBold,
+        setUserClickedUnderline,
+        setUserClickedItalic,
     };
 
     // --- Step Navigation ---
@@ -200,10 +203,42 @@ export function useOnboardingFlow(
                 setCursorMoving();
                 setStep(7);
             }, 1000);
+        } else if (type === "corpora") {
+            setCursorMoving();
+            setStep(13);
+        } else if (type === "corporaClose") {
+            setCursorMoving();
+            setStep(14);
+        } else if (type === "chats") {
+            setCursorMoving();
+            setStep(14);
+        } else if (type === "chatsClose") {
+            setCursorMoving();
+            setStep(15);
+        } else if (type === "favourites") {
+            setCursorMoving();
+            setStep(15);
+        } else if (type === "favouritesClose") {
+            setCursorMoving();
+            setStep(16);
+        } else if (type === "tags") {
+            setCursorMoving();
+            setStep(16);
+        } else if (type === "tagsClose") {
+            setCursorMoving();
+            setStep(17);
         } else if (type === "math") {
             nextSubStep();
         } else if (type === "code") {
             nextSubStep();
+        } else if (type === "lightMode") {
+            if (step >= 23 && step <= 26) {
+                setStep(26);
+            }
+        } else if (type === "darkMode") {
+            if (step >= 23 && step <= 26) {
+                setStep(25);
+            }
         }
     }
 

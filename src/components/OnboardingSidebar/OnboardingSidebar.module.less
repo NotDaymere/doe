@@ -225,6 +225,18 @@
         box-shadow: 0 1px 20px 0 #ff8b12;
     }
 
+    .sidebar_theme_btn:not(:first-child) {
+        &:hover {
+            svg {
+                path {
+                    fill: #6f00ff !important;
+                    transform-origin: center;
+                    transform: rotate(15deg);
+                }
+            }
+        }
+    }
+
     svg {
         path {
             transition: all 1s ease;
