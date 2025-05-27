@@ -10,7 +10,11 @@ import WindIcon from "src/shared/icons/Wind.icon";
 import { useAppStore } from "src/shared/providers";
 import css from "./SidebarGaia.module.less";
 
-export const SidebarGaia = () => {
+interface SidebarGaiaProps {
+    noPadding?: boolean;
+}
+
+export const SidebarGaia = ({ noPadding }: SidebarGaiaProps) => {
     const { gaiaActive, setGaiaActive } = useAppStore();
     const nodeRef = React.useRef<HTMLDivElement>(null);
 
@@ -24,7 +28,7 @@ export const SidebarGaia = () => {
         };
     }, []);
     return (
-        <div className={clsx(css.gaia, gaiaActive && css._active)}>
+        <div className={clsx(css.gaia, gaiaActive && css._active, noPadding && css.no_padding)}>
             <div className={css.gaia_btn_wrapper}>
                 <button className={css.gaia_btn} onClick={toggleGaia} data-step="gaia">
                     <GlobalIcon />
