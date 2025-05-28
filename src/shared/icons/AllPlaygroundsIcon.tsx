@@ -22,8 +22,8 @@ const AllPlaygroundsIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
                     y2="24"
                     gradientUnits="userSpaceOnUse"
                 >
-                    <stop stop-color="#B5B5B5" />
-                    <stop offset="1" stop-color="#8D8D8D" stop-opacity="0.46" />
+                    <stop stopColor="#B5B5B5" />
+                    <stop offset="1" stopColor="#8D8D8D" stopOpacity="0.46" />
                 </linearGradient>
                 <linearGradient
                     id="branches-gradient-light-hover"
@@ -33,8 +33,8 @@ const AllPlaygroundsIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
                     y2="24"
                     gradientUnits="userSpaceOnUse"
                 >
-                    <stop stop-color="#5B5B5B" />
-                    <stop offset="1" stop-color="#8D8D8D" stop-opacity="0.46" />
+                    <stop stopColor="#5B5B5B" />
+                    <stop offset="1" stopColor="#8D8D8D" stopOpacity="0.46" />
                 </linearGradient>
                 <linearGradient
                     id="branches-gradient-dark"
@@ -44,30 +44,11 @@ const AllPlaygroundsIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
                     y2="31"
                     gradientUnits="userSpaceOnUse"
                 >
-                    <stop offset="0.333075" stop-color="white" stop-opacity="0.6" />
-                    <stop offset="1" stop-color="white" stop-opacity="0.05" />
+                    <stop offset="0.333075" stopColor="white" stopOpacity="0.6" />
+                    <stop offset="1" stopColor="white" stopOpacity="0.05" />
                 </linearGradient>
             </defs>
         </svg>
     );
 };
 export default AllPlaygroundsIcon;
-<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-        d="M9.81153 19.5999C10.3833 19.5999 10.6998 19.2261 10.6998 18.5293V12.7319C10.71 10.3079 13.4259 6.79314 15.9274 5.20745L16.7442 4.68225C17.0301 4.51056 17.1833 4.19746 17.1833 3.89446C17.1833 3.39956 16.8361 3.05617 16.3154 3.05617C16.0602 3.05617 15.7845 3.14707 15.5394 3.30866L14.9982 3.66217C12.5172 5.29835 10.1383 8.39903 9.82173 9.96452H9.79111C9.47459 8.38893 7.10584 5.29835 4.62478 3.66217L4.08364 3.30866C3.82838 3.14707 3.56292 3.05617 3.29746 3.05617C2.77674 3.05617 2.43981 3.42987 2.43981 3.88436C2.43981 4.18736 2.59296 4.51056 2.87884 4.68225L3.69565 5.20745C6.19714 6.79314 8.92325 10.3079 8.92325 12.7319V18.5293C8.92325 19.2261 9.23975 19.5999 9.81153 19.5999ZM2.78695 6.43964L5.64579 2.77337C6.08482 2.20778 5.80915 1.75327 5.12508 1.72298L1.15333 1.55128C0.58156 1.52097 0.275257 1.89467 0.448829 2.45017L1.623 6.19724C1.8272 6.86384 2.3377 7.01533 2.78695 6.43964ZM16.7136 6.42954C17.1424 7.01533 17.6631 6.88404 17.8776 6.22755L19.164 2.51078C19.3478 1.96537 19.0517 1.58158 18.4902 1.59167L14.5082 1.65228C13.8241 1.66237 13.5383 2.10677 13.9569 2.68247L16.7136 6.42954Z"
-        fill="url(#paint0_linear_1969_37361)"
-    />
-    <defs>
-        <linearGradient
-            id="paint0_linear_1969_37361"
-            x1="9.8094"
-            y1="1.54956"
-            x2="10"
-            y2="31"
-            gradientUnits="userSpaceOnUse"
-        >
-            <stop offset="0.333075" stop-color="white" stop-opacity="0.6" />
-            <stop offset="1" stop-color="white" stop-opacity="0.05" />
-        </linearGradient>
-    </defs>
-</svg>;

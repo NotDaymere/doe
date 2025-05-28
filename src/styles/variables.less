@@ -465,12 +465,23 @@ body.dark {
         rgba(255, 255, 255, 0) 0%,
         rgba(255, 255, 255, 1) 100%
     );
+    --bg-gradient-var-14: linear-gradient(
+        var(--color-neutral-600) 0%,
+        var(--color-neutral-950) 100%
+    );
+    --bg-gradient-var-15: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.4) 100%);
     // border gradients
     --border-gradient-var-1: linear-gradient(
         to right bottom,
         rgb(255, 228, 200) 0%,
-        rgb(255, 255, 255) ;100%
+        rgb(255, 255, 255) 100%
     );
+    --border-gradient-var-2: linear-gradient(
+        to right bottom,
+        rgba(141, 141, 141, 0.46) 0%,
+        rgb(255, 255, 255) 100%
+    );
+
     //text gradients
     --text-gradient-var-1: linear-gradient(to right, var(--color-black-60), var(--color-black-10));
     --text-gradient-var-2: linear-gradient(
@@ -527,11 +538,22 @@ body.dark {
     --bg-gradient-var-11: linear-gradient(rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.05));
     --bg-gradient-var-12: linear-gradient(rgb(31, 31, 31), rgb(25, 25, 25));
     --bg-gradient-var-13: linear-gradient(90deg, rgba(31, 31, 31, 0) 0%, rgb(57, 57, 57) 100%);
+    --bg-gradient-var-14: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.5) 100%);
+    --bg-gradient-var-15: linear-gradient(
+        rgba(255, 255, 255, 0.11) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+
     // border gradients
     --border-gradient-var-1: linear-gradient(
         to right bottom,
         rgba(255, 228, 200, 0.4) 0%,
         rgba(255, 255, 255, 0.05) 100%;
+    );
+    --border-gradient-var-2: linear-gradient(
+        to right bottom,
+        rgba(255, 255, 255, 0.11) 0%,
+        rgba(255, 255, 255, 0.05) 100%
     );
     //text gradients
     --text-gradient-var-1: linear-gradient(to right, var(--color-white-60), var(--color-white-100));
@@ -559,6 +581,7 @@ body.dark {
     --icon-doe-msg-logo-branches: url("#doe-msg-logo-dark");
     --icon-sos-memory: var(--color-black-100);
     --icon-puzzle-without-category: url(#without_category);
+    --icon-doe-general: url(#general-logo-light);
 }
 body.dark {
     --icon-all-branches-button: url("#branches-gradient-dark");
@@ -567,6 +590,7 @@ body.dark {
     --icon-doe-msg-logo-branches: url("#doe-msg-logo-light");
     --icon-sos-memory: url(#paint_radial_10_19280_0);
     --icon-puzzle-without-category: url(#without_category_dark);
+    --icon-doe-general: url(#general-logo-dark);
 }
 
 :root {

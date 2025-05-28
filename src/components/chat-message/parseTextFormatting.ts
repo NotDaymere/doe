@@ -62,7 +62,7 @@ export function parseTextFormatting(input: string): string {
             case "inline-code":
                 return inputStr.replace(
                     pattern,
-                    `<code class="code-inline-output" style="color: rgba(255, 95, 95, 1); background: #ededed">$1</code>`
+                    `<code class="code-inline-output" style="color: rgba(255, 95, 95, 1); background: var(--var-52)">$1</code>`
                 );
 
             case "block-code":

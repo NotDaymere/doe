@@ -57,30 +57,16 @@
     min-width: 48px;
     height: 48px;
     min-height: 48px;
-
-    background-image: linear-gradient(
-        to right bottom,
-        rgba(141, 141, 141, 0.46),
-        rgba(255, 255, 255, 1)
-    );
     border-radius: 8px;
     transition: all 0.3s ease;
 }
 
 .bot_logo_background_open {
-    color: #ffffff !important;
-    background: linear-gradient(180deg, #5b5b5b 0%, #1f1f1f 100%) !important;
-    border: 1px solid !important;
-    border-image-source: linear-gradient(
-        135deg,
-        rgba(141, 141, 141, 0.46) 11.46%,
-        #ffffff 91.67%
-    ) !important;
+    background: var(--bg-gradient-var-14);
     box-shadow: 0 3px 12px 0 rgba(31, 31, 31, 0.05) !important;
-    fill: #ffffff;
+
     svg {
-        color: #ffffff !important;
-        fill: #ffffff;
+        fill: var(--icon-doe-msg-logo-branches);
     }
 }
 
