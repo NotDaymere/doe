@@ -82,6 +82,7 @@ export interface OnboardingStep {
     navigationOverrideStep?: number;
     autoSkip?: number; // number represents delay for autoskip
     autoSkipSubStep?: number; // skip by sub step
+    canPreventAutoSkip?: boolean;
     [key: string]: any;
 }
 
@@ -1015,6 +1016,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         autoSkip: 2000,
+        canPreventAutoSkip: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -1031,6 +1033,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         autoSkip: 2000,
+        canPreventAutoSkip: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -1046,6 +1049,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 Manage the dark or light theme according to your preference.
             </p>
         ),
+        canPreventAutoSkip: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
