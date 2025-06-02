@@ -155,7 +155,7 @@ export const navigationRules: Rule[] = [
     // 58-60
     {
         match: inRange(58, 60),
-        next: (s, d) => (d === "right" ? 60 : 57),
+        next: (s, d) => (d === "right" ? 60 : 56),
     },
     // default
     {

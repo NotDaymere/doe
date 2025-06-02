@@ -5,6 +5,7 @@ import WelcomeText from "src/components/WelcomeText";
 import { OnboardingMessage } from "src/shared/types/Message";
 import OnboardingChatMessage from "../OnboardingChatMessage";
 import css from "./ReadyMessage.module.less";
+import clsx from "clsx";
 
 interface ReadyMessageProps {
     step: number;
@@ -21,12 +22,14 @@ export const ReadyMessage = ({
     handleFirstReadyMessage,
     handleSecondReadyMessage,
 }: ReadyMessageProps) => {
-    if (step <= 57) return null;
+    if (step <= 56) return null;
     const historyRef = useRef<HTMLDivElement>(null);
     const [visibleMessages, setVisibleMessages] = useState<OnboardingMessage[]>([]);
 
     useEffect(() => {
-        setVisibleMessages([{ role: "ai", content: "Welcome to doe's private beta!" }]);
+        setTimeout(() => {
+            setVisibleMessages([{ role: "ai", content: "Welcome to doe's private beta!" }]);
+        }, 2000);
 
         const timeout = setTimeout(() => {
             setVisibleMessages((prev) => [
@@ -37,16 +40,20 @@ export const ReadyMessage = ({
                     betaWidget: true,
                 },
             ]);
-        }, 3000);
+        }, 5500);
 
         return () => clearTimeout(timeout);
     }, []);
 
     return (
-        <div className={css.header_container} data-step="head" ref={historyRef}>
-            <div className={css.logo_grid}>
+        <div
+            className={clsx(css.header_container, { [css.hidden]: step === 57 })}
+            data-step="head"
+            ref={historyRef}
+        >
+            {/* <div className={css.logo_grid}>
                 <Grid />
-            </div>
+            </div> */}
 
             <div className={css.logo_container}>
                 <Logo />

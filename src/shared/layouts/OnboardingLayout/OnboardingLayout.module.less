@@ -178,6 +178,16 @@
             overflow-y: auto;
         }
     }
+
+    &.no_scrollbar {
+        &::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+    }
 }
 
 .layout_input {
