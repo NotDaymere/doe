@@ -216,8 +216,10 @@ export const InputStaticText = ({
                     </p>
                 </div>
             )}
+
             {step === 38.1 && (
-                <>
+                <div className={css.text_with_icon}>
+                    <BranchIcon className={clsx(css.branch_icon, css.no_animation)} />
                     <p>
                         {typedBranch.text.split("").map((word, index) => {
                             return (
@@ -234,7 +236,7 @@ export const InputStaticText = ({
 
                         {!typedBranch.isDone && <span className={css.caret} />}
                     </p>
-                </>
+                </div>
             )}
             {step === 10 && (
                 <>
