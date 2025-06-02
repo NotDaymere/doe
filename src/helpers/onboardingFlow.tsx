@@ -1169,7 +1169,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorCentered: true,
         tooltip: false,
         blur: [""],
-        // autoSkip: 100,
+        autoSkip: 200,
         disableNavigationHover: true,
     },
     {
