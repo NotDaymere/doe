@@ -324,8 +324,22 @@ export function OnboardingInput({
                         <div className={css.panel_button_test} data-step="input">
                             <ScreenShareIcon className={css.panel_button_icon} />
                         </div>
-                        {step === 52 && (
-                            <ButtonAccordion handleCloseScreenSharing={handleCloseScreenSharing} />
+                        {step >= 51 && step < 53 && (
+                            <Tooltip position="top" className={`highlight-step highlight-step-51`}>
+                                <div className={css.tooltip_content}>
+                                    <b className={css.tooltip_title}>Screen sharing</b>
+                                    <p className={css.tooltip_paragraph}>
+                                        Here you may allow Doe to view the screens of your devices,
+                                        including your laptop, phone, or tablet.
+                                    </p>
+                                </div>
+                            </Tooltip>
+                        )}
+                        {step >= 52 && step < 53 && (
+                            <ButtonAccordion
+                                handleCloseScreenSharing={handleCloseScreenSharing}
+                                step={step}
+                            />
                         )}
                     </button>
                     <button className={css.panel_button}>
