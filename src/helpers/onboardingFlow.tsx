@@ -1563,7 +1563,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 limit by case or timeframe.
             </p>
         ),
-        autoSkip: 1500,
+        autoSkip: 4000,
         disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
