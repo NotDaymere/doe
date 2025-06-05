@@ -7,8 +7,10 @@ import css from "./ButtonAccordion.module.less";
 
 export const ButtonAccordion = ({
     handleCloseScreenSharing,
+    step,
 }: {
     handleCloseScreenSharing: () => void;
+    step: number;
 }) => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -28,13 +30,22 @@ export const ButtonAccordion = ({
 
     return (
         <div className={css.accordion_container}>
-            <div className={clsx(css.accordion_button, { [css.active]: activeIndex === 2 })}>
+            <div
+                className={clsx(css.accordion_button, { [css.active]: step === 52.3 })}
+                data-step="usb"
+            >
                 <UsbIcon />
             </div>
-            <div className={clsx(css.accordion_button, { [css.active]: activeIndex === 1 })}>
+            <div
+                className={clsx(css.accordion_button, { [css.active]: step === 52.2 })}
+                data-step="monitor"
+            >
                 <MonitorIcon />
             </div>
-            <div className={clsx(css.accordion_button, { [css.active]: activeIndex === 0 })}>
+            <div
+                className={clsx(css.accordion_button, { [css.active]: step === 52.1 })}
+                data-step="bluetooth"
+            >
                 <BluetoothIcon />
             </div>
         </div>

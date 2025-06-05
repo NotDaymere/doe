@@ -93,6 +93,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                     // [css.centered]: step >= 60,
                     [css.chat_end]: step >= 8,
                     [css.chat_top]: step >= 40 && step <= 43,
+                    [css.no_scrollbar]: step >= 57,
                 })}
             >
                 {step < 31 && (

@@ -6,6 +6,7 @@ export function useStepEffects(
     step: number,
     nextStep: () => void,
     nextSubStep: () => void,
+    blockAutoSkip: boolean,
     ctx: {
         setMessages: React.Dispatch<React.SetStateAction<OnboardingMessage[]>>;
         setCursorMoving: () => void;
@@ -32,6 +33,12 @@ export function useStepEffects(
         curr?.onEnter?.(ctx);
 
         console.log("curr: ", curr);
+
+        if (curr?.canPreventAutoSkip && blockAutoSkip) {
+            prevStepRef.current = step;
+            return;
+        }
+
         /** auto‑skip */
         if (curr?.autoSkip) {
             const t = setTimeout(() => nextStep(), curr.autoSkip);

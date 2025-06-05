@@ -72,7 +72,7 @@ const OnboardingChatMessage = forwardRef<HTMLDivElement, OnboardingChatMessagePr
                         [css.aiMessage]: isAI,
                         [css.userMessage]: !isAI,
                         [css.translationMessage]: isTranslation || isRecording,
-                        [css.selectText]: step === 35 || step === 32,
+                        [css.selectText]: step === 35,
                     })}
                 >
                     {isTranslation && (

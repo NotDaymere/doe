@@ -12,12 +12,12 @@
 .caret {
     display: inline-block;
     width: 1px;
-    height: 50%;
+    height: 75%;
     background: currentColor;
     margin-top: 2px;
     margin-left: 1px;
     animation: blink 0.75s steps(1) infinite;
-    vertical-align: text-top;
+    vertical-align: baseline;
     display: inline-block;
 }
 
@@ -129,6 +129,11 @@
     transform: translateX(-50px);
     animation: slide-from-left 1s ease 1s forwards;
     overflow: hidden;
+
+    &.no_animation {
+        animation-duration: 0s;
+        animation-delay: 0s;
+    }
 
     path {
         fill: #b5b5b5;

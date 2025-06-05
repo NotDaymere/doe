@@ -133,7 +133,7 @@ export const InputStaticText = ({
             )}
             {step >= 8 && step < 8.4 && !isMessageSent && (
                 <>
-                    <p>
+                    <>
                         {typedMathPrompt.text.split("").map((word, index) => {
                             return (
                                 <span
@@ -166,12 +166,12 @@ export const InputStaticText = ({
                         ) : (
                             memoizedMathJax
                         )}
-                    </p>
+                    </>
                 </>
             )}
             {step >= 9 && step < 9.4 && !isMessageSent && (
                 <>
-                    <p>
+                    <>
                         {typedCodePrompt.text.split("").map((word, index) => {
                             return (
                                 <span
@@ -186,7 +186,7 @@ export const InputStaticText = ({
                         })}
 
                         {!typedCodePrompt.isDone && <span className={css.caret} />}
-                    </p>
+                    </>
                     {
                         <span
                             className={css.code}
@@ -216,8 +216,10 @@ export const InputStaticText = ({
                     </p>
                 </div>
             )}
+
             {step === 38.1 && (
-                <>
+                <div className={css.text_with_icon}>
+                    <BranchIcon className={clsx(css.branch_icon, css.no_animation)} />
                     <p>
                         {typedBranch.text.split("").map((word, index) => {
                             return (
@@ -234,7 +236,7 @@ export const InputStaticText = ({
 
                         {!typedBranch.isDone && <span className={css.caret} />}
                     </p>
-                </>
+                </div>
             )}
             {step === 10 && (
                 <>

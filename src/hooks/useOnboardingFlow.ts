@@ -18,6 +18,7 @@ export function useOnboardingFlow(
     const [userClickedUnderline, setUserClickedUnderline] = useState(false);
     const [userClickedItalic, setUserClickedItalic] = useState(false);
     const [userClickedTranslate, setUserClickedTranslate] = useState(false);
+    const [blockAutoSkip, setBlockAutoSkip] = useState(false);
     const [blockSteps, setBlockSteps] = useState(false);
     const [manualSkip, setManualSkip] = useState(false);
     const { setGaiaActive } = useAppStore();
@@ -54,7 +55,7 @@ export function useOnboardingFlow(
     useArrowNavigation(step, currentStep, setStep, ctx);
 
     // ------ STEP-SPECIFIC EFFECTS ------
-    useStepEffects(step, nextStep, nextSubStep, ctx);
+    useStepEffects(step, nextStep, nextSubStep, blockAutoSkip, ctx);
 
     // ------ HANDLERS IN ORDER ------
 
@@ -233,10 +234,12 @@ export function useOnboardingFlow(
             nextSubStep();
         } else if (type === "lightMode") {
             if (step >= 23 && step <= 26) {
+                setBlockAutoSkip(true);
                 setStep(26);
             }
         } else if (type === "darkMode") {
             if (step >= 23 && step <= 26) {
+                setBlockAutoSkip(true);
                 setStep(25);
             }
         }

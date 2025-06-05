@@ -28,7 +28,7 @@ const menuItems = [
         label: "Favourites",
         dataStep: "favourites",
         buttonTypeOpen: "favourites",
-        buttonTypeClose: "chatsClose",
+        buttonTypeClose: "favouritesClose",
         triggerStep: 15,
     },
     {

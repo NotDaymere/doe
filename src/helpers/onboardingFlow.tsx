@@ -82,6 +82,7 @@ export interface OnboardingStep {
     navigationOverrideStep?: number;
     autoSkip?: number; // number represents delay for autoskip
     autoSkipSubStep?: number; // skip by sub step
+    canPreventAutoSkip?: boolean;
     [key: string]: any;
 }
 
@@ -1015,6 +1016,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         autoSkip: 2000,
+        canPreventAutoSkip: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -1031,6 +1033,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         autoSkip: 2000,
+        canPreventAutoSkip: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -1046,6 +1049,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 Manage the dark or light theme according to your preference.
             </p>
         ),
+        canPreventAutoSkip: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
     },
     {
@@ -1165,7 +1169,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorCentered: true,
         tooltip: false,
         blur: [""],
-        // autoSkip: 100,
+        autoSkip: 200,
         disableNavigationHover: true,
     },
     {
@@ -1475,15 +1479,7 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 51,
         location: '[data-step="screen-share"]',
         cursorVisible: true,
-        tooltip: true,
-        tooltipPosition: "top",
-        tooltipTitle: <b className={css.tooltip_title}>Screen sharing</b>,
-        tooltipParagraph1: (
-            <p className={css.tooltip_paragraph}>
-                Here you may allow Doe to view the screens of your devices, including your laptop,
-                phone, or tablet.
-            </p>
-        ),
+        tooltip: false,
         disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
@@ -1495,16 +1491,42 @@ export const onboardingFlow: OnboardingStep[] = [
             top: 5,
             left: 4,
         },
-        tooltip: true,
-        tooltipPosition: "top",
-        tooltipTitle: <b className={css.tooltip_title}>Screen sharing</b>,
-        tooltipParagraph1: (
-            <p className={css.tooltip_paragraph}>
-                You can share your external devices’ screens via Bluetooth or a manual port. A small
-                window will open to show what Doe is seeing.
-            </p>
-        ),
+        tooltip: false,
         disableNavigationHover: true,
+        autoSkipSubStep: 1000,
+        navigationOverrideStep: 53,
+        blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
+    },
+    {
+        id: 52.1,
+        location: '[data-step="bluetooth"]',
+        cursorSpeed: 600,
+        cursorVisible: true,
+        tooltip: false,
+        disableNavigationHover: true,
+        autoSkipSubStep: 1000,
+        navigationOverrideStep: 53,
+        blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
+    },
+    {
+        id: 52.2,
+        location: '[data-step="monitor"]',
+        cursorVisible: true,
+        cursorSpeed: 600,
+        tooltip: false,
+        disableNavigationHover: true,
+        autoSkipSubStep: 1000,
+        navigationOverrideStep: 53,
+        blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
+    },
+    {
+        id: 52.3,
+        location: '[data-step="usb"]',
+        cursorVisible: true,
+        cursorSpeed: 600,
+        tooltip: false,
+        disableNavigationHover: true,
+        navigationOverrideStep: 53,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
     {
@@ -1541,7 +1563,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 limit by case or timeframe.
             </p>
         ),
-        autoSkip: 1500,
+        autoSkip: 4000,
         disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },

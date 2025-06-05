@@ -63,7 +63,7 @@
         }
 
         .layout_chat {
-            background-color: #f1f1f1;
+            background-color: #f8f8f8;
             max-width: 100%;
             padding-top: 12px;
             border-radius: 16px;
@@ -176,6 +176,16 @@
             flex: 1 1 auto;
             min-height: 0;
             overflow-y: auto;
+        }
+    }
+
+    &.no_scrollbar {
+        &::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
         }
     }
 }
