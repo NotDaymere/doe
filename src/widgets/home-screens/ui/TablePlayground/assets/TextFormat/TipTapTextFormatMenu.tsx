@@ -22,6 +22,8 @@ import ActivePaint from "../../../PlaygroundButtons/ActivePaint/ActivePaint";
 import ActiveMenu from "../../../PlaygroundButtons/ActiveMenu/ActiveMenu";
 import { Editor } from "@tiptap/react";
 import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
+import formatFriendlyDate from "src/helpers/freindlyDate";
+import { generateUUID } from "src/helpers/UUIDGenerator";
 
 type TextFormatProps = {
     isPen?: boolean;
@@ -125,17 +127,57 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
             avatar: "https://example.com/avatar.jpg",
         },
       
-        timestamp: time
+        timestamp: formatFriendlyDate(new Date()),
         message: selectedText,
         replies: []
     })
 
-    console.log(selectedText);
+   
 
+  
     openComments();
 
         // editor.chain().focus().deleteRange({ from, to }).insertContent(newText).run();
     
+        const applyCloudQuotes = () => {
+  if (!editor) return;
+
+  const { from, to } = editor.state.selection;
+  if (from === to) return;
+
+  const selectedText = editor.state.doc.textBetween(from, to, "");
+  const newText = `“${selectedText}”`;
+  const uuid = generateUUID();
+  // Save comment
+  setComment({
+    id: 1,
+    user: {
+      name: "John Doe",
+     
+      avatar: "https://example.com/avatar.jpg",
+    },
+    timestamp: formatFriendlyDate(new Date()),
+    message: selectedText,
+    replies: [],
+  });
+
+  // Open the comment panel
+  openComments();
+
+  // Replace selected text with clickable marked text
+  editor.chain().focus().deleteRange({ from, to }).insertContent({
+    type: 'text',
+    text: selectedText,
+    marks: [
+      {
+        type: 'clickable',
+        attrs: {
+          id: 'comment-1', // optional, can help if you need to identify it later
+        },
+      },
+    ],
+  }).run();
+};
      
     };
 
