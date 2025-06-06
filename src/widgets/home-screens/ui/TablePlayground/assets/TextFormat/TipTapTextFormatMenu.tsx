@@ -57,6 +57,33 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
         };
     }, []);
 
+
+
+
+
+
+
+
+    useEffect(() => {
+  const handler = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('[data-clickable]')) {
+      openComments();
+    }
+  };
+
+  const el = document.querySelector('.ProseMirror');
+  if (el) {
+    el.addEventListener('click', handler as EventListener);
+  }
+
+  return () => {
+    if (el) {
+      el.removeEventListener('click', handler as EventListener);
+    }
+  };
+}, []);
+
     const handleRemoveFormat = () => {
         if (!editor) return;
         editor.chain().focus().unsetAllMarks().clearNodes().run();
@@ -139,21 +166,24 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
 
         // editor.chain().focus().deleteRange({ from, to }).insertContent(newText).run();
     
-        const applyCloudQuotes = () => {
+       const applyCloudQuotes = () => {
   if (!editor) return;
 
   const { from, to } = editor.state.selection;
+  
   if (from === to) return;
 
   const selectedText = editor.state.doc.textBetween(from, to, "");
   const newText = `“${selectedText}”`;
+
+  // Generate a UUID for identification (optional)
   const uuid = generateUUID();
+
   // Save comment
   setComment({
     id: 1,
     user: {
       name: "John Doe",
-     
       avatar: "https://example.com/avatar.jpg",
     },
     timestamp: formatFriendlyDate(new Date()),
@@ -164,20 +194,21 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
   // Open the comment panel
   openComments();
 
-  // Replace selected text with clickable marked text
+  // Insert clickable text
   editor.chain().focus().deleteRange({ from, to }).insertContent({
     type: 'text',
     text: selectedText,
     marks: [
       {
-        type: 'clickable',
+        type: 'clickable', // apply the custom clickable mark
         attrs: {
-          id: 'comment-1', // optional, can help if you need to identify it later
+          id: uuid, // optional, can help if you need to identify it later
         },
       },
     ],
   }).run();
 };
+
      
     };
 

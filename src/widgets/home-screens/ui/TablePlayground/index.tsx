@@ -21,6 +21,8 @@ import { App } from "src/types";
 import PlaygroundAction from "../PlaygroundAction/PlaygroundAction";
 import { CustomBlock } from "./assets/CustomBlock/CustomBlock";
 import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
+import {Clickable} from "src/helpers/clickable";
+
 
 const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
  
@@ -80,6 +82,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     extensions: [
       StarterKit,
       Underline,
+      Clickable,
       TextStyle,
       Superscript,
       Subscript,
@@ -340,7 +343,9 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
           <Flex className={"tabs-panel-playground"}>
             <p>{ playgroundState?.name }</p>
             <HistoryButton id={id} />
+         
           </Flex>
+          
 <AddChartsAndWidgets/>
           <section className="editor-section">
             <Table
