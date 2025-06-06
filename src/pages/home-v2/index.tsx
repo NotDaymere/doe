@@ -23,7 +23,7 @@ const Home = () => {
             <Helmet>
                 <title>Doe</title>
             </Helmet>
-             <AddChartsAndWidgets/>
+             
 
                <Comments/>
                <ChartWidgetsWindow/>

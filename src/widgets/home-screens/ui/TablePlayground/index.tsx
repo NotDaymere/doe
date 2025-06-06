@@ -20,6 +20,7 @@ import HistoryButton from "./assets/HistoryButton/HistoryButton";
 import { App } from "src/types";
 import PlaygroundAction from "../PlaygroundAction/PlaygroundAction";
 import { CustomBlock } from "./assets/CustomBlock/CustomBlock";
+import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
 
 const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
   function adjustPosition(
@@ -339,7 +340,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             <p>{ playgroundState?.name }</p>
             <HistoryButton id={id} />
           </Flex>
-
+<AddChartsAndWidgets/>
           <section className="editor-section">
             <Table
                 className={"table"}
