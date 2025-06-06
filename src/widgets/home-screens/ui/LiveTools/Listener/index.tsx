@@ -8,11 +8,13 @@ import RecordBookmarkIcon from "src/shared/icons/RecordBookmark.icon";
 import classNames from "classnames";
 import AudioRecorder from "./AudioRecorder";
 import css from "./Listener.module.less";
+import { useTheme } from "src/shared/hooks/useTheme";
 
 export type RecordState = "isRecording" | "isPaused" | "isStopped";
 
 const Listener = () => {
     const [record, setRecord] = useState<RecordState>("isRecording");
+    const { theme } = useTheme();
 
     const MAGIC_MENU_ITEMS = useMemo(
         () => [
@@ -154,7 +156,7 @@ const Listener = () => {
 
     return (
         <LiveToolsWrapper
-            bookmarkIcon={<RecordBookmarkIcon width={48} height={48} />}
+            bookmarkIcon={<RecordBookmarkIcon width={48} height={48} theme={theme} />}
             magicMenuItems={MAGIC_MENU_ITEMS}
             magicButtonIcon={<StarsIcon width={21} height={28} />}
             magicButtonClass={css.magicButton}

@@ -93,7 +93,11 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
                     />
                 );
             case "txt":
-                return <pre>{content}</pre>;
+                return (
+                    <div className={css.txtPreview}>
+                        <pre>{content}</pre>
+                    </div>
+                );
             case "docx":
                 return <DocxDocument url={url} />;
             default:

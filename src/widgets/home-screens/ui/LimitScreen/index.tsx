@@ -15,6 +15,7 @@ const LimitScreen = () => {
                 <div className={css.icon}>
                     <DoeIcon width={26} height={26} />
                 </div>
+                <div className={css.redGlow} />
                 <div className={css.backgroundPattern} />
             </div>
             <span className={css.title}>

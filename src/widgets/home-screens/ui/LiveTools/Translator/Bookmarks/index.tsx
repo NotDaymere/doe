@@ -38,9 +38,13 @@ const Bookmarks: FC<IProps> = ({ icon, title, bookmark, isActive, setIsActive })
                     />
                 </div>
             </div>
-            <div className={classNames(css.bookmark, { [css.bookmarkShow]: isActive })}>
-                <span>{bookmark}</span>
-                <MinusIcon width={12} height={2} className={css.removeButton} />
+            <div
+                className={classNames(css.bookmarkWrapper, { [css.bookmarkContentShow]: isActive })}
+            >
+                <div className={classNames(css.bookmark, { [css.bookmarkShow]: isActive })}>
+                    <span>{bookmark}</span>
+                    <MinusIcon width={12} height={2} className={css.removeButton} />
+                </div>
             </div>
         </div>
     );

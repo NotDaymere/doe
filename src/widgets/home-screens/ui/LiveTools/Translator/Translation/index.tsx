@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import TextForTranslateIcon from "src/shared/icons/TextForTranslate.icon";
 import RotateButton from "../RotateButton";
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import DeviceIcon from "src/shared/icons/Device.icon";
 import AppsIcon from "src/shared/icons/Apps.icon";
 import PlaygroundIcon from "src/shared/icons/Playground.icon";
@@ -31,6 +31,7 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
     const [showLangPopup, setShowLangPopup] = useState(false);
     const [langText, setLangText] = useState(DEFAULT_TEXT);
     const [translateFromImage, setTranslateFromImage] = useState(false);
+    const toggleButtonRef = useRef<HTMLButtonElement>(null);
 
     const {
         drag,
@@ -62,12 +63,13 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
         setLangText(e.target.value);
     };
 
-    const MAGIC_MENU_ITEMS: IMagicMenuItem[] = useMemo(
-        () => [
+    const MAGIC_MENU_ITEMS = useMemo(
+        (): IMagicMenuItem[] => [
             {
                 icon: <DeviceIcon width={18} height={11} />,
                 text: "Device Files",
                 onClick: uploadFiles,
+                classes: css.attachmentsMenuItem,
             },
             {
                 icon: <AppsIcon width={9} height={15} />,
@@ -75,6 +77,7 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
                 onClick: () => {
                     console.log("Applications");
                 },
+                classes: css.attachmentsMenuItem,
             },
             {
                 icon: <PlaygroundIcon width={15} height={15} />,
@@ -82,6 +85,7 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
                 onClick: () => {
                     console.log("Playgrounds");
                 },
+                classes: css.attachmentsMenuItem,
             },
         ],
         []
@@ -95,24 +99,28 @@ const Translation: FC<IProps> = ({ isRotated, onRotate }) => {
                         isRotated ? css.translateIconRotatedWrapper : css.translateIconWrapper
                     }
                 >
-                    <button className={css.translateIcon} onClick={() => setShowLangPopup(true)}>
+                    <button
+                        className={css.translateIcon}
+                        onClick={() => setShowLangPopup(!showLangPopup)}
+                        ref={toggleButtonRef}
+                    >
                         <TextForTranslateIcon width={20} height={20} />
                     </button>
-                    {showLangPopup && (
-                        <div
-                            className={classNames(css.langPopup, {
-                                [css.langPopupRotated]: isRotated,
-                            })}
-                        >
-                            <LangPopup
-                                text={langText}
-                                onChange={handleEnteringLanguage}
-                                isActive={showLangPopup}
-                                setIsActive={setShowLangPopup}
-                                isRotated={isRotated}
-                            />
-                        </div>
-                    )}
+                    <div
+                        className={classNames(css.langPopup, {
+                            [css.langPopupRotated]: isRotated,
+                        })}
+                    >
+                        <LangPopup
+                            text={langText}
+                            onChange={handleEnteringLanguage}
+                            isActive={showLangPopup}
+                            setIsActive={setShowLangPopup}
+                            isRotated={isRotated}
+                            onUploadFiles={uploadFiles}
+                            buttonRef={toggleButtonRef}
+                        />
+                    </div>
                     {!isRotated && (
                         <RotateButton onClick={() => onRotate(!isRotated)} isRotaded={isRotated} />
                     )}

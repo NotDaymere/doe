@@ -17,7 +17,6 @@ import { testTextAndCharts } from "src/components/chat-message/mockData";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 import { useChatContext } from "../../lib/hooks/ChatContext";
-import CloseIcon from "../../../../shared/icons/Close.icon";
 import QuestionCodeMessage from "./assets/QuestionCodeMessage/QuestionCodeMessage";
 import HammerIcon from "src/shared/icons/HammerIcon";
 import ChatResponseStopIcon from "../../../../shared/icons/ChatResponseStopIcon";
@@ -26,6 +25,8 @@ import HandCursorIcon from "../../../../shared/icons/HandCursor.icon";
 import BranchIcon from "../../../../shared/icons/Branch.icon";
 import UploadFilesProgressIcon from "../../../../shared/icons/UploadFilesProgress.icon";
 import { IMessage } from "src/shared/types/Message";
+import CloseIcon from "../../../../shared/icons/Close.icon";
+import { Close } from "src/shared/icons/Close";
 import SendTableDataIcon from "../../../../shared/icons/SendTableData.icon";
 import { FileWithId } from "../../lib/helpers/LinkToFileTransformer";
 import Hints from "../WelcomeScreen/Hints";
@@ -530,7 +531,10 @@ export const ChatPanel: React.FC = () => {
                     }
                     blob = await response.blob();
                 } catch (error) {
-                    console.error("Failed to fetch content from link (possibly due to CORS).", error);
+                    console.error(
+                        "Failed to fetch content from link (possibly due to CORS).",
+                        error
+                    );
                     blob = new Blob([`Failed to fetch content from link:\n${link}`], {
                         type: "text/plain",
                     });
@@ -595,8 +599,11 @@ export const ChatPanel: React.FC = () => {
                     <div className={css.panel_prompt}>
                         <ReplyIcon className={css.panel_prompt_icon} />
                         <div className={css.reference_panel}>
-                            <button onClick={() => setIsShowReferencePanel(false)}>
-                                <CloseIcon />
+                            <button
+                                className={css.reference_panel_close_btn}
+                                onClick={() => setIsShowReferencePanel(false)}
+                            >
+                                <Close />
                             </button>
                             <div className={css.referencePanelContent}>{selectedText}</div>
                         </div>
@@ -862,12 +869,19 @@ export const ChatPanel: React.FC = () => {
                                                 Send <ArrowUpIcon />
                                             </button>
                                         ) : (
-                                            <button className={css.panel_hammerBtn}>
+                                            <button
+                                                className={clsx(
+                                                    css.panel_button,
+                                                    css.panel_hammerBtn
+                                                )}
+                                            >
                                                 <HammerIcon />
                                             </button>
                                         )
                                     ) : (
-                                        <button className={css.panel_callBtn}>
+                                        <button
+                                            className={clsx(css.panel_button, css.panel_callBtn)}
+                                        >
                                             <CallVoiceIcon />
                                         </button>
                                     )}

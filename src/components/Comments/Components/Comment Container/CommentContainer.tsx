@@ -4,6 +4,10 @@ import { useState, useRef, useEffect } from "react";
 import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
 import Menu from "../Menu/Menu";
 import "./CommentContainer.less";
+import { CheckRoundIcon } from "src/shared/icons/CheckRoundIcon";
+import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
+import clsx from "clsx";
+import SendIcon from "src/shared/icons/SendIcon";
 
 export default function CommentContainer({ showMenu, setShowMenu }: any) {
     const { comment, addReply, updateComment, isResolved, toggleResolved } =
@@ -78,11 +82,15 @@ export default function CommentContainer({ showMenu, setShowMenu }: any) {
                         onClick={() => {
                             toggleResolved();
                         }}
+                        className={clsx("resolved-button", isResolved && "resolved")}
                     >
-                        <img src={`/img/icons/check${isResolved ? "-on" : ""}.svg`} alt="Check" />
+                        <CheckRoundIcon />
                     </button>
-                    <button onClick={() => setShowMenu(!showMenu)}>
-                        <img src="/img/icons/menu.svg" alt="Menu" />
+                    <button
+                        onClick={() => setShowMenu(!showMenu)}
+                        className={clsx("menu-button", showMenu && "active")}
+                    >
+                        <ThreeVerticalDots fill={"currentColor"} />
                     </button>
                     {showMenu && (
                         <Menu
@@ -122,8 +130,9 @@ export default function CommentContainer({ showMenu, setShowMenu }: any) {
                         addReply(replyMessage);
                         setReplyMessage("");
                     }}
+                    disabled={!replyMessage}
                 >
-                    <img src="/img/icons/send.svg" alt="Send" />
+                    <SendIcon />
                 </button>
             </div>
         </div>

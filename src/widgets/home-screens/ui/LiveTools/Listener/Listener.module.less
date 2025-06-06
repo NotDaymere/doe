@@ -7,8 +7,11 @@
     flex-shrink: 0;
     border-radius: 12px;
     box-shadow: 0 3px 12px rgba(#1f1f1f, 0.05);
-    background: linear-gradient(to bottom, #d7d7d7 0%, #fff 100%);
+    background: var(--bg-gradient-var-9);
     margin: 0 auto;
+    svg path {
+        fill: var(--var-86);
+    }
 }
 
 .recording {
@@ -18,13 +21,14 @@
 }
 
 .recordingText {
-    background-color: #fef1f0;
+    background-color: var(--var-187);
     border-radius: 12px;
     padding: 26px 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
     .setFontSohneBuch();
+    color: var(--var-7);
 
     ul {
         padding-bottom: 20px;
@@ -50,5 +54,5 @@
 }
 
 .blured {
-    color: #e5c6c6;
+    color: var(--var-188);
 }

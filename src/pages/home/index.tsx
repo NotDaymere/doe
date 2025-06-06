@@ -29,13 +29,12 @@ import {
 import { GoogleDocWidget, MiroWidget, SpotifyWidget, YouTubeWidget } from "src/components/widgets";
 import { useEditorContext } from "src/contexts/EditorProvider";
 import { App } from "src/types";
-import DefaultLayout from "../../components/layout"
+import DefaultLayout from "../../components/layout";
 import "./index.less";
 import ChartWidgetsWindow from "src/components/widgetAndChart/Window/ChartWidgetsWindow";
 import Console from "src/components/Console/Console";
 import Comments from "src/components/Comments/Comments";
 import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
-
 
 const Home: FC = () => {
     const {
@@ -167,8 +166,8 @@ const Home: FC = () => {
             }
         }
     }, [editMessage.id, editor, messages]);
-    
-    console.log(messages)
+
+    console.log(messages);
 
     return (
         <DefaultLayout>

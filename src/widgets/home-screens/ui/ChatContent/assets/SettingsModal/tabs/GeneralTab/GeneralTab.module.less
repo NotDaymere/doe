@@ -1,0 +1,131 @@
+.generalTab {
+    &__container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    &__content {
+        padding: 0 18px;
+        flex: 1;
+        overflow-y: auto;
+    }
+    &__setting {
+        &__container {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+            border-bottom: 1px solid var(--var-149);
+            padding: 12px 0 11px;
+            & label {
+                color: var(--var-119) !important;
+                line-height: 1.19rem;
+            }
+            &:last-child {
+                border-top: 1px solid var(--var-149);
+                margin-top: 21px;
+                border-bottom: none;
+            }
+        }
+        &__title {
+            flex: 1;
+            color: var(--var-97);
+            font-family: "Sohne", sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1.19rem;
+        }
+        &__control {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+    }
+    &__uploadBtn {
+        display: flex;
+        padding: 7px 11px 6px 6px;
+        border-radius: 8px;
+        gap: 5px;
+        border: 1px solid var(--var-69);
+        color: var(--var-97);
+        font-size: 0.875rem;
+        line-height: 1.19rem;
+        transition: all 0.3s ease;
+        svg path {
+            fill: rgb(139, 207, 22);
+        }
+        &:hover {
+            border-color: rgb(139, 207, 22);
+            background-color: rgba(139, 207, 22, 0.2);
+            color: rgb(139, 207, 22);
+        }
+    }
+    &__subtitle {
+        margin-top: 12px;
+        color: var(--var-7);
+        font-family: "Sohne", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.19rem;
+    }
+    &__accounts__container {
+        margin-top: 12px;
+        border: 1px solid var(--var-21);
+        border-radius: 12px;
+    }
+    &__account {
+        &__container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 15px 12px 11px;
+            border-bottom: 1px solid var(--var-82);
+            background-color: var(--var-57);
+            &:first-child {
+                border-radius: 12px 12px 0 0;
+            }
+        }
+        &__avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        &__info {
+            font-family: "Sohne", sans-serif;
+            font-size: 0.875rem;
+            line-height: 1.19rem;
+        }
+        &__name {
+            color: var(--var-97);
+            font-weight: 500;
+        }
+        &__email {
+            color: var(--var-116);
+            font-weight: 400;
+        }
+        &__actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-left: auto;
+        }
+        &__logout {
+            padding: 4px 11px 5px !important;
+            max-height: 30px !important;
+        }
+        &__delete {
+            padding: 4px 11px 5px !important;
+            max-height: 30px !important;
+        }
+        &__add {
+            &__container {
+                display: flex;
+                align-items: center;
+                padding: 16px 15px 15px;
+            }
+            &Btn {
+                color: var(--var-97);
+            }
+        }
+    }
+}

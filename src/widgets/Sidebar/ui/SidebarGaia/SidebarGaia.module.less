@@ -11,7 +11,7 @@
         }
 
         .gaia_btn svg {
-            fill: #8BCF16;
+            fill: #8bcf16;
         }
     }
 
@@ -36,11 +36,10 @@
         svg {
             width: 100%;
             height: 100%;
-            fill: #cfcfcf;
+            fill: var(--var-88);
             transition: fill 200ms ease;
         }
     }
-
 
     .gaia_hint {
         position: absolute;
@@ -57,16 +56,17 @@
         padding: 14px;
         padding-left: 20px;
         border-radius: 14px;
-        background: rgba(#1F1F1F, 0.45);
-        backdrop-filter: blur(45px);
+        border: 1px solid rgba(31, 31, 31, 0.05);
+        background: var(--var-55);
+        backdrop-filter: blur(20px);
         box-shadow: 0 4px 20px rgba(#000, 0.06);
 
         .setFontSohneBuch(16px, 1.05, normal);
-        color: #FFF;
-        //z-index: 999;
+        color: var(--var-114);
+
         opacity: 0;
         visibility: hidden;
-        //transition: 200ms ease;
+        transition: 200ms ease;
         transition-property: opacity, visibility;
 
         svg {
@@ -81,20 +81,20 @@
             display: block;
             border-top: 14px solid transparent;
             border-bottom: 14px solid transparent;
-            border-right: 20px solid #969696;
+            border-right: 20px solid var(--var-54);
             position: absolute;
             left: 0;
             top: 2px;
-            transform: translateX(-10px);
+            transform: translateX(-10px) rotate(9deg);
             z-index: 999;
         }
     }
 }
 
 .css.gaia_hint_open {
-  &::before {
-    left: 200px;
-  }
+    &::before {
+        left: 200px;
+    }
 }
 
 .enter,
@@ -113,4 +113,12 @@
 .exitActive {
     opacity: 0;
     transition: opacity 1s;
+}
+
+.no_padding {
+    padding-left: 0;
+
+    .gaia_btn {
+        margin-left: 0;
+    }
 }

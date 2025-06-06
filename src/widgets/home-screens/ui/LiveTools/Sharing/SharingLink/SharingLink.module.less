@@ -4,15 +4,16 @@
     justify-content: space-between;
     align-items: center;
     padding: 16px;
-    border-bottom: 1px solid rgba(#b5b5b5, 0.2);
+    border-bottom: 1px solid var(--var-9);
 }
 
 .shareButton {
     display: flex;
     .setFontSohneKraftig(14px);
     padding: 12px 8px;
-    border: 1px solid #eeeeee;
+    border: 1px solid var(--var-132);
     border-radius: 8px;
+    color: var(--var-7);
 }
 
 .checkboxes {
@@ -31,7 +32,7 @@
 
 .description {
     .setFontSohneBuch(14px);
-    color: #919191;
+    color: rgb(143, 143, 143);
     width: 390px;
 }
 
@@ -41,34 +42,36 @@
     justify-content: space-between;
     align-items: center;
     padding: 26px;
-    border: 1px solid #b1b1b1;
+    border: 1px solid var(--var-134);
     border-radius: 13px;
-
+    svg path:first-child {
+        fill: var(--var-135);
+    }
     &:hover {
         path:first-child {
-            fill: #2564ff;
+            fill: var(--var-136);
         }
     }
 }
 
 .link {
     .setFontSohneKraftig();
-    color: rgba(#000, 0.5);
+    color: var(--var-137);
 }
 
 .seeAllButton {
     .setFontSohneBuch(14px);
     padding: 7px;
-    border: 1px solid #eeeeee;
+    border: 1px solid var(--var-84);
     border-radius: 8px;
     margin-left: 0;
     margin-right: auto;
-    transition:
-        background-color 0.5s ease,
-        color 0.5s ease;
+    color: var(--var-7);
+    transition: 0.5s ease;
 
     &:hover {
-        background-color: #000;
-        color: #f8f8f8;
+        background-color: var(--var-125);
+        color: var(--var-17);
+        border-color: var(--var-50);
     }
 }

@@ -1,0 +1,80 @@
+.personalization {
+    display: flex;
+    flex-direction: column;
+    font-family: "Sohne", sans-serif;
+    height: 100%;
+    &__header {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+        padding: 14px 12px 11px 18px;
+        border-bottom: 1px solid var(--var-82);
+        &__info {
+            display: flex;
+            gap: 4px;
+            margin-top: 9px;
+        }
+        &__title {
+            font-size: 1rem;
+            line-height: 1.25rem;
+            font-weight: 600;
+        }
+        &__controls {
+            display: flex;
+            gap: 6px;
+        }
+    }
+    &__container {
+        flex: 1;
+        padding: 12px 17px;
+        overflow-y: auto;
+    }
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        height: 100%;
+    }
+    &__tabs {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        &__buttons {
+            display: flex;
+            gap: 4px;
+        }
+        &__tabBtn {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1.25rem;
+            color: var(--var-97);
+            transition: 0.3s;
+            svg,
+            svg path {
+                transition: 0.3s;
+                fill: var(--var-147);
+                stroke: var(--var-147);
+            }
+            &:hover,
+            &--active {
+                background-color: var(--var-159);
+                color: var(--var-7);
+                svg,
+                svg path {
+                    fill: var(--var-86);
+                    stroke: var(--var-86);
+                }
+            }
+        }
+        &__content {
+            flex: 1 0;
+            overflow-y: auto;
+        }
+    }
+}

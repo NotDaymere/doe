@@ -18,6 +18,9 @@
 
 .searchInput {
     position: relative;
+    svg path {
+        fill: var(--var-139);
+    }
 }
 
 .startAdornment {
@@ -30,9 +33,9 @@
 .input {
     width: 469px;
     height: 40px;
-    background-color: #f8f8f8;
-    color: #1f1f1f;
-    border: 1px solid #dddddd;
+    background-color: var(--var-57);
+    color: var(--var-7);
+    border: 1px solid var(--var-11);
     border-radius: 12px;
     padding: 10px 36px 10px 28px;
 }
@@ -42,8 +45,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: #fff;
-    border: 1px solid #dddddd;
+    background-color: var(--bg-general);
+    border: 1px solid var(--var-61);
     border-radius: 16px;
     width: 850px;
 }
@@ -53,6 +56,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 4px 10px;
+    border-bottom: 1px solid rgba(181, 181, 181, 0.2);
 }
 
 .actions {
@@ -72,6 +76,7 @@
 
 .bold {
     .setFontSohneKraftig(14px);
+    color: var(--var-7);
 }
 
 .result {
@@ -93,7 +98,7 @@
     align-items: center;
     width: 20px;
     height: 20px;
-    background-color: #edf7ff;
+    background-color: var(--var-141);
     border-radius: 4px;
     flex-shrink: 0;
 }
@@ -102,7 +107,10 @@
     color: #006aff;
     white-space: nowrap;
 }
-
+.password {
+    color: var(--var-7);
+    white-space: nowrap;
+}
 .hidePassword {
     display: flex;
     align-items: center;
@@ -141,12 +149,12 @@
 .dot {
     width: 12px;
     height: 12px;
-    background-color: #000;
+    background-color: var(--var-142);
     border-radius: 100%;
 }
 
 .published {
-    color: #7a7a7a;
+    color: var(--var-143);
 }
 
 .removeButton {

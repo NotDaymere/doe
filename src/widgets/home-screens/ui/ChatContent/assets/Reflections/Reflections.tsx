@@ -13,7 +13,7 @@ import ArrowUpReflectionsIcon from "../../../../../../shared/icons/ArrowUpReflec
 import CloseSearchInputIcon from "../../../../../../shared/icons/CloseSearchInputIcon";
 import LatestMessageInfo from "./LatestMessageInfo";
 import { useAppStore, useChatStore } from "../../../../../../shared/providers";
-import {clsx} from "clsx";
+import { clsx } from "clsx";
 
 const ViewModes = {
     CLOSED: "closed",
@@ -22,7 +22,7 @@ const ViewModes = {
 };
 
 export default function Reflections() {
-    const {isSideBarOpen} = useAppStore();
+    const { isSideBarOpen } = useAppStore();
     const [progress, setProgress] = useState(0);
     const [startProgress, setStartProgress] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
@@ -78,7 +78,6 @@ export default function Reflections() {
         };
     }, [isDragging]);
 
-
     const handleTogglePinned = (id: number) => {
         setMessagesData((prev) =>
             prev.map((message) =>
@@ -88,7 +87,7 @@ export default function Reflections() {
     };
 
     const messagesByDay = messagesData.reduce(
-        (acc: Record<string, typeof ReflectionsMessagesMockData[0][]>, message) => {
+        (acc: Record<string, (typeof ReflectionsMessagesMockData)[0][]>, message) => {
             const day = message.day;
             if (!acc[day]) acc[day] = [];
             acc[day].push(message);
@@ -106,9 +105,7 @@ export default function Reflections() {
             standardDays[(currentIndex - i + standardDays.length) % standardDays.length]
         );
     }
-    const finalOrder = descendingOrder.map((day, index) =>
-        index === 0 ? "Today" : day
-    );
+    const finalOrder = descendingOrder.map((day, index) => (index === 0 ? "Today" : day));
 
     const sortedMessagesByDay = standardDays.map((day) => ({
         day,
@@ -126,8 +123,7 @@ export default function Reflections() {
 
     const pinnedMessages = messagesData.filter(
         (message) =>
-            message.isPinned &&
-            (messageFilter === "user" ? message.isUser : message.isCode)
+            message.isPinned && (messageFilter === "user" ? message.isUser : message.isCode)
     );
 
     const handleMarkAsRead = (ids: number[]) => {
@@ -257,22 +253,22 @@ export default function Reflections() {
     const computedHeight = smallHeight + (expandedHeight - smallHeight) * progress;
     const containerMode =
         progress < threshold
-            ? (isHoveringIcon || isHoveringContainer || persistSmall ? ViewModes.SMALL : ViewModes.CLOSED)
+            ? isHoveringIcon || isHoveringContainer || persistSmall
+                ? ViewModes.SMALL
+                : ViewModes.CLOSED
             : ViewModes.EXPANDED;
     const finalHeight = containerMode === ViewModes.CLOSED ? 40 : computedHeight;
-    const finalWidth = containerMode === ViewModes.CLOSED ? 40 : containerMode === ViewModes.SMALL ? 200 : 360;
+    const finalWidth =
+        containerMode === ViewModes.CLOSED ? 40 : containerMode === ViewModes.SMALL ? 200 : 360;
 
     const handleToggleFilter = (filter: "user" | "code") => {
         setMessageFilter(filter);
     };
 
-    const allRead = messagesData.every(message => message.isRead);
+    const allRead = messagesData.every((message) => message.isRead);
 
     return (
-        <div className={clsx(
-            "reflections-wrapper",
-            { "sidebar-open": isSideBarOpen }
-        )} >
+        <div className={clsx("reflections-wrapper", { "sidebar-open": isSideBarOpen })}>
             <div
                 ref={containerRef}
                 className={clsx("reflections-container", containerMode)}
@@ -282,10 +278,8 @@ export default function Reflections() {
                     width: finalWidth,
                     transition: isDragging
                         ? "height 0s ease, width 300ms ease"
-                        : "height 300ms ease, width 300ms ease"
-
+                        : "height 300ms ease, width 300ms ease",
                 }}
-
                 onMouseEnter={handleContainerMouseEnter}
                 onMouseLeave={handleContainerMouseLeave}
                 onMouseMove={handleContainerMouseMove}
@@ -325,9 +319,9 @@ export default function Reflections() {
                     {containerMode === ViewModes.SMALL && progress < threshold && (
                         <div className="small-content">
                             <div className="small-header">
-                            <span className="small-time">
-                                <LatestMessageInfo messages={messagesData} />
-                            </span>
+                                <span className="small-time">
+                                    <LatestMessageInfo messages={messagesData} />
+                                </span>
                                 <button className="small-add-btn" onClick={() => setProgress(1)}>
                                     +
                                 </button>
@@ -354,7 +348,9 @@ export default function Reflections() {
                                         <div className="message-toggle">
                                             <div
                                                 className="toggle-ball"
-                                                style={{ left: messageFilter === "code" ? "2px" : "24px" }}
+                                                style={{
+                                                    left: messageFilter === "code" ? "2px" : "24px",
+                                                }}
                                             />
                                             <div
                                                 className={
@@ -378,7 +374,8 @@ export default function Reflections() {
                                             </div>
                                         </div>
                                         <div
-                                            className={`search-container ${isSearchVisible ? "search-visible" : ""}`}>
+                                            className={`search-container ${isSearchVisible ? "search-visible" : ""}`}
+                                        >
                                             <div
                                                 className="search-icon"
                                                 onClick={() => setIsSearchVisible((prev) => !prev)}
@@ -414,14 +411,16 @@ export default function Reflections() {
                                     <div className="pinned-header">
                                         <div className="pinned">
                                             <div
-                                                className={`straight-pin-icon ${isPinnedListVisible ? "active-pin" : ""}`}>
+                                                className={`straight-pin-icon ${isPinnedListVisible ? "active-pin" : ""}`}
+                                            >
                                                 <StraightPin fill="currentColor" />
                                             </div>
                                             <div>Pinned</div>
                                         </div>
                                         <div className="add-message-container">
                                             <div
-                                                className={`message-count ${pinnedMessages.length < 1 ? "display-none" : ""}`}>
+                                                className={`message-count ${pinnedMessages.length < 1 ? "display-none" : ""}`}
+                                            >
                                                 {pinnedMessages.length}
                                             </div>
                                             <div
@@ -431,7 +430,11 @@ export default function Reflections() {
                                                     setPinnedListVisible((prev) => !prev);
                                                 }}
                                             >
-                                                {pinnedMessages.length < 1 ? "+" : isPinnedListVisible ? "-" : "+"}
+                                                {pinnedMessages.length < 1
+                                                    ? "+"
+                                                    : isPinnedListVisible
+                                                      ? "-"
+                                                      : "+"}
                                             </div>
                                         </div>
                                     </div>

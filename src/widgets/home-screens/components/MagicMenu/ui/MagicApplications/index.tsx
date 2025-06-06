@@ -9,8 +9,6 @@ import { useMagicMenuStore } from "src/shared/providers/useMagicApplicationStore
 interface Props {}
 
 export const MagicApplications: React.FC<Props> = (props) => {
-  
-  
     const nodeRef = React.useRef<HTMLDivElement>(null);
 
     const { menuActive, toggleMenu } = useMagicMenuStore();
@@ -19,14 +17,13 @@ export const MagicApplications: React.FC<Props> = (props) => {
         <div className={css.apps}>
             <MagicMenuButton
                 className={clsx(css.apps_btn, menuActive && css._active)}
-          
                 icon={<PlusSquareIcon />}
                 text="Connect Applications"
                 onClick={toggleMenu}
                 hasMenu
             />
-          
-            <CSSTransition 
+
+            <CSSTransition
                 classNames={css}
                 timeout={250}
                 in={menuActive}

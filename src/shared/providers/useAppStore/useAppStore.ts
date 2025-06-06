@@ -24,7 +24,6 @@ export interface AppState {
     setPreviewPlayground: (data: IPreviewPlayground) => void;
     setActiveTranslationOption: (activeTranslationOption: TranslationMenuOptionsType) => void;
 
-
     isCitationPlayground: boolean;
     citationPlaygroundRef: string | null;
     setIsCitationPlayground: (isCitationPlayground: boolean) => void;
@@ -46,18 +45,16 @@ export interface AppState {
     };
 
     setIsTablePromptVisible: (visible: boolean) => void;
-    setSelectedArea: (area: { type: TableSelectedAreaType | null;
-        value: string | number | null }) => void;
+    setSelectedArea: (area: {
+        type: TableSelectedAreaType | null;
+        value: string | number | null;
+    }) => void;
 
     isMaximized: boolean;
     setIsMaximized: (isMaximized: boolean) => void;
-
 }
 
-
-
 export const useAppStore = create<AppState>()((set) => {
-
     return {
         editor: null,
         theme: "light",
@@ -81,14 +78,14 @@ export const useAppStore = create<AppState>()((set) => {
         citationPlaygroundRef: null,
         activeTranslationOption: TRANSLATION_MENU_OPTIONS.TRANSLATION,
         isSideBarOpen: false,
-        setIsSideBarOpen: (isSideBarOpen)=> set(() => ({isSideBarOpen})),
+        setIsSideBarOpen: (isSideBarOpen) => set(() => ({ isSideBarOpen })),
 
         setLinkInputActive: (bool: boolean) => set(() => ({ linkInputActive: bool })),
         setIsCitationPlayground: (isCitationPlayground) => set(() => ({ isCitationPlayground })),
         setCitationPlaygroundRef: (ref) => set(() => ({ citationPlaygroundRef: ref })),
         setGaiaActive: (gaiaActive) => set(() => ({ gaiaActive })),
         setGaiaSidebarActive: (gaiaSidebarActive) => set(() => ({ gaiaSidebarActive })),
-        setTalkModeActive: (talkModeActive) => set(() => ({talkModeActive})),
+        setTalkModeActive: (talkModeActive) => set(() => ({ talkModeActive })),
         setActiveEditor: (editor) => set(() => ({ editor })),
         setTheme: (theme) => set(() => ({ theme })),
         setPlayground: (playground) => set(() => ({ playground })),
@@ -99,15 +96,16 @@ export const useAppStore = create<AppState>()((set) => {
         setIsUploadFileChatMode: (isUploadFileChatMode) => set(() => ({ isUploadFileChatMode })),
 
         isHyperlinkInputOpen: false,
-        setIsHyperlinkInputOpen: (isHyperlinkInputOpen) => set(() => ({isHyperlinkInputOpen})),
+        setIsHyperlinkInputOpen: (isHyperlinkInputOpen) => set(() => ({ isHyperlinkInputOpen })),
 
         isTablePromptVisible: false,
         selectedArea: { type: null, value: null },
 
-        setIsTablePromptVisible: (visible: boolean) => set(() => ({ isTablePromptVisible: visible })),
+        setIsTablePromptVisible: (visible: boolean) =>
+            set(() => ({ isTablePromptVisible: visible })),
         setSelectedArea: (area) => set(() => ({ selectedArea: area })),
 
         isMaximized: false,
-        setIsMaximized: (isMaximized) => set(() => ({isMaximized})),
-    }}
-);
+        setIsMaximized: (isMaximized) => set(() => ({ isMaximized })),
+    };
+});

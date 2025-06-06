@@ -1,0 +1,117 @@
+.settingsModal {
+    &__backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 100;
+        background-color: var(--var-144);
+    }
+    &__container {
+        position: absolute;
+        top: 81px;
+        left: 92px;
+        max-width: 716px;
+        width: 100%;
+        height: 532px;
+        padding: 9px 11px 13px;
+        border-radius: 16px;
+        background: var(--var-145);
+        border: 1px solid var(--var-68);
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        z-index: 101;
+        animation: fadeIn 0.45s ease-out forwards;
+    }
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+    }
+    &__title {
+        font-family: var(--font-sohne), sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        line-height: 1.3rem;
+        color: var(--var-123);
+        margin-left: 12px;
+    }
+    &__closeButton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        border: 1px solid var(--var-68);
+        background-color: var(--var-19);
+        backdrop-filter: blur(15px);
+        svg path {
+            stroke: var(--var-146);
+        }
+    }
+    &__content {
+        display: flex;
+        flex: 1;
+        gap: 5px;
+        overflow: hidden;
+    }
+    &__tabsContainer,
+    &__tabContent {
+        background-color: var(--var-10);
+        border: 1px solid var(--var-60);
+        border-radius: 12px;
+        height: 100%;
+    }
+    &__tabsContainer {
+        flex: 0 0 202px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px;
+    }
+    &__tabContent {
+        flex: 1;
+        padding: 0 1px;
+        overflow-x: hidden;
+    }
+    &__tab {
+        display: flex;
+        gap: 6px;
+        width: 100%;
+        padding: 8px;
+        border-radius: 8px;
+        background-color: transparent;
+        border: 1px solid transparent;
+        transition: background-color 0.3s ease;
+        &:hover {
+            background-color: rgba(181, 181, 181, 0.08);
+        }
+        svg {
+            fill: var(--var-147);
+            transition: fill 0.3s ease;
+        }
+        span {
+            font-family: var(--font-sohne), sans-serif;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--var-97);
+            transition: color 0.3s ease;
+        }
+        &--active {
+            background-color: var(--var-9);
+            border-color: var(--var-127);
+            &:hover {
+                background-color: var(--var-9);
+            }
+            svg {
+                fill: var(--var-86);
+            }
+            span {
+                color: var(--var-7);
+            }
+        }
+    }
+}

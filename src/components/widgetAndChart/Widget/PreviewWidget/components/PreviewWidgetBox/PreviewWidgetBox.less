@@ -17,7 +17,7 @@
     }
     .previewHead {
         width: calc(100) !important;
-        background: rgba(255, 255, 255, 0.9);
+        background: var(--var-59);
         backdrop-filter: blur(100px);
         height: 50px;
         display: flex;
@@ -27,11 +27,12 @@
         border-top-right-radius: 12px;
         padding-left: 16px;
         padding-right: 16px;
+        backdrop-filter: blur(100px);
         .previewtitle {
             font-size: 16px;
             font-family: "Sohne";
             font-weight: 600;
-            color: #1f1f1f;
+            color: var(--var-7);
         }
         .widgetIcon {
             width: 30px;
@@ -69,6 +70,7 @@
         height: 280px;
         overflow: hidden;
         background: #fff;
+        border-radius: 0;
         border-bottom-left-radius: 12px;
         border-bottom-right-radius: 12px;
         iframe {

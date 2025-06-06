@@ -8,9 +8,9 @@
     border: none;
     cursor: pointer;
     &:hover {
-        background: #f8f8f8;
+        background: var(--var-2);
         border-radius: 8px;
-        box-shadow: inset 0 0 0 1px #b5b5b5;
+        box-shadow: inset 0 0 0 1px var(--var-80);
     }
     &:focus {
         img {
@@ -21,7 +21,7 @@
 }
 .active {
     img {
-        filter: grayscale(100%);
+        filter: grayscale(0%);
         filter: brightness(0);
     }
 }

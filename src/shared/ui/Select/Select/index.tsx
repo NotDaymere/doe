@@ -1,7 +1,7 @@
-import React from 'react';
-import clsx from 'clsx';
-import { useClickOut } from 'src/shared/hooks/useClickOut';
-import css from './select.module.scss';
+import clsx from "clsx";
+import React from "react";
+import { useClickOut } from "src/shared/hooks/useClickOut";
+import css from "./select.module.scss";
 // import ArrowDownIcon from 'shared/icons/ArrowDown.icon';
 
 interface Props<T> {
@@ -35,20 +35,20 @@ export function Select<T>({
 }: Props<T>) {
     const [active, setActive] = React.useState(false);
     const ref = useClickOut({
-        handler: () => setActive(false)
+        handler: () => setActive(false),
     });
 
     const options = React.Children.toArray(children).filter(
-        (option) => (option as any).type.displayName === 'SelectOption'
+        (option) => (option as any).type.displayName === "SelectOption"
     );
 
     const button = React.Children.toArray(children).find(
-        (option) => (option as any).type.displayName === 'SelectButton'
+        (option) => (option as any).type.displayName === "SelectButton"
     ) as any;
 
-    const selected = (
-        options.find((option) => (option as any).props.selected) as any
-    )?.props as SelectedItem<T> | undefined;
+    const selected = (options.find((option) => (option as any).props.selected) as any)?.props as
+        | SelectedItem<T>
+        | undefined;
 
     const toggleActive = () => setActive(!active);
 
@@ -64,10 +64,7 @@ export function Select<T>({
     };
 
     return (
-        <div
-            className={clsx(css.select, active && css._active, className)}
-            ref={ref}
-        >
+        <div className={clsx(css.select, active && css._active, className)} ref={ref}>
             {button ? (
                 React.cloneElement(button, {
                     ...button.props,
@@ -75,27 +72,19 @@ export function Select<T>({
                         button.props.onClick?.(ev);
                         toggleActive();
                     },
-                    className: clsx(
-                        button.props.className,
-                        active && '_select_active'
-                    ),
+                    className: clsx(button.props.className, active && "_select_active"),
                 })
             ) : (
-                <button
-                    className={clsx(css.select_btn, classNameButton)}
-                    onClick={toggleActive}
-                >
+                <button className={clsx(css.select_btn, classNameButton)} onClick={toggleActive}>
                     <span className={css.select_value}>
                         {maxSize && (
                             <span className={css.select_hidden} data-hidden>
                                 {options.map((item, id) => (
-                                    <span key={id}>
-                                        {(item as any).props.children}{' '}
-                                    </span>
+                                    <span key={id}>{(item as any).props.children} </span>
                                 ))}
                             </span>
                         )}
-                        {selected?.children || placeholder || 'Select'}
+                        {selected?.children || placeholder || "Select"}
                     </span>
                     {/* <ArrowDownIcon className={css.select_btn_icon} /> */}
                 </button>

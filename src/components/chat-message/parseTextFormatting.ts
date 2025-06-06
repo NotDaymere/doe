@@ -23,9 +23,9 @@ type TagType =
     | "footnote";
 
 interface ParsedTag {
-  type: TagType
-  content: string
-  attributes?: Record<string, string>
+    type: TagType;
+    content: string;
+    attributes?: Record<string, string>;
 }
 
 export function parseTextFormatting(input: string): string {
@@ -33,25 +33,25 @@ export function parseTextFormatting(input: string): string {
         "inline-code": /<inline-code>(.*?)<\/inline-code>/g,
         "block-code": /<block-code>([\s\S]*?)<\/block-code>/g,
         "code-with-output": /<code-with-output>([\s\S]*?)<\/code-with-output>/g,
-        "bold": /<bold>(.*?)<\/bold>/g,
-        "italic": /<italic>(.*?)<\/italic>/g,
-        "underline": /<underline>(.*?)<\/underline>/g,
+        bold: /<bold>(.*?)<\/bold>/g,
+        italic: /<italic>(.*?)<\/italic>/g,
+        underline: /<underline>(.*?)<\/underline>/g,
         "inline-math": /\$(.*?)\$/g,
         "block-math": /\$\$(.*?)\$\$/g,
-        "link": /<link url="(.*?)">(.*?)<\/link>/g,
+        link: /<link url="(.*?)">(.*?)<\/link>/g,
         "block-text": /<block-text>([\s\S]*?)<\/block-text>/g,
-        "quote": /<quote>([\s\S]*?)<\/quote>/g,
-        "strikethrough": /<strikethrough>(.*?)<\/strikethrough>/g,
-        "red": /<red>(.*?)<\/red>/g,
-        "blue": /<blue>(.*?)<\/blue>/g,
+        quote: /<quote>([\s\S]*?)<\/quote>/g,
+        strikethrough: /<strikethrough>(.*?)<\/strikethrough>/g,
+        red: /<red>(.*?)<\/red>/g,
+        blue: /<blue>(.*?)<\/blue>/g,
         "medium-text": /<medium-text>(.*?)<\/medium-text>/g,
         "large-text": /<large-text>(.*?)<\/large-text>/g,
-        "superscript": /<superscript>(.*?)<\/superscript>/g,
-        "subscript": /<subscript>(.*?)<\/subscript>/g,
-        "highlight": /<highlight>(.*?)<\/highlight>/g,
-        "tab": /<tab \/>/g,
-        "citation": /<citation id="(\d+)">(.*?)<\/citation>/g,
-        "footnote": /<footnote id="(\d+)">(.*?)<\/footnote>/g,
+        superscript: /<superscript>(.*?)<\/superscript>/g,
+        subscript: /<subscript>(.*?)<\/subscript>/g,
+        highlight: /<highlight>(.*?)<\/highlight>/g,
+        tab: /<tab \/>/g,
+        citation: /<citation id="(\d+)">(.*?)<\/citation>/g,
+        footnote: /<footnote id="(\d+)">(.*?)<\/footnote>/g,
     };
 
     const formatTag = (inputStr: string, tag: TagType): string => {
@@ -62,7 +62,7 @@ export function parseTextFormatting(input: string): string {
             case "inline-code":
                 return inputStr.replace(
                     pattern,
-                    `<code class="code-inline-output" style="color: rgba(255, 95, 95, 1); background: #ededed">$1</code>`
+                    `<code class="code-inline-output" style="color: rgba(255, 95, 95, 1); background: var(--var-52)">$1</code>`
                 );
 
             case "block-code":
@@ -149,10 +149,7 @@ export function parseTextFormatting(input: string): string {
                 });
 
             case "footnote":
-                return inputStr.replace(
-                    pattern,
-                    '<cite class="footnote" data-id="$1">$2</cite>'
-                );
+                return inputStr.replace(pattern, '<cite class="footnote" data-id="$1">$2</cite>');
 
             default:
                 return inputStr;

@@ -1,0 +1,60 @@
+.chatHistoryWrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.chatHistoryContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    align-self: stretch;
+    height: 100%;
+    // width: 100%;
+    flex-shrink: 0;
+
+    // padding: 46px 200px;
+    padding-bottom: 32px;
+    border-radius: 16px;
+    padding-top: 65px;
+    height: 100%;
+    overflow: hidden;
+    transition: background-color 1s ease;
+
+    @media screen and (max-height: 790px) {
+        padding-top: 16px;
+    }
+
+    @media screen and (max-width: 1248px) {
+        padding-top: 16px;
+    }
+}
+
+.low_padding {
+    padding: 30px 30px 32px 80px;
+    justify-content: flex-end;
+}
+
+.chatHistoryContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 892px;
+    width: 100%;
+    z-index: 1;
+
+    @media screen and (max-width: 1120px) {
+        max-width: 700px;
+    }
+}
+
+.msgExit {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.msgExitActive {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}

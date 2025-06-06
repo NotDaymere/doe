@@ -58,7 +58,7 @@ const CustomBar = (props: any) => {
                 y={30}
                 width={width}
                 height={180}
-                fill={backgroundBarColor}
+                fill={"url(#bg-gradient)"}
                 radius={[radius, radius, 0, 0]}
             />
             {/* Render the actual colored bar */}
@@ -104,17 +104,21 @@ const CustomChartBar = ({ data, maxValue = 2000 }: CustomChartBarProps) => {
                             />
                         </linearGradient>
                     ))}
+                    <linearGradient id={`bg-gradient`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={"rgba(248, 248, 248, 0)"} />
+                        <stop offset="100%" stopColor={"rgb(248, 248, 248)"} stopOpacity={0.05} />
+                    </linearGradient>
                 </defs>
 
                 <XAxis
                     dataKey="group"
-                    tick={{ fill: "#CFCFCF", fontWeight: "bold", fontSize: 12 }}
+                    tick={{ fill: "var(--var-119)", fontWeight: "bold", fontSize: 12 }}
                     axisLine={false}
                     tickLine={false}
                 />
 
                 <YAxis
-                    tick={{ fill: "#CFCFCF", fontWeight: "bold", fontSize: 12 }}
+                    tick={{ fill: "var(--var-113)", fontWeight: "bold", fontSize: 12 }}
                     domain={[0, maxValue]}
                     axisLine={false}
                     tickLine={false}

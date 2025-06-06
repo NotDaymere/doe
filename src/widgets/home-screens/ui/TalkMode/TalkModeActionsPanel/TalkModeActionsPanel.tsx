@@ -16,16 +16,18 @@ interface TalkModeActionsPanelProps {
 }
 
 export const TalkModeActionsPanel: React.FC<TalkModeActionsPanelProps> = ({
-                                                                              onClose,
-                                                                              isCameraOn,
-                                                                              isMicrophoneOn,
-                                                                              onCameraToggle,
-                                                                              onMicrophoneToggle,
-                                                                              noPermissionForCamera = false,
-                                                                              noPermissionForMicrophone = false,
-                                                                          }) => {
+    onClose,
+    isCameraOn,
+    isMicrophoneOn,
+    onCameraToggle,
+    onMicrophoneToggle,
+    noPermissionForCamera = false,
+    noPermissionForMicrophone = false,
+}) => {
     return (
-        <div className={`${isCameraOn ? css.actionsPanelCameraOnContainer : css.actionsPanelContainer}`}>
+        <div
+            className={`${isCameraOn ? css.actionsPanelCameraOnContainer : css.actionsPanelContainer}`}
+        >
             <div
                 className={clsx(css.panelButton, {
                     ...(!noPermissionForMicrophone && {
@@ -41,15 +43,7 @@ export const TalkModeActionsPanel: React.FC<TalkModeActionsPanelProps> = ({
                     active={noPermissionForMicrophone ? false : isMicrophoneOn}
                 />
             </div>
-            <svg
-                width="2"
-                height="30"
-                viewBox="0 0 1 30"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <line x1="0.5" y1="30" x2="0.5" stroke="#F8F8F8" />
-            </svg>
+            <div className={css.divider}></div>
             <div
                 className={clsx(css.panelButton, {
                     ...(!noPermissionForCamera && {
@@ -65,19 +59,8 @@ export const TalkModeActionsPanel: React.FC<TalkModeActionsPanelProps> = ({
                     active={noPermissionForCamera ? false : isCameraOn}
                 />
             </div>
-            <svg
-                width="2"
-                height="30"
-                viewBox="0 0 1 30"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <line x1="0.5" y1="30" x2="0.5" stroke="#F8F8F8" />
-            </svg>
-            <div
-                className={`${css.panelButton} ${css.panelButtonClose}`}
-                onClick={onClose}
-            >
+            <div className={css.divider}></div>
+            <div className={`${css.panelButton} ${css.panelButtonClose}`} onClick={onClose}>
                 <PanelCloseIcon color="currentColor" />
             </div>
         </div>

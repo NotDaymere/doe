@@ -24,7 +24,7 @@ export default function MultiplePlaygroundRenderer() {
                 }, 2000);
             }, 300);
         }
-    }, []);
+    }, [getNoPlayground().open]);
 
     return (
         <Flex vertical className={`multiple-playground-renderer-container ${openHistory && ' multiple-playground-renderer-container-left-radius'}`}>
@@ -70,9 +70,13 @@ export default function MultiplePlaygroundRenderer() {
                     })
                }
            </Flex>
-            <Flex className={'doe-playground-open doe-playground-open.show'}>
-                <DoePlaygroundStars /> Doe Playground
-            </Flex>
+            {
+                !getNoPlayground().open && (
+                    <Flex className={'doe-playground-open doe-playground-open.show'}>
+                        <DoePlaygroundStars /> Doe Playground
+                    </Flex>
+                )
+            }
         </Flex>
     )
 }

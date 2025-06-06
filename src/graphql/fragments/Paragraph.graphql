@@ -1,4 +1,4 @@
 fragment Paragraph on ComponentUiParagraph {
-  id
-  value
+    id
+    value
 }

@@ -3,7 +3,7 @@ import React from "react";
 export function usePrompt() {
     const [prompt, setPrompt] = React.useState({
         active: false,
-        number: ""
+        number: "",
     });
 
     const togglePrompt = (active: boolean) => {
@@ -18,6 +18,6 @@ export function usePrompt() {
     return {
         ...prompt,
         togglePrompt,
-        setNumber
+        setNumber,
     };
 }

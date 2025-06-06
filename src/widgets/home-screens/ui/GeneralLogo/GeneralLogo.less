@@ -1,20 +1,56 @@
-.general-logo-hovered-container {
-  max-width: 48px;
-  max-height: 48px;
-  padding: 10px;
-  border: 1px solid;
-  border-radius: 10px;
-  border-image-source: linear-gradient(161.57deg, #FFE4C8 12.5%, #FFFFFF 95.83%);
-  background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.4) 100%);
-  box-shadow: 0 3px 12px 0 #FFE4C8;
-}
 .general-logo-container {
-  max-width: 48px;
-  max-height: 48px;
-  padding: 10px;
-  border: 1px solid;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.4) 100%);
-  border-image-source: linear-gradient(135deg, rgba(141, 141, 141, 0.46) 11.46%, #FFFFFF 91.67%);
-  box-shadow: 0 3px 12px 0 #1F1F1F0D;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: var(--bg-gradient-var-15);
+    box-shadow: 0px 3px 12px 0px rgba(31, 31, 31, 0.05);
+
+    z-index: 0;
+    transition: 0.3s;
+    svg path {
+        transition: 0.3s;
+        fill: var(--icon-doe-general);
+    }
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        padding: 1px;
+        border-radius: inherit;
+        background: var(--border-gradient-var-2);
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        z-index: 1;
+        pointer-events: none;
+        transition: 0.3s;
+    }
+    &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 0;
+        width: 1px;
+        height: 1px;
+        box-shadow: 0 0 0 0 transparent;
+        transition: 0.3s;
+    }
+    &:hover {
+        &::after {
+            box-shadow: -6px 0 40px 10px rgba(255, 139, 18, 0.4);
+        }
+        &::before {
+            background: var(--border-gradient-var-1);
+        }
+        svg path {
+            fill: url(#general-logo-hover);
+        }
+    }
 }

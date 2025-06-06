@@ -1,8 +1,8 @@
 .calendarContainer {
     width: 217px;
     margin: 0 auto;
-    background-color: #fff;
-    border: 1px solid #dddddd;
+    background-color: var(--bg-general);
+    border: 1px solid var(--var-68);
     border-radius: 12px;
     padding: 12px;
     z-index: 999;
@@ -15,6 +15,7 @@
     padding-bottom: 6px;
     font-size: 12px;
     font-weight: bold;
+    color: var(--var-7);
 }
 
 .button {
@@ -23,8 +24,11 @@
     align-items: center;
     width: 20px;
     height: 20px;
-    background-color: #f8f8f8;
+    background-color: var(--var-36);
     border-radius: 4px;
+    svg path {
+        fill: var(--var-101);
+    }
 }
 
 .calendarGrid {
@@ -32,8 +36,8 @@
     grid-template-columns: repeat(7, 24px);
     gap: 4px;
     padding: 10px 0;
-    border-top: 1px solid #dddddd;
-    border-bottom: 1px solid #dddddd;
+    border-top: 1px solid var(--var-163);
+    border-bottom: 1px solid var(--var-163);
 }
 
 .dayHeader {
@@ -41,7 +45,7 @@
     text-align: center;
     font-size: 12px;
     font-weight: bold;
-    color: #8d8d8d;
+    color: var(--var-108);
 }
 
 .day {
@@ -51,16 +55,16 @@
     align-items: center;
     justify-items: center;
     font-size: 12px;
-    color: #5b5b5b;
+    color: var(--var-121);
     cursor: pointer;
 }
 
 .otherMonth {
-    color: #dddddd;
+    color: var(--var-68);
 }
 
 .selected {
-    background-color: #f1e7ff;
+    background-color: var(--var-24);
     color: #9747ff;
     border: 1px solid #9747ff;
     border-radius: 6px;
@@ -90,9 +94,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #dddddd;
+    border: 1px solid var(--var-87);
     border-radius: 8px;
-    color: #8d8d8d;
+    color: var(--var-108);
     font-size: 12px;
     cursor: pointer;
 }
@@ -100,7 +104,7 @@
 .sessionSelected {
     color: #9747ff;
     border: 1px solid #9747ff;
-    background-color: #f1e7ff;
+    background-color: var(--var-24);
 }
 
 .bold {
@@ -110,7 +114,7 @@
 .selectAllSessions {
     font-size: 12px;
     font-weight: bold;
-    color: #b5b5b5;
+    color: var(--var-119);
 }
 
 .sessionsInfo {
@@ -118,6 +122,7 @@
     align-items: center;
     font-size: 12px;
     letter-spacing: 0;
+    color: var(--var-7);
 }
 
 .aroundClockIcon {
@@ -126,7 +131,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f8f8f8;
+    background-color: var(--var-13);
     border-radius: 4px;
     margin-right: 4px;
 }

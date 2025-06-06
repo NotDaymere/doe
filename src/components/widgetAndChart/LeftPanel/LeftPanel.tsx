@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./LeftPanel.less";
 import { Page } from "../Enums/Page.enum";
 import { useChartWidgets } from "../Window/ChartWidgetsWindow";
+import clsx from "clsx";
 
 function LeftPanel() {
     const { page, setPage } = useChartWidgets();
@@ -39,6 +40,9 @@ function LeftPanel() {
                                 <p>Charts</p>
                             </div>
                             <button
+                                className={clsx("expand_button", {
+                                    active: openSections.charts,
+                                })}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     toggleSection("charts");
@@ -126,6 +130,9 @@ function LeftPanel() {
                                 <p>Widgets</p>
                             </div>
                             <button
+                                className={clsx("expand_button", {
+                                    active: openSections.widgets,
+                                })}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     toggleSection("widgets");

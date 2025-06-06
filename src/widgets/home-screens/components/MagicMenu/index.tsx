@@ -15,23 +15,19 @@ import { FileWithId } from "../../lib/hooks/useDragFile";
 import MagicMenuUploadIcon from "../../../../shared/icons/MagicMenuUploadIcon";
 import MagicMenuArrowRightIcon from "../../../../shared/icons/MagicMenuArrowRightIcon";
 
-
 interface Props {
     onUploadFiles?: (files: FileWithId[]) => void;
     onDispatchDoe?: () => void;
 }
 
-export const MagicMenu: React.FC<Props> = ({
-    onUploadFiles,
-    onDispatchDoe
-}) => {
+export const MagicMenu: React.FC<Props> = ({ onUploadFiles, onDispatchDoe }) => {
     const [activeMenu, setActiveMenu] = React.useState(false);
     const nodeRef = React.useRef<HTMLDivElement>(null);
     const ref = useClickOut({
-        handler: () => setActiveMenu(false)
+        handler: () => setActiveMenu(false),
     });
     const isUploadFileChatMode = useChatStore((state) => state.isUploadFileChatMode);
-    const {setTalkModeActive } = useAppStore();
+    const { setTalkModeActive } = useAppStore();
     const toggleMenu = () => setActiveMenu(!activeMenu);
     const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -43,12 +39,12 @@ export const MagicMenu: React.FC<Props> = ({
             const files = Array.from(ev.target.files) as File[];
             onUploadFiles?.(files);
             input.remove();
-        }
+        };
         input.click();
     };
 
     useEffect(() => {
-        if(isUploadFileChatMode){
+        if (isUploadFileChatMode) {
             setActiveMenu(false);
         }
     }, [isUploadFileChatMode]);
@@ -57,15 +53,15 @@ export const MagicMenu: React.FC<Props> = ({
         return () => {
             fn?.();
             setActiveMenu(false);
-        }
-    }
+        };
+    };
 
     return (
         <>
             <div
                 className={css.magic}
                 style={{
-                    zIndex: activeMenu ? 100 : ""
+                    zIndex: activeMenu ? 100 : "",
                 }}
                 ref={ref}
             >
@@ -90,8 +86,10 @@ export const MagicMenu: React.FC<Props> = ({
                         />
                         <MagicUploadApps />
 
-                        <div className={css.magic_button_call_container}
-                             onClick={setCloseHandler(onDispatchDoe)}>
+                        <div
+                            className={css.magic_button_call_container}
+                            onClick={setCloseHandler(onDispatchDoe)}
+                        >
                             <div className={css.magic_button_and_text}>
                                 <CallIcon fill="currentColor" height={18} width={18} />
                                 <span>Dispatch Doe</span>
@@ -101,8 +99,10 @@ export const MagicMenu: React.FC<Props> = ({
                             </div>
                         </div>
 
-                        <div className={css.magic_button_talkmode_container}
-                             onClick={setCloseHandler(() => setTalkModeActive(true))}>
+                        <div
+                            className={css.magic_button_talkmode_container}
+                            onClick={setCloseHandler(() => setTalkModeActive(true))}
+                        >
                             <div className={css.magic_button_and_text}>
                                 <TalkIcon fill="currentColor" height={18} width={18} />
                                 <span>Talk mode</span>
@@ -126,10 +126,11 @@ export const MagicMenu: React.FC<Props> = ({
                     const files = event.target.files;
                     if (!files) return;
 
-                    const filesArray = Array.from(files).map((file) =>
-                        Object.assign(file, {
-                            id: `${Date.now()}-${Math.random()}`,
-                        }) as FileWithId,
+                    const filesArray = Array.from(files).map(
+                        (file) =>
+                            Object.assign(file, {
+                                id: `${Date.now()}-${Math.random()}`,
+                            }) as FileWithId
                     );
                     if (onUploadFiles) {
                         onUploadFiles(filesArray);

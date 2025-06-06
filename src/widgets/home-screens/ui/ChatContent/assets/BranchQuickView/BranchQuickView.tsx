@@ -1,4 +1,4 @@
-import './BranchQuickView.less';
+import "./BranchQuickView.less";
 import { useEffect, useRef, useState } from "react";
 import { useChatStore } from "src/shared/providers";
 import { IBranchDialog } from "../../../../../../shared/types/BranchDialog";
@@ -15,17 +15,13 @@ type BranchQuickViewProps = {
 type AnimationState = "enter" | "visible" | "exit";
 
 export default function BranchQuickView({
-                                            branchId,
-                                            changeIsActiveBranchQuickView,
-                                            isOpenFromChat = false
-                                        }: BranchQuickViewProps) {
+    branchId,
+    changeIsActiveBranchQuickView,
+    isOpenFromChat = false,
+}: BranchQuickViewProps) {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const branch = useChatStore(state => state.getBranchById(branchId));
-    const {
-        setCurrentBranch,
-        setIsCurrentBranchOpen,
-        setCurrentBranchDialog
-    } = useChatStore();
+    const branch = useChatStore((state) => state.getBranchById(branchId));
+    const { setCurrentBranch, setIsCurrentBranchOpen, setCurrentBranchDialog } = useChatStore();
     const [activeOpenAllBranchesMenu, setActiveOpenAllBranchesMenu] = useState<number | null>(null);
     const [contentIdHover, setContentIdHover] = useState<number | null>(null);
     const [animationState, setAnimationState] = useState<AnimationState>("enter");
@@ -64,7 +60,7 @@ export default function BranchQuickView({
     }, []);
 
     const stripHTML = (html: string): string => {
-        const element = document.createElement('div');
+        const element = document.createElement("div");
         element.innerHTML = html;
         return element.textContent || element.innerText || "";
     };
@@ -88,13 +84,23 @@ export default function BranchQuickView({
                     </div>
                     <button
                         className="quick-view-branches-header-button"
-                        onClick={(e) => { e.stopPropagation(); handleClose(); }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleClose();
+                        }}
                     >
                         <BackArrowIcon />
                     </button>
                 </div>
-                <svg width="100%" height="2" viewBox="0 0 293 1" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="0" y1="0.5" x2="293" y2="0.500026" stroke="#F8F8F8" />
+                <svg
+                    width="100%"
+                    height="2"
+                    viewBox="0 0 293 1"
+                    fill="none"
+                    stroke="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <line x1="0" y1="0.5" x2="293" y2="0.500026" stroke="inherit" />
                 </svg>
                 <div className="quick-view-branches-content">
                     <div className="quick-view-branches-content"></div>
@@ -126,29 +132,39 @@ export default function BranchQuickView({
                 </div>
                 <button
                     className="quick-view-branches-header-button"
-                    onClick={(e) => { e.stopPropagation(); handleClose(); }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleClose();
+                    }}
                 >
                     <BackArrowIcon />
                 </button>
             </div>
-            <svg width="100%" height="2" viewBox="0 0 293 1" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="0" y1="0.5" x2="293" y2="0.500026" stroke="#F8F8F8" />
+            <svg
+                width="100%"
+                height="2"
+                viewBox="0 0 293 1"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <line x1="0" y1="0.5" x2="293" y2="0.500026" stroke="inherit" />
             </svg>
             <div className="quick-view-branches-content">
                 {branch.dialogsMessages.map((dialog: IBranchDialog, index: number) => (
                     <div
                         key={index}
                         className={`quick-view-branches-content-item 
-                            ${(contentIdHover === index) || (activeOpenAllBranchesMenu === index)
-                            ? 'quick-view-branches-content-item-hover'
-                            : ''
-                        }`}
+                            ${
+                                contentIdHover === index || activeOpenAllBranchesMenu === index
+                                    ? "quick-view-branches-content-item-hover"
+                                    : ""
+                            }`}
                         onMouseMove={(e) => contentMouseUp(e, index)}
                         onMouseOut={(e) => contentMouseDown(e)}
                         onClick={handleItemClick(index)}
                     >
                         <div className="quick-view-branches-content-name">
-                            <DialogIcon width={16} height={16} fill={"#5B5B5BFF"} />
+                            <DialogIcon width={16} height={16} />
                             <p>{stripHTML(dialog.userRequest.content).slice(0, 50)}...</p>
                         </div>
                     </div>

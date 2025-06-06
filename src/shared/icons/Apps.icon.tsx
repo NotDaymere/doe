@@ -2,12 +2,7 @@ import React, { SVGProps } from "react";
 
 const AppsIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => {
     return (
-        <svg
-            {...props}
-            viewBox="0 0 20 20"
-            stroke="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg {...props} viewBox="0 0 20 20" stroke="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M5.51575 6.77933C5.51575 7.72856 6.20421 8.41702 7.52896 8.77167L11.5554 9.8878C13.5686 10.4302 14.6221 11.6194 14.6221 13.3092V13.5596H13.1201V13.3092C13.1201 12.36 12.442 11.6924 11.1068 11.3169L7.08042 10.2112C5.06721 9.65832 4.01367 8.46917 4.01367 6.77933V6.51855H5.51575V6.77933Z"
                 stroke="none"

@@ -1,95 +1,111 @@
+.va {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    min-height: 400px;
+    padding: 40px 40px;
+    background: var(--var-57);
+    border-radius: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 .line-message-chart {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-  min-height: 400px;
-  padding: 40px 40px;
-  background: #F8F8F8;
-  border-radius: 12px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    min-height: 400px;
+    padding: 40px 40px;
+    background: var(--var-57);
+    border-radius: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    & .yAxis text {
+        fill: var(--var-113);
+    }
+    & .xAxis text {
+        fill: var(--var-7);
+    }
 }
-
 .column-message-chart-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  margin-top: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
-
 
 .line-chart-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-radius: 12px;
-  min-width: 80%;
-  max-width: 100%;
-  gap: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 12px;
+    min-width: 80%;
+    max-width: 100%;
+    gap: 10px;
 }
 
 .line-chart {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #FFFFFFB2;
-  border-radius: 12px;
-  width: 100%;
-  border: 2px solid #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 12px;
+    width: 100%;
+    background: var(--var-58);
+    border: 2px solid var(--var-60);
 }
 
 .info-container {
-  width: 150px;
-  height: 410px;
-  min-height: 100%;
-  padding: 35px 20px;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-radius: 12px;
-  border: 2px solid #FFFFFF;
-  font-weight: 500;
-  font-size: 18px;
+    width: 150px;
+    height: 410px;
+    min-height: 100%;
+    padding: 35px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 12px;
+    background: var(--var-58);
+    border: 2px solid var(--var-60);
+    font-weight: 500;
+    font-size: 18px;
 }
 
 .selected-data {
-  font-size: 13px;
-  font-weight: 600;
-  color: #CFCFCF;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--var-115);
 }
 
 .selected-data-item {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1F1F1F;
-  margin: 0;
-  padding: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f1f1f;
+    margin: 0;
+    padding: 0;
 }
 
 .line-chart-container {
-  flex: 1;
-  height: 400px;
+    flex: 1;
+    height: 400px;
 }
 
 .selected-details {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 30px;
 }
 
 .selected-details-item {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-weight: 500;
-  font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: 500;
+    font-size: 18px;
 }
 
 .line {
-  display: inline-block;
-  width: 110px;
-  border-bottom: 1px dashed #CFCFCF;
+    display: inline-block;
+    width: 110px;
+    border-bottom: 1px dashed var(--var-68);
 }

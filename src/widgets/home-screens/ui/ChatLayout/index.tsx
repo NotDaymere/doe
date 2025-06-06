@@ -24,8 +24,15 @@ const DEFAULT_STYLES = {
 };
 
 export const ChatLayout: React.FC = () => {
-    const { playground, playgroundFullscreen, getOpenSavedPlaygrounds, messagesCount, mode, getNoPlayground} = useChatStore();
-    const {isSideBarOpen} = useAppStore();
+    const {
+        playground,
+        playgroundFullscreen,
+        getOpenSavedPlaygrounds,
+        messagesCount,
+        mode,
+        getNoPlayground,
+    } = useChatStore();
+    const { isSideBarOpen } = useAppStore();
     const [editMsgMode, setEditMsgMode] = React.useState<EditModeState>({
         isEditMsgMode: false,
         msgId: null,
@@ -66,18 +73,31 @@ export const ChatLayout: React.FC = () => {
             )}
             <ChatProvider>
                 <div
-                    className={(getOpenSavedPlaygrounds().length > 0 || getNoPlayground().open) ? (playgroundFullscreen ? css.layout_playground_fullscreen : css.layout_playground) : css.layout}>
-                    {!playgroundFullscreen &&
-                        <div className={(getOpenSavedPlaygrounds().length > 0 || getNoPlayground().open) ? css.layout_sidebar_playground : css.layout_sidebar}>
+                    className={
+                        getOpenSavedPlaygrounds().length > 0 || getNoPlayground().open
+                            ? playgroundFullscreen
+                                ? css.layout_playground_fullscreen
+                                : css.layout_playground
+                            : css.layout
+                    }
+                >
+                    {!playgroundFullscreen && (
+                        <div
+                            className={
+                                getOpenSavedPlaygrounds().length > 0 || getNoPlayground().open
+                                    ? css.layout_sidebar_playground
+                                    : css.layout_sidebar
+                            }
+                        >
                             <Sidebar />
                         </div>
-                    }
-                    <div className={!isSideBarOpen ? css.layout_chat : css.sidebar_open_layout_chat}>
+                    )}
+                    <div
+                        className={!isSideBarOpen ? css.layout_chat : css.sidebar_open_layout_chat}
+                    >
                         <ChatContent editMsgMode={editMsgMode} setEditMsgMode={setEditMsgMode} />
                         {messagesCount < MAX_MESSAGES_LIMIT ? (
-                            <>
-                                {editMsgMode.isEditMsgMode ? null : <ChatPanel />}
-                            </>
+                            <>{editMsgMode.isEditMsgMode ? null : <ChatPanel />}</>
                         ) : (
                             <div className={css.limitScreen}>
                                 <LimitScreen />
@@ -87,6 +107,5 @@ export const ChatLayout: React.FC = () => {
                 </div>
             </ChatProvider>
         </>
-
     );
 };

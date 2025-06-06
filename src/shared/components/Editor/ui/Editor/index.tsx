@@ -15,35 +15,48 @@ type Props = {
     onMouseUp?: React.MouseEventHandler<HTMLDivElement>;
 } & EditorProps;
 
-export const Editor = forwardRef<EditorRef, Props>(({
-                                                        className,
-                                                        classNameEditor,
-                                                        classNameFocus,
-                                                        classNamePlaceholder,
-                                                        clearContent,
-                                                        handleKeyDown,
-                                                        ...editorProps
-                                                    }, ref) => {
-    const editor = useInitialEditor({
-        ...editorProps,
-        classNameEditor: clsx(css.editor_editor, classNameEditor),
-        classNameFocus: clsx(css.editor_focused, classNameFocus),
-        classNamePlaceholder: clsx(css.editor_placeholder, classNamePlaceholder),
-    });
+export const Editor = forwardRef<EditorRef, Props>(
+    (
+        {
+            className,
+            classNameEditor,
+            classNameFocus,
+            classNamePlaceholder,
+            clearContent,
+            handleKeyDown,
+            ...editorProps
+        },
+        ref
+    ) => {
+        const editor = useInitialEditor({
+            ...editorProps,
+            classNameEditor: clsx(css.editor_editor, classNameEditor),
+            classNameFocus: clsx(css.editor_focused, classNameFocus),
+            classNamePlaceholder: clsx(css.editor_placeholder, classNamePlaceholder),
+        });
 
-    React.useEffect(() => {
-        if (clearContent) editor?.commands.clearContent();
-    }, [clearContent, editor]);
+        React.useEffect(() => {
+            if (clearContent) editor?.commands.clearContent();
+        }, [clearContent, editor]);
 
-    useImperativeHandle(ref, () => ({
-        focus: () => {
-            editor?.chain().focus().run();
-        }
-    }), [editor]);
+        useImperativeHandle(
+            ref,
+            () => ({
+                focus: () => {
+                    editor?.chain().focus().run();
+                },
+            }),
+            [editor]
+        );
 
-    return (
-        <div className={clsx(css.editor, className)}>
-            <EditorContent editor={editor} onKeyDown={handleKeyDown} onMouseUp={editorProps.onMouseUp}/>
-        </div>
-    );
-});
+        return (
+            <div className={clsx(css.editor, className)}>
+                <EditorContent
+                    editor={editor}
+                    onKeyDown={handleKeyDown}
+                    onMouseUp={editorProps.onMouseUp}
+                />
+            </div>
+        );
+    }
+);
