@@ -12,24 +12,28 @@ import { ReactComponent as Picture } from "src/assets/icons/picture.svg";
 import { Button, Flex } from "antd";
 import './ActiveMenu.less';
 import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
+import { useConsoleStore } from "src/shared/providers/useConsoleStore/useConsoleStore";
 
 
 function ActiveMenu() {
     const {openComments}  =  useCommentWindowStore();
+    const {open} = useConsoleStore();
     return (
         <Flex className={'active-menu-container'}>
 
             <Button className={'button'}><Picture /></Button>
             <Button className={'button'}><File /></Button>
+        
             <Button className={'button'}><Router /></Button>
             <Button className={'button'}><LikeP /></Button>
 
             <Button onClick = {openComments} className={'button'}><Massage /></Button>
-            <Button className={'button'}><Arrows /></Button>
+            <Button onClick = {open} className={'button'}><Arrows /></Button>
             <Button className={'button'}><NotePlus /></Button>
             <Button className={'button'}><Note /></Button>
             <Button className={'button'}><Reboot /></Button>
         </Flex>
-    )
+   
+)
 }
 export default ActiveMenu;
