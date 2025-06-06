@@ -23,6 +23,7 @@ import { CustomBlock } from "./assets/CustomBlock/CustomBlock";
 import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
 
 const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
+ 
   function adjustPosition(
       rawPosition: { top: number; left: number },
       containerWidth: number,

@@ -21,6 +21,7 @@ import { useEffect, useRef, useState } from "react";
 import ActivePaint from "../../../PlaygroundButtons/ActivePaint/ActivePaint";
 import ActiveMenu from "../../../PlaygroundButtons/ActiveMenu/ActiveMenu";
 import { Editor } from "@tiptap/react";
+import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
 
 type TextFormatProps = {
     isPen?: boolean;
@@ -38,6 +39,8 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     const [activePaint, setActivePaint] = useState(false);
     const [activeMenu, setActiveMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
+
+    const {setComment,openComments} = useCommentWindowStore();
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -110,9 +113,30 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
         if (!editor) return;
         const { from, to } = editor.state.selection;
         if (from === to) return;
+      
         const selectedText = editor.state.doc.textBetween(from, to, "");
         const newText = `“${selectedText}”`;
-        editor.chain().focus().deleteRange({ from, to }).insertContent(newText).run();
+       
+        setComment( {
+        id: 1,
+        user: {
+            name: "John Doe",
+
+            avatar: "https://example.com/avatar.jpg",
+        },
+      
+        timestamp: time
+        message: selectedText,
+        replies: []
+    })
+
+    console.log(selectedText);
+
+    openComments();
+
+        // editor.chain().focus().deleteRange({ from, to }).insertContent(newText).run();
+    
+     
     };
 
 
