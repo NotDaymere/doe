@@ -21,7 +21,7 @@ interface CommentWindowStore {
  
     isOpen: boolean;
     comment?: Comment|null;
-    openComments: () => void;
+    openComments: (id?:string|number) => void;
     closeComments: () => void;
  
     toggleComments: () => void;
@@ -42,7 +42,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
     comment: null,
 
 
-    openComments: () => {
+    openComments: (id?:string|number) => {
   
         const { comment } = get();
   if (comment) {

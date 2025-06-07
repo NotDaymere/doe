@@ -64,23 +64,28 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
 
 
 
-    useEffect(() => {
-  const handler = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.closest('[data-clickable]')) {
-      openComments();
-    }
-  };
+const handleClickOnClickableText = (event: MouseEvent) => {
+  const clickedElement = event.target as HTMLElement;
 
-  const el = document.querySelector('.ProseMirror');
-  if (el) {
-    el.addEventListener('click', handler as EventListener);
-  }
 
+  if (clickedElement && clickedElement.dataset.clickable) {
+    const clickedId = clickedElement.dataset.id;
+    openComments(clickedId); 
+    // event.preventDefault();
+    // event.stopPropagation(); 
+ 
+}
+};
+
+
+useEffect(() => {
+  const handleClick = (event: MouseEvent) => handleClickOnClickableText(event);
+
+  document.addEventListener('mousedown', handleClick); // Use mousedown for quicker response
+
+ 
   return () => {
-    if (el) {
-      el.removeEventListener('click', handler as EventListener);
-    }
+    document.removeEventListener('mousedown', handleClick);
   };
 }, []);
 
@@ -139,48 +144,21 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     };
 
     const applyCloudQuotes = () => {
-        if (!editor) return;
-        const { from, to } = editor.state.selection;
-        if (from === to) return;
-      
-        const selectedText = editor.state.doc.textBetween(from, to, "");
-        const newText = `“${selectedText}”`;
-       
-        setComment( {
-        id: 1,
-        user: {
-            name: "John Doe",
-
-            avatar: "https://example.com/avatar.jpg",
-        },
-      
-        timestamp: formatFriendlyDate(new Date()),
-        message: selectedText,
-        replies: []
-    })
-
-   
-
-  
-    openComments();
-
-        // editor.chain().focus().deleteRange({ from, to }).insertContent(newText).run();
-    
-       const applyCloudQuotes = () => {
   if (!editor) return;
 
   const { from, to } = editor.state.selection;
-  
+
+  // Check if text is selected
   if (from === to) return;
 
   const selectedText = editor.state.doc.textBetween(from, to, "");
-  const newText = `“${selectedText}”`;
+  const UUID = generateUUID();
+ 
+ 
 
-  // Generate a UUID for identification (optional)
-  const uuid = generateUUID();
 
-  // Save comment
   setComment({
+ 
     id: 1,
     user: {
       name: "John Doe",
@@ -191,29 +169,26 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     replies: [],
   });
 
-  // Open the comment panel
   openComments();
 
-  // Insert clickable text
-  editor.chain().focus().deleteRange({ from, to }).insertContent({
-    type: 'text',
-    text: selectedText,
-    marks: [
-      {
-        type: 'clickable', // apply the custom clickable mark
-        attrs: {
-          id: uuid, // optional, can help if you need to identify it later
-        },
-      },
-    ],
-  }).run();
+ 
+
+
+ 
+  editor.chain().focus()
+    .toggleMark('highlight') 
+    .setMark('clickable', { id: UUID }) 
+   
+    .run();
+
+
 };
 
-     
-    };
+
 
 
     const insertDegreeSymbol = () => {
+      
         if (!editor) return;
         const { from, to } = editor.state.selection;
         if (from === to) return;
