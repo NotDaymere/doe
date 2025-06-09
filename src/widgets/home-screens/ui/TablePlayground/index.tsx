@@ -400,7 +400,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                                     {!playgroundFullscreen && !openHistory && (
                                         <CloudPlusButton type="table" />
                                     )}
-                                    {playgroundFullscreen && <FullscreenGeneralLogo />}
+                                    {playgroundFullscreen && <FullscreenGeneralLogo unique />}
                                 </div>
                                 {!openHistory && (
                                     <div className={"action-buttons-right-part"}>

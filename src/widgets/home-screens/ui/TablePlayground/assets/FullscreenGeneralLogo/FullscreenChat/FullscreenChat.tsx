@@ -6,11 +6,12 @@ import "./FullscreenChat.less";
 
 interface Props {
     onClick?: () => void;
+    unique: boolean;
 }
 
-export default function FullscreenChat({ onClick }: Props) {
+export default function FullscreenChat({ unique, onClick }: Props) {
     const chatRef = useRef<HTMLDivElement>(null);
-    const [position, setPosition] = useState({ x: 15, y: -314 });
+    const [position, setPosition] = useState({ x: 15, y: (unique ? 50 :-314) });
     const [isDragging, setIsDragging] = useState(false);
 
     const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
