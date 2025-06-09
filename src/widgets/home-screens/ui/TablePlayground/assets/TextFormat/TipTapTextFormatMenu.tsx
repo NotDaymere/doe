@@ -21,6 +21,9 @@ import { useEffect, useRef, useState } from "react";
 import ActivePaint from "../../../PlaygroundButtons/ActivePaint/ActivePaint";
 import ActiveMenu from "../../../PlaygroundButtons/ActiveMenu/ActiveMenu";
 import { Editor } from "@tiptap/react";
+import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
+import formatFriendlyDate from "src/helpers/freindlyDate";
+import { generateUUID } from "src/helpers/UUIDGenerator";
 
 type TextFormatProps = {
     isPen?: boolean;
@@ -39,6 +42,8 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     const [activeMenu, setActiveMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
 
+    const {setComment,openComments} = useCommentWindowStore();
+
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -51,6 +56,38 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+
+
+
+
+
+
+
+const handleClickOnClickableText = (event: MouseEvent) => {
+  const clickedElement = event.target as HTMLElement;
+
+
+  if (clickedElement && clickedElement.dataset.clickable) {
+    const clickedId = clickedElement.dataset.id;
+    openComments(clickedId); 
+    // event.preventDefault();
+    // event.stopPropagation(); 
+ 
+}
+};
+
+
+useEffect(() => {
+  const handleClick = (event: MouseEvent) => handleClickOnClickableText(event);
+
+  document.addEventListener('mousedown', handleClick); // Use mousedown for quicker response
+
+ 
+  return () => {
+    document.removeEventListener('mousedown', handleClick);
+  };
+}, []);
 
     const handleRemoveFormat = () => {
         if (!editor) return;
@@ -107,16 +144,51 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     };
 
     const applyCloudQuotes = () => {
-        if (!editor) return;
-        const { from, to } = editor.state.selection;
-        if (from === to) return;
-        const selectedText = editor.state.doc.textBetween(from, to, "");
-        const newText = `“${selectedText}”`;
-        editor.chain().focus().deleteRange({ from, to }).insertContent(newText).run();
-    };
+  if (!editor) return;
+
+  const { from, to } = editor.state.selection;
+
+  // Check if text is selected
+  if (from === to) return;
+
+  const selectedText = editor.state.doc.textBetween(from, to, "");
+  const UUID = generateUUID();
+ 
+ 
+
+
+  setComment({
+ 
+    id: 1,
+    user: {
+      name: "John Doe",
+      avatar: "https://example.com/avatar.jpg",
+    },
+    timestamp: formatFriendlyDate(new Date()),
+    message: selectedText,
+    replies: [],
+  });
+
+  openComments();
+
+ 
+
+
+ 
+  editor.chain().focus()
+    .toggleMark('highlight') 
+    .setMark('clickable', { id: UUID }) 
+   
+    .run();
+
+
+};
+
+
 
 
     const insertDegreeSymbol = () => {
+      
         if (!editor) return;
         const { from, to } = editor.state.selection;
         if (from === to) return;
