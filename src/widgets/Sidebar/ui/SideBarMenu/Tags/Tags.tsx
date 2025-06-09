@@ -232,6 +232,7 @@ export const Tags = ({ isSideBarOpen, isSideBarMenuOpen }: TagsProps) => {
                                                                                                 setActiveOpenAllBranchesMenu={
                                                                                                     setActiveOpenAllBranchesMenu
                                                                                                 }
+                                                                                                onClose={() => {setIsBranchMenuOpen(false)}}
                                                                                             />
                                                                                         </CSSTransition>,
                                                                                         document.body
