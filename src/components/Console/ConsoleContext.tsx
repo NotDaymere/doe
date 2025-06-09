@@ -2,11 +2,13 @@ import { createContext, useState } from "react";
 
 export const ConsoleContext = createContext();
 
-export const ConsoleProvider = ({ children }) => {
+export const ConsoleProvider = ({ children }:any) => {
+ 
   const [isVisible, setIsVisible] = useState(true);
 
   return (
     <ConsoleContext.Provider value={{ isVisible, setIsVisible }}>
+     
       {children}
     </ConsoleContext.Provider>
   );

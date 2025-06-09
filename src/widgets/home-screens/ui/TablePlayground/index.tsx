@@ -53,6 +53,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
     const {
         playground,
+     
         getSavedPlayground,
         setPlayground,
         playgroundFullscreen,
@@ -62,8 +63,9 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     const { playgroundAction } = usePlaygroundStore();
     const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
     const [mockData, setMockData] = useState(() => {
+    
         const savedData = playgroundState?.data;
-     
+ 
         if (savedData instanceof Object) {
             return savedData;
         } else {
@@ -354,12 +356,14 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
     return (
         <>
+      
             <div
                 className={`table-playground`}
                 onMouseDown={(event) => {
                     if (event.button === 1) {
                         handleCollapsePlayground();
                     }
+              
                 }}
                 onMouseMove={() => {
                     if (playgroundAction) return;
@@ -386,6 +390,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                             <EditorContent editor={editor} />
                         </div>
                     </section>
+                    <AddChartsAndWidgets />
                 </div>
                 {playground.id == id && (
                     <div className={`action-buttons ${showButtons && "visible"}`}>
