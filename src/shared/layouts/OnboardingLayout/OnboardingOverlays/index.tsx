@@ -58,7 +58,7 @@ export function OnboardingOverlays({
             />
             <div
                 className={clsx(css.overlay_boxes, {
-                    [css.unfold]: (step >= 32 && step <= 34) || (step >= 42 && step <= 43),
+                    [css.unfold]: (step >= 33 && step <= 34) || (step >= 42 && step <= 43),
                 })}
             >
                 <BranchesMenuBox step={step} />
