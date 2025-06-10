@@ -56,7 +56,7 @@ const branches: BranchItem[] = [
 ];
 
 const BranchesMenuBox = ({ step }: BranchesMenuBoxProps) => {
-    if (!step || step <= 34 || step >= 58) return null;
+    if (!step || step <= 31 || step >= 58) return null;
     const { cursorMoving } = useCursor();
     const [isOpen, setIsOpen] = useState(false);
     const [activeBranchId, setActiveBranchId] = useState<string | null>(null);

@@ -85,7 +85,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                 [css.tableOpen]: currentStep?.openTable,
                 [css.gap]: step >= 28.1 && step < 58,
                 [css.blur_top]: step >= 58,
-                [css.centered]: step >= 60,
+                [css.centered]: step >= 58,
             })}
         >
             <div
@@ -117,7 +117,12 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                         </div>
                     </>
                 ) : (
-                    <div className={css.layout_history} data-step="history">
+                    <div
+                        className={clsx(css.layout_history, {
+                            [css.history_collapse]: step === 39,
+                        })}
+                        data-step="history"
+                    >
                         <OnboardingChatHistory messages={messages} step={step} setStep={setStep} />
                     </div>
                 )}

@@ -3,6 +3,8 @@ import { useCursor } from "src/contexts/CursorContext";
 import { ChatMenu } from "../ChatMenu";
 import { CorporasMenu } from "../CorporasMenu";
 import { FavouritesMenu } from "../FavouritesMenu";
+import { ReactComponent as MinusIcon } from "src/assets/icons/minus.svg";
+import { ReactComponent as PlusIcon } from "src/assets/icons/plus.svg";
 import { TagsMenu } from "../TagsMenu";
 import css from "./OnboardingSidebarMenu.module.less";
 
@@ -84,7 +86,7 @@ export const OnboardingSidebarMenu = ({
                                                     handleUserClickedSidebarButton(buttonTypeOpen);
                                                 }}
                                             >
-                                                +
+                                                <PlusIcon />
                                             </button>
                                         ) : (
                                             <button
@@ -93,7 +95,7 @@ export const OnboardingSidebarMenu = ({
                                                     handleUserClickedSidebarButton(buttonTypeClose);
                                                 }}
                                             >
-                                                —
+                                                <MinusIcon />
                                             </button>
                                         )}
                                     </>

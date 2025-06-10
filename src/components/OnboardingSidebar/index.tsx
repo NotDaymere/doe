@@ -5,11 +5,11 @@ import LightThemeIcon from "src/shared/icons/LightTheme.icon";
 import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
 import { useChatStore } from "src/shared/providers";
-import { SidebarGaia } from "src/widgets/Sidebar/ui";
 import { OnboardingSidebarFormatting } from "../OnboardingSidebarFormatting/intex";
 import { OnboardingSidebarMenu } from "../OnboardingSidebarMenu/intex";
 import { OnboardingSidebarTools } from "../OnboardingSidebarTools/intex";
 import css from "./OnboardingSidebar.module.less";
+import { MemoizedSidebarGaia } from "src/widgets/Sidebar/ui/SidebarGaia";
 
 interface OnboardingSidebarProps {
     step: number;
@@ -48,7 +48,7 @@ export const OnboardingSidebar = ({
             })}
             onTransitionEnd={handleSidebarOpen}
         >
-            <SidebarGaia noPadding />
+            <MemoizedSidebarGaia noPadding />
 
             <div className={css.sidebar_profile}>
                 <img

@@ -1018,6 +1018,7 @@ export const onboardingFlow: OnboardingStep[] = [
         autoSkip: 2000,
         canPreventAutoSkip: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
+        // onEnter: ({ setMessages }) => setMessages([]),
     },
     {
         id: 25,
@@ -1035,6 +1036,7 @@ export const onboardingFlow: OnboardingStep[] = [
         autoSkip: 2000,
         canPreventAutoSkip: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
+        // onEnter: ({ setMessages }) => setMessages([]),
     },
     {
         id: 26,
@@ -1051,6 +1053,7 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         canPreventAutoSkip: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
+        onEnter: ({ setMessages }) => setMessages([]),
     },
     {
         id: 27,
@@ -1075,16 +1078,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
-        onEnter: ({ setMessages, setGaiaActive }) => {
-            setMessages?.([
-                { role: "user", content: `Hey Doe, I'm John Smith`, noTypeEffect: true },
-                { role: "ai", content: `Hey, John Smith, I'm Doe!`, noTypeEffect: true },
-                {
-                    role: "ai",
-                    content: `Let me introduce my main functionality.`,
-                    noTypeEffect: true,
-                },
-            ]);
+        onEnter: ({ setGaiaActive }) => {
             setTimeout(() => {
                 setGaiaActive(true);
             }, 1100);
@@ -1105,7 +1099,16 @@ export const onboardingFlow: OnboardingStep[] = [
         stressSendButtonOnArrowRight: true,
         tooltip: false,
         blur: [""],
-        onEnter: ({ setBlockInput }) => {
+        onEnter: ({ setBlockInput, setMessages }) => {
+            setMessages?.([
+                { role: "user", content: `Hey Doe, I'm John Smith`, noTypeEffect: true },
+                { role: "ai", content: `Hey, John Smith, I'm Doe!`, noTypeEffect: true },
+                {
+                    role: "ai",
+                    content: `Let me introduce my main functionality.`,
+                    noTypeEffect: true,
+                },
+            ]);
             setBlockInput(false);
         },
     },
@@ -1176,10 +1179,10 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 33,
         location: '[data-step="playgrounds"]',
         cursorVisible: true,
-        cursorDelay: 300,
+        cursorDelay: 500,
         tooltip: false,
         disableNavigationHover: true,
-        autoSkip: 1500,
+        autoSkip: 2500,
         blur: ["input", "history", "body", "magicbox", "navigate"],
         onExit: ({ setCursorMoving }) => {
             setCursorMoving();
@@ -1302,7 +1305,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         cursorClickPrevPosition: true,
         tooltip: false,
-        autoSkip: 2000,
+        autoSkip: 4000,
         disableNavigationHover: true,
         onEnter: ({ setCursorMoving }) => setCursorMoving(),
     },

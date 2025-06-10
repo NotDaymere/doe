@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import { useState } from "react";
+import { ReactComponent as MinusIcon } from "src/assets/icons/minus.svg";
+import { ReactComponent as PlusIcon } from "src/assets/icons/plus.svg";
 import paths from "src/assets/icons/paths.svg";
 import css from "./TagsMenu.module.less";
 
@@ -70,7 +72,11 @@ export const TagsMenu = ({ step, label, triggerStep, isOpen }: TagsMenuProps) =>
                         )}
                         <div className={css.sidebar_controls_text}>Green Tag</div>
                     </div>
-                    {step === triggerStep && <div className={css.minus}>—</div>}
+                    {step === triggerStep && (
+                        <div className={css.minus}>
+                            <MinusIcon />
+                        </div>
+                    )}
                 </button>
                 <div className={css.sidebar_controls_title}>Chats</div>
                 <div className={css.chats}>
@@ -85,7 +91,11 @@ export const TagsMenu = ({ step, label, triggerStep, isOpen }: TagsMenuProps) =>
                             <div className={css.circle}></div>
                             <div className={css.sidebar_controls_text}>Chat 1</div>
                         </div>
-                        {step === triggerStep && <div className={css.minus}>—</div>}
+                        {step === triggerStep && (
+                            <div className={css.minus}>
+                                <MinusIcon />
+                            </div>
+                        )}
                     </button>
                     <div className={css.sidebar_controls_title}>Branches</div>
                     <div className={css.chats}>
@@ -100,7 +110,11 @@ export const TagsMenu = ({ step, label, triggerStep, isOpen }: TagsMenuProps) =>
                                 <img src={paths} alt="" />
                                 <div className={css.sidebar_controls_text}>Create a simple ...</div>
                             </div>
-                            {step === triggerStep && <div className={css.minus}>—</div>}
+                            {step === triggerStep && (
+                                <div className={css.minus}>
+                                    <MinusIcon />
+                                </div>
+                            )}
                         </button>
                         <button
                             className={clsx(css.sidebar_controls_btn, css.low_opacity, {
@@ -113,7 +127,11 @@ export const TagsMenu = ({ step, label, triggerStep, isOpen }: TagsMenuProps) =>
                                 <img src={paths} alt="" />
                                 <div className={css.sidebar_controls_text}>The Python code ...</div>
                             </div>
-                            {step === triggerStep && <div className={css.minus}>—</div>}
+                            {step === triggerStep && (
+                                <div className={css.minus}>
+                                    <MinusIcon />
+                                </div>
+                            )}
                         </button>
                         <button
                             className={clsx(css.sidebar_controls_btn, css.low_opacity, {
@@ -128,7 +146,11 @@ export const TagsMenu = ({ step, label, triggerStep, isOpen }: TagsMenuProps) =>
                                     We will write thi...
                                 </div>
                             </div>
-                            {step === triggerStep && <div className={css.minus}>—</div>}
+                            {step === triggerStep && (
+                                <div className={css.minus}>
+                                    <MinusIcon />
+                                </div>
+                            )}
                         </button>
                     </div>
                 </div>
@@ -143,7 +165,11 @@ export const TagsMenu = ({ step, label, triggerStep, isOpen }: TagsMenuProps) =>
                         <div className={clsx(css.circle, css.purple)} />
                         <div className={css.sidebar_controls_text}>Purple Tag</div>
                     </div>
-                    {step === triggerStep && <div className={css.plus}>+</div>}
+                    {step === triggerStep && (
+                        <div className={css.plus}>
+                            <PlusIcon />
+                        </div>
+                    )}
                 </button>
                 <button
                     className={clsx(css.sidebar_controls_btn, {
@@ -156,7 +182,11 @@ export const TagsMenu = ({ step, label, triggerStep, isOpen }: TagsMenuProps) =>
                         <div className={clsx(css.circle, css.orange)} />
                         <div className={css.sidebar_controls_text}>Orange Tag</div>
                     </div>
-                    {step === triggerStep && <div className={css.plus}>+</div>}
+                    {step === triggerStep && (
+                        <div className={css.plus}>
+                            <PlusIcon />
+                        </div>
+                    )}
                 </button>
             </div>
         </div>

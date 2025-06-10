@@ -40,7 +40,7 @@ export const ReadyMessage = ({
                     betaWidget: true,
                 },
             ]);
-        }, 5500);
+        }, 6200);
 
         return () => clearTimeout(timeout);
     }, []);
