@@ -1305,7 +1305,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         cursorClickPrevPosition: true,
         tooltip: false,
-        autoSkip: 2000,
+        autoSkip: 4000,
         disableNavigationHover: true,
         onEnter: ({ setCursorMoving }) => setCursorMoving(),
     },

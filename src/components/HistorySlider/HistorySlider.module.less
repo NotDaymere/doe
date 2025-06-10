@@ -1,6 +1,7 @@
 .history_slider {
     display: flex;
     flex-direction: row;
+    animation: fade-in 0.5s ease forwards;
 }
 
 .slide {
@@ -58,4 +59,15 @@
     gap: 12px;
     max-width: 892px;
     width: 100%;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(-5%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
 }
