@@ -60,7 +60,7 @@ export const OnboardingSidebarFormatting = ({
         {
             icon: <FunctionIcon />,
             label: "Math mode",
-            step: [8.1, 8.2],
+            step: [8.1, 8.2, 8.3, 8.4],
             dataStep: "function",
             onClick: () => {
                 handleUserClickedSidebarButton("math");
@@ -69,7 +69,7 @@ export const OnboardingSidebarFormatting = ({
         {
             icon: <CodeIcon />,
             label: "Code mode",
-            step: [9.1, 9.2],
+            step: [9.1, 9.2, 9.3, 9.4],
             dataStep: "code",
             onClick: () => {
                 editorState.toggleCode?.();
