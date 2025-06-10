@@ -85,7 +85,7 @@ export function OnboardingBody(props: OnboardingBodyProps) {
                 [css.tableOpen]: currentStep?.openTable,
                 [css.gap]: step >= 28.1 && step < 58,
                 [css.blur_top]: step >= 58,
-                [css.centered]: step >= 60,
+                [css.centered]: step >= 58,
             })}
         >
             <div
