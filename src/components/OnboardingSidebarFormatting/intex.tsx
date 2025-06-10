@@ -15,6 +15,15 @@ interface OnboardingSidebarFormattingProps {
     handleUserClickedSidebarButton: (type: string) => void;
 }
 
+const ICONS = {
+    bold: <BoldIcon />,
+    underline: <UnderlineIcon />,
+    italic: <ItalicIcon />,
+    function: <FunctionIcon />,
+    code: <CodeIcon />,
+    link: <LinkIcon />,
+};
+
 export const OnboardingSidebarFormatting = ({
     step,
     isOpen,
@@ -25,7 +34,7 @@ export const OnboardingSidebarFormatting = ({
 
     const formattingButtons = [
         {
-            icon: <BoldIcon />,
+            icon: ICONS.bold,
             label: "bold text",
             step: 5,
             dataStep: "bold",
@@ -36,7 +45,7 @@ export const OnboardingSidebarFormatting = ({
             isActive: editorState.isBold,
         },
         {
-            icon: <UnderlineIcon />,
+            icon: ICONS.underline,
             label: "Underlined text",
             step: 6,
             dataStep: "underline",
@@ -47,7 +56,7 @@ export const OnboardingSidebarFormatting = ({
             isActive: editorState.isUnderline,
         },
         {
-            icon: <ItalicIcon />,
+            icon: ICONS.italic,
             label: "Italic text",
             step: 7,
             dataStep: "italic",
@@ -58,7 +67,7 @@ export const OnboardingSidebarFormatting = ({
             isActive: editorState.isItalic,
         },
         {
-            icon: <FunctionIcon />,
+            icon: ICONS.function,
             label: "Math mode",
             step: [8.1, 8.2, 8.3, 8.4],
             dataStep: "function",
@@ -67,7 +76,7 @@ export const OnboardingSidebarFormatting = ({
             },
         },
         {
-            icon: <CodeIcon />,
+            icon: ICONS.code,
             label: "Code mode",
             step: [9.1, 9.2, 9.3, 9.4],
             dataStep: "code",
@@ -78,7 +87,7 @@ export const OnboardingSidebarFormatting = ({
             isActive: editorState.isCode,
         },
         {
-            icon: <LinkIcon />,
+            icon: ICONS.link,
             label: "Insert link",
             step: 10,
             dataStep: "link",

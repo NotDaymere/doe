@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { CSSTransition } from "react-transition-group";
 import EnergyIcon from "src/shared/icons/Energy.icon";
 import GlobalIcon from "src/shared/icons/Global.icon";
@@ -63,3 +63,5 @@ export const SidebarGaia = ({ noPadding }: SidebarGaiaProps) => {
         </div>
     );
 };
+
+export const MemoizedSidebarGaia = React.memo(SidebarGaia);
