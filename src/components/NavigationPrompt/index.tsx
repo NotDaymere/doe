@@ -16,13 +16,6 @@ export const NavigationPrompt = ({
     handleNavigationAnimation,
 }: NavigationPromptProps) => {
     if (step < 4.5) return null;
-    const [isFading, setIsFading] = useState(false);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setIsFading(true);
-        }, 4000);
-    }, []);
 
     return (
         <div

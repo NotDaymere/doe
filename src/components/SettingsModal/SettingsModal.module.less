@@ -38,6 +38,7 @@
 
 .settings_title {
     font-size: 16px;
+    font-weight: 500;
     color: #5b5b5b;
 }
 
@@ -98,12 +99,12 @@
 .settings_nav_item {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-end;
     gap: 6px;
     padding: 8px;
     border-radius: 8px;
     color: #5b5b5b;
-    font-weight: 600;
+    font-weight: 500;
     transition: all 0.15s ease;
 
     &.active {
@@ -119,6 +120,14 @@
     @media screen and (max-width: 1248px) {
         font-size: 12px;
     }
+}
+
+.settings_nav_title {
+    display: flex;
+    align-items: flex-end;
+    vertical-align: bottom;
+    line-height: 17px;
+    // height: 100%;
 }
 
 .settings_nav_img {
