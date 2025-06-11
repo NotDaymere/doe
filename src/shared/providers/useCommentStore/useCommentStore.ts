@@ -20,8 +20,8 @@ interface Comment {
 interface CommentWindowStore {
  
     isOpen: boolean;
-    comment?: Comment;
-    openComments: () => void;
+    comment?: Comment|null;
+    openComments: (id?:string|number) => void;
     closeComments: () => void;
  
     toggleComments: () => void;
@@ -39,35 +39,21 @@ interface CommentWindowStore {
 export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => ({
     isOpen: false,
     isResolved: false,
-    comment: {
-        id: 1,
-        user: {
-            name: "John Doe",
-
-            avatar: "https://example.com/avatar.jpg",
-        },
-        timestamp: "Today, 9:41 AM",
-        message: "This is your table looks like when it's in Doe Playground",
-        replies: [
-            {
-                id: 2,
-                user: {
-                    name: "Jane Smith",
-
-                    avatar: "https://example.com/avatar2.jpg",
-                },
-                timestamp: "Today, 9:45 AM",
-                message: "This looks great! Nice work.",
-                replies: [],
-            },
-        ],
-    },
+    comment: null,
 
 
-    openComments: () => set({ isOpen: true }),
+    openComments: (id?:string|number) => {
+  
+        const { comment } = get();
+  if (comment) {
+    set({ isOpen: true });
+  }
+},
+    
     closeComments: () => set({ isOpen: false }),
     toggleComments: () => set((state) => ({ isOpen: !state.isOpen })),
 
+  
     setComment: (comment: Comment) => set({ comment }),
 
     addReply: (content: string) => {

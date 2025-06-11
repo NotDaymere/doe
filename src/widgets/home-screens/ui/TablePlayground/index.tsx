@@ -20,6 +20,10 @@ import HistoryButton from "./assets/HistoryButton/HistoryButton";
 import { App } from "src/types";
 import PlaygroundAction from "../PlaygroundAction/PlaygroundAction";
 import { CustomBlock } from "./assets/CustomBlock/CustomBlock";
+import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
+import {Clickable} from "src/helpers/clickable";
+import { Highlight } from "src/helpers/highlight.tiptap";
+
 
 const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     function adjustPosition(
@@ -49,6 +53,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
     const {
         playground,
+     
         getSavedPlayground,
         setPlayground,
         playgroundFullscreen,
@@ -58,7 +63,9 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     const { playgroundAction } = usePlaygroundStore();
     const [playgroundState, setPlaygroundState] = useState(getSavedPlayground(id));
     const [mockData, setMockData] = useState(() => {
+    
         const savedData = playgroundState?.data;
+ 
         if (savedData instanceof Object) {
             return savedData;
         } else {
@@ -88,6 +95,9 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             TextStyle,
             Superscript,
             Subscript,
+           
+            Highlight,
+            Clickable,
             Color.configure({
                 types: ["textStyle"],
             }),
@@ -97,22 +107,30 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             ? playgroundState.text
             : `<p>
         This is what your table looks like when it's in Doe Playground! 
+       
         Larger tables can be navigated, folded in to reveal text, etc.
         Typically, a Playground table will not include both text blocks and graphs 
         as it does here, but it is still possible! 
         The graph interaction with highlighting still applies here!
-      </p>`,
+    
+        </p>`,
+        // editable:false,
+      
         onSelectionUpdate({ editor }) {
             const { from, to } = editor.state.selection;
             const text = editor.state.doc.textBetween(from, to, " ");
+          
+        
             setSelectedText(text);
 
             const position = calculateTiptapButtonPosition(editor);
             if (position) {
+          
                 const adjustedPosition = adjustPosition(
                     { top: position.top, left: position.left },
                     280,
                     20,
+              
                     10
                 );
                 setButtonPosition(adjustedPosition);
@@ -182,7 +200,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         as it does here, but it is still possible! 
         The graph interaction with highlighting still applies here!
       </p>`,
-            false
+            true
         );
 
         editor.commands.setTextSelection(selection);
@@ -338,12 +356,14 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
     return (
         <>
+      
             <div
                 className={`table-playground`}
                 onMouseDown={(event) => {
                     if (event.button === 1) {
                         handleCollapsePlayground();
                     }
+              
                 }}
                 onMouseMove={() => {
                     if (playgroundAction) return;
@@ -370,6 +390,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                             <EditorContent editor={editor} />
                         </div>
                     </section>
+                    <AddChartsAndWidgets />
                 </div>
                 {playground.id == id && (
                     <div className={`action-buttons ${showButtons && "visible"}`}>
@@ -379,7 +400,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                                     {!playgroundFullscreen && !openHistory && (
                                         <CloudPlusButton type="table" />
                                     )}
-                                    {playgroundFullscreen && <FullscreenGeneralLogo />}
+                                    {playgroundFullscreen && <FullscreenGeneralLogo unique />}
                                 </div>
                                 {!openHistory && (
                                     <div className={"action-buttons-right-part"}>

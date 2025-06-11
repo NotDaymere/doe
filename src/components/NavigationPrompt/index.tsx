@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { OnboardingStep } from "src/helpers/onboardingFlow";
 import ArrowUpIcon from "src/shared/icons/ArrowUp.icon";
 import css from "./NavigationPrompt.module.less";
@@ -16,13 +16,8 @@ export const NavigationPrompt = ({
     handleNavigationAnimation,
 }: NavigationPromptProps) => {
     if (step < 4.5) return null;
-    const [isFading, setIsFading] = useState(false);
 
-    useEffect(() => {
-        setTimeout(() => {
-            setIsFading(true);
-        }, 4000);
-    }, []);
+    const MemoizedArrowIcon = useMemo(() => <ArrowUpIcon />, []);
 
     return (
         <div
@@ -36,12 +31,8 @@ export const NavigationPrompt = ({
                 To navigate through onboarding use your <b>keyboard buttons.</b>
             </p>
             <div className={css.navigation_buttons}>
-                <div className={css.navigation_prev}>
-                    <ArrowUpIcon />
-                </div>
-                <div className={css.navigation_next}>
-                    <ArrowUpIcon />
-                </div>
+                <div className={css.navigation_prev}>{MemoizedArrowIcon}</div>
+                <div className={css.navigation_next}>{MemoizedArrowIcon}</div>
             </div>
         </div>
     );

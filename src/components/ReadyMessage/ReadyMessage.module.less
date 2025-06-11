@@ -8,7 +8,16 @@
     flex-shrink: 1;
     // height: 100%;
     padding: 30px 30px 12px 80px;
-    animation: slide-in 2s ease forwards;
+    transition: all 3s ease-in-out;
+
+    max-height: 1500px;
+    padding-bottom: 64px;
+
+    &.hidden {
+        transition: all 1s ease-in-out;
+        max-height: 0;
+        padding-bottom: 0;
+    }
 }
 
 .logo_container {
@@ -100,7 +109,7 @@
     }
     100% {
         opacity: 1;
-        max-height: 1000px;
+        max-height: 1500px;
         padding-bottom: 64px;
     }
 }

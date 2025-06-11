@@ -651,7 +651,7 @@ export const ChatPanel: React.FC = () => {
                 {loadingFile &&
                     (() => {
                         const [fileName, progressStr] = loadingFile.split("|||");
-                        const progress = Number(progressStr) || 0;
+                        const progress = Math.min(Math.max(Number(progressStr) || 0, 0), 100); // Обмежуємо значення від 0 до 100
                         return (
                             <div className={css.panel_uploading_files} key={fileName}>
                                 <div className={css.uploading_file}>
@@ -659,9 +659,7 @@ export const ChatPanel: React.FC = () => {
                                         <UploadFilesProgressIcon />
                                     </div>
                                     <div className={css.panel_uploading_files_name_and_progressbar}>
-                                        <div
-                                            className={css.panel_uploading_files_name_and_progress}
-                                        >
+                                        <div className={css.panel_uploading_files_name_and_progress}>
                                             <span>{fileName}</span>
                                             <span>{progress}%</span>
                                         </div>

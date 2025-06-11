@@ -1,4 +1,6 @@
 import clsx from "clsx";
+import { ReactComponent as MinusIcon } from "src/assets/icons/minus.svg";
+import { ReactComponent as PlusIcon } from "src/assets/icons/plus.svg";
 import paths from "src/assets/icons/paths.svg";
 import css from "./ChatMenu.module.less";
 
@@ -26,7 +28,11 @@ export const ChatMenu = ({ step, label, triggerStep, isOpen }: ChatMenuProps) =>
                     </div>
                     <div className={css.icons}>
                         {step === triggerStep && <div className={css.dots}>⋮</div>}
-                        {step === triggerStep && <div className={css.minus}>—</div>}
+                        {step === triggerStep && (
+                            <div className={css.minus}>
+                                <MinusIcon />
+                            </div>
+                        )}
                     </div>
                 </button>
                 <div className={css.sidebar_controls_title}>Branches</div>
@@ -82,7 +88,11 @@ export const ChatMenu = ({ step, label, triggerStep, isOpen }: ChatMenuProps) =>
                         <div className={clsx(css.circle, css.orange)} />
                         <div className={css.sidebar_controls_text}>Chat 2</div>
                     </div>
-                    {step === triggerStep && <div className={css.plus}>+</div>}
+                    {step === triggerStep && (
+                        <div className={css.plus}>
+                            <PlusIcon />
+                        </div>
+                    )}
                 </button>
                 <button
                     className={clsx(css.sidebar_controls_btn, {
@@ -95,7 +105,11 @@ export const ChatMenu = ({ step, label, triggerStep, isOpen }: ChatMenuProps) =>
                         <div className={clsx(css.circle, css.purple)} />
                         <div className={css.sidebar_controls_text}>Chat 3</div>
                     </div>
-                    {step === triggerStep && <div className={css.plus}>+</div>}
+                    {step === triggerStep && (
+                        <div className={css.plus}>
+                            <PlusIcon />
+                        </div>
+                    )}
                 </button>
             </div>
         </div>

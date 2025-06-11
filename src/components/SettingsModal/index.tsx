@@ -63,19 +63,19 @@ export const SettingsModal = ({
                 <div className={css.settings_nav}>
                     <div className={clsx(css.settings_nav_item, css.active)}>
                         <img src={person} alt="" className={css.settings_nav_img} />
-                        Profile
+                        <p className={css.settings_nav_title}>Profile</p>
                     </div>
                     <div className={css.settings_nav_item}>
                         <img src={gear} alt="" className={css.settings_nav_img} />
-                        General
+                        <p className={css.settings_nav_title}>General</p>
                     </div>
                     <div className={css.settings_nav_item}>
                         <img src={stack} alt="" className={css.settings_nav_img} />
-                        Model Settings
+                        <p className={css.settings_nav_title}>Model Settings</p>
                     </div>
                     <div className={css.settings_nav_item}>
                         <img src={wire} alt="" className={css.settings_nav_img} />
-                        Apps Integration
+                        <p className={css.settings_nav_title}>Apps Integration</p>
                     </div>
                 </div>
                 <div className={css.settings_content}>
