@@ -29,10 +29,6 @@ const TextToTranslate: FC<IProps> = ({
     const { activeTranslationOption } = useAppStore();
     const isVoiceMode = activeTranslationOption === TRANSLATION_MENU_OPTIONS.VOICE_MODE;
 
-    useEffect(() => {
-        console.log("translateFromImage", translateFromImage);
-    }, [translateFromImage]);
-
     const renderContent = () => {
         if (activeTranslationOption === TRANSLATION_MENU_OPTIONS.TRANSLATION) {
             return (

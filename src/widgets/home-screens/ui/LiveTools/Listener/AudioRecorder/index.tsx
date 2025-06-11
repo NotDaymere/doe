@@ -48,10 +48,13 @@ const AudioRecorder = () => {
             if (!waveformRef.current) return;
             const recordedUrl = URL.createObjectURL(blob);
 
+            const getCSSVar = (name: string) =>
+                getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
             const recordedWaveSurfer = WaveSurfer.create({
                 container: waveformRef.current,
-                waveColor: "var(--var-88)",
-                progressColor: "var(--var-7)",
+                waveColor: getCSSVar("--var-88"),
+                progressColor: getCSSVar("--var-7"),
                 barWidth: 1,
                 barGap: 2,
                 barHeight: 22,
