@@ -3,8 +3,7 @@ import { CSSTransition } from "react-transition-group";
 import BluetoothIcon from "src/shared/icons/Bluetooth.icon";
 import CableIcon from "src/shared/icons/Cable.icon";
 import ScreenIcon from "src/shared/icons/Screen.icon";
-import ScreenShareIcon from "src/shared/icons/ScreenShare.icon";
-import { FC, ReactElement, useEffect, useRef, useState } from "react";
+import { FC, ReactElement, useEffect, useRef } from "react";
 import { ShareType } from "src/shared/types/ScreenShare";
 import css from "./ScreenShareMenu.module.less";
 
@@ -40,12 +39,7 @@ const EXPANDED_MENU_CONFIG: IExpandedMenuConfig[] = [
 ];
 
 const ScreenShareMenu: FC<IProps> = ({ isActive, type, onConfig, onClickOutside }) => {
-    const [showExpandedMenu, setShowExpandedMenu] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        setShowExpandedMenu(isActive);
-    }, [isActive]);
 
     const handleClickOutside = (event: MouseEvent) => {
         if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -61,7 +55,7 @@ const ScreenShareMenu: FC<IProps> = ({ isActive, type, onConfig, onClickOutside 
     }, []);
 
     return (
-        <CSSTransition in={showExpandedMenu} timeout={500} classNames={css} unmountOnExit>
+        <CSSTransition in={isActive} timeout={500} classNames={css} unmountOnExit>
             <div className={css.shareScreenExpanded} ref={ref}>
                 {EXPANDED_MENU_CONFIG.map((item) => (
                     <button
@@ -74,9 +68,6 @@ const ScreenShareMenu: FC<IProps> = ({ isActive, type, onConfig, onClickOutside 
                         {item.icon}
                     </button>
                 ))}
-                <div className={classNames(css.expandedIcon, css.activeShareType)}>
-                    <ScreenShareIcon width={16} height={16} />
-                </div>
             </div>
         </CSSTransition>
     );
