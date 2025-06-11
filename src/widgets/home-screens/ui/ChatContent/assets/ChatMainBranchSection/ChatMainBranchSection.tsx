@@ -12,7 +12,7 @@ interface ChatMessageDateProps {
     isOpenBrunch?: boolean;
 }
 
-const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunch = false }) => {
+const ChatBranchSection: React.FC<ChatMessageDateProps> = ({ branch, isOpenBrunch = false }) => {
     const {
         currentBranch,
         savedBranches,
@@ -20,7 +20,9 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunc
         setIsCurrentBranchOpen,
         isCurrentBranchOpen
     } = useChatStore();
+
     const [isActiveBranchMenu, setIsActiveBranchMenu] = useState<boolean>(false);
+    const [clickPosition, setClickPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
     const branchToDisplay = isOpenBrunch
         ? currentBranch
@@ -31,20 +33,21 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunc
     const text = branchToDisplay.name;
 
     const handleContainerClick = (e: React.MouseEvent) => {
-        if(!isCurrentBranchOpen){
+        if (!isCurrentBranchOpen) {
             const target = e.target as HTMLElement;
             if (target.closest('.quick-view-branches-container')) {
                 return;
             }
             setCurrentBranch(branchToDisplay);
             setIsCurrentBranchOpen(true);
-        }else {
-            setIsActiveBranchMenu(!isActiveBranchMenu)
+        } else {
+            setIsActiveBranchMenu(!isActiveBranchMenu);
         }
     };
 
     const handleButtonClick = (e: React.MouseEvent) => {
         e.stopPropagation();
+        setClickPosition({ x: e.clientX, y: e.clientY });
         setIsActiveBranchMenu(true);
     };
 
@@ -62,6 +65,7 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunc
                 <button className="branch-options-button" onClick={handleButtonClick}>
                     <ThreeVerticalDots fill="currentColor" />
                 </button>
+
                 {(isActiveBranchMenu && branchToDisplay.id && !isCurrentBranchOpen) && (
                     <BranchQuickView
                         isOpenFromChat={true}
@@ -69,10 +73,12 @@ const ChatBranchSection: React.FC<ChatMessageDateProps> = ({branch,  isOpenBrunc
                         changeIsActiveBranchQuickView={setIsActiveBranchMenu}
                     />
                 )}
+
                 {(isActiveBranchMenu && branchToDisplay.id && isCurrentBranchOpen) && (
                     <OpenBranchMenu
                         branchId={branchToDisplay.id}
                         changeIsActiveBranchQuickView={setIsActiveBranchMenu}
+                        clickPosition={clickPosition}
                     />
                 )}
             </div>

@@ -7,36 +7,24 @@
     background-color: var(--var-185);
     border: 1px solid var(--var-68);
     border-radius: 16px;
-    animation: show 0.5s ease-in-out;
-    transform-origin: left;
+    transition:
+          opacity 300ms ease,
+          transform 300ms ease;
 }
 
-@keyframes close {
-    from {
-        transform: scaleX(1);
-        opacity: 1;
-    }
-    to {
-        transform: scaleX(0);
-        opacity: 0;
-    }
+.bookmarks.enter {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
-.bookmarksClose {
-    opacity: 0;
-    animation: close 0.5s forwards;
-    transform-origin: left;
+.bookmarks.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-@keyframes show {
-    from {
-        transform: scaleX(0);
-        opacity: 0;
-    }
-    to {
-        transform: scaleX(1);
-        opacity: 1;
-    }
+.bookmarks.exit {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
 .bookmarkHeader {

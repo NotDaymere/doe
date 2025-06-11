@@ -22,9 +22,10 @@ import { CrossIcon } from "src/shared/icons/CrossIcon";
 interface ChartWidgetsContextType {
     prevPage: string;
     page: string;
-    paramter: string;
+    parameter: string;
     link: string;
-    setPage: (page?: string, parameter?: string, link?: string) => void;
+    fullWindow: boolean;
+    setPage: (page: string, parameter?: string, link?: string) => void;
     setFullWindow: (fullWindow: boolean) => void;
     closeWindow: () => void;
 }
@@ -44,7 +45,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
     const [prevPage, setPrevPage] = useState(Page.NEW_CHART);
     const [isVisible, setIsVisible] = useState(false);
     const [page, changePage] = useState(props.page);
-    const [paramter, setParameter] = useState("test");
+    const [parameter, setParameter] = useState("test");
     const [link, setLink] = useState("test");
     const [fullWindow, setFullWindow] = useState(false);
     const { closeComments } = useCommentWindowStore();
@@ -87,7 +88,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
                 setFullWindow,
                 page,
                 setPage,
-                paramter,
+                parameter,
                 link,
                 closeWindow,
             }}
@@ -97,7 +98,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
                     <Draggable nodeRef={nodeRef} handle=".drag-handle">
                         <div ref={nodeRef} className="widgetChartWindow">
                             <div className="Head drag-handle">
-                                <p>Charts and widgets {paramter}</p>
+                                <p>Charts and widgets {parameter}</p>
                                 <button className="closeBtn" onClick={closeWindow}>
                                     <CrossIcon />
                                 </button>
@@ -112,7 +113,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
                         </div>
                     </Draggable>
                 )}
-                {fullWindow && <>{page === Page.NEW_DRAWING && <DrawingModal id={paramter} />}</>}
+                {fullWindow && <>{page === Page.NEW_DRAWING && <DrawingModal id={parameter} />}</>}
                 {fullWindow && <>{page === Page.EDIT_TEMPLATE && <EditTemplateModal />}</>}
             </div>
         </ChartWidgetsContext.Provider>
