@@ -48,11 +48,15 @@ export const CorporasMenu = ({ step, label, triggerStep, isOpen }: CorporasMenuP
                             <div className={css.circle}></div>
                             <div className={css.sidebar_controls_text}>Chat 1</div>
                         </div>
-                        {step === triggerStep && (
-                            <div className={css.minus}>
-                                <MinusIcon />
-                            </div>
-                        )}
+
+                        <div className={css.sidebar_controls_buttons}>
+                            {step === triggerStep && <div className={css.dots}>⋮</div>}
+                            {step === triggerStep && (
+                                <div className={css.minus}>
+                                    <MinusIcon />
+                                </div>
+                            )}
+                        </div>
                     </button>
                     <div className={css.sidebar_controls_title}>Branches</div>
                     <div className={css.chats}>
@@ -67,11 +71,14 @@ export const CorporasMenu = ({ step, label, triggerStep, isOpen }: CorporasMenuP
                                 <img src={paths} alt="" />
                                 <div className={css.sidebar_controls_text}>Create a simple ...</div>
                             </div>
-                            {step === triggerStep && (
-                                <div className={css.minus}>
-                                    <MinusIcon />
-                                </div>
-                            )}
+                            <div className={css.sidebar_controls_buttons}>
+                                {step === triggerStep && <div className={css.dots}>⋮</div>}
+                                {/* {step === triggerStep && (
+                                    <div className={css.minus}>
+                                        <MinusIcon />
+                                    </div>
+                                )} */}
+                            </div>
                         </button>
                         <button
                             className={clsx(css.sidebar_controls_btn, css.low_opacity, {
@@ -84,11 +91,11 @@ export const CorporasMenu = ({ step, label, triggerStep, isOpen }: CorporasMenuP
                                 <img src={paths} alt="" />
                                 <div className={css.sidebar_controls_text}>The Python code ...</div>
                             </div>
-                            {step === triggerStep && (
+                            {/* {step === triggerStep && (
                                 <div className={css.minus}>
                                     <MinusIcon />
                                 </div>
-                            )}
+                            )} */}
                         </button>
                         <button
                             className={clsx(css.sidebar_controls_btn, css.low_opacity, {
@@ -103,11 +110,11 @@ export const CorporasMenu = ({ step, label, triggerStep, isOpen }: CorporasMenuP
                                     We will write thi...
                                 </div>
                             </div>
-                            {step === triggerStep && (
+                            {/* {step === triggerStep && (
                                 <div className={css.minus}>
                                     <MinusIcon />
                                 </div>
-                            )}
+                            )} */}
                         </button>
                     </div>
                 </div>
