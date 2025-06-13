@@ -41,6 +41,7 @@ export const PazzleItem = ({
     const isLastInRow = index % 4 === 3 || index === 3;
     const isSelected = selectedPuzzleId === id;
     const isUnselected = selectedPuzzleId && selectedPuzzleId !== id;
+    const isFilled = !!description && !!category;
     const [openEditModal, setOpenEditModal] = useState(false);
 
     return (
@@ -64,7 +65,7 @@ export const PazzleItem = ({
                     isUnselected && styles.puzzleItem__description__unselected
                 )}
             >
-                {description}
+                {description ?? "Create new memory block!"}
             </p>
             <PuzzleShape
                 index={index}
@@ -81,15 +82,17 @@ export const PazzleItem = ({
                         e.stopPropagation();
                     }}
                 >
-                    <button
-                        className={clsx(
-                            styles.puzzleItem__controlBtn,
-                            styles.puzzleItem__controlBtn__add
-                        )}
-                        onClick={addPuzzle}
-                    >
-                        <PlusIcon />
-                    </button>
+                    {isFilled && (
+                        <button
+                            className={clsx(
+                                styles.puzzleItem__controlBtn,
+                                styles.puzzleItem__controlBtn__add
+                            )}
+                            onClick={addPuzzle}
+                        >
+                            <PlusIcon />
+                        </button>
+                    )}
                     {!isSingle && (
                         <button
                             className={clsx(

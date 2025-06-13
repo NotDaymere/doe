@@ -8,16 +8,19 @@ type AppIntegrationItemProps = {
     title: string;
     description: string;
     onDisconnectClick: () => void;
+    className?: string;
 };
 
 export const AppIntegrationItem = ({
     icon,
     title,
     description,
+    className,
     onDisconnectClick,
 }: AppIntegrationItemProps) => {
+    console.log(" className:", className);
     return (
-        <div>
+        <div className={className}>
             <div className={styles.appIntegrationItem__header__container}>
                 <div className={styles.appIntegrationItem__header__icon}>{icon}</div>
                 <p className={styles.appIntegrationItem__header__title}>{title}</p>

@@ -8,15 +8,13 @@ import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { PuzzleType } from "../../../../components/Puzzles/PuzzleItem/PuzzleItem";
 import { ModalButton } from "../../../../components/ModalButton/ModalButton";
-
+export const createEmptyPuzzle = (): PuzzleType => ({
+    id: crypto.randomUUID(),
+    category: null,
+    description: null,
+});
 export const SensOfSelf = () => {
-    const [puzzles, setPuzzles] = useState<PuzzleType[]>([
-        {
-            id: crypto.randomUUID(),
-            category: null,
-            description: "Create new memory block!",
-        },
-    ]);
+    const [puzzles, setPuzzles] = useState<PuzzleType[]>([createEmptyPuzzle()]);
     const initialState = useRef<PuzzleType[] | null>(null);
     useEffect(() => {
         initialState.current = puzzles;

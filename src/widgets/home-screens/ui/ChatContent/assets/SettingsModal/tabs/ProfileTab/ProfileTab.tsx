@@ -9,6 +9,12 @@ import { ContentHeader } from "../../components/ContentHeader/ContentHeader";
 import { ModalButton } from "../../components/ModalButton/ModalButton";
 import { PopupSelect } from "../../components/PopupSelect/PopupSelect";
 import clsx from "clsx";
+
+const languages = [
+    { label: "Auto", value: "auto" },
+    { label: "English", value: "en" },
+];
+type LanguageOption = (typeof languages)[number]["value"];
 type ProfileTabProps = {
     currentProfile: Profile;
     onClose: () => void;
@@ -17,10 +23,11 @@ type formDataType = {
     username: string;
     email: string;
     imgSrc: string | null;
+    lang: LanguageOption;
 };
 export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
     const inputRefs = useRef<
-        Record<keyof Omit<formDataType, "imgSrc">, React.RefObject<HTMLInputElement>>
+        Record<keyof Omit<formDataType, "imgSrc" | "lang">, React.RefObject<HTMLInputElement>>
     >({
         username: useRef<HTMLInputElement>(null),
         email: useRef<HTMLInputElement>(null),
@@ -29,7 +36,9 @@ export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
         username: currentProfile.username,
         email: currentProfile.email,
         imgSrc: currentProfile.imgSrc || null,
+        lang: "auto",
     });
+    const prevLang = useRef(formData.lang);
     const [isDirty, setIsDirty] = useState(false);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -52,12 +61,20 @@ export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
     };
     useEffect(() => {
         const keys = Object.keys(formData) as Array<keyof typeof formData>;
-        const isDirty = keys.some((key) => formData[key] !== currentProfile[key]);
+        const isDirty = keys
+            .filter((key) => key !== "lang")
+            .some((key) => formData[key] !== currentProfile[key]);
         setIsDirty(isDirty);
+    }, [formData]);
+    useEffect(() => {
+        if (formData.lang === prevLang.current) return;
+        setIsDirty(true);
     }, [formData]);
     const onSaveChanges = () => {
         if (isDirty) {
+            prevLang.current = formData.lang;
             console.log("Saved changes", formData);
+            setIsDirty(false);
             onClose();
         }
     };
@@ -125,11 +142,15 @@ export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
                         )}
                     >
                         <PopupSelect
-                            options={[
-                                { label: "Auto", value: "auto" },
-                                { label: "English", value: "en" },
-                            ]}
-                            value={"auto"}
+                            options={languages}
+                            value={formData.lang}
+                            onChange={(value) => {
+                                console.log(" ProfileTab ~ value:", value);
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    lang: value as LanguageOption,
+                                }));
+                            }}
                         />
                     </div>
                 </div>
