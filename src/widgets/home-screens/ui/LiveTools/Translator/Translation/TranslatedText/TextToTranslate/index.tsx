@@ -16,6 +16,7 @@ interface IProps {
     drag: boolean;
     isRotated: boolean;
     magicMenuItems: IMagicMenuItem[];
+    text?: string;
 }
 
 const TextToTranslate: FC<IProps> = ({
@@ -25,8 +26,10 @@ const TextToTranslate: FC<IProps> = ({
     drag,
     isRotated,
     magicMenuItems,
+    text = TEXT_TO_TRANSLATE_PART
 }) => {
     const { activeTranslationOption } = useAppStore();
+
     const isVoiceMode = activeTranslationOption === TRANSLATION_MENU_OPTIONS.VOICE_MODE;
 
     const renderContent = () => {
@@ -35,7 +38,7 @@ const TextToTranslate: FC<IProps> = ({
                 <div
                     className={css.text}
                     dangerouslySetInnerHTML={{
-                        __html: TEXT_TO_TRANSLATE_PART,
+                        __html: text,
                     }}
                 />
             );

@@ -3,15 +3,14 @@ import MinimizeIcon from "src/shared/icons/Minimize.icon";
 import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import css from "./Bookmarks.module.less";
-import TranslationIcon from "../../../../../../shared/icons/Translation.icon";
-import { IBookmark } from "../../../../../../shared/types/Bookmark";
 import { ModeType } from "../../../../../../shared/types/Chat";
 import { useChatStore } from "../../../../../../shared/providers";
+import RecordsIcon from "../../../../../../shared/icons/Records.icon";
 
 interface IProps {
     icon?: ReactElement;
     title?: string;
-    bookmark?: string;
+    recording?: string;
     isActive: boolean;
     setIsActive: (value: boolean) => void;
     mode?: ModeType;
@@ -19,10 +18,10 @@ interface IProps {
 
 type AnimationState = "enter" | "visible" | "exit";
 
-const Bookmarks: FC<IProps> = ({ isActive, setIsActive }) => {
+const Recording: FC<IProps> = ({ isActive, setIsActive }) => {
     const [animationState, setAnimationState] = useState<AnimationState>("enter");
     const ref = useRef<HTMLDivElement>(null);
-    const {savedBookmarks, deleteBookmark} = useChatStore();
+    const {savedRecordings,deleteRecording} = useChatStore();
 
     useEffect(() => {
         if (isActive) {
@@ -47,8 +46,8 @@ const Bookmarks: FC<IProps> = ({ isActive, setIsActive }) => {
             <div className={css.bookmarkItem}>
                 <div className={css.bookmarkHeader}>
                     <div className={css.bookmarkTitle}>
-                        <TranslationIcon width={24} height={17} className={css.icon} />
-                        <span>Bookmarked Translations</span>
+                        <RecordsIcon width={23} height={10} className={css.icon} />
+                        <span>Recordings</span>
                     </div>
                     <div className={css.minimizeButton}>
                         <MinimizeIcon width={12} height={12} onClick={handleClose} />
@@ -56,11 +55,11 @@ const Bookmarks: FC<IProps> = ({ isActive, setIsActive }) => {
                 </div>
                 <div  className={css.bookmarkWrapper}>
 
-                {savedBookmarks.map(({ id, title }) => (
+                {savedRecordings.map(({ id, title }) => (
 
                         <div key={id} className={css.bookmark}>
                             <span>{title}</span>
-                            <MinusIcon width={12} height={2} className={css.removeButton}  onClick={() => deleteBookmark(id)}/>
+                            <MinusIcon width={12} height={2} className={css.removeButton}  onClick={() => deleteRecording(id)}/>
                         </div>
             ))}
                 </div>
@@ -70,4 +69,4 @@ const Bookmarks: FC<IProps> = ({ isActive, setIsActive }) => {
     );
 };
 
-export default Bookmarks;
+export default Recording;
