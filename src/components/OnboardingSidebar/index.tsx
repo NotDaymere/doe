@@ -5,6 +5,7 @@ import LightThemeIcon from "src/shared/icons/LightTheme.icon";
 import MoonIcon from "src/shared/icons/Moon.icon";
 import TrashIcon from "src/shared/icons/Trash.icon";
 import { useChatStore } from "src/shared/providers";
+import { ReactComponent as ArrowsIcon } from "src/assets/icons/arrows-vertical.svg";
 import { OnboardingSidebarFormatting } from "../OnboardingSidebarFormatting/intex";
 import { OnboardingSidebarMenu } from "../OnboardingSidebarMenu/intex";
 import { OnboardingSidebarTools } from "../OnboardingSidebarTools/intex";
@@ -63,6 +64,12 @@ export const OnboardingSidebar = ({
                     <div className={css.sidebar_profile_name}>John Doe</div>
                     <div className={css.sidebar_profile_email}>johndoe@gmail.com</div>
                 </div>
+
+                {isOpen && (
+                    <div className={css.sidebar_arrows_icon}>
+                        <ArrowsIcon />
+                    </div>
+                )}
             </div>
 
             <div

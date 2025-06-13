@@ -29,7 +29,7 @@ export const ReadyMessage = ({
     useEffect(() => {
         setTimeout(() => {
             setVisibleMessages([{ role: "ai", content: "Welcome to doe's private beta!" }]);
-        }, 2000);
+        }, 5000);
 
         const timeout = setTimeout(() => {
             setVisibleMessages((prev) => [
@@ -40,7 +40,7 @@ export const ReadyMessage = ({
                     betaWidget: true,
                 },
             ]);
-        }, 6200);
+        }, 7200);
 
         return () => clearTimeout(timeout);
     }, []);

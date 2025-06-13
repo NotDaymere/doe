@@ -61,7 +61,6 @@ export const ChatMenu = ({ step, label, triggerStep, isOpen }: ChatMenuProps) =>
                             <img src={paths} alt="" />
                             <div className={css.sidebar_controls_text}>The Python code ...</div>
                         </div>
-                        {step === triggerStep && <div className={css.dots}>⋮</div>}
                     </button>
                     <button
                         className={clsx(css.sidebar_controls_btn, css.low_opacity, {
@@ -74,7 +73,6 @@ export const ChatMenu = ({ step, label, triggerStep, isOpen }: ChatMenuProps) =>
                             <img src={paths} alt="" />
                             <div className={css.sidebar_controls_text}>We will write thi...</div>
                         </div>
-                        {step === triggerStep && <div className={css.dots}>⋮</div>}
                     </button>
                 </div>
                 <button
