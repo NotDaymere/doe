@@ -14,6 +14,7 @@ export function useStepEffects(
         setBlockSteps: React.Dispatch<React.SetStateAction<boolean>>;
         setBlockInput: React.Dispatch<React.SetStateAction<boolean>>;
         setManualSkip: React.Dispatch<React.SetStateAction<boolean>>;
+        setBlockAutoSkip: React.Dispatch<React.SetStateAction<boolean>>;
         setUserClickedBold: React.Dispatch<React.SetStateAction<boolean>>;
         setUserClickedUnderline: React.Dispatch<React.SetStateAction<boolean>>;
         setUserClickedItalic: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,6 +38,13 @@ export function useStepEffects(
         if (curr?.canPreventAutoSkip && blockAutoSkip) {
             prevStepRef.current = step;
             return;
+        }
+
+        if (curr?.newAutoSkip && blockAutoSkip) {
+            const t = setTimeout(() => nextStep(), curr.newAutoSkip);
+            prevStepRef.current = step;
+            // setBlockAutoSkip(false);
+            return () => clearTimeout(t);
         }
 
         /** auto‑skip */
