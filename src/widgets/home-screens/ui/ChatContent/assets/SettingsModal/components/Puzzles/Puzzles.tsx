@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { PazzleItem, PuzzleCategories, PuzzleType } from "./PuzzleItem/PuzzleItem";
 import styles from "./Puzzles.module.less";
 import { PuzzleShape } from "./PuzzleItem/PuzzleShape";
+import { create } from "domain";
+import { createEmptyPuzzle } from "../../tabs/ModelSettingsTab/views/SensOfSelf/SensOfSelf";
 
 type PuzzlesProps = {
     puzzles: PuzzleType[];
@@ -26,10 +28,8 @@ export const Puzzles = ({ puzzles, setPuzzles }: PuzzlesProps) => {
             document.removeEventListener("mousedown", clickOutside);
         };
     }, []);
-    const addPuzzle = (id: string) => {
-        const puzzle = puzzles.find((puzzle) => puzzle.id === id);
-        if (!puzzle) return;
-        setPuzzles((prev) => [...prev, { ...puzzle, id: crypto.randomUUID() }]);
+    const addPuzzle = () => {
+        setPuzzles((prev) => [...prev, createEmptyPuzzle()]);
     };
     const removePuzzle = (id: string) => {
         if (puzzles.length > 1) {
@@ -54,7 +54,7 @@ export const Puzzles = ({ puzzles, setPuzzles }: PuzzlesProps) => {
                     key={puzzle.id}
                     index={index}
                     puzzle={puzzle}
-                    addPuzzle={() => addPuzzle(puzzle.id)}
+                    addPuzzle={() => addPuzzle()}
                     removePuzzle={() => removePuzzle(puzzle.id)}
                     onEdit={(text) =>
                         setPuzzles((prev) =>
