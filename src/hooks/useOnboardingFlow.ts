@@ -32,6 +32,7 @@ export function useOnboardingFlow(
         setBlockSteps,
         setBlockInput,
         setManualSkip,
+        setBlockAutoSkip,
         setUserClickedBold,
         setUserClickedUnderline,
         setUserClickedItalic,

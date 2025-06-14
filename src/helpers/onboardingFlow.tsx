@@ -45,6 +45,7 @@ export interface OnboardingCtx {
     setBlockSteps: (b: boolean) => void;
     setBlockInput: React.Dispatch<React.SetStateAction<boolean>>;
     setManualSkip: React.Dispatch<React.SetStateAction<boolean>>;
+    setBlockAutoSkip: React.Dispatch<React.SetStateAction<boolean>>;
     setUserClickedBold: React.Dispatch<React.SetStateAction<boolean>>;
     setUserClickedUnderline: React.Dispatch<React.SetStateAction<boolean>>;
     setUserClickedItalic: React.Dispatch<React.SetStateAction<boolean>>;
@@ -83,6 +84,7 @@ export interface OnboardingStep {
     autoSkip?: number; // number represents delay for autoskip
     autoSkipSubStep?: number; // skip by sub step
     canPreventAutoSkip?: boolean;
+    newAutoSkip?: number;
     [key: string]: any;
 }
 
@@ -1000,7 +1002,10 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         disableNavigationHover: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
-        onEnter: ({ setMessages }) => setMessages([]),
+        onEnter: ({ setMessages, setBlockAutoSkip }) => {
+            setBlockAutoSkip(false);
+            setMessages([]);
+        },
     },
     {
         id: 24,
@@ -1016,7 +1021,8 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         autoSkip: 2000,
-        canPreventAutoSkip: true,
+        // canPreventAutoSkip: true,
+        newAutoSkip: 5000,
         blur: ["input", "history", "body", "magicbox", "navigate"],
         // onEnter: ({ setMessages }) => setMessages([]),
     },
@@ -1034,7 +1040,8 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         autoSkip: 2000,
-        canPreventAutoSkip: true,
+        // canPreventAutoSkip: true,
+        newAutoSkip: 4000,
         blur: ["input", "history", "body", "magicbox", "navigate"],
         // onEnter: ({ setMessages }) => setMessages([]),
     },
@@ -1051,9 +1058,13 @@ export const onboardingFlow: OnboardingStep[] = [
                 Manage the dark or light theme according to your preference.
             </p>
         ),
-        canPreventAutoSkip: true,
+        // canPreventAutoSkip: true,
+        newAutoSkip: 5000,
         blur: ["input", "history", "body", "magicbox", "navigate"],
-        onEnter: ({ setMessages }) => setMessages([]),
+        onEnter: ({ setMessages, setBlockAutoSkip }) => {
+            setBlockAutoSkip(false);
+            setMessages([]);
+        },
     },
     {
         id: 27,
@@ -1566,7 +1577,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 limit by case or timeframe.
             </p>
         ),
-        autoSkip: 4000,
+        autoSkip: 3000,
         disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },
