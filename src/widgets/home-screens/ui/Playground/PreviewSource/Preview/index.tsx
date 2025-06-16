@@ -140,28 +140,30 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
 
     if (isModalView && fileType === "docx")
         return (
-            <div className={css.docxPreview}>
-                <div className={css.docxTitle}>
-                    <Title title={title} />
-                </div>
-                <div className={css.pagination}>
-                    <Pagination
+            <div className={css.docxDocument}>
+                <div className={css.docxPreview}>
+                    <div className={css.docxTitle}>
+                        <Title title={title} />
+                    </div>
+                    <div className={css.pagination}>
+                        <Pagination
+                            pageRefs={pageRefs}
+                            numPages={pagesDocsNum}
+                            currentPage={currentDocxPage}
+                            onPageChange={setCurrentDocxPage}
+                        />
+                    </div>
+                    <div className={css.zoom}>
+                        <ZoomButton onZoomClick={() => setDocxScale(scale + 0.1)} />
+                    </div>
+                    <DocxDocumentWithPagination
+                        url={url}
+                        scale={docxScale}
                         pageRefs={pageRefs}
-                        numPages={pagesDocsNum}
-                        currentPage={currentDocxPage}
+                        onSetPages={setPagesDocsNum}
                         onPageChange={setCurrentDocxPage}
                     />
                 </div>
-                <div className={css.zoom}>
-                    <ZoomButton onZoomClick={() => setDocxScale(scale + 0.1)} />
-                </div>
-                <DocxDocumentWithPagination
-                    url={url}
-                    scale={docxScale}
-                    pageRefs={pageRefs}
-                    onSetPages={setPagesDocsNum}
-                    onPageChange={setCurrentDocxPage}
-                />
             </div>
         );
 
