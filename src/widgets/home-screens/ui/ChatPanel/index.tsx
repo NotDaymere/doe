@@ -420,6 +420,7 @@ export const ChatPanel: React.FC = () => {
         if (text.trim() === "") {
             return;
         }
+        setMessagesCount(messagesCount + 1);
 
         const userMessage: IMessage = {
             id: Date.now(),
