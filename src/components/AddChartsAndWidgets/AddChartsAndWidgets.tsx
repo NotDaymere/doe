@@ -42,8 +42,9 @@ function AddChartsAndWidgets() {
           onClick={() => handleOpenWindow(Page.NEW_WIDGET)}
         >
           <div className="dottedbg">
+           
+           
             <div className="flex">
-        
               <button>
                 <div>
                   <img src="/img/icons/mirro.svg" alt="Mirro" />

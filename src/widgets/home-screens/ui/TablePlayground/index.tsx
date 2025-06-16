@@ -390,7 +390,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                             <EditorContent editor={editor} />
                         </div>
                     </section>
-                    <AddChartsAndWidgets />
+                    {/* <AddChartsAndWidgets /> */}
                 </div>
                 {playground.id == id && (
                     <div className={`action-buttons ${showButtons && "visible"}`}>
