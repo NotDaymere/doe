@@ -1,24 +1,54 @@
 .edit-mode {
-    background-color: transparent;
-    //border
-    border-radius: 4px;
+  background-color: transparent;
+  border-radius: 4px;
+  padding: 10px;
+  width: 320px;
 
-    padding: 10px;
-    width: 320px;
-    display: flex;
+  display: flex;
+  align-items: center;     /* Vertically align textarea + button */
+  gap: 8px;               /* Add space between textarea and button */
+}
+
+.edit-mode button {
+  width: 40px;
+  height: 40px;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 8px;     /* Make it match the input (optional: 12px if you want rounder) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease;
+}
+
+.edit-mode button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.edit-mode button:hover:not(:disabled) {
+  background-color: #d0d0d0;
 }
 
 .edit-input {
-    width: 100%;
-    height: auto;
-    border: none;
-    background-color: transparent;
-    outline: none;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    color: var(--var-7);
+  flex: 1;                /* Let the textarea take up remaining space */
+  height: auto;
+  background-color: #fff;
+  outline: none;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: var(--var-7);
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 14px;        /* Consistent text size */
+  resize: none;           /* Optional: prevent manual resizing */
 }
+
 .commentmenu {
-    padding-left: 10px;
-    padding-right: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }

@@ -163,9 +163,10 @@ useEffect(() => {
     user: {
       name: "John Doe",
       avatar: "https://example.com/avatar.jpg",
+   
     },
     timestamp: formatFriendlyDate(new Date()),
-    message: selectedText,
+    message: "",
     replies: [],
   });
 
