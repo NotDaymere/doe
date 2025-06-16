@@ -43,12 +43,20 @@ export default function HistoryPlayground() {
                         </button>
                         <div className={'history-playground-version-text'}>Current version</div>
                     </div>
-                    <button className={'history-playground-version-button'}
-                            onClick={() => {
-                                setOpenContent(!openContent)
-                            }}
+                    <button
+                        className={'history-playground-version-button'}
+                        onClick={() => {
+                            setOpenContent(!openContent);
+                        }}
                     >
-                        <div className={'history-playground-minus'} />
+                        {openContent ? (
+                            <div className="history-playground-minus" />
+                        ) : (
+                            <div className="history-playground-plus">
+                                <div className="horizontal" />
+                                <div className="vertical" />
+                            </div>
+                        )}
                     </button>
                 </div>
                 {openContent && historyArray.map((history, index) => {
