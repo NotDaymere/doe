@@ -177,12 +177,10 @@ useEffect(() => {
 
  
   editor.chain().focus()
-    .toggleMark('highlight') 
+ 
     .setMark('clickable', { id: UUID }) 
    
     .run();
-
-
 };
 
 
