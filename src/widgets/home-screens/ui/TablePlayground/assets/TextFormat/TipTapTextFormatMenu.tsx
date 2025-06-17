@@ -163,9 +163,10 @@ useEffect(() => {
     user: {
       name: "John Doe",
       avatar: "https://example.com/avatar.jpg",
+   
     },
     timestamp: formatFriendlyDate(new Date()),
-    message: selectedText,
+    message: "",
     replies: [],
   });
 
@@ -176,12 +177,10 @@ useEffect(() => {
 
  
   editor.chain().focus()
-    .toggleMark('highlight') 
+ 
     .setMark('clickable', { id: UUID }) 
    
     .run();
-
-
 };
 
 
