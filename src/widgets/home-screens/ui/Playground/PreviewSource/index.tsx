@@ -61,7 +61,8 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                     showScroll={fileType === "txt"}
                     classes={classNames(
                         fileType === "docx" ? `${css.flex}` : "",
-                        fileType === "pdf" ? `${css.pdf}` : `${css.content}`
+                        fileType === "pdf" ? `${css.pdf}` : `${css.content}`,
+                        type === "docs" ? `${css.modalDocPreview}` : `${css.modalWebPreview}`
                     )}
                 >
                     <Preview type={type} url={data} isModalView={true} title={title} />
