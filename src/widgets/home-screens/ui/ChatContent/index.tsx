@@ -35,6 +35,7 @@ import { ChatMessage } from "../ChatMessage";
 import classNames from "classnames";
 import MagicIcon from "src/shared/icons/Magic.icon";
 import QuickSearch from "../QuickSearch";
+import { MAX_MESSAGES_LIMIT } from "../ChatLayout";
 
 interface Props {
     editMsgMode: {
@@ -274,10 +275,10 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     </div>
                 )}
 
-                {messagesCount > 0 &&
+                {messagesCount > 0 && messagesCount < MAX_MESSAGES_LIMIT && (
                     !talkModeActive &&
                     !playgroundFullscreen &&
-                    !isCurrentBranchOpen && <Reflections />}
+                    !isCurrentBranchOpen && <Reflections />)}
 
 
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
