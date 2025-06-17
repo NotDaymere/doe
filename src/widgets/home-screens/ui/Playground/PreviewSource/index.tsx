@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { IPreviewPlayground } from "src/shared/types/Playground";
 import ArrowRightUpIcon from "src/shared/icons/ArrowRightUp.icon";
 import ExpandDoubleIcon from "src/shared/icons/ExpandDouble.icon";
@@ -8,12 +8,20 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import css from "./PreviewSource.module.less";
 import classNames from "classnames";
+import Title from "./Title";
+import Pagination from "./Pagination";
+import ZoomButton from "./ZoomButton";
 
 const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
     const fileType = data?.split(".").pop() || "";
 
     const [isHovered, setIsHovered] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const pageRefs = useRef<any>({});
+    const [pagesDocsNum, setPagesDocsNum] = useState<number>(0);
+    const [currentDocxPage, setCurrentDocxPage] = useState<number>(0);
+    const [docxScale, setDocxScale] = useState(1);
+    const [scale, setScale] = useState(1);
 
     const handleOpenInNewWindowClick = (e: any) => {
         e.stopPropagation();
@@ -44,7 +52,17 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                 id="previewSource"
             >
                 <div className={css.preview}>
-                    <Preview type={type} url={data} isModalView={false} />
+                    <Preview
+                        type={type}
+                        url={data}
+                        isModalView={false}
+                        pageRefs={pageRefs}
+                        setPagesDocsNum={setPagesDocsNum}
+                        setCurrentDocxPage={setCurrentDocxPage}
+                        docxScale={docxScale}
+                        setScale={setScale}
+                        scale={scale}
+                    />
                     {type !== "web" && (
                         <button className={css.expandView} onClick={() => setIsModalOpen(true)}>
                             <ExpandDoubleIcon width={20} height={20} />
@@ -66,7 +84,36 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                     )}
 
                 >
-                    <Preview type={type} url={data} isModalView={true} title={title} />
+                    {fileType === "docx" &&
+                        <>
+                            <div className={css.docxTitle}>
+                                <Title title={title} />
+                            </div>
+                            <div className={css.pagination}>
+                                    <Pagination
+                                        pageRefs={pageRefs}
+                                        numPages={pagesDocsNum}
+                                        currentPage={currentDocxPage}
+                                        onPageChange={setCurrentDocxPage}
+                                    />
+                            </div>
+                            <div className={css.zoom}>
+                                <ZoomButton onZoomClick={() => setDocxScale(scale + 0.1)} />
+                            </div>
+                        </>
+                    }
+                    <Preview
+                        type={type}
+                        url={data}
+                        isModalView={true}
+                        title={title}
+                        pageRefs={pageRefs}
+                        setPagesDocsNum={setPagesDocsNum}
+                        setCurrentDocxPage={setCurrentDocxPage}
+                        docxScale={docxScale}
+                        setScale={setScale}
+                        scale={scale}
+                    />
                 </Modal>
             </div>
         </>
