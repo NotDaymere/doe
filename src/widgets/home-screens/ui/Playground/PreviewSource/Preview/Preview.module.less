@@ -42,12 +42,11 @@ pre {
 }
 
 .docxDocument {
-    width: 85vw;
-    height: 80vh;
+    width: 513px !important;
+    height: 683px !important;
 }
 
 .docxPreview {
-    display: contents;
     position: relative;
 }
 
@@ -55,10 +54,11 @@ pre {
     .title;
     top: 0;
 }
+.iframeModal,
+.docxDocument,
 .txtPreview {
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    width: 85vw;
-    height: 80vh;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
+
