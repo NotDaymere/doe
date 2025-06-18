@@ -46,9 +46,6 @@ export default defineConfig({
     buildInfo: {
         enabled: false,
     },
-    graphql: {
-        enabled: true,
-    },
     react: {
         jsxRuntime: "automatic",
         babel: {
