@@ -9,6 +9,8 @@ import WritingLevel from "./WritingLevel/WritingLevel";
 import CloseIcon from "../../../../shared/icons/CloseIcon";
 import SendIcon from "../../../../shared/icons/SendIcon";
 import PortCode from "./PortCode/PortCode";
+import ChangeTone from "./ChangeTone/ChangeTone";
+import ContentLength from "./ContentLength/ContentLength";
 
 interface IProps {
     playgroundAction: IPlaygroundAction;
@@ -59,16 +61,18 @@ const PlaygroundAction: FC<IProps> = ({ playgroundAction: { type }, editor }) =>
             style={{ top: position?.y, left: position?.x }}
             onMouseDown={handleMouseDown}
         >
-            <div className="playground-action-content">
+            <div className={"playground-action-content"}>
                 {type === "prompt" && <Prompt editor={editor} setSendButton={setSendButton} />}
                 {type === "writing-level" && <WritingLevel editor = {editor} />}
+                {type === "change-tone" && <ChangeTone editor = {editor} />}
+                {type === "content-length" && <ContentLength editor = {editor} />}
                 {type === "port-code" && <PortCode editor = {editor} />}
 
-                <div className="actions">
-                    <button className="prompt-button prompt-button-close" onClick={() => setPlaygroundAction(null)}>
+                <div className={"actions"}>
+                    <button className={"prompt-button prompt-button-close"} onClick={() => setPlaygroundAction(null)}>
                         <CloseIcon />
                     </button>
-                    <button className="prompt-button prompt-button-send" onClick={() => sendButton?.()} disabled={!sendButton}>
+                    <button className={"prompt-button prompt-button-send"} onClick={() => sendButton?.()} disabled={!sendButton}>
                         <SendIcon />
                     </button>
                 </div>

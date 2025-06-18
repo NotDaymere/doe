@@ -1,5 +1,5 @@
 {
-    "name": "@doe/website",
+    "name": "website",
     "description": "Frontend application based on Ant Design React components",
     "version": "2023.7.7",
     "scripts": {
