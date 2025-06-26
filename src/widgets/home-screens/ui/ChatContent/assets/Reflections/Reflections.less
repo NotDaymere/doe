@@ -93,26 +93,44 @@
 }
 
 .content-wrapper {
-    overflow-y: scroll;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
 
-    &::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 8px;
-    }
+  &:hover,
+  &.scrolling {
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
 
-    &::-webkit-scrollbar-thumb {
-        background-color: rgb(198, 198, 198);
-        border-radius: 4px;
-    }
+  &:hover::-webkit-scrollbar,
+  &.scrolling::-webkit-scrollbar {
+    width: 5px;
+  }
 
-    &::-webkit-scrollbar-thumb:hover {
-        background-color: #cfcfcf;
-    }
+  &:hover::-webkit-scrollbar-track,
+  &.scrolling::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 8px;
+  }
+
+  &:hover::-webkit-scrollbar-thumb,
+  &.scrolling::-webkit-scrollbar-thumb {
+    background-color: rgb(198, 198, 198);
+    border-radius: 4px;
+  }
+
+  &:hover::-webkit-scrollbar-thumb:hover,
+  &.scrolling::-webkit-scrollbar-thumb:hover {
+    background-color: #cfcfcf;
+  }
 }
+
 
 .small-content {
     display: none;
@@ -353,7 +371,7 @@
     backdrop-filter: blur(4px);
     bottom: 10px;
     right: 10px;
-    font-size: 30px;
+    font-size: 20px;
     color: var(--var-94);
     border: transparent;
     transition:

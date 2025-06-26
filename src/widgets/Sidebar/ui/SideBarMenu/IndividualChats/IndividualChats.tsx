@@ -9,7 +9,7 @@ import BranchIcon from "../../../../../shared/icons/Branch.icon";
 import { CSSTransition } from "react-transition-group";
 import AllBranchesMenu from "../../../../home-screens/ui/ChatContent/assets/AllBranchesMenu/AllBranchesMenu";
 import { IndividualChatsActions } from "./IndividualChatsActions/IndividualChatsActions";
-import { useChatStore } from "../../../../../shared/providers";
+import { useChatStore, useAppStore } from "../../../../../shared/providers";
 import { ChatTagsPanel } from "./ChatTagsPanel/ChatTagsPanel";
 import { ChatItem } from "./ChatItem/ChatItem";
 import ReactDOM from "react-dom";
@@ -35,6 +35,8 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         deleteSavedBranch,
     } = useChatStore();
 
+    const { setIsSideBarOpen } = useAppStore();
+
     const [isIndividualChatsSearchInputOpen, setIsIndividualChatsSearchInputOpen] = useState(false);
     const [isIndividualChatOpen, setIsIndividualChatOpen] = useState(false);
     const [expandedChatId, setExpandedChatId] = useState<string | null>(null);
@@ -57,11 +59,14 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
     const panelRef = useRef<HTMLDivElement>(null);
 
     const handleOpenIndividualChat = () => {
-        setIsIndividualChatOpen(!isIndividualChatOpen);
+        if (!isSideBarOpen) {
+            setIsSideBarOpen(true);
+        }
+        setIsIndividualChatOpen(prev => !prev);
     };
 
     const handleOpenIndividualChatsSearchInput = () => {
-        setIsIndividualChatsSearchInputOpen(!isIndividualChatsSearchInputOpen);
+        setIsIndividualChatsSearchInputOpen(prev => !prev);
     };
 
     const handleOpenBranchMenu = (event: React.MouseEvent, branchId: number | null) => {
@@ -156,6 +161,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                     className={css.sidebar_menu_action_btn}
                     onClick={(e) => {
                         e.stopPropagation();
+                        handleOpenIndividualChat();
                         if (isIndividualChatOpen) {
                             handleOpenIndividualChatsSearchInput();
                         }

@@ -241,25 +241,25 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         };
     }, []);
 
-    useEffect(() => {
-        handleSetDataToInput();
-    }, [selectedRow, selectedColumn, selectedCell]);
-
-    const handleSetDataToInput = () => {
-        if (!editor) return;
-
-        let template = "";
-        if (selectedCell) {
-            template = `<div>I have a question about <span class="highlighted-span green">Tab ${selectedCell}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
-        } else if (selectedRow) {
-            template = `<div>I have a question about <span class="highlighted-span green">Row ${selectedRow}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
-        } else if (selectedColumn) {
-            template = `<div>I have a question about <span class="highlighted-span green">Column ${selectedColumn}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
-        }
-        if (template) {
-            editor.commands.setContent(template);
-        }
-    };
+    // useEffect(() => {
+    //     handleSetDataToInput();
+    // }, [selectedRow, selectedColumn, selectedCell]);
+    //
+    // const handleSetDataToInput = () => {
+    //     if (!editor) return;
+    //
+    //     let template = "";
+    //     if (selectedCell) {
+    //         template = `<div>I have a question about <span class="highlighted-span green">Tab ${selectedCell}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
+    //     } else if (selectedRow) {
+    //         template = `<div>I have a question about <span class="highlighted-span green">Row ${selectedRow}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
+    //     } else if (selectedColumn) {
+    //         template = `<div>I have a question about <span class="highlighted-span green">Column ${selectedColumn}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
+    //     }
+    //     if (template) {
+    //         editor.commands.setContent(template);
+    //     }
+    // };
 
     const rowHeaderColumn: TableProps<any>["columns"] = [
         {

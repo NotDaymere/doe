@@ -267,6 +267,25 @@ export default function Reflections() {
 
     const allRead = messagesData.every((message) => message.isRead);
 
+    useEffect(() => {
+        const el = containerRef.current?.querySelector(".content-wrapper");
+        if (!el) return;
+
+        let timeout: NodeJS.Timeout;
+
+        const handleScroll = () => {
+            el.classList.add("scrolling");
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                el.classList.remove("scrolling");
+            }, 1000);
+        };
+
+        el.addEventListener("scroll", handleScroll);
+        return () => el.removeEventListener("scroll", handleScroll);
+    }, []);
+
+
     return (
         <div className={clsx("reflections-wrapper", { "sidebar-open": isSideBarOpen })}>
             <div

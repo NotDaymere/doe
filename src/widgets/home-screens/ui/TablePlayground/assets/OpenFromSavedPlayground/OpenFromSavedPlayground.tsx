@@ -36,8 +36,6 @@ export default function OpenFromSavedPlayground({savedPlayground, length} : Prop
         >
             {savedPlayground.type == 'table' && <TableIcon />}
             {savedPlayground.type == 'code' && <CodeIcon />}
-            {savedPlayground.type == 'source' && <MagicIcon />}
-            {savedPlayground.type == 'iframe' && <FileIcon />}
             {length <= 3 && (<>
                     <span className={'open-from-saved-playground-name'}>{savedPlayground.name}</span>
                 </>

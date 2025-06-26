@@ -7,14 +7,14 @@ import StarsIcon from "../../../../../shared/icons/Stars.icon";
 import UserMessageIcon from "../../../../../shared/icons/UserMessage.icon";
 import ThreeDotsIcon from "../../../../../shared/icons/ThreeDotsIcon";
 import { BookmarksActions } from "./BookmarksActions/BookmarksActions";
-import { useChatStore } from "../../../../../shared/providers";
+import { useChatStore, useAppStore } from "../../../../../shared/providers"; // 🆕 useAppStore додано
 
 interface BookmarksProps {
     isSideBarOpen: boolean;
     isSideBarMenuOpen: boolean;
 }
 
-export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) => {
+export const Bookmarks = ({ isSideBarOpen, isSideBarMenuOpen }: BookmarksProps) => {
     const {
         currentChat,
         getAllFavouritesMessages,
@@ -24,22 +24,27 @@ export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) =>
         setMessageLike,
     } = useChatStore();
 
-    const [isBookmarksOpen, setIsBookmarksOpen] = React.useState(false);
-    const [isBookmarksSearchInputOpen, setIsBookmarksSearchInputOpen] = React.useState(false);
+    const { setIsSideBarOpen } = useAppStore(); // 🆕 Отримуємо функцію відкриття сайдбару
+
+    const [isBookmarksOpen, setIsBookmarksOpen] = useState(false);
+    const [isBookmarksSearchInputOpen, setIsBookmarksSearchInputOpen] = useState(false);
 
     const [bookmarksActionsPosition, setBookmarksActionsPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
-    const [isBookmarksActionsOpen, setIsBookmarksActionsOpen] = useState<boolean>(false);
+    const [isBookmarksActionsOpen, setIsBookmarksActionsOpen] = useState(false);
 
     const [activeBookmarkMessage, setActiveBookmarkMessage] = useState<any>(null);
     const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
     const [editingMessageValue, setEditingMessageValue] = useState("");
 
     const handleOpenBookmarks = () => {
-        setIsBookmarksOpen(!isBookmarksOpen);
+        if (!isSideBarOpen) {
+            setIsSideBarOpen(true); // ✅ Автоматично відкриває сайдбар
+        }
+        setIsBookmarksOpen((prev) => !prev);
     };
 
     const handleOpenBookmarksSearchInput = () => {
-        setIsBookmarksSearchInputOpen(!isBookmarksSearchInputOpen);
+        setIsBookmarksSearchInputOpen((prev) => !prev);
     };
 
     const handleOpenBookmarksActions = (
@@ -49,7 +54,7 @@ export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) =>
         event.stopPropagation();
         setActiveBookmarkMessage(msg);
         setBookmarksActionsPosition({ top: event.clientY, left: event.clientX + 30 });
-        setIsBookmarksActionsOpen(prev => !prev);
+        setIsBookmarksActionsOpen((prev) => !prev);
     };
 
     const handleRename = () => {
@@ -106,19 +111,19 @@ export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) =>
         <>
             <div
                 className={isSideBarOpen
-                            ? !isBookmarksSearchInputOpen
-                                ? css.open_sidebar_menu_action_container
-                                : css.sidebar_search_input_container
-                            :  css.sidebar_menu_action_container
-                            }
+                    ? !isBookmarksSearchInputOpen
+                        ? css.open_sidebar_menu_action_container
+                        : css.sidebar_search_input_container
+                    : css.sidebar_menu_action_container
+                }
                 data-active={isBookmarksOpen}
                 onClick={handleOpenBookmarks}
-
             >
                 <div
                     className={css.sidebar_menu_action_btn}
                     onClick={(e) => {
                         e.stopPropagation();
+                        handleOpenBookmarks();
                         if (isBookmarksOpen && isSideBarOpen) {
                             handleOpenBookmarksSearchInput();
                         }
@@ -148,7 +153,7 @@ export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) =>
                 ) : (
                     <div className={css.sidebar_menu_action_btn_tooltip}>
                         <div>Favourites</div>
-                        <div className={css.show_more_btn} >
+                        <div className={css.show_more_btn}>
                             {!isBookmarksOpen ? "+" : "-"}
                         </div>
                     </div>
@@ -216,7 +221,6 @@ export const Bookmarks = ({isSideBarOpen, isSideBarMenuOpen}: BookmarksProps) =>
                     onClose={() => setIsBookmarksActionsOpen(false)}
                 />
             )}
-
         </>
-    )
-}
+    );
+};
