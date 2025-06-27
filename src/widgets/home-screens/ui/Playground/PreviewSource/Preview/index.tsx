@@ -15,6 +15,12 @@ interface IProps {
     url: string;
     title?: string;
     isModalView?: boolean;
+    pageRefs: any;
+    setPagesDocsNum: any
+    setCurrentDocxPage: any
+    docxScale: any
+    setScale: any
+    scale: any
 }
 
 const throttle = <T extends unknown[]>(callback: (...args: T) => void, delay: number) => {
@@ -34,16 +40,22 @@ const throttle = <T extends unknown[]>(callback: (...args: T) => void, delay: nu
     };
 };
 
-const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
+const Preview: FC<IProps> = ({
+                                 type,
+                                 url,
+                                 title,
+                                 isModalView,
+                                 pageRefs,
+                                 setPagesDocsNum,
+                                 setCurrentDocxPage,
+                                 docxScale,
+                                 setScale,
+                                 scale,
+}) => {
     const fileType = url?.split(".").pop() || "";
     const [content, setContent] = useState<any>(null);
-    const [scale, setScale] = useState(1);
-    const [docxScale, setDocxScale] = useState(1);
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [numPages, setNumPages] = useState<number>(0);
-    const [pagesDocsNum, setPagesDocsNum] = useState<number>(0);
-    const [currentDocxPage, setCurrentDocxPage] = useState<number>(0);
-    const pageRefs = useRef<any>({});
 
     useEffect(() => {
         if (fileType === "txt") {
@@ -142,20 +154,6 @@ const Preview: FC<IProps> = ({ type, url, title, isModalView }) => {
         return (
             <div className={css.docxDocument}>
                 <div className={css.docxPreview}>
-                    <div className={css.docxTitle}>
-                        <Title title={title} />
-                    </div>
-                    <div className={css.pagination}>
-                        <Pagination
-                            pageRefs={pageRefs}
-                            numPages={pagesDocsNum}
-                            currentPage={currentDocxPage}
-                            onPageChange={setCurrentDocxPage}
-                        />
-                    </div>
-                    <div className={css.zoom}>
-                        <ZoomButton onZoomClick={() => setDocxScale(scale + 0.1)} />
-                    </div>
                     <DocxDocumentWithPagination
                         url={url}
                         scale={docxScale}

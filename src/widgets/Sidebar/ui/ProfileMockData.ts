@@ -7,6 +7,7 @@ export const ProfileMockData: Profile[] = [
         email: "johndoe@gmail.com",
         imgSrc: "/temp/profile.jpg",
         isCurrent: true,
+        lang: "auto",
     },
     {
         id: 2,
@@ -14,5 +15,6 @@ export const ProfileMockData: Profile[] = [
         email: "johndoe@gmail.com",
         imgSrc: "/temp/profile2.jpg",
         isCurrent: false,
+        lang: "auto",
     },
 ];

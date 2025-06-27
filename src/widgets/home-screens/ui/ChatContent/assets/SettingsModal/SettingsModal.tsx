@@ -16,10 +16,12 @@ type SettingsModalProps = {
     currentProfile: Profile;
     isSideBarOpen: boolean;
     profiles: Profile[];
+    changeProfile: (data: Partial<Omit<Profile, "id" | "isCurrent">>) => void;
 };
 
 export const SettingsModal = ({
     onClose,
+    changeProfile,
     currentProfile,
     profiles,
     isSideBarOpen,
@@ -34,7 +36,13 @@ export const SettingsModal = ({
                     name: "Profile",
                     tabName: "profile",
                     icon: <ProfileIcon />,
-                    component: <ProfileTab currentProfile={currentProfile} onClose={onClose} />,
+                    component: (
+                        <ProfileTab
+                            currentProfile={currentProfile}
+                            onClose={onClose}
+                            changeProfile={changeProfile}
+                        />
+                    ),
                 },
                 {
                     name: "General",

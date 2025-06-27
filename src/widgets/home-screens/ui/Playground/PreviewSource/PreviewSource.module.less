@@ -11,6 +11,14 @@
     border-radius: 8px;
 }
 
+.title {
+  width: max-content;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -15px;
+  z-index: 1;
+}
 .preview {
     height: 100%;
     background-color: #fdfdff;
@@ -97,9 +105,35 @@ pre {
     width: 100%;
     margin-top: 0;
 }
+//.modalDocPreview {
+//  width: 513px;
+//  max-width: 513px;
+//  height: 683px;
+//  max-height: 683px;
+//  position: relative;
 
 .modalWebPreview {
     max-width: 1254px;
     height: 80vh;
     max-height: 808px;
+}
+
+
+.docxTitle {
+  .title;
+  top: 0;
+}
+
+.pagination {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 12px;
+  z-index: 1;
+}
+.zoom {
+  position: absolute;
+  right: 20px;
+  bottom: 12px;
+  z-index: 1;
 }

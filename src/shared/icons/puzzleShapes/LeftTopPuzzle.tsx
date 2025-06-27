@@ -9,7 +9,7 @@ import {
     withoutCategoryBorderColor,
 } from "./puzzlesParams";
 
-export const LeftTopPuzzle = ({ category, isColored, isPlaceholder }: PuzzleProps) => {
+export const LeftTopPuzzle = ({ category, isColored, isPlaceholder, ...props }: PuzzleProps) => {
     return (
         <svg
             width="127"
@@ -17,6 +17,7 @@ export const LeftTopPuzzle = ({ category, isColored, isPlaceholder }: PuzzleProp
             viewBox="0 0 127 127"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            {...props}
         >
             <mask id="path-1-inside-1_7077_30292" fill="white">
                 <path
