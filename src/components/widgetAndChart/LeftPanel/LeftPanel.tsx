@@ -7,12 +7,12 @@ import clsx from "clsx";
 function LeftPanel() {
     const { page, setPage } = useChartWidgets();
     const isChartsPage = [Page.NEW_CHART, Page.PREVIEW_CHART,Page.CHART_DRAFTS].includes(page as Page);
-    const isDrawingPage = [Page.DRAWING, Page.PREVIEW_DRAWING, Page.NEW_DRAWING].includes(page as Page);
+    const isWidgetPage = [Page.NEW_WIDGET,Page.WIDGET_IN_CHAT].includes(page as Page);
 
     const [openSections, setOpenSections] = useState<any>({
       
         charts: isChartsPage,
-        widgets: isDrawingPage,
+        widgets: isWidgetPage,
    
         drawing: false,
         games: false,
@@ -20,7 +20,7 @@ function LeftPanel() {
     });
 
     const toggleSection = (section: string) => {
-        console.log("Toggling section:",section);
+      
         setOpenSections({
             charts: false,
    
