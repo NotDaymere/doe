@@ -27,7 +27,7 @@ function ActiveMenu() {
             <Button className={'button'}><Picture /></Button>
             <Button className={'button'}><File /></Button>
         
-            <Button className={'button'}><Router /></Button>
+            <Button className={'button'} onClick={()=>{eventEmitter.emit("openChartWidgets", { page:Page.NEW_CHART })}}><Router /></Button>
             <Button className={'button'}><LikeP /></Button>
 
             <Button onClick = {openComments} className={'button'}><Massage /></Button>
