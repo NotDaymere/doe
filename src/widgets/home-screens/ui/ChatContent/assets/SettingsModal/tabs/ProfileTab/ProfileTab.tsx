@@ -18,6 +18,7 @@ type LanguageOption = (typeof languages)[number]["value"];
 type ProfileTabProps = {
     currentProfile: Profile;
     onClose: () => void;
+    changeProfile: (data: Partial<Omit<Profile, "id" | "isCurrent">>) => void;
 };
 type formDataType = {
     username: string;
@@ -25,7 +26,7 @@ type formDataType = {
     imgSrc: string | null;
     lang: LanguageOption;
 };
-export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
+export const ProfileTab = ({ currentProfile, onClose, changeProfile }: ProfileTabProps) => {
     const inputRefs = useRef<
         Record<keyof Omit<formDataType, "imgSrc" | "lang">, React.RefObject<HTMLInputElement>>
     >({
@@ -36,8 +37,9 @@ export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
         username: currentProfile.username,
         email: currentProfile.email,
         imgSrc: currentProfile.imgSrc || null,
-        lang: "auto",
+        lang: currentProfile.lang,
     });
+
     const prevLang = useRef(formData.lang);
     const [isDirty, setIsDirty] = useState(false);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +75,7 @@ export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
     const onSaveChanges = () => {
         if (isDirty) {
             prevLang.current = formData.lang;
-            console.log("Saved changes", formData);
+            changeProfile(formData);
             setIsDirty(false);
             onClose();
         }
@@ -145,7 +147,6 @@ export const ProfileTab = ({ currentProfile, onClose }: ProfileTabProps) => {
                             options={languages}
                             value={formData.lang}
                             onChange={(value) => {
-                                console.log(" ProfileTab ~ value:", value);
                                 setFormData((prev) => ({
                                     ...prev,
                                     lang: value as LanguageOption,
