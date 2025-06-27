@@ -40,7 +40,6 @@ export const ProfileTab = ({ currentProfile, onClose, changeProfile }: ProfileTa
         lang: currentProfile.lang,
     });
 
-    const prevLang = useRef(formData.lang);
     const [isDirty, setIsDirty] = useState(false);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -63,18 +62,12 @@ export const ProfileTab = ({ currentProfile, onClose, changeProfile }: ProfileTa
     };
     useEffect(() => {
         const keys = Object.keys(formData) as Array<keyof typeof formData>;
-        const isDirty = keys
-            .filter((key) => key !== "lang")
-            .some((key) => formData[key] !== currentProfile[key]);
+        const isDirty = keys.some((key) => formData[key] !== currentProfile[key]);
         setIsDirty(isDirty);
     }, [formData]);
-    useEffect(() => {
-        if (formData.lang === prevLang.current) return;
-        setIsDirty(true);
-    }, [formData]);
+
     const onSaveChanges = () => {
         if (isDirty) {
-            prevLang.current = formData.lang;
             changeProfile(formData);
             setIsDirty(false);
             onClose();
