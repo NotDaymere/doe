@@ -3,9 +3,6 @@ import { ReactComponent as TableIcon } from "src/assets/icons/table.svg";
 import { ReactComponent as CodeIcon } from "src/assets/icons/code.svg";
 import './OpenFromSavedPlayground.less';
 import { useChatStore } from "src/shared/providers";
-import MagicIcon from "../../../../../../shared/icons/Magic.icon";
-import LinkIcon from "../../../../../../shared/icons/Link.icon";
-import FileIcon from "../../../../../../shared/icons/File.icon";
 
 interface Props {
     savedPlayground: IPlayground;
