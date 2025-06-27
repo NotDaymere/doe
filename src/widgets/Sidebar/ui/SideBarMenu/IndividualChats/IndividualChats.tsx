@@ -14,7 +14,7 @@ import { ChatTagsPanel } from "./ChatTagsPanel/ChatTagsPanel";
 import { ChatItem } from "./ChatItem/ChatItem";
 import ReactDOM from "react-dom";
 import { TAG_META } from "../SideBarMenu";
-import { IChat } from "../../../../../shared/types/Chat";
+import { IChat, MODE } from "../../../../../shared/types/Chat";
 
 interface IndividualChatsProps {
     isSideBarOpen: boolean;
@@ -33,6 +33,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         removeChat,
         addChat,
         deleteSavedBranch,
+        setMode
     } = useChatStore();
 
     const { setIsSideBarOpen } = useAppStore();
@@ -288,7 +289,11 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                                         <div>Branches</div>
                                         <div className={css.branches_list}>
                                             {branches.map(branch => (
-                                                <div key={branch.id} className={css.branch_item}>
+                                                <div
+                                                    key={branch.id}
+                                                    className={css.branch_item}
+                                                    onClick={() => setMode(MODE.INITIAL)}
+                                                >
                                                     <div className={css.branch_icon_and_name}>
                                                         <div>
                                                             <BranchIcon fill="currentColor" width={16} height={16} />
