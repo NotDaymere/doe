@@ -41,6 +41,10 @@ function Console() {
         setNumberOfConsole(1);
     };
 
+    const closeConsoleWindow = (currentConsole: number) => {
+        setNumberOfConsole((prev) => Math.max(1, prev - 1));
+    };
+
     const [dimensions, setDimensions] = useState({ width: "100%", height: 300 });
     const consoleRef = useRef(null);
 
@@ -169,6 +173,9 @@ function Console() {
                                         <ConsoleWindow
                                             key={i}
                                             currentConsole={i + 1}
+                                            
+                                            totalConsoles={numberOfConsole}
+                                            closeWindow={closeConsoleWindow}
                                             icon={i + 1}
                                         />
                                     );

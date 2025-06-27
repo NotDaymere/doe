@@ -126,13 +126,13 @@ function Console() {
                             <ConsoleWindow /> */}
 
                                 {[...Array(numberOfConsole)].map((_, i) => {
-                                    return (
-                                        <ConsoleWindow
-                                            key={i}
-                                            currentConsole={i + 1}
-                                            icon={i + 1}
-                                        />
-                                    );
+                                    // return (
+                                    //     <ConsoleWindow
+                                    //         key={i}
+                                    //         currentConsole={i + 1}
+                                    //         icon={i + 1}
+                                    //     />
+                                    // );
                                 })}
                             </div>
 
