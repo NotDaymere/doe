@@ -22,7 +22,7 @@ type AnimationState = "enter" | "visible" | "exit";
 const Bookmarks: FC<IProps> = ({ isActive, setIsActive }) => {
     const [animationState, setAnimationState] = useState<AnimationState>("enter");
     const ref = useRef<HTMLDivElement>(null);
-    const {savedBookmarks, deleteBookmark} = useChatStore();
+    const { savedBookmarks, deleteBookmark } = useChatStore();
 
     useEffect(() => {
         if (isActive) {
@@ -40,10 +40,7 @@ const Bookmarks: FC<IProps> = ({ isActive, setIsActive }) => {
     if (!isActive && animationState === "enter") return null;
 
     return (
-        <div
-            ref={ref}
-            className={classNames(css.bookmarks, css[animationState])}
-        >
+        <div ref={ref} className={classNames(css.bookmarks, css[animationState])}>
             <div className={css.bookmarkItem}>
                 <div className={css.bookmarkHeader}>
                     <div className={css.bookmarkTitle}>
@@ -54,17 +51,21 @@ const Bookmarks: FC<IProps> = ({ isActive, setIsActive }) => {
                         <MinimizeIcon width={12} height={12} onClick={handleClose} />
                     </div>
                 </div>
-                <div  className={css.bookmarkWrapper}>
-
-                {savedBookmarks.map(({ id, title }) => (
-
-                        <div key={id} className={css.bookmark}>
-                            <span>{title}</span>
-                            <MinusIcon width={12} height={2} className={css.removeButton}  onClick={() => deleteBookmark(id)}/>
-                        </div>
-            ))}
-                </div>
-
+                {savedBookmarks?.length > 0 && (
+                    <div className={css.bookmarkWrapper}>
+                        {savedBookmarks.map(({ id, title }) => (
+                            <div key={id} className={css.bookmark}>
+                                <span>{title}</span>
+                                <MinusIcon
+                                    width={12}
+                                    height={2}
+                                    className={css.removeButton}
+                                    onClick={() => deleteBookmark(id)}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
