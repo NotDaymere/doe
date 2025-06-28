@@ -1,19 +1,21 @@
 import { useRef } from "react";
 
 import "./EditTemplate.less";
-// import Draggable from "react-draggable";
+
 import UploadChartBody from "./component/UploadChartBody/UploadChartBody";
+
 import { useChartWidgets } from "../../Window/ChartWidgetsWindow";
 import { Page } from "../../Enums/Page.enum";
 import Draggable from "react-draggable";
-function EditTemplateModal() {
+function EditTemplateModal({chartType}: { chartType: string }) {
     const { setPage, setFullWindow } = useChartWidgets();
     const nodeRef = useRef(null);
     return (
         <Draggable nodeRef={nodeRef} handle=".drag-handle">
             <div className="modalChart" ref={nodeRef}>
+           
                 <div className="modalHead drag-handle">
-                    <p>Bar Chart #1</p>
+                    <p>{chartType || "Bar"} Chart #1</p>
                     <div className="containerBtns">
                         <button
                             className="cancelBtn"
@@ -29,7 +31,7 @@ function EditTemplateModal() {
                         </button>
                     </div>
                 </div>
-                <UploadChartBody />
+                <UploadChartBody chartType={chartType} />
             </div>
         </Draggable>
     );
