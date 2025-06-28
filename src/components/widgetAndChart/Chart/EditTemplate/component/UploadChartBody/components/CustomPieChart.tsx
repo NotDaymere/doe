@@ -1,60 +1,41 @@
+import { useMemo } from "react";
 import {
     PieChart,
     Pie,
     ResponsiveContainer,
+   
     Tooltip,
-    
     Cell,
 } from "recharts";
 
 
 
-interface ChartData {
+interface InputChartData {
     group: string;
     value: number | null;
-    label: string;
 
-    rank?: string;
+    label: string;
     color?: string;
 }
 
 
 interface CustomPieChartProps {
-    data?: ChartData[]; 
-    height?: number;
+    data?: InputChartData[];
 }
-
-
-const defaultChartData: ChartData[] = [
-    { group: 'Group A', value: 400, label: 'Alpha', color: '#0088FE' },
-    { group: 'Group B', value: 300, label: 'Beta', color: '#00C49F' },
-    { group: 'Group C', value: 300, label: 'Gamma', color: '#FFBB28' },
-    { group: 'Group D', value: 200, label: 'Delta', color: '#FF8042' },
-];
 
 
 
 const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
-    if (active && payload && payload.length && payload[0].payload.value !== null) {
-        const entry = payload[0].payload;
+    if (active && payload && payload.length) {
+        const data = payload[0].payload;
         return (
-            <div
-                style={{
-                    background: "#1F1F1F",
-                    color: "#fff",
-                    padding: "8px 12px",
+            <div style={{ background: "#1F1F1F", color: "#fff", padding: "12px", borderRadius: "5px", fontSize: "14px", minWidth: "120px" }}>
+                <p style={{ margin: 0, fontWeight: "bold" }}>{data.group}</p>
+                <p style={{ margin: '4px 0 0 0', color: '#ddd' }}>
+                    <span>Value: </span>
 
-                    borderRadius: "5px",
-                    fontSize: "14px",
-                    textAlign: "center",
-                    minWidth: "78px",
-                }}
-            >
-                <div>{entry.label}</div>
-                <div style={{ fontWeight: "bold", marginTop: '4px' }}>
-                    {`${entry.value}${entry.rank ? ` / ${entry.rank}` : ""}`}
-
-                </div>
+                    <span style={{ fontWeight: 'bold', color: 'white' }}>{data.value}</span>
+                </p>
             </div>
         );
     }
@@ -63,103 +44,86 @@ const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] 
 
 
 
-
-const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    payload,
-}: any) => {
+const RADIAN = Math.PI / 180;
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, payload }: any) => {
   
-    const RADIAN = Math.PI / 180;
-    const radius = outerRadius * 1.2;
+    const radius = outerRadius * 1.35;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
     return (
         <text
-            x={x}
+
+        x={x}
             y={y}
-  
-            fill="var(--var-119)"
-            textAnchor={x > cx ? "start" : "end"}
+            fill="#555" 
+            textAnchor={x > cx ? 'start' : 'end'}
             dominantBaseline="central"
-            style={{ fontSize: 12, fontWeight: 'bold' }}
+            fontSize={12}
+            fontWeight="500"
         >
-            {payload.group}
+            {`${payload.group} (${(percent * 100).toFixed(0)}%)`}
+
         </text>
     );
 };
 
 
-const CustomPieChart = ({ data = defaultChartData, height = 350 }: CustomPieChartProps) => {
-    
-  
+const CustomPieChart = ({ data = [] }: CustomPieChartProps) => {
+    const processedData = useMemo(() => {
+        return data.filter(item => item.value !== null && item.value > 0).map(item => ({
+            ...item,
 
-    const validData = data.filter(d => d.value !== null && d.value > 0);
-    console.log("Valid Data for Pie Chart:", validData);
+            color: item.color || '#cccccc'
+        }));
+    }, [data]);
+
     return (
-        <ResponsiveContainer width="100%" height={height}>
-  
-            <PieChart>
+        <ResponsiveContainer width="100%" height="100%">
+          
+            <PieChart margin={{ top: 33, right: 33, bottom: 33, left: 33 }}>
                 <defs>
-                    {validData.map((entry, index) => (
-                        <linearGradient
-  
-                        key={`pie-gradient-${index}`}
-                            id={`pie-gradient-${index}`}
-                            x1="0"
-                            y1="0"
-  
-                            x2="0"
-                            y2="1"
-                        >
-                            <stop
-  
-  offset="0%"
-                                stopColor={entry.color || "#FFDB65"}
-                                stopOpacity={1}
-                            />
-  
-                            <stop
-                                offset="100%"
-                                stopColor={entry.color || "#FFDB65"}
-                                stopOpacity={0.4}
-                            />
+
+                    {processedData.map((entry, index) => (
+                        <linearGradient key={`pie-gradient-${index}`} id={`pie-gradient-${index}`} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={entry.color} stopOpacity={0.9} />
+                            <stop offset="100%" stopColor={entry.color} stopOpacity={0.5} />
                         </linearGradient>
                     ))}
                 </defs>
 
-  
-                <Tooltip content={<CustomTooltip />} cursor={{ fill: "transparent" }} />
+                <Tooltip content={<CustomTooltip />} />
 
                 <Pie
-                    data={validData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={{ stroke: 'var(--var-113)' }}
-                    label={renderCustomizedLabel}
-                    outerRadius={"70%"}
-  
-                    innerRadius={"50%"}
+                    data={processedData}
                     dataKey="value"
                     nameKey="group"
-                    paddingAngle={5}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={0}
+                    outerRadius={"80%"}
+                    paddingAngle={0}
+
+                   
+                    labelLine={{ stroke: 'rgba(0, 0, 0, 0.3)' }}
+                    label={renderCustomizedLabel}
                 >
-                    {validData.map((entry, index) => (
+
+                    {processedData.map((entry, index) => (
                         <Cell
                             key={`cell-${index}`}
                             fill={`url(#pie-gradient-${index})`}
-  
-                            stroke="none"
+
+                            stroke={"#fff"}
+                            strokeWidth={2}
                         />
                     ))}
+
                 </Pie>
             </PieChart>
         </ResponsiveContainer>
     );
+
 };
+
 export default CustomPieChart;

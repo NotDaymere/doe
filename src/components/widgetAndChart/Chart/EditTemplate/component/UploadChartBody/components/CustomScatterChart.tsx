@@ -12,7 +12,7 @@ import {
     Cell,
 } from "recharts";
 
-// Interfaces remain the same
+
 
 interface InputChartData {
     group: string;
@@ -32,11 +32,11 @@ interface ProcessedScatterData {
 
 interface CustomScatterChartProps {
     data?: InputChartData[];
-    // The height is now controlled by the parent CSS for better flexibility
+  
 
 }
 
-// Tooltip remains the same
+
 const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
     if (active && payload && payload.length) {
         const data = payload[0].payload;
@@ -68,9 +68,9 @@ const CustomScatterChart = ({ data = [] }: CustomScatterChartProps) => {
     }, [data]);
 
     return (
-        // Let the container fill its parent completely.
+       
         <ResponsiveContainer width="100%" height="100%">
-            {/* The increased margin creates the essential safety buffer. */}
+           
             <ScatterChart margin={{ top: 50, right: 30, bottom: 50, left: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0, 0, 0, 0.1)" />
 

@@ -3,21 +3,26 @@ import React, {
     useContext,
     useRef,
     useState,
+ 
     forwardRef,
     useImperativeHandle,
     useEffect,
 } from "react";
+
 import Draggable from "react-draggable";
 import LeftPanel from "../LeftPanel/LeftPanel";
 import RightPanel from "../RightPanel/RightPanel";
 import "./ChartWidgetsWindow.less";
+
 import { Page } from "../Enums/Page.enum";
 import { eventEmitter } from "../Utils/eventEmitter";
 import EditTemplateModal from "../Chart/EditTemplate/EditTemplate";
 import Drawing from "../Drawing/Drawing";
+
 import DrawingModal from "../Drawing/DrawingModal/DrawingModal";
 import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
 import { CrossIcon } from "src/shared/icons/CrossIcon";
+
 
 interface ChartWidgetsContextType {
     prevPage: string;
@@ -33,10 +38,12 @@ const ChartWidgetsContext = createContext<ChartWidgetsContextType | undefined>(u
 
 export const useChartWidgets = () => {
     const context = useContext(ChartWidgetsContext);
+   
     if (!context) {
         throw new Error("useChartWidgets must be used within a ChartWidgetsProvider");
     }
     return context;
+
 };
 
 const ChartWidgetsWindow = forwardRef((props: any, ref) => {
@@ -46,6 +53,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
     const [page, changePage] = useState(props.page);
     const [paramter, setParameter] = useState("test");
     const [link, setLink] = useState("test");
+
     const [fullWindow, setFullWindow] = useState(false);
     const { closeComments } = useCommentWindowStore();
 
@@ -65,6 +73,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
 
     useEffect(() => {
         const openWindowHandler = (event: CustomEvent) => {
+
             setPage(event.detail?.page || Page.NEW_CHART, event.detail?.parameter || "test");
 
             closeComments();
@@ -74,6 +83,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
         eventEmitter.on("openChartWidgets", openWindowHandler);
         return () => {
             eventEmitter.off("openChartWidgets", openWindowHandler);
+
         };
     }, []);
 
@@ -83,6 +93,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
         <ChartWidgetsContext.Provider
             value={{
                 prevPage,
+
                 fullWindow,
                 setFullWindow,
                 page,
@@ -92,31 +103,37 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
                 closeWindow,
             }}
         >
+
             <div className="widgetAndChartOverlay">
                 {!fullWindow && (
                     <Draggable nodeRef={nodeRef} handle=".drag-handle">
                         <div ref={nodeRef} className="widgetChartWindow">
+
                             <div className="Head drag-handle">
                                 <p>Charts and widgets {paramter}</p>
                                 <button className="closeBtn" onClick={closeWindow}>
                                     <CrossIcon />
+
                                 </button>
                             </div>
                             <div className="containerModal">
                                 {!fullWindow && (
-                                    <>
+
+<>
                                         <LeftPanel /> <RightPanel />
                                     </>
                                 )}
+
                             </div>
                         </div>
                     </Draggable>
                 )}
                 {fullWindow && <>{page === Page.NEW_DRAWING && <DrawingModal id={paramter} />}</>}
-                {fullWindow && <>{page === Page.EDIT_TEMPLATE && <EditTemplateModal />}</>}
+                {fullWindow && <>{page === Page.EDIT_TEMPLATE && <EditTemplateModal chartType={paramter} />}</>}
             </div>
         </ChartWidgetsContext.Provider>
     );
+
 });
 
 export default ChartWidgetsWindow;

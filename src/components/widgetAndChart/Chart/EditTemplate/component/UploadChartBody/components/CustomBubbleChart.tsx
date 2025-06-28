@@ -37,7 +37,7 @@ interface CustomBubbleChartProps {
     data?: InputChartData[];
 }
 
-// --- UPDATED TOOLTIP TO MATCH IMAGE EXACTLY ---
+
 const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
     if (active && payload && payload.length) {
         const data = payload[0].payload;
@@ -49,7 +49,7 @@ const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] 
                 padding: "12px",
                 borderRadius: "5px",
                 fontSize: "14px",
-                textAlign: 'left', // Ensure text aligns left
+                textAlign: 'left', 
             }}>
                 <p style={{ margin: 0, paddingBottom: '8px', fontWeight: "bold", borderBottom: '1px solid #444' }}>
                     {data.label}
@@ -80,14 +80,14 @@ const CustomBubbleChart = ({ data = [] }: CustomBubbleChartProps) => {
         }));
     }, [data]);
 
-    // --- THIS IS THE FIX ---
-    // Calculate a padded domain for the X-Axis to prevent bubbles from touching it.
+  
+  
     const xAxisDomain = useMemo(() => {
 
         if (processedData.length <= 1) {
-            return [-0.5, 0.5]; // Handle single data point case
+            return [-0.5, 0.5];
         }
-        // Add a 0.5 unit buffer on each side of the x-axis
+       
         return [-0.5, processedData.length - 0.5];
     }, [processedData]);
 
@@ -96,7 +96,7 @@ const CustomBubbleChart = ({ data = [] }: CustomBubbleChartProps) => {
 
     return (
         <ResponsiveContainer width="100%" height="100%">
-            {/* The generous margin is still needed to prevent clipping by the container */}
+           
             <ScatterChart margin={{ top: 50, right: 17, bottom: 50, left: 17 }}>
                 <defs>
                     {processedData.map((entry, index) => (
@@ -114,7 +114,7 @@ const CustomBubbleChart = ({ data = [] }: CustomBubbleChartProps) => {
                     type="number"
                     dataKey="x"
 
-                    // Apply the padded domain here
+                   
                     domain={xAxisDomain}
                     tick={false}
                     axisLine={false}
