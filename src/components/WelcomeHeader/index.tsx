@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ReactComponent as Grid } from "src/assets/icons/dot-grid.svg";
 import { ReactComponent as Logo } from "src/assets/icons/logo-gradient.svg";
 import WelcomeText from "src/components/WelcomeText";
@@ -32,6 +32,9 @@ export const WelcomeHeader = ({
         startOnboardingFlow();
     };
 
+    const MemoizedGrid = useMemo(() => <Grid />, []);
+    const MemoizedLogo = useMemo(() => <Logo />, []);
+
     return (
         <div
             className={clsx(css.header_container, {
@@ -42,18 +45,14 @@ export const WelcomeHeader = ({
             data-step="head"
             onTransitionEnd={handleLogoSlideComplete}
         >
-            {hideGrid && (
-                <div className={css.logo_grid}>
-                    <Grid />
-                </div>
-            )}
+            {hideGrid && <div className={css.logo_grid}>{MemoizedGrid}</div>}
             <div
                 className={clsx(css.logo_container, {
                     [css.logo_no_shadow]: step >= 28,
                 })}
                 onAnimationEnd={onLogoAppearing}
             >
-                <Logo />
+                {MemoizedLogo}
             </div>
 
             {(animationComplete || step > 5) && (

@@ -45,6 +45,7 @@ export interface OnboardingCtx {
     setBlockSteps: (b: boolean) => void;
     setBlockInput: React.Dispatch<React.SetStateAction<boolean>>;
     setManualSkip: React.Dispatch<React.SetStateAction<boolean>>;
+    setBlockAutoSkip: React.Dispatch<React.SetStateAction<boolean>>;
     setUserClickedBold: React.Dispatch<React.SetStateAction<boolean>>;
     setUserClickedUnderline: React.Dispatch<React.SetStateAction<boolean>>;
     setUserClickedItalic: React.Dispatch<React.SetStateAction<boolean>>;
@@ -83,6 +84,7 @@ export interface OnboardingStep {
     autoSkip?: number; // number represents delay for autoskip
     autoSkipSubStep?: number; // skip by sub step
     canPreventAutoSkip?: boolean;
+    newAutoSkip?: number;
     [key: string]: any;
 }
 
@@ -1000,7 +1002,10 @@ export const onboardingFlow: OnboardingStep[] = [
         ),
         disableNavigationHover: true,
         blur: ["input", "history", "body", "magicbox", "navigate"],
-        onEnter: ({ setMessages }) => setMessages([]),
+        onEnter: ({ setMessages, setBlockAutoSkip }) => {
+            setBlockAutoSkip(false);
+            setMessages([]);
+        },
     },
     {
         id: 24,
@@ -1016,8 +1021,10 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         autoSkip: 2000,
-        canPreventAutoSkip: true,
+        // canPreventAutoSkip: true,
+        newAutoSkip: 5000,
         blur: ["input", "history", "body", "magicbox", "navigate"],
+        // onEnter: ({ setMessages }) => setMessages([]),
     },
     {
         id: 25,
@@ -1033,8 +1040,10 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         autoSkip: 2000,
-        canPreventAutoSkip: true,
+        // canPreventAutoSkip: true,
+        newAutoSkip: 4000,
         blur: ["input", "history", "body", "magicbox", "navigate"],
+        // onEnter: ({ setMessages }) => setMessages([]),
     },
     {
         id: 26,
@@ -1049,8 +1058,13 @@ export const onboardingFlow: OnboardingStep[] = [
                 Manage the dark or light theme according to your preference.
             </p>
         ),
-        canPreventAutoSkip: true,
+        // canPreventAutoSkip: true,
+        newAutoSkip: 5000,
         blur: ["input", "history", "body", "magicbox", "navigate"],
+        onEnter: ({ setMessages, setBlockAutoSkip }) => {
+            setBlockAutoSkip(false);
+            setMessages([]);
+        },
     },
     {
         id: 27,
@@ -1075,16 +1089,7 @@ export const onboardingFlow: OnboardingStep[] = [
             </p>
         ),
         blur: ["input", "history", "body", "magicbox", "navigate"],
-        onEnter: ({ setMessages, setGaiaActive }) => {
-            setMessages?.([
-                { role: "user", content: `Hey Doe, I'm John Smith`, noTypeEffect: true },
-                { role: "ai", content: `Hey, John Smith, I'm Doe!`, noTypeEffect: true },
-                {
-                    role: "ai",
-                    content: `Let me introduce my main functionality.`,
-                    noTypeEffect: true,
-                },
-            ]);
+        onEnter: ({ setGaiaActive }) => {
             setTimeout(() => {
                 setGaiaActive(true);
             }, 1100);
@@ -1105,7 +1110,16 @@ export const onboardingFlow: OnboardingStep[] = [
         stressSendButtonOnArrowRight: true,
         tooltip: false,
         blur: [""],
-        onEnter: ({ setBlockInput }) => {
+        onEnter: ({ setBlockInput, setMessages }) => {
+            setMessages?.([
+                { role: "user", content: `Hey Doe, I'm John Smith`, noTypeEffect: true },
+                { role: "ai", content: `Hey, John Smith, I'm Doe!`, noTypeEffect: true },
+                {
+                    role: "ai",
+                    content: `Let me introduce my main functionality.`,
+                    noTypeEffect: true,
+                },
+            ]);
             setBlockInput(false);
         },
     },
@@ -1176,10 +1190,10 @@ export const onboardingFlow: OnboardingStep[] = [
         id: 33,
         location: '[data-step="playgrounds"]',
         cursorVisible: true,
-        cursorDelay: 300,
+        cursorDelay: 500,
         tooltip: false,
         disableNavigationHover: true,
-        autoSkip: 1500,
+        autoSkip: 2500,
         blur: ["input", "history", "body", "magicbox", "navigate"],
         onExit: ({ setCursorMoving }) => {
             setCursorMoving();
@@ -1302,7 +1316,7 @@ export const onboardingFlow: OnboardingStep[] = [
         cursorVisible: true,
         cursorClickPrevPosition: true,
         tooltip: false,
-        autoSkip: 2000,
+        autoSkip: 4000,
         disableNavigationHover: true,
         onEnter: ({ setCursorMoving }) => setCursorMoving(),
     },
@@ -1563,7 +1577,7 @@ export const onboardingFlow: OnboardingStep[] = [
                 limit by case or timeframe.
             </p>
         ),
-        autoSkip: 4000,
+        autoSkip: 3000,
         disableNavigationHover: true,
         blur: ["history", "body", "magicbox", "navigate", "playgrounds-box"],
     },

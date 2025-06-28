@@ -27,11 +27,13 @@ import { CrossIcon } from "src/shared/icons/CrossIcon";
 interface ChartWidgetsContextType {
     prevPage: string;
     page: string;
-    paramter: string;
+    parameter: string;
     link: string;
-    setPage: (page?: string, parameter?: string, link?: string) => void;
+    fullWindow: boolean;
+    setPage: (page: string, parameter?: string, link?: string) => void;
     setFullWindow: (fullWindow: boolean) => void;
     closeWindow: () => void;
+
 }
 
 const ChartWidgetsContext = createContext<ChartWidgetsContextType | undefined>(undefined);
@@ -41,6 +43,7 @@ export const useChartWidgets = () => {
    
     if (!context) {
         throw new Error("useChartWidgets must be used within a ChartWidgetsProvider");
+
     }
     return context;
 
@@ -50,8 +53,9 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
     const nodeRef = useRef<HTMLDivElement>(null);
     const [prevPage, setPrevPage] = useState(Page.NEW_CHART);
     const [isVisible, setIsVisible] = useState(false);
+
     const [page, changePage] = useState(props.page);
-    const [paramter, setParameter] = useState("test");
+    const [parameter, setParameter] = useState("test");
     const [link, setLink] = useState("test");
 
     const [fullWindow, setFullWindow] = useState(false);
@@ -59,6 +63,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
 
     const setPage = (pageName: string, parameterName?: string, linkName?: string) => {
         setPrevPage(page);
+
         changePage(pageName);
         setParameter(parameterName || "");
         setLink(linkName || "");
@@ -68,6 +73,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
     const closeWindow = () => setIsVisible(false);
 
     useImperativeHandle(ref, () => ({
+
         openWindow,
     }));
 
@@ -77,6 +83,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
             setPage(event.detail?.page || Page.NEW_CHART, event.detail?.parameter || "test");
 
             closeComments();
+
             setIsVisible(true);
         };
 
@@ -96,22 +103,27 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
 
                 fullWindow,
                 setFullWindow,
+
                 page,
                 setPage,
-                paramter,
+                parameter,
                 link,
+
                 closeWindow,
             }}
         >
+
 
             <div className="widgetAndChartOverlay">
                 {!fullWindow && (
                     <Draggable nodeRef={nodeRef} handle=".drag-handle">
                         <div ref={nodeRef} className="widgetChartWindow">
 
+
                             <div className="Head drag-handle">
-                                <p>Charts and widgets {paramter}</p>
+                                <p>Charts and widgets {parameter}</p>
                                 <button className="closeBtn" onClick={closeWindow}>
+
                                     <CrossIcon />
 
                                 </button>
@@ -121,6 +133,7 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
 
 <>
                                         <LeftPanel /> <RightPanel />
+
                                     </>
                                 )}
 
@@ -128,12 +141,13 @@ const ChartWidgetsWindow = forwardRef((props: any, ref) => {
                         </div>
                     </Draggable>
                 )}
-                {fullWindow && <>{page === Page.NEW_DRAWING && <DrawingModal id={paramter} />}</>}
-                {fullWindow && <>{page === Page.EDIT_TEMPLATE && <EditTemplateModal chartType={paramter} />}</>}
+                {fullWindow && <>{page === Page.NEW_DRAWING && <DrawingModal id={parameter} />}</>}
+                {fullWindow && <>{page === Page.EDIT_TEMPLATE && <EditTemplateModal chartType={parameter} />}</>}
+
             </div>
         </ChartWidgetsContext.Provider>
-    );
+    
+);
 
 });
-
 export default ChartWidgetsWindow;

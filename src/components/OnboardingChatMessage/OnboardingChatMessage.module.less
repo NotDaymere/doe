@@ -1,6 +1,7 @@
 .userMessageWrapper {
     display: flex;
     justify-content: flex-end;
+    margin: 16px 0;
 }
 
 .aiMessageWrapper {
@@ -69,7 +70,7 @@
 
     position: absolute;
     top: -5px;
-    left: -52px;
+    left: -58px;
     width: 48px;
     height: 48px;
     background-color: #ffffff;
@@ -122,6 +123,17 @@
 
 .message {
     z-index: 3;
+
+    .setFontSohneKraftig(16px);
+    font-weight: 500;
+
+    b {
+        font-weight: 600;
+    }
+
+    strong {
+        font-weight: 600;
+    }
 }
 
 .aiMessage {
@@ -256,9 +268,9 @@ pre {
 }
 
 code {
-    font-family: "Courier New", monospace;
-    .setFontSFMono400(12px);
-    font-weight: 400;
+    // font-weight: 400;
+    font-family: SF Mono;
+    font-size: 15px;
     letter-spacing: 0.02em;
 }
 

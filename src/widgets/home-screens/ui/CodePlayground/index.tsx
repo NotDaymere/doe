@@ -130,6 +130,11 @@ const CodePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     useEffect(() => {
         setTimeout(() => setShowButtons(true), 50);
     }, []);
+
+    useEffect(() => {
+        setSelectedText(null)
+        setIsPen(false)
+    }, [playgroundFullscreen]);
     const customTheme: monaco.editor.IStandaloneThemeData = {
         base: "vs",
         inherit: true,

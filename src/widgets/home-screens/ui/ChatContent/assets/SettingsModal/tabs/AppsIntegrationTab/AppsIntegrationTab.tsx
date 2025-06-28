@@ -18,6 +18,7 @@ const CONNECTED_APPS = [
         icon: <NotionIcon />,
         title: "Notion",
         description: "Upload Notion Docs, Sheets, Slides and other files.",
+        className: styles.appIntegration__notion,
         onDisconnectClick: () => {
             console.log("Disconnect Notion");
         },
@@ -29,9 +30,9 @@ export const AppsIntegrationTab = () => {
         <div className={styles.appIntegration}>
             <div className={styles.appIntegration__header__container}>
                 <h2 className={styles.appIntegration__header__title}>Apps integration</h2>
-                <ModalButton variant="primary">
+                <ModalButton className={styles.appIntegration__header__button} variant="primary">
                     <PlusSquareIcon />
-                    <span>Connect Applications</span>
+                    Connect Applications
                 </ModalButton>
             </div>
             <div className={styles.appIntegration__contentWrapper}>

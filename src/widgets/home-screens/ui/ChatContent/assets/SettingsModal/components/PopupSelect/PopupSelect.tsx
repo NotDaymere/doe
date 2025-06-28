@@ -139,7 +139,7 @@ export const PopupSelect = ({ options, value, onChange }: PopupSelectProps) => {
                                     selected === option.value &&
                                         styles["popupSelect__menu__item--active"]
                                 )}
-                                onClick={() => setSelected(option.value)}
+                                onClick={() => handleChange(option.value)}
                             >
                                 {option.label}
                             </button>

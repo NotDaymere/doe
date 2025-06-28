@@ -35,6 +35,7 @@ import { ChatMessage } from "../ChatMessage";
 import classNames from "classnames";
 import MagicIcon from "src/shared/icons/Magic.icon";
 import QuickSearch from "../QuickSearch";
+import { MAX_MESSAGES_LIMIT } from "../ChatLayout";
 
 interface Props {
     editMsgMode: {
@@ -63,6 +64,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
         getNoPlayground,
     } = useChatStore();
     const { talkModeActive, isSideBarOpen } = useAppStore();
+    const { messagesCount } = useChatStore();
     const [showScrollDownBtn, setShowScrollDownBtn] = React.useState(false);
     const dialogRefs = React.useRef<(HTMLDivElement | null)[]>([]);
 
@@ -239,7 +241,7 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                         chatRef={chatRef}
                     />
                 )}
-                {!isCurrentBranchOpen && (
+                {messagesCount > 0 && !isCurrentBranchOpen && (
                     <div
                         className={
                             getOpenSavedPlaygrounds().length <= 0 && !getNoPlayground().open
@@ -247,8 +249,8 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                                     ? css.logoWrapper
                                     : css.logoWrapperSideBarOpen
                                 : !isSideBarOpen
-                                  ? css.logoWrapperPlaygroundOpen
-                                  : css.logoWrapperPlaygroundAndSideBarOpen
+                                    ? css.logoWrapperPlaygroundOpen
+                                    : css.logoWrapperPlaygroundAndSideBarOpen
                         }
                     >
                         {!playgroundFullscreen && (
@@ -273,9 +275,11 @@ export const ChatContent: React.FC<Props> = ({ editMsgMode, setEditMsgMode }) =>
                     </div>
                 )}
 
-                {!talkModeActive && !playgroundFullscreen && !isCurrentBranchOpen && (
-                    <Reflections />
-                )}
+                {messagesCount > 0 && messagesCount < MAX_MESSAGES_LIMIT && (
+                    !talkModeActive &&
+                    !playgroundFullscreen &&
+                    !isCurrentBranchOpen && <Reflections />)}
+
 
                 {showScrollDownBtn && <ScrollDownButton onClick={scrollToBottom} />}
 

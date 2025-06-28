@@ -13,7 +13,6 @@ import { MagicMenu, useDragFile, usePanel, usePrompt } from "../..";
 import { FileListForUpload } from "src/shared/components/FileList/FileListForUpload";
 import css from "./ChatPanel.module.less";
 import UploadIcon from "src/shared/icons/Upload.icon";
-import { testTextAndCharts } from "src/components/chat-message/mockData";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 import { useChatContext } from "../../lib/hooks/ChatContext";
@@ -38,7 +37,7 @@ import ScreenIcon from "src/shared/icons/Screen.icon";
 import { IScreenSharePopup, ShareType } from "src/shared/types/ScreenShare";
 import ScreenShareMenu from "../ShareScreen/ScreenShareMenu";
 import { Simulate } from "react-dom/test-utils";
-import reset = Simulate.reset;
+import classNames from "classnames";
 
 interface IShareScreen {
     expandedButtons: boolean;
@@ -421,6 +420,7 @@ export const ChatPanel: React.FC = () => {
         if (text.trim() === "") {
             return;
         }
+        setMessagesCount(messagesCount + 1);
 
         const userMessage: IMessage = {
             id: Date.now(),
@@ -727,37 +727,43 @@ export const ChatPanel: React.FC = () => {
                         placeholder={placeholder}
                         onMouseUp={handleTextSelection}
                     />
-                    <ScreenShareMenu
-                        isActive={shareScreenConfig.expandedButtons}
-                        type={shareScreenConfig.shareType}
-                        onConfig={(type) =>
-                            setShareScreenConfig({ ...shareScreenConfig, shareType: type })
-                        }
-                        onClickOutside={onShareScreenClickOutside}
-                    />
-                    {!shareScreenConfig.expandedButtons && (
-                        <button
-                            className={css.screenShareButton}
-                            disabled={disableButtons}
-                            onMouseEnter={(event) => {
-                                if (!event.currentTarget.disabled) {
-                                    setShareScreenConfig({
-                                        ...shareScreenConfig,
-                                        expandedButtons: true,
-                                    });
-                                }
-                            }}
-                        >
-                            <ScreenShareIcon width={16} height={16} />
-                        </button>
-                    )}
-                    {shareScreenConfig.shareType && (
-                        <ShareScreenInfo
-                            isActive={!!shareScreenConfig.shareType}
+                    <div
+                        className={classNames(css.screenShareWrapper, {
+                            [css.screenShareWrapperExpanded]: shareScreenConfig.expandedButtons,
+                        })}
+                    >
+                        <ScreenShareMenu
+                            isActive={shareScreenConfig.expandedButtons}
+                            type={shareScreenConfig.shareType}
+                            onConfig={(type) =>
+                                setShareScreenConfig({ ...shareScreenConfig, shareType: type })
+                            }
                             onClickOutside={onShareScreenClickOutside}
-                            {...SCREEN_SHARE_CONFIG[shareScreenConfig.shareType]}
                         />
-                    )}
+                        {shareScreenConfig.shareType && (
+                            <ShareScreenInfo
+                                isActive={!!shareScreenConfig.shareType}
+                                onClickOutside={onShareScreenClickOutside}
+                                {...SCREEN_SHARE_CONFIG[shareScreenConfig.shareType]}
+                            />
+                        )}
+                    </div>
+                    <button
+                        className={classNames(css.screenShareButton, {
+                            [css.screenShareButtonExpanded]: shareScreenConfig.expandedButtons,
+                        })}
+                        disabled={disableButtons}
+                        onMouseEnter={(event) => {
+                            if (!event.currentTarget.disabled) {
+                                setShareScreenConfig({
+                                    ...shareScreenConfig,
+                                    expandedButtons: true,
+                                });
+                            }
+                        }}
+                    >
+                        <ScreenShareIcon width={16} height={16} />
+                    </button>
                     <button className={css.panel_button}>
                         <MicrophoneIcon />
                     </button>

@@ -1,9 +1,7 @@
 import React from "react";
-import clsx from "clsx";
-import css from "./FavButton.module.less";
-import FavoriteIcon from "../../../../../../shared/icons/Favorite.icon";
 import { useChatStore } from "../../../../../../shared/providers";
 import { IMessage } from "../../../../../../shared/types/Message";
+import Favorite from "./Favorite";
 
 interface FavButtonProps {
     data: IMessage;
@@ -19,15 +17,6 @@ export const FavButton = ({data, className}: FavButtonProps) => {
     };
 
     return (
-        <button
-            className={clsx(
-                css.fav_button,
-                { [css.fav_button_liked]: data.isLiked },
-                className
-            )}
-            onClick={handleLike}
-        >
-            <FavoriteIcon fill="currentColor" />
-        </button>
+        <Favorite onClick={handleLike} isLiked={data.isLiked} className={className} />
     );
 }

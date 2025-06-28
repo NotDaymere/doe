@@ -1,6 +1,7 @@
 .tooltip {
     position: absolute;
     background: rgba(31, 31, 31, 0.5);
+    backdrop-filter: blur(20px);
     box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.05);
 
     color: #ffffff;
@@ -197,6 +198,8 @@
 :global(.highlight-step-20) {
     top: -150px;
     left: -450px;
+    opacity: 0;
+    animation: popIn 0.7s ease-out 1s forwards !important;
     .tooltip__arrow {
         top: 80%;
         border-color: transparent transparent transparent rgba(31, 31, 31, 0.5);

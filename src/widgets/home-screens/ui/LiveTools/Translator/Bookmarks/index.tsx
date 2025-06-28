@@ -1,50 +1,70 @@
 import MinusIcon from "src/shared/icons/Minus.icon";
 import MinimizeIcon from "src/shared/icons/Minimize.icon";
-import { FC, ReactElement, useState } from "react";
+import React, { FC, ReactElement, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import css from "./Bookmarks.module.less";
+import TranslationIcon from "../../../../../../shared/icons/Translation.icon";
+import { IBookmark } from "../../../../../../shared/types/Bookmark";
+import { ModeType } from "../../../../../../shared/types/Chat";
+import { useChatStore } from "../../../../../../shared/providers";
 
 interface IProps {
-    icon: ReactElement;
-    title: string;
-    bookmark: string;
+    icon?: ReactElement;
+    title?: string;
+    bookmark?: string;
     isActive: boolean;
     setIsActive: (value: boolean) => void;
+    mode?: ModeType;
 }
 
-const Bookmarks: FC<IProps> = ({ icon, title, bookmark, isActive, setIsActive }) => {
-    const [close, setClose] = useState(false);
+type AnimationState = "enter" | "visible" | "exit";
+
+const Bookmarks: FC<IProps> = ({ isActive, setIsActive }) => {
+    const [animationState, setAnimationState] = useState<AnimationState>("enter");
+    const ref = useRef<HTMLDivElement>(null);
+    const {savedBookmarks, deleteBookmark} = useChatStore();
+
+    useEffect(() => {
+        if (isActive) {
+            setAnimationState("visible");
+        }
+    }, [isActive]);
+
+    const handleClose = () => {
+        setAnimationState("exit");
+        setTimeout(() => {
+            setIsActive(false);
+        }, 300);
+    };
+
+    if (!isActive && animationState === "enter") return null;
 
     return (
         <div
-            className={classNames(css.bookmarks, {
-                [css.bookmarksShow]: isActive,
-                [css.bookmarksClose]: close,
-            })}
+            ref={ref}
+            className={classNames(css.bookmarks, css[animationState])}
         >
-            <div className={classNames(css.bookmarkHeader, { [css.bookmarkHeaderShow]: isActive })}>
-                <div className={css.bookmarkTitle}>
-                    {icon}
-                    <span>{title}</span>
+            <div className={css.bookmarkItem}>
+                <div className={css.bookmarkHeader}>
+                    <div className={css.bookmarkTitle}>
+                        <TranslationIcon width={24} height={17} className={css.icon} />
+                        <span>Bookmarked Translations</span>
+                    </div>
+                    <div className={css.minimizeButton}>
+                        <MinimizeIcon width={12} height={12} onClick={handleClose} />
+                    </div>
                 </div>
-                <div className={css.minimizeButton}>
-                    <MinimizeIcon
-                        width={12}
-                        height={12}
-                        onClick={() => {
-                            setClose(true);
-                            setTimeout(() => setIsActive(false), 300);
-                        }}
-                    />
+                <div  className={css.bookmarkWrapper}>
+
+                {savedBookmarks.map(({ id, title }) => (
+
+                        <div key={id} className={css.bookmark}>
+                            <span>{title}</span>
+                            <MinusIcon width={12} height={2} className={css.removeButton}  onClick={() => deleteBookmark(id)}/>
+                        </div>
+            ))}
                 </div>
-            </div>
-            <div
-                className={classNames(css.bookmarkWrapper, { [css.bookmarkContentShow]: isActive })}
-            >
-                <div className={classNames(css.bookmark, { [css.bookmarkShow]: isActive })}>
-                    <span>{bookmark}</span>
-                    <MinusIcon width={12} height={2} className={css.removeButton} />
-                </div>
+
             </div>
         </div>
     );

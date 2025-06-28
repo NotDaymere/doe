@@ -133,6 +133,33 @@
     height: 1px;
     background: var(--var-102);
 }
+
+.history-playground-plus {
+  position: relative;
+  width: 10px;
+  height: 10px;
+
+  .horizontal, .vertical {
+    position: absolute;
+    background: var(--var-102);
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  .horizontal {
+    height: 1px;
+    width: 10px;
+    top: 4px;
+  }
+
+  .vertical {
+    width: 1px;
+    height: 10px;
+    top: 0;
+  }
+}
+
 .history-playground-content {
     display: flex;
     flex-direction: row;

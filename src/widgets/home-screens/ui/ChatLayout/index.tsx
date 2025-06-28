@@ -89,7 +89,11 @@ export const ChatLayout: React.FC = () => {
                                     : css.layout_sidebar
                             }
                         >
-                            <Sidebar />
+                            {messagesCount > 0 && messagesCount < MAX_MESSAGES_LIMIT && (
+                                <div className={css.layout_sidebar}>
+                                    <Sidebar />
+                                </div>
+                            )}
                         </div>
                     )}
                     <div

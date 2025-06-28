@@ -1,27 +1,30 @@
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import "./AddChartsAndWidgets.less";
 import { Page } from "../widgetAndChart/Enums/Page.enum";
 import { eventEmitter } from "../widgetAndChart/Utils/eventEmitter";
 import Draggable from "react-draggable";
 
+import CloseIcon from "src/shared/icons/Close.icon";
+import { CrossIcon } from "src/shared/icons/CrossIcon";
 function AddChartsAndWidgets() {
-  const [isVisible, setIsVisible] = useState(true);
-  const nodeRef = useRef<HTMLDivElement>(null);
+    const [isVisible, setIsVisible] = useState(true);
 
-  
-  const closeModal = () => { 
-    setIsVisible(false);
-  };
+    const nodeRef = useRef<HTMLDivElement>(null);
 
-  
-  if (!isVisible) return null;
+    const closeModal = () => {
+        setIsVisible(false);
 
-  const handleOpenWindow = (page: string) => {
-    
-   
-    eventEmitter.emit("openChartWidgets", { page });
-    setIsVisible(false);
-  };
+      };
+
+    if (!isVisible) return null;
+
+
+    const handleOpenWindow = (page: string) => {
+        console.log("Opening ChartWidgetsWindow with page:", page);
+        eventEmitter.emit("openChartWidgets", { page });
+        setIsVisible(false);
+
+      };
 
   
   return (  
@@ -30,6 +33,7 @@ function AddChartsAndWidgets() {
    
       <div className="modalHead drag-handle">    
         <p>Charts and widgets</p>
+
         <button className="closeBtn" onClick={closeModal}>
           <img src="/img/icons/close.svg" alt="Close" />
         </button>
@@ -39,15 +43,17 @@ function AddChartsAndWidgets() {
         <div
           className="addWidget"
     
+
           onClick={() => handleOpenWindow(Page.NEW_WIDGET)}
         >
           <div className="dottedbg">
-           
-           
+
+
             <div className="flex">
               <button>
                 <div>
                   <img src="/img/icons/mirro.svg" alt="Mirro" />
+
                 </div>
               </button>
  
@@ -57,6 +63,7 @@ function AddChartsAndWidgets() {
    
                 </div>
               </button>
+
               <button>
                 <div>
                   <img src="/img/icons/google.svg" alt="Google" />
@@ -66,6 +73,7 @@ function AddChartsAndWidgets() {
             </div>
           
             <p>Add Widget</p>
+
           </div>
         </div>
         <div
@@ -75,6 +83,7 @@ function AddChartsAndWidgets() {
         >
  
       
+
           <div className="linebg">
             <div className="flex">
               <img src="/img/icons/chart_icon.svg" alt="Chart" />
@@ -90,4 +99,5 @@ function AddChartsAndWidgets() {
     </Draggable>
   );
 }
+
 export default AddChartsAndWidgets;

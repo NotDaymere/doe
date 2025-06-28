@@ -13,6 +13,12 @@ import { TableSelectedAreaType } from "../../../widgets/home-screens/lib/enums/T
 
 import { ChatTagsEnum } from "../../enums/ChatTagsEnum";
 import { IChat } from "../../types/Chat";
+import { IBookmark } from "../../types/Bookmark";
+import { IRecording } from "../../types/Recording";
+import {
+    TEXT_TO_TRANSLATE_PART,
+    VOICE_TEXT_TO_TRANSLATE_PART,
+} from "../../../widgets/home-screens/ui/LiveTools/MockData";
 
 const initialMessageNodeMap = (initialMessages: IMessage[]): Record<string, IMessageNode> => {
     const messageNodeMap: Record<string, IMessageNode> = {
@@ -297,6 +303,22 @@ export interface ChatState {
     getChatsByTags: () => Record<string, IChat[]>;
 
     initChat: (messages: IMessage[]) => void;
+
+    savedBookmarks: IBookmark[];
+    setSavedBookmarks: (savedBookmarks: IBookmark[]) => void;
+    addBookmark: (bookmark: IBookmark) => void;
+    deleteBookmark: (id: number) => void;
+    selectedBookmark: IBookmark;
+    setSelectedBookmark: (selectedBookmark: IBookmark) => void;
+
+
+    savedRecordings: IRecording[];
+    setSavedRecordings: (savedRecordings: IRecording[]) => void;
+    addRecording: (recording: IRecording) => void;
+    deleteRecording: (id: number) => void;
+    selectedRecording: IRecording;
+    setSelectedRecording: (selectedRecording: IRecording) => void;
+
 }
 
 export const useChatStore = create<ChatState>()((set, get) => ({
@@ -1095,4 +1117,76 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     setMode: (mode) => set(() => ({ mode })),
     setDisableButtons: (disableButtons) => set(() => ({ disableButtons })),
     setIsSharingActive: (isSharingActive) => set(() => ({ isSharingActive })),
+
+    savedBookmarks: [],
+    selectedBookmark: {
+        id: 0,
+        text: TEXT_TO_TRANSLATE_PART,
+        title: 'Bookmarked Translations',
+    },
+    setSelectedBookmark: (selectedBookmark) => set({ selectedBookmark }),
+
+    setSavedBookmarks: (savedBookmarks) => set(() => ({ savedBookmarks })),
+
+
+    addBookmark: (bookmark) =>
+        set((state) => {
+            const lastId = state.savedBookmarks.length > 0
+                ? Math.max(...state.savedBookmarks.map(b => b.id))
+                : 0;
+
+            const newBookmark = {
+                ...bookmark,
+                id: lastId + 1,
+            };
+
+            return {
+                selectedBookmark: newBookmark,
+                savedBookmarks: [...state.savedBookmarks, newBookmark],
+            };
+        }),
+
+    deleteBookmark: (id) =>
+        set((state) => ({
+            savedBookmarks: state.savedBookmarks.filter(
+                (bookmark) => bookmark.id !== id
+            ),
+        })),
+
+    savedRecordings: [],
+    selectedRecording: {
+        id: 0,
+        text: VOICE_TEXT_TO_TRANSLATE_PART,
+        title: "Recordings",
+    },
+
+    setSelectedRecording: (selectedRecording) => set({ selectedRecording }),
+
+    setSavedRecordings: (savedRecordings) => set(() => ({ savedRecordings })),
+
+    addRecording: (recording) =>
+    set((state) => {
+        const lastId = state.savedRecordings.length > 0
+            ? Math.max(...state.savedRecordings.map(r => r.id))
+            : 0;
+
+        const newRecording = {
+            ...recording,
+            id: lastId + 1,
+        };
+
+        return {
+            selectedRecording: newRecording,
+            savedRecordings: [...state.savedRecordings, newRecording],
+        };
+    }),
+
+    deleteRecording: (id) =>
+        set((state) => ({
+            savedRecordings: state.savedRecordings.filter(
+                (recording) => recording.id !== id
+            ),
+        })),
 }));
+
+
