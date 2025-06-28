@@ -1,5 +1,3 @@
-
-
 import { useRef, useState, useEffect } from "react"
 import { useChartWidgets } from "../../Window/ChartWidgetsWindow"
 import "./DrawingModal.less"
@@ -15,35 +13,37 @@ function DrawingModal({ id }: any) {
     if (id) {
       const savedDrawings = JSON.parse(localStorage.getItem("drawings") || "[]")
       const foundDrawing = savedDrawings.find((drawing) => drawing.id === id)
+    
       if (foundDrawing) {
         setDrawingData(foundDrawing.drawingData)
         console.log("Loaded drawing:", foundDrawing)
       }
+    
     }
   }, [id])
 
   const handleSave = () => {
      
-    // First, trigger the save in the canvas component
-    // The actual data will be updated through the state setters passed to the child
+    
+    
     const canvasRef = document.getElementById("save-canvas-button")
     if (canvasRef) {
 
 
-      // Simulate a click on the canvas save button to ensure data is updated
+      
       canvasRef.click()
      
-       setTimeout(() => {
-
-        // Close the modal
+     
+      setTimeout(() => { 
         setPage(prevPage)
         setFullWindow(false)
-      }, 10) // Small delay to ensure state is updated
+      }, 10) 
     } else {
       console.error("Save canvas button not found")
     }
   }
 
+ 
   return (
     <Draggable nodeRef={nodeRef} handle=".drag-handle">
       <div className="modalDrawing" ref={nodeRef}>
@@ -53,6 +53,7 @@ function DrawingModal({ id }: any) {
             <button
               className="cancelBtn"
               onClick={() => {
+      
                 setPage(prevPage)
                 setFullWindow(false)
               }}
@@ -62,7 +63,9 @@ function DrawingModal({ id }: any) {
             <button className="saveBtn" onClick={handleSave}>
               <img src="/img/icons/coge.svg" alt="Settings" />
               <p>Save Changes</p>
+      
             </button>
+       
           </div>
         </div>
         <div className="canvas">
@@ -70,8 +73,10 @@ function DrawingModal({ id }: any) {
         </div>
       </div>
     </Draggable>
-  )
+  
+)
 }
 
-export default DrawingModal
 
+
+export default DrawingModal

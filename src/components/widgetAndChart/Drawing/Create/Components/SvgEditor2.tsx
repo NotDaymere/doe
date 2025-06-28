@@ -3,22 +3,27 @@
 import { useEffect, useRef, useState } from "react";
 import * as fabric from "fabric";
 import "./Editor.less";
+
 import DrawingToolButton from "src/components/widgetAndChart/Component/DrawingToolButton/DrawingToolButton";
 
 const FabricCanvasWindow = ({ drawingData, id }) => {
     const canvasRef = useRef(null);
+   
     const fabricCanvas = useRef(null);
     const [isPen, setIsPen] = useState(true);
     const [isDrawingMode, setIsDrawingMode] = useState(false);
     const [isTextFormat, setIsTextFormat] = useState(false);
+   
     const [isDrawingFormat, setIsDrawingFormat] = useState(false);
     const [showPaintBox, setShowPaintBox] = useState(false);
     const fontSizes = [8, 12, 16, 32]; // Font sizes to toggle through
     const indentAmount = 20;
+   
     const [showPaintDrawingBox, setShowPaintDrawingBox] = useState(false);
     const [showStrokeBox, setShowStrokeBox] = useState(false);
     const [showOpacityBox, setShowOpacityBox] = useState(false);
     const [isEraserMode, setIsEraserMode] = useState(false);
+   
     const [strokeWidth, setStrokeWidth] = useState(1);
     const [opacityValue, setOpacityValue] = useState(100);
     const [showMoreTools, setShowMoreTools] = useState(false);
@@ -28,6 +33,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     const lassoPoints = useRef([]);
     const lassoPath = useRef(null);
 
+   
     const resetToolbar = () => {
         setIsTextFormat(false);
         setIsDrawingFormat(false);
@@ -37,6 +43,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         setShowOpacityBox(false);
         setShowMoreTools(false);
         setActiveTool("");
+   
     };
 
     useEffect(() => {
@@ -46,6 +53,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             height: 350,
             backgroundColor: "transparent",
             isDrawingMode: false,
+   
         });
 
         console.log("Drawing data loaded:", drawingData);
@@ -55,6 +63,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             fabricCanvas.current.loadFromJSON(drawingData, () => {
                 requestAnimationFrame(() => {
                     fabricCanvas.current.renderAll();
+   
                 });
             });
             // enableDrawingMode();
@@ -64,6 +73,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
         // Add event listener for delete key
         const handleKeyDown = (event) => {
+   
             if (event.key === "Delete" || event.key === "Backspace") {
                 const activeObject = fabricCanvas.current.getActiveObject();
                 if (activeObject) {
@@ -73,6 +83,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             }
         };
 
+     
         // Add event listener for text deselection
         const handleSelectionCleared = () => {
             resetToolbar();
@@ -82,6 +93,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         const handleMouseDown = (event) => {
             const activeObject = fabricCanvas.current.getActiveObject();
             if (!activeObject || activeObject.type !== "i-text") {
+     
                 resetToolbar();
             }
         };
@@ -91,10 +103,12 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         fabricCanvas.current.on("mouse:down", handleMouseDown);
 
         return () => {
+     
             window.removeEventListener("keydown", handleKeyDown);
             if (fabricCanvas.current) {
                 fabricCanvas.current.off("selection:cleared", handleSelectionCleared);
                 fabricCanvas.current.off("mouse:down", handleMouseDown);
+     
                 fabricCanvas.current.dispose(); // Cleanup on unmount
             }
         };
@@ -109,6 +123,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
             const savedDrawings = JSON.parse(localStorage.getItem("drawings") || "[]");
             // Create a new drawing object or update existing one
+     
             const newDrawing = {
                 id: `Drawing_${new Date().toISOString()}`, // Use existing ID or create new one
                 drawingData: jsonData,
@@ -118,6 +133,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             // If editing existing drawing, replace it; otherwise add new
             let updatedDrawings;
             if (id) {
+     
                 updatedDrawings = savedDrawings.map((drawing) =>
                     drawing.id === id ? newDrawing : drawing
                 );
@@ -127,6 +143,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
             localStorage.setItem("drawings", JSON.stringify(updatedDrawings));
             console.log("Saved drawing:", newDrawing);
+     
         }
     };
 
@@ -136,6 +153,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
     const enableDrawingMode = (color = drawingcolor, width = strokeWidth) => {
         setIsDrawingMode(true);
+     
         fabricCanvas.current.isDrawingMode = true;
         fabricCanvas.current.freeDrawingBrush = new fabric.PencilBrush(fabricCanvas.current);
         fabricCanvas.current.freeDrawingBrush.color = color;
@@ -145,6 +163,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
     const disableDrawingMode = () => {
         setIsDrawingMode(false);
+     
         fabricCanvas.current.isDrawingMode = false;
     };
     const toggleSelectionMode = (toolName) => {
@@ -164,6 +183,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         if (fabricCanvas.current) {
             fabricCanvas.current.selection = false;
             fabricCanvas.current.defaultCursor = "default";
+     
             fabricCanvas.current.hoverCursor = "default";
 
             // Make sure all objects are selectable
@@ -173,6 +193,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         }
     };
 
+    
     const toggleEraserMode = (toolName) => {
         setActiveTool(toolName);
         setIsEraserMode((prev) => !prev);
@@ -182,14 +203,17 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         if (!fabricCanvas.current) return;
 
         const handleObjectClick = (event) => {
+    
             if (isEraserMode && event.target) {
                 fabricCanvas.current.remove(event.target);
                 fabricCanvas.current.renderAll();
             }
+    
         };
 
         fabricCanvas.current.on("mouse:down", handleObjectClick);
 
+    
         return () => {
             fabricCanvas.current.off("mouse:down", handleObjectClick);
         };
@@ -199,6 +223,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         disableDrawingMode();
         setActiveTool(toolName);
         let shapeObject;
+    
         switch (shape) {
             case "circle":
                 shapeObject = new fabric.Circle({ radius: 30, fill: "blue", left: 100, top: 100 });
@@ -208,6 +233,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                     width: 60,
                     height: 40,
                     fill: "green",
+    
                     left: 150,
                     top: 150,
                 });
@@ -217,6 +243,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                     width: 60,
                     height: 50,
                     fill: "red",
+    
                     left: 200,
                     top: 200,
                 });
@@ -226,6 +253,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         }
         fabricCanvas.current.add(shapeObject);
         fabricCanvas.current.renderAll();
+    
     };
 
     // Function to add text
@@ -235,6 +263,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             top: 150,
             fontSize: 16,
             fill: "black",
+    
             selectable: true,
         });
         fabricCanvas.current.add(text);
@@ -244,6 +273,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
     // Function to get the selected text object
     const getSelectedTextObject = () => {
+    
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject && activeObject.type === "i-text") {
             return activeObject;
@@ -253,6 +283,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     };
 
     // Function to toggle styles for selected text range
+    
     const toggleTextStyle = (style, value) => {
         const text = getSelectedTextObject();
         if (text) {
@@ -262,6 +293,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             }
             fabricCanvas.current.renderAll();
         }
+    
     };
 
     // Function to toggle font size
@@ -271,20 +303,22 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             const currentSize = text.fontSize;
             const nextSize = fontSizes[(fontSizes.indexOf(currentSize) + 1) % fontSizes.length];
             text.set("fontSize", nextSize);
+    
             fabricCanvas.current.renderAll();
         }
     };
 
-    // Function to apply Superscript
+    
     const toggleSuperscript = () => {
         const text = getSelectedTextObject();
         if (text) {
             const currentStyles = text.getSelectionStyles();
+    
             const isSuperscript = currentStyles.fontSize && currentStyles.fontSize < text.fontSize;
-
             text.setSelectionStyles({
                 fontSize: isSuperscript ? text.fontSize : text.fontSize * 0.7,
                 deltaY: isSuperscript ? 0 : -text.fontSize * 0.3,
+  
             });
             fabricCanvas.current.renderAll();
         }
@@ -299,6 +333,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
             text.setSelectionStyles({
                 fontSize: isSubscript ? text.fontSize : text.fontSize * 0.7,
+  
                 deltaY: isSubscript ? 0 : text.fontSize * 0.3,
             });
             fabricCanvas.current.renderAll();
@@ -308,6 +343,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     // Function to add a hyperlink
     const addHyperlink = () => {
         const text = getSelectedTextObject();
+  
         if (text) {
             const url = prompt("Enter the URL for the link:");
             if (url) {
@@ -317,6 +353,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                     link: url, // Store link metadata
                 });
 
+  
                 // Make the link clickable
                 fabricCanvas.current.on("mouse:down", (event) => {
                     const clickedObject = event.target;
@@ -326,6 +363,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                             window.open(selectionStyles.link, "_blank");
                         }
                     }
+  
                 });
 
                 fabricCanvas.current.renderAll();
@@ -335,6 +373,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
     const changeColor = (color) => {
         const activeObject = fabricCanvas.current.getActiveObject();
+  
         if (activeObject) {
             activeObject.set("fill", color);
             fabricCanvas.current.renderAll();
@@ -344,6 +383,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     const changeColorDrawing = (color) => {
         setDrawingColor(color);
 
+  
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject) {
             activeObject.set("fill", color);
@@ -352,7 +392,8 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         enableDrawingMode(color);
     };
 
-    // Function to add a quotation to the canvas
+    
+  
     const addQuote = () => {
         const quote = new fabric.IText('"Your quote here"', {
             left: 100,
@@ -362,22 +403,27 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             fontStyle: "italic",
             selectable: true,
         });
+    
         fabricCanvas.current.add(quote);
         fabricCanvas.current.setActiveObject(quote);
         fabricCanvas.current.renderAll();
     };
+    
     const toggleTexformating = (toolName) => {
         setActiveTool(toolName);
         setIsEraserMode(false);
         setIsTextFormat(!isTextFormat);
+    
         setIsDrawingFormat(false);
 
         addText();
         disableDrawingMode();
+    
     };
 
     const toggleDrawingformating = (toolName) => {
         setActiveTool(toolName);
+    
         setIsTextFormat(false);
         setIsDrawingFormat(!isDrawingFormat);
         enableDrawingMode();
@@ -387,6 +433,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     const changeStrokeWidth = (width) => {
         setStrokeWidth(width);
         enableDrawingMode();
+    
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject) {
             activeObject.set("strokeWidth", width);
@@ -396,6 +443,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     };
 
     const changeOpacity = (opacity) => {
+    
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject) {
             activeObject.set("opacity", Math.max(0.1, opacity / 100));
@@ -405,8 +453,8 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
     // Set up lasso selection
     useEffect(() => {
+    
         if (!fabricCanvas.current) return;
-
         const canvas = fabricCanvas.current;
 
         // Remove any existing event handlers to avoid duplicates
@@ -415,6 +463,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         canvas.off("mouse:up");
 
         // Handle mouse down for lasso selection
+   
         const handleMouseDown = (opt) => {
             // Only proceed if lasso tool is active
             if (activeTool !== "lasso") {
@@ -434,6 +483,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             // Store the first point
             lassoPoints.current.push({ x: pointer.x, y: pointer.y });
 
+   
             // Create a new path for the lasso
             lassoPath.current = new fabric.Path(`M ${pointer.x} ${pointer.y}`, {
                 strokeWidth: 2,
@@ -443,6 +493,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                 selectable: false,
                 evented: false,
                 objectCaching: false,
+   
             });
 
             canvas.add(lassoPath.current);
@@ -462,14 +513,17 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             if (lassoPath.current) {
                 lassoPath.current.path.push(["L", pointer.x, pointer.y]);
                 lassoPath.current.setCoords();
+   
                 canvas.renderAll();
             }
         };
 
+   
         // Handle mouse up for lasso selection
         const handleMouseUp = () => {
             if (!isLassoDrawing.current || activeTool !== "lasso") return;
 
+   
             isLassoDrawing.current = false;
 
             // Close the path
@@ -494,13 +548,14 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         };
 
         const selectObjectsInLasso = () => {
-            // Deselect all objects
+           
             canvas.discardActiveObject();
 
-            // Check each object if it's inside the lasso
+           
             const selectedObjects = [];
+   
             canvas.forEachObject((obj) => {
-                // Skip the lasso path itself
+               
                 if (obj === lassoPath.current) return;
 
                 if (isObjectInLasso(obj)) {
@@ -508,6 +563,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                 }
             });
 
+   
             if (selectedObjects.length > 0) {
                 // Create a selection of multiple objects
                 const selection = new fabric.ActiveSelection(selectedObjects, {
@@ -517,6 +573,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             }
 
             canvas.requestRenderAll();
+   
         };
 
         const isObjectInLasso = (obj) => {
@@ -526,6 +583,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             // Check multiple points of the object (center and corners)
             const points = [
                 // Center
+   
                 {
                     x: objBounds.left + objBounds.width / 2,
                     y: objBounds.top + objBounds.height / 2,
@@ -535,6 +593,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                 { x: objBounds.left + objBounds.width, y: objBounds.top },
                 { x: objBounds.left, y: objBounds.top + objBounds.height },
                 { x: objBounds.left + objBounds.width, y: objBounds.top + objBounds.height },
+   
             ];
 
             // If any point is inside the polygon, consider the object selected
@@ -544,22 +603,27 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                 }
             }
 
+   
             return false;
         };
 
         const isPointInPolygon = (point) => {
+   
             const polygon = lassoPoints.current;
             if (!polygon || polygon.length < 3) return false;
 
             // Ray casting algorithm
+   
             let inside = false;
 
             for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
                 const xi = polygon[i].x;
+   
                 const yi = polygon[i].y;
                 const xj = polygon[j].x;
                 const yj = polygon[j].y;
 
+   
                 const intersect =
                     yi > point.y !== yj > point.y &&
                     point.x < ((xj - xi) * (point.y - yi)) / (yj - yi) + xi;
@@ -579,6 +643,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
         return () => {
             canvas.off("mouse:down", handleMouseDown);
             canvas.off("mouse:move", handleMouseMove);
+   
             canvas.off("mouse:up", handleMouseUp);
         };
     }, [activeTool, isEraserMode]);
@@ -588,6 +653,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
             <div>
                 <canvas ref={canvasRef} />
                 <div style={{ marginTop: "10px" }}>
+   
                     <button
                         id="save-canvas-button"
                         onClick={saveDrawingData}
@@ -607,6 +673,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                     onClick={() => toggleSelectionMode("moveArrow")}
                     isActive={activeTool === "moveArrow"}
                 />
+   
                 <hr />
 
                 {!isTextFormat && (
@@ -616,6 +683,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                         isActive={activeTool === "textformat"}
                     />
                 )}
+   
                 {isTextFormat && (
                     <>
                         <div className="style textformating">
@@ -625,6 +693,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                             />
                             <DrawingToolButton
                                 icon="/img/drawingEditorIcons/italic.svg"
+   
                                 onClick={() => toggleTextStyle("fontStyle", "italic")}
                             />
                             <DrawingToolButton
@@ -634,15 +703,18 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                             <DrawingToolButton
                                 icon="/img/drawingEditorIcons/strike.svg"
                                 onClick={() => toggleTextStyle("linethrough", true)}
-                            />
+   
+   />
                         </div>
                         <hr />
 
+   
                         <div>
                             <DrawingToolButton
                                 icon="/img/drawingEditorIcons/edit.svg"
                                 onClick={toggleFontSize}
-                            />
+   
+   />
                         </div>
                         <hr />
 
@@ -651,6 +723,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                 icon="/img/drawingEditorIcons/edit2.svg"
                                 onClick={togglePen}
                             />
+   
                         </div>
                         <hr />
 
@@ -660,7 +733,8 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                 onClick={() => setShowPaintBox(!showPaintBox)}
                             />
                             {showPaintBox && (
-                                <div className="paintBox">
+   
+   <div className="paintBox">
                                     <button
                                         className="blue"
                                         onClick={() => changeColor("blue")}
@@ -669,6 +743,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                     <button
                                         className="green"
                                         onClick={() => changeColor("green")}
+   
                                         style={{ backgroundColor: "#8BCF16" }}
                                     ></button>
                                     <button
@@ -678,6 +753,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                     ></button>
                                 </div>
                             )}
+   
                         </div>
                         <hr />
 
@@ -687,6 +763,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                 onClick={addQuote}
                             />
                         </div>
+   
                         <hr />
 
                         <div>
@@ -706,6 +783,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                         <hr />
 
                         <div>
+   
                             <DrawingToolButton
                                 icon="/img/drawingEditorIcons/link.svg"
                                 onClick={addHyperlink}
@@ -715,6 +793,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                     </>
                 )}
 
+   
                 <div>
                     {!isDrawingFormat && (
                         <DrawingToolButton
@@ -724,22 +803,27 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                         />
                     )}
 
+   
                     {isDrawingFormat && (
                         <div className="drawingformating">
                             <div>
                                 <DrawingToolButton
-                                    icon="/img/drawingEditorIcons/color.svg"
+   
+   icon="/img/drawingEditorIcons/color.svg"
                                     onClick={() => {
                                         setShowPaintDrawingBox(!showPaintDrawingBox);
                                         setShowOpacityBox(false);
+   
                                         setShowStrokeBox(false);
                                     }}
                                 />
                                 {showPaintDrawingBox && (
-                                    <div className="paintBox">
+   
+   <div className="paintBox">
                                         <button
                                             className="blue"
                                             onClick={() => changeColorDrawing("blue")}
+   
                                             style={{ backgroundColor: "#28ABFB" }}
                                         ></button>
                                         <button
@@ -749,6 +833,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                         ></button>
                                         <button
                                             className="red"
+   
                                             onClick={() => changeColorDrawing("red")}
                                             style={{ backgroundColor: "#FF5F5F" }}
                                         ></button>
@@ -758,6 +843,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                             <hr />
 
                             <div>
+   
                                 <DrawingToolButton
                                     icon="/img/drawingEditorIcons/stroke.svg"
                                     onClick={() => {
@@ -767,6 +853,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                 />
                                 {showStrokeBox && (
                                     <div className="strokeBox">
+   
                                         <img src="/img/drawingEditorIcons/stroke.svg" />
                                         <input
                                             value={strokeWidth}
@@ -776,6 +863,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                                 const val = Number.parseInt(e.target.value, 10);
                                                 setStrokeWidth(val);
                                                 changeStrokeWidth(val);
+   
                                             }}
                                         />
                                     </div>
@@ -785,7 +873,8 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
                             <div>
                                 <DrawingToolButton
-                                    icon="/img/drawingEditorIcons/opacity.svg"
+   
+   icon="/img/drawingEditorIcons/opacity.svg"
                                     onClick={() => {
                                         setShowOpacityBox(!showOpacityBox);
                                         setShowStrokeBox(false);
@@ -794,6 +883,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                 {showOpacityBox && (
                                     <div className="opacityBox">
                                         <img src="/img/drawingEditorIcons/opacity.svg" />
+   
                                         <input
                                             type="number"
                                             value={opacityValue}
@@ -803,6 +893,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                                                 const val = Number.parseInt(e.target.value, 10);
                                                 setOpacityValue(val);
                                                 changeOpacity(val);
+   
                                             }}
                                         />
                                     </div>
@@ -817,18 +908,22 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                     <div>
                         <DrawingToolButton
                             icon="/img/drawingEditorIcons/shape.svg"
+   
                             onClick={() => addShape("rectangle", "shape")}
                             isActive={activeTool === "shape"}
                         />
                     </div>
+   
                     <hr />
                     <div>
                         <DrawingToolButton
                             icon="/img/drawingEditorIcons/lasso.svg"
+   
                             onClick={() => toggleLassoSelection("lasso")}
                             isActive={activeTool === "lasso"}
                         />
                     </div>
+   
                     <hr />
                     <div>
                         <DrawingToolButton
@@ -838,6 +933,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
                         />
                     </div>
                     <hr />
+   
                 </div>
             </div>
         </>
