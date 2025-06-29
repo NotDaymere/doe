@@ -8,13 +8,14 @@ import { MOCKCOMMENTS } from "./Mock";
 import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
 import CommentContainer from "./Components/Comment Container/CommentContainer";
 import LinesIcon from "src/shared/icons/LinesIcon";
+
 import clsx from "clsx";
 import { Close } from "src/shared/icons/Close";
 import SearchIcon from "src/shared/icons/SearchIcon";
 
+
 function Comments() {
     const { isOpen, comment, setComment, closeComments } = useCommentWindowStore();
-
     const [showFilter, setShowFilter] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
 
@@ -22,8 +23,9 @@ function Comments() {
     const filterContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+       
         function handleClickOutside(event: MouseEvent) {
-            // If filter is not shown, no need to do anything
+          
             if (!showFilter) return;
 
             // Check if the click is outside both the filter button and filter container
@@ -31,6 +33,7 @@ function Comments() {
                 filterContainerRef.current &&
                 !filterContainerRef.current.contains(event.target as Node) &&
                 filterButtonRef.current &&
+        
                 !filterButtonRef.current.contains(event.target as Node);
 
             // Close the filter if clicked outside
@@ -40,6 +43,7 @@ function Comments() {
         }
 
         // Add event listener
+        
         document.addEventListener("mousedown", handleClickOutside);
 
         // Clean up the event listener
@@ -59,6 +63,7 @@ function Comments() {
         >
             <div className="header">
                 <div className="search">
+        
                     <SearchIcon />
 
                     <input type="text" placeholder="Search" />
@@ -68,6 +73,7 @@ function Comments() {
                     onClick={() => setShowFilter(!showFilter)}
                     className={clsx("action-button", showFilter ? "active" : "")}
                 >
+        
                     <LinesIcon />
                 </button>
                 <button
@@ -77,6 +83,7 @@ function Comments() {
                     className="action-button close"
                 >
                     <Close />
+        
                 </button>
                 {showFilter && (
                     <div ref={filterContainerRef} className="filterdiv">
@@ -86,6 +93,7 @@ function Comments() {
             </div>
 
             <div className="body">
+        
                 <div className="comments_container">
                     {comment && <CommentContainer showMenu={showMenu} setShowMenu={setShowMenu} />}
 
@@ -95,6 +103,7 @@ function Comments() {
                         })}
                     </div>
                 </div>
+        
             </div>
         </div>
     );

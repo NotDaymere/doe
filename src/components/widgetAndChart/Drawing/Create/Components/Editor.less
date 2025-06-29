@@ -3,31 +3,38 @@
     margin: auto;
     height: 42px;
     display: flex;
+ 
     align-items: center;
     justify-content: center;
     border: solid 1px var(--var-1);
     border-radius: 12px;
+ 
     gap: 4px;
     box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.05);
+
     hr {
+  
         background: var(--var-1);
         width: 1px;
         height: 30px;
         border: none;
+   
     }
-    div {
+
+    // This targets the direct div wrapper around each tool/group of tools.
+    > div {
+  
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 3px;
+      
+        position: relative; 
     }
 
     .style {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    
         gap: 0px;
-
         button {
             width: auto !important;
             padding: 0px;
@@ -36,95 +43,72 @@
                 box-shadow: none;
             }
         }
+ 
     }
 }
 
-.paintBox {
-    width: 63px;
+// A common class for all our pop-up menus
+
+.flyout-menu {
+    position: absolute;
+    z-index: 100;
+    // Position the bottom of the menu at the top of the parent anchor
+
+    bottom: calc(100% + 8px); // The 8px adds a small gap
+    // Center the menu horizontally above the button
+    left: 50%;
+    transform: translateX(-50%);
+
+    // Shared visual styles from your original code
     height: 27px;
+    padding: 8px;
     display: flex;
+
     align-items: center;
     justify-content: center;
-    border-radius: 100px;
+    gap: 6px; // A consistent gap
+    border-radius: 100px; // Pill shape
     border: solid 1px var(--var-1);
     background-color: var(--bg-general);
     box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.05);
-    position: absolute;
-    z-index: 100;
-    margin-top: -80px;
+}
+
+
+// Now the specific classes only contain styles unique to them
+.paintBox {
+    // Note: No position, margin, z-index, etc. needed here anymore.
+    // It gets all that from the .flyout-menu class.
     button {
         width: 15px;
         height: 15px;
         border-radius: 100%;
-    }
-    .blue {
-        background: #28abfb;
-    }
-    .green {
-        background: #8bcf16;
-    }
-    .red {
-        background: #ff5f5f;
-    }
-}
-.strokeBox {
-    width: 63px;
-    height: 27px;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 100px;
-    border: solid 1px var(--var-1);
-    background-color: var(--bg-general);
-    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.05);
-    position: absolute;
-    z-index: 100;
-    margin-top: -80px;
-    img {
-        width: auto;
-        height: 18px;
-        filter: grayscale(100%);
-    }
+        border: none;
 
-    input[type="number"] {
-        width: 33px;
-        height: 22px;
-        border-radius: 16px;
-        background: rgba(221, 221, 221, 0.6);
-        text-align: center;
-        font-size: 11px;
-        color: rgba(31, 31, 31, 0.8);
     }
+    .blue { background: #28abfb; }
+    .green { background: #8bcf16; }
+    .red { background: #ff5f5f; }
 }
 
+.strokeBox,
 .opacityBox {
-    width: 63px;
-    height: 27px;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 100px;
-    border: solid 1px var(--var-1);
-    background-color: var(--bg-general);
-    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.05);
-    position: absolute;
-    z-index: 100;
-    margin-top: -80px;
     img {
+
         width: auto;
         height: 18px;
         filter: grayscale(100%);
     }
-
     input[type="number"] {
         width: 33px;
         height: 22px;
         border-radius: 16px;
         background: rgba(221, 221, 221, 0.6);
+
         text-align: center;
         font-size: 11px;
         color: rgba(31, 31, 31, 0.8);
     }
+
 }
+
+.shapeBox {}

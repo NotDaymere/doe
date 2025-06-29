@@ -77,6 +77,4 @@ function DrawingModal({ id }: any) {
 )
 }
 
-
-
 export default DrawingModal
