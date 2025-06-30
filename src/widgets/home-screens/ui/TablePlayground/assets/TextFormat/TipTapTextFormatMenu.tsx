@@ -86,20 +86,23 @@ useEffect(() => {
 
   const handleClick = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
-
+   
     if (target?.dataset?.clickable === "true") {
+       
       const clickedId = target.dataset.id;
       if (clickedId) {
         openComments(clickedId); // ✅ Open your comment thread
       }
+   
     }
   
 };
-document.querySelector(".tiptap-editor")?.addEventListener("click", (e) => {
-  console.log("Target:", e.target);
-});
+// document.querySelector(".tiptap-editor")?.addEventListener("click", (e) => {
+//   console.log("Target:", e.target);
+// });
 
-  editorContainer.addEventListener("click", handleClick);
+  //editorContainer.addEventListener("click", handleClick);
+
 
   return () => {
     editorContainer.removeEventListener("click", handleClick);
@@ -188,14 +191,14 @@ document.querySelector(".tiptap-editor")?.addEventListener("click", (e) => {
     replies: [],
   });
 
-  editor.chain().focus()
-  .setMark('clickable', { id: UUID })
-  .run();
+//   editor.chain().focus()
+//   .setMark('clickable', { id: UUID })
+//   .run();
 
 setTimeout(() => {
   
-    openComments(UUID); // ✅ wait for DOM update
-}, 50);
+    openComments(UUID);
+}, 0); 
 
  
 
