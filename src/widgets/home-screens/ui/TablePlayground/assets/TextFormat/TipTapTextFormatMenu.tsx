@@ -79,15 +79,33 @@ const handleClickOnClickableText = (event: MouseEvent) => {
 
 
 useEffect(() => {
-  const handleClick = (event: MouseEvent) => handleClickOnClickableText(event);
+  const editorContainer = document.querySelector(".tiptap-editor");
 
-  document.addEventListener('mousedown', handleClick); // Use mousedown for quicker response
+  if (!editorContainer) return;
 
- 
+
+  const handleClick = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+
+    if (target?.dataset?.clickable === "true") {
+      const clickedId = target.dataset.id;
+      if (clickedId) {
+        openComments(clickedId); // ✅ Open your comment thread
+      }
+    }
+  
+};
+document.querySelector(".tiptap-editor")?.addEventListener("click", (e) => {
+  console.log("Target:", e.target);
+});
+
+  editorContainer.addEventListener("click", handleClick);
+
   return () => {
-    document.removeEventListener('mousedown', handleClick);
+    editorContainer.removeEventListener("click", handleClick);
   };
 }, []);
+
 
     const handleRemoveFormat = () => {
         if (!editor) return;
@@ -148,7 +166,7 @@ useEffect(() => {
 
   const { from, to } = editor.state.selection;
 
-  // Check if text is selected
+
   if (from === to) return;
 
   const selectedText = editor.state.doc.textBetween(from, to, "");
@@ -170,16 +188,32 @@ useEffect(() => {
     replies: [],
   });
 
-  openComments();
+  editor.chain().focus()
+  .setMark('clickable', { id: UUID })
+  .run();
+
+setTimeout(() => {
+  
+    openComments(UUID); // ✅ wait for DOM update
+}, 50);
 
  
 
 
  
   editor.chain().focus()
- 
-    .setMark('clickable', { id: UUID }) 
-   
+    .deleteRange({ from, to })
+    
+    .insertContent({
+      type: "text",
+      text: selectedText,
+      marks: [
+     
+        { type: "clickable", attrs: { id: UUID } },
+        { type: "highlight" },
+      ],
+    })
+    
     .run();
 };
 

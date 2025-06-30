@@ -22,6 +22,7 @@ import PlaygroundAction from "../PlaygroundAction/PlaygroundAction";
 import { CustomBlock } from "./assets/CustomBlock/CustomBlock";
 import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
 import {Clickable} from "src/helpers/clickable";
+import { Highlight } from "src/helpers/highlight.tiptap";
 
 
 
@@ -32,6 +33,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         containerHeight: number,
         margin = 10
     ) {
+     
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
         let { top, left } = rawPosition;
@@ -41,6 +43,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         }
         if (left < margin) {
             left = margin;
+    
         }
         if (top + containerHeight + margin > viewportHeight) {
             top = viewportHeight - containerHeight - margin;
@@ -92,15 +95,17 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         extensions: [
             StarterKit,
             Underline,
+           
             TextStyle,
             Superscript,
             Subscript,
-           
+            Highlight,
        
             Clickable,
             Color.configure({
                 types: ["textStyle"],
             }),
+        
             CustomBlock,
         ],
         content: playgroundState?.text
