@@ -33,7 +33,6 @@ export const CategorySelect = ({ category, onSelect, className }: CategorySelect
     const menuRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const handleOpenMenu = (e: React.MouseEvent) => {
-        // e.stopPropagation();
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
         setMenuState({
             active: true,
@@ -116,6 +115,7 @@ export const CategorySelect = ({ category, onSelect, className }: CategorySelect
                 >
                     <div
                         ref={menuRef}
+                        id="category-select"
                         style={{
                             top: menuState.position?.top,
                             left: menuState.position?.left,

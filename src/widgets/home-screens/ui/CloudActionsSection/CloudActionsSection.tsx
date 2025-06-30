@@ -9,36 +9,45 @@ function CloudActionsSection() {
 
     return (
         <div
-            className="text-columns-container"
+            className={"text-columns-container"}
             style={{
-                right: playgroundFullscreen ? 0 : 'default',
-                left: !playgroundFullscreen ? 0 : 'default',
+                right: playgroundFullscreen ? 0 : "default",
+                left: !playgroundFullscreen ? 0 : "default",
             }}
         >
-            <div className="text-columns-button justify-space-between"
-                 onClick={() => setPlaygroundAction({type: 'prompt'})}>
+            <div
+                className={"text-columns-button justify-space-between"}
+                onClick={() => setPlaygroundAction({ type: "prompt" })}
+            >
                 <p className={"text-columns-button-p"}>
                     Add a <span className={"text-columns-button-span"}>Prompt</span>
                 </p>
-                <button className="button-plus">
-                    <Plus className="plus-icon" />
+                <button className={"button-plus"}>
+                    <Plus className={"plus-icon"} />
                 </button>
             </div>
-            <div className="text-columns-button text-columns-border-top justify-flex-start"
-                 onClick={() => setPlaygroundAction({type: 'writing-level'})}
+            <div
+                className={"text-columns-button text-columns-border-top justify-flex-start"}
+                onClick={() => setPlaygroundAction({ type: "writing-level" })}
             >
                 <Stars />
                 <p className={"text-columns-button-p"}>
                     Change <span className={"text-columns-button-span"}>Writing Level</span>
                 </p>
             </div>
-            <div className="text-columns-button justify-flex-start text-columns-border-top">
+            <div
+                className={"text-columns-button justify-flex-start text-columns-border-top"}
+                onClick={() => setPlaygroundAction({ type: "content-length" })}
+            >
                 <Stars />
                 <p className={"text-columns-button-p"}>
                     Make <span className={"text-columns-button-span "}>Content Length</span>
                 </p>
             </div>
-            <div className="text-columns-button text-columns-border-top justify-flex-start">
+            <div
+                className={"text-columns-button text-columns-border-top justify-flex-start"}
+                onClick={() => setPlaygroundAction({ type: "change-tone" })}
+            >
                 <Stars />
                 <p className={"text-columns-button-p"}>
                     Change <span className={"text-columns-button-span"}>Tone</span>

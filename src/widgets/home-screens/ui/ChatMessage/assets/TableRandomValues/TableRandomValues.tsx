@@ -15,52 +15,43 @@ function TableRandomValues() {
         getOpenSavedPlaygroundsByType,
         closeNoPlayground,
     } = useChatStore();
-    const openTablePlayground = () => {
+    const toggleTablePlayground = () => {
+        const openPlaygrounds = getOpenSavedPlaygroundsByType("table");
+
+        // Якщо вже відкритий — закриваємо
+        if (openPlaygrounds.length > 0) {
+            const tablePlayground = openPlaygrounds[0];
+            tablePlayground.open = false;
+            updateSavedPlaygrounds(tablePlayground);
+            closeNoPlayground();
+            return;
+        }
+
+        // Інакше — відкриваємо
         closeNoPlayground();
         const oldPlayground = getSavedPlaygroundLastByType("table");
-        if (getOpenSavedPlaygrounds().length >= 2) {
-            const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
-            console.log(lastPlayground);
-            if (lastPlayground && lastPlayground.type != "table") {
-                lastPlayground.open = false;
-                updateSavedPlaygrounds(lastPlayground);
-            }
-        }
-        if (oldPlayground == null) {
+
+        if (!oldPlayground) {
             const newPlayground: IPlayground = {
                 id: null,
                 name: "Tabular random values",
                 type: "table",
                 data: null,
-                open: false,
+                open: true,
             };
-            newPlayground.open = true;
             setSavedPlaygrounds(newPlayground);
             setPlayground(newPlayground);
             return;
         }
-        if (getOpenSavedPlaygroundsByType("table").length > 0) {
-            oldPlayground.open = false;
-            updateSavedPlaygrounds(oldPlayground);
-            const newPlayground: IPlayground = {
-                id: null,
-                name: "Tabular random values",
-                type: "table",
-                data: null,
-                open: false,
-            };
-            newPlayground.open = true;
-            setSavedPlaygrounds(newPlayground);
-            setPlayground(newPlayground);
-            return;
-        } else {
-            oldPlayground.open = true;
-            updateSavedPlaygrounds(oldPlayground);
-        }
+
+        oldPlayground.open = true;
+        updateSavedPlaygrounds(oldPlayground);
+        setPlayground(oldPlayground);
     };
+
     return (
         <button
-            onClick={openTablePlayground}
+            onClick={toggleTablePlayground}
             className={`${css["table-playground-button"]} ${getOpenSavedPlaygroundsByType("table").length > 0 && css["table-playground-button-active"]}`}
         >
             <TableIcon /> Tabular Random Values

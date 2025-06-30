@@ -1,20 +1,20 @@
-import { ReactComponent as General } from "src/assets/icons/general.svg";
-import { ReactComponent as Bold } from "src/assets/icons/bold.svg";
-import { ReactComponent as Indian } from "src/assets/icons/indian.svg";
-import { ReactComponent as UnderLine } from "src/assets/icons/underlining.svg";
-import { ReactComponent as StrikeThrough } from "src/assets/icons/strikethrough.svg";
-import { ReactComponent as UpperLowerCase } from "src/assets/icons/upper-lower-case.svg";
-import { ReactComponent as PencilUnderline } from "src/assets/icons/pencil-underline.svg";
-import { ReactComponent as Paint } from "src/assets/icons/paint.svg";
-import { ReactComponent as ActivePaintIcon } from "src/assets/icons/active-paint.svg";
-import { ReactComponent as Quotes } from "src/assets/icons/quotes.svg";
-import { ReactComponent as CloudQuotes } from "src/assets/icons/cloud-quotes.svg";
-import { ReactComponent as Degree } from "src/assets/icons/degree.svg";
-import { ReactComponent as Format } from "src/assets/icons/format.svg";
-import { ReactComponent as LinkOther } from "src/assets/icons/link-other.svg";
-import { ReactComponent as Menu } from "src/assets/icons/menu.svg";
-import { ReactComponent as ActiveMenuIcon } from "src/assets/icons/active-menu.svg";
-import { ReactComponent as CardPlus } from "src/assets/icons/card-plus.svg";
+import Format from "../../../../../../shared/icons/Format";
+import General from "src/shared/icons/General"
+import Bold from "../../../../../../shared/icons/Bold";
+import Indian from "../../../../../../shared/icons/Indian";
+import Underline from "../../../../../../shared/icons/Underline";
+import StrikeThrough from "../../../../../../shared/icons/StrikeThrough";
+import UpperLowerCase from "../../../../../../shared/icons/UpperLowerCase";
+import PencilUnderline from "../../../../../../shared/icons/PencilUnderline";
+import Paint from "../../../../../../shared/icons/Paint";
+import ActivePaintIcon from "../../../../../../shared/icons/ActivePaintIcon";
+import Quotes from "../../../../../../shared/icons/Quotes";
+import CloudQuotes from "../../../../../../shared/icons/CloudQuotes";
+import Degree from "../../../../../../shared/icons/Degree";
+import LinkOther from "../../../../../../shared/icons/LinkOther";
+import Menu from "../../../../../../shared/icons/Menu";
+import ActiveMenuIcon from "../../../../../../shared/icons/ActiveMenuIcon";
+import CardPlus from "../../../../../../shared/icons/CardPlus";
 import './MonacoEditorMenu.less';
 import { Button, Flex } from "antd";
 import { useState } from "react";
@@ -199,7 +199,7 @@ function MonacoEditorMenu({ buttonPosition, isPen, editor }: TextFormatProps) {
                     <Indian />
                 </Button>
                 <Button className={'button'} onClick={applyUnderline}>
-                    <UnderLine />
+                    <Underline />
                 </Button>
                 <Button className={'button'} onClick={applyStrikeThrough}>
                     <StrikeThrough />

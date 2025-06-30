@@ -11,6 +11,7 @@ type PuzzleShapeProps = {
     isColored?: boolean;
     category?: PuzzleCategories | null;
     isPlaceholder?: boolean;
+    onClick?: (e: React.MouseEvent<SVGSVGElement>) => void;
 };
 
 export const PuzzleShape = ({
@@ -18,11 +19,13 @@ export const PuzzleShape = ({
     isColored = true,
     category,
     isPlaceholder = false,
+    onClick,
 }: PuzzleShapeProps) => {
     const puzzleProps = {
         isColored,
         category,
         isPlaceholder,
+        onClick,
     } as const;
     if (index === 0) return <LeftTopPuzzle {...puzzleProps} />;
     if (index > 0 && index < 3) return <MiddleTopPuzzle {...puzzleProps} />;

@@ -6,7 +6,7 @@ import BranchIcon from "../../../../../shared/icons/Branch.icon";
 import ThreeDotsIcon from "../../../../../shared/icons/ThreeDotsIcon";
 import { CSSTransition } from "react-transition-group";
 import AllBranchesMenu from "../../../../home-screens/ui/ChatContent/assets/AllBranchesMenu/AllBranchesMenu";
-import { useChatStore } from "../../../../../shared/providers";
+import { useChatStore, useAppStore } from "../../../../../shared/providers";
 import { TAG_META } from "../SideBarMenu";
 import ReactDOM from "react-dom";
 
@@ -16,6 +16,7 @@ interface TagsProps {
 }
 
 export const Tags = ({ isSideBarOpen, isSideBarMenuOpen }: TagsProps) => {
+    const { setIsSideBarOpen } = useAppStore();
     const { currentChat, customTagNames, getChatsByTags } = useChatStore();
 
     const [isTagsOpen, setIsTagsOpen] = React.useState(false);
@@ -51,6 +52,9 @@ export const Tags = ({ isSideBarOpen, isSideBarMenuOpen }: TagsProps) => {
                     }
                     data-active={isTagsOpen}
                     onClick={() => {
+                        if (!isSideBarOpen) {
+                            setIsSideBarOpen(true);
+                        }
                         setIsTagsOpen((prev) => !prev);
                         setSelectedTag(null);
                     }}
@@ -104,7 +108,7 @@ export const Tags = ({ isSideBarOpen, isSideBarMenuOpen }: TagsProps) => {
                                                     const branches =
                                                         chat.id === currentChat.id
                                                             ? currentChat.branches
-                                                            : (chat.branches ?? []);
+                                                            : chat.branches ?? [];
 
                                                     return (
                                                         <div key={chat.id}>

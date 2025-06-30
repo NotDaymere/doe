@@ -1,10 +1,9 @@
 import { FC, lazy } from "react";
 import { Outlet, RouteObject } from "react-router-dom";
 
-import DefaultLayout, { Loader } from "../components/layout";
+import { Loader } from "../components/layout";
 import Onboarding from "./onboarding";
 
-const Home = lazy<FC>(() => import("./home"));
 const HomeV2 = lazy<FC>(() => import("./home-v2"));
 
 const routes: RouteObject[] = [
@@ -13,13 +12,9 @@ const routes: RouteObject[] = [
         loader: () => <Loader spinning />,
         children: [
             {
-                Component: Home,
+                Component: HomeV2,
                 path: "",
                 index: true,
-            },
-            {
-                Component: HomeV2,
-                path: "v2",
             },
             {
                 Component: Onboarding,
