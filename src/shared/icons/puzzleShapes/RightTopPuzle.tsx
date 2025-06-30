@@ -9,7 +9,7 @@ import {
     withoutCategoryBorderColor,
 } from "./puzzlesParams";
 
-export const RightTopPuzzle = ({ category, isColored, isPlaceholder, ...props }: PuzzleProps) => {
+export const RightTopPuzzle = ({ category, isColored, isPlaceholder }: PuzzleProps) => {
     return (
         <svg
             width="127.000000"
@@ -17,7 +17,6 @@ export const RightTopPuzzle = ({ category, isColored, isPlaceholder, ...props }:
             viewBox="0 0 127 127"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            {...props}
         >
             <PuzzlesBorderGradients />
 

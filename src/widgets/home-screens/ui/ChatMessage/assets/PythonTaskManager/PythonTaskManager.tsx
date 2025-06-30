@@ -15,41 +15,51 @@ function PythonTaskManager() {
         getOpenSavedPlaygrounds,
         closeNoPlayground,
     } = useChatStore();
-    const toggleCodePlayground = () => {
-        const openPlaygrounds = getOpenSavedPlaygroundsByType("code");
-
-        if (openPlaygrounds.length > 0) {
-            const codePlayground = openPlaygrounds[0];
-            codePlayground.open = false;
-            updateSavedPlaygrounds(codePlayground);
-            closeNoPlayground();
-            return;
-        }
-
+    const openCodePlayground = () => {
         closeNoPlayground();
         let oldPlayground = getSavedPlaygroundLastByType("code");
-
-        if (!oldPlayground) {
+        if (getOpenSavedPlaygrounds().length >= 2) {
+            const lastPlayground = getOpenSavedPlaygrounds().at(-1) || oldPlayground;
+            if (lastPlayground && lastPlayground.type != "code") {
+                lastPlayground.open = false;
+                updateSavedPlaygrounds(lastPlayground);
+            }
+        }
+        if (oldPlayground == null) {
             const newPlayground: IPlayground = {
                 id: null,
                 name: "Python Task Manager",
                 type: "code",
                 data: null,
-                open: true,
+                open: false,
             };
+            newPlayground.open = true;
             setSavedPlaygrounds(newPlayground);
             setPlayground(newPlayground);
             return;
         }
-
-        oldPlayground.open = true;
-        updateSavedPlaygrounds(oldPlayground);
-        setPlayground(oldPlayground);
+        if (getOpenSavedPlaygroundsByType("code").length > 0) {
+            oldPlayground.open = false;
+            updateSavedPlaygrounds(oldPlayground);
+            const newPlayground: IPlayground = {
+                id: null,
+                name: "Python Task Manager",
+                type: "code",
+                data: null,
+                open: false,
+            };
+            newPlayground.open = true;
+            setSavedPlaygrounds(newPlayground);
+            setPlayground(newPlayground);
+            return;
+        } else {
+            oldPlayground.open = true;
+            updateSavedPlaygrounds(oldPlayground);
+        }
     };
-
     return (
         <button
-            onClick={toggleCodePlayground}
+            onClick={openCodePlayground}
             className={`${css["table-playground-button"]} ${getOpenSavedPlaygroundsByType("code").length > 0 && css["table-playground-button-active"]}`}
         >
             <CodeIcon /> Python Task Manager

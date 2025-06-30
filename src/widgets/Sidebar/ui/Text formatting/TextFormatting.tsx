@@ -17,36 +17,6 @@ export const TextFormatting = () => {
     const editorState = useEditorContext(editor);
     const {isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useAppStore();
     const [isSideBarTextFormattingOpen, setIsSideBarTextFormattingOpen] = React.useState(true);
-    const [isMathModeActive, setIsMathModeActive] = React.useState(false);
-
-    const handleToggleMathMode = () => {
-        setIsMathModeActive((prev) => {
-            const newState = !prev;
-
-            if (editor && !prev) {
-                const { from, to } = editor.state.selection;
-                const selectedText = editor.state.doc.textBetween(from, to);
-
-                if (selectedText) {
-                    const newText = convertCaretNotationToUnicode(selectedText);
-
-                    editor.chain().focus().insertContentAt({ from, to }, newText).run();
-                }
-            }
-
-            return newState;
-        });
-    };
-
-    function convertCaretNotationToUnicode(text: string): string {
-        return text
-            .replace(/\^2/g, '²')
-            .replace(/\^3/g, '³')
-            .replace(/\^1/g, '¹')
-            .replace(/\^0/g, '⁰');
-    }
-
-
 
     const pointerDown = (event: React.PointerEvent) => {
         event.preventDefault();
@@ -116,20 +86,17 @@ export const TextFormatting = () => {
                         </div>
                     </div>
 
-                    <div
-                        className={css.sidebar_text_formatting_action_container}
-                        onPointerDown={pointerDown}
-                        onClick={handleToggleMathMode}
-                        data-active={isMathModeActive}
-                    >
-                        <button className={css.sidebar_text_formatting_action_btn}>
+                    <div className={css.sidebar_text_formatting_action_container}
+                         onPointerDown={pointerDown}>
+                        <button
+                            className={css.sidebar_text_formatting_action_btn}
+                        >
                             <FunctionIcon fill="currentColor" width={20} height={20} />
                         </button>
                         <div className={css.sidebar_text_formatting_action_btn_tooltip}>
                             <span>Math</span><span>Mode</span>
                         </div>
                     </div>
-
 
                     <div className={css.sidebar_text_formatting_action_container}
                          onPointerDown={pointerDown}

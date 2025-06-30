@@ -2,7 +2,7 @@ import styles from "./KnowledgeView.module.less";
 import modalStyles from "../../../../SettingsModal.module.less";
 import { Folder } from "../../../../components/Folder/Folder";
 import { CreateFolder } from "../../../../components/CreateFolder/CreateFolder";
-import { File as FileComponent } from "../../../../components/File/File";
+import { File } from "../../../../components/File/File";
 import { useState } from "react";
 import classNames from "classnames";
 import { UploadArea } from "../../../../components/UploadArea/UploadArea";
@@ -70,26 +70,6 @@ export const KnowledgeView = () => {
             }),
         }));
     };
-    const renameFile = (fileId: string, newName: string = "123") => {
-        const changeName = (file: FileType) => {
-            const fileExtension = file.name.split(".").pop();
-            const newFile = new File([file], `${newName}.${fileExtension}`, {
-                type: file.type,
-                lastModified: file.lastModified,
-            });
-            return Object.assign(newFile, { id: file.id, folderId: file.folderId });
-        };
-        setData((prev) => ({
-            ...prev,
-            recentFiles: prev.recentFiles.map((file) =>
-                file.id === fileId ? changeName(file) : file
-            ),
-            folders: prev.folders.map((folder) => ({
-                ...folder,
-                files: folder.files.map((file) => (file.id === fileId ? changeName(file) : file)),
-            })),
-        }));
-    };
     const deleteFile = (id: string) => {
         setData((prev) => ({
             ...prev,
@@ -142,7 +122,6 @@ export const KnowledgeView = () => {
             <FolderView
                 folder={currentFolder}
                 onDelete={deleteFile}
-                onRename={renameFile}
                 folders={data.folders}
                 onMoveToFolder={moveFileToFolder}
             />
@@ -208,11 +187,10 @@ export const KnowledgeView = () => {
                     <h3 className={styles.knowledge__section__title}>Recent Files</h3>
                     <div className={styles.knowledge__files__section}>
                         {data.recentFiles.map((file) => (
-                            <FileComponent
+                            <File
                                 key={file.id}
                                 file={file}
                                 onDelete={() => deleteFile(file.id)}
-                                onRename={(newName) => renameFile(file.id, newName)}
                                 folders={data.folders}
                                 onMoveToFolder={(folderId) => moveFileToFolder(file.id, folderId)}
                             />

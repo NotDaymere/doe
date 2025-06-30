@@ -15,7 +15,7 @@ export const PuzzleEditModal = ({ text, onClose, onSave }: PuzzleEditModalProps)
         e.stopPropagation();
         onClose();
     };
-    const handleSave = (e: React.MouseEvent | React.KeyboardEvent) => {
+    const handleSave = (e: React.MouseEvent) => {
         e.stopPropagation();
         onSave(inputValue);
         onClose();
@@ -32,7 +32,6 @@ export const PuzzleEditModal = ({ text, onClose, onSave }: PuzzleEditModalProps)
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             className={style.puzzleEditModal__text}
-                            onKeyDown={(e) => e.key === "Enter" && handleSave(e)}
                         />
                         <div className={style.puzzleEditModal__buttons}>
                             <button

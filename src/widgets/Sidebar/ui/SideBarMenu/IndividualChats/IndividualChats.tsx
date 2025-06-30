@@ -9,12 +9,12 @@ import BranchIcon from "../../../../../shared/icons/Branch.icon";
 import { CSSTransition } from "react-transition-group";
 import AllBranchesMenu from "../../../../home-screens/ui/ChatContent/assets/AllBranchesMenu/AllBranchesMenu";
 import { IndividualChatsActions } from "./IndividualChatsActions/IndividualChatsActions";
-import { useChatStore, useAppStore } from "../../../../../shared/providers";
+import { useChatStore } from "../../../../../shared/providers";
 import { ChatTagsPanel } from "./ChatTagsPanel/ChatTagsPanel";
 import { ChatItem } from "./ChatItem/ChatItem";
 import ReactDOM from "react-dom";
 import { TAG_META } from "../SideBarMenu";
-import { IChat, MODE } from "../../../../../shared/types/Chat";
+import { IChat } from "../../../../../shared/types/Chat";
 
 interface IndividualChatsProps {
     isSideBarOpen: boolean;
@@ -33,10 +33,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
         removeChat,
         addChat,
         deleteSavedBranch,
-        setMode
     } = useChatStore();
-
-    const { setIsSideBarOpen } = useAppStore();
 
     const [isIndividualChatsSearchInputOpen, setIsIndividualChatsSearchInputOpen] = useState(false);
     const [isIndividualChatOpen, setIsIndividualChatOpen] = useState(false);
@@ -60,14 +57,11 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
     const panelRef = useRef<HTMLDivElement>(null);
 
     const handleOpenIndividualChat = () => {
-        if (!isSideBarOpen) {
-            setIsSideBarOpen(true);
-        }
-        setIsIndividualChatOpen(prev => !prev);
+        setIsIndividualChatOpen(!isIndividualChatOpen);
     };
 
     const handleOpenIndividualChatsSearchInput = () => {
-        setIsIndividualChatsSearchInputOpen(prev => !prev);
+        setIsIndividualChatsSearchInputOpen(!isIndividualChatsSearchInputOpen);
     };
 
     const handleOpenBranchMenu = (event: React.MouseEvent, branchId: number | null) => {
@@ -162,7 +156,6 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                     className={css.sidebar_menu_action_btn}
                     onClick={(e) => {
                         e.stopPropagation();
-                        handleOpenIndividualChat();
                         if (isIndividualChatOpen) {
                             handleOpenIndividualChatsSearchInput();
                         }
@@ -289,11 +282,7 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                                         <div>Branches</div>
                                         <div className={css.branches_list}>
                                             {branches.map(branch => (
-                                                <div
-                                                    key={branch.id}
-                                                    className={css.branch_item}
-                                                    onClick={() => setMode(MODE.INITIAL)}
-                                                >
+                                                <div key={branch.id} className={css.branch_item}>
                                                     <div className={css.branch_icon_and_name}>
                                                         <div>
                                                             <BranchIcon fill="currentColor" width={16} height={16} />

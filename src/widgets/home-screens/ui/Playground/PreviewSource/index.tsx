@@ -1,11 +1,11 @@
-import React, { FC, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { IPreviewPlayground } from "src/shared/types/Playground";
 import ArrowRightUpIcon from "src/shared/icons/ArrowRightUp.icon";
 import ExpandDoubleIcon from "src/shared/icons/ExpandDouble.icon";
 import Modal from "src/shared/components/Modal";
 import Preview from "./Preview";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-
+import "@react-pdf-viewer/core/lib/styles/index.css";
 import css from "./PreviewSource.module.less";
 import classNames from "classnames";
 import Title from "./Title";
@@ -29,27 +29,27 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
     };
 
     const renderOpenInNewWindowButtonClick = () => (
-        <React.Fragment>
+        <>
             {isHovered && (
                 <button
                     className={css.openButton}
-                    rel={"noreferrer"}
+                    rel="noreferrer"
                     onClick={(e) => handleOpenInNewWindowClick(e)}
                 >
                     <ArrowRightUpIcon width={16} height={16} />
                     <span>Open in new window</span>
                 </button>
             )}
-        </React.Fragment>
+        </>
     );
 
     return (
-        <React.Fragment>
+        <>
             <div
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 className={css.previewSource}
-                id={"previewSource"}
+                id="previewSource"
             >
                 <div className={css.preview}>
                     <Preview
@@ -79,10 +79,10 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                     showScroll={fileType === "txt"}
                     classes={classNames(
                         fileType === "docx" ? `${css.flex}` : "",
-                        fileType === "pdf" && `${css.modalDocPreview}`,
                         fileType === "pdf" ? `${css.pdf}` : `${css.content}`,
-                        type !== "docs" && `${css.modalWebPreview}`
+                        type === "docs" ? `${css.modalDocPreview}` : `${css.modalWebPreview}`
                     )}
+
                 >
                     {fileType === "docx" &&
                         <>
@@ -116,7 +116,7 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                     />
                 </Modal>
             </div>
-        </React.Fragment>
+        </>
     );
 };
 

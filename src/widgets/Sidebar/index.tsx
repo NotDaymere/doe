@@ -92,10 +92,6 @@ export const Sidebar: React.FC = () => {
         setProfiles((prev) => prev.map((p) => ({ ...p, isCurrent: p.id === id })));
     };
 
-    const handleChangeCurrentProfile = (newData: Partial<Omit<Profile, "id" | "isCurrent">>) => {
-        setProfiles((prev) => prev.map((p) => (p.isCurrent ? { ...p, ...newData } : p)));
-    };
-
     const handleDeleteAllMessages = () => {
         clearCurrentChatMessages();
     };
@@ -112,7 +108,7 @@ export const Sidebar: React.FC = () => {
                 <div className={css.sidebar_profile}>
                     <img
                         className={css.sidebar_profile_img}
-                        src={currentProfile ? (currentProfile.imgSrc ?? "") : ""}
+                        src={currentProfile ? currentProfile.imgSrc : ""}
                         onClick={() => setIsSettingsOpen(true)}
                     />
                 </div>
@@ -142,7 +138,6 @@ export const Sidebar: React.FC = () => {
                     onClose={() => setIsSettingsOpen(false)}
                     isSideBarOpen={isSideBarOpen}
                     profiles={profiles}
-                    changeProfile={handleChangeCurrentProfile}
                 />
             )}
             <CSSTransition
@@ -164,10 +159,7 @@ export const Sidebar: React.FC = () => {
                             onClick={() => handleSelectProfile(profile.id)}
                         >
                             <div className={css.sidebar_profile}>
-                                <img
-                                    className={css.sidebar_profile_img}
-                                    src={profile.imgSrc ?? ""}
-                                />
+                                <img className={css.sidebar_profile_img} src={profile.imgSrc} />
                             </div>
                             <div className={css.profile_user_info_container}>
                                 <div className={css.profile_user_info}>

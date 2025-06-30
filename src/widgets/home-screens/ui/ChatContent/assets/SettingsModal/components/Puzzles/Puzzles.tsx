@@ -16,10 +16,6 @@ export const Puzzles = ({ puzzles, setPuzzles }: PuzzlesProps) => {
     useEffect(() => {
         const clickOutside = (e: MouseEvent) => {
             const target = e.target as Node;
-            const menu = document.querySelector("#category-select");
-            if (ref.current && menu && menu.contains(target)) {
-                return;
-            }
             if (
                 ref.current &&
                 !Array.from(ref.current?.children ?? []).some((child) => child.contains(target))
@@ -32,14 +28,11 @@ export const Puzzles = ({ puzzles, setPuzzles }: PuzzlesProps) => {
             document.removeEventListener("mousedown", clickOutside);
         };
     }, []);
-    const addPuzzle = (e: React.MouseEvent<any>) => {
-        e.stopPropagation();
-        const newPuzzle = createEmptyPuzzle();
-        setPuzzles((prev) => [...prev, newPuzzle]);
-        setSelectedPuzzle(() => newPuzzle.id);
+    const addPuzzle = () => {
+        setPuzzles((prev) => [...prev, createEmptyPuzzle()]);
     };
     const removePuzzle = (id: string) => {
-        if (puzzles.length > 0) {
+        if (puzzles.length > 1) {
             setSelectedPuzzle((prev) => null);
             setPuzzles((prev) => prev.filter((puzzle) => puzzle.id !== id));
         }
@@ -54,7 +47,6 @@ export const Puzzles = ({ puzzles, setPuzzles }: PuzzlesProps) => {
             });
         });
     };
-    const isFilled = puzzles.every((puzzle) => !!puzzle.category);
     return (
         <div ref={ref} className={styles.puzzles__container}>
             {puzzles.map((puzzle, index) => (
@@ -62,7 +54,7 @@ export const Puzzles = ({ puzzles, setPuzzles }: PuzzlesProps) => {
                     key={puzzle.id}
                     index={index}
                     puzzle={puzzle}
-                    addPuzzle={addPuzzle}
+                    addPuzzle={() => addPuzzle()}
                     removePuzzle={() => removePuzzle(puzzle.id)}
                     onEdit={(text) =>
                         setPuzzles((prev) =>
@@ -74,14 +66,10 @@ export const Puzzles = ({ puzzles, setPuzzles }: PuzzlesProps) => {
                     onClick={() => setSelectedPuzzle(puzzle.id)}
                     onSelectCategory={changeCategory}
                     selectedPuzzleId={selectedPuzzle}
-                    isFilled={isFilled}
+                    isSingle={puzzles.length === 1}
                 />
             ))}
-            <PuzzleShape
-                index={puzzles.length}
-                isPlaceholder
-                onClick={(e) => puzzles.length === 0 && addPuzzle(e)}
-            />
+            <PuzzleShape index={puzzles.length} isPlaceholder />
         </div>
     );
 };

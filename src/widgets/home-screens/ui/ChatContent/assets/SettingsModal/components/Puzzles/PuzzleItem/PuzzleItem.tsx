@@ -19,19 +19,19 @@ export type PuzzleType = {
 type PuzzleItemProps = {
     index: number;
     puzzle: PuzzleType;
-    addPuzzle: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    addPuzzle: () => void;
     removePuzzle: () => void;
     onEdit: (text: string) => void;
     onClick: () => void;
     onSelectCategory: ({ category, id }: { category: PuzzleCategories; id: string }) => void;
     selectedPuzzleId: string | null;
-    isFilled: boolean;
+    isSingle: boolean;
 };
 export const PazzleItem = ({
     index,
     puzzle: { category, id, description },
     selectedPuzzleId,
-    isFilled,
+    isSingle,
     addPuzzle,
     removePuzzle,
     onEdit,
@@ -41,6 +41,7 @@ export const PazzleItem = ({
     const isLastInRow = index % 4 === 3 || index === 3;
     const isSelected = selectedPuzzleId === id;
     const isUnselected = selectedPuzzleId && selectedPuzzleId !== id;
+    const isFilled = !!description && !!category;
     const [openEditModal, setOpenEditModal] = useState(false);
 
     return (
@@ -49,9 +50,8 @@ export const PazzleItem = ({
                 styles.puzzleItem__container,
                 isSelected && styles.puzzleItem__container__selected
             )}
-            onClick={() => {
-                onClick();
-            }}
+            onClick={() => onClick()}
+            onDoubleClick={() => setOpenEditModal(true)}
         >
             <CategorySelect
                 category={category}
@@ -64,7 +64,6 @@ export const PazzleItem = ({
                     category && !isUnselected && styles[category],
                     isUnselected && styles.puzzleItem__description__unselected
                 )}
-                onClick={() => setOpenEditModal(true)}
             >
                 {description ?? "Create new memory block!"}
             </p>
@@ -94,19 +93,20 @@ export const PazzleItem = ({
                             <PlusIcon />
                         </button>
                     )}
-
-                    <button
-                        className={clsx(
-                            styles.puzzleItem__controlBtn,
-                            styles.puzzleItem__controlBtn__remove
-                        )}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            removePuzzle();
-                        }}
-                    >
-                        <MinusIcon />
-                    </button>
+                    {!isSingle && (
+                        <button
+                            className={clsx(
+                                styles.puzzleItem__controlBtn,
+                                styles.puzzleItem__controlBtn__remove
+                            )}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                removePuzzle();
+                            }}
+                        >
+                            <MinusIcon />
+                        </button>
+                    )}
                 </div>
             )}
             {openEditModal &&

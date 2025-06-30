@@ -12,7 +12,6 @@ type PopupMenuProps = {
     className?: string;
     folders: FolderType[];
     onDelete: () => void;
-    onRename: () => void;
     onMoveToFolder: (folderId: string) => void;
 };
 
@@ -29,7 +28,6 @@ export const PopupMenu = ({
     className,
     folders,
     onDelete,
-    onRename,
     onMoveToFolder,
 }: PopupMenuProps) => {
     const [menuState, setMenuState] = useState<MenuState>({
@@ -41,7 +39,6 @@ export const PopupMenu = ({
     const menuRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const handleOpenMenu = (e: React.MouseEvent) => {
-        if (menuState.active) return;
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
         setMenuState({
             active: true,
@@ -53,9 +50,9 @@ export const PopupMenu = ({
         });
     };
     const handleCloseMenu = () => {
-        setMenuState((prev) => ({ ...prev, active: false }));
+        setMenuState({ ...menuState, active: false });
         setTimeout(() => {
-            setMenuState(() => ({ active: false, position: null, anchorRect: null }));
+            setMenuState({ active: false, position: null, anchorRect: null });
         }, ANIMATION_DURATION);
     };
     useEffect(() => {
@@ -105,10 +102,6 @@ export const PopupMenu = ({
         onMoveToFolder(folderId);
         handleCloseMenu();
     };
-    const handleRename = () => {
-        onRename();
-        handleCloseMenu();
-    };
     return (
         <button onClick={handleOpenMenu} ref={buttonRef} className={className}>
             {children}
@@ -130,7 +123,7 @@ export const PopupMenu = ({
                         }}
                         className={styles.menu}
                     >
-                        <button className={styles.menu__item} onClick={handleRename}>
+                        <button className={styles.menu__item}>
                             <PenIcon />
                             Rename
                         </button>

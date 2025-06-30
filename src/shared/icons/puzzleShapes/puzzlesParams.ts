@@ -1,10 +1,8 @@
-import { SVGProps } from "react";
-
 export type PuzzleProps = {
     category?: "Identity" | "Preferences" | "Knowledge" | "Intent" | "Cognition" | null;
     isColored: boolean;
     isPlaceholder?: boolean;
-} & SVGProps<SVGSVGElement>;
+};
 export const fillColors = {
     Identity: "rgb(255, 212, 212)",
     Preferences: "rgb(255, 223, 178)",

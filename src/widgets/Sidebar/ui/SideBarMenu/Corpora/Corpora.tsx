@@ -1,7 +1,6 @@
 import React from "react";
 import css from "./Corpora.module.less";
 import CorporaIcon from "../../../../../shared/icons/CorporaIcon";
-import { useAppStore } from "src/shared/providers";
 
 interface CorporaProps {
     isSideBarOpen: boolean;
@@ -10,12 +9,7 @@ interface CorporaProps {
 
 export const Corpora = ({ isSideBarOpen, isSideBarMenuOpen }: CorporaProps) => {
     const [isCorporaOpen, setIsCorporaOpen] = React.useState(false);
-    const { setIsSideBarOpen } = useAppStore();
-
     const handleOpenCorpora = () => {
-        if (!isSideBarOpen) {
-            setIsSideBarOpen(true);
-        }
         setIsCorporaOpen(!isCorporaOpen);
     };
 
@@ -37,5 +31,5 @@ export const Corpora = ({ isSideBarOpen, isSideBarMenuOpen }: CorporaProps) => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}

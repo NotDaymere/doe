@@ -8,18 +8,11 @@ import { ModalButton } from "../../../../components/ModalButton/ModalButton";
 type FolderViewProps = {
     folder: FolderType;
     onDelete: (fileId: string) => void;
-    onRename: (fileId: string, newName: string) => void;
     onMoveToFolder: (fileId: string, folderId: string) => void;
     folders: FolderType[];
 };
 
-export const FolderView = ({
-    folder,
-    folders,
-    onDelete,
-    onMoveToFolder,
-    onRename,
-}: FolderViewProps) => {
+export const FolderView = ({ folder, folders, onDelete, onMoveToFolder }: FolderViewProps) => {
     const navigate = useNavigate();
     return (
         <div className={styles.folderView}>
@@ -38,7 +31,6 @@ export const FolderView = ({
                                 key={file.id}
                                 folders={folders}
                                 file={file}
-                                onRename={(newName) => onRename(file.id, newName)}
                                 onDelete={() => onDelete(file.id)}
                                 onMoveToFolder={(folderId) => onMoveToFolder(file.id, folderId)}
                             />
