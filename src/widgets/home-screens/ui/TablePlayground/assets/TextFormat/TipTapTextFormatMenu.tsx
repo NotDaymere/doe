@@ -42,7 +42,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     const [activeMenu, setActiveMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
 
-    const {setComment,openComments} = useCommentWindowStore();
+    const {isOpen,comment,setComment,openComments} = useCommentWindowStore();
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -58,6 +58,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     }, []);
 
 
+    useEffect(()=>{console.log(comment)},[[comment, isOpen]])
 
 
 
@@ -165,60 +166,40 @@ useEffect(() => {
     };
 
     const applyCloudQuotes = () => {
-  if (!editor) return;
+    if (!editor) return;
+    const { from, to } = editor.state.selection;
+    if (from === to) return;
 
-  const { from, to } = editor.state.selection;
+    const selectedText = editor.state.doc.textBetween(from, to, "");
+    const UUID = generateUUID();
 
+    // Set comment with empty message
+    setComment({
+      id: 1,
+      user: {
+        name: "John Doe",
+        avatar: "https://example.com/avatar.jpg",
+      },
+      timestamp: formatFriendlyDate(new Date()),
+      message: "",
+      replies: [],
+    });
 
-  if (from === to) return;
-
-  const selectedText = editor.state.doc.textBetween(from, to, "");
-  const UUID = generateUUID();
- 
- 
-
-
-  setComment({
- 
-    id: 1,
-    user: {
-      name: "John Doe",
-      avatar: "https://example.com/avatar.jpg",
-   
-    },
-    timestamp: formatFriendlyDate(new Date()),
-    message: "",
-    replies: [],
-  });
-
-//   editor.chain().focus()
-//   .setMark('clickable', { id: UUID })
-//   .run();
-
-setTimeout(() => {
-  
-    openComments(UUID);
-}, 0); 
-
- 
-
-
- 
-  editor.chain().focus()
-    .deleteRange({ from, to })
+    setTimeout(() => {
+      openComments(UUID);
+    }, 0);
     
-    .insertContent({
+    const className = comment?.message.length === 0 && isOpen ? "highlighted-typing" : "highlighted";
+
+    editor.chain().focus().deleteRange({ from, to }).insertContent({
       type: "text",
       text: selectedText,
       marks: [
-     
         { type: "clickable", attrs: { id: UUID } },
-        { type: "highlight" },
+        { type: "highlight", attrs: { class: className } },
       ],
-    })
-    
-    .run();
-};
+    }).run();
+  };
 
 
 
