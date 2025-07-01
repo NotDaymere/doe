@@ -215,17 +215,36 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
     const togglePen = () => {
         addText();
     };
+const hexToRgba = (hex, alpha) => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+ 
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
 
-    const enableDrawingMode = (color = drawingcolor, width = strokeWidth) => {
-        setIsDrawingMode(true);
-        fabricCanvas.current.isDrawingMode = true;
-        fabricCanvas.current.freeDrawingBrush = new fabric.PencilBrush(fabricCanvas.current);
-        fabricCanvas.current.freeDrawingBrush.color = color;
-        fabricCanvas.current.freeDrawingBrush.width = width;
-        fabricCanvas.current.renderAll();
-    };
 
-    const disableDrawingMode = () => {
+
+   const enableDrawingMode = (
+  color = drawingcolor,
+  width = strokeWidth,
+  opacity = opacityValue / 100 
+) => {
+  const brushOpacity = Math.max(0.1, opacity);
+
+ 
+
+  setIsDrawingMode(true);
+  fabricCanvas.current.isDrawingMode = true; const rgbaColor = hexToRgba(color, brushOpacity); // convert here
+  fabricCanvas.current.freeDrawingBrush = new fabric.PencilBrush(fabricCanvas.current);
+  fabricCanvas.current.freeDrawingBrush.color = color;
+  fabricCanvas.current.freeDrawingBrush.width = width;
+  fabricCanvas.current.freeDrawingBrush.color = hexToRgba(color, brushOpacity);
+  fabricCanvas.current.renderAll();
+};
+
+   
+const disableDrawingMode = () => {
         setIsDrawingMode(false);
         fabricCanvas.current.isDrawingMode = false;
     };
@@ -263,56 +282,77 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
     }, [isEraserMode]);
 
     const addShape = (shape, toolName) => {
+ 
         disableDrawingMode();
-        setActiveTool(toolName);
-        setShowMoreTools(false);
-        let shapeObject;
-        switch (shape) {
-            case "circle":
-                shapeObject = new fabric.Circle({ radius: 30, fill: "blue", left: 100, top: 100 });
-                break;
-            case "rectangle":
-                shapeObject = new fabric.Rect({
-                    width: 60,
-                    height: 40,
-                    fill: "green",
-                    left: 150,
-                    top: 150,
-                    selectable: true,
-                    evented: true,
-                });
-                break;
-            case "triangle":
-                shapeObject = new fabric.Triangle({
-                    width: 60,
-                    height: 50,
-                    fill: "red",
-                    left: 200,
-                    top: 200,
-                });
-                break;
-           
-                default:
-                return;
-        }
-        fabricCanvas.current.add(shapeObject);
-         fabricCanvas.current.setActiveObject(shapeObject); 
-        fabricCanvas.current.renderAll();
-    };
+  setActiveTool(toolName);
+  setShowMoreTools(false);
+  let shapeObject;
+
+  const opacity = Math.max(0.1, opacityValue / 100);
+
+  switch (shape) {
+    case "circle":
+
+    shapeObject = new fabric.Circle({
+        radius: 30,
+        fill: "blue",
+        left: 100,
+        top: 100,
+        opacity,
+      });
+      break;
+    case "rectangle":
+  
+    shapeObject = new fabric.Rect({
+        width: 60,
+        height: 40,
+        fill: "green",
+        left: 150,
+        top: 150,
+        selectable: true,
+        evented: true,
+        opacity,
+ 
+    });
+      break;
+    case "triangle":
+      shapeObject = new fabric.Triangle({
+        width: 60,
+        height: 50,
+        fill: "red",
+        left: 200,
+        top: 200,
+   
+        opacity,
+      });
+      break;
+    default:
+   
+    return;
+  }
+
+  fabricCanvas.current.add(shapeObject);
+  fabricCanvas.current.setActiveObject(shapeObject);
+  fabricCanvas.current.renderAll();
+};
 
     
    
-    const addText = () => {    
+    const addText = () => {   
+        const opacity = Math.max(0.1, opacityValue / 100); 
         const text = new fabric.IText("Editable Text", {
             left: 150,
+        
             top: 150,
             fontSize: 16,
             fill: "black",
             selectable: true,
+            opacity
         });
         fabricCanvas.current.add(text);
         fabricCanvas.current.setActiveObject(text);
         fabricCanvas.current.renderAll();
+ 
     };
 
     // Function to get the selected text object
@@ -322,6 +362,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
             return activeObject;
         }
         alert("Please select a text object and highlight text to format.");
+  
         return null;
     };
 
@@ -331,6 +372,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
         if (text) {
             if (text.getSelectionStyles) {
                 const currentStyles = text.getSelectionStyles();
+    
                 text.setSelectionStyles({ [style]: currentStyles[style] === value ? null : value });
             }
             fabricCanvas.current.renderAll();
@@ -340,6 +382,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
     // Function to toggle font size
     const toggleFontSize = () => {
         const text = getSelectedTextObject();
+    
         if (text) {
             const currentSize = text.fontSize;
             const nextSize = fontSizes[(fontSizes.indexOf(currentSize) + 1) % fontSizes.length];
@@ -349,6 +392,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
     };
 
     // Function to apply Superscript
+  
     const toggleSuperscript = () => {
         const text = getSelectedTextObject();
         if (text) {
@@ -358,6 +402,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
             text.setSelectionStyles({
                 fontSize: isSuperscript ? text.fontSize : text.fontSize * 0.7,
                 deltaY: isSuperscript ? 0 : -text.fontSize * 0.3,
+   
             });
             fabricCanvas.current.renderAll();
         }
@@ -367,6 +412,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
     const toggleSubscript = () => {
         const text = getSelectedTextObject();
         if (text) {
+   
             const currentStyles = text.getSelectionStyles();
             const isSubscript = currentStyles.fontSize && currentStyles.fontSize < text.fontSize;
 
@@ -376,22 +422,27 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
             });
             fabricCanvas.current.renderAll();
         }
+   
     };
 
     // Function to add a hyperlink
     const addHyperlink = () => {
+   
         const text = getSelectedTextObject();
         if (text) {
             const url = prompt("Enter the URL for the link:");
             if (url) {
+  
                 text.setSelectionStyles({
                     fill: "blue", // Change text color to blue
                     underline: true, // Underline the text
                     link: url, // Store link metadata
+  
                 });
 
                 // Make the link clickable
                 fabricCanvas.current.on("mouse:down", (event) => {
+ 
                     const clickedObject = event.target;
                     if (clickedObject && clickedObject.type === "i-text") {
                         const selectionStyles = clickedObject.getSelectionStyles();
@@ -401,6 +452,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                     }
                 });
 
+  
                 fabricCanvas.current.renderAll();
             }
         }
@@ -410,6 +462,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject) {
             activeObject.set("fill", color);
+  
             fabricCanvas.current.renderAll();
         }
     };
@@ -419,6 +472,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
 
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject) {
+   
             activeObject.set("fill", color);
             fabricCanvas.current.renderAll();
         }
@@ -426,17 +480,19 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
     };
 
     // Function to add a quotation to the canvas
-    const addQuote = () => {
+    const addQuote = () => { const opacity = Math.max(0.1, opacityValue / 100);
         const quote = new fabric.IText('"Your quote here"', {
+   
             left: 100,
             top: 100,
             fontSize: 24,
             fill: "black",
             fontStyle: "italic",
-            selectable: true,
+            selectable: true,opacity
         });
         fabricCanvas.current.add(quote);
         fabricCanvas.current.setActiveObject(quote);
+  
         fabricCanvas.current.renderAll();
     };
     const toggleTexformating = (toolName) => {
@@ -446,35 +502,61 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
         setIsDrawingFormat(false);
 
         addText();
+  
         disableDrawingMode();
     };
 
-    const toggleDrawingformating = (toolName) => {
-        setActiveTool(toolName);
-        setIsTextFormat(false);
-        setIsDrawingFormat(!isDrawingFormat);
-        enableDrawingMode();
-        setIsEraserMode(false);
-    };
+   const toggleDrawingformating = (toolName) => {
+  setActiveTool(toolName);
+  setIsTextFormat(false);
+  setIsDrawingFormat(!isDrawingFormat);
+  setIsEraserMode(false);
+
+  enableDrawingMode(drawingcolor, strokeWidth, opacityValue / 100); // <- Add this
+
+};
 
     const changeStrokeWidth = (width) => {
         setStrokeWidth(width);
-        enableDrawingMode();
+      
+       enableDrawingMode(drawingcolor, width, opacityValue / 100);
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject) {
             activeObject.set("strokeWidth", width);
+     
             activeObject.set("stroke", "#000000");
+    
             fabricCanvas.current.renderAll();
         }
+        
     };
 
+ 
+    
     const changeOpacity = (opacity) => {
-        const activeObject = fabricCanvas.current.getActiveObject();
-        if (activeObject) {
-            activeObject.set("opacity", Math.max(0.1, opacity / 100));
-            fabricCanvas.current.renderAll();
-        }
-    };
+   
+    const newOpacityValue = Math.max(0, Math.min(100, Number(opacity) || 0));
+    setOpacityValue(newOpacityValue);
+
+    // Convert to Fabric's 0-1 scale for rendering
+    const fabricOpacity = newOpacityValue / 100;
+
+    // Update the currently selected object, if any
+   
+    const activeObject = fabricCanvas.current.getActiveObject();
+    if (activeObject) {
+        activeObject.set("opacity", fabricOpacity);
+        fabricCanvas.current.renderAll();
+    }
+
+    // *** FIX: Also update the drawing brush if drawing mode is active ***
+    if (fabricCanvas.current && fabricCanvas.current.isDrawingMode) {
+        // PencilBrush opacity is controlled by the alpha channel of its color
+        const newBrushColor = hexToRgba(drawingcolor, fabricOpacity);
+      
+        fabricCanvas.current.freeDrawingBrush.color = newBrushColor;
+    }
+};
 
 
 
@@ -521,6 +603,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
     
 return (
         <>
+     
             <div>
                 <canvas ref={canvasRef} />
            
@@ -530,6 +613,7 @@ return (
                         onClick={saveDrawingData}
                         style={{ display: "none" }}
                     >
+     
                         Save
                     </button>
                 </div>
