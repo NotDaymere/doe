@@ -147,10 +147,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
      const comment = useCommentWindowStore((s) => s.comment);
         
-    const isOpen = useCommentWindowStore((s) => s.isOpen);
-    const setComment = useCommentWindowStore((s) => s.setComment);
-        
-    const openComments = useCommentWindowStore((s) => s.openComments);
+
 
     useEffect(()=>{
         
@@ -166,7 +163,8 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
      
             { type: "highlight", attrs: { class: "highlighted" } },
          ],
-    }).run();
+   
+        }).run();
     },[comment])
 
     useEffect(() => {
