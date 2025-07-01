@@ -23,6 +23,7 @@ interface Comment {
 }
 
 
+
 interface CommentWindowStore { 
     isOpen: boolean;
     comment?: Comment|null;
