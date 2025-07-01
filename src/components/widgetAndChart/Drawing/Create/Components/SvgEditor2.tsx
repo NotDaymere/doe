@@ -560,12 +560,7 @@ const disableDrawingMode = () => {
 
 
 
-
-
-
-
-useEffect(() => {
-  const handleKeyDown = (e: KeyboardEvent) => {
+ const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Delete" || e.key === "Backspace") {
       const canvas = fabricCanvas.current;
       if (!canvas) return;
@@ -603,6 +598,10 @@ useEffect(() => {
     }
   };
 
+
+
+useEffect(() => {
+ 
   window.addEventListener("keydown", handleKeyDown);
   
   return () => window.removeEventListener("keydown", handleKeyDown);
@@ -791,7 +790,7 @@ return (
                                     <div className="paintBox">
                                         <button
     
-    className="blue"
+                                            className="blue"
                                             onClick={() => changeColorDrawing("blue")}
                                             style={{ backgroundColor: "#28ABFB" }}
                                         ></button>
