@@ -93,11 +93,12 @@ useEffect(() => {
   if (!editorContainer) return;
 
 
+  
   const handleClick = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
-    console.log("Target:", target);
+  
     if (target?.dataset?.clickable === "true") {
-        console.log("Clickable text clicked:", target);
+      
       const clickedId = target.dataset.id;
       if (clickedId) {
         openComments(clickedId); // ✅ Open your comment thread
@@ -106,15 +107,19 @@ useEffect(() => {
     }
   
 };
+
+
 // document.querySelector(".tiptap-editor")?.addEventListener("click", (e) => {
 //   console.log("Target:", e.target);
 // });
+
 
  editorContainer.addEventListener("click", handleClick);
 
   
   return () => {
-   // editorContainer.removeEventListener("click", handleClick);
+ 
+    // editorContainer.removeEventListener("click", handleClick);
   };
 }, []);
 

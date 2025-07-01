@@ -561,42 +561,54 @@ const disableDrawingMode = () => {
 
 
 
-  useEffect(() => {
-     const handleKeyDown = (event: KeyboardEvent) => {
-  if ((event.key === "Delete" || event.key === "Backspace") && fabricCanvas.current) {
-    const canvas = fabricCanvas.current;
-  
-    const activeObject = canvas.getActiveObject();
 
-    console.log("Pressed:", event.key);
-    console.log("Active object to delete:", activeObject);
-    console.log("Type:", activeObject?.type);
 
-    if (!activeObject) return;
 
-    if (activeObject.type === "activeSelection") {
-  
+useEffect(() => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Delete" || e.key === "Backspace") {
+      const canvas = fabricCanvas.current;
+      if (!canvas) return;
+
+      const activeObject = canvas.getActiveObject();
+      if (!activeObject) return;
+
+    
+      console.log("[KEY] Pressed:", e.key);
+      console.log("[FABRIC] Active object:", activeObject);
+      activeObject.getObjects().forEach((obj) => {
+          console.log("[FABRIC] Removing:", obj.type, obj);
+          canvas.remove(obj);
+        });
+
+      if (activeObject.type === "activeSelection") {
+      
+        
         activeObject.getObjects().forEach((obj) => {
-        canvas.remove(obj);
-      });
-      canvas.discardActiveObject(); // 👈 make sure to clear selection
+          console.log("[FABRIC] Removing:", obj.type, obj);
+          canvas.remove(obj);
+        });
+    
     } else {
-      canvas.remove(activeObject);
+        console.log("[FABRIC] Removing single object:", activeObject);
+        canvas.remove(activeObject);
+      }
+
+      canvas.discardActiveObject();
+      canvas.requestRenderAll();
+
+      console.log("[FABRIC] Deletion complete and canvas re-rendered.");
+    
+      console.log("[FABRIC] Remaining objects:", canvas.getObjects());
     }
-
-    canvas.requestRenderAll(); // 👈 force re-render
-  
-}
-};
-
-  window.addEventListener("keydown", handleKeyDown);
- 
-  return () => {
-
-    window.removeEventListener("keydown", handleKeyDown);
   };
 
+  window.addEventListener("keydown", handleKeyDown);
+  
+  return () => window.removeEventListener("keydown", handleKeyDown);
 }, []);
+
+
 
     
 
@@ -609,7 +621,8 @@ return (
            
                 <div style={{ marginTop: "10px" }}>
                     <button
-                        id="save-canvas-button"
+        
+        id="save-canvas-button"
                         onClick={saveDrawingData}
                         style={{ display: "none" }}
                     >
