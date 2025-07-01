@@ -32,42 +32,23 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     const [fabricInstance, setFabricInstance] = useState(null);
     const lassoPoints = useRef([]);
     const activeToolRef = useRef("");
-    const toggleLassoTool = () => {
-   
-        const isActive = activeTool === "lasso";
-
-    if (isActive) {
-        setActiveTool("");
-        isLassoActive.current = false;
-        lassoPoints.current = [];
-        if (lassoPath.current) {
-            fabricCanvas.current.remove(lassoPath.current); // 💥 Remove previous lasso path
-            fabricCanvas.current.renderAll();
-         
-            lassoPath.current = null;
-        }
     
-    } else {
-        setActiveTool("lasso");
-        setIsEraserMode(false);
-        disableDrawingMode();
 
-        if (fabricCanvas.current) {
-        
-            fabricCanvas.current.selection = false;
-            fabricCanvas.current.forEachObject((obj) => (obj.selectable = true));
-        }
+    const toggleLassoTool = () => {
+  const isActive = activeTool === "lasso";
+  if (isActive) {
+    setActiveTool("");
+  } else {
+    setActiveTool("lasso");
+    setIsEraserMode(false);
+    disableDrawingMode();
 
-       
-        if (lassoPath.current) {
-            fabricCanvas.current.remove(lassoPath.current);
-            fabricCanvas.current.renderAll();
-            lassoPath.current = null;
-     
-        }
-      
-        lassoPoints.current = [];
+    
+    if (fabricCanvas.current) {
+      fabricCanvas.current.selection = false;
+      fabricCanvas.current.forEachObject((obj) => (obj.selectable = true));
     }
+  }
 };
 
    
@@ -107,10 +88,13 @@ useEffect(() => {
             backgroundColor: "transparent",
             isDrawingMode: false,
         });
+        fabricCanvas.current.upperCanvasEl.setAttribute("tabindex", "0");
+        fabricCanvas.current.upperCanvasEl.focus();
         setTimeout(() => {
   
             setFabricInstance(fabricCanvas.current);
-            }, 0);
+          
+        }, 0);
 
         console.log("Drawing data loaded:", drawingData);
 
@@ -127,22 +111,8 @@ useEffect(() => {
         }
 
         // Add event listener for delete key
-        const handleKeyDown = (event) => {
-    if ((event.key === "Delete" || event.key === "Backspace") && fabricCanvas.current) {
-        const activeObject = fabricCanvas.current.getActiveObject();
+        
 
-        if (!activeObject) return;
-
-        if (activeObject.type === "activeSelection") {
-            activeObject.getObjects().forEach((obj) => fabricCanvas.current.remove(obj));
-            fabricCanvas.current.discardActiveObject();
-        } else {
-            fabricCanvas.current.remove(activeObject);
-        }
-
-        fabricCanvas.current.renderAll();
-    }
-};
 
         // Add event listener for text deselection
         const handleSelectionCleared = () => {
@@ -151,8 +121,10 @@ useEffect(() => {
 
         // Add event listener for clicks outside text
        const handleMouseDown = (event) => {
- console.log("tool", activeToolRef.current);
-  if (activeTool === activeToolRef.current) return;
+  const tool = activeToolRef.current;
+
+  // Prevent toolbar reset when using tools like lasso, eraser, etc.
+  if (["lasso", "eraser", "drawingFormat", "shape", "textformat"].includes(tool)) return;
 
   const activeObject = fabricCanvas.current.getActiveObject();
   if (!activeObject || activeObject.type !== "i-text") {
@@ -160,7 +132,8 @@ useEffect(() => {
   }
 };
 
-        window.addEventListener("keydown", handleKeyDown);
+     
+
      
         fabricCanvas.current.on("selection:cleared", handleSelectionCleared);
         
@@ -169,12 +142,18 @@ useEffect(() => {
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
             if (fabricCanvas.current) {
+        
                 fabricCanvas.current.off("selection:cleared", handleSelectionCleared);
                 fabricCanvas.current.off("mouse:down", handleMouseDown);
                 fabricCanvas.current.dispose(); // Cleanup on unmount
     
             }
         };
+
+
+
+
+        
     }, [drawingData]);
 
 
@@ -299,6 +278,8 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                     fill: "green",
                     left: 150,
                     top: 150,
+                    selectable: true,
+                    evented: true,
                 });
                 break;
             case "triangle":
@@ -495,9 +476,50 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
         }
     };
 
+
+
+
+  useEffect(() => {
+     const handleKeyDown = (event: KeyboardEvent) => {
+  if ((event.key === "Delete" || event.key === "Backspace") && fabricCanvas.current) {
+    const canvas = fabricCanvas.current;
+  
+    const activeObject = canvas.getActiveObject();
+
+    console.log("Pressed:", event.key);
+    console.log("Active object to delete:", activeObject);
+    console.log("Type:", activeObject?.type);
+
+    if (!activeObject) return;
+
+    if (activeObject.type === "activeSelection") {
+  
+        activeObject.getObjects().forEach((obj) => {
+        canvas.remove(obj);
+      });
+      canvas.discardActiveObject(); // 👈 make sure to clear selection
+    } else {
+      canvas.remove(activeObject);
+    }
+
+    canvas.requestRenderAll(); // 👈 force re-render
+  
+}
+};
+
+  window.addEventListener("keydown", handleKeyDown);
+ 
+  return () => {
+
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+
+}, []);
+
     
 
-    return (
+    
+return (
         <>
             <div>
                 <canvas ref={canvasRef} />
@@ -511,6 +533,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                         Save
                     </button>
                 </div>
+    
             </div>
 
             <div className="toolbox">
@@ -520,6 +543,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                 <DrawingToolButton
                     icon="/img/drawingEditorIcons/moveArrow.svg"
                     onClick={() => toggleSelectionMode("moveArrow")}
+    
                     isActive={activeTool === "moveArrow"}
                 />
                 <hr />
@@ -529,7 +553,8 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                         icon="img/drawingEditorIcons/textformating.svg"
                         onClick={() => toggleTexformating("textformat")}
                         isActive={activeTool === "textformat"}
-                    />
+    
+                        />
                 )}
                 {isTextFormat && (
                     <>
@@ -538,6 +563,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                 icon="/img/drawingEditorIcons/bold.svg"
                                 onClick={() => toggleTextStyle("fontWeight", "bold")}
                             />
+    
                             <DrawingToolButton
                                 icon="/img/drawingEditorIcons/italic.svg"
                                 onClick={() => toggleTextStyle("fontStyle", "italic")}
@@ -547,7 +573,8 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                 onClick={() => toggleTextStyle("underline", true)}
                             />
                             <DrawingToolButton
-                                icon="/img/drawingEditorIcons/strike.svg"
+    
+    icon="/img/drawingEditorIcons/strike.svg"
                                 onClick={() => toggleTextStyle("linethrough", true)}
                             />
                         </div>
@@ -556,6 +583,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                         <div>
                             <DrawingToolButton
                                 icon="/img/drawingEditorIcons/edit.svg"
+    
                                 onClick={toggleFontSize}
                             />
                         </div>
@@ -565,7 +593,8 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                             <DrawingToolButton
                                 icon="/img/drawingEditorIcons/edit2.svg"
                                 onClick={togglePen}
-                            />
+    
+    />
                         </div>
                         <hr />
 
@@ -574,23 +603,28 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                 icon="/img/drawingEditorIcons/paint.svg"
                                 onClick={() => setShowPaintBox(!showPaintBox)}
                             />
+    
                             {showPaintBox && (
                                 <div className="paintBox">
                                     <button
                                         className="blue"
+    
                                         onClick={() => changeColor("blue")}
                                         style={{ backgroundColor: "#28ABFB" }}
                                     ></button>
                                     <button
-                                        className="green"
+    
+    className="green"
                                         onClick={() => changeColor("green")}
                                         style={{ backgroundColor: "#8BCF16" }}
                                     ></button>
+    
                                     <button
                                         className="red"
                                         onClick={() => changeColor("red")}
                                         style={{ backgroundColor: "#FF5F5F" }}
-                                    ></button>
+    
+    ></button>
                                 </div>
                             )}
                         </div>
@@ -599,6 +633,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                         <div>
                             <DrawingToolButton
                                 icon="/img/drawingEditorIcons/quote.svg"
+    
                                 onClick={addQuote}
                             />
                         </div>
@@ -608,7 +643,8 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                             <DrawingToolButton
                                 icon="/img/drawingEditorIcons/sup.svg"
                                 onClick={toggleSuperscript}
-                            />
+    
+    />
                         </div>
                         <hr />
 
@@ -617,6 +653,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                 icon="/img/drawingEditorIcons/sub.svg"
                                 onClick={toggleSubscript}
                             />
+    
                         </div>
                         <hr />
 
@@ -626,6 +663,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                 onClick={addHyperlink}
                             />
                         </div>
+    
                         <hr />
                     </>
                 )}
@@ -635,6 +673,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                         <DrawingToolButton
                             icon="/img/drawingEditorIcons/drawing.svg"
                             onClick={() => toggleDrawingformating("drawingFormat")}
+    
                             isActive={activeTool === "drawingFormat"}
                         />
                     )}
@@ -644,6 +683,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                             <div>
                                 <DrawingToolButton
                                     icon="/img/drawingEditorIcons/color.svg"
+    
                                     onClick={() => {
                                         setShowPaintDrawingBox(!showPaintDrawingBox);
                                         setShowOpacityBox(false);
@@ -653,7 +693,8 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                 {showPaintDrawingBox && (
                                     <div className="paintBox">
                                         <button
-                                            className="blue"
+    
+    className="blue"
                                             onClick={() => changeColorDrawing("blue")}
                                             style={{ backgroundColor: "#28ABFB" }}
                                         ></button>
@@ -662,22 +703,27 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                             onClick={() => changeColorDrawing("green")}
                                             style={{ backgroundColor: "#8BCF16" }}
                                         ></button>
+    
                                         <button
                                             className="red"
                                             onClick={() => changeColorDrawing("red")}
                                             style={{ backgroundColor: "#FF5F5F" }}
-                                        ></button>
+    
+    ></button>
                                     </div>
                                 )}
                             </div>
+    
                             <hr />
 
                             <div>
                                 <DrawingToolButton
-                                    icon="/img/drawingEditorIcons/stroke.svg"
+    
+    icon="/img/drawingEditorIcons/stroke.svg"
                                     onClick={() => {
                                         setShowStrokeBox(!showStrokeBox);
                                         setShowOpacityBox(false);
+    
                                     }}
                                 />
                                 {showStrokeBox && (
@@ -687,6 +733,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                             value={strokeWidth}
                                             type="number"
                                             maxLength={2}
+    
                                             onChange={(e) => {
                                                 const val = Number.parseInt(e.target.value, 10);
                                                 setStrokeWidth(val);
@@ -696,6 +743,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                     </div>
                                 )}
                             </div>
+    
                             <hr />
 
                             <div>
@@ -705,7 +753,8 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                         setShowOpacityBox(!showOpacityBox);
                                         setShowStrokeBox(false);
                                     }}
-                                />
+    
+    />
                                 {showOpacityBox && (
                                     <div className="opacityBox">
                                         <img src="/img/drawingEditorIcons/opacity.svg" />
@@ -714,6 +763,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                             value={opacityValue}
                                             maxLength={3}
                                             max={100}
+    
                                             onChange={(e) => {
                                                 const val = Number.parseInt(e.target.value, 10);
                                                 setOpacityValue(val);
@@ -723,6 +773,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                                     </div>
                                 )}
                             </div>
+    
                             <hr />
                         </div>
                     )}
@@ -732,6 +783,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                     <div>
                        <div style={{ position: "relative" }}>
   <DrawingToolButton
+    
     icon="/img/drawingEditorIcons/shape.svg"
   
     onClick={() => {
@@ -741,6 +793,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
     }}
   
     isActive={activeTool === "shape"}
+  
   />
   {showMoreTools && (
      <div ref={shapePopoverRef} className="flyout-menu shape-popover">
@@ -750,22 +803,27 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
       onClick={() => addShape("rectangle", "shape")}
    
    />
+  
     <DrawingToolButton
       icon="/img/drawingEditorIcons/circle-icon.svg"
       onClick={() => addShape("circle", "shape")}
     />
+  
     <DrawingToolButton
       icon="/img/drawingEditorIcons/triangle-icon.svg"
    
       onClick={() => addShape("triangle", "shape")}
-    />
+  
+  />
  
   </div>
   )}
+
 </div>
                
                     </div>
                     <hr />
+
                     <div>
                         <DrawingToolButton
     icon="/img/drawingEditorIcons/lasso.svg"
@@ -775,6 +833,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                     </div>
               
                     <hr />
+
                     <div>
                         <DrawingToolButton
                             icon="/img/drawingEditorIcons/eraser.svg"
@@ -784,6 +843,7 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
                     </div>
                     <hr />
       
+
                 </div>
             </div>
         </>

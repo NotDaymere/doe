@@ -312,10 +312,13 @@ useEffect(() => {
                         }
                 }
             >
+                
+                
                 <Button className={"button"} onClick={handleRemoveFormat}>
-                    <General />
+                    <General width={25} height={25}/>
                 </Button>
 
+               
                 <Button className={"button"} onClick={applyBold}>
                     <Bold />
                 </Button>
@@ -326,19 +329,19 @@ useEffect(() => {
                 </Button>
 
                 <Button className={"button"} onClick={applyUnderline}>
-                    <UnderLine />
+                    <UnderLine width={20} height={20}/>
                 </Button>
 
                 <Button className={"button"} onClick={applyStrikeThrough}>
-                    <StrikeThrough />
+                    <StrikeThrough width={17} height={17}/>
                 </Button>
 
                 <Button className={"button"} onClick={toggleUpperLowerCase}>
-                    <UpperLowerCase />
+                    <UpperLowerCase width={20} height={20}/>
                 </Button>
 
                 <Button className={"button"} onClick={applyPencilUnderline}>
-                    <PencilUnderline />
+                    <PencilUnderline width={17} height={17}/>
                 </Button>
 
                 <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
@@ -346,29 +349,30 @@ useEffect(() => {
                         className={activePaint ? "button-active" : "button"}
                         onClick={handlePenClick}
                     >
-                        {!activePaint ? <Paint /> : <ActivePaintIcon />}
+                        {!activePaint ? <Paint width={25} height={25}/> : <ActivePaintIcon width={17} height={17    }/>}
                     </Button>
                     {activePaint && <ActivePaint onColorSelect={applyColor} onClick={handlePenClick} />}
                 </div>
 
                 <Button className={"button"} onClick={applyQuotes}>
-                    <Quotes />
+                    <Quotes width={20} height={20}/>
                 </Button>
 
                 <Button className={"button"} onClick={applyCloudQuotes}>
-                    <CloudQuotes />
+                    <CloudQuotes width={15} height={15}/>
                 </Button>
 
                 <Button className={"button"} onClick={insertDegreeSymbol}>
-                    <Degree />
+                    
+                    <Degree width={17} height={17}/>
                 </Button>
 
                 <Button className={"button"} onClick={applyFormatBlock}>
-                    <Format />
+                    <Format width={25} height={25}/>
                 </Button>
 
                 <Button className={"button"} onClick={applyLink}>
-                    <LinkOther />
+                    <LinkOther width={25} height={25}/>
                 </Button>
              
                 {isPen && (
