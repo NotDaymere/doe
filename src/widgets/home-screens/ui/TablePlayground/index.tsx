@@ -23,6 +23,7 @@ import { CustomBlock } from "./assets/CustomBlock/CustomBlock";
 import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
 import {Clickable} from "src/helpers/clickable";
 import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
+import { Highlight } from "src/helpers/highlight.tiptap";
 
 
 
@@ -96,11 +97,13 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             TextStyle,
             Superscript,
             Subscript,
+            Highlight,
            
        
             Clickable,
             Color.configure({
                 types: ["textStyle"],
+    
             }),
             CustomBlock,
         ],
