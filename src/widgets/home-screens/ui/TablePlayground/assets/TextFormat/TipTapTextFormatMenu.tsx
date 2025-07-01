@@ -187,7 +187,7 @@ useEffect(() => {
     const selectedText = editor.state.doc.textBetween(from, to, "");
     const UUID = generateUUID();
 
-    // Set comment with empty message
+  
     setComment({
       id: 1,
       user: {
