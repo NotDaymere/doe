@@ -16,7 +16,7 @@ import { ReactComponent as Menu } from "src/assets/icons/menu.svg";
 import { ReactComponent as ActiveMenuIcon } from "src/assets/icons/active-menu.svg";
 import { ReactComponent as CardPlus } from "src/assets/icons/card-plus.svg";
 import './TipTapTextFormatMenu.less';
-import { Button, Flex } from "antd";
+import { Button, Flex, message } from "antd";
 import { useEffect, useRef, useState } from "react";
 import ActivePaint from "../../../PlaygroundButtons/ActivePaint/ActivePaint";
 import ActiveMenu from "../../../PlaygroundButtons/ActiveMenu/ActiveMenu";
@@ -33,6 +33,7 @@ type TextFormatProps = {
         bottom?: number;
         right?: number;
     };
+    
     editor: Editor | null;
     handleTipTapTextFormatMenuOnClick: () => void;
 };
@@ -41,24 +42,31 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     const [activePaint, setActivePaint] = useState(false);
     const [activeMenu, setActiveMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
-
-    const {isOpen,comment,setComment,openComments} = useCommentWindowStore();
+    const comment = useCommentWindowStore((s) => s.comment);
+    
+    const isOpen = useCommentWindowStore((s) => s.isOpen);
+    const setComment = useCommentWindowStore((s) => s.setComment);
+    const openComments = useCommentWindowStore((s) => s.openComments);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
                 handleTipTapTextFormatMenuOnClick();
             }
+       
         }
 
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
+            
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-
-
-    useEffect(()=>{console.log(comment)},[[comment, isOpen]])
+   
+  
+  
+    
+ 
 
 
 
@@ -143,6 +151,7 @@ useEffect(() => {
         if (from === to) return;
         const selectedText = editor.state.doc.textBetween(from, to, "");
        
+        
         const newText = 
         selectedText === selectedText.toUpperCase()
                 ? selectedText.toLowerCase()
@@ -182,22 +191,34 @@ useEffect(() => {
       },
       timestamp: formatFriendlyDate(new Date()),
       message: "",
+      from,
+      to,
       replies: [],
+      _version:Date.now(),
+   
     });
 
+    
     setTimeout(() => {
       openComments(UUID);
     }, 0);
     
-    const className = comment?.message.length === 0 && isOpen ? "highlighted-typing" : "highlighted";
+    
+    const className =  "highlighted-typing";
 
+   
     editor.chain().focus().deleteRange({ from, to }).insertContent({
+     
       type: "text",
       text: selectedText,
+
       marks: [
+       
         { type: "clickable", attrs: { id: UUID } },
         { type: "highlight", attrs: { class: className } },
       ],
+  
+
     }).run();
   };
 
@@ -242,7 +263,8 @@ useEffect(() => {
             editor.chain().focus().toggleSubscript().run();
         } else {
             editor.chain()
-                .focus()
+               
+            .focus()
                 .deleteRange({ from, to })
                 .insertContent([
                    

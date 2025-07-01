@@ -13,17 +13,22 @@ interface Comment {
     user: User;
     timestamp: string;
     message: string;
+
+    to?:any,
+    from?:any,
  
     replies: Comment[];
+  
+    _version?:any
 }
 
-interface CommentWindowStore {
- 
+
+interface CommentWindowStore { 
     isOpen: boolean;
     comment?: Comment|null;
     openComments: (id?:string|number) => void;
+    
     closeComments: () => void;
- 
     toggleComments: () => void;
     setComment: (comment: Comment) => void;
     addReply: (content: string) => void;
@@ -54,7 +59,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
     toggleComments: () => set((state) => ({ isOpen: !state.isOpen })),
 
   
-    setComment: (comment: Comment) => set({ comment }),
+    setComment: (comment: Comment) => {console.log("setComment called with", comment);set({ comment })},
 
     addReply: (content: string) => {
         const newReply: Comment = {
@@ -94,33 +99,41 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
     },
 
     updateComment: (content: string) => {
-
+console.log("updatedComment called with", content);
         set((state) => ({
             comment: {
                 ...state.comment,
+                
                 message: content,
-
+               _version: Date.now(),
             },
         }));
+        
+   
     },
 
 
     copyLink: () => {
+   
         const state = get();
         if (!state.comment) return;
 
 
+      
         const commentLink = `${window.location.origin}/comment/${state.comment.id}`;
         navigator.clipboard
             .writeText(commentLink)
             .then(() => {
+        
                 alert("Copied");
 
                 return true;
             })
+     
             .catch((err) => {
 
                 return false;
             });
+
     },
 }));

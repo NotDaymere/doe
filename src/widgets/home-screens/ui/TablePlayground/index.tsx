@@ -23,6 +23,7 @@ import { CustomBlock } from "./assets/CustomBlock/CustomBlock";
 import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
 import {Clickable} from "src/helpers/clickable";
 import { Highlight } from "src/helpers/highlight.tiptap";
+import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
 
 
 
@@ -142,15 +143,38 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                 setIsPen(false);
             }
         },
+   
     });
     const divRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState(0);
     const { openHistory, updateHistory } = useVersionHistoryStore();
     const [showButtons, setShowButtons] = useState(false);
+    const comment = useCommentWindowStore((s) => s.comment);
+        
+    const isOpen = useCommentWindowStore((s) => s.isOpen);
+    const setComment = useCommentWindowStore((s) => s.setComment);
+        
+    const openComments = useCommentWindowStore((s) => s.openComments);
+
+    useEffect(()=>{
+        if(!editor || comment?.message.length == 0) return;
+          const selectedText = editor.state.doc.textBetween(comment?.from, comment?.to, "");
+         editor.chain().focus().deleteRange({ from:comment?.from, to:comment?.to }).insertContent({
+        type: "text",
+        text: selectedText,
+        marks: [
+       
+            
+            { type: "clickable", attrs: { id: comment?.id } },
+            { type: "highlight", attrs: { class: "highlighted" } },
+         ],
+    }).run();
+    },[comment])
 
     useEffect(() => {
         const handleSave = (event: KeyboardEvent) => {
             if (event.ctrlKey && event.key.toLowerCase() === "s") {
+        
                 event.preventDefault();
 
                 setPlaygroundState((prev) => {
@@ -343,6 +367,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         }
     };
 
+   
     const handlePenClick = (position: any) => {
         if (isPen) {
             setSelectedText(null);
@@ -352,6 +377,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             setSelectedText(selectedText ? selectedText : "Pen");
             setIsPen(true);
             setButtonPosition(position);
+      
         }
     };
 
