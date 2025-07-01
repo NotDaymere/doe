@@ -52,9 +52,9 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
         }
 
         document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
+        // return () => {
+        //     document.removeEventListener("mousedown", handleClickOutside);
+        // };
     }, []);
 
 const handleClickOnClickableText = (event: MouseEvent) => {
