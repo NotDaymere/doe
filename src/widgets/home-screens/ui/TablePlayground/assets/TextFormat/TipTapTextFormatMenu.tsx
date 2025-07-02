@@ -52,9 +52,9 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
         }
 
         document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
+        // return () => {
+        //     document.removeEventListener("mousedown", handleClickOutside);
+        // };
     }, []);
 
 const handleClickOnClickableText = (event: MouseEvent) => {
@@ -77,9 +77,9 @@ useEffect(() => {
   document.addEventListener('mousedown', handleClick); // Use mousedown for quicker response
 
  
-  return () => {
-    document.removeEventListener('mousedown', handleClick);
-  };
+//   return () => {
+//     document.removeEventListener('mousedown', handleClick);
+//   };
 }, []);
 
     const handleRemoveFormat = () => {
@@ -136,44 +136,54 @@ useEffect(() => {
         editor.chain().focus().deleteRange({ from, to }).insertContent(newText).run();
     };
 
-    const applyCloudQuotes = () => {
-  if (!editor) return;
+     const applyCloudQuotes = () => {
+    if (!editor) return;
+    const { from, to } = editor.state.selection;
+    if (from === to) return;
 
-  const { from, to } = editor.state.selection;
+    const selectedText = editor.state.doc.textBetween(from, to, "");
+    const UUID = generateUUID();
+    //
 
-  if (from === to) return;
-
-  const selectedText = editor.state.doc.textBetween(from, to, "");
-  const UUID = generateUUID();
- 
- 
-
-
-  setComment({
- 
-    id: 1,
-    user: {
-      name: "John Doe",
-      avatar: "https://example.com/avatar.jpg",
+  
+    setComment({
+      id: 1,
+      user: {
+        name: "John Doe",
+        avatar: "https://example.com/avatar.jpg",
+      },
+      timestamp: formatFriendlyDate(new Date()),
+      message: "",
+      from,
+      to,
+      replies: [],
+      _version:Date.now(),
    
-    },
-    timestamp: formatFriendlyDate(new Date()),
-    message: "",
-    replies: [],
-  });
+    });
 
-  openComments();
+    
+    setTimeout(() => {
+      openComments(UUID);
+    }, 0);
+    
+    
+    const className =  "highlighted-typing";
 
- 
-
-
- 
-  editor.chain().focus()
- 
-    .setMark('clickable', { id: UUID }) 
    
-    .run();
-};
+
+    editor.chain().focus().deleteRange({ from, to }).insertContent({ 
+      type: "text",
+      text: selectedText,
+
+      marks: [
+       
+        { type: "clickable", attrs: { id: UUID } },
+        { type: "highlight", attrs: { class: className } },
+      ],
+  
+
+    }).run();
+  };
 
 
 

@@ -22,6 +22,8 @@ import PlaygroundAction from "../PlaygroundAction/PlaygroundAction";
 import { CustomBlock } from "./assets/CustomBlock/CustomBlock";
 import AddChartsAndWidgets from "src/components/AddChartsAndWidgets/AddChartsAndWidgets";
 import {Clickable} from "src/helpers/clickable";
+import { useCommentWindowStore } from "src/shared/providers/useCommentStore";
+import { Highlight } from "src/helpers/highlight.tiptap";
 
 
 
@@ -95,11 +97,13 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
             TextStyle,
             Superscript,
             Subscript,
+            Highlight,
            
        
             Clickable,
             Color.configure({
                 types: ["textStyle"],
+    
             }),
             CustomBlock,
         ],
@@ -142,6 +146,29 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     const [containerWidth, setContainerWidth] = useState(0);
     const { openHistory, updateHistory } = useVersionHistoryStore();
     const [showButtons, setShowButtons] = useState(false);
+
+
+     const comment = useCommentWindowStore((s) => s.comment);
+        
+
+
+    useEffect(()=>{
+        
+        if(!editor || comment?.message.length == 0) return;
+          const selectedText = editor.state.doc.textBetween(comment?.from, comment?.to, "");
+         editor.chain().focus().deleteRange({ from:comment?.from, to:comment?.to }).insertContent({
+        type: "text",
+        text: selectedText,
+        marks: [
+       
+            
+            { type: "clickable", attrs: { id: comment?.id } },
+     
+            { type: "highlight", attrs: { class: "highlighted" } },
+         ],
+   
+        }).run();
+    },[comment])
 
     useEffect(() => {
         const handleSave = (event: KeyboardEvent) => {
