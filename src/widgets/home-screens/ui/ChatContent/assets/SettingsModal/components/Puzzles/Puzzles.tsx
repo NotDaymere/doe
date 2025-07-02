@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { PazzleItem, PuzzleCategories, PuzzleType } from "./PuzzleItem/PuzzleItem";
+import { PuzzleItem, PuzzleCategories, PuzzleType } from "./PuzzleItem/PuzzleItem";
 import styles from "./Puzzles.module.less";
 import { PuzzleShape } from "./PuzzleItem/PuzzleShape";
 import { create } from "domain";
@@ -38,12 +38,18 @@ export const Puzzles = ({ puzzles, setPuzzles }: PuzzlesProps) => {
         setPuzzles((prev) => [...prev, newPuzzle]);
         setSelectedPuzzle(() => newPuzzle.id);
     };
+    const clearPuzzle = (id: string) => {
+        setPuzzles((prev) =>
+            prev.map((puzzle) => ({ ...puzzle, category: null, description: null }))
+        );
+    };
     const removePuzzle = (id: string) => {
-        if (puzzles.length > 0) {
+        if (puzzles.length > 1) {
             setSelectedPuzzle((prev) => null);
             setPuzzles((prev) => prev.filter((puzzle) => puzzle.id !== id));
-        }
+        } else clearPuzzle(id);
     };
+
     const changeCategory = ({ category, id }: { category: PuzzleCategories; id: string }) => {
         setPuzzles((prev) => {
             return prev.map((puzzle) => {
@@ -58,7 +64,7 @@ export const Puzzles = ({ puzzles, setPuzzles }: PuzzlesProps) => {
     return (
         <div ref={ref} className={styles.puzzles__container}>
             {puzzles.map((puzzle, index) => (
-                <PazzleItem
+                <PuzzleItem
                     key={puzzle.id}
                     index={index}
                     puzzle={puzzle}

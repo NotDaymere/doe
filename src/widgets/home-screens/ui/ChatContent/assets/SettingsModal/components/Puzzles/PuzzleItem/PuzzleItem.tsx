@@ -27,7 +27,7 @@ type PuzzleItemProps = {
     selectedPuzzleId: string | null;
     isFilled: boolean;
 };
-export const PazzleItem = ({
+export const PuzzleItem = ({
     index,
     puzzle: { category, id, description },
     selectedPuzzleId,
@@ -95,18 +95,20 @@ export const PazzleItem = ({
                         </button>
                     )}
 
-                    <button
-                        className={clsx(
-                            styles.puzzleItem__controlBtn,
-                            styles.puzzleItem__controlBtn__remove
-                        )}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            removePuzzle();
-                        }}
-                    >
-                        <MinusIcon />
-                    </button>
+                    {(index > 0 || (index === 0 && !!category)) && (
+                        <button
+                            className={clsx(
+                                styles.puzzleItem__controlBtn,
+                                styles.puzzleItem__controlBtn__remove
+                            )}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                removePuzzle();
+                            }}
+                        >
+                            <MinusIcon />
+                        </button>
+                    )}
                 </div>
             )}
             {openEditModal &&
