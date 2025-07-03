@@ -14,7 +14,7 @@ export const createEmptyPuzzle = (): PuzzleType => ({
     description: null,
 });
 export const SensOfSelf = () => {
-    const [puzzles, setPuzzles] = useState<PuzzleType[]>([]);
+    const [puzzles, setPuzzles] = useState<PuzzleType[]>([createEmptyPuzzle()]);
     const initialState = useRef<PuzzleType[] | null>(null);
     useEffect(() => {
         initialState.current = puzzles;
