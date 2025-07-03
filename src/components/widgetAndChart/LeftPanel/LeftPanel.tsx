@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./LeftPanel.less";
 import { Page } from "../Enums/Page.enum";
 import { useChartWidgets } from "../Window/ChartWidgetsWindow";
@@ -31,6 +31,21 @@ function LeftPanel() {
             [section]: true,
         });
     };
+
+
+
+   useEffect(() => {
+    const currentPage = page as Page;
+
+    const newOpenSections = {
+        charts: [Page.NEW_CHART, Page.PREVIEW_CHART, Page.CHART_DRAFTS].includes(currentPage),
+        widgets: [Page.NEW_WIDGET, Page.WIDGET_IN_CHAT].includes(currentPage),
+        drawing: currentPage === Page.DRAWING,
+        games: currentPage === Page.GAMES,
+    };
+
+    setOpenSections(newOpenSections);
+}, [page]);
 
 
 
