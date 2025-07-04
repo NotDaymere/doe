@@ -168,11 +168,12 @@ function Console() {
                         >
                             <div className="consoleWidowTabContainer">
     
-                                {[...Array(numberOfConsole)].map((_, i) => {
+                                {numberOfConsole <= 3 && [...Array(numberOfConsole)].map((_, i) => {
                                     return (
                                         <ConsoleWindow
                                             key={i}
                                             currentConsole={i + 1}
+                    
                                             
                                             totalConsoles={numberOfConsole}
                                             closeWindow={closeConsoleWindow}
@@ -180,6 +181,20 @@ function Console() {
                                         />
                                     );
                                 })}
+                                 {numberOfConsole > 3 && [...Array(1)].map((_, i) => {
+                                    return (
+                                        <ConsoleWindow
+                                            key={i}
+                                            currentConsole={i + 1}
+                    
+                                            
+                                            totalConsoles={numberOfConsole}
+                                            closeWindow={closeConsoleWindow}
+                                            icon={i + 1}
+                                        />
+                                    );
+                                })}
+                                
     
                             </div>
 
