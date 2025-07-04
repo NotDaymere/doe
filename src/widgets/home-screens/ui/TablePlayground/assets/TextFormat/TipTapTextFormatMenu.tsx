@@ -312,7 +312,7 @@ useEffect(() => {
 
         const adjusted = adjustPositionIfOverflowing(
             {
-                top: buttonPosition.top,
+                top: buttonPosition.top - 10,
                 left: buttonPosition.left - 200, // як у тебе
             },
             400, // Ширина меню (приблизно, підбери сам)
