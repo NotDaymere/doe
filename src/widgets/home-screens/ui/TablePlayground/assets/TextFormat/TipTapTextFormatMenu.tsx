@@ -41,7 +41,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     const [activePaint, setActivePaint] = useState(false);
     const [activeMenu, setActiveMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
-
+    const [menuCoords, setMenuCoords] = useState({ top: 0, left: 0 });
     const {setComment,openComments} = useCommentWindowStore();
 
     useEffect(() => {
@@ -283,18 +283,54 @@ useEffect(() => {
         editor.chain().focus().insertContent('<div class="card">New Card</div>').run();
     };
 
+    function adjustPositionIfOverflowing(
+        position: { top?: number; left?: number },
+        menuWidth: number,
+        menuHeight: number,
+        margin = 10
+    ) {
+        const { innerWidth, innerHeight } = window;
+        let top = position.top ?? 0;
+        let left = position.left ?? 0;
+
+        if (left + menuWidth + margin > innerWidth) {
+            left = innerWidth - menuWidth - margin;
+        }
+
+        if (top + menuHeight + margin > innerHeight) {
+            top = innerHeight - menuHeight - margin;
+        }
+
+        if (left < margin) left = margin;
+        if (top < margin) top = margin;
+
+        return { top, left };
+    }
+
+    useEffect(() => {
+        if (!buttonPosition?.top || !buttonPosition?.left) return;
+
+        const adjusted = adjustPositionIfOverflowing(
+            {
+                top: buttonPosition.top,
+                left: buttonPosition.left - 200, // як у тебе
+            },
+            400, // Ширина меню (приблизно, підбери сам)
+            48,  // Висота меню (можна уточнити через getBoundingClientRect)
+        );
+
+        setMenuCoords(adjusted);
+    }, [buttonPosition]);
+
     return (
         <>
             <Flex
                 ref={menuRef}
                 className={"text-format-container"}
                 style={{
-                            top: `${buttonPosition?.top}px`,
-                            left: buttonPosition?.left ? `${buttonPosition.left - 200}px` : "auto",
-                            bottom: `${buttonPosition?.bottom}px`,
-                            right: `${buttonPosition?.right}px`,
-                        }
-                }
+                    top: `${menuCoords.top}px`,
+                    left: `${menuCoords.left}px`,
+                }}
             >
                 <Button className={"button"} onClick={handleRemoveFormat}>
                     <General />
