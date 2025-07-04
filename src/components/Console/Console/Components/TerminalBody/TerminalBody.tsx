@@ -3,27 +3,27 @@
 import { useEffect, useRef, useState } from "react";
 import { Terminal } from "xterm";
 import "xterm/css/xterm.css";
+
 import BugCatchModal from "../BugCatchMoal/BugCatchModal";
 import "./TerminalBody.less";
 import { useConsole } from "../../Console";
+
 
 function TerminalBody() {
     const terminalRef = useRef<HTMLDivElement>(null);
     const termInstance = useRef<Terminal | null>(null);
     const [hoveredBug, setHoveredBug] = useState<number | null>(null);
+    
     const [currentLineIndex, setCurrentLineIndex] = useState(0);
-
     const [bugs, setBugs] = useState<Array<{ id: number; type: string; x: number; y: number }>>([]);
     const { numberOfConsole } = useConsole();
-
-    // Replace the single showWhiteDot state with an array to track all lines with white dots
     const [showWhiteDot, setShowWhiteDot] = useState(false);
-
-    // Add this new state to track all lines that should have white dots
+    
     const [whiteDotLines, setWhiteDotLines] = useState<number[]>([]);
 
     useEffect(() => {
         if (!termInstance.current && terminalRef.current) {
+    
             const term = new Terminal({
                 cursorBlink: true,
                 rows: 20,
@@ -33,6 +33,7 @@ function TerminalBody() {
                 scrollback: 1000,
                 theme: {
                     background: "#3d3e3c",
+    
                     foreground: "#FFFFFF",
                 },
             });
@@ -42,6 +43,7 @@ function TerminalBody() {
 
             let lineIndex = 0;
 
+    
             const originalWriteln = term.writeln.bind(term);
             term.writeln = (text: string) => {
                 originalWriteln(text);
@@ -51,6 +53,7 @@ function TerminalBody() {
 
                 const newBug = {
                     id: lineIndex,
+    
                     type: lineIndex % 2 === 0 ? "red-bug" : "blue-bug",
                     x: 0,
                     y: lineIndex,
@@ -60,6 +63,7 @@ function TerminalBody() {
 
                 lineIndex += lineCount;
                 setCurrentLineIndex(lineIndex);
+    
             };
 
             term.open(terminalRef.current);
@@ -69,6 +73,7 @@ function TerminalBody() {
                 );
                 term.writeln(
                     `${red}ImportError: dlopen(/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-pack${reset}`
+    
                 );
                 term.writeln(
                     "(venv) okezuebell@MacBook-Air Desktop % pip3 install stockfish Collecting stockfish"
@@ -79,25 +84,17 @@ function TerminalBody() {
                 term.writeln(`${red}23.1.2 ${reset}->${red}24.3.1${reset}`);
                 term.writeln("(venv) okezuebell@MacBook-Air Desktop % python3 chessgame.py");
 
-                // In the useEffect where the terminal is initialized, update the initialization of white dots
-                // Find where it sets setShowWhiteDot(true) and replace with:
                 setWhiteDotLines((prev) => [...prev, lineIndex]);
 
                 term.onData((data) => {
                     const code = data.charCodeAt(0);
-
                     if (code === 127) {
-                        // Backspace
                         term.write("\b \b");
                     } else if (code === 13) {
-                        // Enter key
-                        term.write("\r\n"); // Move to next line
-
-                        // Increment line index for the new line
+                        term.write("\r\n");
                         lineIndex += 1;
+    
                         setCurrentLineIndex(lineIndex);
-
-                        // Add this line to the list of lines with white dots
                         setWhiteDotLines((prev) => [...prev, lineIndex]);
                     } else {
                         term.write(data);
@@ -105,30 +102,23 @@ function TerminalBody() {
                 });
             } else {
                 term.writeln("");
-
-                // In the useEffect where the terminal is initialized, update the initialization of white dots
-                // Find where it sets setShowWhiteDot(true) and replace with:
                 setWhiteDotLines((prev) => [...prev, lineIndex]);
 
                 term.onData((data) => {
                     const code = data.charCodeAt(0);
-
                     if (code === 127) {
-                        // Backspace
                         term.write("\b \b");
+    
                     } else if (code === 13) {
-                        // Enter key
-                        term.write("\r\n"); // Move to next line
-
-                        // Increment line index for the new line
+                        term.write("\r\n");
                         lineIndex += 1;
                         setCurrentLineIndex(lineIndex);
-
-                        // Add this line to the list of lines with white dots
+    
                         setWhiteDotLines((prev) => [...prev, lineIndex]);
                     } else {
                         term.write(data);
                     }
+    
                 });
             }
             termInstance.current = term;
@@ -142,15 +132,15 @@ function TerminalBody() {
         };
     }, []);
 
-    // Fixed row height for perfect alignment
     const calculatePosition = (x: number, y: number) => {
+    
         if (!terminalRef.current || !termInstance.current) return { top: 19.5, left: 0 };
 
-        const charHeight = 19.3; // Directly using the known row height
+        const charHeight = 19.3;
 
         return {
             top: y * charHeight + 13.8,
-            left: 20, // Align dots to the left margin
+            left: 20,
         };
     };
 
@@ -163,6 +153,7 @@ function TerminalBody() {
                         <div
                             key={id}
                             style={{
+    
                                 position: "absolute",
                                 top: `${top}px`,
                                 left: `${left}px`,
@@ -172,6 +163,7 @@ function TerminalBody() {
                             onMouseEnter={() => setHoveredBug(id)}
                             onMouseLeave={() => setHoveredBug(null)}
                         >
+    
                             {hoveredBug === id && (
                                 <div
                                     className="bug-modal"
@@ -181,16 +173,17 @@ function TerminalBody() {
                                     <div className="bug-modal-arrow"></div>
                                     <BugCatchModal />
                                 </div>
-                            )}
+    
+    )}
                         </div>
                     );
                 })}
 
-                {/* White dots for all marked lines */}
                 {whiteDotLines.map((lineIdx) => (
                     <div
                         key={`white-dot-${lineIdx}`}
                         style={{
+    
                             position: "absolute",
                             top: `${calculatePosition(0, lineIdx).top}px`,
                             left: `${calculatePosition(0, lineIdx).left}px`,
@@ -200,8 +193,9 @@ function TerminalBody() {
                             backgroundColor: "white",
                             zIndex: 10,
                         }}
+    
                         className="white-bug"
-                        onMouseEnter={() => setHoveredBug(999999 + lineIdx)} // Use a unique ID for each line
+                        onMouseEnter={() => setHoveredBug(999999 + lineIdx)}
                         onMouseLeave={() => setHoveredBug(null)}
                     >
                         {hoveredBug === 999999 + lineIdx && (
@@ -209,11 +203,13 @@ function TerminalBody() {
                                 className="bug-modal"
                                 onMouseEnter={() => setHoveredBug(999999 + lineIdx)}
                                 onMouseLeave={() => setHoveredBug(null)}
-                            >
+    
+    >
                                 <div className="bug-modal-arrow"></div>
                                 <BugCatchModal />
                             </div>
-                        )}
+    
+    )}
                     </div>
                 ))}
             </div>
@@ -222,31 +218,34 @@ function TerminalBody() {
                 <div className="codewindow" ref={terminalRef}></div>
             </div>
 
+    
             <div className="lines">
                 {bugs.map(({ id, type, x, y }) => {
-                    const { top, left } = calculatePosition(x, y);
+                    const { top } = calculatePosition(x, y);
                     return (
+    
                         <div
                             key={id}
                             style={{
                                 position: "absolute",
                                 top: `${top}px`,
-                                height: `${19.5}px`,
+                                height: `19.5px`,
                                 zIndex: 10,
                             }}
                             className={`${type}`}
-                        ></div>
+    
+                            ></div>
                     );
                 })}
 
-                {/* White lines for all marked lines */}
                 {whiteDotLines.map((lineIdx) => (
                     <div
                         key={`white-line-${lineIdx}`}
                         style={{
                             position: "absolute",
+    
                             top: `${calculatePosition(0, lineIdx).top}px`,
-                            height: `${19.5}px`,
+                            height: `19.5px`,
                             zIndex: 10,
                             width: "100%",
                             backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -254,6 +253,7 @@ function TerminalBody() {
                         className="white-line"
                     />
                 ))}
+    
             </div>
         </>
     );
