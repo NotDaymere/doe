@@ -183,6 +183,7 @@ function Console() {
                                 })}
                                  {numberOfConsole > 3 && [...Array(1)].map((_, i) => {
                                     return (
+                                 
                                         <ConsoleWindow
                                             key={i}
                                             currentConsole={i + 1}
@@ -192,6 +193,7 @@ function Console() {
                                             closeWindow={closeConsoleWindow}
                                             icon={i + 1}
                                         />
+                         
                                     );
                                 })}
                                 
