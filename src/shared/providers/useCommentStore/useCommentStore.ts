@@ -27,6 +27,7 @@ interface Comment {
 interface CommentWindowStore { 
     isOpen: boolean;
     comment?: Comment|null;
+    comments:Comment[]|[],
     openComments: (id?:string|number) => void;
     
     closeComments: () => void;
@@ -58,9 +59,12 @@ export const useCommentWindowStore = create<CommentWindowStore>()((set, get) => 
     
     closeComments: () => set({ isOpen: false }),
     toggleComments: () => set((state) => ({ isOpen: !state.isOpen })),
+    selectComment: (id:any) => { const comment = get().comments.find((c) => c.id === id) || null; set({ comment }); },
 
   
-    setComment: (comment: Comment) => {console.log("setComment called with", comment);set({ comment })},
+    setComment: (comment: Comment) => {set({ comment })},
+    
+    addComment: (comment: Comment) => set((state) => ({ comments: [...state.comments, comment]})),
 
     addReply: (content: string) => {
         const newReply: Comment = {
