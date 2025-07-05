@@ -3,6 +3,7 @@ import "./ConsoleTitleContainer.less";
 import { useConsoleStore } from "src/shared/providers/useConsoleStore/useConsoleStore";
 
 interface ConsoleEntry {
+  
   id: number;
   label: string;
   icon: string;
@@ -12,14 +13,17 @@ const ConsoleTitleContainer: React.FC = () => {
   const {
     consoles,
     activeConsoleIndex,
+  
     setConsoles,
     setActiveConsoleIndex,
   } = useConsoleStore();
 
+  
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const entries: ConsoleEntry[] = Array.from({ length: 1   }, (_, i) => ({
+  
       id: i + 1,
       label: `cnsl${i + 1}`,
       icon: "/img/console/consoleicon4.svg",
@@ -29,6 +33,7 @@ const ConsoleTitleContainer: React.FC = () => {
   }, [setConsoles, setActiveConsoleIndex]);
 
   const toggleExpanded = () => {
+  
     if (consoles.length > 3) {
       setIsExpanded((prev) => !prev);
     }
@@ -48,6 +53,7 @@ const ConsoleTitleContainer: React.FC = () => {
           src={
             index === activeConsoleIndex
               ? "/img/console/consoleicon1.svg"
+  
               : "/img/console/consoleicon4.svg"
           }
           alt="icon"
@@ -57,6 +63,7 @@ const ConsoleTitleContainer: React.FC = () => {
       </div>
     ),
     [activeConsoleIndex, setActiveConsoleIndex]
+  
   );
 
   const getVisibleConsoles = () => {
@@ -66,6 +73,7 @@ const ConsoleTitleContainer: React.FC = () => {
     } else {
       const visible = [consoles[0], consoles[1], consoles[activeConsoleIndex]];
       const unique = visible.filter(
+  
         (item, index, self) => self.findIndex((c) => c.id === item.id) === index
       );
       return unique;
@@ -75,6 +83,7 @@ const ConsoleTitleContainer: React.FC = () => {
   return (
     <div className="title">
       <p>Console</p>
+  
       <div className="console-wrapper">
         {isExpanded ? (
           <div className="console-popover">
@@ -84,6 +93,7 @@ const ConsoleTitleContainer: React.FC = () => {
             {consoles.length > 3 && (
               <div className="console-icon-button" onClick={toggleExpanded}>
                 <img src="/img/console/consolecodeicon.svg" alt="code" />
+  
               </div>
             )}
           </div>
@@ -93,17 +103,25 @@ const ConsoleTitleContainer: React.FC = () => {
               {getVisibleConsoles().map((console) =>
                 renderConsoleEntry(console, consoles.findIndex((c) => c.id === console.id))
               )}
+          
             </div>
             {consoles.length > 3 && (
               <div className="console-icon-button" onClick={toggleExpanded}>
                 <img src="/img/console/consolecodeicon.svg" alt="code" />
+          
               </div>
-            )}
+  
+  )}
           </>
-        )}
+    
+    )}
       </div>
+  
     </div>
-  );
+ 
+);
 };
+
+
 
 export default ConsoleTitleContainer;

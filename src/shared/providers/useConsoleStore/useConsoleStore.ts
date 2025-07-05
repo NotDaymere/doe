@@ -72,10 +72,14 @@ export const useConsoleStore = create<ConsoleStore>()((set) => ({
       };
     }),
 
- clearConsole: () =>
+ clearConsole: () =>{
   
   set(() => ({
     consoles: [{}],
     activeConsoleIndex: 0,
-  })),
+  }))
+  set(() => ({
+    isOpen:false
+  }))
+}
 }));
