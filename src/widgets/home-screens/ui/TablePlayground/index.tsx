@@ -154,7 +154,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
     useEffect(()=>{
         
-        if(!editor || comment?.message.length == 0) return;
+        if(!editor || comment?.message == null) return;
           const selectedText = editor.state.doc.textBetween(comment?.from, comment?.to, "");
          editor.chain().focus().deleteRange({ from:comment?.from, to:comment?.to }).insertContent({
         type: "text",

@@ -153,7 +153,8 @@ useEffect(() => {
         avatar: "https://example.com/avatar.jpg",
       },
       timestamp: formatFriendlyDate(new Date()),
-      message: "",
+      
+      message: null,
       from,
       to,
       replies: [],

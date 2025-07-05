@@ -1,0 +1,112 @@
+.title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.title > p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+
+  color: #fff;
+}
+
+/* This is now the positioning anchor for our popover */
+
+.console-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  /* These styles apply to the collapsed state's background */
+  padding: 4px 8px;
+  background-color: #2d2e2c;
+  border-radius: 6px;
+
+}
+
+/* --- POPOVER STYLES --- */
+.console-popover {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  transform: translateY(-50%); /* Vertically center the popover */
+  z-index: 10;
+
+  display: flex;
+  align-items: flex-end; /* Aligns button with the bottom row of the grid */
+  gap: 12px;
+
+  padding: 12px;
+  background-color: #2d2e2c;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.console-grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 6px 12px;
+}
+
+/* --- COLLAPSED & SHARED STYLES --- */
+.console-group {
+  display: flex;
+
+  align-items: center;
+}
+
+.console-entry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  img {
+    width: 16px;
+    height: 13px;
+  }
+
+  span {
+    font-size: 14px;
+
+    color: #999;
+  }
+}
+
+.console-entry--active {
+  background-color: #000;
+  span {
+    color: #fff;
+  }
+
+}
+
+.console-icon-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  background: #1f1f1f;
+
+  border-radius: 8px;
+  margin-left: 8px;
+  cursor: pointer;
+  flex-shrink: 0; /* Prevents button from shrinking */
+
+  /* Remove margin when inside the popover as gap is used instead */
+  .console-popover & {
+    margin-left: 0;
+  }
+
+  img {
+    width: 16px;
+    height: 16px;
+  }
+
+}

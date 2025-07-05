@@ -19,7 +19,7 @@ function ConsoleWindow({ currentConsole, icon }: any) {
                                     : "/img/console/consoleicon2.svg"
                             }
                         />
-                        <p>cnsl {currentConsole}</p>
+                        <p>cnsl - {currentConsole}</p>
                     </div>
                     <div className={`consoleTab ${activeTab === "terminal" ? "on" : ""}`}>
                         <button onClick={() => setActiveTab("terminal")}>

@@ -14,36 +14,28 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
         useCommentWindowStore();
 
 
-        const [replyMessage, setReplyMessage] = useState("");
-    const [isEditing, setIsEditing] = useState(comment?.message.length === 0);
+    const [replyMessage, setReplyMessage] = useState("");
+    const [isEditing, setIsEditing] = useState(comment?.message == null);
     const [editedMessage, setEditedMessage] = useState(comment?.message || "");
 
 
-    const textareaRef = useRef(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
    
  
  
-    useEffect(() => {
-  if (isEditing) {
-  
-    const timer = setTimeout(() => {
-      if (textareaRef.current) {
-        textareaRef.current.focus();
-        const length = textareaRef.current.value.length;
-        textareaRef.current.setSelectionRange(length, length);
-      }
- 
-    }, 0);
-
-    return () => clearTimeout(timer);
+    useLayoutEffect(() => {
+  if (isEditing && textareaRef.current) {
+    textareaRef.current.focus();
+    const length = textareaRef.current.value.length;
+    textareaRef.current.setSelectionRange(length, length);
   }
 }, [isEditing]);
 
     const handleSaveEdit = () => {
+        
         if (editedMessage.trim().length > 0) {
             updateComment(editedMessage);
- 
             setIsEditing(false);
         }
     };
@@ -51,6 +43,7 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
     const handleCancelEdit = () => {
         setEditedMessage(comment?.message || "");
         setIsEditing(false);
+    
     };
 
  
@@ -60,6 +53,7 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
             handleSaveEdit();
         } else if (e.key === "Escape") {
             handleCancelEdit();
+    
         }
     };
 
@@ -69,6 +63,7 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
             e.preventDefault();
             addReply(replyMessage);
             setReplyMessage("");
+    
         }
     };
 
@@ -78,6 +73,7 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
             <div className="cp-header">
                 <div className="left">
                     <img className="profile" src="/img/profile_pic.png" alt="Profile" />
+    
                     <div className="profile-name-time">
                         <h4>{comment?.user.name}</h4>
                         <p>{comment?.timestamp}</p>
@@ -87,6 +83,7 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
                 <div className="right">
                     <button
                         onClick={toggleResolved}
+    
                         className={clsx("resolved-button", isResolved && "resolved")}
                     >
                         <CheckRoundIcon />
@@ -96,6 +93,7 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
  
                         className={clsx("menu-button", showMenu && "active")}
                     >
+    
                         <ThreeVerticalDots fill="currentColor" />
                     </button>
                     {showMenu && (
@@ -105,10 +103,12 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
                             setShowMenu={setShowMenu}
  
                             />
-                    )}
+    
+    )}
                 </div>
             </div>
 
+    
             <div className="cp-body">
                 {isEditing ? (
                     <div className="edit-mode">
@@ -123,8 +123,8 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
   onKeyDown={handleEditKeyDown}
 />
                         <button
-                            style={{ backgroundColor: "grey" }}
- 
+    
+    style={{ backgroundColor: "grey" }}
                             onClick={handleSaveEdit}
                         >
             

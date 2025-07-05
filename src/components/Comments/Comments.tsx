@@ -28,7 +28,7 @@ function Comments() {
           
             if (!showFilter) return;
 
-            // Check if the click is outside both the filter button and filter container
+            
             const isClickOutsideFilter =
                 filterContainerRef.current &&
                 !filterContainerRef.current.contains(event.target as Node) &&
@@ -36,7 +36,7 @@ function Comments() {
         
                 !filterButtonRef.current.contains(event.target as Node);
 
-            // Close the filter if clicked outside
+           
             if (isClickOutsideFilter) {
                 setShowFilter(false);
             }
