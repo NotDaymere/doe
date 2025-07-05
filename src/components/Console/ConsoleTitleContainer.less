@@ -17,10 +17,13 @@
 .console-wrapper {
   position: relative;
   display: flex;
+
+  
   align-items: center;
 
   /* These styles apply to the collapsed state's background */
   padding: 4px 8px;
+  
   background-color: #2d2e2c;
   border-radius: 6px;
 
@@ -29,6 +32,8 @@
 /* --- POPOVER STYLES --- */
 .console-popover {
   position: absolute;
+  min-width: 120px;
+  
   top: 45px;
   left: 0;
   transform: translateY(-50%); /* Vertically center the popover */
@@ -38,6 +43,7 @@
   align-items: flex-end; /* Aligns button with the bottom row of the grid */
   gap: 12px;
 
+  
   padding: 12px;
   background-color: #2d2e2c;
   border-radius: 8px;
@@ -47,6 +53,7 @@
 .console-grid {
   display: grid;
   grid-template-columns: repeat(3, auto);
+  
   gap: 6px 12px;
 }
 
@@ -66,6 +73,7 @@
 
   cursor: pointer;
 
+  
   img {
     width: 16px;
     height: 13px;
@@ -75,6 +83,7 @@
     font-size: 14px;
 
     color: #999;
+  
   }
 }
 
