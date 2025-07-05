@@ -14,7 +14,7 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
         useCommentWindowStore();
 
 
-        const [replyMessage, setReplyMessage] = useState("");
+    const [replyMessage, setReplyMessage] = useState("");
     const [isEditing, setIsEditing] = useState(comment?.message == null);
     const [editedMessage, setEditedMessage] = useState(comment?.message || "");
 

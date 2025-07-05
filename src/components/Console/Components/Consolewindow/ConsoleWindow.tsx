@@ -12,7 +12,7 @@ function ConsoleWindow({ currentConsole, icon,totalConsoles,closeWindow }: any) 
        <div className="consoleInnerWindow">
             <div className="consoletop">
     <div className="consoleTabContainer">
-        <div className="consoleTitle">
+        {/* <div className="consoleTitle">
             <img
                 src={
                     icon % 2
@@ -21,7 +21,7 @@ function ConsoleWindow({ currentConsole, icon,totalConsoles,closeWindow }: any) 
                 }
             />
             <p>cnsl {currentConsole}</p>
-        </div>
+        </div> */}
         <div className={`consoleTab ${activeTab === "terminal" ? "on" : ""}`}>
             <button onClick={() => setActiveTab("terminal")}>
                 <img src="/img/console/terminal.svg" alt="Terminal" />
