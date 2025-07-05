@@ -42,7 +42,7 @@ function Console() {
 
     const menuRef = useRef<HTMLDivElement>(null);
     const { isOpen, close } = useConsoleStore();
-    const {removeConsole,consoles,setConsoles,addConsole,activeConsoleIndex} = useConsoleStore();
+    const {clearConsole,removeConsole,consoles,setConsoles,addConsole,activeConsoleIndex} = useConsoleStore();
    
     const toggleMenu = () => setShowMenu((prev) => !prev);
      const hideConsole = () => setIsVisible(false);
@@ -88,13 +88,13 @@ function Console() {
         return () => observer.disconnect();
     }, [consoles.length]);
 
-    const clearConsole = () => {
+    const clearConsoleWindows = () => {
          if (consoles.length > 1) {
         
             ignoreNextResize.current = true;
         }
        
-        setConsoles([{}]);
+        clearConsole();
 
         
     };
@@ -240,7 +240,7 @@ function Console() {
 
                                     <img src="/img/console/window.svg" />
                                 </button>
-                                <button onClick={clearConsole}>
+                                <button onClick={clearConsoleWindows}>
     
                                     <img src="/img/console/delete.svg" />
     

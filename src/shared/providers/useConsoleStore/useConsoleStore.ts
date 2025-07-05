@@ -8,17 +8,22 @@ interface ConsoleEntry {
 
 interface ConsoleStore {
   isOpen: boolean;
+ 
   consoles: ConsoleEntry[];
   activeConsoleIndex: number;
 
   open: () => void;
+ 
   close: () => void;
   toggle: () => void;
 
   setConsoles: (entries: ConsoleEntry[]) => void;
+ 
   setActiveConsoleIndex: (index: number) => void;
   addConsole: () => void;
   removeConsole: (index: number) => void;
+  clearConsole: () => void;
+
 }
 
 export const useConsoleStore = create<ConsoleStore>()((set) => ({
@@ -28,6 +33,7 @@ export const useConsoleStore = create<ConsoleStore>()((set) => ({
 
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
+  
   toggle: () => set((state) => ({ isOpen: !state.isOpen })),
 
   setConsoles: (entries) => set({ consoles: entries }),
@@ -37,6 +43,7 @@ export const useConsoleStore = create<ConsoleStore>()((set) => ({
     set((state) => {
       const newIndex = state.consoles.length;
       const newConsole: ConsoleEntry = {
+  
         id: newIndex + 1,
         label: `cnsl${newIndex + 1}`,
         icon: "/img/console/consoleicon4.svg",
@@ -53,16 +60,22 @@ export const useConsoleStore = create<ConsoleStore>()((set) => ({
       let newActiveIndex = state.activeConsoleIndex;
 
       if (indexToRemove === state.activeConsoleIndex) {
-       
         newActiveIndex = Math.max(0, indexToRemove - 1);
       } else if (indexToRemove < state.activeConsoleIndex) {
         newActiveIndex = state.activeConsoleIndex - 1;
+  
       }
 
       return {
         consoles: updatedConsoles,
         activeConsoleIndex: newActiveIndex,
       };
-   
     }),
+
+ clearConsole: () =>
+  
+  set(() => ({
+    consoles: [{}],
+    activeConsoleIndex: 0,
+  })),
 }));
