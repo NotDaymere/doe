@@ -12,7 +12,7 @@ interface Comment {
     id: number;
     user: User;
     timestamp: string;
-    message: string;
+    message?: string|null;
 
     to?:any,
     from?:any,
