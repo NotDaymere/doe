@@ -55,6 +55,7 @@ function Comments() {
     if (!isOpen) return null;
 
     return (
+        <div className="CommentsOverlayContainer">
         <div
             className="Comment_Box"
             onClick={() => {
@@ -62,6 +63,7 @@ function Comments() {
             }}
         >
             <div className="header">
+ 
                 <div className="search">
         
                     <SearchIcon />
@@ -71,6 +73,7 @@ function Comments() {
                 <button
                     ref={filterButtonRef}
                     onClick={() => setShowFilter(!showFilter)}
+  
                     className={clsx("action-button", showFilter ? "active" : "")}
                 >
         
@@ -80,6 +83,7 @@ function Comments() {
                     onClick={() => {
                         closeComments();
                     }}
+   
                     className="action-button close"
                 >
                     <Close />
@@ -89,7 +93,8 @@ function Comments() {
                     <div ref={filterContainerRef} className="filterdiv">
                         <Filter />
                     </div>
-                )}
+   
+   )}
             </div>
 
             <div className="body">
@@ -98,15 +103,18 @@ function Comments() {
                     {comment && <CommentContainer showMenu={showMenu} setShowMenu={setShowMenu} />}
 
                     <div className="">
+    
                         {comment?.replies.map((comment: any, index: number) => {
                             return <Thread key={index} comment={comment} />;
                         })}
                     </div>
+  
                 </div>
         
             </div>
         </div>
+   
+        </div>
     );
 }
-
 export default Comments;

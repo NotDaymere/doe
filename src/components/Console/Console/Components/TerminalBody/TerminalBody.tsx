@@ -7,6 +7,7 @@ import "xterm/css/xterm.css";
 import BugCatchModal from "../BugCatchMoal/BugCatchModal";
 import "./TerminalBody.less";
 import { useConsole } from "../../Console";
+import { useConsoleStore } from "src/shared/providers/useConsoleStore/useConsoleStore";
 
 
 function TerminalBody() {
@@ -20,7 +21,7 @@ function TerminalBody() {
     const [showWhiteDot, setShowWhiteDot] = useState(false);
     
     const [whiteDotLines, setWhiteDotLines] = useState<number[]>([]);
-
+    const {consoles} = useConsoleStore();
     useEffect(() => {
         if (!termInstance.current && terminalRef.current) {
     
@@ -62,16 +63,18 @@ function TerminalBody() {
                 setBugs((prevBugs) => [...prevBugs, newBug]);
 
                 lineIndex += lineCount;
+             
                 setCurrentLineIndex(lineIndex);
     
             };
 
             term.open(terminalRef.current);
-            if (numberOfConsole === 1) {
+            if (consoles.length === 1) {
                 term.writeln(
                     'Traceback (most recent call last):File "/Users/okezuebell/Desktop/Chip/Doe/app.py", line 1, in <module>import streamlit as st\r'
                 );
                 term.writeln(
+                 
                     `${red}ImportError: dlopen(/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-pack${reset}`
     
                 );
