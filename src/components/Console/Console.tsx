@@ -34,49 +34,106 @@ function Console() {
     const nodeRef = useRef<HTMLDivElement>(null);
     const menuButtonRef = useRef<HTMLButtonElement>(null);
 
+       
+    const ignoreNextResize = useRef(false);
+
+   
+    const isInitialRender = useRef(true);
+
     const menuRef = useRef<HTMLDivElement>(null);
     const { isOpen, close } = useConsoleStore();
-    const {consoles,setConsoles,addConsole,activeConsoleIndex} = useConsoleStore();
+    const {removeConsole,consoles,setConsoles,addConsole,activeConsoleIndex} = useConsoleStore();
+   
     const toggleMenu = () => setShowMenu((prev) => !prev);
      const hideConsole = () => setIsVisible(false);
      const [userResized,setUserResized] = useState(false);
      const splitConsole = () => {
+        ignoreNextResize.current = true;
         addConsole()
     };
 
+   
+
+    useEffect(() => {
+     
+        const element = nodeRef.current;
+        if (!element) return;
+        const observer = new ResizeObserver(() => {
+           
+            if (isInitialRender.current) {
+                isInitialRender.current = false;
+                return;
+         
+            }
+
+         
+            if (ignoreNextResize.current) {
+               
+                ignoreNextResize.current = false;
+                return;
+            }
+
+           
+        
+            setUserResized(true);
+            console.log("USER has manually resized the console!");
+
+           
+            observer.disconnect();
+        });
+
+        observer.observe(element);
+
+        // Standard cleanup
+        return () => observer.disconnect();
+    }, [consoles.length]);
+
     const clearConsole = () => {
+         if (consoles.length > 1) {
+        
+            ignoreNextResize.current = true;
+        }
+       
         setConsoles([{}]);
+
+        
     };
 
     const closeConsoleWindow = (currentConsole: number) => {
-  useConsoleStore.setState((state) => ({
-    consoles: state.consoles.filter((_, index) => index !== currentConsole),
-  }));
+        ignoreNextResize.current = true;
+        removeConsole(currentConsole);
     };
+
 
     const [dimensions, setDimensions] = useState({ width: "100%", height: 300 });
     
     const consoleRef = useRef(null);
+  
+
     const isResizing = useRef(false);
     const resizeDirection = useRef("");
 
-    useEffect(() => {
+  
+    useEffect(() => {   
         const handleClickOutside = (event: MouseEvent) => {
             if (
-          
                 showMenu &&
+      
                 menuRef.current &&
                 !menuRef.current.contains(event.target as Node) &&
                 menuButtonRef.current &&
                 !menuButtonRef.current.contains(event.target as Node)
+          
             ) {
                 setShowMenu(false);
             }
         };
 
+  
         if (showMenu) {
     
             document.addEventListener("mousedown", handleClickOutside);
+        
         }
 
         return () => {
@@ -86,6 +143,7 @@ function Console() {
 
     const handleMouseDown = (e: any, direction: any) => {
     
+        
         e.preventDefault();
         isResizing.current = true;
         resizeDirection.current = direction;
@@ -105,6 +163,7 @@ function Console() {
             let newHeight = startHeight;
      
             if (resizeDirection.current.includes("right")) {
+        
                 newWidth = Math.max(300, startWidth + (e.clientX - startX));
             } else if (resizeDirection.current.includes("left")) {
     
@@ -114,6 +173,7 @@ function Console() {
 
             if (resizeDirection.current.includes("bottom")) {
     
+        
                 newHeight = Math.max(150, startHeight + (e.clientY - startY));
          
             } else if (resizeDirection.current.includes("top")) {
@@ -148,20 +208,23 @@ function Console() {
     
                     showMenu,
                     toggleMenu,
+
                     isVisible,
                     numberOfConsole,
     
                     hideConsole,
-                    splitConsole,
 
+                    splitConsole,
                     clearConsole,
                 }}
             >
+    
                 <Draggable nodeRef={nodeRef} handle=".drag-handle">
               
                     <div ref={nodeRef} className="consoleWindow" style={{maxWidth:userResized ? "100%" : "80%"}}>
                         <div className="console_head drag-handle">
-            
+
+
                             <ConsoleTitleContainer/>
 
                             <div className="right_buttons">
@@ -170,6 +233,7 @@ function Console() {
                      
                                     <img src="/img/console/code.svg" />
                    
+    
                                 </button>
                                 <button onClick={splitConsole}>
     
@@ -179,6 +243,7 @@ function Console() {
                                 <button onClick={clearConsole}>
     
                                     <img src="/img/console/delete.svg" />
+    
                                 </button>
                                 <button onClick={close}>
                                     <img src="/img/console/hide.svg" />
@@ -189,6 +254,7 @@ function Console() {
                                 <CodingLanguageMenu
                                     ref={menuRef}
     
+
                                     onSelectLanguage={() => setShowMenu(false)}
                                 />
                             )}
@@ -197,7 +263,9 @@ function Console() {
                         <div
                             ref={consoleRef}
                             style={{ width: dimensions.width, height: dimensions.height }}
-                        >
+        
+        >
+
                             <div className="consoleWidowTabContainer">
     
                                 {consoles.length <= 3 && [...Array(consoles.length)].map((_, i) => {
@@ -205,7 +273,8 @@ function Console() {
                                         <ConsoleWindow
     
                                         key={i}
-                                            currentConsole={i + 1}
+        
+                                        currentConsole={i + 1}
                     
                                             
                                             totalConsoles={numberOfConsole}
@@ -214,9 +283,11 @@ function Console() {
                                         />
                                     );
     
+    
     })}
                                  {consoles.length > 3 && [...Array(1)].map((_, i) => {
-                                    return (
+                            
+                            return (
                                  
     
                                         <ConsoleWindow
@@ -225,20 +296,24 @@ function Console() {
                     
     
                                             
+                            
                                             totalConsoles={consoles.length}
                                             closeWindow={closeConsoleWindow}
                                             icon={i + 1}
                                         />
                          
                                     );
-                                })}
+    
+    })}
                                 
     
 
+    
                             </div>
 
-                            <div
+                            {/* <div
                                 className="resizer top-left"
+                            
                                 onMouseDown={(e) => {setUserResized(true);handleMouseDown(e, "top-left")}}
                             ></div>
                             <div
@@ -248,14 +323,16 @@ function Console() {
     
     ></div>
                             <div
-                                className="resizer bottom-left"
+    
+                            className="resizer bottom-left"
                                 onMouseDown={(e) => handleMouseDown(e, "bottom-left")}
                             ></div>
                             <div
                                 className="resizer bottom-right"
                                 
                                 onMouseDown={(e) => {setUserResized(true); handleMouseDown(e, "bottom-right")}}
-                            ></div>
+                            ></div> */}
+    
     
                         </div>
                     </div>
@@ -265,5 +342,4 @@ function Console() {
     );
 
 }
-
 export default Console;
