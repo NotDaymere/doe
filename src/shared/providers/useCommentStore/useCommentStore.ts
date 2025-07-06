@@ -8,10 +8,12 @@ interface User {
   avatar: string;
 }
 
+
 interface Comment {
   id: number|string;
   user: User;
   timestamp: string;
+
   message?: string | null;
  
   to?: any;
@@ -21,6 +23,7 @@ interface Comment {
 
 }
 
+
 interface CommentWindowStore {
   isOpen: boolean;
 
@@ -28,17 +31,19 @@ interface CommentWindowStore {
   comments: Comment[];
   isResolved: boolean;
 
-  openComments: (id?: string | number) => void;
-  closeComments: () => void;
+  openComments: (id?: number|string) => void;
+  closeComments: (id?:number|string) => void;
+
   toggleComments: () => void;
   setComment: (comment: Comment) => void;
   addComment: (comment: Comment) => void;
 
   selectComment: (id: number) => void;
-  addReply: (content: string) => void;
+  addReply: (id:number|string,content: string) => void;
   updateComment: (id:any,content: string) => void;
   removeComment: () => void;
   toggleResolved: () => void;
+
   copyLink: () => boolean;
 }
 
@@ -48,6 +53,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
     isOpen: false,
     comment: null,
     comments: [],
+
     isResolved: false,
 
    openComments: (id: any) => {
@@ -57,6 +63,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
   const comment = get().comments.find(c => c.id === id);
   if (comment) {
     
+
     set({
       comment,
       isOpen: true
@@ -64,11 +71,28 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
   }else{console.log("No Comment Found")}
 },
 
-    closeComments: () => set({ isOpen: false }, false, "closeComments"),
+   closeComments: (id?: number | string) => {
+  const { comments, comment } = get();
+
+  if (!id) return;
+  console.log("Removing comment");
+  const updatedComments = comments.filter((c) => {
+    // Remove comment only if it matches ID and is empty
+    return c.id !== id || (c.message !== null && c.message !== '');
+  });
+
+  set({
+    comments: updatedComments,
+
+    comment: null,
+    isOpen: false,
+  }, false, "closeComments");
+},
 
 
     toggleComments: () =>
       set((state) => ({ isOpen: !state.isOpen }), false, "toggleComments"),
+
 
     setComment: (comment) =>
 
@@ -79,39 +103,58 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
       set({ comment: selected }, false, "selectComment");
     },
 
+    
+
     addComment: (comment) =>{
      console.log("adding Comment");
      
+
      set((state) => ({
 
         comments: [...state.comments, comment],
         comment,
+
         isOpen: true,
       }), false, "addComment")},
 
-    addReply: (content) => {
-      const current = get().comment;
-     
-      if (!current) return;
-      
-      const newReply: Comment = {
-        id: Date.now(),
-        user: { name: "Reply User", avatar: "https://example.com/avatar3.jpg" },
-        timestamp: formatFriendlyDate(new Date()),
-        message: content,
-        replies: [],
-      };
+  addReply: (id: number | string, content: string) => {
+  const { comments, comment } = get();
 
-      set({
-
-        comment: {
-          ...current,
-          replies: [...current.replies, newReply],
-        },
-      }, false, "addReply");
+  const newReply: Comment = {
+    id: Date.now(),
+    user: {
+   
+      name: "Reply User",
+      avatar: "https://example.com/avatar3.jpg",
     },
+    timestamp: formatFriendlyDate(new Date()),
+    message: content,
+    replies: [],
+  };
 
-   updateComment: (id: any, content: string) => {
+  const updatedComments = comments.map((c) =>
+  
+    c.id === id ? { ...c, replies: [...c.replies, newReply] } : c
+  );
+
+  const updatedComment =
+    comment?.id === id
+      ? { ...comment, replies: [...comment.replies, newReply] }
+      : comment;
+
+  set(
+  
+    {
+      comments: updatedComments,
+      comment: updatedComment,
+    },
+    false,
+    "addReply"
+  );
+},
+
+  
+updateComment: (id: any, content: string) => {
  
   
     const { comments, comment } = get();
@@ -143,7 +186,8 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
 
         set({ comment: undefined, isOpen: false }, false, "removeComment"),
 
-    toggleResolved: () =>
+
+        toggleResolved: () =>
       set((state) => ({ isResolved: !state.isResolved }), false, "toggleResolved"),
 
     copyLink: () => {
@@ -152,7 +196,8 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
 
       const commentLink = `${window.location.origin}/comment/${comment.id}`;
       navigator.clipboard.writeText(commentLink)
-        .then(() => {
+
+      .then(() => {
           alert("Copied");
         })
 
@@ -161,6 +206,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
         });
 
       return true;
+
     },
   }))
 );

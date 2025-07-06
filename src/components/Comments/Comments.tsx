@@ -81,7 +81,7 @@ function Comments() {
                 </button>
                 <button
                     onClick={() => {
-                        closeComments();
+                        closeComments(comment?.id);
                     }}
    
                     className="action-button close"

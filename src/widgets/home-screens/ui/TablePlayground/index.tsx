@@ -181,50 +181,49 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
 
 
 
-
     
-        
 
- useEffect(() => {
+
+useEffect(() => {
   if (!editor) return;
 
+  const plainText = editor.state.doc.textContent;
+    editor.commands.setContent(plainText);
+
+
   comments.forEach((comment: any) => {
-    if (comment.message == null || comment.from == null || comment.to == null) return;
+    if (comment.from == null || comment.to == null) return;
 
-   
-    const selectedText = editor.state.doc.textBetween(comment.from, comment.to, "");
+    const selectedText = editor.state.doc.textBetween(comment.from, comment.to, '');
 
-  
     editor.commands.deleteRange({ from: comment.from, to: comment.to });
 
-    editor.commands.insertContentAt(
-      comment.from,
-      {
-        type: "text",
-   
-        text: selectedText,
-   
-        marks: [
-          { type: "clickable", attrs: { id: comment.id } },
-          { type: "unselectable", attrs: { class: "unselectable-text" } },
-          { type: "highlight", attrs: { class: "highlighted" } },
-   
-        ],
-      }
-    );
-  });
-
-}, [comments]);
+    editor.commands.insertContentAt(comment.from, {
+      type: 'text',
+      text: selectedText,
+      marks: [
+        { type: 'clickable', attrs: { id: comment.id } },
+    
+        { type: 'unselectable', attrs: { class: 'unselectable-text' } },
+        { type: 'highlight', attrs: { class: !comment.message ? 'highlighted-typing':'highlighted' } },
+      ],
+    });
+  
+});
+}, [comments, editor]);
 
     useEffect(() => {
+     
         const handleSave = (event: KeyboardEvent) => {
       
             
             if (event.ctrlKey && event.key.toLowerCase() === "s") {
+               
                 event.preventDefault();
 
-   
+
                 setPlaygroundState((prev) => {
+
                     if (prev) {
                         const updatedHistory = {
                             id: Date.now(),
@@ -234,6 +233,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                             user: "Current User",
                             photo: "/temp/profile.jpg",
    
+
                             playgroundId: prev.id,
                             playground: prev,
                         };
@@ -288,15 +288,17 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         );
 
         editor.commands.setTextSelection(selection);
+   
     }, [playgroundState, editor]);
 
     useEffect(() => {
         if (id !== null) {
-            const savedData = playgroundState?.data;
    
+            const savedData = playgroundState?.data;
             if (savedData instanceof Object) {
                 setMockData(savedData);
             } else {
+ 
                 setMockData(table());
             }
         }
@@ -311,6 +313,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
    
     useEffect(() => {
         if (divRef.current) {
+ 
             setContainerWidth(divRef.current.getBoundingClientRect().width);
         }
 
@@ -340,6 +343,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     //     if (!editor) return;
     //
     //     let template = "";
+ 
     //     if (selectedCell) {
     //         template = `<div>I have a question about <span class="highlighted-span green">Tab ${selectedCell}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
     //     } else if (selectedRow) {
@@ -349,6 +353,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     //         template = `<div>I have a question about <span class="highlighted-span green">Column ${selectedColumn}</span> in the graph: <span class="custom-tag green" data-deletable="true">question</span></div>`;
     //     }
     //     if (template) {
+ 
     //         editor.commands.setContent(template);
     //     }
     // };
@@ -358,6 +363,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
         {
             title: "",
             dataIndex: "rowHeader",
+ 
             width: "36px",
             render: (_: any, __: any, rowIndex: number) => `${rowIndex + 1}`,
             onCell: (_: any, rowIndex?: number) => ({
@@ -367,6 +373,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
                     if (rowIndex === undefined) return;
                     setSelectedRow(rowIndex + 1);
                     setSelectedCell(null);
+ 
                     setSelectedColumn(null);
                 },
             }),
@@ -376,6 +383,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
    
     const columns: TableProps<any>["columns"] = [
         ...rowHeaderColumn,
+ 
         ...mockData.columns.map((col: any) => ({
             ...col,
             onCell: (_: any, rowIndex?: number) => ({
