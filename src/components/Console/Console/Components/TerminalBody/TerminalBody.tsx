@@ -33,7 +33,8 @@ function TerminalBody() {
     if (!termInstance.current && terminalRef.current) {
       const term = new Terminal({
   cursorBlink: true,
-     rows: 20,
+  
+  rows: 20,
   fontFamily: 'Menlo, Monaco, "Courier New", monospace',
   fontSize: 14,
   lineHeight: 1.2,
@@ -42,7 +43,8 @@ function TerminalBody() {
   theme: {
     background: "#3d3e3c",
     foreground: "#FFFFFF",
-  },
+  
+},
   
 });
 
@@ -51,6 +53,7 @@ function TerminalBody() {
       fitAddonRef.current = fitAddon;
 
       term.open(terminalRef.current);
+
       fitAddon.fit();
 
 
@@ -70,6 +73,7 @@ function TerminalBody() {
 
         const newBug = {
           id: lineIndex,
+
           type: lineIndex % 2 === 0 ? "red-bug" : "blue-bug",
           x: 0,
           y: lineIndex,
@@ -79,7 +83,8 @@ function TerminalBody() {
         setBugs((prev) => [...prev, newBug]);
         lineIndex += lineCount;
         setCurrentLineIndex(lineIndex);
-      };
+
+    };
 
       // Sample content
       if (consoles.length === 1) {
@@ -88,6 +93,7 @@ function TerminalBody() {
           'Traceback (most recent call last): File "/Users/okezuebell/Desktop/Chip/Doe/app.py", line 1, in <module> import streamlit as st\r'
         );
         term.writeln(`${red}ImportError: dlopen(.../python3.11/site-pack...${reset}`);
+
         term.writeln("(venv) % pip3 install stockfish");
         term.writeln("Collecting stockfish...");
         term.writeln("Successfully installed stockfish");
@@ -97,6 +103,7 @@ function TerminalBody() {
         setWhiteDotLines((prev) => [...prev, lineIndex]);
       } else {
         term.writeln("");
+
         setWhiteDotLines((prev) => [...prev, lineIndex]);
       }
 
@@ -106,13 +113,16 @@ function TerminalBody() {
 
             term.write("\b \b");
         } else if (code === 13) {
-          term.write("\r\n");
+
+            term.write("\r\n");
           lineIndex += 1;
 
           setCurrentLineIndex(lineIndex);
+
           setWhiteDotLines((prev) => [...prev, lineIndex]);
         } else {
           term.write(data);
+
 
         }
       });
@@ -198,19 +208,23 @@ function TerminalBody() {
         ))}
       </div>
 
+
       <div className="terminal-container">
         <div className="codewindow" ref={terminalRef}></div>
       </div>
+
 
       <div className="lines">
 
         {bugs.map(({ id, type, x, y }) => {
           const { top } = calculatePosition(x, y);
+
           return (
             <div
 
             key={id}
-              style={{ position: "absolute", top: `${top}px`, height: `19.5px`, zIndex: 10 }}
+
+            style={{ position: "absolute", top: `${top}px`, height: `19.5px`, zIndex: 10 }}
               className={`${type}`}
             ></div>
 
@@ -218,6 +232,7 @@ function TerminalBody() {
         })}
 
         {whiteDotLines.map((lineIdx) => (
+
 
 <div
             key={`white-line-${lineIdx}`}
@@ -228,6 +243,7 @@ function TerminalBody() {
               height: `19.5px`,
               zIndex: 10,
               width: "100%",
+
               backgroundColor: "rgba(255, 255, 255, 0.1)",
             }}
             className="white-line"
@@ -237,6 +253,7 @@ function TerminalBody() {
       </div>
     </>
   );
+
 }
 
 export default TerminalBody;
