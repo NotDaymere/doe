@@ -10,7 +10,7 @@ import SendIcon from "src/shared/icons/SendIcon";
 
 
 export default function CommentContainer({ showMenu, setShowMenu }:any) {
-    const { comment, addReply, updateComment, isResolved, toggleResolved } =
+    const { comments,comment, addReply, updateComment, isResolved, toggleResolved } =
         useCommentWindowStore();
 
 
@@ -35,15 +35,17 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
     const handleSaveEdit = () => {
         
         if (editedMessage.trim().length > 0) {
-            updateComment(editedMessage);
+            alert("Saving!");
+            useCommentWindowStore.getState().updateComment(comment?.id,editedMessage);
+           
             setIsEditing(false);
         }
     };
 
     const handleCancelEdit = () => {
         setEditedMessage(comment?.message || "");
+      
         setIsEditing(false);
-    
     };
 
  
