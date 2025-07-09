@@ -42,7 +42,7 @@ function TipTapTextFormatMenu({ buttonPosition, isPen, editor, handleTipTapTextF
     const [activeMenu, setActiveMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
     const [menuCoords, setMenuCoords] = useState({ top: 0, left: 0 });
-    const {setComment,openComments} = useCommentWindowStore();
+    const {addComment,setComment,openComments} = useCommentWindowStore();
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -61,8 +61,9 @@ const handleClickOnClickableText = (event: MouseEvent) => {
   const clickedElement = event.target as HTMLElement;
 
 
-  if (clickedElement && clickedElement.dataset.clickable) {
+  if (clickedElement && clickedElement.dataset.clickable) {  console.log("comment,clicked---",clickedElement.dataset.id)
     const clickedId = clickedElement.dataset.id;
+   
     openComments(clickedId); 
     // event.preventDefault();
     // event.stopPropagation(); 
@@ -72,6 +73,8 @@ const handleClickOnClickableText = (event: MouseEvent) => {
 
 
 useEffect(() => {
+ 
+
   const handleClick = (event: MouseEvent) => handleClickOnClickableText(event);
 
   document.addEventListener('mousedown', handleClick); // Use mousedown for quicker response
@@ -143,13 +146,14 @@ useEffect(() => {
 
     const selectedText = editor.state.doc.textBetween(from, to, "");
     const UUID = generateUUID();
-    //
+    
 
-  
-    setComment({
-      id: 1,
+    
+    addComment({
+      id:UUID,
       user: {
         name: "John Doe",
+       
         avatar: "https://example.com/avatar.jpg",
       },
       timestamp: formatFriendlyDate(new Date()),
@@ -162,24 +166,31 @@ useEffect(() => {
    
     });
 
+
+
+   
+
     
     setTimeout(() => {
       openComments(UUID);
+    
     }, 0);
     
     
     const className =  "highlighted-typing";
 
    
-
+   
     editor.chain().focus().deleteRange({ from, to }).insertContent({ 
       type: "text",
+      
       text: selectedText,
-
       marks: [
        
         { type: "clickable", attrs: { id: UUID } },
+       
         { type: "highlight", attrs: { class: className } },
+        // { type:"unselectable", attrs: { class: "unselectable-text" }},
       ],
   
 

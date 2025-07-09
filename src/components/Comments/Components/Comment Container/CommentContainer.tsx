@@ -10,7 +10,7 @@ import SendIcon from "src/shared/icons/SendIcon";
 
 
 export default function CommentContainer({ showMenu, setShowMenu }:any) {
-    const { comment, addReply, updateComment, isResolved, toggleResolved } =
+    const { comments,comment, addReply, updateComment, isResolved, toggleResolved } =
         useCommentWindowStore();
 
 
@@ -20,48 +20,65 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
 
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-
+useEffect(() => {
+  if (isEditing && textareaRef.current) {
+    console.log("Focusing textarea");
+  
+}
+}, [isEditing, comment]);
    
  
  
-    useLayoutEffect(() => {
-  if (isEditing && textareaRef.current) {
-    textareaRef.current.focus();
-    const length = textareaRef.current.value.length;
-    textareaRef.current.setSelectionRange(length, length);
+ useEffect(() => {
+  if (isEditing) {
+    const timeout = setTimeout(() => {
+      if (textareaRef.current) {
+   
+        textareaRef.current.focus();
+        const len = textareaRef.current.value.length;
+        textareaRef.current.setSelectionRange(len, len);
+      }
+    }, 0);
+    return () => clearTimeout(timeout);
   }
-}, [isEditing]);
+}, [isEditing, comment]);
 
-    const handleSaveEdit = () => {
+  
+const handleSaveEdit = () => {
         
         if (editedMessage.trim().length > 0) {
-            updateComment(editedMessage);
+          
+            useCommentWindowStore.getState().updateComment(comment?.id,editedMessage);
+           
             setIsEditing(false);
         }
     };
 
     const handleCancelEdit = () => {
-        setEditedMessage(comment?.message || "");
+     
+        setEditedMessage(comment?.message || ""); 
         setIsEditing(false);
-    
     };
 
  
     const handleEditKeyDown = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
+         
             e.preventDefault();
             handleSaveEdit();
+   
         } else if (e.key === "Escape") {
-            handleCancelEdit();
-    
+            handleCancelEdit(); 
         }
     };
 
  
+    
     const handleReplyKeyDown = (e:any) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            addReply(replyMessage);
+          
+            addReply(comment!.id,replyMessage);
             setReplyMessage("");
     
         }
@@ -70,11 +87,13 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
     return (
  
  <div className="top">
+         
             <div className="cp-header">
                 <div className="left">
                     <img className="profile" src="/img/profile_pic.png" alt="Profile" />
     
                     <div className="profile-name-time">
+    
                         <h4>{comment?.user.name}</h4>
                         <p>{comment?.timestamp}</p>
                     </div>
@@ -84,35 +103,46 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
                     <button
                         onClick={toggleResolved}
     
+    
                         className={clsx("resolved-button", isResolved && "resolved")}
                     >
                         <CheckRoundIcon />
                     </button>
+    
                     <button
-                        onClick={() => setShowMenu(!showMenu)}
+     
+     onClick={() => setShowMenu(!showMenu)}
  
-                        className={clsx("menu-button", showMenu && "active")}
+    
+     className={clsx("menu-button", showMenu && "active")}
                     >
     
                         <ThreeVerticalDots fill="currentColor" />
+    
                     </button>
                     {showMenu && (
                         <Menu
-                            isEditing={isEditing}
+   
+    
+                        isEditing={isEditing}
                             setIsEditing={setIsEditing}
                             setShowMenu={setShowMenu}
  
+     
                             />
     
     )}
                 </div>
+     
             </div>
 
     
             <div className="cp-body">
+     
                 {isEditing ? (
                     <div className="edit-mode">
                         <textarea
+ 
  
  ref={textareaRef}
  
@@ -123,7 +153,8 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
   onKeyDown={handleEditKeyDown}
 />
                         <button
-    
+ 
+ 
     style={{ backgroundColor: "grey" }}
                             onClick={handleSaveEdit}
                         >
@@ -132,6 +163,7 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
                         </button>
                     </div>
                 ) : (
+ 
                     <p>{editedMessage}</p>
  
  )}
@@ -141,6 +173,7 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
                 <div className="cp-footer">
                     <input
                         type="text"
+ 
                         value={replyMessage}
                         placeholder="Reply..."
  
@@ -149,7 +182,8 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
                     />
                     <button
                         onClick={() => {
-                            addReply(replyMessage);
+                            addReply(comment!.id,replyMessage);
+ 
                             setReplyMessage("");
                         }}
                         disabled={!replyMessage}
@@ -159,7 +193,8 @@ export default function CommentContainer({ showMenu, setShowMenu }:any) {
                     </button>
                 </div>
     
-    )}
+ 
+ )}
         </div>
     );
 }
