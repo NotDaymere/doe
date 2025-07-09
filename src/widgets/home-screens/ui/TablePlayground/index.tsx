@@ -197,7 +197,7 @@ useEffect(() => {
     const selectedText = editor.state.doc.textBetween(comment.from, comment.to, '');
 
     editor.commands.deleteRange({ from: comment.from, to: comment.to });
-
+    const randomColorNumber = 1;
     editor.commands.insertContentAt(comment.from, {
       type: 'text',
       text: selectedText,
@@ -205,7 +205,7 @@ useEffect(() => {
         { type: 'clickable', attrs: { id: comment.id } },
     
         { type: 'unselectable', attrs: { class: 'unselectable-text' } },
-        { type: 'highlight', attrs: { class: !comment.message ? 'highlighted-typing':'highlighted' } },
+        { type: 'highlight', attrs: { class: !comment.message ? `highlighted-typing-${randomColorNumber}`:`highlighted-${randomColorNumber}` } },
       ],
     });
   
