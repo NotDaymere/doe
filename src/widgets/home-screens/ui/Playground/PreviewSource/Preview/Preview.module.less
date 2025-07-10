@@ -17,6 +17,12 @@
     transform: translateX(-50%);
     top: 8px;
     z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.showTitle {
+    opacity: 1;
 }
 
 .pagination {
@@ -25,6 +31,12 @@
     transform: translateX(-50%);
     bottom: 30px;
     z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.showPagination {
+    opacity: 1;
 }
 
 .zoom {
@@ -32,6 +44,12 @@
     right: 50px;
     bottom: 30px;
     z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.showZoom {
+    opacity: 1;
 }
 
 .preWrapper {
@@ -42,30 +60,40 @@
     display: block;
     white-space: pre-wrap;
     margin: 0;
+    border-radius: 0;
 }
 
 .docxDocument {
     width: 100%;
     max-width: 465px;
-    height: 67vh;
+    height: 85vh;
     max-height: 635px;
-    //width: 513px;
-    //max-width: 513px;
-    //height: 683px;
-    //max-height: 100%;
     overflow-x: scroll;
 }
 
 .docxPreview {
-    // display: contents;
     position: relative;
-    border-radius: 8px;
     width: 100%;
     max-width: 465px;
-    max-height: calc(67vh - 48px);
+    max-height: calc(85vh - 40px);
     overflow: auto;
-    padding-right: 8px;
+    padding-right: 4px;
     box-sizing: border-box;
+
+    &::-webkit-scrollbar {
+        width: 7px;
+        background: var(--var-33);
+        border-radius: 20px;
+        margin: 0;
+        padding: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--color-white-100);
+        border-radius: 20px;
+        height: 6px;
+        cursor: pointer;
+    }
 }
 
 .docxTitle {
@@ -74,11 +102,25 @@
 }
 
 .txtPreview {
-    border-radius: 8px;
     width: 100%;
     max-width: 465px;
-    max-height: calc(67vh - 48px);
+    max-height: calc(85vh - 40px);
     overflow: auto;
-    padding-right: 8px;
+    padding-right: 4px;
     box-sizing: border-box;
+
+    &::-webkit-scrollbar {
+        width: 7px;
+        background: var(--var-33);
+        border-radius: 20px;
+        margin: 0;
+        padding: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--color-white-100);
+        border-radius: 20px;
+        height: 6px;
+        cursor: pointer;
+    }
 }
