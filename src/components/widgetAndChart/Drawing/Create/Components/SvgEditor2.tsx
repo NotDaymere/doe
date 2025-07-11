@@ -8,22 +8,24 @@ import DrawingToolButton from "src/components/widgetAndChart/Component/DrawingTo
 import { useLassoSelection } from "./useLassoSelection";
 const FabricCanvasWindow = ({ drawingData, id }) => {
     const canvasRef = useRef(null);
+    
     const fabricCanvas = useRef(null);
     const [isPen, setIsPen] = useState(true);
     const [isDrawingMode, setIsDrawingMode] = useState(false);
     const [isTextFormat, setIsTextFormat] = useState(false);
+    
     const [isDrawingFormat, setIsDrawingFormat] = useState(false);
-  
     const [showPaintBox, setShowPaintBox] = useState(false);
-    const fontSizes = [8, 12, 16, 32]; // Font sizes to toggle through
+    const fontSizes = [8, 12, 16, 32]; 
     const indentAmount = 20;
+   
     const [showPaintDrawingBox, setShowPaintDrawingBox] = useState(false);
     const [showStrokeBox, setShowStrokeBox] = useState(false);
     const [showOpacityBox, setShowOpacityBox] = useState(false);
     const [isEraserMode, setIsEraserMode] = useState(false);
+   
     const [strokeWidth, setStrokeWidth] = useState(1);
     const [opacityValue, setOpacityValue] = useState(100);
-   
     const [showMoreTools, setShowMoreTools] = useState(false);
     const [drawingcolor, setDrawingColor] = useState("#000000");
     const [activeTool, setActiveTool] = useState("");
@@ -31,8 +33,8 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
     const lassoPath = useRef(null);
     const [fabricInstance, setFabricInstance] = useState(null);
     const lassoPoints = useRef([]);
+   
     const activeToolRef = useRef("");
-    
 
     const toggleLassoTool = () => {
   const isActive = activeTool === "lasso";
@@ -41,6 +43,7 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
   } else {
     setActiveTool("lasso");
     setIsEraserMode(false);
+  
     disableDrawingMode();
 
     
@@ -53,6 +56,41 @@ const FabricCanvasWindow = ({ drawingData, id }) => {
 
    
 
+
+useEffect(() => {
+  const canvas = fabricCanvas.current;
+  if (!canvas) return;
+
+  const handleSelectionCreated = (e) => {
+    const obj = e.selected?.[0];
+    
+    console.log("[FABRIC] selection:created", obj);
+  };
+
+  
+  const handleSelectionUpdated = (e) => {
+    const obj = e.selected?.[0];
+    console.log("[FABRIC] selection:updated", obj);
+  };
+
+  
+  const handleSelectionCleared = () => {
+    console.log("[FABRIC] selection:cleared");
+  };
+
+  
+  canvas.on("selection:created", handleSelectionCreated);
+  canvas.on("selection:updated", handleSelectionUpdated);
+  canvas.on("selection:cleared", handleSelectionCleared);
+
+  
+  return () => {
+    canvas.off("selection:created", handleSelectionCreated);
+    canvas.off("selection:updated", handleSelectionUpdated);
+    canvas.off("selection:cleared", handleSelectionCleared);
+  };
+
+}, [drawingData]);
 
 
 
@@ -71,34 +109,45 @@ useEffect(() => {
         setIsDrawingFormat(false);
         setShowPaintBox(false);
         setShowPaintDrawingBox(false);
+       
         setShowStrokeBox(false);
         setShowOpacityBox(false);
         setShowMoreTools(false);
      
+       
         setActiveTool("");
     };
 
+    
     
     useEffect(() => {
         // Initialize Fabric.js canvas
         fabricCanvas.current = new fabric.Canvas(canvasRef.current, {
             width: 700,
+            
             height: 350,
-      
             backgroundColor: "transparent",
             isDrawingMode: false,
         });
+    
         fabricCanvas.current.upperCanvasEl.setAttribute("tabindex", "0");
         fabricCanvas.current.upperCanvasEl.focus();
+
+
+        
+
+
+
         setTimeout(() => {
   
             setFabricInstance(fabricCanvas.current);
           
+    
         }, 0);
 
         console.log("Drawing data loaded:", drawingData);
 
-        // Load existing drawing data if available
+       
         if (drawingData) {
             fabricCanvas.current.loadFromJSON(drawingData, () => {
                 requestAnimationFrame(() => {
@@ -108,6 +157,7 @@ useEffect(() => {
             // enableDrawingMode();
         } else {
             // enableDrawingMode(); // Enable drawing mode directly if no data to load
+       
         }
 
         // Add event listener for delete key
@@ -117,6 +167,7 @@ useEffect(() => {
         // Add event listener for text deselection
         const handleSelectionCleared = () => {
             resetToolbar();
+       
         };
 
         // Add event listener for clicks outside text
@@ -126,6 +177,7 @@ useEffect(() => {
   // Prevent toolbar reset when using tools like lasso, eraser, etc.
   if (["lasso", "eraser", "drawingFormat", "shape", "textformat"].includes(tool)) return;
 
+ 
   const activeObject = fabricCanvas.current.getActiveObject();
   if (!activeObject || activeObject.type !== "i-text") {
     resetToolbar();
@@ -135,8 +187,8 @@ useEffect(() => {
      
 
      
-        fabricCanvas.current.on("selection:cleared", handleSelectionCleared);
-        
+ 
+fabricCanvas.current.on("selection:cleared", handleSelectionCleared);        
         fabricCanvas.current.on("mouse:down", handleMouseDown);
 
         return () => {
@@ -146,14 +198,12 @@ useEffect(() => {
                 fabricCanvas.current.off("selection:cleared", handleSelectionCleared);
                 fabricCanvas.current.off("mouse:down", handleMouseDown);
                 fabricCanvas.current.dispose(); // Cleanup on unmount
+
     
             }
         };
 
 
-
-
-        
     }, [drawingData]);
 
 
@@ -215,32 +265,49 @@ useLassoSelection(fabricInstance, activeTool === "lasso");
     const togglePen = () => {
         addText();
     };
-const hexToRgba = (hex, alpha) => {
+const colorMap:any = {
+  blue: "#28ABFB",
+  green: "#8BCF16",
+  red: "#FF5F5F"
+};
+
+const hexToRgba = (color: string, alpha = 1): string => {
+  let hex = color.startsWith("#") ? color : colorMap[color.toLowerCase()];
+ 
+  if (!hex) return `rgba(0, 0, 0, ${alpha})`;
+
+  if (hex.length === 4) {
+    hex = "#" + hex.slice(1).split("").map((c:any) => c + c).join("");
+  }
+
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
- 
   const b = parseInt(hex.slice(5, 7), 16);
+
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
 
 
-   const enableDrawingMode = (
+  const enableDrawingMode = (
   color = drawingcolor,
   width = strokeWidth,
-  opacity = opacityValue / 100 
+  opacity = opacityValue / 100
 ) => {
   const brushOpacity = Math.max(0.1, opacity);
-
+  const rgbaColor = hexToRgba(color, brushOpacity);
+  console.log(rgbaColor);
  
+  if (!fabricCanvas.current) return;
+  fabricCanvas.current.isDrawingMode = true;
+  const brush = new fabric.PencilBrush(fabricCanvas.current);
+  brush.color = rgbaColor;
+  brush.width = width;
 
+  fabricCanvas.current.freeDrawingBrush = brush;
   setIsDrawingMode(true);
-  fabricCanvas.current.isDrawingMode = true; const rgbaColor = hexToRgba(color, brushOpacity); // convert here
-  fabricCanvas.current.freeDrawingBrush = new fabric.PencilBrush(fabricCanvas.current);
-  fabricCanvas.current.freeDrawingBrush.color = color;
-  fabricCanvas.current.freeDrawingBrush.width = width;
-  fabricCanvas.current.freeDrawingBrush.color = hexToRgba(color, brushOpacity);
   fabricCanvas.current.renderAll();
+
 };
 
    
@@ -462,24 +529,35 @@ const disableDrawingMode = () => {
         const activeObject = fabricCanvas.current.getActiveObject();
         if (activeObject) {
             activeObject.set("fill", color);
-  
             fabricCanvas.current.renderAll();
+       
         }
+          setShowPaintBox(false);
     };
 
     const changeColorDrawing = (color) => {
-        setDrawingColor(color);
+  setDrawingColor(color);
+  enableDrawingMode(color, strokeWidth, opacityValue / 100);
 
-        const activeObject = fabricCanvas.current.getActiveObject();
-        if (activeObject) {
+  const obj = fabricCanvas.current.getActiveObject();
+  if (obj) {
+    if (obj.type === "path") {
+      // Free drawing path
+     
+      obj.set("stroke", color);
+    } else {
+      // Shapes: fill color
+      obj.set("fill", color);
+    }
+    fabricCanvas.current.renderAll();
+  }
+
+  setShowPaintDrawingBox(false);
+
+};
+
+  
    
-            activeObject.set("fill", color);
-            fabricCanvas.current.renderAll();
-        }
-        enableDrawingMode(color);
-    };
-
-    // Function to add a quotation to the canvas
     const addQuote = () => { const opacity = Math.max(0.1, opacityValue / 100);
         const quote = new fabric.IText('"Your quote here"', {
    
@@ -489,6 +567,7 @@ const disableDrawingMode = () => {
             fill: "black",
             fontStyle: "italic",
             selectable: true,opacity
+      
         });
         fabricCanvas.current.add(quote);
         fabricCanvas.current.setActiveObject(quote);
@@ -791,18 +870,18 @@ return (
                                         <button
     
                                             className="blue"
-                                            onClick={() => changeColorDrawing("blue")}
+                                            onClick={() => changeColorDrawing("#28ABFB")}
                                             style={{ backgroundColor: "#28ABFB" }}
                                         ></button>
                                         <button
                                             className="green"
-                                            onClick={() => changeColorDrawing("green")}
+                                            onClick={() => changeColorDrawing("#8BCF16")}
                                             style={{ backgroundColor: "#8BCF16" }}
                                         ></button>
     
                                         <button
                                             className="red"
-                                            onClick={() => changeColorDrawing("red")}
+                                            onClick={() => changeColorDrawing("#FF5F5F")}
                                             style={{ backgroundColor: "#FF5F5F" }}
     
     ></button>
