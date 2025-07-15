@@ -9,12 +9,18 @@ interface MagicCreateNewBranchProps {
     setActiveMenu: (active: boolean) => void;
 }
 
-export const MagicCreateNewBranch: React.FC<MagicCreateNewBranchProps> = ({setActiveMenu}) => {
-    const { setIsCreateBranchChatMode, isCreateBranchChatMode } = useChatStore();
+export const MagicCreateNewBranch: React.FC<MagicCreateNewBranchProps> = ({ setActiveMenu }) => {
+    const { setIsCreateBranchChatMode, isCreateBranchChatMode, savedPlaygrounds, setNoPlayground, closeSavedPlaygrounds, closeNoPlayground} = useChatStore();
 
     const createBranch = () => {
-        setIsCreateBranchChatMode(!isCreateBranchChatMode)
+        setIsCreateBranchChatMode(!isCreateBranchChatMode);
         setActiveMenu(false);
+        // hides all playgrounds and "see all" btn
+        if (!isCreateBranchChatMode) {
+            savedPlaygrounds.map(el => el.open = false);
+            closeSavedPlaygrounds();
+            closeNoPlayground();
+        }
     };
 
     return (

@@ -20,7 +20,7 @@ import ThemeToggleSwitch from "src/shared/components/ThemeToggler";
 import { SettingsModal } from "../home-screens/ui/ChatContent/assets/SettingsModal/SettingsModal";
 
 export const Sidebar: React.FC = () => {
-    const { editor, mode, setMode, isSharingActive, setIsSharingActive, getNoPlayground } =
+    const { editor, mode, setMode, isSharingActive, setIsSharingActive, getNoPlayground, closeNoPlayground } =
         useChatStore();
     const { isSideBarOpen, setIsSideBarOpen } = useAppStore();
     const editorState = useEditorContext(editor);
