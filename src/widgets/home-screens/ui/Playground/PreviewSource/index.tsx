@@ -84,24 +84,6 @@ const PreviewSource: FC<IPreviewPlayground> = ({ type, data, title }) => {
                         type !== "docs" && `${css.modalWebPreview}`
                     )}
                 >
-                    {fileType === "docx" &&
-                        <>
-                            <div className={css.docxTitle}>
-                                <Title title={title} />
-                            </div>
-                            <div className={css.pagination}>
-                                    <Pagination
-                                        pageRefs={pageRefs}
-                                        numPages={pagesDocsNum}
-                                        currentPage={currentDocxPage}
-                                        onPageChange={setCurrentDocxPage}
-                                    />
-                            </div>
-                            <div className={css.zoom}>
-                                <ZoomButton onZoomClick={() => setDocxScale(scale + 0.1)} />
-                            </div>
-                        </>
-                    }
                     <Preview
                         type={type}
                         url={data}

@@ -16,11 +16,11 @@ interface IProps {
     title?: string;
     isModalView?: boolean;
     pageRefs: any;
-    setPagesDocsNum: any
-    setCurrentDocxPage: any
-    docxScale: any
-    setScale: any
-    scale: any
+    setPagesDocsNum: any;
+    setCurrentDocxPage: any;
+    docxScale: any;
+    setScale: any;
+    scale: any;
 }
 
 const throttle = <T extends unknown[]>(callback: (...args: T) => void, delay: number) => {
@@ -41,21 +41,22 @@ const throttle = <T extends unknown[]>(callback: (...args: T) => void, delay: nu
 };
 
 const Preview: FC<IProps> = ({
-                                 type,
-                                 url,
-                                 title,
-                                 isModalView,
-                                 pageRefs,
-                                 setPagesDocsNum,
-                                 setCurrentDocxPage,
-                                 docxScale,
-                                 setScale,
-                                 scale,
+    type,
+    url,
+    title,
+    isModalView,
+    pageRefs,
+    setPagesDocsNum,
+    setCurrentDocxPage,
+    docxScale,
+    setScale,
+    scale,
 }) => {
     const fileType = url?.split(".").pop() || "";
     const [content, setContent] = useState<any>(null);
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [numPages, setNumPages] = useState<number>(0);
+    const [showDocumentInfo, setShowDocumentInfo] = useState(false);
 
     useEffect(() => {
         if (fileType === "txt") {
@@ -117,27 +118,42 @@ const Preview: FC<IProps> = ({
         }
     };
 
+    const renderDocumentInfo = () => (
+        <>
+            <div className={classNames(css.title, { [css.showTitle]: showDocumentInfo })}>
+                <Title title={title} />
+            </div>
+
+            <div
+                className={classNames(css.pagination, {
+                    [css.showPagination]: showDocumentInfo,
+                })}
+            >
+                <Pagination
+                    pageRefs={pageRefs}
+                    numPages={numPages}
+                    currentPage={currentPage}
+                    onPageChange={setCurrentPage}
+                />
+            </div>
+            <div className={classNames(css.zoom, { [css.showZoom]: showDocumentInfo })}>
+                <ZoomButton onZoomClick={() => setScale(scale + 0.1)} />
+            </div>
+        </>
+    );
+
     if (type === "apps" || type === "web")
         return <iframe className={classNames({ [css.iframeModal]: isModalView })} src={url} />;
 
     if (isModalView && fileType === "pdf")
         return (
-            <div className={css.pdfViewerWithPagination} id="pdf_viewer">
-                <div className={css.title}>
-                    <Title title={title} />
-                </div>
-                <div className={css.pagination}>
-                    <Pagination
-                        pageRefs={pageRefs}
-                        numPages={numPages}
-                        currentPage={currentPage}
-                        onPageChange={setCurrentPage}
-                    />
-                </div>
-                <div className={css.zoom}>
-                    <ZoomButton onZoomClick={() => setScale(scale + 0.1)} />
-                </div>
-
+            <div
+                className={css.pdfViewerWithPagination}
+                id="pdf_viewer"
+                onMouseEnter={() => setShowDocumentInfo(true)}
+                onMouseLeave={() => setShowDocumentInfo(false)}
+            >
+                {renderDocumentInfo()}
                 <PdfDocument
                     url={url}
                     scale={scale}
@@ -152,8 +168,13 @@ const Preview: FC<IProps> = ({
 
     if (isModalView && fileType === "docx")
         return (
-            <div className={css.docxDocument}>
+            <div
+                className={css.docxDocument}
+                onMouseEnter={() => setShowDocumentInfo(true)}
+                onMouseLeave={() => setShowDocumentInfo(false)}
+            >
                 <div className={css.docxPreview}>
+                    {renderDocumentInfo()}
                     <DocxDocumentWithPagination
                         url={url}
                         scale={docxScale}

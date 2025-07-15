@@ -1,11 +1,26 @@
 .fileTitle {
+    position: absolute;
+    padding: 0 5px 0 5px;
     display: flex;
+    justify-content: center;
     align-items: center;
-    background: linear-gradient(to right, rgba(2, 0, 1, 0.35), rgb(177, 56, 94));
+    align-content: center;
+    width: 156px;
+    height: 36px;
+    background: radial-gradient(92.63% 98.61% at 50% 50%, rgba(0, 0, 0, 0.35) 0%, #cb6484 100%);
+    font-size: 16px;
+    gap: 0;
+    font-weight: 400;
+    font-family: "Sohne";
+    color: #f8f8f8;
+    border-radius: 17px;
+    top: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    box-shadow: 0px 4px 20px 0px #0000000f;
     backdrop-filter: blur(20px);
-    border-radius: 1000px;
-    border: 1px solid rgba(31, 31, 31, 0.05);
-    padding: 12px;
+    z-index: 10000;
 }
 
 .title {
