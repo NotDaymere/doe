@@ -61,36 +61,46 @@ useEffect(() => {
   const canvas = fabricCanvas.current;
   if (!canvas) return;
 
+  // Enable selection
+  canvas.selection = true;
+
+  // Ensure all objects are selectable
+  canvas.forEachObject((obj) => {
+    obj.selectable = true;
+  });
+
+  const handleObjectSelected = (e) => {
+    console.log("[FABRIC] object:selected →", e.target);
+  };
+
   const handleSelectionCreated = (e) => {
-    const obj = e.selected?.[0];
-    
-    console.log("[FABRIC] selection:created", obj);
+    console.log("[FABRIC] selection:created →", e.selected);
   };
 
-  
   const handleSelectionUpdated = (e) => {
-    const obj = e.selected?.[0];
-    console.log("[FABRIC] selection:updated", obj);
+    console.log("[FABRIC] selection:updated → selected:", e.selected, "deselected:", e.deselected);
   };
 
-  
   const handleSelectionCleared = () => {
     console.log("[FABRIC] selection:cleared");
-  };
-
   
+};
+
+  canvas.on("object:selected", handleObjectSelected);
   canvas.on("selection:created", handleSelectionCreated);
   canvas.on("selection:updated", handleSelectionUpdated);
   canvas.on("selection:cleared", handleSelectionCleared);
 
-  
+
   return () => {
+   
+    canvas.off("object:selected", handleObjectSelected);
     canvas.off("selection:created", handleSelectionCreated);
     canvas.off("selection:updated", handleSelectionUpdated);
     canvas.off("selection:cleared", handleSelectionCleared);
   };
-
 }, [drawingData]);
+
 
 
 
@@ -639,43 +649,43 @@ const disableDrawingMode = () => {
 
 
 
- const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Delete" || e.key === "Backspace") {
-      const canvas = fabricCanvas.current;
-      if (!canvas) return;
 
-      const activeObject = canvas.getActiveObject();
-      if (!activeObject) return;
 
-    
-      console.log("[KEY] Pressed:", e.key);
-      console.log("[FABRIC] Active object:", activeObject);
-      activeObject.getObjects().forEach((obj) => {
-          console.log("[FABRIC] Removing:", obj.type, obj);
-          canvas.remove(obj);
-        });
 
-      if (activeObject.type === "activeSelection") {
-      
-        
-        activeObject.getObjects().forEach((obj) => {
-          console.log("[FABRIC] Removing:", obj.type, obj);
-          canvas.remove(obj);
-        });
-    
+
+
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (e.key === "Delete" || e.key === "Backspace") {
+    const canvas = fabricCanvas.current;
+    if (!canvas) return;
+
+    const activeObject = canvas.getActiveObject();
+    if (!activeObject) return;
+
+    if (activeObject.type === "activeSelection") {
+      // Properly delete all selected objects
+      const objects = activeObject.getObjects();
+
+      // Deselect before removal to avoid internal issues
+      canvas.discardActiveObject();
+
+      objects.forEach((obj) => {
+        canvas.remove(obj);
+      });
+
+      canvas.requestRenderAll();
     } else {
-        console.log("[FABRIC] Removing single object:", activeObject);
-        canvas.remove(activeObject);
-      }
-
+      // Single object deletion
+      canvas.remove(activeObject);
       canvas.discardActiveObject();
       canvas.requestRenderAll();
-
-      console.log("[FABRIC] Deletion complete and canvas re-rendered.");
-    
-      console.log("[FABRIC] Remaining objects:", canvas.getObjects());
     }
-  };
+  }
+};
+
+
+
+
 
 
 
