@@ -1,7 +1,7 @@
 import { Editor } from "@tiptap/react";
 import { FC, PropsWithChildren, createContext, useContext, useState } from "react";
 
-interface EditorContextType {
+export interface EditorContextType {
     editor: Editor | null;
     isLinkFocused: boolean;
     linkUrl: string | null;
