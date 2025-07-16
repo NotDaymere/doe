@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Editor } from "src/shared/components/Editor";
-import { Editor as IEditor } from "@tiptap/react";
+import { EditorContentProps, Editor as IEditor } from "@tiptap/react";
 import { InputDynamicWidth } from "src/shared/components/InputDynamicWidth";
 import ArrowUpIcon from "src/shared/icons/ArrowUp.icon";
 import CallVoiceIcon from "src/shared/icons/CallVoice.icon";
@@ -38,6 +38,19 @@ import { IScreenSharePopup, ShareType } from "src/shared/types/ScreenShare";
 import ScreenShareMenu from "../ShareScreen/ScreenShareMenu";
 import { Simulate } from "react-dom/test-utils";
 import classNames from "classnames";
+import { useEditorContext } from "src/contexts/EditorProvider";
+
+interface EditorState {
+    toggleBold: () => void;
+    toggleUnderline: () => void;
+    toggleItalic: () => void;
+    toggleCode: () => void;
+    isBold: boolean;
+    isUnderline: boolean;
+    isItalic: boolean;
+    isCode: boolean;
+}
+
 
 interface IShareScreen {
     expandedButtons: boolean;
@@ -202,6 +215,7 @@ export const ChatPanel: React.FC = () => {
                 updateLinkInputPosition();
             }
         };
+        
 
         function updateLinkInputPosition() {
             if (skipPositionUpdate.current) return;
@@ -218,8 +232,8 @@ export const ChatPanel: React.FC = () => {
             const selectionTop = lastRect.bottom + window.scrollY;
             const selectionLeft = lastRect.right + window.scrollX;
             const maxDistance = 30;
-            const offsetY = -70;
-            const offsetX = -20;
+            const offsetY = -50;
+            const offsetX = -0;
 
             if (lastMouseEventRef.current) {
                 const candidateTop = lastMouseEventRef.current.pageY;

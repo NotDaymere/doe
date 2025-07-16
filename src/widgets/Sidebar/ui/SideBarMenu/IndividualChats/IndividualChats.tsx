@@ -221,7 +221,8 @@ export const IndividualChats = ({ isSideBarOpen, isSideBarMenuOpen }: Individual
                                     onFinishEdit={(id, newName) => { renameChat(id, newName); setEditingChatId(null); }}
                                     onToggleExpand={(id) => {
                                         handleOpenChat(id);
-                                        setExpandedChatId(prev => prev === id ? null : id)
+                                        setExpandedChatId(prev => prev === id ? null : id);
+                                        setMode(null);
                                     }}
                                     onOpenActions={e => {
                                         e.stopPropagation();
