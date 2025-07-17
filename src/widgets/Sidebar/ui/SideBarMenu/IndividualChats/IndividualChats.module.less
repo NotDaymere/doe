@@ -96,6 +96,7 @@
             fill: var(--var-49);
         }
         .search_input {
+            display: flex;
             color: var(--var-7);
             &::placeholder {
                 color: var(--var-49);
@@ -104,7 +105,19 @@
         }
     }
 }
-
+.sidebar_menu_action_btn_tooltip{
+        opacity: 1;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+        font-size: 14px;
+        font-weight: 500;
+        .show_more_btn{
+            padding-right: 5px;
+        }
+}
 .open_sidebar_menu_action_container {
     padding-right: 5px;
     border-radius: 12px;

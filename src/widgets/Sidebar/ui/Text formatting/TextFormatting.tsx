@@ -296,8 +296,7 @@ export const TextFormatting: React.FC = () => {
                     <div
                         className={css.sidebar_text_formatting_action_container}
                         onPointerDown={pointerDown}
-                        onClick={() => { 
-                            editor?.chain().focus().toggleBold().run();
+                        onClick={() => {
                             setIsHyperlinkInputOpen(!isHyperlinkInputOpen)
                             console.log(editor?.chain().focus())
                         }}
