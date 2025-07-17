@@ -22,7 +22,7 @@ export const ReflectionsMessageItem: React.FC<ReflectionsMessageItemProps> = ({
     return (
         <div className="message-list-of-each-day-item">
             <div className="message-and-icon">
-                <div className={`message-icon ${!message.isRead ? "new-message" : ""}`}>
+                <div className={`message-icon ${message.isPinned ? "new-message" : ""}`}>
                     {message.isUser ? <UserMessageIcon /> : <StarsIcon width={13} height={17} />}
                 </div>
                 <div className="message-content">{message.content}</div>
