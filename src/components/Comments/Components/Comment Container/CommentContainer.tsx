@@ -7,7 +7,7 @@ import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
 import clsx from "clsx";
 import SendIcon from "src/shared/icons/SendIcon";
 
-export default function CommentContainer({ showMenu, setShowMenu }: any) {
+export default function CommentContainer({ showMenu, setShowMenu, commmentFromProp   }: any) {
   const {
     comments,
     comment,
@@ -18,8 +18,8 @@ export default function CommentContainer({ showMenu, setShowMenu }: any) {
   } = useCommentWindowStore();
 
   const [replyMessage, setReplyMessage] = useState("");
-  const [isEditing, setIsEditing] = useState(comment?.message == null);
-  const [editedMessage, setEditedMessage] = useState(comment?.message || "");
+  const [isEditing, setIsEditing] = useState(comment != null && comment?.message == null)
+  const [editedMessage, setEditedMessage] = useState(comment?.message || commmentFromProp?.message||"");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -153,7 +153,7 @@ export default function CommentContainer({ showMenu, setShowMenu }: any) {
           />
           <button
             onClick={() => {
-              addReply(comment!.id, replyMessage);
+              addReply(commmentFromProp?commmentFromProp.id: comment!.id, replyMessage);
               setReplyMessage("");
             }}
             disabled={!replyMessage}

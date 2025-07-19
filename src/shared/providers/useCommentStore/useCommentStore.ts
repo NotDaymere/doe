@@ -68,11 +68,23 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
       comment,
       isOpen: true
     }, false, "openComments");
-  }else{console.log("No Comment Found")}
+  }else{
+    set({
+      // comment,
+      isOpen: true
+    }, false, "openComments");
+ 
+  }
 },
 
    closeComments: (id?: number | string) => {
   const { comments, comment } = get();
+
+  set({
+      comment:null,
+      isOpen: false
+    }, false, "closeComments");
+
 
   if (!id) return;
   console.log("Removing comment");
