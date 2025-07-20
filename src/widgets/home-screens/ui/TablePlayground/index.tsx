@@ -176,7 +176,7 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     
     const {comments} = useCommentWindowStore();
     
-    const comment = useCommentWindowStore((s) => s.comment);
+    const selectedComment = useCommentWindowStore((s) => s.comment);
 
 
 
@@ -194,6 +194,7 @@ useEffect(() => {
   comments.forEach((comment: any) => {
     if (comment.from == null || comment.to == null) return;
 
+    console.log("Selected Comment",(selectedComment?.id == comment.id));
     const selectedText = editor.state.doc.textBetween(comment.from, comment.to, '');
 
     editor.commands.deleteRange({ from: comment.from, to: comment.to });
@@ -205,7 +206,7 @@ useEffect(() => {
         { type: 'clickable', attrs: { id: comment.id } },
     
         { type: 'unselectable', attrs: { class: 'unselectable-text' } },
-        { type: 'highlight', attrs: { class: !comment.message ? `highlighted-typing-${randomColorNumber}`:`highlighted-${randomColorNumber}` } },
+        { type: 'highlight', attrs: { class: !comment.message ||  (selectedComment?.id == comment.id) ? `highlighted-typing-${randomColorNumber}`:`highlighted-${randomColorNumber}` } },
       ],
     });
   
