@@ -4,7 +4,7 @@ import { PenIcon } from "src/shared/icons/PenIcon";
 import LinkIcon from "src/shared/icons/Link.icon";
 import DeleteIcon from "src/shared/icons/DeleteIcon";
 
-function Menu({ setShowMenu, isEditing, setIsEditing }: any) {
+function Menu({ setShowMenu, isEditing, setIsEditing,removeCommentOrReply }: any) {
     const { removeComment, copyLink } = useCommentWindowStore();
 
     return (

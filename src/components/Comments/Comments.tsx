@@ -106,10 +106,16 @@ function Comments() {
             showMenu={showMenu}
             setShowMenu={setShowMenu}
             commmentFromProp={c}
+            replyOn = {c.replies.length == 0}
           />
           <div>
             {c.replies?.map((reply: any, idx: number) => (
-              <Thread key={idx} comment={reply} />
+               <CommentContainer
+               commentId={c.id}
+          
+             commmentFromProp={reply}
+            replyOn = {c.replies.length -1 == idx}
+          />
             ))}
           </div>
         </div>

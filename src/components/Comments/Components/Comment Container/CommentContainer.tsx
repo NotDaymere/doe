@@ -6,10 +6,10 @@ import { CheckRoundIcon } from "src/shared/icons/CheckRoundIcon";
 import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
 import clsx from "clsx";
 import SendIcon from "src/shared/icons/SendIcon";
+import ReplyInput from "../ReplyInput";
 
-export default function CommentContainer({ showMenu, setShowMenu, commmentFromProp }: any) {
+export default function CommentContainer({ commentId,commmentFromProp, replyOn }: any) {
   const {
-    comments,
     comment,
     addReply,
     updateComment,
@@ -19,9 +19,12 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
 
   const activeComment = commmentFromProp || comment;
 
+  const [showMenu, setShowMenu] = useState(false);
   const [replyMessage, setReplyMessage] = useState("");
   const [isEditing, setIsEditing] = useState(activeComment?.message == null);
   const [editedMessage, setEditedMessage] = useState(activeComment?.message || "");
+  
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -33,16 +36,13 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
           textareaRef.current.setSelectionRange(len, len);
         }
       }, 0);
-      
       return () => clearTimeout(timeout);
     }
   }, [isEditing, activeComment]);
 
   const handleSaveEdit = () => {
     if (editedMessage.trim().length > 0) {
-      useCommentWindowStore
-        .getState()
-        .updateComment(activeComment?.id, editedMessage);
+      updateComment(activeComment?.id, editedMessage);
       setIsEditing(false);
     }
   };
@@ -51,6 +51,22 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
     setEditedMessage(activeComment?.message || "");
     setIsEditing(false);
   };
+
+
+
+  const removeCommentOrReply = () => {
+    if (activeComment?.isReply) {
+      // Logic to remove a reply
+      console.log("Removing reply with ID:", activeComment.id);
+      // Implement the logic to remove the reply here
+    } else {
+      // Logic to remove a comment
+      console.log("Removing comment with ID:", activeComment.id);
+      // Implement the logic to remove the comment here
+    
+    }
+  }
+
 
   const handleEditKeyDown = (e: any) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -61,23 +77,11 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
     }
   };
 
-  const handleReplyKeyDown = (e: any) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      addReply(activeComment!.id, replyMessage);
-      setReplyMessage("");
-    }
-  };
-
   return (
     <div className="top">
       <div className="cp-header">
         <div className="left">
-          <img
-            className="profile"
-            src="/img/profile_pic.png"
-            alt="Profile"
-          />
+          <img className="profile" src="/img/profile_pic.png" alt="Profile" />
           <div className="profile-name-time">
             <h4>{activeComment?.user.name}</h4>
             <p>{activeComment?.timestamp}</p>
@@ -104,6 +108,7 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
               isEditing={isEditing}
               setIsEditing={setIsEditing}
               setShowMenu={setShowMenu}
+              removeComment={removeCommentOrReply}
             />
           )}
         </div>
@@ -138,32 +143,8 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
         )}
       </div>
 
-      {!isEditing && (
-        <div className="cp-footer">
-          <input
-            type="text"
-            className="comment-input"
-            value={replyMessage}
-            placeholder="Reply..."
-            onKeyDown={handleReplyKeyDown}
-            onChange={(e) => setReplyMessage(e.target.value)}
-            style={{
-              padding: "8px 12px",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-              fontSize: "14px",
-            }}
-          />
-          <button
-            onClick={() => {
-              addReply(activeComment!.id, replyMessage);
-              setReplyMessage("");
-            }}
-            disabled={!replyMessage}
-          >
-            <SendIcon />
-          </button>
-        </div>
+      {!isEditing && replyOn && (
+        <ReplyInput commentId={commentId} parentId={activeComment.id} isReply={activeComment.isReply} />
       )}
     </div>
   );
