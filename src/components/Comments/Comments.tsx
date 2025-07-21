@@ -15,7 +15,7 @@ import SearchIcon from "src/shared/icons/SearchIcon";
 
 
 function Comments() {
-    const { isOpen, comment, setComment, closeComments } = useCommentWindowStore();
+    const { isOpen, comment, comments, setComment, closeComments } = useCommentWindowStore();
     const [showFilter, setShowFilter] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
 
@@ -98,20 +98,28 @@ function Comments() {
             </div>
 
             <div className="body">
-        
-                <div className="comments_container">
-                    {comment && <CommentContainer showMenu={showMenu} setShowMenu={setShowMenu} />}
-
-                    <div className="">
+  {comments.length > 0 ? (
+    <div className="comments_container">
+      {comments.map((c: any, index: number) => (
+        <div key={index}>
+          <CommentContainer
+            showMenu={showMenu}
+            setShowMenu={setShowMenu}
+            commmentFromProp={c}
+          />
+          <div>
+            {c.replies?.map((reply: any, idx: number) => (
+              <Thread key={idx} comment={reply} />
+            ))}
+          </div>
+        </div>
     
-                        {comment?.replies.map((comment: any, index: number) => {
-                            return <Thread key={index} comment={comment} />;
-                        })}
-                    </div>
-  
-                </div>
-        
-            </div>
+    ))}
+    </div>
+  ) : (
+    <p>No comments yet.</p>
+  )}
+</div>
         </div>
    
         </div>

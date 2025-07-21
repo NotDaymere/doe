@@ -69,7 +69,7 @@ function UploadChartBody({chartType}: { chartType: string }) {
                 dynamicTyping: true,
                 complete: (result) => {
     
-                    console.log("Default CSV Data:", result.data);
+                
                     if (result.data && result.data.length > 0) {    
                         const firstRow = result.data[0];
                         const formattedData = Object.keys(firstRow).map((key, index) => ({

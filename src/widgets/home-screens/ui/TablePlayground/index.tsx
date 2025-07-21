@@ -174,11 +174,11 @@ const TablePlayground: FC<Partial<App.Playground>> = ({ id = null }) => {
     const [showButtons, setShowButtons] = useState(false);
 
     
-    const {comments} = useCommentWindowStore();
+    const {comment,comments} = useCommentWindowStore();
     
-    const comment = useCommentWindowStore((s) => s.comment);
+ 
 
-
+    
 
 
     
@@ -191,28 +191,31 @@ useEffect(() => {
     editor.commands.setContent(plainText);
 
 
-  comments.forEach((comment: any) => {
-    if (comment.from == null || comment.to == null) return;
+  comments.forEach((c: any) => {
+    if (c.from == null || c.to == null) return;
 
-    const selectedText = editor.state.doc.textBetween(comment.from, comment.to, '');
+   
+    const selectedText = editor.state.doc.textBetween(c.from, c.to, '');
 
-    editor.commands.deleteRange({ from: comment.from, to: comment.to });
+    editor.commands.deleteRange({ from: c.from, to: c.to });
     const randomColorNumber = 1;
-    editor.commands.insertContentAt(comment.from, {
+    editor.commands.insertContentAt(c.from, {
       type: 'text',
       text: selectedText,
       marks: [
-        { type: 'clickable', attrs: { id: comment.id } },
+        { type: 'clickable', attrs: { id: c.id } },
     
         { type: 'unselectable', attrs: { class: 'unselectable-text' } },
-        { type: 'highlight', attrs: { class: !comment.message ? `highlighted-typing-${randomColorNumber}`:`highlighted-${randomColorNumber}` } },
+        { type: 'highlight', attrs: { class: comment?.id == c.id ? `highlighted-typing-${randomColorNumber}`:`highlighted-${randomColorNumber}` } },
       ],
+    
     });
   
 });
-}, [comments, editor]);
+}, [comment,comments, editor]);
 
-    useEffect(() => {
+    
+useEffect(() => {
      
         const handleSave = (event: KeyboardEvent) => {
       
