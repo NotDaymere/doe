@@ -62,7 +62,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
  
   const comment = get().comments.find(c => c.id === id);
   if (comment) {
-    
+   
 
     set({
       comment,

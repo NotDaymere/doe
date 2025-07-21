@@ -7,7 +7,7 @@ import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
 import clsx from "clsx";
 import SendIcon from "src/shared/icons/SendIcon";
 
-export default function CommentContainer({ showMenu, setShowMenu, commmentFromProp   }: any) {
+export default function CommentContainer({ showMenu, setShowMenu, commmentFromProp }: any) {
   const {
     comments,
     comment,
@@ -17,9 +17,11 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
     toggleResolved,
   } = useCommentWindowStore();
 
+  const activeComment = commmentFromProp || comment;
+
   const [replyMessage, setReplyMessage] = useState("");
-  const [isEditing, setIsEditing] = useState(comment != null && comment?.message == null)
-  const [editedMessage, setEditedMessage] = useState(comment?.message || commmentFromProp?.message||"");
+  const [isEditing, setIsEditing] = useState(activeComment?.message == null);
+  const [editedMessage, setEditedMessage] = useState(activeComment?.message || "");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -31,21 +33,22 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
           textareaRef.current.setSelectionRange(len, len);
         }
       }, 0);
+      
       return () => clearTimeout(timeout);
     }
-  }, [isEditing, comment]);
+  }, [isEditing, activeComment]);
 
   const handleSaveEdit = () => {
     if (editedMessage.trim().length > 0) {
       useCommentWindowStore
         .getState()
-        .updateComment(comment?.id, editedMessage);
+        .updateComment(activeComment?.id, editedMessage);
       setIsEditing(false);
     }
   };
 
   const handleCancelEdit = () => {
-    setEditedMessage(comment?.message || "");
+    setEditedMessage(activeComment?.message || "");
     setIsEditing(false);
   };
 
@@ -61,7 +64,7 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
   const handleReplyKeyDown = (e: any) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      addReply(comment!.id, replyMessage);
+      addReply(activeComment!.id, replyMessage);
       setReplyMessage("");
     }
   };
@@ -76,8 +79,8 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
             alt="Profile"
           />
           <div className="profile-name-time">
-            <h4>{comment?.user.name}</h4>
-            <p>{comment?.timestamp}</p>
+            <h4>{activeComment?.user.name}</h4>
+            <p>{activeComment?.timestamp}</p>
           </div>
         </div>
 
@@ -153,7 +156,7 @@ export default function CommentContainer({ showMenu, setShowMenu, commmentFromPr
           />
           <button
             onClick={() => {
-              addReply(commmentFromProp?commmentFromProp.id: comment!.id, replyMessage);
+              addReply(activeComment!.id, replyMessage);
               setReplyMessage("");
             }}
             disabled={!replyMessage}

@@ -98,35 +98,28 @@ function Comments() {
             </div>
 
             <div className="body">
-            {comment ? (
-  <div className="comments_container">
-    <CommentContainer showMenu={showMenu} setShowMenu={setShowMenu} />
-    <div>
-      {comment.replies?.map((reply: any, idx: number) => (
-        <Thread key={idx} comment={reply} />
-      ))}
-    </div>
-  </div>
-) : comments.length > 0 ? (
-  <div className="comments_container">
-    {comments.map((c: any, index: number) => (
-      
-      <div key={index}>
-       
-        <CommentContainer showMenu={showMenu} setShowMenu={setShowMenu} commmentFromProp={c} />
-        <div>
-          {c.replies?.map((reply: any, idx: number) => (
-            <Thread key={idx} comment={reply} />
-          ))}
+  {comments.length > 0 ? (
+    <div className="comments_container">
+      {comments.map((c: any, index: number) => (
+        <div key={index}>
+          <CommentContainer
+            showMenu={showMenu}
+            setShowMenu={setShowMenu}
+            commmentFromProp={c}
+          />
+          <div>
+            {c.replies?.map((reply: any, idx: number) => (
+              <Thread key={idx} comment={reply} />
+            ))}
+          </div>
         </div>
-      </div>
+    
     ))}
-  </div>
-) : (
-  <p>No comments yet.</p>
-)}
-        
-            </div>
+    </div>
+  ) : (
+    <p>No comments yet.</p>
+  )}
+</div>
         </div>
    
         </div>
