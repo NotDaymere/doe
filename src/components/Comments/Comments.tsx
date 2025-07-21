@@ -51,7 +51,7 @@ function Comments() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [showFilter]);
-
+    console.log("isOpen", isOpen);
     if (!isOpen) return null;
 
     return (

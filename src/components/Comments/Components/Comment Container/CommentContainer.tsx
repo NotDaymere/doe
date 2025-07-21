@@ -14,6 +14,7 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
     addReply,
     updateComment,
     isResolved,
+    deleteReply,
     toggleResolved,
   } = useCommentWindowStore();
 
@@ -53,19 +54,21 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
   };
 
 
+  
 
-  const removeCommentOrReply = () => {
-    if (activeComment?.isReply) {
-      // Logic to remove a reply
-      console.log("Removing reply with ID:", activeComment.id);
-      // Implement the logic to remove the reply here
-    } else {
-      // Logic to remove a comment
-      console.log("Removing comment with ID:", activeComment.id);
-      // Implement the logic to remove the comment here
-    
+
+
+    const removeCommentOrReply = () => {
+      if (activeComment?.isReply) {
+         deleteReply(commentId,activeComment.id);
+      } else {
+        // Logic to remove a comment
+       
+        console.log("Removing comment with ID:", activeComment.id);
+        // Implement the logic to remove the comment here
+      
+      }
     }
-  }
 
 
   const handleEditKeyDown = (e: any) => {
@@ -108,7 +111,7 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
               isEditing={isEditing}
               setIsEditing={setIsEditing}
               setShowMenu={setShowMenu}
-              removeComment={removeCommentOrReply}
+              removeCommentOrReply={removeCommentOrReply}
             />
           )}
         </div>
@@ -144,6 +147,7 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
       </div>
 
       {!isEditing && replyOn && (
+       
         <ReplyInput commentId={commentId} parentId={activeComment.id} isReply={activeComment.isReply} />
       )}
     </div>

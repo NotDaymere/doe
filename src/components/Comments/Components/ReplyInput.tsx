@@ -9,8 +9,8 @@ export default function ReplyInput({ commentId,parentId,isReply }: any) {
 
   const handleReplySubmit = () => {
     if (!replyMessage.trim()) return;
-    console.log("Replying to comment with ID:", parentId, "Message:", replyMessage);
-    addReply(commentId, replyMessage);
+    console.log("Replying to comment with ID:", parentId, "comment",commentId,"Message:", replyMessage);
+    addReply(commentId ?? parentId , replyMessage)
     setReplyMessage("");
   };
 

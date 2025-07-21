@@ -123,6 +123,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
       set({
         comments: updatedComments,
         comment: updatedComment,
+  
       }, false, "addReply");
     },
 
@@ -173,8 +174,10 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
       }, false, "updateReply");
     },
 
+    
     deleteReply: (parentId, replyId) => {
       const { comments, comment } = get();
+      console.log("Deleting reply with ID:", replyId, "from parent ID:", parentId);
 
       const updatedComments = comments.map((c) => {
         if (c.id === parentId) {
@@ -185,21 +188,22 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
       });
 
       const updatedComment =
-        comment?.id === parentId
-          ? {
-              ...comment,
-              replies: comment.replies.filter((r) => r.id !== replyId),
-            }
-          : comment;
+  comment?.id === parentId
+    ? {
+        ...comment,
+        replies: comment.replies.filter((r) => r.id !== replyId),
+      }
+    : comment;
 
-      set({
-        comments: updatedComments,
-        comment: updatedComment,
-      }, false, "deleteReply");
+set({
+  isOpen:true,
+  comments: updatedComments,
+  comment: updatedComment ?? comment,
+}, false, "deleteReply");
     },
 
     removeComment: () =>
-      set({ comment: undefined, isOpen: false }, false, "removeComment"),
+      set({ comment: undefined, isOpen: true }, false, "removeComment"),
 
     toggleResolved: () =>
       set((state) => ({ isResolved: !state.isResolved }), false, "toggleResolved"),

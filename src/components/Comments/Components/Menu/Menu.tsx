@@ -27,7 +27,7 @@ function Menu({ setShowMenu, isEditing, setIsEditing,removeCommentOrReply }: any
                 <LinkIcon />
                 Copy link
             </button>
-            <button onClick={() => removeComment()}>
+            <button onClick={() => removeCommentOrReply() ?? removeComment()}>
                 <DeleteIcon />
                 Delete
             </button>
