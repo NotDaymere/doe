@@ -17,8 +17,13 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
     deleteComment,
     updateComment,
     isResolved,
+
+    
+    updateReply,
     deleteReply,
-    toggleResolved,
+    
+    toggleReplyResolved,
+    toggleResolvedComment,
   } = useCommentWindowStore();
 
   const activeComment = commmentFromProp || comment;
@@ -64,6 +69,24 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
   
 
 
+  const toggleResolvedCommentOrReply = () => {
+  
+    if (activeComment?.isReply) {
+    toggleReplyResolved(commentId, activeComment.id);
+    } else {
+     toggleResolvedComment(activeComment.id);
+    }
+  };
+
+
+  const updateCommentOrReply = (content: string) => {
+    if (activeComment?.isReply) {
+      updateReply(commentId, activeComment.id, content);
+    } else {
+      updateComment(activeComment.id, content);
+    }
+  };
+
 
     const removeCommentOrReply = () => {
       if (activeComment?.isReply) {
@@ -98,8 +121,8 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
 
         <div className="right">
           <button
-            onClick={toggleResolved}
-            className={clsx("resolved-button", isResolved && "resolved")}
+            onClick={()=>{toggleResolvedCommentOrReply()}}
+            className={clsx("resolved-button", activeComment.isResolved && "resolved")}
           >
             <CheckRoundIcon />
           </button>

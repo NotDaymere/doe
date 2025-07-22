@@ -16,6 +16,7 @@ interface Comment {
   from?: any;
   replies: Comment[];
   isReply?: boolean;
+  isResolved?: boolean;
   _version?: any;
 }
 
@@ -38,6 +39,8 @@ interface CommentWindowStore {
   updateComment: (id: number | string, content: string) => void;
   updateReply: (parentId: number | string, replyId: number | string, content: string) => void;
   deleteReply: (parentId: number | string, replyId: number | string) => void;
+  toggleResolvedComment: (commentId: number | string) => void;
+  toggleReplyResolved: (parentId: number | string, replyId: number | string) => void;
 
   removeComment: () => void;
   toggleResolved: () => void;
@@ -220,8 +223,38 @@ set({
     removeComment: () =>
       set({ comment: undefined, isOpen: true }, false, "removeComment"),
 
-    toggleResolved: () =>
-      set((state) => ({ isResolved: !state.isResolved }), false, "toggleResolved"),
+    toggleResolvedComment: (commentId) => {
+ 
+      if (!commentId) return;
+  const { comments } = get();
+  const updatedComments = comments.map((c) =>
+    c.id === commentId ? { ...c, isResolved: !c.isResolved } : c
+  );
+  set({
+    comments: updatedComments,
+    isResolved: !get().isResolved,
+  }, false, "toggleResolvedComment");
+
+},
+
+ toggleReplyResolved: (parentId:any, replyId:any) => {
+      const { comments } = get();
+      const updatedComments = comments.map((c) => {
+        if (c.id === parentId) {
+          const updatedReplies = c.replies.map((r) =>
+            r.id === replyId ? { ...r, isResolved: !r.isResolved }
+            : r
+          );
+          return { ...c, replies: updatedReplies };
+        }
+
+        return c;
+      });
+      set({
+        comments: updatedComments,
+      }, false, "toggleReplyResolved");
+    },
+    
 
     copyLink: () => {
       const { comment } = get();
