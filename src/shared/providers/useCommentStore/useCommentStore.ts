@@ -32,6 +32,7 @@ interface CommentWindowStore {
   setComment: (comment: Comment) => void;
   addComment: (comment: Comment) => void;
   selectComment: (id: number) => void;
+  deleteComment: (commentId: number | string) => void;
 
   addReply: (parentId: number | string, content: string) => void;
   updateComment: (id: number | string, content: string) => void;
@@ -172,6 +173,20 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
         comments: updatedComments,
         comment: updatedComment,
       }, false, "updateReply");
+    },
+
+    deleteComment(commentId) {
+      const { comments, comment } = get();
+
+      const updatedComments = comments.filter((c) => c.id !== commentId);
+      const updatedComment = comment?.id === commentId ? null : comment;
+    
+      set({
+        comments: updatedComments,
+        comment: updatedComment,
+       
+        isOpen: updatedComments.length > 0 ,
+      }, false, "deleteComment");
     },
 
     

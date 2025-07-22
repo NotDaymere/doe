@@ -12,6 +12,9 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
   const {
     comment,
     addReply,
+    openComments,
+   
+    deleteComment,
     updateComment,
     isResolved,
     deleteReply,
@@ -21,6 +24,7 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
   const activeComment = commmentFromProp || comment;
 
   const [showMenu, setShowMenu] = useState(false);
+  
   const [replyMessage, setReplyMessage] = useState("");
   const [isEditing, setIsEditing] = useState(activeComment?.message == null);
   const [editedMessage, setEditedMessage] = useState(activeComment?.message || "");
@@ -30,6 +34,7 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
 
   useEffect(() => {
     if (isEditing) {
+   
       const timeout = setTimeout(() => {
         if (textareaRef.current) {
           textareaRef.current.focus();
@@ -39,6 +44,7 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
       }, 0);
       return () => clearTimeout(timeout);
     }
+ 
   }, [isEditing, activeComment]);
 
   const handleSaveEdit = () => {
@@ -48,6 +54,7 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
     }
   };
 
+ 
   const handleCancelEdit = () => {
     setEditedMessage(activeComment?.message || "");
     setIsEditing(false);
@@ -61,14 +68,12 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
     const removeCommentOrReply = () => {
       if (activeComment?.isReply) {
          deleteReply(commentId,activeComment.id);
+         openComments(commentId);
       } else {
-        // Logic to remove a comment
-       
-        console.log("Removing comment with ID:", activeComment.id);
-        // Implement the logic to remove the comment here
-      
+        deleteComment(commentId ?? activeComment.id);
       }
     }
+    
 
 
   const handleEditKeyDown = (e: any) => {
