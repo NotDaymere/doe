@@ -145,12 +145,13 @@
         .comments_container {
         
             width: auto;
+            
             .top {
                 background: var(--var-46);
                 border: solid 1px var(--var-75);
                 box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.04);
                 backdrop-filter: blur(60px);
-                border-radius: 12px;
+                border-radius: 12px 12px 0 0;
                 padding: 8px;
                 display: flex;
         
@@ -260,6 +261,189 @@
                 .cp-body {
                     background: var(--var-60);
                     padding: 12px;
+                    border-radius: 8px;
+                    width: auto;
+
+                    p {
+                        font-size: 14px;
+                        color: var(--var-107);
+                        font-family: "Sohne";
+                        font-weight: 500;
+                    }
+                }
+
+                .cp-footer {
+                    background: var(--var-17);
+    
+                    border: solid 1px var(--var-74);
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 5px;
+                    width: calc(100% - 10px);
+
+                    input[type="text"] {
+       
+                        background: none;
+                        border: none;
+                        outline: none;
+                        font-size: 14px;
+                        width: 100%;
+                        color: var(--var-7);
+                        font-family: "Sohne";
+                        font-weight: 500;
+
+       
+                        &::placeholder {
+                            color: var(--var-116);
+                        }
+                    }
+
+                    button {
+                        width: 26px;
+                        height: 26px;
+                        border-radius: 8px;
+          
+                        background: var(--var-7);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+          
+                        cursor: pointer;
+                        border: none;
+                        transition: 1s;
+
+            
+                        svg path {
+                            fill: var(--var-104);
+                        }
+
+           
+                        &:disabled {
+                            background-color: var(--var-69);
+                        }
+                    }
+     
+                }
+            }
+            .reply-top {
+                background: var(--var-46);
+                border: solid 1px var(--var-75);
+                box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.04);
+                backdrop-filter: blur(60px);
+                border-radius: none;
+                padding: 8px;
+                display: flex;
+                margin-top:2px;
+                border-top: #222;
+        
+                flex-direction: column;
+                align-items: start;
+                justify-content: space-between;
+                gap: 10px;
+                width: auto;
+
+                .cp-header {
+                    display: flex;
+                    align-items: center;
+       
+                    justify-content: space-between;
+                    width: 100%;
+
+                    .profile {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 100%;
+                    }
+
+       
+                    .left {
+                        display: flex;
+                        justify-content: start;
+                        align-items: center;
+                        gap: 9px;
+                    }
+
+                    div {
+                        .profile-name-time {
+      
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: start;
+                            align-items: start;
+                        }
+
+                        h4 {
+                            font-size: 14px;
+                            color: var(--var-97);
+       
+                            font-family: "Sohne";
+                            font-weight: 600;
+                            padding: 0;
+                            margin: 0;
+                        }
+
+                        .profile-name-time {
+                            p {
+                                font-size: 12px;
+      
+                                color: var(--var-116);
+                                margin: 0;
+                                padding: 0;
+                                font-family: "Sohne";
+  
+                                font-weight: 500;
+                            }
+                        }
+                    }
+
+                    .right {
+                        display: flex;
+                        justify-content: start;
+                        align-items: center;
+      
+                        gap: 6px;
+
+                        button {
+                            background: transparent;
+      
+                            border: none;
+                            cursor: pointer;
+                            width: 20px;
+                            height: 20px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            &.resolved-button.resolved svg path {
+     
+                                transition: 0.3s;
+                                stroke: var(--var-104);
+                            }
+
+                            &.resolved-button.resolved svg rect {
+                                transition: 0.3s;
+                                fill: var(--var-101);
+                                stroke: var(--var-101);
+                            }
+
+                            &.menu-button {
+                                color: var(--var-99);
+
+                                &.active svg path {
+                                    transition: 0.3s;
+                                    fill: var(--var-7);
+                                }
+                            }
+                        }
+   
+                    }
+                }
+
+                .cp-body {
+                    background: var(--var-60);
+                    padding: 2px 12px;
                     border-radius: 8px;
                     width: auto;
 

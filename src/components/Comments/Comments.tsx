@@ -18,6 +18,7 @@ function Comments() {
     const { isOpen, comment, comments, setComment, closeComments } = useCommentWindowStore();
     const [showFilter, setShowFilter] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
+    
 
     const filterButtonRef = useRef<HTMLButtonElement>(null);
     const filterContainerRef = useRef<HTMLDivElement>(null);
@@ -100,26 +101,45 @@ function Comments() {
             <div className="body">
   {comments.length > 0 ? (
     <div className="comments_container">
-      {comments.map((c: any, index: number) => (
+     
+      {comments.
+      //sort by selected comment id at the top
+        sort((a, b) => {
+            if (comment && a.id === comment.id) return -1;
+            if (comment && b.id === comment.id) return 1;
+            return 0;
+        })
+        .
+      map((c: any, index: number) => (
+        
+        <div style={{ background:"fff"}}>
         <div key={index}>
           <CommentContainer
             showMenu={showMenu}
             setShowMenu={setShowMenu}
             commmentFromProp={c}
-            replyOn = {c.replies.length == 0}
+            commentId={c.id}
+            replyOn = {comment == null && c.replies.length == 0 || comment!= null && comment.id == c.id && c.replies.length == 0}
           />
-          <div>
-            {c.replies?.map((reply: any, idx: number) => (
-               <CommentContainer
+
+         
+         
+         <div> {(!comment || comment!.id == c.id) && c.replies?.map((reply: any, idx: number) => (
+
+              <CommentContainer
                commentId={c.id}
-          
-             commmentFromProp={reply}
-            replyOn = {c.replies.length -1 == idx}
+               
+            
+             
+               commmentFromProp={reply}
+               replyOn = {(comment!= null && comment.id == c.id && c.replies.length -1 == idx) || (comment == null && c.replies.length -1 == idx)}
           />
             ))}
-          </div>
+        
         </div>
-    
+      
+        </div>
+    </div>
     ))}
     </div>
   ) : (
