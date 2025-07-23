@@ -37,7 +37,7 @@ console.log("comment",comment,"commentId",parentId);
         style={{
           padding: "8px 12px",
           borderRadius: "6px",
-          border: "1px solid #ccc",
+          // border: "1px solid #ccc",
           fontSize: "14px",
         }}
       />
