@@ -19,6 +19,7 @@ function Comments() {
     const [showFilter, setShowFilter] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     
+    const commentRefs = useRef<Record<string | number, HTMLDivElement | null>>({});
 
     const filterButtonRef = useRef<HTMLButtonElement>(null);
     const filterContainerRef = useRef<HTMLDivElement>(null);
@@ -52,6 +53,12 @@ function Comments() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, [showFilter]);
+
+    useEffect(() => {
+  if (comment?.id && commentRefs.current[comment.id]) {
+    commentRefs.current[comment.id]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}, [comment]);
     console.log("isOpen", isOpen);
     if (!isOpen) return null;
 
@@ -104,42 +111,46 @@ function Comments() {
      
       {comments.
       //sort by selected comment id at the top
-        sort((a, b) => {
-            if (comment && a.id === comment.id) return -1;
-            if (comment && b.id === comment.id) return 1;
-            return 0;
-        })
-        .
+        // sort((a, b) => {
+        //     if (comment && a.id === comment.id) return -1;
+        //     if (comment && b.id === comment.id) return 1;
+        //     return 0;
+        // })
+        // .
       map((c: any, index: number) => (
         
-        <div style={{ background:"fff"}}>
-        <div key={index}>
-          <CommentContainer
-            showMenu={showMenu}
-            setShowMenu={setShowMenu}
-            commmentFromProp={c}
-            commentId={c.id}
-            replyOn = {comment == null && c.replies.length == 0 || comment!= null && comment.id == c.id && c.replies.length == 0}
-          />
-
-         
-         
-         <div> {(!comment || comment!.id == c.id) && c.replies?.map((reply: any, idx: number) => (
-
-              <CommentContainer
-               commentId={c.id}
-               
-            
-             
-               commmentFromProp={reply}
-               replyOn = {(comment!= null && comment.id == c.id && c.replies.length -1 == idx) || (comment == null && c.replies.length -1 == idx)}
-          />
-            ))}
-        
-        </div>
-      
-        </div>
-    </div>
+        <div
+  key={c.id}
+  ref={(el) => {
+    commentRefs.current[c.id] = el;
+  }}
+  style={{ background: "#fff" }}
+>
+  <CommentContainer
+    showMenu={showMenu}
+    setShowMenu={setShowMenu}
+    commmentFromProp={c}
+    commentId={c.id}
+    replyOn={
+      (comment == null && c.replies.length === 0) ||
+      (comment != null && comment.id === c.id && c.replies.length === 0)
+    }
+  />
+  <div>
+    {(!comment || comment!.id === c.id) &&
+      c.replies?.map((reply: any, idx: number) => (
+        <CommentContainer
+          key={reply.id}
+          commentId={c.id}
+          commmentFromProp={reply}
+          replyOn={
+            (comment != null && comment.id === c.id && c.replies.length - 1 === idx) ||
+            (comment == null && c.replies.length - 1 === idx)
+          }
+        />
+      ))}
+  </div>
+</div>
     ))}
     </div>
   ) : (
