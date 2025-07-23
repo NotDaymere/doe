@@ -108,24 +108,29 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
     }
   };
 
-  return (
-    <div className="top">
+
+  return ( 
+    <div className={activeComment.isReply ? `reply-top` : 'top'} style={{ background: commentId == comment?.id ? "#fff" : "#FAFAFA" }}>
+     
       <div className="cp-header">
+   
         <div className="left">
           <img className="profile" src="/img/profile_pic.png" alt="Profile" />
           <div className="profile-name-time">
             <h4>{activeComment?.user.name}</h4>
+    
             <p>{activeComment?.timestamp}</p>
+            
           </div>
         </div>
 
         <div className="right">
-          <button
+          {!activeComment.isReply && <button
             onClick={()=>{toggleResolvedCommentOrReply()}}
             className={clsx("resolved-button", activeComment.isResolved && "resolved")}
           >
             <CheckRoundIcon />
-          </button>
+          </button>}
 
           <button
             onClick={() => setShowMenu(!showMenu)}
@@ -145,7 +150,7 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
         </div>
       </div>
 
-      <div className="cp-body">
+      <div className={`cp-body ${comment && commentId == comment?.id ? "bg-white" : "bg-gray"}`}>
         {isEditing ? (
           <div className="edit-mode">
             <textarea

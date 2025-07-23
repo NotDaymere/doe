@@ -5,7 +5,7 @@ import "../Components/Comment Container/CommentContainer.less";
 
 export default function ReplyInput({ commentId,parentId,isReply }: any) {
   const [replyMessage, setReplyMessage] = useState("");
-  const { addReply } = useCommentWindowStore();
+  const { addReply,comment } = useCommentWindowStore();
 
   const handleReplySubmit = () => {
     if (!replyMessage.trim()) return;
@@ -20,6 +20,8 @@ export default function ReplyInput({ commentId,parentId,isReply }: any) {
       handleReplySubmit();
     }
   };
+console.log("comment",comment,"commentId",parentId);
+ // if(comment && (comment?.id != parentId)) return null;
   
 
 
@@ -35,7 +37,7 @@ export default function ReplyInput({ commentId,parentId,isReply }: any) {
         style={{
           padding: "8px 12px",
           borderRadius: "6px",
-          border: "1px solid #ccc",
+          // border: "1px solid #ccc",
           fontSize: "14px",
         }}
       />
