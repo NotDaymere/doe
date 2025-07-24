@@ -7,6 +7,7 @@ import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
 import clsx from "clsx";
 import SendIcon from "src/shared/icons/SendIcon";
 import ReplyInput from "../ReplyInput";
+import useTheme from "src/hooks/useTheme";
 
 export default function CommentContainer({ commentId,commmentFromProp, replyOn }: any) {
   const {
@@ -32,8 +33,9 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
   
   const [replyMessage, setReplyMessage] = useState("");
   const [isEditing, setIsEditing] = useState(activeComment?.message == null);
-  const [editedMessage, setEditedMessage] = useState(activeComment?.message || "");
   
+  const [editedMessage, setEditedMessage] = useState(activeComment?.message || "");
+   const [theme] = useTheme();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -111,10 +113,20 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
 
   return ( 
     <div
-  className={activeComment.isReply ? "reply-top" : "top"}
+  
+    className={activeComment.isReply ? "reply-top" : "top"}
   style={{
-    background: commentId === comment?.id ? "#fff" : "#FAFAFA",
-    borderRadius: commentId !== comment?.id
+   background:
+    commentId === comment?.id
+      
+    ? theme === "light"
+        ? "#fff"        // light active
+        : "#2C2C2C"     // dark active — lighter than the base dark
+      : theme === "light"
+       
+      ? "#FAFAFA"     // light inactive
+        : "#1A1A1A"     // dark inactive — darker than active
+    ,borderRadius: commentId !== comment?.id
       ? "12px"
       : replyOn
         ? "0 0 12px 12px" 
@@ -123,7 +135,6 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
 >
      
       <div className="cp-header">
-   
         <div className="left">
           <img className="profile" src="/img/profile_pic.png" alt="Profile" />
           <div className="profile-name-time">
@@ -131,6 +142,8 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
     
             <p>{activeComment?.timestamp}</p>
             
+
+
           </div>
         </div>
 
@@ -160,7 +173,7 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
         </div>
       </div>
 
-      <div className={`cp-body ${comment && commentId == comment?.id ? "bg-white" : "bg-gray"}`}>
+      <div className={`cp-body`}>
         {isEditing ? (
           <div className="edit-mode">
             <textarea
