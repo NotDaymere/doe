@@ -124,7 +124,7 @@ function Comments() {
   ref={(el) => {
     commentRefs.current[c.id] = el;
   }}
-  style={{ background: "#fff" }}
+  
 >
   <CommentContainer
     showMenu={showMenu}
