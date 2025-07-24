@@ -110,7 +110,17 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
 
 
   return ( 
-    <div className={activeComment.isReply ? `reply-top` : 'top'} style={{ background: commentId == comment?.id ? "#fff" : "#FAFAFA" }}>
+    <div
+  className={activeComment.isReply ? "reply-top" : "top"}
+  style={{
+    background: commentId === comment?.id ? "#fff" : "#FAFAFA",
+    borderRadius: commentId !== comment?.id
+      ? "12px"
+      : replyOn
+        ? "0 0 12px 12px" 
+        : "12px 12px 0 0" 
+  }}
+>
      
       <div className="cp-header">
    

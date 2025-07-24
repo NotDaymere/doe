@@ -106,7 +106,7 @@ export const useCommentWindowStore = create<CommentWindowStore>()(
       const newReply: Comment = {
         id: Date.now(),
         user: {
-          name: "Reply User",
+          name: "John Doe",
           avatar: "https://example.com/avatar3.jpg",
         },
         timestamp: formatFriendlyDate(new Date()),
