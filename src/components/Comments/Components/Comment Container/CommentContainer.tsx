@@ -112,29 +112,31 @@ export default function CommentContainer({ commentId,commmentFromProp, replyOn }
 
 
   return ( 
-    <div
-  
-    className={activeComment.isReply ? "reply-top" : "top"}
+<div
+  className={activeComment.isReply ? "reply-top" : "top"}
   style={{
-   background:
-    commentId === comment?.id
-      
-    ? theme === "light"
-        ? "#fff"        // light active
-        : "#2C2C2C"     // dark active — lighter than the base dark
-      : theme === "light"
-       
-      ? "#FAFAFA"     // light inactive
-        : "#1A1A1A"     // dark inactive — darker than active
-    ,borderRadius: commentId !== comment?.id
-      ? "12px"
-      : replyOn
-        ? "0 0 12px 12px" 
-        : "12px 12px 0 0" 
+    background:
+      commentId === comment?.id
+        ? theme === "light"
+          ? "#fff"
+          : "#2C2C2C"
+        : theme === "light"
+          ? "#FAFAFA"
+          : "#1A1A1A",
+    borderRadius:
+      commentId !== comment?.id // ✅ non-active comment → always full radius
+        ? "12px"
+        : activeComment.isReply
+          ? (replyOn ? "0 0 12px 12px" : "0") // ✅ active reply logic
+          : activeComment.replies.length > 0
+            ? "12px 12px 0 0"               // ✅ active top-level with replies
+            : "12px"                        // ✅ active standalone
   }}
 >
      
+    
       <div className="cp-header">
+      
         <div className="left">
           <img className="profile" src="/img/profile_pic.png" alt="Profile" />
           <div className="profile-name-time">
