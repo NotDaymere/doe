@@ -98,6 +98,7 @@ export const ChatPanel: React.FC = () => {
     const messages = useChatStore((state) => state.messages);
     const [clearContent, setClearContent] = React.useState(false);
     const { playground, questionCodeMessage, playgroundFullscreen } = useChatStore();
+    const { formulaToDisplay } = useEditorContext();
     const {
         setEditor,
         setMessages,
@@ -192,6 +193,8 @@ export const ChatPanel: React.FC = () => {
     const lastMouseEventRef = React.useRef<MouseEvent | null>(null);
 
     const skipPositionUpdate = React.useRef(false);
+    const { editor } = useEditorContext();
+    const doesEditorContainsSelectedText = useState<boolean>(false)
 
     React.useEffect(() => {
         const handleMouseUp = (e: MouseEvent) => {
@@ -442,6 +445,7 @@ export const ChatPanel: React.FC = () => {
             isCode: false,
             content: text,
             files: files,
+            formulaContent: String(formulaToDisplay)
         };
 
         reset();
@@ -584,6 +588,39 @@ export const ChatPanel: React.FC = () => {
     const handleStopReply = () => {
         cancelReply();
     };
+    
+    
+    const wrapSelected = ()=>{
+        if(!editor) {
+            console.error('Editor is missing');
+            return
+        }
+        const { dispatch } = editor.view;
+        const { state } = editor;
+        const allMarks = state.schema.marks
+        const fittingMark = Object.keys(allMarks).findIndex(el=> allMarks[el].name == "span")
+        
+        
+        console.log(allMarks, allMarks[Object.keys(allMarks)[fittingMark]])
+        dispatch(state.tr.removeMark(0, state.doc.content.size, allMarks[Object.keys(allMarks)[fittingMark]]))
+
+
+        editor
+        .chain()
+        .focus()
+        .setMark('span', {class: 'thinggg'})
+        .run();
+        
+    }
+    useEffect(()=>{
+        
+        const colorToSet = localStorage.theme == 'dark' ? "rgba(151, 71, 255, 0.24)" : 'rgb(179, 215, 255)'
+    document.documentElement.style.setProperty(
+        "--selectedTextForLinkBgColor", 
+        (showLinkInput && isHyperlinkInputOpen) ? colorToSet : 'transparent')
+        if(!(showLinkInput && isHyperlinkInputOpen)) return
+        wrapSelected();
+    }, [showLinkInput, isHyperlinkInputOpen])
 
     return (
         <div
@@ -736,7 +773,7 @@ export const ChatPanel: React.FC = () => {
                             handleBlurEditor();
                         }}
                         className={css.panel_editor}
-                        classNameEditor={css.panel_editor_editor}
+                        classNameEditor={doesEditorContainsSelectedText ? css.panel_editor_editor : css.panel_editor_editorActive}
                         clearContent={clearContent}
                         placeholder={placeholder}
                         onMouseUp={handleTextSelection}

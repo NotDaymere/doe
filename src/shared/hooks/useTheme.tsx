@@ -15,8 +15,11 @@ export const useTheme = () => {
         localStorage.setItem("theme", nextTheme);
         document.body.classList.replace(appTheme, nextTheme);
     };
+    const updateTheme = ()=>{
+        document.body.classList = appTheme;
+    }
     useEffect(() => {
-        document.body.classList.add(appTheme);
+        updateTheme()
         setTheme(appTheme);
     }, []);
     return { theme, toggleTheme };

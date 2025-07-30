@@ -8,6 +8,7 @@ export interface IMessage {
     isUser: boolean;
     isCode: boolean;
     isLiked?: boolean;
+    formulaContent?:string;
 }
 export interface OnboardingMessage {
     role: "user" | "ai";

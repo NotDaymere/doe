@@ -23,7 +23,7 @@ import { CodeChatMessage } from "./assets/CodeChatMessage/CodeChatMessage";
 
 interface Props {
     data: IMessage;
-    editor: EditorTiptap | null;
+    editor?: EditorTiptap | null;
     editMsgMode: {
         isEditMsgMode: boolean;
         msgId: number | null;
@@ -41,6 +41,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
 
     const [content, setContent] = React.useState(data.content);
     const [updatedContent, setUpdatedContent] = useState(data.content);
+    const [formula, setFormula] = useState(data.formulaContent);
     const {
         isCurrentBranchOpen,
         addMessageNodeVersion,
@@ -223,6 +224,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const toggleEditUnauthorized = () => {
         setEdit(!isEdit);
     };
+  
     if (data.isUser) {
         return (
             <UserChatMessage
@@ -235,6 +237,7 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 setContent={setContent}
                 handleEdit={handleEdit}
                 toggleEdit={toggleEdit}
+                formulaIndex={data.id}
             />
         );
     }
@@ -265,6 +268,12 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
                 dangerouslySetInnerHTML={{
                     __html: data.content,
                 }}
+            />
+            <div
+            className={css.input_formula}
+            dangerouslySetInnerHTML={{
+                __html: data.formulaContent ? data.formulaContent : ''
+            }}
             />
         </div>
     );

@@ -27,7 +27,7 @@ export const MainLayout: React.FC<Props> = ({ children }) => {
                 }
                 hasSider
             >
-                <Sider />
+                {/* <Sider /> */}
                 <div
                     className={`children-main-layout ${(!playgroundFullscreen || getOpenSavedPlaygrounds().length == 0 || getNoPlayground().open) && "children-main-layout-active"}`}
                 >

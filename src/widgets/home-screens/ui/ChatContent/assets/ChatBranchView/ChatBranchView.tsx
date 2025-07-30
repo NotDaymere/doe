@@ -67,14 +67,19 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
 
     return (
         <div className={css.branches_wrapper}>
+             <ChatMessage
+                                data={currentBranch.messages[0]}
+                                editMsgMode={editMsgMode}
+                                setEditMsgMode={setEditMsgMode}
+                            />
             <div className={css.content_chat_branch_messages}>
                 {currentBranch.messages.slice(-3).map((item, index) => (
                     <React.Fragment key={item.id}>
                         <ChatMessageDate id={index} />
                         <div id={`chat-msg-${item.id}`}>
                             <ChatMessage
+                                key={item.id + "m"}
                                 data={item}
-                                editor={editor}
                                 editMsgMode={editMsgMode}
                                 setEditMsgMode={setEditMsgMode}
                             />
@@ -112,7 +117,6 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                 >
                                     <ChatMessage
                                         data={dialog.userRequest}
-                                        editor={editor}
                                         editMsgMode={editMsgMode}
                                         setEditMsgMode={setEditMsgMode}
                                     />
@@ -124,7 +128,6 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
                                     >
                                         <ChatMessage
                                             data={dialog.botMessages}
-                                            editor={editor}
                                             editMsgMode={editMsgMode}
                                             setEditMsgMode={setEditMsgMode}
                                         />

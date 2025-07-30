@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactComponentElement, useState } from "react";
 import clsx from "clsx";
 import { MathJax } from "better-react-mathjax";
 import ReactDOMServer from "react-dom/server";
@@ -9,10 +9,14 @@ import FunctionIcon from "../../../../shared/icons/Function.icon";
 import CodeIcon from "../../../../shared/icons/Code.icon";
 import LinkIcon from "../../../../shared/icons/Link.icon";
 import { useEditorContext } from "src/shared/components/Editor";
+import { useEditorContext as useEditorContext2 } from "src/contexts/EditorProvider";
 import { useAppStore, useChatStore } from "../../../../shared/providers";
 import css from "./TextFormatting.module.less";
+import ReactDOM from "react-dom";
+import { TextToLatexService } from "./LatexService";
+import { renderLatexInEditor } from "./RenderLaTeX";
 
-// Типизация для контекста редактора
+
 interface EditorState {
     toggleBold: () => void;
     toggleUnderline: () => void;
@@ -24,7 +28,6 @@ interface EditorState {
     isCode: boolean;
 }
 
-// Типизация для редактора
 interface Editor {
     state: {
         selection: { from: number; to: number };
@@ -39,13 +42,11 @@ interface Editor {
     };
 }
 
-// Типизация для результата преобразования текста
 interface ConversionResult {
     display: string;
     results: string[];
 }
 
-// Типизация для иконок
 interface IconProps {
     fill: string;
     width: number;
@@ -53,13 +54,14 @@ interface IconProps {
 }
 
 export const TextFormatting: React.FC = () => {
+    const { formulaToDisplay, setFormulaToDisplay } = useEditorContext2();
     const { isSideBarOpen, isHyperlinkInputOpen, setIsHyperlinkInputOpen } = useAppStore();
     const { editor } = useChatStore();
     const editorState = useEditorContext(editor) as EditorState;
     const [isSideBarTextFormattingOpen, setIsSideBarTextFormattingOpen] = useState<boolean>(true);
     const [isMathModeActive, setIsMathModeActive] = useState<boolean>(false);
 
-    // Словарь для преобразования цифр в Unicode верхний индекс
+
     const superscriptMap: { [key: string]: string } = {
         '0': '⁰',
         '1': '¹',
@@ -177,23 +179,29 @@ export const TextFormatting: React.FC = () => {
     };
 
     const handleToggleMathMode = (): void => {
-        setIsMathModeActive((prev: boolean) => {
-            const newState = !prev;
+        if(!editor) return
 
-            if (editor && !prev) {
-                const { from, to } = editor.state.selection;
-                const selectedText = editor.state.doc.textBetween(from, to);
+        const selection = editor.state.selection;
+        let selectionCoords = { from: selection.from, to: selection.to}
+        let selectionText = editor.state.doc.textBetween(selection.from, selection.to)
+        if(selection.from === selection.to){ 
+            selectionText = editor.state.doc.textContent;
+            selectionCoords = {from: 0, to: editor.state.doc.textContent.length + 1}
+        }
+        const renderedLatexArray = renderLatexInEditor(editor)
+        try{
+            renderedLatexArray[0].rendered
+        }
+        catch(er){
+            setFormulaToDisplay('')
+        }
 
-                if (selectedText) {
-                    const { display, results } = convertCaretNotationToUnicode(selectedText);
-                    const mathContent = display;
-                    const renderedContent = ReactDOMServer.renderToString(mathContent);
-                    editor.chain().focus().insertContentAt({ from, to }, renderedContent).run();
-                }
-            }
-
-            return newState;
-        });
+        
+        const renderedLatex = renderedLatexArray[0].rendered;
+        
+        setFormulaToDisplay(`${renderedLatex}`) ;
+        if(!formulaToDisplay) return
+        
     };
 
     const pointerDown = (event: React.PointerEvent): void => {
