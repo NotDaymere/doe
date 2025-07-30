@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IMessage } from "src/shared/types/Message";
 import { MessageNodeVersionSelector } from "../MessageNodeVersionSelector/MessageNodeVersionSelector";
 import { FileListForDisplay } from "../../../../../../shared/components/FileList/FileListForDisplay";
@@ -10,6 +10,7 @@ import css from "./UserChatMessage.module.less";
 import { useChatStore } from "../../../../../../shared/providers";
 import { usePanel } from "../../../../lib";
 import { FavButton } from "../FavButton/FavButton";
+import { useEditorContext } from "src/contexts/EditorProvider";
 
 interface UserChatMessageProps {
     data: IMessage;
@@ -24,7 +25,7 @@ interface UserChatMessageProps {
     setContent: (newValue: string) => void;
     handleEdit: () => void;
     toggleEdit: (id: number) => void;
-
+    formulaIndex:number
 }
 
 export const UserChatMessage: React.FC<UserChatMessageProps> = ({
@@ -36,11 +37,13 @@ export const UserChatMessage: React.FC<UserChatMessageProps> = ({
                                                                     editMsgMode,
                                                                     setContent,
                                                                     handleEdit,
-                                                                    toggleEdit
+                                                                    toggleEdit,
+                                                                    formulaIndex
                                                                 }) => {
 
-    const { setEditor } = useChatStore();
+    const { setEditor, arrayOfFormulas, setArrayOfFormulas } = useChatStore();
     const { setFiles } = usePanel();
+    const { setFormulaToDisplay } = useEditorContext()
 
     if (editMsgMode.isEditMsgMode && editMsgMode.msgId === data.id) {
         return (
@@ -81,6 +84,25 @@ export const UserChatMessage: React.FC<UserChatMessageProps> = ({
             </div>
         );
     }
+    // let formulaInChatMessage;
+    // formulaInChatMessage = formulaInChatMessage
+    // useEffect(()=>{
+    //     console.log('formula that gotta be in chat message is ' + formulaInChatMessage)
+    // },[formulaInChatMessage])
+    // if(!arrayOfFormulas){
+    //     setArrayOfFormulas([''])
+    // }
+    // useEffect(()=>{
+    //     console.log(
+    //         "arrayOfFormulas is changed, now it's " 
+    //         + arrayOfFormulas 
+    //         + " and under index " 
+    //         + formulaIndex 
+    //         + " it's value is " + arrayOfFormulas![formulaIndex])
+    // },[arrayOfFormulas])
+    useEffect(()=>{
+        setFormulaToDisplay('')
+    },[])
 
     return (
         <div className={css.message_with_button_container}>
@@ -99,10 +121,19 @@ export const UserChatMessage: React.FC<UserChatMessageProps> = ({
 
                             <div
                                 className={`${isCurrentBranchOpen ? css.input_message_branch : css.input_message} `}
+                            >
+                                <div
                                 dangerouslySetInnerHTML={{
                                     __html: updatedContent,
                                 }}
-                            ></div>
+                                ></div>
+                                <div
+                                className={data.formulaContent ? css.formulaToDisplay : css.formulaToDisplayHidden}
+                                dangerouslySetInnerHTML={{
+                                    __html: data.formulaContent ? data.formulaContent : ''
+                                }}
+                                ></div>
+                            </div>
                         </div>
 
 

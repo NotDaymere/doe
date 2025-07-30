@@ -318,7 +318,8 @@ export interface ChatState {
     deleteRecording: (id: number) => void;
     selectedRecording: IRecording;
     setSelectedRecording: (selectedRecording: IRecording) => void;
-
+    arrayOfFormulas: string[] | undefined;
+    setArrayOfFormulas:  (value:string[]) => void;
 }
 
 export const useChatStore = create<ChatState>()((set, get) => ({
@@ -1187,6 +1188,8 @@ export const useChatStore = create<ChatState>()((set, get) => ({
                 (recording) => recording.id !== id
             ),
         })),
+        arrayOfFormulas: [],
+        setArrayOfFormulas: value=> {set({arrayOfFormulas:value})}
 }));
 
 

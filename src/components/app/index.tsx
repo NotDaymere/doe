@@ -1,6 +1,6 @@
 import { ConfigProvider } from "antd";
 import { MathJaxContext } from "better-react-mathjax";
-import { createContext, memo, useContext, useState, type FC, type PropsWithChildren } from "react";
+import { createContext, memo, useContext, useEffect, useState, type FC, type PropsWithChildren } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { App as AppTypes } from "src/types";
 import { version } from "../../../package.json";

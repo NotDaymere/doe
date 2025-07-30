@@ -16,7 +16,7 @@ const Layout: FC<Props> = ({ children }) => {
     return (
         <BaseLayout className={"main-layout"} hasSider>
             <BaseLayout.Sider width={"auto"} className={"sider-wrapper"}>
-                <Sider />
+                {/* <Sider /> */}
             </BaseLayout.Sider>
 
             <BaseLayout.Content className={"content"}>

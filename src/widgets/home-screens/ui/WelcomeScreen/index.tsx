@@ -4,7 +4,7 @@ import WelcomeMagicIcon from "src/shared/icons/WelcomeMagic.icon";
 import { useChatStore } from "src/shared/providers";
 import css from "./WelcomeScreen.module.less";
 import WelcomeIcon from "./WelcomeIcon";
-
+import { useTheme } from "src/shared/hooks/useTheme";
 const TYPING_SPEED = 25;
 
 const WelcomeScreen = () => {
@@ -36,6 +36,10 @@ const WelcomeScreen = () => {
             await sleep(speed);
         }
     };
+        const { toggleTheme } = useTheme();
+    useEffect(()=>{
+        
+    },[])
 
     useEffect(() => {
         const typeEffect = async (): Promise<void> => {

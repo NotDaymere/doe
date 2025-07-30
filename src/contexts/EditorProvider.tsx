@@ -22,6 +22,8 @@ export interface EditorContextType {
     setLinkInputVisible: React.Dispatch<React.SetStateAction<boolean>>;
     inputPosition: { top: number | null; left: number | null };
     setInputPosition: (state: { top: number | null; left: number | null }) => void;
+    formulaToDisplay: string | undefined,
+    setFormulaToDisplay: React.Dispatch<React.SetStateAction<string>>
 }
 
 const EditorContext = createContext<EditorContextType>({
@@ -45,6 +47,8 @@ const EditorContext = createContext<EditorContextType>({
     inputPosition: { top: null, left: null },
     setInputPosition: () => {},
     setIsEditing: () => {},
+    formulaToDisplay: '',
+    setFormulaToDisplay: ()=>{}
 });
 
 export const useEditorContext = () => useContext(EditorContext);
@@ -64,6 +68,7 @@ export const EditorProvider: FC<PropsWithChildren> = ({ children }) => {
     );
     const [editor, setEditor] = useState<Editor | null>(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [formulaToDisplay, setFormulaToDisplay] = useState('')
 
     const closeLinkInput = () => setLinkInputVisible(false);
     const closeFormulaInput = () => setFormulaInputVisible(false);
@@ -91,6 +96,8 @@ export const EditorProvider: FC<PropsWithChildren> = ({ children }) => {
                 setLinkInputVisible,
                 inputPosition,
                 setInputPosition,
+                formulaToDisplay,
+                setFormulaToDisplay
             }}
         >
             {children}
