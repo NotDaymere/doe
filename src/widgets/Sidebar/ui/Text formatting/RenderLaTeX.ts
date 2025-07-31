@@ -1,6 +1,7 @@
 import { Editor } from '@tiptap/core';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
+import { TextToLatexService } from './LatexService';
 
 // Интерфейс для возвращаемого результата
 interface RenderedLatex {
@@ -27,7 +28,7 @@ export function renderLatexInEditor(editor: Editor): RenderedLatex[] {
       let currentPos = pos;
       
       // Обработка инлайн-формул
-      while ((match = inlineRegex.exec(node.text)) !== null) {
+      while ((match = inlineRegex.exec(TextToLatexService.convert(node.text))) !== null) {
         const latex = match[1];
         const original = match[0];
         const matchStart = currentPos + match.index;

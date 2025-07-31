@@ -1,5 +1,5 @@
 const latexDictionary: { [key: string]: string } = {
-  '^': '\\^',
+  '^': '\^',
   '*': '\\cdot',
   '/': '/',
   'sqrt': '\\sqrt',

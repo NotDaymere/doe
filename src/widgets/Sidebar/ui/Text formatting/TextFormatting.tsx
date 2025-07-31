@@ -184,6 +184,8 @@ export const TextFormatting: React.FC = () => {
         const selection = editor.state.selection;
         let selectionCoords = { from: selection.from, to: selection.to}
         let selectionText = editor.state.doc.textBetween(selection.from, selection.to)
+        console.log(selection)
+        console.log(TextToLatexService.convert(editor.state.doc.textBetween(selection.from, selection.to)))
         if(selection.from === selection.to){ 
             selectionText = editor.state.doc.textContent;
             selectionCoords = {from: 0, to: editor.state.doc.textContent.length + 1}
@@ -201,7 +203,7 @@ export const TextFormatting: React.FC = () => {
         
         setFormulaToDisplay(`${renderedLatex}`) ;
         if(!formulaToDisplay) return
-        
+
     };
 
     const pointerDown = (event: React.PointerEvent): void => {
