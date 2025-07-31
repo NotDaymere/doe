@@ -224,6 +224,22 @@ export const ChatMessage: React.FC<Props> = ({ data, editMsgMode, setEditMsgMode
     const toggleEditUnauthorized = () => {
         setEdit(!isEdit);
     };
+    useEffect(() => {
+        const handleCopyToDeleteTextStyles = (e: ClipboardEvent) => {
+            const selection: string = window.getSelection()?.toString() || '';
+
+            e.preventDefault();
+            if (!selection && !e.clipboardData) return
+            e.clipboardData!.setData('text/plain', selection);
+            navigator.clipboard.writeText(selection).catch(err => { console.log(err) })
+            console.log("selected text is " + selection);
+        }
+        window.addEventListener('copy', handleCopyToDeleteTextStyles)
+        console.log("added copy listener")
+        return () => {
+            window.removeEventListener('copy', handleCopyToDeleteTextStyles)
+        }
+    }, [])
   
     if (data.isUser) {
         return (
