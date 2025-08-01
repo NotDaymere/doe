@@ -124,7 +124,7 @@ export const UserChatMessage: React.FC<UserChatMessageProps> = ({
                             >
                                 <div
                                 dangerouslySetInnerHTML={{
-                                    __html: updatedContent,
+                                    __html: `${updatedContent}`,
                                 }}
                                 ></div>
                                 <div

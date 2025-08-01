@@ -67,15 +67,15 @@ export const ChatBranchView: React.FC<ChatBranchViewProps> = ({
 
     return (
         <div className={css.branches_wrapper}>
-             <ChatMessage
+             {/* <ChatMessage
                                 data={currentBranch.messages[0]}
                                 editMsgMode={editMsgMode}
                                 setEditMsgMode={setEditMsgMode}
-                            />
+                            /> */}
             <div className={css.content_chat_branch_messages}>
                 {currentBranch.messages.slice(-3).map((item, index) => (
                     <React.Fragment key={item.id}>
-                        <ChatMessageDate id={index} />
+                        {/* <ChatMessageDate id={index} /> */}
                         <div id={`chat-msg-${item.id}`}>
                             <ChatMessage
                                 key={item.id + "m"}
