@@ -418,19 +418,19 @@ useEffect(() => {
             }),
         })),
     ];
-    useEffect(() => {
+    // useEffect(() => {
    
-        if (!editor || !playgroundState) return;
+    //     if (!editor || !playgroundState) return;
 
-        const newContent = editor.getHTML();
-        setPlaygroundState((prev: any) => {
+    //     let newContent = editor.getText();
+    //     setPlaygroundState((prev: any) => {
    
-            if (!prev) return null;
-            const updatedPlayground = { ...prev, text: newContent };
-            updateSavedPlaygrounds(updatedPlayground);
-            return updatedPlayground;
-        });
-    }, [editor?.getHTML()]);
+    //         if (!prev) return null;
+    //         const updatedPlayground = { ...prev, text: newContent };
+    //         updateSavedPlaygrounds(updatedPlayground);
+    //         return updatedPlayground;
+    //     });
+    // }, [editor?.getHTML()]);
 
     const handleCollapsePlayground = () => {
         const newPlayground = getOpenSavedPlaygrounds().at(1) || {
