@@ -418,11 +418,10 @@ useEffect(() => {
             }),
         })),
     ];
-    useEffect(() => {
-   
+    const blurAndFocusHandler = ()=>{
         if (!editor || !playgroundState) return;
 
-        const newContent = editor.getHTML();
+        let newContent = editor.getText();
         setPlaygroundState((prev: any) => {
    
             if (!prev) return null;
@@ -430,7 +429,21 @@ useEffect(() => {
             updateSavedPlaygrounds(updatedPlayground);
             return updatedPlayground;
         });
-    }, [editor?.getHTML()]);
+
+    }
+    // useEffect(() => {
+   
+    //     if (!editor || !playgroundState) return;
+
+    //     let newContent = editor.getText();
+    //     setPlaygroundState((prev: any) => {
+   
+    //         if (!prev) return null;
+    //         const updatedPlayground = { ...prev, text: newContent };
+    //         updateSavedPlaygrounds(updatedPlayground);
+    //         return updatedPlayground;
+    //     });
+    // }, [editor?.getHTML()]);
 
     const handleCollapsePlayground = () => {
         const newPlayground = getOpenSavedPlaygrounds().at(1) || {
@@ -505,7 +518,11 @@ useEffect(() => {
                         />
                         <div className="table-playground-editor tiptap-editor">
   
-                            <EditorContent editor={editor} />
+                            <EditorContent 
+                            editor={editor}
+                            onBlur={blurAndFocusHandler}
+                            onFocus={blurAndFocusHandler}
+                            />
                         </div>
                     </section>
                     {/* <AddChartsAndWidgets /> */}
