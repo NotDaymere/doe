@@ -1,0 +1,36 @@
+.boxbutton {
+    width: 99px;
+    height: 78px;
+    border-radius: 12px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px var(--var-52) inset;
+    transition: 0.3s;
+    &:hover {
+        background: var(--var-2);
+        box-shadow: 0 0 0 2px var(--var-52) inset;
+        p {
+            color: var(--var-7);
+        }
+    }
+
+    & .icon {
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+    }
+    p {
+        font-size: 12px;
+        color: var(--var-97);
+        font-family: "Sohne";
+        font-weight: 600;
+        transition: 0.3s;
+    }
+}

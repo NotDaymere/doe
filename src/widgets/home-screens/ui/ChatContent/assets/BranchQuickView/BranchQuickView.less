@@ -1,0 +1,167 @@
+.setFontSohneBuch(
+  @fontSize: 16px,
+  @leading: 1.25,
+  @letterSpacing: normal
+) {
+    font: 500 @fontSize / @leading var(--font-sohne);
+    letter-spacing: @letterSpacing;
+}
+.quick-view-branches-container {
+    position: absolute;
+    top: 0;
+    width: 277px;
+    height: 165px;
+    padding: 10px;
+    border-radius: 16px;
+    box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(100px);
+    display: flex;
+    flex-direction: column;
+    background: var(--var-10);
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 8px;
+    z-index: 1000;
+    transition:
+        opacity 300ms ease,
+        transform 300ms ease;
+    > svg {
+        stroke: var(--var-36);
+    }
+}
+.quick-view-open-from-chat {
+    top: calc(100% + 16px);
+    right: 0;
+}
+.quick-view-branches-container.enter {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.quick-view-branches-container.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.quick-view-branches-container.exit {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.quick-view-branches-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .setFontSohneBuch(16px, 1.4, normal);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18.56px;
+    color: var(--var-93);
+}
+
+.quick-view-branches-header-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quick-view-branches-header-text svg {
+    fill: var(--var-94);
+    width: 16px;
+    height: 16px;
+}
+
+.quick-view-branches-header-button {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    background: var(--var-2);
+    box-shadow: 0px 8px 12px 0px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(100px);
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-view-branches-header-button svg {
+    width: 12px;
+    height: 12px;
+    fill: var(--var-94);
+}
+
+.quick-view-branches-content {
+    width: 257px;
+    height: 117px;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--color-neutral-150);
+        border-radius: 3px;
+    }
+    background: transparent;
+    overflow-y: auto;
+    transition:
+        opacity 300ms ease,
+        transform 300ms ease;
+}
+
+.quick-view-branches-content-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    width: 100%;
+    height: 35px;
+    border-radius: 8px;
+    .setFontSohneBuch(16px, 1.4, normal);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18.56px;
+    color: var(--var-111);
+    cursor: pointer;
+    svg {
+        fill: var(--var-94);
+    }
+    transition:
+        background 300ms ease,
+        color 300ms ease;
+}
+
+.quick-view-branches-content-item:hover {
+    background: var(--var-21);
+    color: var(--var-107);
+}
+
+.quick-view-branches-content-item:hover span {
+    display: block;
+}
+
+.quick-view-branches-content-item:hover svg {
+    fill: var(--var-86);
+}
+
+.quick-view-branches-content-example-button {
+    height: 12px;
+    width: 12px;
+}
+
+.quick-view-branches-content-name {
+    max-width: 100%;
+    display: flex;
+    gap: 5px;
+}
+
+.quick-view-branches-content-name p {
+    max-width: 190px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

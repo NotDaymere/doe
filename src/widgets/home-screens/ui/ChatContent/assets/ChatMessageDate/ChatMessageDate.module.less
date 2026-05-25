@@ -1,0 +1,45 @@
+.dateSeparatorContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.dateSeparator {
+    display: flex;
+    max-width: 900px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    margin-top: 8px;
+    position: relative;
+    width: 100%;
+
+    &::before {
+        content: "";
+        flex: 1;
+        height: 1px;
+        width: 100%;
+        background: var(--bg-gradient-var-1);
+        margin: 0 12px;
+    }
+    &::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        width: 100%;
+        background: var(--bg-gradient-var-2);
+        margin: 0 12px;
+    }
+}
+
+.dateSeparator_text {
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid var(--var-61);
+    border-radius: 16px;
+    color: var(--var-116);
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+}

@@ -1,51 +1,48 @@
-
 .source-section {
-  margin: 10px 15px 10px 10px;
-  background-color: rgb(239 239 239 / 37%);
-  border: 1px solid #DEDEDE;
-  border-radius: 25px;
+    margin: 10px 15px 10px 10px;
+    background-color: rgb(239 239 239 / 37%);
+    border: 1px solid #dedede;
+    border-radius: 25px;
 
-  .source-container {
-    padding: 20px 0 20px 15px;
+    .source-container {
+        padding: 20px 0 20px 15px;
 
-    .source-title {
-      font-weight: bold;
+        .source-title {
+            font-weight: bold;
+        }
+
+        .source-item {
+            padding: 2px 10px;
+            border: 1px solid #dedede;
+            border-radius: 5px;
+        }
+
+        .annotation {
+            overflow: hidden;
+            color: #b7b7b7;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .link {
+            color: #1d1d1d;
+        }
     }
 
-    .source-item {
-      padding: 2px 10px;
-      border: 1px solid #DEDEDE;
-      border-radius: 5px;
+    .divider {
+        margin: 12px 0;
     }
 
-    .annotation {         
-      overflow: hidden;
-      color: #B7B7B7;
-      white-space: nowrap;            
-      text-overflow: ellipsis;
+    .closeBtn {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        padding: 10px;
+
+        svg {
+            font-size: 25px;
+            cursor: pointer;
+            color: #707070;
+        }
     }
-
-    .link {
-      color: #1D1D1D;
-    }
-
-
-  }
-
-  .divider {
-    margin: 12px 0;
-  }
-
-  .closeBtn {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    padding: 10px;
-
-    svg {
-      font-size: 25px;
-      cursor: pointer;
-      color: #707070;
-    }
-  }
 }

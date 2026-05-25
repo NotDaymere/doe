@@ -1,0 +1,95 @@
+.edit-mode {
+  background-color: transparent;
+  border-radius: 4px;
+  padding: 10px;
+  width: 320px;
+
+  display: flex;
+  align-items: center;    
+  gap: 8px;             
+}
+
+.top{
+  margin-top: 10px;
+}
+
+
+.bg-white{
+  background-color: #FFFFFF !important;
+}
+
+
+.active-comment{
+  background-color: #E0F7FA !important;
+}
+
+
+.inactive-comment{
+  background-color: #FAFAFA !important;
+}
+
+
+.bg-gray{
+  background-color: #FAFAFA !important;
+}
+
+.edit-mode button {
+  width: 40px;
+  height: 40px;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 8px;    
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease;
+}
+
+.edit-mode button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.edit-mode button:hover:not(:disabled) {
+  background-color: #d0d0d0;
+}
+
+.edit-input {
+  flex: 1;               
+  height: auto;
+  background-color: #fff;
+  outline: none;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: var(--var-7);
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 14px;        
+  resize: none;          
+}
+
+.commentmenu {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+.comment-input {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+  resize: vertical;
+
+  
+  &:focus {
+    outline: none;
+    border-color: #888;
+  }
+}

@@ -1,0 +1,64 @@
+.fileLoading {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 766px;
+    width: 100%;
+    padding-top: 6px;
+
+    svg {
+        margin-bottom: 6px;
+    }
+}
+
+.fileLoadingName {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    .setFontSohneBuch(16px);
+    color: #365302;
+}
+
+.fileInfo {
+    display: flex;
+    justify-content: space-between;
+}
+
+.fileName {
+    max-width: 650px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fileNameShorten {
+    max-width: 250px;
+}
+
+.progressText {
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+
+.progressWrapper {
+    position: relative;
+    width: 100%;
+    height: 1px;
+}
+
+.progressBar {
+    height: 1px;
+    border-bottom: 1px solid #e7f5d1;
+    border-radius: 12px;
+}
+
+.progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1px;
+    border-bottom: 1px solid #8bcf16;
+    transition: width 0.1s linear;
+    border-radius: 12px;
+}

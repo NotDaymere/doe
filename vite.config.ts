@@ -1,58 +1,55 @@
-import { configureReact } from "@bn-digital/vite";
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import svgr from "vite-plugin-svgr";
+import path from "path";
 
-export default configureReact(
-    { 
-        server: { 
-            hmr: { 
-                overlay: true 
-            } 
-        }, 
-        css: {
-            preprocessorOptions: {
-                less: {
-                    additionalData: `
-                        @import "@/styles/mixins.less";
-                        @import "@/styles/build-variables.less";
-                    `,
-                }
-            }
+export default defineConfig({
+    server: {
+        hmr: {
+            overlay: true,
         },
-        resolve: {
-            alias: {
-                '@': "/src"
-            }
-        }
     },
-    {
-        openGraph: {
-            enabled: false,
-        },
-        pwa: {
-            enabled: false,
-        },
-        buildInfo: {
-            enabled: false,
-        },
-        react: {
-            svg: {
-                enabled: true,
+    css: {
+        preprocessorOptions: {
+            less: {
+                additionalData: `
+                    @import "@/styles/mixins.less";
+                    @import "@/styles/build-variables.less";
+                `,
             },
         },
-        // lint: {
-        //     enabled: true,
-        //     stylelint: false,
-        //     enableBuild: true,
-        // },
-        graphql: {
-            enabled: true,
+    },
+    resolve: {
+        alias: {
+            "@": path.resolve(__dirname, "src"),
+            src: path.resolve(__dirname, "src"),
         },
-        // analytics: { enableDev: true },
-        // fonts: {
-        //     google: {
-        //         preconnect: true,
-        //         families: [{ name: "Lato", styles: "wght@400;500;600;700;800;900", defer: true }],
-        //         display: "auto",
-        //     },
-        // },
-    }
-);
+    },
+    plugins: [
+        react(),
+        svgr({
+            svgrOptions: {
+                icon: true,
+            },
+        }),
+    ],
+    build: {
+        sourcemap: true, // Optional: Helps in debugging the build
+    },
+    openGraph: {
+        enabled: false,
+    },
+    pwa: {
+        enabled: false,
+    },
+    buildInfo: {
+        enabled: false,
+    },
+    react: {
+        jsxRuntime: "automatic",
+        babel: {
+            plugins: [],
+        },
+    },
+});

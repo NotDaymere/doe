@@ -3,13 +3,67 @@
     flex: 1 1 auto;
     padding-right: 76px;
     overflow: auto;
+    position: relative;
 }
 
+.content_playground {
+    height: 0;
+    flex: 1 1 auto;
+    padding-right: 22px;
+    padding-left: 22px;
+    overflow: auto;
+    background-color: var(--var-17);
+    border-radius: 16px;
+}
+.content_playground_fullscreen {
+    height: 0;
+    flex: 1 1;
+    overflow: auto;
+    background-color: var(--var-17);
+    border-radius: 16px;
+}
+.content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 76px);
+    height: 20px;
+    border-radius: 16px;
+    //background: linear-gradient(to bottom, rgba(248, 248, 248, 0.8), rgba(248, 248, 248, 0));
+    pointer-events: none;
+}
 .content_inner {
+    display: flex;
+    justify-content: center;
+    position: relative;
     height: 100%;
     border-radius: 16px;
-    background: #f8f8f8;
-    background: #F8F8F8;
+    overflow-y: auto;
+    background: var(--var-17);
+    padding-top: 20px;
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--var-49);
+        border-radius: 3px;
+    }
+}
+.content_inner::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 76px);
+    height: 54px;
+    //background: linear-gradient(to top, rgba(248, 248, 248, 0.8), rgba(248, 248, 248, 0));
+    pointer-events: none;
+    border-radius: 16px;
 }
 
 .content_chat {
@@ -17,8 +71,170 @@
     max-width: 892px;
     width: 100%;
     height: 100%;
-
     display: flex;
     flex-direction: column;
     gap: 24px;
+    padding: 24px 20px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    overflow: auto;
+}
+
+.content_chat_branch_wrapper {
+    backdrop-filter: blur(15px);
+}
+
+.logoWrapper {
+    position: fixed;
+    top: 45px;
+    left: 95px;
+    transition: left 0.3s ease;
+}
+
+.logoWrapperSideBarOpen {
+    position: fixed;
+    top: 45px;
+    left: 295px;
+    transition: left 0.3s ease;
+}
+
+.logoWrapperPlaygroundOpen {
+    position: fixed;
+    top: 45px;
+    left: 90px;
+    transition: left 0.3s ease;
+}
+
+.logoWrapperPlaygroundAndSideBarOpen {
+    position: fixed;
+    top: 45px;
+    left: 295px;
+    transition: left 0.3s ease;
+}
+
+.logoPopup {
+    width: 55px;
+    height: 105px;
+
+    &[data-active="true"] {
+        .allBranchesContainer {
+            transform: rotate(0deg);
+        }
+
+        .allPlaygroundsWrapper {
+            transform: rotate(0deg);
+            top: 58px;
+            left: 0;
+        }
+    }
+}
+
+.allBranchesContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center center;
+    transition:
+        transform 0.3s ease,
+        top 0.3s ease;
+}
+
+.allPlaygroundsWrapper {
+    position: absolute;
+    top: 8px;
+    left: 5px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center center;
+    transition:
+        transform 0.3s ease,
+        top 0.3s ease;
+}
+
+.allBranchesContainer {
+    transform: rotate(-20deg);
+    z-index: 2;
+}
+
+.allPlaygroundsWrapper {
+    transform: rotate(20deg);
+    z-index: 10;
+}
+
+.logoPopup:hover .allBranchesContainer {
+    transform: rotate(0deg);
+}
+
+.logoPopup:hover .allPlaygroundsWrapper {
+    transform: rotate(0deg);
+    top: 58px;
+    left: 0;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px;
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
+.buttons {
+    display: flex;
+    gap: 4px;
+    border: 1px solid #ffffff;
+    padding: 12px;
+    border-radius: 24px;
+    box-shadow: 0 2px 15px rgba(#000, 0.05);
+    cursor: pointer;
+}
+
+.steps_button {
+    .buttons;
+    background-color: #ffffff;
+    background-image: linear-gradient(to right, #9747ff, #1f1f1f);
+    color: transparent;
+    background-clip: text;
+
+    transition:
+        background 0.3s ease,
+        border 0.3s ease,
+        border-radius 0.3s ease,
+        color 0.3s ease;
+
+    &:hover {
+        background:
+            linear-gradient(#1f1f1f, #5b2b99) padding-box,
+            linear-gradient(to bottom, #f1e7ff, #9747ff) border-box;
+        border-radius: 24px;
+        border: 1px solid transparent;
+        color: #fff;
+
+        svg {
+            path {
+                fill: #fff;
+            }
+        }
+    }
+}
+
+.active_steps_button {
+    .buttons;
+    border-color: #9747ff;
+    background: #fff;
+    color: #9747ff;
+
+    svg {
+        path {
+            fill: #9747ff;
+        }
+    }
 }

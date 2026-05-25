@@ -1,9 +1,9 @@
-import '@tiptap/core';
+import "@tiptap/core";
 
-declare module '@tiptap/core' {
-  interface Commands {
-    insertFormula: {
-      insertFormula: (formula: string) => void;
-    };
-  }
+declare module "@tiptap/core" {
+    interface Commands {
+        insertFormula: {
+            insertFormula: (formula: string) => void;
+        };
+    }
 }

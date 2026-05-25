@@ -1,0 +1,40 @@
+import { useRef } from "react";
+
+import "./EditTemplate.less";
+
+import UploadChartBody from "./component/UploadChartBody/UploadChartBody";
+
+import { useChartWidgets } from "../../Window/ChartWidgetsWindow";
+import { Page } from "../../Enums/Page.enum";
+import Draggable from "react-draggable";
+function EditTemplateModal({chartType}: { chartType: string }) {
+    const { setPage, setFullWindow } = useChartWidgets();
+    const nodeRef = useRef(null);
+    return (
+        <Draggable nodeRef={nodeRef} handle=".drag-handle">
+            <div className="modalChart" ref={nodeRef}>
+           
+                <div className="modalHead drag-handle">
+                    <p>{chartType || "Bar"} Chart #1</p>
+                    <div className="containerBtns">
+                        <button
+                            className="cancelBtn"
+                            onClick={() => {
+                                setPage(Page.NEW_CHART), setFullWindow(false);
+                            }}
+                        >
+                            <p>Cancel</p>
+                        </button>
+                        <button className="saveBtn">
+                            <img src="/img/icons/coge.svg" alt="Settings" />
+                            <p>Save Changes</p>
+                        </button>
+                    </div>
+                </div>
+                <UploadChartBody chartType={chartType} />
+            </div>
+        </Draggable>
+    );
+}
+
+export default EditTemplateModal;

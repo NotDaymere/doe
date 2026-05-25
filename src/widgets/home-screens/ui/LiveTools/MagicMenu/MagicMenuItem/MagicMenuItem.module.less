@@ -1,0 +1,96 @@
+.magicMenuItem {
+    padding: 10px;
+    border: 1px solid transparent;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    align-items: center;
+    justify-items: start;
+    gap: 6px;
+
+    .setFontSohneBuch(14px, 1.1, normal);
+    color: var(--var-119);
+
+    transition: 200ms ease;
+    transition-property: border, background;
+    & svg path {
+        fill: var(--var-96);
+    }
+    &:hover {
+        background-color: var(--var-2);
+        border-color: var(--var-69);
+        color: var(--var-129);
+        border-radius: 12px;
+
+        .hasMenu {
+            opacity: 1 !important;
+            svg path {
+                fill: var(--var-101) !important;
+            }
+        }
+
+        .hasConnection {
+            opacity: 1;
+        }
+    }
+}
+
+.camera {
+    &:hover {
+        path {
+            fill: #ff8b12 !important;
+        }
+    }
+}
+
+.practice {
+    &:hover {
+        path {
+            fill: #33826b !important;
+        }
+    }
+}
+
+.voice {
+    &:hover {
+        path {
+            fill: #9747ff !important;
+        }
+    }
+}
+
+.hasMenu {
+    opacity: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    background: var(--var-11);
+    margin-right: 0;
+    margin-left: auto;
+}
+.hasConnection {
+    opacity: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    border: 7px solid rgba(#ff8b12, 0.1);
+    margin-right: 0;
+    margin-left: auto;
+    position: relative;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 6px;
+        height: 6px;
+        border-radius: 100%;
+        background: #ff8b12;
+    }
+}

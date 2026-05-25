@@ -1,0 +1,97 @@
+.linkCreated {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.topPart {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid var(--var-9);
+}
+
+.linkCreatedLabel {
+    padding: 12px 8px;
+    border: 1px solid var(--var-132);
+    color: var(--var-7);
+    border-radius: 8px;
+    .setFontSohneKraftig(14px);
+}
+
+.passwordLabel {
+    background-color: var(--var-138);
+    &:hover .password {
+        border-bottom: 1px dashed #ffe209;
+    }
+}
+
+.password {
+    .setFontSohneKraftig(14px);
+}
+
+.bottomPart {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 16px;
+}
+
+.description {
+    .setFontSohneBuch(14px);
+    color: #919191;
+    padding: 0 26px;
+}
+
+.icons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.icon {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgb(240, 240, 240);
+    }
+}
+
+.input {
+    width: 100%;
+    height: 61px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .setFontSohneKraftig(16px);
+    color: var(--var-137);
+    border: 1px solid var(--var-134);
+    border-radius: 13px;
+    &:hover .createdLink {
+        border-color: #00bf46;
+    }
+}
+
+.createdLink {
+    border-bottom: 1px dashed transparent;
+}
+
+.chipPassword {
+    position: absolute;
+    right: 16px;
+    top: 68px;
+}
+
+.chipLink {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 88px;
+}

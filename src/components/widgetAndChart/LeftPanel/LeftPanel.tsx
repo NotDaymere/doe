@@ -1,0 +1,244 @@
+import { useEffect, useState } from "react";
+import "./LeftPanel.less";
+import { Page } from "../Enums/Page.enum";
+import { useChartWidgets } from "../Window/ChartWidgetsWindow";
+import clsx from "clsx";
+
+function LeftPanel() {
+    const { page, setPage } = useChartWidgets();
+    const isChartsPage = [Page.NEW_CHART, Page.PREVIEW_CHART,Page.CHART_DRAFTS].includes(page as Page);
+    const isWidgetPage = [Page.NEW_WIDGET,Page.WIDGET_IN_CHAT].includes(page as Page);
+
+    const [openSections, setOpenSections] = useState<any>({
+      
+        charts: isChartsPage,
+        widgets: isWidgetPage,
+   
+        drawing: false,
+        games: false,
+    
+    });
+
+    const toggleSection = (section: string) => {
+      
+        setOpenSections({
+            charts: false,
+   
+            widgets: false,
+            drawing: false,
+            games: false,
+       
+            [section]: true,
+        });
+    };
+
+
+
+   useEffect(() => {
+    const currentPage = page as Page;
+
+    const newOpenSections = {
+        charts: [Page.NEW_CHART, Page.PREVIEW_CHART, Page.CHART_DRAFTS].includes(currentPage),
+        widgets: [Page.NEW_WIDGET, Page.WIDGET_IN_CHAT].includes(currentPage),
+        drawing: currentPage === Page.DRAWING,
+        games: currentPage === Page.GAMES,
+    };
+
+    setOpenSections(newOpenSections);
+}, [page]);
+
+
+
+    return (
+        <div className="leftpanel">
+            <ul>
+      
+                <li className={openSections.charts ? "active" : ""}>
+                    <div className="list_container">
+                        <div
+                            className={`list_button_container ${
+                                openSections.charts ? "expanded" : ""
+   
+                            }`}
+                            onClick={() => toggleSection("charts")}
+                        >
+                            <div>
+       
+                                <img src="/img/icons/chart.svg" alt="Charts" />
+                                <p>Charts</p>
+                            </div>
+                            <button
+   
+   className={clsx("expand_button", {
+                                    active: openSections.charts,
+                                })}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+         
+                                    toggleSection("charts");
+                                }}
+                            >
+   
+                                <img
+                                    src={
+                                        openSections.charts
+                                            ? "/img/icons/decollapsed.svg"
+                                            : "/img/icons/collapsed.svg"
+                                    }
+        
+                                    alt="Toggle"
+                                />
+   
+                            </button>
+                        </div>
+                        {openSections.charts && (
+                            <div className="list_sub_child">
+                                <ul>
+                                    <li
+                                        onClick={() => {
+       
+                                            setPage(Page.NEW_CHART);
+   
+                                        }}
+                                    >
+                                        Create New Chart
+                                    </li>
+                                    <li
+                                        onClick={() => {
+                                            setPage(Page.PREVIEW_CHART);
+                                        }}
+       
+   
+                                        // className={page == Page.PREVIEW_CHART ? 'active': ''}
+                                    >
+                                        Charts Created by Doe
+                                    </li>
+                                    <li>Drafts</li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+     
+                </li>
+
+                <li
+                    className={openSections.drawing ? "active" : ""}
+   
+                    onClick={() => {
+                        setPage(Page.DRAWING);
+                        toggleSection("drawing");
+                    }}
+   
+   >
+       
+                    <div className="list_container">
+                        <div className="list_button_container">
+   
+                            <div>
+                                <img src="/img/icons/drawicon.svg" />
+       
+                                <p>Drawings</p>
+   
+                            </div>
+                        </div>
+                    </div>
+       
+                </li>
+
+                <li
+                    className={openSections.games ? "active" : ""}
+        
+   
+                    onClick={() => {
+                        setPage(Page.GAMES);
+                        toggleSection("games");
+                    }}
+         
+         >
+                    <div className="list_container">
+                        <div className="list_button_container">
+                            <div>
+   
+                                <img src="/img/icons/game_icon.svg" />
+                                <p>Games</p>
+                            </div>
+                        </div>
+                    </div>
+        
+                </li>
+
+                <li className={openSections.widgets ? "active" : ""}>
+   
+                    <div className="list_container">
+                        <div
+                            className={`list_button_container ${
+                                openSections.widgets ? "expanded" : ""
+                            }`}
+                            onClick={() => toggleSection("widgets")}
+        
+        >
+                            <div>
+   
+                                <img src="/img/icons/widgetIcon.svg" alt="Widgets" />
+                                <p>Widgets</p>
+                            </div>
+                            <button
+                                className={clsx("expand_button", {
+                                    active: openSections.widgets,
+                                })}
+     
+                                onClick={(e) => {
+   
+                                    e.stopPropagation();
+                                    toggleSection("widgets");
+                                }}
+                            >
+                                <img
+                                    src={
+                                        openSections.widgets
+                                            ? "/img/icons/decollapsed.svg"
+    
+   
+                                            : "/img/icons/collapsed.svg"
+                                    }
+                                    alt="Toggle"
+                                />
+                            </button>
+                        </div>
+                        {openSections.widgets && (
+                            <div className="list_sub_child">
+                                <ul>
+
+
+                                    <li
+                                        onClick={() => {
+                                            setPage(Page.NEW_WIDGET);
+                                        }}
+                                    >
+                                        New Widget
+                                    </li>
+                                    <li
+   
+   onClick={() => {
+     
+                                            setPage(Page.WIDGET_IN_CHAT);
+                                        }}
+     
+     >
+                                        Widgets in this Chat
+                                    </li>
+                                </ul>
+  
+                            </div>
+   
+   )}
+                    </div>
+     
+                </li>
+   
+            </ul>
+        </div>
+  
+);
+}
+export default LeftPanel;

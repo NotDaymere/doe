@@ -1,0 +1,46 @@
+.menuBoxContainer {
+    background: var(--bg-general);
+    border: solid 1px var(--var-1);
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.05);
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    z-index: 1000;
+    border-radius: 12px;
+    padding: 5px;
+
+    right: 30px;
+    top: 0px;
+    button {
+        background: none;
+        border-radius: 12px;
+        color: var(--var-116);
+        font-size: 14px !important;
+        width: 100% !important;
+        height: 40px !important;
+        display: flex;
+        align-items: center;
+        justify-content: start !important;
+        padding-left: 10px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        font-family: "Sohne";
+        font-weight: 600;
+        gap: 5px;
+        svg {
+            width: 20px;
+            height: 20px;
+            path {
+                fill: var(--var-176);
+            }
+        }
+        &:hover {
+            background: var(--var-2) !important;
+            border: solid 1px var(--var-74) !important;
+            color: var(--var-7);
+            svg path {
+                fill: var(--var-95);
+            }
+        }
+    }
+}

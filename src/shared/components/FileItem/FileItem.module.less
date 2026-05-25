@@ -1,17 +1,17 @@
 .file {
-    width: 235px;
+    height: 56px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 10px;
-    
+    padding-left: 8px;
+    padding-right: 8px;
     position: relative;
-
-    border: 1px solid #fff;
-    background: rgba(#fff, 0.1);
+    border: 1px solid var(--var-11);
+    background: var(--var-31);
     backdrop-filter: blur(16px);
     box-shadow: 0 4px 20px rgba(#000, 0.06);
-
+    border-radius: 12px;
     &:hover {
         .file_deleteBtn {
             opacity: 1;
@@ -36,19 +36,18 @@
 
     display: flex;
     flex-direction: column;
-    gap: 2px
-
+    gap: 2px;
 }
 .file_name {
     .setFontSohneKraftig(16px, 1.1, normal);
-    color: #1f1f1f;
+    color: var(--var-7);
     white-space: nowrap;
 }
 
 .file_ext {
     text-transform: uppercase;
     .setFontSohneBuch(16px, 1, normal);
-    color: #B5B5B5;
+    color: var(--var-119);
 }
 
 .file_deleteBtn {
@@ -58,7 +57,7 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #F55687;
+    background: #f55687;
     transform: translate(50%, -50%);
 
     opacity: 0;
@@ -67,7 +66,7 @@
     svg {
         width: 50%;
         height: 50%;
-        fill: #FFF;
+        fill: #fff;
 
         position: absolute;
         left: 50%;

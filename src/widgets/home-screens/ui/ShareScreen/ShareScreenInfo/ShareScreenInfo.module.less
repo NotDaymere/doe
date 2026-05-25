@@ -1,0 +1,81 @@
+.shareScreenWrapper {
+    font-family: Sohne;
+    width: 659px;
+    display: flex;
+    justify-content: flex-end;
+    border: 2px solid var(--var-1);
+    border-radius: 16px;
+    background-color: var(--bg-general);
+    box-shadow: 0 4px 20px rgba(#000, 0.05);
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 72px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.video {
+    width: 265px;
+    height: 218px;
+
+    video {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.shareScreen {
+    width: 394px;
+    padding: 20px 28px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.instruction {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 32px;
+    color: var(--var-118);
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.title {
+    color: var(--var-7);
+}
+.bold {
+    font-weight: bold;
+}
+
+.bottom {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #ff8b12;
+}
+
+.enter {
+    opacity: 0;
+}
+.enterActive {
+    opacity: 1;
+    transition: 0.5s ease-in;
+    transition-property: transform, opacity;
+}
+
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: 0.5s ease-in;
+    transition-property: opacity;
+}

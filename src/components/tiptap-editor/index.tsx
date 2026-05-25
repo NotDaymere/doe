@@ -1,119 +1,132 @@
 import { FC, useEffect, useState } from "react";
-import { EditorContent, Editor } from '@tiptap/react'
+import { EditorContent, Editor } from "@tiptap/react";
 import FormulaInput from "./assets/FormulaInput";
 import { MathJax } from "better-react-mathjax";
 import { LinkInput } from "./assets/LinkInput";
 import { useEditorContext } from "src/contexts/EditorProvider";
-import './index.less'
+import "./index.less";
 
 interface Props {
-  editor: Editor | null
-  classname?: string
+    editor: Editor | null;
+    classname?: string;
 }
 
 export const CustomEditor: FC<Props> = ({ editor, classname }) => {
-  const { 
-    setInputPosition, 
-    linkUrl, 
-    closeFormulaInput, 
-    closeLinkInput,
-    setLinkUrl,
-    setFormulaFocused,
-    setFormula,
-    linkInputVisible,
-    formulaInputVisible,
-    inputPosition,
-    formula,
-    setEditor,
-    setFormulaInputVisible,
-    setLinkFocused
-  } = useEditorContext()
+    const {
+        setInputPosition,
+        linkUrl,
+        closeFormulaInput,
+        closeLinkInput,
+        setLinkUrl,
+        setFormulaFocused,
+        setFormula,
+        linkInputVisible,
+        setLinkInputVisible,
+        formulaInputVisible,
+        inputPosition,
+        formula,
+        setEditor,
+        setFormulaInputVisible,
+        setLinkFocused,
+    } = useEditorContext();
 
-  useEffect(() => {
-    if (editor) {
-      const { from } = editor.state.selection;
+    const openLinkInput = () => {
+        if (!editor) return;
+        const { from } = editor.state.selection;
+        try {
+            const coords = editor.view.coordsAtPos(from);
+            setInputPosition({
+                top: coords.top,
+                left: coords.left,
+            });
+            setLinkInputVisible(true);
+        } catch (error) {
+            console.error("Error getting coordinates:", error);
+        }
+    };
 
-      try {
-        const coords = editor.view.coordsAtPos(from);
-        setInputPosition({
-          top: coords.top,
-          left: coords.left
-        });
-      } catch (error) {
-        console.error("Error getting coordinates:", error);
-      }
-    }
-  }, [editor]);
+    useEffect(() => {
+        if (editor) {
+            const { from } = editor.state.selection;
 
-  const handleLinkSubmit = () => {
-    if (!editor) return;
+            try {
+                const coords = editor.view.coordsAtPos(from);
+                setInputPosition({
+                    top: coords.top,
+                    left: coords.left,
+                });
+            } catch (error) {
+                console.error("Error getting coordinates:", error);
+            }
+        }
+    }, [editor]);
 
-    
-    if (!linkUrl) {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run();
-      closeLinkInput();
-      return;
-    }
+    const handleLinkSubmit = () => {
+        if (!editor) return;
 
-    const { to } = editor.state.selection;
+        if (!linkUrl) {
+            editor.chain().focus().extendMarkRange("link").unsetLink().run();
+            closeLinkInput();
+            return;
+        }
 
-    editor.chain()
-      .focus()
-      .setLink({ href: linkUrl })
-      .setTextSelection({ from: to, to: to })
-      .run();
+        const { to } = editor.state.selection;
 
-    setLinkUrl('');
-    closeLinkInput();
-  };
+        editor
+            .chain()
+            .focus()
+            .setLink({ href: linkUrl })
+            .setTextSelection({ from: to, to: to })
+            .run();
 
-  const handleFormulaSubmit = (formula: string) => {
-    if (editor) {
-      editor.commands.insertFormula(formula.trim());
-      setFormula('');
-      setFormulaInputVisible(false);
-    }
-  };
+        setLinkUrl("");
+        closeLinkInput();
+    };
 
-  useEffect(() => {
-    setEditor(editor)
-  }, [])
+    const handleFormulaSubmit = (formula: string) => {
+        if (editor) {
+            editor.commands.insertFormula(formula.trim());
+            setFormula("");
+            setFormulaInputVisible(false);
+        }
+    };
 
-  return (
-    <div 
-      className={classname} 
-      style={{ position: 'relative', width: '100%', height: '100%' }}
-    >
-      <MathJax>
-        <EditorContent 
-          onFocus={() => setEditor(editor)}
-          placeholder={'Ask Doe anything you’d like about the world…'}
-          className={'chat-input-editor'} 
-          editor={editor} 
-        />
-      </MathJax>
+    useEffect(() => {
+        setEditor(editor);
+    }, []);
 
-      {linkInputVisible && (
-        <LinkInput 
-          linkUrl={linkUrl}
-          setLinkUrl={setLinkUrl}
-          inputPosition={inputPosition}
-          closeLinkInput={closeLinkInput}
-          handleLinkSubmit={handleLinkSubmit}
-          setLinkFocused={setLinkFocused}
-        />
-      )}
+    return (
+        <div className={classname} style={{ position: "relative", width: "100%", height: "100%" }}>
+            <MathJax>
+                <EditorContent
+                    onFocus={() => setEditor(editor)}
+                    placeholder={"Ask Doe anything you’d like about the world…"}
+                    className={"chat-input-editor"}
+                    editor={editor}
+                />
+            </MathJax>
 
-      {formulaInputVisible && (
-        <FormulaInput
-          inputPosition={inputPosition}
-          formula={formula}
-          closeFormulaInput={closeFormulaInput}
-          handleFormulaSubmit={handleFormulaSubmit}
-          setFormula={setFormula}
-          setIsFormulaFocused={setFormulaFocused}
-        />
-      )}
-    </div>
-  )
-}
+            {linkInputVisible && (
+                <LinkInput
+                    linkUrl={linkUrl}
+                    setLinkUrl={setLinkUrl}
+                    inputPosition={inputPosition}
+                    closeLinkInput={closeLinkInput}
+                    handleLinkSubmit={handleLinkSubmit}
+                    setLinkFocused={setLinkFocused}
+                />
+            )}
+
+            {formulaInputVisible && (
+                <FormulaInput
+                    inputPosition={inputPosition}
+                    formula={formula}
+                    closeFormulaInput={closeFormulaInput}
+                    handleFormulaSubmit={handleFormulaSubmit}
+                    setFormula={setFormula}
+                    setIsFormulaFocused={setFormulaFocused}
+                />
+            )}
+        </div>
+    );
+};

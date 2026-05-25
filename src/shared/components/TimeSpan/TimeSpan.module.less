@@ -1,0 +1,84 @@
+.timeSpanContainer {
+    position: relative;
+    display: inline-block;
+}
+
+.timeSpanButton {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid var(--var-140);
+    color: var(--var-7);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: transparent;
+    border-radius: 8px;
+    > svg path {
+        fill: var(--var-90);
+    }
+}
+
+.text {
+    padding-left: 6px;
+    padding-right: 3px;
+}
+
+.arrowIcon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    background-color: transparent;
+    svg path {
+        fill: var(--var-92);
+    }
+}
+
+.arrowIconRotated {
+    transform: rotate(180deg);
+}
+
+.toggleCalendar {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    border: 1px solid var(--var-84);
+    svg path {
+        fill: var(--var-86);
+    }
+}
+
+.selectedDateWrapper {
+    display: flex;
+    gap: 4px;
+}
+
+.selectedDate {
+    display: flex;
+    align-items: center;
+    color: #9747ff;
+    background-color: var(--var-24);
+    border: 1px solid #9747ff;
+    border-radius: 8px;
+    padding: 8px;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.calendar {
+    position: absolute;
+    top: 45px;
+    z-index: 999;
+}
+
+.selectedTimeSpan {
+    margin-top: 10px;
+    color: magenta;
+}

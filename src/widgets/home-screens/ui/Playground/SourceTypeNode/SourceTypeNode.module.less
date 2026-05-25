@@ -1,0 +1,65 @@
+.sourceTypeNode {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    gap: 12px;
+    background-color: var(--var-193);
+    border: 1px solid var(--var-11);
+    backdrop-filter: blur(12px);
+    border-radius: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.type {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.sourceTypeIcon {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    box-shadow: 0 0px 12px rgba(#000, 0.08);
+}
+
+.web {
+    background-color: rgba(#169ecf, 0.3);
+}
+
+.docs {
+    background-color: rgba(#8bcf16, 0.3);
+}
+
+.apps {
+    background-color: rgba(#fbbc05, 0.3);
+}
+
+.title {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--var-97);
+}
+
+.expandIcon {
+    background-color: var(--var-11);
+    cursor: pointer;
+
+    path {
+        fill: var(--var-85);
+    }
+}
+
+.expandIconActive {
+    path {
+        fill: #00b6e4;
+    }
+}

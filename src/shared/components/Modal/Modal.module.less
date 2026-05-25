@@ -1,0 +1,41 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: var(--var-34);
+    border: 1px solid var(--var-75);
+    backdrop-filter: blur(20px);
+    padding: 20px;
+    border-radius: 16px;
+    position: relative;
+    z-index: 1001;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 23px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--var-33);
+    border-radius: 16px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #fff;
+    border-radius: 16px;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: var(--var-33);
+}

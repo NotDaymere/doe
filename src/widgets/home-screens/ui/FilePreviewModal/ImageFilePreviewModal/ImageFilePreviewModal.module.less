@@ -1,0 +1,223 @@
+.modalImage {
+    max-width: 100%;
+    max-height: 80vh;
+    height: 100%;
+    flex-shrink: 10;
+    display: block;
+    margin: 0 auto;
+}
+
+.modalFileNameImgContainer {
+    position: absolute;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 156px;
+    height: 36px;
+    background: radial-gradient(99.36% 115.28% at 9.62% 100%, rgba(2, 0, 1, 0.35) 0%, #b9900a 100%);
+    font-size: 16px;
+    font-weight: 400;
+    font-family: "Sohne";
+    color: #f8f8f8;
+    border-radius: 17px;
+    top: 1%;
+    box-shadow: 0 4px 20px 0 #0000000f;
+    backdrop-filter: blur(20px);
+    gap: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        visibility 0.3s ease;
+    z-index: 1000;
+}
+
+.modalContentImg {
+    background: var(--var-34);
+    padding: 24px;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    z-index: 1500;
+    max-width: 50%;
+    border: 1px solid var(--var-75);
+}
+
+.imageContainer {
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.modalContentImg:hover .modalFileNameImgContainer {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.separator {
+    background-color: var(--var-13);
+    width: 2px;
+    height: 25px;
+}
+
+.modalContentEditPanelItem {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--var-85);
+    border-radius: 7px;
+
+    transition:
+        color 0.3s ease,
+        border 0.3s ease;
+
+    border: 1px solid transparent;
+    svg {
+        fill: var(--var-85);
+    }
+    &:hover {
+        color: var(--var-95);
+        border: 1px solid var(--var-76);
+        background-color: var(--var-2);
+        svg {
+            fill: var(--var-95);
+        }
+    }
+    &[data-active="true"] {
+        color: var(--var-95);
+        border: 1px solid var(--var-76);
+        background-color: var(--var-2);
+    }
+}
+
+.modalContentEditPanel {
+    display: flex;
+    background: var(--bg-general);
+    border: 1px solid var(--var-1);
+    box-shadow: 0 0 12px 0 #0000000d;
+    position: absolute;
+    justify-content: center;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    border-radius: 10px;
+    padding: 5px;
+    bottom: -50px;
+    gap: 5px;
+}
+
+.drawContainer {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 7px;
+}
+
+.colorInputContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    width: 100%;
+    color: #b8b8b8;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+    padding-left: 5px;
+
+    &:hover {
+        color: #7a7a7a;
+    }
+}
+
+.colorInput {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.colorInput::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 50%;
+}
+
+.colorInput::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+.selectWeightInput {
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    padding: 5px;
+    width: 100%;
+
+    :focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    ::selection {
+        background-color: #ff7f50;
+        color: #fff;
+    }
+
+    ::-moz-selection {
+        background-color: #ff7f50;
+        color: #fff;
+    }
+}
+
+.addTextContainer {
+    background: #ffffff;
+    position: absolute;
+    bottom: 45px;
+    right: -25px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    padding: 5px;
+    width: 80px;
+}
+
+.selectTextSize {
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    padding: 5px;
+    width: 100%;
+}
+
+.canvas_styles {
+    position: relative;
+    display: inline-block;
+    flex-shrink: 10;
+}

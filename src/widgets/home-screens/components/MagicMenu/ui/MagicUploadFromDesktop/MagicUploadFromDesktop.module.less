@@ -1,0 +1,63 @@
+.magic_button_container {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    width: 100%;
+    gap: 6px;
+    font: 500 14px / 1.1 var(--font-sohne);
+    letter-spacing: normal;
+    color: var(--var-108);
+    transition: 200ms ease;
+    transition-property: border, background, color;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--var-2);
+        border: 1px solid var(--var-69);
+        color: var(--var-7);
+    }
+
+    &:hover svg path {
+        fill: #8bcf16;
+    }
+
+    &:hover .upload_icon {
+        opacity: 1;
+    }
+
+    .magic_button_and_text {
+        display: flex;
+        align-items: center;
+        align-content: center;
+        gap: 6px;
+
+        svg {
+            fill: var(--var-89);
+            transition: fill 0.3s ease-in-out;
+        }
+    }
+
+    .upload_icon {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+        color: var(--var-101);
+        display: flex;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        background-color: var(--var-11);
+        svg path {
+            fill: var(--var-101);
+            transition: fill 0.3s ease-in-out;
+        }
+    }
+}

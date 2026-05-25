@@ -1,0 +1,147 @@
+.practiceMode {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 64px 0;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 892px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.seeSection {
+    display: flex;
+    justify-content: space-between;
+    height: fit-content;
+    align-items: center;
+    width: 100%;
+}
+
+.questionWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    svg path {
+        fill: var(--var-85);
+    }
+}
+
+.question {
+    width: 100%;
+    height: 45px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    border: 1px solid var(--var-166);
+    border-radius: 16px;
+    background-color: var(--var-18);
+    color: var(--var-108);
+    .setFontSohneBuch(16px);
+}
+
+.practiceInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 20px;
+}
+
+.talkingAnimation {
+    width: 100px;
+    height: 120px;
+    display: flex;
+    position: relative;
+}
+
+.badQuality path {
+    fill: #cb3131;
+}
+
+.volumeInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 20px;
+    > svg path {
+        fill: var(--var-85);
+    }
+}
+
+.volumeMeasure {
+    display: flex;
+    gap: 1px;
+}
+
+.measureBlock {
+    width: 44px;
+    height: 23px;
+    border-radius: 5px;
+    background-color: var(--var-85);
+}
+
+.lowQuality {
+    background-color: #cb3131;
+}
+
+.midQuality {
+    background-color: #cbc831;
+}
+
+.highQuality {
+    background-color: #31cb3d;
+}
+
+.practiceResult {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 20px;
+    background-color: var(--var-182);
+    border-radius: 12px;
+    color: var(--var-7);
+    .setFontSohneBuch();
+}
+
+.practiceResultStopped {
+    background-color: #fff;
+}
+
+.bold {
+    .setFontSohneKraftig();
+}
+
+.score {
+    color: rgb(145, 0, 255);
+}
+.tipsList ul {
+    list-style-type: disc;
+    padding-left: 25px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding-top: 20px;
+}
+
+.button {
+    background-color: var(--var-14);
+    color: #f8f8f8;
+    .setFontSohneBuch(14px);
+    padding: 12px;
+    border: 1px solid var(--var-66);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    path {
+        fill: #f8f8f8;
+    }
+}

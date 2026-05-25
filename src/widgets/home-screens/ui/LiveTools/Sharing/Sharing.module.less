@@ -1,0 +1,36 @@
+.sharing {
+    width: 475px;
+    position: fixed;
+    bottom: 100px;
+    left: 73px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--var-61);
+    border-radius: 16px;
+    background-color: var(--bg-general);
+    box-shadow: 0 4px 30px rgba(#000, 0.1);
+    z-index: 1000;
+}
+
+.seeAllLinks {
+    position: fixed;
+    bottom: 130px;
+    left: 215px;
+    z-index: 9999;
+}
+
+.enter {
+    opacity: 0;
+}
+.enterActive {
+    opacity: 1;
+    transition: opacity 500ms;
+}
+
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    transition: opacity 500ms;
+}

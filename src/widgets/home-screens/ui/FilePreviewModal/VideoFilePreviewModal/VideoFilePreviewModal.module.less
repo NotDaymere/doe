@@ -1,0 +1,271 @@
+.modalVideo {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: 0 auto;
+    overflow: hidden;
+    justify-content: center;
+    border-radius: 20px;
+    position: relative;
+    z-index: 1500;
+    width: auto;
+    height: auto;
+}
+
+.modalFileNameVideoContainer {
+    position: absolute;
+    padding: 0 5px 0 5px;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 126px;
+    height: 30px;
+    background: radial-gradient(89.74% 100% at 10.26% 100%, rgba(2, 0, 1, 0.35) 0%, #0a9b5f 100%);
+    font-size: 13px;
+    font-weight: 400;
+    font-family: "Sohne";
+    color: #f8f8f8;
+    border-radius: 17px;
+    top: 1%;
+    box-shadow: 0px 4px 20px 0px #0000000f;
+    backdrop-filter: blur(20px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        visibility 0.3s ease;
+}
+
+.modalContentVideo {
+    background: var(--var-34);
+    padding: 16px;
+    border-radius: 20px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    z-index: 1500;
+    width: fit-content;
+    max-width: 50%;
+    max-height: 70%;
+    border: 1px solid var(--var-75);
+    &.visible {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0s linear 0.1s;
+    }
+
+    &.hidden {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+.modalContentVideo:hover .modalFileNameVideoContainer {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.modalContentVideo:hover .modalContentEditPanel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.separator {
+    background-color: var(--var-13);
+    width: 100%;
+    height: 2px;
+}
+
+.modalContentEditPanelItem {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--var-85);
+    border-radius: 7px;
+    transition:
+        color 0.3s ease,
+        border 0.3s ease;
+    border: 1px solid transparent;
+    svg {
+        fill: var(--var-85);
+    }
+    &:hover {
+        color: var(--var-95);
+        border: 1px solid var(--var-76);
+        background-color: var(--var-2);
+        svg {
+            fill: var(--var-95);
+        }
+    }
+    &[data-active="true"] {
+        color: var(--var-95);
+        border: 1px solid var(--var-76);
+        background-color: var(--var-2);
+    }
+}
+
+.modalContentEditPanel {
+    display: flex;
+    background: var(--bg-general);
+    border: 1px solid var(--var-1);
+    box-shadow: 0 0 12px 0 #0000000d;
+    position: absolute;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    border-radius: 10px;
+    padding: 5px;
+    bottom: 70px;
+    left: 30px;
+    z-index: 10000;
+    gap: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        visibility 0.3s ease;
+}
+
+.progressBarContainer {
+    position: absolute;
+    z-index: 5000;
+    background-color: #eff5fd;
+}
+
+.videoWrapper {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.progressBarContainer {
+    position: absolute;
+    z-index: 10000;
+    bottom: 25px;
+    width: 85%;
+    height: 7px;
+    background-color: #ffffff33;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.progressBar {
+    height: 100%;
+    background-color: #ffffff;
+    border-radius: 5px;
+    display: flex;
+    min-width: 15px;
+    justify-content: flex-end;
+    align-items: center;
+    align-content: center;
+}
+
+.progressBarHandle {
+    height: 15px;
+    width: 15px;
+    border-radius: 50px;
+    background-color: #ffffff;
+}
+
+.playPauseButton {
+    z-index: 9999;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.speedPopup {
+    position: absolute;
+    bottom: 80px;
+    left: 30px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 11000;
+}
+
+.speedPopup button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px 10px;
+}
+
+.speedPopup button:hover {
+    background: #f0f0f0;
+}
+
+.cutMarker {
+    position: absolute;
+    top: -7px;
+    width: 6px;
+    border-radius: 8px;
+    height: 20px;
+    background-color: #ffffff;
+}
+
+.cutControls {
+    position: absolute;
+    bottom: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10001;
+    display: flex;
+    gap: 10px;
+}
+
+.cutButton {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cutButton:hover {
+    background-color: #f0f0f0;
+}
+
+.processingOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 20px;
+}

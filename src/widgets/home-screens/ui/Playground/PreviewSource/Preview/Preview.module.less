@@ -1,0 +1,126 @@
+.iframeModal {
+    width: 85vw;
+    max-width: 1208px;
+    height: 80vh;
+    max-height: 762px;
+    border: none;
+}
+
+.pdfViewerWithPagination {
+    position: relative;
+}
+
+.title {
+    width: max-content;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 8px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.showTitle {
+    opacity: 1;
+}
+
+.pagination {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 30px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.showPagination {
+    opacity: 1;
+}
+
+.zoom {
+    position: fixed;
+    right: 50px;
+    bottom: 30px;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.showZoom {
+    opacity: 1;
+}
+
+.preWrapper {
+    background-color: #fff;
+}
+
+.txtPreview pre {
+    display: block;
+    white-space: pre-wrap;
+    margin: 0;
+    border-radius: 0;
+}
+
+.docxDocument {
+    width: 100%;
+    max-width: 465px;
+    height: 85vh;
+    // max-height: 635px;
+    overflow-x: scroll;
+}
+
+.docxPreview {
+    position: relative;
+    width: 100%;
+    max-width: 465px;
+    max-height: calc(85vh - 40px);
+    overflow: auto;
+    padding-right: 4px;
+    box-sizing: border-box;
+
+    &::-webkit-scrollbar {
+        width: 7px;
+        background: var(--var-33);
+        border-radius: 20px;
+        margin: 0;
+        padding: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--color-white-100);
+        border-radius: 20px;
+        height: 6px;
+        cursor: pointer;
+    }
+}
+
+.docxTitle {
+    .title;
+    top: 8px;
+}
+
+.txtPreview {
+    width: 100%;
+    max-width: 465px;
+    max-height: calc(85vh - 40px);
+    overflow: auto;
+    padding-right: 4px;
+    box-sizing: border-box;
+
+    &::-webkit-scrollbar {
+        width: 7px;
+        background: var(--var-33);
+        border-radius: 20px;
+        margin: 0;
+        padding: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--color-white-100);
+        border-radius: 20px;
+        height: 6px;
+        cursor: pointer;
+    }
+}

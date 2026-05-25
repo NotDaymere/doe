@@ -1,0 +1,135 @@
+import "./OpenAllPlaygrounds.less";
+import { useEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom";
+import { ReactComponent as DecreasePlaygroundIcon } from "src/assets/icons/decrease-playground.svg";
+import DoePlaygroundStars from "src/shared/icons/DoePlaygroundStars";
+import { useAppStore, useChatStore } from "src/shared/providers";
+import ThreeVerticalDots from "src/shared/icons/ThreeVerticalDots";
+import AllPlaygroundsMenu from "../AllPlaygroundsMenu/AllPlaygroundsMenu";
+
+type OpenAllPlaygroundsProps = {
+    changeActiveAllPlaygrounds: () => void;
+    activeAllPlaygrounds: boolean;
+};
+
+export default function OpenAllPlaygrounds({
+    changeActiveAllPlaygrounds,
+}: OpenAllPlaygroundsProps) {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const {
+        savedPlaygrounds,
+        getOpenSavedPlaygrounds,
+        updateSavedPlaygrounds,
+        getSavedPlayground,
+    } = useChatStore();
+    const [activeOpenAllPlaygroundsMenu, setActiveOpenAllPlaygroundsMenu] = useState<string | null>(
+        null
+    );
+    const [activeAllPlaygrounds, setActiveAllPlaygrounds] = useState<boolean>(true);
+    const [contentIdHover, setContentIdHover] = useState<string | null>(null);
+    const {isSideBarOpen} = useAppStore();
+    const contentMouseUp = (id: string | null) => {
+        if (activeOpenAllPlaygroundsMenu) {
+            return;
+        }
+        setContentIdHover(id);
+    };
+    const contentMouseDown = () => {
+        if (activeOpenAllPlaygroundsMenu) {
+            return;
+        }
+        setContentIdHover(null);
+    };
+    const changeActiveOpenAllPlaygroundsMenu = (id: string | null = null) => {
+        if (activeOpenAllPlaygroundsMenu) {
+            setActiveOpenAllPlaygroundsMenu(null);
+            return;
+        }
+        setActiveOpenAllPlaygroundsMenu(id);
+    };
+
+    const openSavedPlaygroundStatus = (id: string | null) => {
+        const savedPlayground = getSavedPlayground(id);
+        const maxLength = 2;
+        if (getOpenSavedPlaygrounds().length >= maxLength) {
+            return;
+        }
+        if (!savedPlayground) return;
+        savedPlayground.open = true;
+        updateSavedPlaygrounds(savedPlayground);
+    };
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setActiveAllPlaygrounds(false);
+                changeActiveAllPlaygrounds();
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [changeActiveAllPlaygrounds]);
+
+    return ReactDOM.createPortal(
+            <div ref={containerRef} className={`open-all-playgrounds-container
+    ${getOpenSavedPlaygrounds().length < 1 ? 'open-all-playgrounds-container-without-playground' : ''}
+    ${getOpenSavedPlaygrounds().length < 1 && isSideBarOpen ? 'playgrounds-sidebar-open' : getOpenSavedPlaygrounds().length >= 1 && isSideBarOpen ? 'playgrounds-sidebar-and-playground-open' : ''}
+    
+    ${!activeAllPlaygrounds ? 'close' : ''}`}>
+            <div className={'open-all-playgrounds-header'}>
+                <div className={'open-all-playgrounds-header-text'}>
+                    <DoePlaygroundStars />All Playgrounds
+                </div>
+                <button
+                    className={"open-all-playgrounds-header-button"}
+                    onClick={() => {
+                        changeActiveAllPlaygrounds();
+                        setActiveAllPlaygrounds(false);
+                    }}
+                >
+                    <DecreasePlaygroundIcon />
+                </button>
+            </div>
+            <div className={'open-all-playgrounds-content'}>
+                {savedPlaygrounds.filter(p => p.type !== "source").map((savedPlayground, index) => (
+                    <div
+                        key={savedPlayground.id}
+                        className={`open-all-playgrounds-content-example ${
+                            contentIdHover == savedPlayground.id &&
+                            "open-all-playgrounds-content-example-hover"
+                        }`}
+                        onMouseMove={() => contentMouseUp(savedPlayground.id)}
+                        onMouseOut={contentMouseDown}
+                        onClick={() => openSavedPlaygroundStatus(savedPlayground.id)}
+                    >
+                        <div className={"open-all-playgrounds-content-name"}>
+                            <DoePlaygroundStars />
+                            <p>{savedPlayground.name}</p>
+                        </div>
+                        <button
+                            className={"open-all-playgrounds-content-example-button"}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                changeActiveOpenAllPlaygroundsMenu(savedPlayground.id);
+                            }}
+                        >
+                            <span>
+                                <ThreeVerticalDots />
+                            </span>
+                        </button>
+                    </div>
+                ))}
+            </div>
+            {activeOpenAllPlaygroundsMenu && (
+                <AllPlaygroundsMenu
+                    activeOpenAllPlaygroundsMenu={activeOpenAllPlaygroundsMenu}
+                    changeActiveOpenAllPlaygroundsMenu={changeActiveOpenAllPlaygroundsMenu}
+                    changeActiveAllPlaygrounds={changeActiveAllPlaygrounds}
+                />
+            )}
+        </div>,
+        document.body
+    );
+}

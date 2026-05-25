@@ -1,0 +1,137 @@
+.calendarContainer {
+    width: 217px;
+    margin: 0 auto;
+    background-color: var(--bg-general);
+    border: 1px solid var(--var-68);
+    border-radius: 12px;
+    padding: 12px;
+    z-index: 999;
+}
+
+.calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--var-7);
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    background-color: var(--var-36);
+    border-radius: 4px;
+    svg path {
+        fill: var(--var-101);
+    }
+}
+
+.calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 24px);
+    gap: 4px;
+    padding: 10px 0;
+    border-top: 1px solid var(--var-163);
+    border-bottom: 1px solid var(--var-163);
+}
+
+.dayHeader {
+    height: 24px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--var-108);
+}
+
+.day {
+    width: 24px;
+    height: 24px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    font-size: 12px;
+    color: var(--var-121);
+    cursor: pointer;
+}
+
+.otherMonth {
+    color: var(--var-68);
+}
+
+.selected {
+    background-color: var(--var-24);
+    color: #9747ff;
+    border: 1px solid #9747ff;
+    border-radius: 6px;
+}
+
+.calendarFooter {
+    margin-top: 10px;
+}
+
+.sessionsWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+}
+
+.sessions {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.session {
+    width: 63px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--var-87);
+    border-radius: 8px;
+    color: var(--var-108);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.sessionSelected {
+    color: #9747ff;
+    border: 1px solid #9747ff;
+    background-color: var(--var-24);
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.selectAllSessions {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--var-119);
+}
+
+.sessionsInfo {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    letter-spacing: 0;
+    color: var(--var-7);
+}
+
+.aroundClockIcon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--var-13);
+    border-radius: 4px;
+    margin-right: 4px;
+}

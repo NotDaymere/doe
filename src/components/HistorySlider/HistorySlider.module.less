@@ -1,0 +1,73 @@
+.history_slider {
+    display: flex;
+    flex-direction: row;
+    animation: fade-in 0.5s ease forwards;
+}
+
+.slide {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    flex-shrink: 0;
+    padding: 30px;
+    padding-top: 0;
+}
+
+.slide:first-child {
+    padding-left: 100px;
+}
+
+.branch {
+    display: flex;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: 1px dashed #b5b5b5;
+    color: #1f1f1f;
+    font-size: 16px;
+    width: 30%;
+    // min-width: 300px;
+    height: fit-content;
+}
+
+.chatHistoryContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    align-self: stretch;
+    height: 100%;
+    width: 70%;
+    flex-shrink: 0;
+
+    // padding: 46px 200px;
+    padding-bottom: 12px;
+    padding-left: 64px;
+    border-radius: 16px;
+    padding-top: 8px;
+    height: 100%;
+}
+
+.low_padding {
+    // padding: 30px 30px 12px 80px;
+    padding: 0;
+}
+
+.chatHistoryContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 892px;
+    width: 100%;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(-5%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}

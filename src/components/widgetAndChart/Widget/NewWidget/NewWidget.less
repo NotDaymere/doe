@@ -1,0 +1,34 @@
+.newWidgetContainerOne {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .connectApplicationbutton {
+        width: 100%;
+        height: 39px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--var-60);
+        border-radius: 8px;
+        gap: 10px;
+        font-size: 14px;
+        color: var(--var-97);
+        font-weight: 500;
+        box-shadow:
+            inset 0 0 0 1px var(--var-21),
+            0 4px 10px rgba(0, 0, 0, 0.05);
+        transition: 0.3s;
+        &:hover {
+            background: rgba(151, 71, 255, 0.2);
+            box-shadow: inset 0 0 0 2px #9747ff;
+            color: #9747ff;
+        }
+    }
+    .newWidgetContainerInner {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        gap: 5px;
+    }
+}

@@ -1,4 +1,3 @@
-
 export const testTextAndCharts = `
 <response>
 <p><large-text>Example answer</large-text></p>
@@ -24,6 +23,13 @@ export const testTextAndCharts = `
   <p>Here is some <sup>superscript</sup> and <sub>subscript</sub> text.</p>
   <p>Here is some <highlight>highlighted text</highlight>.</p>
   <p>Here is a tab: <tab /></p>
+    <p>
+        Here is a citation: 
+        <span class="citation-container" id="citation-ref-1" data-citation-url="https://en.wikipedia.org/wiki/Yoneda_lemma">
+          <span class="cited-text">This is a cited quote.</span>
+          <sup class="citation">1</sup>
+       </span> 
+     </p>
   <p><large-text>Waterfall Chart</large-text></p>
   <chart type="waterfall">
     <data>
@@ -338,7 +344,8 @@ export const testTextAndCharts = `
     const area = calculateArea(5);
     console.log("Area:", area);
   </block-code>
+    <p></p>
     <p>Here is some inline code: <inline-code>let y = 10;</inline-code>.</p>  
   
 </response>
-`
+`;

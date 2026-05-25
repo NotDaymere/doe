@@ -11,7 +11,7 @@
     min-height: 36px;
 
     .setFontSohneBuch(16px, 1.1, normal);
-    color: #000;
+    color: var(--var-107);
 
     position: relative;
 }
@@ -34,6 +34,25 @@
         .setFontSohneBuch(16px, 1.2, normal);
         .setTextGradient(
             linear-gradient(to right, #B5B5B5, rgba(#B5B5B5, 0.2))
-        )
+        );
+    }
+}
+
+.formulaContainer{
+    display: flex;
+    width: 75%;
+    text-align: center;
+    background: var(--bg-general);
+    border: 1px solid none;
+    color: var(--var-86);
+    padding: 5px 3px;
+    border-radius: 5px;
+    margin: 5px auto;
+    justify-content: center;
+    align-items: center;
+    &Hidden{
+        padding: 0;
+        margin: 0;
+        transition-duration: .3s;
     }
 }

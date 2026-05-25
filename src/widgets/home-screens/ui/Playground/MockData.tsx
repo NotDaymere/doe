@@ -1,0 +1,116 @@
+import BrilliantOrgIcon from "src/shared/icons/BrilliantOrg.icon";
+import CodecademyIcon from "src/shared/icons/Codecademy.icon";
+import NotionIcon from "src/shared/icons/Notion.icon";
+import GoogleCalendarIcon from "src/shared/icons/GoogleCalendar.icon";
+import ObsidianIcon from "src/shared/icons/Obsidian.icon";
+import CaseStudyIcon from "src/shared/icons/CaseStudy.icon";
+import FileFilledIcon from "src/shared/icons/FileFilled.icon";
+import { ISourceTypeNode } from "src/shared/types/Playground";
+import AppsSourceIcon from "src/shared/icons/AppsSource.icon";
+import DocsIcon from "src/shared/icons/Docs.icon";
+import { IPlaygroundSourceData } from "src/shared/types/Playground";
+import MemoryIcon from "src/shared/icons/Memory.icon";
+import WebIcon from "src/shared/icons/Web.icon";
+import BrainIcon from "src/shared/icons/Brain.icon";
+
+export const INFO_NODES: Pick<ISourceTypeNode, "icon" | "title">[] = [
+    {
+        icon: <BrainIcon fill="#cfcecf" width={16} height={16} />,
+        title: "GO",
+    },
+    {
+        icon: <MemoryIcon fill="#cfcecf" width={16} height={16} />,
+        title: "Memory",
+    },
+];
+
+export const SOURCE_NODES: ISourceTypeNode[] = [
+    {
+        icon: <WebIcon fill="#6091A3" width={16} height={16} />,
+        title: "Web",
+        type: "web",
+    },
+    {
+        icon: <DocsIcon fill="#8BCF16" width={16} height={16} />,
+        title: "Docs",
+        type: "docs",
+    },
+    {
+        icon: <AppsSourceIcon fill="#FBBC05" width={16} height={16} />,
+        title: "Apps",
+        type: "apps",
+    },
+];
+
+export const PLAYGROUND_SOURCES: IPlaygroundSourceData = {
+    web: {
+        title: "Website resources",
+        type: "web",
+        items: [
+            {
+                title: "brilliant.org",
+                isLink: true,
+                icon: <BrilliantOrgIcon width={12} height={13} />,
+                link: "https://localsolar.io/",
+                // link: "https://www.example.com",
+            },
+            {
+                title: "codecade...com",
+                isLink: true,
+                icon: <CodecademyIcon width={12} height={13} />,
+                link: "https://localsolar.io/",
+            },
+            {
+                title: "theinform...com",
+                isLink: true,
+                icon: <CaseStudyIcon width={12} height={13} />,
+                link: "https://localsolar.io/",
+            },
+        ],
+    },
+    apps: {
+        title: "App resources",
+        type: "apps",
+        items: [
+            {
+                title: "Notion",
+                isBoldText: true,
+                icon: <NotionIcon width={18} height={19} />,
+                link: "https://localsolar.io/",
+            },
+            {
+                title: "Obsidian",
+                isBoldText: true,
+                icon: <ObsidianIcon width={18} height={19} />,
+                link: "https://localsolar.io/",
+            },
+            {
+                title: "Calendar",
+                isBoldText: true,
+                icon: <GoogleCalendarIcon width={18} height={19} />,
+                link: "https://localsolar.io/",
+            },
+        ],
+    },
+    docs: {
+        title: "Documents resources",
+        type: "docs",
+        items: [
+            {
+                title: "Work_file.pdf",
+                icon: <FileFilledIcon width={10} height={12} />,
+                link: "/file-samples/file-sample.pdf",
+            },
+            {
+                title: "Work_file.txt",
+                icon: <FileFilledIcon width={10} height={12} />,
+                link: "/file-samples/file-sample.txt",
+            },
+            {
+                title: "Work_file.doc",
+                icon: <FileFilledIcon width={10} height={12} />,
+                link: "/file-samples/file-sample.docx",
+            },
+        ],
+    },
+};

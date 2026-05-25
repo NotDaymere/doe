@@ -1,0 +1,34 @@
+import React, { FC } from 'react';
+
+interface ArrowRightIconProps extends React.SVGProps<SVGSVGElement> {
+    fill?: string;
+    width?: string | number;
+    height?: string | number;
+    opacity?: number;
+}
+
+const ArrowRightIcon: FC<ArrowRightIconProps> = ({
+                                                     fill = "white",
+                                                     width = "10",
+                                                     height = "8",
+                                                     opacity = 1,
+                                                     ...props
+                                                 }) => (
+    <svg
+        width={width}
+        height={height}
+        viewBox="0 0 10 8"
+        fill="none"
+        opacity={opacity}
+        xmlns="http://www.w3.org/2000/svg"
+        {...props}
+    >
+        <path
+            d="M10 3.99735C10 4.12919 9.94192 4.25048 9.83633 4.35068L6.33052 7.84701C6.22492 7.94724 6.11405 7.99471 5.98733 7.99471C5.72862 7.99471 5.5227 7.80484 5.5227 7.54115C5.5227 7.41463 5.57022 7.28805 5.6547 7.20894L6.83738 6.00655L8.9282 4.10282L9.03907 4.36122L7.33896 4.46669H0.659976C0.385432 4.46669 0.195338 4.27158 0.195338 3.99735C0.195338 3.72313 0.385432 3.528 0.659976 3.528H7.33896L9.03907 3.63348L8.9282 3.89715L6.83738 1.98813L5.6547 0.78576C5.57022 0.701383 5.5227 0.580091 5.5227 0.453525C5.5227 0.189848 5.72862 0 5.98733 0C6.11405 0 6.22492 0.0421884 6.34108 0.158207L9.83633 3.64402C9.94192 3.74422 10 3.86551 10 3.99735Z"
+            fill={fill}
+            fillOpacity="0.6"
+        />
+    </svg>
+);
+
+export default ArrowRightIcon;

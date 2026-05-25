@@ -1,0 +1,117 @@
+.content_chat_branch_messages {
+  margin: 0 auto;
+  max-width: 892px;
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+
+  filter: blur(5px);
+  transition: filter 0.3s ease;
+}
+
+.branch_section {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 150px;
+    transform: translateY(0);
+}
+
+.branch_section_open_playground {
+  width: 57%;
+  position: fixed;
+  left: 30px;
+  top: 180px;
+  transform: translateY(0);
+}
+
+
+.content_chat_branch_dialogs {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  left: 10px;
+  top: 200px;
+
+  .content_chat_branch {
+    width: 100% !important;
+    margin: 0 auto;
+    height: 100%;
+    max-width: 75vw;
+    min-width: 75vw;
+
+
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+
+
+
+    .content_chat_branch_dialog {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 22px;
+      //background-color: #f8f8f8;
+      width: 100%;
+    }
+  }
+}
+
+
+.content_chat_branch_dialogs_open_playground {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  left: 30px;
+
+  top: 200px;
+
+  .content_chat_branch {
+    width: 100% !important;
+    margin: 0 auto;
+    height: 100%;
+    max-width: 60vw;
+    min-width: 60vw;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+
+    .branch_section {
+      width: 100%;
+      padding-right: 100px;
+    }
+
+    .content_chat_branch_dialog {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-end;
+      gap: 22px;
+      width: 100%;
+      margin-left: -100px;
+
+      .branch_message {
+        max-width: 650px !important;
+      }
+    }
+  }
+}
+
+.branches_wrapper {
+  display: flex;
+  position: relative;
+}
+
+

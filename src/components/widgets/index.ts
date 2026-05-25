@@ -1,11 +1,6 @@
-import { YouTubeWidget } from './youtube/YouTubeWidget';
-import { SpotifyWidget } from './spotify/SpotifyWidget';
-import { GoogleDocWidget } from './google-doc/GoogleDocWidget';
-import { MiroWidget } from './miro/MiroWidget';
+import { GoogleDocWidget } from "./google-doc/GoogleDocWidget";
+import { MiroWidget } from "./miro/MiroWidget";
+import { SpotifyWidget } from "./spotify/SpotifyWidget";
+import { YouTubeWidget } from "./youtube/YouTubeWidget";
 
-export { 
-  YouTubeWidget,
-  SpotifyWidget,
-  GoogleDocWidget,
-  MiroWidget
-};
+export { GoogleDocWidget, MiroWidget, SpotifyWidget, YouTubeWidget };

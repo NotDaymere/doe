@@ -1,3 +1,3 @@
-export { ChatLayout } from "./ui";
 export * from "./components";
-export * from "./lib"
+export * from "./lib";
+export { ChatLayout } from "./ui";
